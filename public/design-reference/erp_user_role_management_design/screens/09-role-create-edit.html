@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Create / Edit Role - Construction ERP</title>
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+<div class="layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand"><span class="logo-icon">C</span><span>Construction ERP</span></div>
+        <div class="small" style="margin-top:5px;color:#94a3b8">Admin Web Portal</div>
+      </div>
+      <div class="user">
+        <div class="avatar">OA</div>
+        <div><div style="color:#fff;font-weight:800">Omar Sir</div><div class="small" style="color:#94a3b8">Super Admin</div></div>
+      </div>
+      <div class="search-box"><input placeholder="Search menu..." /></div>
+      <div class="nav-title">Administration</div>
+      <a class="nav-item" href="04-dashboard.html"><span>📊</span><span>Dashboard</span></a><a class="nav-item" href="05-users-listing.html"><span>👥</span><span>Users</span></a><a class="nav-item active" href="08-roles-listing.html"><span>🛡️</span><span>Roles</span></a><a class="nav-item" href="11-permission-matrix.html"><span>✅</span><span>Permission Matrix</span></a><a class="nav-item" href="12-role-hierarchy.html"><span>🌳</span><span>Role Hierarchy</span></a><a class="nav-item" href="14-approval-workflow-builder.html"><span>🔁</span><span>Approval Workflows</span></a><a class="nav-item" href="15-activity-logs.html"><span>🧾</span><span>Activity Logs</span></a>
+      <div class="nav-title">ERP Modules Preview</div>
+      <a class="nav-item" href="#"><span>💰</span><span>Accounting</span></a>
+      <a class="nav-item" href="#"><span>🏗️</span><span>Projects</span></a>
+      <a class="nav-item" href="#"><span>👷</span><span>HR & Payroll</span></a>
+      <a class="nav-item" href="#"><span>📦</span><span>Inventory</span></a>
+      <a class="nav-item" href="#"><span>🚜</span><span>Equipment</span></a>
+      <a class="nav-item" href="#"><span>🧾</span><span>ZATCA</span></a>
+    </aside>
+    
+<main class="content">
+  <div class="topbar">
+    <div>
+      <div class="breadcrumb">Home / Administration / Create / Edit Role</div>
+    </div>
+    <div style="display:flex;gap:14px;align-items:center">
+      <span>🔎</span><span>🔔</span><span>⚙️</span>
+      <div class="avatar">OA</div>
+    </div>
+  </div>
+  <section class="page">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Create / Edit Role</h1>
+        <p class="page-desc">Define role information, hierarchy parent, access scope, and permissions</p>
+      </div>
+      <div></div>
+    </div>
+    
+<div class="help-box">Create/Edit Role must include Basic Information, Access Scope, and Permission Matrix. This is the main correction from current Figma.</div>
+<div class="tabs"><div class="tab active">Basic Information</div><div class="tab">Access Scope</div><div class="tab">Permissions</div><div class="tab">Workflow Links</div></div>
+<div class="form-section">
+  <div class="section-title">Basic Role Information</div>
+  <div class="section-body form-grid three">
+    <div><label>Role Name</label><input class="input" value="Site Supervisor" /></div>
+    <div><label>Role Code</label><input class="input" value="SITE_SUPERVISOR" /></div>
+    <div><label>Department</label><select class="select"><option>Site</option><option>Finance</option><option>HR</option><option>Projects</option><option>Equipment</option></select></div>
+    <div><label>Parent Role</label><select class="select"><option>Project Manager</option><option>Super Admin</option><option>Finance Manager</option></select></div>
+    <div><label>Role Level</label><select class="select"><option>Level 4</option><option>Level 1</option><option>Level 2</option></select></div>
+    <div><label>Status</label><select class="select"><option>Active</option><option>Inactive</option></select></div>
+    <div><label>Default Dashboard</label><select class="select"><option>Site Dashboard</option><option>Finance Dashboard</option><option>Admin Dashboard</option></select></div>
+    <div style="grid-column:span 2"><label>Description</label><textarea class="textarea">Can manage site attendance, site expenses, and approvals for assigned project/site.</textarea></div>
+  </div>
+</div>
+<div class="form-section">
+  <div class="section-title">Access Scope</div>
+  <div class="section-body form-grid three">
+    <div><label>Company Access</label><select class="select"><option>Selected</option><option>All Company</option></select></div>
+    <div><label>Branch Access</label><select class="select"><option>Riyadh Branch</option><option>Jeddah Branch</option></select></div>
+    <div><label>Project Access</label><select class="select"><option>Assigned Projects Only</option><option>All Projects</option></select></div>
+    <div><label>Site Access</label><select class="select"><option>Assigned Sites Only</option><option>All Sites</option></select></div>
+    <div><label>Warehouse Access</label><select class="select"><option>Assigned Warehouses Only</option><option>All Warehouses</option></select></div>
+    <div><label>Mobile App Access</label><select class="select"><option>Allowed</option><option>Not Allowed</option></select></div>
+  </div>
+</div>
+<div class="table-card">
+  <div class="table-title">Permission Matrix</div>
+  <table class="permission-table">
+    <thead><tr><th>Module</th><th>View</th><th>Create</th><th>Edit</th><th>Delete</th><th>Approve</th><th>Export</th></tr></thead>
+    <tbody>
+      <tr><td>Dashboard</td><td><input class="checkbox" type="checkbox" checked></td><td></td><td></td><td></td><td></td><td><input class="checkbox" type="checkbox"></td></tr>
+      <tr><td>Attendance</td><td><input class="checkbox" type="checkbox" checked></td><td><input class="checkbox" type="checkbox" checked></td><td><input class="checkbox" type="checkbox" checked></td><td></td><td><input class="checkbox" type="checkbox" checked></td><td><input class="checkbox" type="checkbox"></td></tr>
+      <tr><td>Site Expenses</td><td><input class="checkbox" type="checkbox" checked></td><td><input class="checkbox" type="checkbox" checked></td><td><input class="checkbox" type="checkbox"></td><td></td><td><input class="checkbox" type="checkbox" checked></td><td><input class="checkbox" type="checkbox"></td></tr>
+      <tr><td>Projects</td><td><input class="checkbox" type="checkbox" checked></td><td></td><td></td><td></td><td></td><td><input class="checkbox" type="checkbox"></td></tr>
+      <tr><td>Inventory</td><td><input class="checkbox" type="checkbox" checked></td><td><input class="checkbox" type="checkbox"></td><td></td><td></td><td></td><td><input class="checkbox" type="checkbox"></td></tr>
+      <tr><td>Accounting</td><td><input class="checkbox" type="checkbox"></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>ZATCA Invoicing</td><td><input class="checkbox" type="checkbox"></td><td></td><td></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+</div>
+<div style="display:flex;justify-content:flex-end;gap:10px"><a class="btn outline" href="08-roles-listing.html">Cancel</a><button class="btn primary">Save Role</button></div>
+
+  </section>
+</main>
+</div>
+</body>
+</html>

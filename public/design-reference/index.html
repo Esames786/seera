@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Construction ERP - Combined Phase 1 & Phase 2</title>
+  <style>
+    :root{
+      --bg:#f4f7fb; --panel:#fff; --text:#0f172a; --muted:#64748b;
+      --line:#e2e8f0; --brand:#2563eb; --soft:#e8f0ff; --green:#16a34a;
+      --radius:18px; --shadow:0 10px 30px rgba(15,23,42,.06);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:1180px;margin:0 auto;padding:28px}
+    .hero{background:linear-gradient(135deg,#0b1220,#1d4ed8);color:#fff;border-radius:26px;padding:28px 30px;box-shadow:var(--shadow)}
+    .hero h1{margin:0 0 10px;font-size:34px}
+    .hero p{margin:0;color:#dbeafe;max-width:900px;line-height:1.6}
+    .grid{display:grid;gap:18px}
+    .cards{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:22px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
+    .card h2{margin:0 0 10px;font-size:24px}
+    .meta{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 16px}
+    .badge{display:inline-flex;padding:7px 12px;border-radius:999px;background:var(--soft);color:var(--brand);font-size:12px;font-weight:700}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .btn{display:inline-block;padding:12px 15px;border-radius:12px;background:var(--brand);color:#fff;text-decoration:none;font-weight:700}
+    .btn.secondary{background:#fff;color:var(--text);border:1px solid var(--line)}
+    ul{padding-left:18px;line-height:1.7;color:#334155}
+    .section{margin-top:24px}
+    .timeline{display:grid;gap:12px}
+    .step{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+    .num{width:40px;height:40px;border-radius:999px;background:var(--soft);color:var(--brand);display:grid;place-items:center;font-weight:800}
+    .step h3{margin:0 0 6px;font-size:18px}
+    .step p{margin:0;color:#64748b;line-height:1.6}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+    th,td{padding:14px;border-bottom:1px solid var(--line);text-align:left;font-size:14px;vertical-align:top}
+    th{background:#f8fafc}
+    tr:last-child td{border-bottom:none}
+    @media(max-width:900px){.cards{grid-template-columns:1fr}.wrap{padding:16px}.hero h1{font-size:28px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Construction ERP - Combined Phase 1 & Phase 2</h1>
+      <p>
+        This package combines the full design direction created so far:
+        <strong>Phase 1: User, Role, Permission & Approval Foundation</strong>
+        and <strong>Phase 2: Main Dashboard & Master Setup</strong>.
+        It gives a broader picture before moving into HR, Payroll, Accounting, Projects, Inventory, Equipment, and Mobile App.
+      </p>
+    </div>
+
+    <div class="grid cards">
+      <div class="card">
+        <h2>Phase 1 - Access Control Foundation</h2>
+        <div class="meta">
+          <span class="badge">15 screens</span>
+          <span class="badge">Admin foundation</span>
+          <span class="badge">Role-based access</span>
+        </div>
+        <ul>
+          <li>Login / Forgot Password / Reset Password</li>
+          <li>Dashboard shell + sidebar</li>
+          <li>Users listing, add/edit, details</li>
+          <li>Roles listing, create/edit, details</li>
+          <li>Permission Matrix</li>
+          <li>Role Hierarchy</li>
+          <li>Assign Users to Role</li>
+          <li>Approval Workflow Builder</li>
+          <li>Activity Logs</li>
+        </ul>
+        <div class="btns">
+          <a class="btn" href="erp_user_role_management_design/index.html">Open Phase 1</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Phase 2 - Dashboard & Master Setup</h2>
+        <div class="meta">
+          <span class="badge">12+ screens</span>
+          <span class="badge">Master data</span>
+          <span class="badge">ERP setup</span>
+        </div>
+        <ul>
+          <li>Main ERP Dashboard</li>
+          <li>Company Profile</li>
+          <li>Branches</li>
+          <li>Departments</li>
+          <li>Designations</li>
+          <li>Projects</li>
+          <li>Sites with Geo-Fence</li>
+          <li>Warehouses</li>
+          <li>Expense Categories</li>
+          <li>Suppliers</li>
+          <li>Customers / Clients</li>
+        </ul>
+        <div class="btns">
+          <a class="btn" href="erp_phase2_dashboard_master_setup/index.html">Open Phase 2</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>How both phases fit together</h2>
+      <div class="timeline">
+        <div class="step">
+          <div class="num">1</div>
+          <div>
+            <h3>Phase 1 creates control and governance</h3>
+            <p>
+              Defines who can log in, what they can access, what they can approve, and how hierarchy and workflow work inside the ERP.
+            </p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <div>
+            <h3>Phase 2 creates the business setup records</h3>
+            <p>
+              Defines company, branches, departments, projects, sites, suppliers, customers, and categories that later modules will use.
+            </p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <div>
+            <h3>Next phases will consume these two foundations</h3>
+            <p>
+              HR, Payroll, Accounting, Inventory, Projects, Equipment, Mobile Attendance, Site Expenses, and ZATCA modules will all depend on Phase 1 and Phase 2.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Broader ERP picture</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th>Purpose</th>
+            <th>Main Output</th>
+            <th>Used By</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Phase 1</strong></td>
+            <td>Access control foundation</td>
+            <td>Users, roles, permissions, hierarchy, approvals</td>
+            <td>All modules</td>
+          </tr>
+          <tr>
+            <td><strong>Phase 2</strong></td>
+            <td>Master setup foundation</td>
+            <td>Company, branches, departments, designations, projects, sites, warehouses, categories, suppliers, customers</td>
+            <td>HR, Accounting, Projects, Inventory, Expenses, Equipment, Mobile App</td>
+          </tr>
+          <tr>
+            <td><strong>Phase 3</strong></td>
+            <td>HR & Payroll</td>
+            <td>Employees, attendance, shifts, leaves, payroll, documents / IQAMA</td>
+            <td>HR, Accounting</td>
+          </tr>
+          <tr>
+            <td><strong>Phase 4</strong></td>
+            <td>Accounting + VAT + ZATCA</td>
+            <td>COA, GL, AP, AR, journal, reports, invoice clearance</td>
+            <td>Finance, Compliance</td>
+          </tr>
+          <tr>
+            <td><strong>Phase 5</strong></td>
+            <td>Projects + Site Expenses</td>
+            <td>Budgeting, costing, mobile expenses, approvals, auto-posting</td>
+            <td>Projects, Finance, Site Staff</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>What to show the client now</h2>
+      <div class="card">
+        <p style="margin:0;color:#334155;line-height:1.7">
+          Show this combined package as the <strong>foundation and setup layer</strong> of the Construction ERP.
+          Explain that the system is being designed in the correct order:
+          first access control, then master setup, then operational modules.
+          This ensures that later screens are aligned with approvals, reporting, accounting, and Saudi ERP style workflows.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construction ERP - Phase 2 Dashboard & Master Setup</title>
+  <link rel="stylesheet" href="assets/styles.css"/>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">CE</div>
+      <div>
+        <h1>Construction ERP</h1>
+        <small>Phase 2 Prototype</small>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-section">
+        <div class="nav-title">Main</div>
+        <a class="active" href="#dashboard"><span class="dot"></span>Dashboard</a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-title">Administration</div>
+        <a href="#company"><span class="dot"></span>Company Profile</a>
+        <a href="#branches"><span class="dot"></span>Branches</a>
+        <a href="#departments"><span class="dot"></span>Departments</a>
+        <a href="#designations"><span class="dot"></span>Designations</a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-title">Project Setup</div>
+        <a href="#projects"><span class="dot"></span>Projects</a>
+        <a href="#sites"><span class="dot"></span>Sites / Geo Fence</a>
+        <a href="#warehouses"><span class="dot"></span>Warehouses</a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-title">Commercial Setup</div>
+        <a href="#expenses"><span class="dot"></span>Expense Categories</a>
+        <a href="#suppliers"><span class="dot"></span>Suppliers</a>
+        <a href="#customers"><span class="dot"></span>Customers</a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-title">Coming Next</div>
+        <a href="#next"><span class="dot"></span>Phase 3 Planning</a>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="title">
+        <div class="breadcrumb">ERP / Phase 2 / Dashboard + Master Setup</div>
+        <h2>Main Dashboard & Master Setup</h2>
+        <p>This prototype defines the foundation data screens used by HR, Accounting, Projects, Inventory, Equipment, and Mobile App.</p>
+      </div>
+      <div class="actions">
+        <div class="searchbar">Search modules, projects, suppliers...</div>
+        <button class="btn soft">Export</button>
+        <button class="btn primary">+ Create</button>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <a href="#dashboard">Dashboard</a>
+      <a href="#company">Company</a>
+      <a href="#branches">Branches</a>
+      <a href="#departments">Departments</a>
+      <a href="#designations">Designations</a>
+      <a href="#projects">Projects</a>
+      <a href="#sites">Sites</a>
+      <a href="#warehouses">Warehouses</a>
+      <a href="#expenses">Expenses</a>
+      <a href="#suppliers">Suppliers</a>
+      <a href="#customers">Customers</a>
+    </div>
+
+    <section class="screen" id="dashboard">
+      <div class="grid cards-4">
+        <div class="card metric"><div><p>Total Projects</p><h3>12</h3><span class="trend">+3 active</span></div><div class="icon">P</div></div>
+        <div class="card metric"><div><p>Active Sites</p><h3>28</h3><span class="trend">21 geo-fenced</span></div><div class="icon">S</div></div>
+        <div class="card metric"><div><p>Total Staff</p><h3>240</h3><span class="trend">196 present</span></div><div class="icon">HR</div></div>
+        <div class="card metric"><div><p>Pending Approvals</p><h3>34</h3><span class="trend warn">Needs action</span></div><div class="icon">A</div></div>
+
+        <div class="card metric"><div><p>Monthly Payroll</p><h3>SAR 420K</h3><span class="trend">Draft</span></div><div class="icon">₽</div></div>
+        <div class="card metric"><div><p>VAT Payable</p><h3>SAR 18.5K</h3><span class="trend warn">Due soon</span></div><div class="icon">%</div></div>
+        <div class="card metric"><div><p>Low Stock Items</p><h3>16</h3><span class="trend danger">Reorder required</span></div><div class="icon">I</div></div>
+        <div class="card metric"><div><p>Equipment In Use</p><h3>36 / 40</h3><span class="trend">90% utilized</span></div><div class="icon">EQ</div></div>
+      </div>
+
+      <br/>
+
+      <div class="split">
+        <div class="screen-card">
+          <div class="section-head">
+            <div><h3>Project Cost Summary</h3><p>Budget vs actual cost overview by project.</p></div>
+            <button class="btn">View Report</button>
+          </div>
+          <div class="chart-placeholder">Chart Placeholder: Project Budget vs Actual</div>
+        </div>
+
+        <div class="screen-card">
+          <div class="section-head">
+            <div><h3>Approval Queue</h3><p>Important pending approvals.</p></div>
+          </div>
+          <div class="timeline">
+            <div class="timeline-item"><div class="timeline-num">1</div><div><h4>Site Expense Approval</h4><p>12 entries awaiting Site Supervisor / Project Manager.</p></div></div>
+            <div class="timeline-item"><div class="timeline-num">2</div><div><h4>Purchase Request</h4><p>8 material requests waiting for Finance approval.</p></div></div>
+            <div class="timeline-item"><div class="timeline-num">3</div><div><h4>Payroll Review</h4><p>May payroll draft needs HR and Finance review.</p></div></div>
+            <div class="timeline-item"><div class="timeline-num">4</div><div><h4>ZATCA Clearance</h4><p>3 invoices failed clearance and need retry.</p></div></div>
+          </div>
+        </div>
+      </div>
+
+      <br/>
+
+      <div class="screen-card">
+        <div class="section-head">
+          <div><h3>Recent Activity</h3><p>Audit trail preview for admin and master setup changes.</p></div>
+          <button class="btn">Open Activity Logs</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Date</th><th>User</th><th>Module</th><th>Activity</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>12 May 2026</td><td>Omar Sir</td><td>Company</td><td>Updated VAT details</td><td><span class="badge green">Success</span></td></tr>
+              <tr><td>12 May 2026</td><td>M.Bin Ashfaq</td><td>Project</td><td>Created Riyadh Tower project</td><td><span class="badge green">Success</span></td></tr>
+              <tr><td>12 May 2026</td><td>Zubair</td><td>Supplier</td><td>Added new cement supplier</td><td><span class="badge green">Success</span></td></tr>
+              <tr><td>11 May 2026</td><td>Nabeel Sir</td><td>Site</td><td>Updated geo-fence radius</td><td><span class="badge yellow">Reviewed</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="company">
+      <div class="screen-card">
+        <div class="section-head">
+          <div><h3>Company Profile</h3><p>Central company information, Saudi VAT, ZATCA, and fiscal settings.</p></div>
+          <button class="btn primary">Save Company Profile</button>
+        </div>
+
+        <div class="form-section">
+          <h4>Basic Company Information</h4>
+          <div class="form-grid three">
+            <div class="field"><label>Company Name *</label><div class="input">Al Omar Construction Company</div></div>
+            <div class="field"><label>Arabic Company Name</label><div class="input">شركة العمر للمقاولات</div></div>
+            <div class="field"><label>Company Logo</label><div class="upload">Upload Logo</div></div>
+            <div class="field"><label>Email *</label><div class="input">info@company.sa</div></div>
+            <div class="field"><label>Phone *</label><div class="input">+966 5X XXX XXXX</div></div>
+            <div class="field"><label>Website</label><div class="input">www.company.sa</div></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>Saudi Compliance & ZATCA</h4>
+          <div class="form-grid three">
+            <div class="field"><label>CR Number *</label><div class="input">1010XXXXXX</div></div>
+            <div class="field"><label>VAT Number *</label><div class="input">300XXXXXXXXXXXX</div></div>
+            <div class="field"><label>ZATCA Registration Number</label><div class="input">ZATCA-REG-001</div></div>
+            <div class="field"><label>Default VAT Rate</label><div class="select">15%</div></div>
+            <div class="field"><label>Invoice Mode</label><div class="select">ZATCA Phase 2 - Clearance</div></div>
+            <div class="field"><label>Digital Certificate Status</label><div class="select">Active</div></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>Address & Fiscal Settings</h4>
+          <div class="form-grid three">
+            <div class="field"><label>Country</label><div class="select">Saudi Arabia</div></div>
+            <div class="field"><label>City</label><div class="select">Riyadh</div></div>
+            <div class="field"><label>Default Currency</label><div class="select">SAR</div></div>
+            <div class="field"><label>Fiscal Year Start</label><div class="input">01 January</div></div>
+            <div class="field"><label>Fiscal Year End</label><div class="input">31 December</div></div>
+            <div class="field"><label>Status</label><div class="select">Active</div></div>
+            <div class="field" style="grid-column:1/-1"><label>Full Address</label><div class="textarea">Building no, Street, District, Riyadh, Saudi Arabia</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="branches">
+      <div class="screen-card">
+        <div class="section-head">
+          <div><h3>Branch Management</h3><p>Manage company branches for users, projects, warehouses, and accounting reports.</p></div>
+          <button class="btn primary">+ Add Branch</button>
+        </div>
+        <div class="note">Listing should include search, city filter, status filter, export, and actions: View, Edit, Delete.</div><br/>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Branch Code</th><th>Branch Name</th><th>City</th><th>Manager</th><th>Phone</th><th>Total Projects</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td>BR-RYD</td><td>Riyadh Main Branch</td><td>Riyadh</td><td>Omar Sir</td><td>+966...</td><td>7</td><td><span class="badge green">Active</span></td><td>View · Edit · Delete</td></tr>
+              <tr><td>BR-JED</td><td>Jeddah Branch</td><td>Jeddah</td><td>Zubair</td><td>+966...</td><td>3</td><td><span class="badge green">Active</span></td><td>View · Edit · Delete</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <br/>
+        <div class="form-section">
+          <h4>Add / Edit Branch Fields</h4>
+          <div class="form-grid three">
+            <div class="field"><label>Branch Name *</label><div class="input">Riyadh Main Branch</div></div>
+            <div class="field"><label>Branch Code *</label><div class="input">BR-RYD</div></div>
+            <div class="field"><label>City *</label><div class="select">Riyadh</div></div>
+            <div class="field"><label>Branch Manager</label><div class="select">Omar Sir</div></div>
+            <div class="field"><label>Phone</label><div class="input">+966...</div></div>
+            <div class="field"><label>Email</label><div class="input">riyadh@company.sa</div></div>
+            <div class="field" style="grid-column:1/-1"><label>Address</label><div class="textarea">Branch full address...</div></div>
+            <div class="field"><label>Status</label><div class="select">Active</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="departments">
+      <div class="screen-card">
+        <div class="section-head">
+          <div><h3>Department Management</h3><p>Used for users, employees, roles, approval workflows, and reports.</p></div>
+          <button class="btn primary">+ Add Department</button>
+        </div>
+        <div class="grid cards-4">
+          <div class="card"><strong>Finance</strong><p class="footer-note">Finance Manager, Accountant, Payables</p></div>
+          <div class="card"><strong>HR</strong><p class="footer-note">HR Manager, Payroll, Documents</p></div>
+          <div class="card"><strong>Projects</strong><p class="footer-note">Project Manager, Engineers</p></div>
+          <div class="card"><strong>Site Operations</strong><p class="footer-note">Supervisors, Mechanics, Workers</p></div>
+        </div>
+        <br/>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Department Code</th><th>Department Name</th><th>Department Head</th><th>Total Users</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td>FIN</td><td>Finance</td><td>M.Bin Ashfaq</td><td>8</td><td><span class="badge green">Active</span></td><td>View · Edit · Delete</td></tr>
+              <tr><td>HR</td><td>Human Resource</td><td>Zubair</td><td>6</td><td><span class="badge green">Active</span></td><td>View · Edit · Delete</td></tr>
+              <tr><td>SITE</td><td>Site Operations</td><td>Nabeel Sir</td><td>110</td><td><span class="badge green">Active</span></td><td>View · Edit · Delete</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <br/>
+        <div class="form-section">
+          <h4>Add / Edit Department Fields</h4>
+          <div class="form-grid three">
+            <div class="field"><label>Department Name *</label><div class="input">Finance</div></div>
+            <div class="field"><label>Department Code *</label><div class="input">FIN</div></div>
+            <div class="field"><label>Department Head</label><div class="select">M.Bin Ashfaq</div></div>
+            <div class="field" style="grid-column:1/-1"><label>Description</label><div class="textarea">Department purpose and responsibilities...</div></div>
+            <div class="field"><label>Status</label><div class="select">Active</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="designations">
+      <div class="screen-card">
+        <div class="section-head">
+          <div><h3>Designation Management</h3><p>Employee job titles connected with departments and role suggestions.</p></div>
+          <button class="btn primary">+ Add Designation</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Designation</th><th>Department</th><th>Grade / Level</th><th>Default Role</th><th>Total Employees</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td>Finance Manager</td><td>Finance</td><td>L3</td><td>Finance Manager</td><td>2</td><td><span class="badge green">Active</span></td><td>View · Edit · Delete</td></tr>
+              <tr><td>Project Manager</td><td>Projects</td><td>L3</td><td>Project Manager</td><td>3</td><td><span class="badge green">Active</span></td><td>View · Edit · Delete</td></tr>
+              <tr><td>Site Supervisor</td><td>Site Operations</td><td>L2</td><td>Site Supervisor</td><td>8</td><td><span class="badge green">Active</span></td><td>View · Edit · Delete</td></tr>
+              <tr><td>Mechanic</td><td>Equipment</td><td>L1</td><td>Mechanic</td><td>12</td><td><span class="badge green">Active</span></td><td>View · Edit · Delete</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <br/>
+        <div class="form-section">
+          <h4>Add / Edit Designation Fields</h4>
+          <div class="form-grid three">
+            <div class="field"><label>Designation Name *</label><div class="input">Site Supervisor</div></div>
+            <div class="field"><label>Department *</label><div class="select">Site Operations</div></div>
+            <div class="field"><label>Grade / Level</label><div class="select">L2</div></div>
+            <div class="field"><label>Default Role</label><div class="select">Site Supervisor</div></div>
+            <div class="field"><label>Mobile App Access Default</label><div class="select">Yes</div></div>
+            <div class="field"><label>Status</label><div class="select">Active</div></div>
+            <div class="field" style="grid-column:1/-1"><label>Description</label><div class="textarea">Responsibilities and access notes...</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="projects">
+      <div class="screen-card">
+        <div class="section-head">
+          <div><h3>Project Management Setup</h3><p>Master project setup before budgeting, attendance, expense, inventory, and equipment assignment.</p></div>
+          <button class="btn primary">+ Create Project</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Project Code</th><th>Project Name</th><th>Client</th><th>Branch</th><th>Project Manager</th><th>Budget</th><th>Start</th><th>End</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td>PRJ-001</td><td>Riyadh Tower</td><td>ABC Holdings</td><td>Riyadh</td><td>M.Bin Ashfaq</td><td>SAR 2.5M</td><td>01 Jan 2026</td><td>30 Dec 2026</td><td><span class="badge green">Active</span></td><td>View · Edit · Sites · Budget</td></tr>
+              <tr><td>PRJ-002</td><td>Jeddah Warehouse</td><td>XYZ Trading</td><td>Jeddah</td><td>Zubair</td><td>SAR 1.4M</td><td>15 Feb 2026</td><td>15 Oct 2026</td><td><span class="badge yellow">Planning</span></td><td>View · Edit · Sites · Budget</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <br/>
+        <div class="form-section">
+          <h4>Create / Edit Project Fields</h4>
+          <div class="form-grid three">
+            <div class="field"><label>Project Name *</label><div class="input">Riyadh Tower</div></div>
+            <div class="field"><label>Project Code *</label><div class="input">PRJ-001</div></div>
+            <div class="field"><label>Client Name *</label><div class="select">ABC Holdings</div></div>
+            <div class="field"><label>Branch *</label><div class="select">Riyadh Main Branch</div></div>
+            <div class="field"><label>Project Manager *</label><div class="select">M.Bin Ashfaq</div></div>
+            <div class="field"><label>Status *</label><div class="select">Active</div></div>
+            <div class="field"><label>Start Date *</label><div class="input">01 Jan 2026</div></div>
+            <div class="field"><label>End Date *</label><div class="input">30 Dec 2026</div></div>
+            <div class="field"><label>Budget Amount *</label><div class="input">SAR 2,500,000</div></div>
+            <div class="field" style="grid-column:1/-1"><label>Project Location</label><div class="textarea">Riyadh, District, Street, exact construction location...</div></div>
+            <div class="field" style="grid-column:1/-1"><label>Description</label><div class="textarea">Project scope, commercial notes, client requirements...</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="sites">
+      <div class="screen-card">
+        <div class="section-head">
+          <div><h3>Site Management with Geo-Fence</h3><p>Construction sites used by mobile attendance, expenses, material consumption, and equipment assignment.</p></div>
+          <button class="btn primary">+ Add Site</button>
+        </div>
+        <div class="split">
+          <div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Site Code</th><th>Site Name</th><th>Project</th><th>Supervisor</th><th>Geo-Fence</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody>
+                  <tr><td>SITE-A</td><td>Block A</td><td>Riyadh Tower</td><td>Nabeel Sir</td><td><span class="badge green">Enabled</span></td><td><span class="badge green">Active</span></td><td>View · Edit · Map</td></tr>
+                  <tr><td>SITE-B</td><td>Block B</td><td>Riyadh Tower</td><td>Waiz</td><td><span class="badge green">Enabled</span></td><td><span class="badge green">Active</span></td><td>View · Edit · Map</td></tr>
+                  <tr><td>SITE-YARD</td><td>Equipment Yard</td><td>Jeddah Warehouse</td><td>Uzaid</td><td><span class="badge yellow">Pending</span></td><td><span class="badge yellow">Draft</span></td><td>View · Edit · Map</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <br/>
+            <div class="form-section">
+              <h4>Add / Edit Site Fields</h4>
+              <div class="form-grid">
+                <div class="field"><label>Site Name *</label><div class="input">Block A</div></div>
+                <div class="field"><label>Site Code *</label><div class="input">SITE-A</div></div>
+                <div class="field"><label>Project *</label><div class="select">Riyadh Tower</div></div>
+                <div class="field"><label>Site Supervisor *</label><div class="select">Nabeel Sir</div></div>
+                <div class="field"><label>Latitude *</label><div class="input">24.7136</div></div>
+                <div class="field"><label>Longitude *</label><div class="input">46.6753</div></div>
+                <div class="field"><label>Geo-Fence Radius *</label><div class="input">300 meters</div></div>
+                <div class="field"><label>Attendance Allowed Inside Boundary</label><div class="select">Yes</div></div>
+                <div class="field"><label>Offline Attendance Allowed</label><div class="select">Yes</div></div>
+                <div class="field"><label>Status</label><div class="select">Active</div></div>
+                <div class="field" style="grid-column:1/-1"><label>Address</label><div class="textarea">Full construction site address...</div></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="map-placeholder">Map + Geo-Fence Circle Placeholder</div>
+            <br/>
+            <div class="note">
+              Figma note: show map placeholder with a circular geo-fence. Add radius input and small labels for latitude/longitude. This screen will later connect with mobile attendance check-in/check-out.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="warehouses">
+      <div class="screen-card">
+        <div class="section-head">
+          <div><h3>Warehouse Management</h3><p>Warehouses can be branch-level or project/site-level for inventory tracking.</p></div>
+          <button class="btn primary">+ Add Warehouse</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Warehouse Code</th><th>Warehouse Name</th><th>Branch</th><th>Project/Site</th><th>Incharge</th><th>Stock Value</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td>WH-RYD</td><td>Riyadh Main Store</td><td>Riyadh</td><td>Branch Level</td><td>Store Keeper</td><td>SAR 340K</td><td><span class="badge green">Active</span></td><td>View · Edit · Stock</td></tr>
+              <tr><td>WH-SITE-A</td><td>Riyadh Tower Site Store</td><td>Riyadh</td><td>Riyadh Tower / Block A</td><td>Nabeel Sir</td><td>SAR 85K</td><td><span class="badge green">Active</span></td><td>View · Edit · Stock</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <br/>
+        <div class="form-section">
+          <h4>Add / Edit Warehouse Fields</h4>
+          <div class="form-grid three">
+            <div class="field"><label>Warehouse Name *</label><div class="input">Riyadh Main Store</div></div>
+            <div class="field"><label>Warehouse Code *</label><div class="input">WH-RYD</div></div>
+            <div class="field"><label>Branch *</label><div class="select">Riyadh Main Branch</div></div>
+            <div class="field"><label>Project</label><div class="select">Optional / Riyadh Tower</div></div>
+            <div class="field"><label>Site</label><div class="select">Optional / Block A</div></div>
+            <div class="field"><label>Warehouse Incharge</label><div class="select">Store Keeper</div></div>
+            <div class="field"><label>Inventory Valuation Method</label><div class="select">FIFO / Average</div></div>
+            <div class="field"><label>Status</label><div class="select">Active</div></div>
+            <div class="field" style="grid-column:1/-1"><label>Location / Address</label><div class="textarea">Warehouse address...</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="expenses">
+      <div class="screen-card">
+        <div class="section-head">
+          <div><h3>Expense Category Setup</h3><p>Used by site staff mobile expense entry and automatic accounting posting.</p></div>
+          <button class="btn primary">+ Add Expense Category</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Category Code</th><th>Category Name</th><th>Linked Account</th><th>Approval Required</th><th>Mobile Visible</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td>EXP-MAT</td><td>Material Purchase</td><td>Project Material Expense</td><td><span class="badge blue">Yes</span></td><td><span class="badge green">Yes</span></td><td><span class="badge green">Active</span></td><td>View · Edit · Delete</td></tr>
+              <tr><td>EXP-FUEL</td><td>Fuel</td><td>Fuel Expense</td><td><span class="badge blue">Yes</span></td><td><span class="badge green">Yes</span></td><td><span class="badge green">Active</span></td><td>View · Edit · Delete</td></tr>
+              <tr><td>EXP-FOOD</td><td>Food</td><td>Staff Welfare Expense</td><td><span class="badge blue">Yes</span></td><td><span class="badge green">Yes</span></td><td><span class="badge green">Active</span></td><td>View · Edit · Delete</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <br/>
+        <div class="form-section">
+          <h4>Add / Edit Expense Category Fields</h4>
+          <div class="form-grid three">
+            <div class="field"><label>Category Name *</label><div class="input">Fuel</div></div>
+            <div class="field"><label>Category Code *</label><div class="input">EXP-FUEL</div></div>
+            <div class="field"><label>Linked Chart of Account *</label><div class="select">Fuel Expense</div></div>
+            <div class="field"><label>Approval Required</label><div class="select">Yes</div></div>
+            <div class="field"><label>Mobile App Visible</label><div class="select">Yes</div></div>
+            <div class="field"><label>Allowed Payment Type</label><div class="select">Cash / Bank / Both</div></div>
+            <div class="field"><label>Invoice Photo Required</label><div class="select">Yes</div></div>
+            <div class="field"><label>Default VAT Treatment</label><div class="select">VAT 15% / Non-VAT</div></div>
+            <div class="field"><label>Status</label><div class="select">Active</div></div>
+            <div class="field" style="grid-column:1/-1"><label>Description</label><div class="textarea">Used for daily fuel expense entries from mobile app...</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="suppliers">
+      <div class="screen-card">
+        <div class="section-head">
+          <div><h3>Supplier Management</h3><p>Used by purchase management, expenses, inventory, payable accounting, and VAT records.</p></div>
+          <button class="btn primary">+ Add Supplier</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Supplier Code</th><th>Supplier Name</th><th>VAT Number</th><th>Phone</th><th>Category</th><th>Payable Balance</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td>SUP-001</td><td>Saudi Cement Supplier</td><td>300XXXX</td><td>+966...</td><td>Materials</td><td>SAR 42K</td><td><span class="badge green">Active</span></td><td>View · Edit · Ledger</td></tr>
+              <tr><td>SUP-002</td><td>Fuel Station Vendor</td><td>300YYYY</td><td>+966...</td><td>Fuel</td><td>SAR 8K</td><td><span class="badge green">Active</span></td><td>View · Edit · Ledger</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <br/>
+        <div class="form-section">
+          <h4>Add / Edit Supplier Fields</h4>
+          <div class="form-grid three">
+            <div class="field"><label>Supplier Name *</label><div class="input">Saudi Cement Supplier</div></div>
+            <div class="field"><label>Supplier Code *</label><div class="input">SUP-001</div></div>
+            <div class="field"><label>Supplier Category</label><div class="select">Materials</div></div>
+            <div class="field"><label>VAT Number</label><div class="input">300XXXXXXXXXXXX</div></div>
+            <div class="field"><label>CR Number</label><div class="input">1010XXXXXX</div></div>
+            <div class="field"><label>Opening Balance</label><div class="input">SAR 0.00</div></div>
+            <div class="field"><label>Contact Person</label><div class="input">Ahmed</div></div>
+            <div class="field"><label>Phone</label><div class="input">+966...</div></div>
+            <div class="field"><label>Email</label><div class="input">supplier@email.com</div></div>
+            <div class="field"><label>Payment Terms</label><div class="select">Cash / 15 Days / 30 Days</div></div>
+            <div class="field"><label>Linked Payable Account</label><div class="select">Accounts Payable - Suppliers</div></div>
+            <div class="field"><label>Status</label><div class="select">Active</div></div>
+            <div class="field" style="grid-column:1/-1"><label>Address</label><div class="textarea">Supplier address...</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="customers">
+      <div class="screen-card">
+        <div class="section-head">
+          <div><h3>Customer / Client Management</h3><p>Used by project contracts, receivables, sales invoices, VAT, and ZATCA e-invoicing.</p></div>
+          <button class="btn primary">+ Add Customer</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Customer Code</th><th>Customer Name</th><th>VAT Number</th><th>Contact Person</th><th>Total Projects</th><th>Receivable</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td>CUS-001</td><td>ABC Holdings</td><td>300ZZZZ</td><td>Mr. Khalid</td><td>2</td><td>SAR 120K</td><td><span class="badge green">Active</span></td><td>View · Edit · Ledger</td></tr>
+              <tr><td>CUS-002</td><td>XYZ Trading</td><td>300AAAA</td><td>Mr. Saleh</td><td>1</td><td>SAR 65K</td><td><span class="badge green">Active</span></td><td>View · Edit · Ledger</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <br/>
+        <div class="form-section">
+          <h4>Add / Edit Customer Fields</h4>
+          <div class="form-grid three">
+            <div class="field"><label>Customer Name *</label><div class="input">ABC Holdings</div></div>
+            <div class="field"><label>Customer Code *</label><div class="input">CUS-001</div></div>
+            <div class="field"><label>Customer Type</label><div class="select">Company / Individual</div></div>
+            <div class="field"><label>VAT Number</label><div class="input">300XXXXXXXXXXXX</div></div>
+            <div class="field"><label>CR Number</label><div class="input">1010XXXXXX</div></div>
+            <div class="field"><label>Opening Receivable</label><div class="input">SAR 0.00</div></div>
+            <div class="field"><label>Contact Person</label><div class="input">Mr. Khalid</div></div>
+            <div class="field"><label>Phone</label><div class="input">+966...</div></div>
+            <div class="field"><label>Email</label><div class="input">client@email.com</div></div>
+            <div class="field"><label>Credit Limit</label><div class="input">SAR 500,000</div></div>
+            <div class="field"><label>Linked Receivable Account</label><div class="select">Accounts Receivable - Customers</div></div>
+            <div class="field"><label>Status</label><div class="select">Active</div></div>
+            <div class="field" style="grid-column:1/-1"><label>Billing Address</label><div class="textarea">Customer billing address for ZATCA invoices...</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="next">
+      <div class="screen-card">
+        <div class="section-head">
+          <div><h3>What Comes After Phase 2?</h3><p>Recommended next Figma order after master setup is approved.</p></div>
+        </div>
+        <div class="grid cards-3">
+          <div class="card"><h3>Phase 3</h3><p><strong>HR & Payroll</strong></p><p class="footer-note">Employees, documents/IQAMA, attendance, shifts, leaves, payroll processing, EOSB.</p></div>
+          <div class="card"><h3>Phase 4</h3><p><strong>Accounting + VAT + ZATCA</strong></p><p class="footer-note">Chart of accounts, journal, GL, payables, receivables, VAT reports, e-invoices.</p></div>
+          <div class="card"><h3>Phase 5</h3><p><strong>Projects + Site Expenses</strong></p><p class="footer-note">Budgeting, cost tracking, mobile expenses, approvals, auto accounting posting.</p></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>

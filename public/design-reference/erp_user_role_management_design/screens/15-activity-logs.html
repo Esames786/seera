@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Activity Logs - Construction ERP</title>
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+<div class="layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand"><span class="logo-icon">C</span><span>Construction ERP</span></div>
+        <div class="small" style="margin-top:5px;color:#94a3b8">Admin Web Portal</div>
+      </div>
+      <div class="user">
+        <div class="avatar">OA</div>
+        <div><div style="color:#fff;font-weight:800">Omar Sir</div><div class="small" style="color:#94a3b8">Super Admin</div></div>
+      </div>
+      <div class="search-box"><input placeholder="Search menu..." /></div>
+      <div class="nav-title">Administration</div>
+      <a class="nav-item" href="04-dashboard.html"><span>📊</span><span>Dashboard</span></a><a class="nav-item" href="05-users-listing.html"><span>👥</span><span>Users</span></a><a class="nav-item" href="08-roles-listing.html"><span>🛡️</span><span>Roles</span></a><a class="nav-item" href="11-permission-matrix.html"><span>✅</span><span>Permission Matrix</span></a><a class="nav-item" href="12-role-hierarchy.html"><span>🌳</span><span>Role Hierarchy</span></a><a class="nav-item" href="14-approval-workflow-builder.html"><span>🔁</span><span>Approval Workflows</span></a><a class="nav-item active" href="15-activity-logs.html"><span>🧾</span><span>Activity Logs</span></a>
+      <div class="nav-title">ERP Modules Preview</div>
+      <a class="nav-item" href="#"><span>💰</span><span>Accounting</span></a>
+      <a class="nav-item" href="#"><span>🏗️</span><span>Projects</span></a>
+      <a class="nav-item" href="#"><span>👷</span><span>HR & Payroll</span></a>
+      <a class="nav-item" href="#"><span>📦</span><span>Inventory</span></a>
+      <a class="nav-item" href="#"><span>🚜</span><span>Equipment</span></a>
+      <a class="nav-item" href="#"><span>🧾</span><span>ZATCA</span></a>
+    </aside>
+    
+<main class="content">
+  <div class="topbar">
+    <div>
+      <div class="breadcrumb">Home / Administration / Activity Logs</div>
+    </div>
+    <div style="display:flex;gap:14px;align-items:center">
+      <span>🔎</span><span>🔔</span><span>⚙️</span>
+      <div class="avatar">OA</div>
+    </div>
+  </div>
+  <section class="page">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Activity Logs</h1>
+        <p class="page-desc">Audit trail for security, user, role, permission and workflow changes</p>
+      </div>
+      <div></div>
+    </div>
+    
+<div class="toolbar">
+  <div class="toolbar-left">
+    <input class="input" style="width:220px" placeholder="Search activity..." />
+    <select class="select" style="width:160px"><option>All Modules</option><option>Users</option><option>Roles</option><option>Permissions</option></select>
+    <select class="select" style="width:160px"><option>All Actions</option><option>Create</option><option>Update</option><option>Delete</option><option>Login</option></select>
+    <input class="input" style="width:150px" type="date" />
+  </div>
+  <div class="toolbar-right"><button class="btn outline">Export Logs</button></div>
+</div>
+<div class="table-card">
+  <div class="table-title">Audit Trail / Activity Logs</div>
+  <table>
+    <thead><tr><th>Date & Time</th><th>User</th><th>Module</th><th>Action</th><th>Old Value</th><th>New Value</th><th>IP Address</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>2026-05-12 10:22</td><td>Omar Sir</td><td>Roles</td><td>Updated role permission</td><td>Approve: No</td><td>Approve: Yes</td><td>192.168.1.15</td><td><span class="badge green">Success</span></td></tr>
+      <tr><td>2026-05-12 09:44</td><td>Finance Manager</td><td>Users</td><td>Assigned role</td><td>None</td><td>Finance Manager</td><td>192.168.1.20</td><td><span class="badge green">Success</span></td></tr>
+      <tr><td>2026-05-11 18:10</td><td>System</td><td>Security</td><td>Failed login</td><td>-</td><td>Invalid password</td><td>185.10.1.2</td><td><span class="badge red">Failed</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+  </section>
+</main>
+</div>
+</body>
+</html>

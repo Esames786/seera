@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Approval Workflow Builder - Construction ERP</title>
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+<div class="layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand"><span class="logo-icon">C</span><span>Construction ERP</span></div>
+        <div class="small" style="margin-top:5px;color:#94a3b8">Admin Web Portal</div>
+      </div>
+      <div class="user">
+        <div class="avatar">OA</div>
+        <div><div style="color:#fff;font-weight:800">Omar Sir</div><div class="small" style="color:#94a3b8">Super Admin</div></div>
+      </div>
+      <div class="search-box"><input placeholder="Search menu..." /></div>
+      <div class="nav-title">Administration</div>
+      <a class="nav-item" href="04-dashboard.html"><span>📊</span><span>Dashboard</span></a><a class="nav-item" href="05-users-listing.html"><span>👥</span><span>Users</span></a><a class="nav-item" href="08-roles-listing.html"><span>🛡️</span><span>Roles</span></a><a class="nav-item" href="11-permission-matrix.html"><span>✅</span><span>Permission Matrix</span></a><a class="nav-item" href="12-role-hierarchy.html"><span>🌳</span><span>Role Hierarchy</span></a><a class="nav-item active" href="14-approval-workflow-builder.html"><span>🔁</span><span>Approval Workflows</span></a><a class="nav-item" href="15-activity-logs.html"><span>🧾</span><span>Activity Logs</span></a>
+      <div class="nav-title">ERP Modules Preview</div>
+      <a class="nav-item" href="#"><span>💰</span><span>Accounting</span></a>
+      <a class="nav-item" href="#"><span>🏗️</span><span>Projects</span></a>
+      <a class="nav-item" href="#"><span>👷</span><span>HR & Payroll</span></a>
+      <a class="nav-item" href="#"><span>📦</span><span>Inventory</span></a>
+      <a class="nav-item" href="#"><span>🚜</span><span>Equipment</span></a>
+      <a class="nav-item" href="#"><span>🧾</span><span>ZATCA</span></a>
+    </aside>
+    
+<main class="content">
+  <div class="topbar">
+    <div>
+      <div class="breadcrumb">Home / Administration / Approval Workflow Builder</div>
+    </div>
+    <div style="display:flex;gap:14px;align-items:center">
+      <span>🔎</span><span>🔔</span><span>⚙️</span>
+      <div class="avatar">OA</div>
+    </div>
+  </div>
+  <section class="page">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Approval Workflow Builder</h1>
+        <p class="page-desc">Create approval flows for ERP transactions</p>
+      </div>
+      <div></div>
+    </div>
+    
+<div class="help-box">This screen is essential for construction ERP approvals. Use it for site expenses, purchase requests, leave, payroll, inventory transfer, equipment maintenance, etc.</div>
+<div class="form-section">
+  <div class="section-title">Workflow Basic Information</div>
+  <div class="section-body form-grid three">
+    <div><label>Workflow Name</label><input class="input" value="Site Expense Approval" /></div>
+    <div><label>Module</label><select class="select"><option>Site Expenses</option><option>Purchase Request</option><option>Payroll</option><option>Leave Request</option><option>Inventory Transfer</option><option>Equipment Maintenance</option></select></div>
+    <div><label>Trigger Action</label><select class="select"><option>Expense Submitted</option><option>Request Created</option><option>Payroll Generated</option></select></div>
+    <div><label>Department</label><select class="select"><option>Site</option><option>Finance</option><option>HR</option></select></div>
+    <div><label>Project/Site Scope</label><select class="select"><option>Assigned Project/Site</option><option>All Projects</option></select></div>
+    <div><label>Status</label><select class="select"><option>Active</option><option>Inactive</option></select></div>
+  </div>
+</div>
+<div class="table-card">
+  <div class="table-title">Approval Steps <button class="btn sm primary">+ Add Step</button></div>
+  <table>
+    <thead><tr><th>Step No</th><th>Approver Role</th><th>Approver User</th><th>Required?</th><th>Amount Limit</th><th>SLA</th><th>Escalation Role</th><th>Can Reject</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Site Supervisor</td><td>Any assigned supervisor</td><td><span class="badge green">Required</span></td><td>Up to 5,000 SAR</td><td>24 hours</td><td>Project Manager</td><td>Yes</td><td><button class="btn sm">Edit</button></td></tr>
+      <tr><td>2</td><td>Project Manager</td><td>Assigned PM</td><td><span class="badge green">Required</span></td><td>Up to 20,000 SAR</td><td>48 hours</td><td>Finance Manager</td><td>Yes</td><td><button class="btn sm">Edit</button></td></tr>
+      <tr><td>3</td><td>Finance Manager</td><td>Any finance manager</td><td><span class="badge green">Required</span></td><td>Final approval</td><td>48 hours</td><td>Super Admin</td><td>Yes</td><td><button class="btn sm">Edit</button></td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="form-section">
+  <div class="section-title">Final Action After Approval</div>
+  <div class="section-body form-grid three">
+    <div><label>Auto Posting</label><select class="select"><option>Create Accounting Entry</option><option>No Auto Posting</option></select></div>
+    <div><label>Notify Requester</label><select class="select"><option>Yes</option><option>No</option></select></div>
+    <div><label>Lock After Approval</label><select class="select"><option>Yes</option><option>No</option></select></div>
+  </div>
+</div>
+<div class="workflow">
+  <div class="workflow-step">Mechanic<br><span class="small">Requester</span></div><div class="arrow">→</div>
+  <div class="workflow-step">Site Supervisor<br><span class="small">Step 1</span></div><div class="arrow">→</div>
+  <div class="workflow-step">Project Manager<br><span class="small">Step 2</span></div><div class="arrow">→</div>
+  <div class="workflow-step">Finance Manager<br><span class="small">Final Approval</span></div><div class="arrow">→</div>
+  <div class="workflow-step">Accounting Entry<br><span class="small">Auto Post</span></div>
+</div>
+<div style="display:flex;justify-content:flex-end;gap:10px"><button class="btn outline">Cancel</button><button class="btn primary">Save Workflow</button></div>
+
+  </section>
+</main>
+</div>
+</body>
+</html>

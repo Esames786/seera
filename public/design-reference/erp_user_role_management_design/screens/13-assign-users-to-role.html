@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Assign Users to Role - Construction ERP</title>
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+<div class="layout">
+
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand"><span class="logo-icon">C</span><span>Construction ERP</span></div>
+        <div class="small" style="margin-top:5px;color:#94a3b8">Admin Web Portal</div>
+      </div>
+      <div class="user">
+        <div class="avatar">OA</div>
+        <div><div style="color:#fff;font-weight:800">Omar Sir</div><div class="small" style="color:#94a3b8">Super Admin</div></div>
+      </div>
+      <div class="search-box"><input placeholder="Search menu..." /></div>
+      <div class="nav-title">Administration</div>
+      <a class="nav-item" href="04-dashboard.html"><span>📊</span><span>Dashboard</span></a><a class="nav-item" href="05-users-listing.html"><span>👥</span><span>Users</span></a><a class="nav-item active" href="08-roles-listing.html"><span>🛡️</span><span>Roles</span></a><a class="nav-item" href="11-permission-matrix.html"><span>✅</span><span>Permission Matrix</span></a><a class="nav-item" href="12-role-hierarchy.html"><span>🌳</span><span>Role Hierarchy</span></a><a class="nav-item" href="14-approval-workflow-builder.html"><span>🔁</span><span>Approval Workflows</span></a><a class="nav-item" href="15-activity-logs.html"><span>🧾</span><span>Activity Logs</span></a>
+      <div class="nav-title">ERP Modules Preview</div>
+      <a class="nav-item" href="#"><span>💰</span><span>Accounting</span></a>
+      <a class="nav-item" href="#"><span>🏗️</span><span>Projects</span></a>
+      <a class="nav-item" href="#"><span>👷</span><span>HR & Payroll</span></a>
+      <a class="nav-item" href="#"><span>📦</span><span>Inventory</span></a>
+      <a class="nav-item" href="#"><span>🚜</span><span>Equipment</span></a>
+      <a class="nav-item" href="#"><span>🧾</span><span>ZATCA</span></a>
+    </aside>
+    
+<main class="content">
+  <div class="topbar">
+    <div>
+      <div class="breadcrumb">Home / Administration / Assign Users to Role</div>
+    </div>
+    <div style="display:flex;gap:14px;align-items:center">
+      <span>🔎</span><span>🔔</span><span>⚙️</span>
+      <div class="avatar">OA</div>
+    </div>
+  </div>
+  <section class="page">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Assign Users to Role</h1>
+        <p class="page-desc">Assign or remove users from role with project/site filters and temporary access</p>
+      </div>
+      <div></div>
+    </div>
+    
+<div class="toolbar">
+  <div class="toolbar-left">
+    <select class="select" style="width:220px"><option>Selected Role: Site Supervisor</option><option>Project Manager</option><option>Mechanic</option></select>
+    <select class="select" style="width:160px"><option>Department: Site</option><option>All Departments</option></select>
+    <select class="select" style="width:160px"><option>Project: All</option><option>Riyadh Tower</option></select>
+    <select class="select" style="width:160px"><option>Site: All</option><option>Block A</option></select>
+  </div>
+  <div class="toolbar-right"><button class="btn primary">Save Changes</button></div>
+</div>
+<div class="dual-list">
+  <div class="user-list">
+    <h3>Available Users <span class="badge green">14 Total</span></h3>
+    <input class="input" placeholder="Search user..." />
+    <div style="height:12px"></div>
+    <div class="user-row"><div class="avatar">KM</div><div><b>Kamran</b><div class="small">Mechanic • Jeddah Workshop</div></div></div>
+    <div class="user-row"><div class="avatar">PR</div><div><b>Pradip</b><div class="small">Mechanic • Riyadh Site</div></div></div>
+    <div class="user-row"><div class="avatar">IM</div><div><b>Imran</b><div class="small">Mechanic • Dammam Site</div></div></div>
+    <div class="user-row"><div class="avatar">ZF</div><div><b>Zafar</b><div class="small">Site Staff • Block B</div></div></div>
+  </div>
+  <div class="center-actions">
+    <button class="btn primary">→</button>
+    <button class="btn outline">←</button>
+    <button class="btn sm">Add All</button>
+    <button class="btn sm danger">Remove All</button>
+  </div>
+  <div class="user-list">
+    <h3>Assigned to Role <span class="badge yellow">4 Members</span></h3>
+    <input class="input" placeholder="Search assigned..." />
+    <div style="height:12px"></div>
+    <div class="user-row"><div class="avatar">NA</div><div><b>Nabeel Sir</b><div class="small">Site Supervisor • Riyadh Tower</div></div></div>
+    <div class="user-row"><div class="avatar">WZ</div><div><b>Waiz</b><div class="small">Site Supervisor • Jeddah Villa</div></div></div>
+    <div class="user-row"><div class="avatar">UZ</div><div><b>Uzaid</b><div class="small">Site Supervisor • Dammam Road</div></div></div>
+  </div>
+</div>
+<div style="height:16px"></div>
+<div class="form-section">
+  <div class="section-title">Temporary Access Option</div>
+  <div class="section-body form-grid four">
+    <div><label>Temporary Access</label><select class="select"><option>No</option><option>Yes</option></select></div>
+    <div><label>Access Start Date</label><input class="input" type="date" /></div>
+    <div><label>Access End Date</label><input class="input" type="date" /></div>
+    <div><label>Approval Required?</label><select class="select"><option>Yes</option><option>No</option></select></div>
+    <div style="grid-column:1/-1"><label>Reason</label><textarea class="textarea" placeholder="Example: temporary project coverage for Riyadh Tower"></textarea></div>
+  </div>
+</div>
+
+  </section>
+</main>
+</div>
+</body>
+</html>
