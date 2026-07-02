@@ -55,7 +55,15 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::put('roles/permission-matrix', [PermissionMatrixController::class, 'update'])->name('roles.permission-matrix.update');
     Route::get('roles/hierarchy', [RoleHierarchyController::class, 'index'])->name('roles.hierarchy');
     Route::get('roles/assign-users', [RoleController::class, 'assignUsers'])->name('roles.assign-users');
-    Route::get('roles/approval-workflows', [ApprovalWorkflowController::class, 'index'])->name('roles.approval-workflows');
+    Route::post('roles/assign-users', [RoleController::class, 'saveAssignedUsers'])->name('roles.assign-users.save');
+
+    Route::get('roles/approval-workflows', [ApprovalWorkflowController::class, 'index'])->name('roles.approval-workflows.index');
+    Route::get('roles/approval-workflows/create', [ApprovalWorkflowController::class, 'create'])->name('roles.approval-workflows.create');
+    Route::post('roles/approval-workflows', [ApprovalWorkflowController::class, 'store'])->name('roles.approval-workflows.store');
+    Route::get('roles/approval-workflows/{approval_workflow}/edit', [ApprovalWorkflowController::class, 'edit'])->name('roles.approval-workflows.edit');
+    Route::put('roles/approval-workflows/{approval_workflow}', [ApprovalWorkflowController::class, 'update'])->name('roles.approval-workflows.update');
+    Route::delete('roles/approval-workflows/{approval_workflow}', [ApprovalWorkflowController::class, 'destroy'])->name('roles.approval-workflows.destroy');
+
     Route::resource('roles', RoleController::class);
 
     // Activity Logs

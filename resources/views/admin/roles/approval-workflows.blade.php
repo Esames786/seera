@@ -4,75 +4,80 @@
 @section('breadcrumb', 'Administration / Approval Workflows')
 
 @section('content')
-    <x-admin.page-header title="Approval Workflow Builder" description="Create approval flows for ERP transactions"/>
+    <x-admin.page-header title="Approval Workflows" description="Create approval flows for ERP transactions">
+        <a class="btn primary" href="{{ route('admin.roles.approval-workflows.create') }}">+ New Workflow</a>
+    </x-admin.page-header>
 
     <div class="help-box">
         Approval workflows drive site expenses, purchase requests, leave, payroll, inventory transfers, and equipment maintenance approvals.
     </div>
 
-    <form method="GET" class="toolbar">
-        <div class="toolbar-left">
-            <select class="select" style="width:260px" name="workflow" onchange="this.form.submit()">
-                @foreach ($workflows as $workflow)
-                    <option value="{{ $workflow->id }}" @selected($selectedWorkflow && $selectedWorkflow->id === $workflow->id)>Workflow: {{ $workflow->name }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="toolbar-right">
-            <button type="button" class="btn primary">+ New Workflow</button>
-        </div>
-    </form>
+    <x-admin.data-table title="Workflows Listing">
+        <thead>
+            <tr>
+                <th>Workflow Name</th><th>Module</th><th>Trigger</th><th>Department</th>
+                <th>Scope</th><th>Steps</th><th>Status</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($workflows as $workflow)
+                <tr>
+                    <td>{{ $workflow->name }}</td>
+                    <td>{{ $workflow->module }}</td>
+                    <td>{{ $workflow->trigger_action ?? '-' }}</td>
+                    <td>{{ $workflow->department?->name ?? '-' }}</td>
+                    <td>{{ $workflow->scope }}</td>
+                    <td>{{ $workflow->steps_count }}</td>
+                    <td><x-admin.status-badge :status="$workflow->status"/></td>
+                    <td>
+                        <div class="actions">
+                            <a class="btn sm primary" href="{{ route('admin.roles.approval-workflows.index', ['workflow' => $workflow->id]) }}">Preview</a>
+                            <a class="btn sm" href="{{ route('admin.roles.approval-workflows.edit', $workflow) }}">Edit</a>
+                            <button type="button" class="btn sm danger js-delete"
+                                    data-delete-url="{{ route('admin.roles.approval-workflows.destroy', $workflow) }}"
+                                    data-delete-name="{{ $workflow->name }}">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr><td colspan="8" class="table-empty">No approval workflows yet. Create the first one.</td></tr>
+            @endforelse
+        </tbody>
+    </x-admin.data-table>
 
     @if ($selectedWorkflow)
-        <x-admin.form-section title="Workflow Basic Information" columns="3">
-            <div><label>Workflow Name</label><input class="input" value="{{ $selectedWorkflow->name }}" readonly/></div>
-            <div><label>Module</label><input class="input" value="{{ $selectedWorkflow->module }}" readonly/></div>
-            <div><label>Trigger Action</label><input class="input" value="{{ $selectedWorkflow->trigger_action }}" readonly/></div>
-            <div><label>Department</label><input class="input" value="{{ $selectedWorkflow->department?->name ?? '-' }}" readonly/></div>
-            <div><label>Project/Site Scope</label><input class="input" value="{{ $selectedWorkflow->scope }}" readonly/></div>
-            <div><label>Status</label><input class="input" value="{{ ucfirst($selectedWorkflow->status) }}" readonly/></div>
-        </x-admin.form-section>
-
-        <x-admin.data-table title="Approval Steps">
+        <x-admin.data-table :title="'Steps: '.$selectedWorkflow->name">
             <x-slot:headerActions>
-                <button type="button" class="btn sm primary">+ Add Step</button>
+                <a class="btn sm primary" href="{{ route('admin.roles.approval-workflows.edit', $selectedWorkflow) }}">Edit Workflow</a>
             </x-slot:headerActions>
             <thead>
                 <tr>
-                    <th>Step No</th><th>Approver Role</th><th>Approver User</th><th>Required?</th>
-                    <th>Amount Limit</th><th>SLA</th><th>Escalation Role</th><th>Can Reject</th><th>Actions</th>
+                    <th>Step No</th><th>Approver Role</th><th>Specific User</th><th>Required?</th>
+                    <th>Amount Limit</th><th>SLA</th><th>Escalation Role</th><th>Can Reject</th><th>Can Send Back</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($selectedWorkflow->steps as $step)
+                @foreach ($selectedWorkflow->steps as $step)
                     <tr>
                         <td>{{ $step->step_no }}</td>
                         <td>{{ $step->approverRole?->name ?? 'Any' }}</td>
-                        <td>{{ $step->approver_note ?? '-' }}</td>
+                        <td>{{ $step->approverUser?->name ?? 'Any assigned user' }}</td>
                         <td><span class="badge {{ $step->is_required ? 'green' : 'gray' }}">{{ $step->is_required ? 'Required' : 'Optional' }}</span></td>
                         <td>{{ $step->amount_limit ? 'Up to '.number_format($step->amount_limit).' SAR' : 'Final approval' }}</td>
                         <td>{{ $step->sla_hours }} hours</td>
                         <td>{{ $step->escalationRole?->name ?? '-' }}</td>
                         <td>{{ $step->can_reject ? 'Yes' : 'No' }}</td>
-                        <td><button type="button" class="btn sm">Edit</button></td>
+                        <td>{{ $step->can_send_back ? 'Yes' : 'No' }}</td>
                     </tr>
-                @empty
-                    <tr><td colspan="9" class="table-empty">No steps defined for this workflow yet.</td></tr>
-                @endforelse
+                @endforeach
             </tbody>
         </x-admin.data-table>
-
-        <x-admin.form-section title="Final Action After Approval" columns="3">
-            <div><label>Auto Posting</label><input class="input" value="{{ $selectedWorkflow->auto_posting }}" readonly/></div>
-            <div><label>Notify Requester</label><input class="input" value="{{ $selectedWorkflow->notify_requester ? 'Yes' : 'No' }}" readonly/></div>
-            <div><label>Lock After Approval</label><input class="input" value="{{ $selectedWorkflow->lock_after_approval ? 'Yes' : 'No' }}" readonly/></div>
-        </x-admin.form-section>
 
         <div class="table-card">
             <div class="table-title">Workflow Preview</div>
             <div style="padding:12px 16px">
                 <div class="workflow">
-                    <div class="workflow-step">Requester<br><span class="small">{{ $selectedWorkflow->trigger_action }}</span></div>
+                    <div class="workflow-step">Requester<br><span class="small">{{ $selectedWorkflow->trigger_action ?? 'Submitted' }}</span></div>
                     <div class="arrow">&rarr;</div>
                     @foreach ($selectedWorkflow->steps as $step)
                         <div class="workflow-step">{{ $step->approverRole?->name ?? 'Any' }}<br><span class="small">{{ $loop->last ? 'Final Approval' : 'Step '.$step->step_no }}</span></div>
@@ -82,7 +87,5 @@
                 </div>
             </div>
         </div>
-    @else
-        <div class="table-empty">No approval workflows defined yet.</div>
     @endif
 @endsection

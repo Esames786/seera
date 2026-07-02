@@ -28,7 +28,7 @@
     <a class="nav-item {{ request()->routeIs('admin.roles.index', 'admin.roles.create', 'admin.roles.show', 'admin.roles.edit') ? 'active' : '' }}" href="{{ route('admin.roles.index') }}"><span>🛡️</span><span>Roles</span></a>
     <a class="nav-item {{ request()->routeIs('admin.roles.permission-matrix') ? 'active' : '' }}" href="{{ route('admin.roles.permission-matrix') }}"><span>✅</span><span>Permission Matrix</span></a>
     <a class="nav-item {{ request()->routeIs('admin.roles.hierarchy') ? 'active' : '' }}" href="{{ route('admin.roles.hierarchy') }}"><span>🌳</span><span>Role Hierarchy</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.roles.approval-workflows') ? 'active' : '' }}" href="{{ route('admin.roles.approval-workflows') }}"><span>🔁</span><span>Approval Workflows</span></a>
+    <a class="nav-item {{ request()->routeIs('admin.roles.approval-workflows.*') ? 'active' : '' }}" href="{{ route('admin.roles.approval-workflows.index') }}"><span>🔁</span><span>Approval Workflows</span></a>
     <a class="nav-item {{ request()->routeIs('admin.activity-logs.*') ? 'active' : '' }}" href="{{ route('admin.activity-logs.index') }}"><span>🧾</span><span>Activity Logs</span></a>
 
     <div class="nav-title">Master Setup</div>

@@ -116,6 +116,7 @@ class RoleController extends Controller
 
         $availableUsers = User::with(['designation', 'project', 'site'])
             ->whereNotIn('id', $assignedUsers->pluck('id'))
+            ->when($request->filled('department'), fn ($q) => $q->where('department_id', $request->integer('department')))
             ->orderBy('name')
             ->get();
 
@@ -126,6 +127,50 @@ class RoleController extends Controller
             'availableUsers' => $availableUsers,
             'departments' => Department::orderBy('name')->get(),
         ]);
+    }
+
+    public function saveAssignedUsers(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'role_id' => ['required', 'exists:roles,id'],
+            'user_ids' => ['nullable', 'array'],
+            'user_ids.*' => ['exists:users,id'],
+            'temporary_access' => ['nullable', 'boolean'],
+            'access_start_date' => ['nullable', 'date'],
+            'access_end_date' => ['nullable', 'date', 'after_or_equal:access_start_date'],
+            'reason' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $role = Role::findOrFail($data['role_id']);
+        $userIds = collect($data['user_ids'] ?? [])->map(fn ($id) => (int) $id);
+
+        // Keep is_primary flags for users that stay on the role.
+        $existingPrimary = $role->users()
+            ->wherePivot('is_primary', true)
+            ->pluck('users.id');
+
+        $isTemporary = $request->boolean('temporary_access');
+        $pivot = [
+            'is_temporary' => $isTemporary,
+            'access_start_date' => $isTemporary ? ($data['access_start_date'] ?? null) : null,
+            'access_end_date' => $isTemporary ? ($data['access_end_date'] ?? null) : null,
+            'reason' => $data['reason'] ?? null,
+        ];
+
+        $role->users()->sync(
+            $userIds->mapWithKeys(fn ($id) => [$id => $pivot + ['is_primary' => $existingPrimary->contains($id)]])->all()
+        );
+
+        ActivityLog::record(
+            $request,
+            'Roles',
+            'Updated role assignments',
+            $role->name.': '.$userIds->count().' user(s) assigned'.($isTemporary ? ' (temporary access)' : '')
+        );
+
+        return redirect()
+            ->route('admin.roles.assign-users', ['role' => $role->id])
+            ->with('status', 'Assignments for "'.$role->name.'" saved successfully ('.$userIds->count().' users).');
     }
 
     private function validated(Request $request, ?Role $role = null): array

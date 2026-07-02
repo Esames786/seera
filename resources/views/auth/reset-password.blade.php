@@ -7,9 +7,10 @@
 @section('content')
     <form method="POST" action="{{ route('password.update') }}">
         @csrf
+        <input type="hidden" name="token" value="{{ $token ?? request('token') }}"/>
 
         <label for="email">Email Address</label>
-        <input id="email" name="email" type="email" class="input" placeholder="you@example.com" value="{{ old('email', request('email')) }}" required/>
+        <input id="email" name="email" type="email" class="input" placeholder="you@example.com" value="{{ old('email', $email ?? request('email')) }}" required/>
 
         <div style="height:12px"></div>
 
