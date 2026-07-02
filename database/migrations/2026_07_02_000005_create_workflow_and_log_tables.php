@@ -40,8 +40,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('user_name')->nullable();
-            $table->string('module');
-            $table->string('action');
+            $table->string('module', 100);
+            $table->string('action', 100);
             $table->text('description')->nullable();
             $table->string('old_value')->nullable();
             $table->string('new_value')->nullable();
