@@ -1,0 +1,37 @@
+# Phase 5 Projects + Site Expenses QA Checklist
+
+- [ ] Project dashboard loads
+- [ ] Dashboard cards show seeded data
+- [ ] Projects listing loads
+- [ ] Project filters visible
+- [ ] Add/Edit project screen loads
+- [ ] Project details screen loads
+- [ ] Project Budget / BOQ listing loads
+- [ ] Budget line create works
+- [ ] Budget variance visible
+- [ ] Project milestones load
+- [ ] Milestone create/edit works
+- [ ] Project cost tracking loads
+- [ ] Site expenses listing loads
+- [ ] Site expense filters visible
+- [ ] Site expense create works
+- [ ] Invoice photo upload placeholder visible
+- [ ] VAT calculation fields visible
+- [ ] Expense details page loads
+- [ ] Approval trail visible
+- [ ] PM approval changes status
+- [ ] Finance approval changes status
+- [ ] Reject action works
+- [ ] Send back action works
+- [ ] Approved expense becomes ready to post
+- [ ] Accounting posting preview visible
+- [ ] Posting creates journal entry
+- [ ] Expense payments screen loads
+- [ ] Expense payment record create works
+- [ ] Daily site reports listing loads
+- [ ] Daily site report create works
+- [ ] Project reports screen loads
+- [ ] Sidebar active states work
+- [ ] Activity logs are created
+- [ ] Phase 1, 2, 3, and 4 tests remain passing
+- [ ] New Phase 5 tests pass
