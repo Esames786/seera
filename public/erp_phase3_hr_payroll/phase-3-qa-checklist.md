@@ -1,0 +1,24 @@
+# Phase 3 HR & Payroll QA Checklist
+
+- [ ] HR Dashboard loads
+- [ ] Employee listing loads
+- [ ] Employee create works
+- [ ] Employee edit/update works
+- [ ] Employee deactivate/delete works
+- [ ] Employee details page loads
+- [ ] Employee document create works
+- [ ] IQAMA expiry status visible
+- [ ] Shift create works
+- [ ] Attendance create works
+- [ ] Attendance source manual/mobile/offline visible
+- [ ] Geo-fence status visible
+- [ ] Leave request create works
+- [ ] Overtime create works
+- [ ] Salary structure create works
+- [ ] Payroll run create works
+- [ ] Payroll process creates payroll items
+- [ ] Payroll approve changes status
+- [ ] EOSB create works
+- [ ] HR sidebar active states work
+- [ ] Phase 1 and Phase 2 tests remain passing
+- [ ] New Phase 3 tests pass

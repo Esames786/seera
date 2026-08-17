@@ -45,27 +45,35 @@
 
     <div class="nav-title">HR &amp; Payroll</div>
     @foreach ([
-        'employees' => ['👷', 'Employees'],
-        'attendance' => ['🕒', 'Attendance'],
-        'shifts' => ['🔄', 'Shifts'],
-        'leaves' => ['🌴', 'Leaves'],
-        'payroll' => ['💵', 'Payroll'],
-        'documents-iqama' => ['🪪', 'Documents / IQAMA'],
-    ] as $slug => [$icon, $label])
-        <a class="nav-item {{ request()->routeIs('admin.coming-soon') && request()->route('module') === $slug ? 'active' : '' }}" href="{{ route('admin.coming-soon', $slug) }}"><span>{{ $icon }}</span><span>{{ $label }}</span><span class="soon">Soon</span></a>
+        ['admin.hr.dashboard', 'admin.hr.dashboard', '📋', 'HR Dashboard'],
+        ['admin.hr.employees.index', 'admin.hr.employees.*', '👷', 'Employees'],
+        ['admin.hr.documents.index', 'admin.hr.documents.*', '🪪', 'Documents / IQAMA'],
+        ['admin.hr.shifts.index', 'admin.hr.shifts.*', '🔄', 'Shifts'],
+        ['admin.hr.attendance.index', 'admin.hr.attendance.*', '🕒', 'Attendance'],
+        ['admin.hr.leaves.index', 'admin.hr.leaves.*', '🌴', 'Leaves'],
+        ['admin.hr.overtime.index', 'admin.hr.overtime.*', '⏱️', 'Overtime'],
+        ['admin.hr.salary-structures.index', 'admin.hr.salary-structures.*', '🧮', 'Salary Structures'],
+        ['admin.hr.payroll.index', 'admin.hr.payroll.*', '💵', 'Payroll'],
+        ['admin.hr.eosb.index', 'admin.hr.eosb.*', '📄', 'End of Service'],
+    ] as [$route, $pattern, $icon, $label])
+        <a class="nav-item {{ request()->routeIs($pattern) ? 'active' : '' }}" href="{{ route($route) }}"><span>{{ $icon }}</span><span>{{ $label }}</span></a>
     @endforeach
 
     <div class="nav-title">Accounting</div>
     @foreach ([
-        'chart-of-accounts' => ['📒', 'Chart of Accounts'],
-        'journal-entries' => ['📓', 'Journal Entries'],
-        'general-ledger' => ['📚', 'General Ledger'],
-        'payables' => ['📤', 'Payables'],
-        'receivables' => ['📥', 'Receivables'],
-        'vat-management' => ['🧮', 'VAT Management'],
-        'financial-reports' => ['📈', 'Financial Reports'],
-    ] as $slug => [$icon, $label])
-        <a class="nav-item {{ request()->routeIs('admin.coming-soon') && request()->route('module') === $slug ? 'active' : '' }}" href="{{ route('admin.coming-soon', $slug) }}"><span>{{ $icon }}</span><span>{{ $label }}</span><span class="soon">Soon</span></a>
+        ['admin.accounting.dashboard', 'admin.accounting.dashboard', '📊', 'Accounting Dashboard'],
+        ['admin.accounting.chart-of-accounts.index', 'admin.accounting.chart-of-accounts.*', '📒', 'Chart of Accounts'],
+        ['admin.accounting.journal-entries.index', 'admin.accounting.journal-entries.*', '📓', 'Journal Entries'],
+        ['admin.accounting.general-ledger', 'admin.accounting.general-ledger', '📚', 'General Ledger'],
+        ['admin.accounting.accounts-payable.index', 'admin.accounting.accounts-payable.*', '📤', 'Accounts Payable'],
+        ['admin.accounting.accounts-receivable.index', 'admin.accounting.accounts-receivable.*', '📥', 'Accounts Receivable'],
+        ['admin.accounting.vat.index', 'admin.accounting.vat.*', '🧮', 'VAT Management'],
+        ['admin.accounting.zatca.index', 'admin.accounting.zatca.*', '🧾', 'ZATCA E-Invoicing'],
+        ['admin.accounting.reports.index', 'admin.accounting.reports.*', '📈', 'Financial Reports'],
+        ['admin.accounting.cost-centers.index', 'admin.accounting.cost-centers.*', '🎯', 'Cost Centers'],
+        ['admin.accounting.posting-rules.index', 'admin.accounting.posting-rules.*', '⚙️', 'Automatic Posting Rules'],
+    ] as [$route, $pattern, $icon, $label])
+        <a class="nav-item {{ request()->routeIs($pattern) ? 'active' : '' }}" href="{{ route($route) }}"><span>{{ $icon }}</span><span>{{ $label }}</span></a>
     @endforeach
 
     <div class="nav-title">Projects</div>
@@ -97,16 +105,6 @@
         'gps-tracking' => ['🛰️', 'GPS Tracking'],
         'maintenance' => ['🔧', 'Maintenance'],
         'fuel-tracking' => ['⛽', 'Fuel Tracking'],
-    ] as $slug => [$icon, $label])
-        <a class="nav-item {{ request()->routeIs('admin.coming-soon') && request()->route('module') === $slug ? 'active' : '' }}" href="{{ route('admin.coming-soon', $slug) }}"><span>{{ $icon }}</span><span>{{ $label }}</span><span class="soon">Soon</span></a>
-    @endforeach
-
-    <div class="nav-title">ZATCA E-Invoicing</div>
-    @foreach ([
-        'zatca-invoices' => ['🧾', 'Invoices'],
-        'zatca-qr-code' => ['🔳', 'QR Code'],
-        'zatca-xml' => ['🗎', 'XML'],
-        'zatca-clearance' => ['✔️', 'Clearance Status'],
     ] as $slug => [$icon, $label])
         <a class="nav-item {{ request()->routeIs('admin.coming-soon') && request()->route('module') === $slug ? 'active' : '' }}" href="{{ route('admin.coming-soon', $slug) }}"><span>{{ $icon }}</span><span>{{ $label }}</span><span class="soon">Soon</span></a>
     @endforeach

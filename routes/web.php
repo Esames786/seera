@@ -1,8 +1,29 @@
 <?php
 
+use App\Http\Controllers\Admin\Accounting\AccountingDashboardController;
+use App\Http\Controllers\Admin\Accounting\AccountsPayableController;
+use App\Http\Controllers\Admin\Accounting\AccountsReceivableController;
+use App\Http\Controllers\Admin\Accounting\AutoPostingRuleController;
+use App\Http\Controllers\Admin\Accounting\ChartOfAccountController;
+use App\Http\Controllers\Admin\Accounting\CostCenterController;
+use App\Http\Controllers\Admin\Accounting\FinancialReportController;
+use App\Http\Controllers\Admin\Accounting\GeneralLedgerController;
+use App\Http\Controllers\Admin\Accounting\JournalEntryController;
+use App\Http\Controllers\Admin\Accounting\VatController;
+use App\Http\Controllers\Admin\Accounting\ZatcaInvoiceController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\ApprovalWorkflowController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\Hr\AttendanceController;
+use App\Http\Controllers\Admin\Hr\EmployeeController;
+use App\Http\Controllers\Admin\Hr\EmployeeDocumentController;
+use App\Http\Controllers\Admin\Hr\EndOfServiceController;
+use App\Http\Controllers\Admin\Hr\HrDashboardController;
+use App\Http\Controllers\Admin\Hr\LeaveRequestController;
+use App\Http\Controllers\Admin\Hr\OvertimeController;
+use App\Http\Controllers\Admin\Hr\PayrollRunController;
+use App\Http\Controllers\Admin\Hr\SalaryStructureController;
+use App\Http\Controllers\Admin\Hr\ShiftController;
 use App\Http\Controllers\Admin\Master\BranchController;
 use App\Http\Controllers\Admin\Master\CompanyProfileController;
 use App\Http\Controllers\Admin\Master\CustomerController;
@@ -85,7 +106,82 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::resource('customers', CustomerController::class);
     });
 
-    // Future modules (Phase 3+) render a Coming Soon page.
+    // HR & Payroll (Phase 3)
+    Route::prefix('hr')->name('hr.')->group(function () {
+        Route::get('dashboard', [HrDashboardController::class, 'index'])->name('dashboard');
+
+        Route::resource('employees', EmployeeController::class);
+        Route::resource('documents', EmployeeDocumentController::class)->except(['show']);
+        Route::resource('shifts', ShiftController::class)->except(['show']);
+
+        Route::resource('attendance', AttendanceController::class)
+            ->except(['show'])
+            ->parameters(['attendance' => 'attendance_record']);
+
+        Route::post('leaves/{leave_request}/approve', [LeaveRequestController::class, 'approve'])->name('leaves.approve');
+        Route::post('leaves/{leave_request}/reject', [LeaveRequestController::class, 'reject'])->name('leaves.reject');
+        Route::resource('leaves', LeaveRequestController::class)->parameters(['leaves' => 'leave_request']);
+
+        Route::post('overtime/{overtime_record}/approve', [OvertimeController::class, 'approve'])->name('overtime.approve');
+        Route::resource('overtime', OvertimeController::class)
+            ->except(['show'])
+            ->parameters(['overtime' => 'overtime_record']);
+
+        Route::resource('salary-structures', SalaryStructureController::class);
+
+        Route::post('payroll/{payroll_run}/process', [PayrollRunController::class, 'process'])->name('payroll.process');
+        Route::post('payroll/{payroll_run}/approve', [PayrollRunController::class, 'approve'])->name('payroll.approve');
+        Route::resource('payroll', PayrollRunController::class)->parameters(['payroll' => 'payroll_run']);
+
+        Route::post('eosb/{end_of_service_record}/approve', [EndOfServiceController::class, 'approve'])->name('eosb.approve');
+        Route::resource('eosb', EndOfServiceController::class)->parameters(['eosb' => 'end_of_service_record']);
+    });
+
+    // Accounting + VAT + ZATCA (Phase 4)
+    Route::prefix('accounting')->name('accounting.')->group(function () {
+        Route::get('dashboard', [AccountingDashboardController::class, 'index'])->name('dashboard');
+
+        Route::resource('chart-of-accounts', ChartOfAccountController::class);
+
+        Route::post('journal-entries/{journal_entry}/post', [JournalEntryController::class, 'post'])->name('journal-entries.post');
+        Route::post('journal-entries/{journal_entry}/cancel', [JournalEntryController::class, 'cancel'])->name('journal-entries.cancel');
+        Route::resource('journal-entries', JournalEntryController::class);
+
+        Route::get('general-ledger', [GeneralLedgerController::class, 'index'])->name('general-ledger');
+
+        Route::post('accounts-payable/{accounts_payable}/approve', [AccountsPayableController::class, 'approve'])->name('accounts-payable.approve');
+        Route::get('accounts-payable/{accounts_payable}/payment', [AccountsPayableController::class, 'paymentForm'])->name('accounts-payable.payment');
+        Route::post('accounts-payable/{accounts_payable}/payment', [AccountsPayableController::class, 'storePayment'])->name('accounts-payable.payment.store');
+        Route::resource('accounts-payable', AccountsPayableController::class);
+
+        Route::post('accounts-receivable/{accounts_receivable}/approve', [AccountsReceivableController::class, 'approve'])->name('accounts-receivable.approve');
+        Route::get('accounts-receivable/{accounts_receivable}/receipt', [AccountsReceivableController::class, 'receiptForm'])->name('accounts-receivable.receipt');
+        Route::post('accounts-receivable/{accounts_receivable}/receipt', [AccountsReceivableController::class, 'storeReceipt'])->name('accounts-receivable.receipt.store');
+        Route::resource('accounts-receivable', AccountsReceivableController::class);
+
+        Route::get('vat', [VatController::class, 'index'])->name('vat.index');
+        Route::get('vat/{vat}', [VatController::class, 'show'])->name('vat.show');
+        Route::post('vat/{vat}/recalculate', [VatController::class, 'recalculate'])->name('vat.recalculate');
+        Route::post('vat/{vat}/finalize', [VatController::class, 'finalize'])->name('vat.finalize');
+
+        Route::get('zatca', [ZatcaInvoiceController::class, 'index'])->name('zatca.index');
+        Route::get('zatca/{zatca}', [ZatcaInvoiceController::class, 'show'])->name('zatca.show');
+        Route::post('zatca/{zatca}/retry', [ZatcaInvoiceController::class, 'retry'])->name('zatca.retry');
+
+        // Report routes are static, so they must be registered before any wildcard.
+        Route::get('reports', [FinancialReportController::class, 'index'])->name('reports.index');
+        Route::get('reports/balance-sheet', [FinancialReportController::class, 'balanceSheet'])->name('reports.balance-sheet');
+        Route::get('reports/profit-loss', [FinancialReportController::class, 'profitLoss'])->name('reports.profit-loss');
+        Route::get('reports/trial-balance', [FinancialReportController::class, 'trialBalance'])->name('reports.trial-balance');
+        Route::get('reports/cash-flow', [FinancialReportController::class, 'cashFlow'])->name('reports.cash-flow');
+        Route::get('reports/vat-report', [FinancialReportController::class, 'vatReport'])->name('reports.vat-report');
+        Route::get('reports/project-cost-report', [FinancialReportController::class, 'projectCostReport'])->name('reports.project-cost-report');
+
+        Route::resource('cost-centers', CostCenterController::class);
+        Route::resource('posting-rules', AutoPostingRuleController::class)->parameters(['posting-rules' => 'posting_rule']);
+    });
+
+    // Future modules (Phase 5+) render a Coming Soon page.
     Route::get('coming-soon/{module}', function (string $module) {
         return view('admin.coming-soon', [
             'module' => (string) Str::of($module)->replace('-', ' ')->title()->replace('Zatca', 'ZATCA'),

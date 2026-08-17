@@ -29,7 +29,7 @@ class PermissionMatrixController extends Controller
             'selectedRole' => $selectedRole,
             'permissionsByModule' => $permissions,
             'grantedIds' => $selectedRole ? $selectedRole->permissions->pluck('id')->all() : [],
-            'actions' => ['view', 'create', 'edit', 'delete', 'approve', 'export', 'mobile'],
+            'actions' => Permission::ACTIONS,
         ]);
     }
 

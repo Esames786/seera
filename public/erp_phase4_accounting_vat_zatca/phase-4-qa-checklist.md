@@ -1,0 +1,31 @@
+# Phase 4 Accounting + VAT + ZATCA QA Checklist
+
+- [ ] Accounting dashboard loads
+- [ ] Dashboard cards show seeded finance data
+- [ ] Chart of Accounts tree loads
+- [ ] Account create works
+- [ ] Account edit/update works
+- [ ] Journal entry listing loads
+- [ ] Journal entry create works
+- [ ] Journal entry line items work
+- [ ] Unbalanced journal is rejected
+- [ ] Journal post action works
+- [ ] General Ledger loads
+- [ ] Ledger filters visible
+- [ ] Accounts Payable listing loads
+- [ ] Supplier bill create works
+- [ ] Supplier payment foundation visible
+- [ ] Accounts Receivable listing loads
+- [ ] Customer invoice create works
+- [ ] Customer receipt foundation visible
+- [ ] VAT Management loads
+- [ ] VAT output/input/payable summary visible
+- [ ] ZATCA invoice listing loads
+- [ ] UUID/QR/XML/clearance status visible
+- [ ] ZATCA failed retry action visible
+- [ ] Financial reports screens visible
+- [ ] Cost center create works
+- [ ] Auto posting rule create works
+- [ ] Accounting sidebar active states work
+- [ ] Phase 1, 2, and 3 tests remain passing
+- [ ] New Phase 4 tests pass

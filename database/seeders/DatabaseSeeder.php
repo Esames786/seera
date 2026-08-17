@@ -33,6 +33,8 @@ class DatabaseSeeder extends Seeder
         $this->seedProjectsSitesWarehouses();
         $this->seedWorkflows();
         $this->seedActivityLogs();
+        $this->call(Phase3HrSeeder::class);
+        $this->call(Phase4AccountingSeeder::class);
     }
 
     private function seedDepartments(): void
@@ -123,11 +125,14 @@ class DatabaseSeeder extends Seeder
             'Dashboard', 'Users', 'Roles', 'Accounting', 'HR', 'Payroll',
             'Attendance', 'Projects', 'Sites', 'Inventory', 'Site Expenses',
             'Equipment', 'Vehicles', 'ZATCA Invoicing', 'Reports', 'Settings',
+            // Phase 4 accounting modules.
+            'Accounting Dashboard', 'Chart of Accounts', 'Journal Entries',
+            'General Ledger', 'Accounts Payable', 'Accounts Receivable',
+            'VAT Management', 'Financial Reports', 'Cost Centers', 'Auto Posting Rules',
         ];
-        $actions = ['view', 'create', 'edit', 'delete', 'approve', 'export', 'mobile'];
 
         foreach ($modules as $module) {
-            foreach ($actions as $action) {
+            foreach (Permission::ACTIONS as $action) {
                 Permission::create(['module' => $module, 'action' => $action]);
             }
         }
@@ -140,8 +145,19 @@ class DatabaseSeeder extends Seeder
                 'Accounting' => ['view', 'create', 'edit', 'approve', 'export'],
                 'Payroll' => ['view', 'approve', 'export'],
                 'Site Expenses' => ['view', 'approve', 'export'],
-                'ZATCA Invoicing' => ['view', 'create', 'edit', 'export'],
+                'ZATCA Invoicing' => ['view', 'create', 'edit', 'export', 'retry'],
                 'Reports' => ['view', 'export'],
+                // Full accounting control for the finance backbone.
+                'Accounting Dashboard' => ['view', 'export'],
+                'Chart of Accounts' => ['view', 'create', 'edit', 'delete', 'export'],
+                'Journal Entries' => ['view', 'create', 'edit', 'delete', 'approve', 'export', 'post'],
+                'General Ledger' => ['view', 'export'],
+                'Accounts Payable' => ['view', 'create', 'edit', 'delete', 'approve', 'export', 'process'],
+                'Accounts Receivable' => ['view', 'create', 'edit', 'delete', 'approve', 'export', 'process'],
+                'VAT Management' => ['view', 'edit', 'approve', 'export', 'process'],
+                'Financial Reports' => ['view', 'export'],
+                'Cost Centers' => ['view', 'create', 'edit', 'delete'],
+                'Auto Posting Rules' => ['view', 'create', 'edit', 'delete'],
             ],
             $hrManager->id => [
                 'Dashboard' => ['view'],
@@ -149,6 +165,8 @@ class DatabaseSeeder extends Seeder
                 'Payroll' => ['view', 'create', 'edit', 'export'],
                 'Attendance' => ['view', 'edit', 'approve', 'export'],
                 'Reports' => ['view', 'export'],
+                // Payroll-related finance summary only.
+                'Financial Reports' => ['view'],
             ],
             $projectManager->id => [
                 'Dashboard' => ['view'],
@@ -158,6 +176,9 @@ class DatabaseSeeder extends Seeder
                 'Attendance' => ['view', 'approve'],
                 'Inventory' => ['view'],
                 'Reports' => ['view'],
+                // Project cost visibility only.
+                'Financial Reports' => ['view', 'export'],
+                'Cost Centers' => ['view'],
             ],
             $inventoryManager->id => [
                 'Dashboard' => ['view'],

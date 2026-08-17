@@ -56,7 +56,7 @@
                             @endforeach
                         </tr>
                     @empty
-                        <tr><td colspan="8" class="table-empty">No modules match your search.</td></tr>
+                        <tr><td colspan="{{ count($actions) + 1 }}" class="table-empty">No modules match your search.</td></tr>
                     @endforelse
                 </tbody>
             </x-admin.data-table>
