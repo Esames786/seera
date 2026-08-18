@@ -1,0 +1,26 @@
+# Phase 7 QA Checklist
+
+- [ ] Equipment dashboard loads
+- [ ] Dashboard cards show seeded data
+- [ ] Equipment listing loads
+- [ ] Equipment create works
+- [ ] Equipment edit/update works
+- [ ] Equipment details loads
+- [ ] Project/site assignment create works
+- [ ] Duplicate active full-time assignment is rejected
+- [ ] Operator/driver assignment works
+- [ ] GPS tracking overview loads
+- [ ] GPS online/offline/geofence statuses visible
+- [ ] Maintenance job create works
+- [ ] Maintenance job complete works
+- [ ] Fuel log create works
+- [ ] Fuel log approve works
+- [ ] Equipment document create works
+- [ ] Expiring document status visible
+- [ ] Utilization screen loads
+- [ ] Project equipment costing loads
+- [ ] Accounting posting creates journal entry
+- [ ] Equipment reports load
+- [ ] Sidebar grouped active states work
+- [ ] Previous tests remain passing
+- [ ] New Phase 7 tests pass
