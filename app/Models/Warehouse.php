@@ -30,4 +30,14 @@ class Warehouse extends Model
     {
         return $this->belongsTo(User::class, 'incharge_id');
     }
+
+    public function stocks()
+    {
+        return $this->hasMany(WarehouseStock::class);
+    }
+
+    public function ledgerEntries()
+    {
+        return $this->hasMany(StockLedgerEntry::class);
+    }
 }

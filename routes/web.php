@@ -24,6 +24,19 @@ use App\Http\Controllers\Admin\Hr\OvertimeController;
 use App\Http\Controllers\Admin\Hr\PayrollRunController;
 use App\Http\Controllers\Admin\Hr\SalaryStructureController;
 use App\Http\Controllers\Admin\Hr\ShiftController;
+use App\Http\Controllers\Admin\Inventory\GoodsReceiptController;
+use App\Http\Controllers\Admin\Inventory\InventoryDashboardController;
+use App\Http\Controllers\Admin\Inventory\InventoryReportController;
+use App\Http\Controllers\Admin\Inventory\ItemCategoryController;
+use App\Http\Controllers\Admin\Inventory\ItemController;
+use App\Http\Controllers\Admin\Inventory\PurchaseOrderController;
+use App\Http\Controllers\Admin\Inventory\PurchaseRequestController;
+use App\Http\Controllers\Admin\Inventory\StockAdjustmentController;
+use App\Http\Controllers\Admin\Inventory\StockController;
+use App\Http\Controllers\Admin\Inventory\StockIssueController;
+use App\Http\Controllers\Admin\Inventory\StockLedgerController;
+use App\Http\Controllers\Admin\Inventory\StockTransferController;
+use App\Http\Controllers\Admin\Inventory\UnitController;
 use App\Http\Controllers\Admin\Master\BranchController;
 use App\Http\Controllers\Admin\Master\CompanyProfileController;
 use App\Http\Controllers\Admin\Master\CustomerController;
@@ -181,7 +194,47 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::resource('posting-rules', AutoPostingRuleController::class)->parameters(['posting-rules' => 'posting_rule']);
     });
 
-    // Future modules (Phase 5+) render a Coming Soon page.
+    // Inventory & Warehouse (Phase 6)
+    Route::prefix('inventory')->name('inventory.')->group(function () {
+        Route::get('dashboard', [InventoryDashboardController::class, 'index'])->name('dashboard');
+
+        Route::resource('items', ItemController::class);
+        Route::resource('categories', ItemCategoryController::class)->except(['show'])->parameters(['categories' => 'category']);
+        Route::resource('units', UnitController::class)->except(['show']);
+
+        Route::get('stock', [StockController::class, 'index'])->name('stock.index');
+        Route::get('stock-ledger', [StockLedgerController::class, 'index'])->name('stock-ledger');
+
+        // Report routes are static, so they are registered before any wildcard.
+        Route::get('reports', [InventoryReportController::class, 'index'])->name('reports.index');
+        Route::get('reports/stock-valuation', [InventoryReportController::class, 'stockValuation'])->name('reports.stock-valuation');
+        Route::get('reports/low-stock', [InventoryReportController::class, 'lowStock'])->name('reports.low-stock');
+        Route::get('reports/project-consumption', [InventoryReportController::class, 'projectConsumption'])->name('reports.project-consumption');
+        Route::get('reports/movement', [InventoryReportController::class, 'movement'])->name('reports.movement');
+
+        Route::post('purchase-requests/{purchase_request}/approve', [PurchaseRequestController::class, 'approve'])->name('purchase-requests.approve');
+        Route::post('purchase-requests/{purchase_request}/reject', [PurchaseRequestController::class, 'reject'])->name('purchase-requests.reject');
+        Route::resource('purchase-requests', PurchaseRequestController::class);
+
+        Route::post('purchase-orders/{purchase_order}/approve', [PurchaseOrderController::class, 'approve'])->name('purchase-orders.approve');
+        Route::resource('purchase-orders', PurchaseOrderController::class);
+
+        Route::post('goods-receipts/{goods_receipt}/post-stock', [GoodsReceiptController::class, 'postStock'])->name('goods-receipts.post-stock');
+        Route::resource('goods-receipts', GoodsReceiptController::class);
+
+        Route::post('stock-issues/{stock_issue}/post', [StockIssueController::class, 'post'])->name('stock-issues.post');
+        Route::resource('stock-issues', StockIssueController::class);
+
+        Route::post('stock-transfers/{stock_transfer}/dispatch', [StockTransferController::class, 'dispatch'])->name('stock-transfers.dispatch');
+        Route::post('stock-transfers/{stock_transfer}/receive', [StockTransferController::class, 'receive'])->name('stock-transfers.receive');
+        Route::resource('stock-transfers', StockTransferController::class);
+
+        Route::post('stock-adjustments/{stock_adjustment}/approve', [StockAdjustmentController::class, 'approve'])->name('stock-adjustments.approve');
+        Route::post('stock-adjustments/{stock_adjustment}/post', [StockAdjustmentController::class, 'post'])->name('stock-adjustments.post');
+        Route::resource('stock-adjustments', StockAdjustmentController::class);
+    });
+
+    // Future modules (Phase 5, 7+) render a Coming Soon page.
     Route::get('coming-soon/{module}', function (string $module) {
         return view('admin.coming-soon', [
             'module' => (string) Str::of($module)->replace('-', ' ')->title()->replace('Zatca', 'ZATCA'),

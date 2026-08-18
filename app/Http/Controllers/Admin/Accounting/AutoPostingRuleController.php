@@ -111,7 +111,8 @@ class AutoPostingRuleController extends Controller
             'sourceModules' => JournalEntry::SOURCE_MODULES,
             'triggerEvents' => [
                 'Payroll Approved', 'Site Expense Approved', 'Inventory Purchase',
-                'Bill Approved', 'Payment Recorded', 'Invoice Approved', 'Receipt Recorded',
+                'Stock Issued', 'Stock Adjusted', 'Bill Approved', 'Payment Recorded',
+                'Invoice Approved', 'Receipt Recorded',
             ],
             'costCenterRules' => AutomaticPostingRule::COST_CENTER_RULES,
         ];

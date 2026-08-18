@@ -1,8 +1,9 @@
 @php
     $user = auth()->user();
+    $groups = \App\Support\SidebarMenu::groups();
 @endphp
 
-<aside class="sidebar">
+<aside class="sidebar" id="admin-sidebar">
     <div class="sidebar-header">
         <a class="brand" href="{{ route('admin.dashboard') }}">
             <span class="logo-icon">S</span><span>{{ config('app.name') }} ERP</span>
@@ -20,98 +21,92 @@
         </div>
     @endif
 
-    <div class="nav-title">Main</div>
-    <a class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}"><span>📊</span><span>Dashboard</span></a>
+    <nav class="nav-groups">
+        @foreach ($groups as $group)
+            @php
+                $hasActive = collect($group['items'])->contains('active', true);
+                $groupBadge = collect($group['items'])->sum(fn ($item) => (int) ($item['badge'] ?? 0));
+            @endphp
 
-    <div class="nav-title">Administration</div>
-    <a class="nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}"><span>👥</span><span>Users</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.roles.index', 'admin.roles.create', 'admin.roles.show', 'admin.roles.edit') ? 'active' : '' }}" href="{{ route('admin.roles.index') }}"><span>🛡️</span><span>Roles</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.roles.permission-matrix') ? 'active' : '' }}" href="{{ route('admin.roles.permission-matrix') }}"><span>✅</span><span>Permission Matrix</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.roles.hierarchy') ? 'active' : '' }}" href="{{ route('admin.roles.hierarchy') }}"><span>🌳</span><span>Role Hierarchy</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.roles.approval-workflows.*') ? 'active' : '' }}" href="{{ route('admin.roles.approval-workflows.index') }}"><span>🔁</span><span>Approval Workflows</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.activity-logs.*') ? 'active' : '' }}" href="{{ route('admin.activity-logs.index') }}"><span>🧾</span><span>Activity Logs</span></a>
+            <div class="nav-group {{ $hasActive ? 'open' : '' }}" data-group="{{ $group['key'] }}" @if($hasActive) data-has-active="1" @endif>
+                <button type="button" class="nav-group-header" aria-expanded="{{ $hasActive ? 'true' : 'false' }}">
+                    <span>{{ $group['label'] }}</span>
+                    @if ($groupBadge > 0)
+                        <span class="nav-badge">{{ $groupBadge }}</span>
+                    @endif
+                    <span class="chevron" aria-hidden="true">▸</span>
+                </button>
 
-    <div class="nav-title">Master Setup</div>
-    <a class="nav-item {{ request()->routeIs('admin.master.company-profile') ? 'active' : '' }}" href="{{ route('admin.master.company-profile') }}"><span>🏢</span><span>Company Profile</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.master.branches.*') ? 'active' : '' }}" href="{{ route('admin.master.branches.index') }}"><span>🏬</span><span>Branches</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.master.departments.*') ? 'active' : '' }}" href="{{ route('admin.master.departments.index') }}"><span>🗂️</span><span>Departments</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.master.designations.*') ? 'active' : '' }}" href="{{ route('admin.master.designations.index') }}"><span>🪪</span><span>Designations</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.master.projects.*') ? 'active' : '' }}" href="{{ route('admin.master.projects.index') }}"><span>🏗️</span><span>Projects</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.master.sites.*') ? 'active' : '' }}" href="{{ route('admin.master.sites.index') }}"><span>📍</span><span>Sites / Geo-Fence</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.master.warehouses.*') ? 'active' : '' }}" href="{{ route('admin.master.warehouses.index') }}"><span>🏭</span><span>Warehouses</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.master.expense-categories.*') ? 'active' : '' }}" href="{{ route('admin.master.expense-categories.index') }}"><span>🏷️</span><span>Expense Categories</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.master.suppliers.*') ? 'active' : '' }}" href="{{ route('admin.master.suppliers.index') }}"><span>🚚</span><span>Suppliers</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.master.customers.*') ? 'active' : '' }}" href="{{ route('admin.master.customers.index') }}"><span>🤝</span><span>Customers</span></a>
-
-    <div class="nav-title">HR &amp; Payroll</div>
-    @foreach ([
-        ['admin.hr.dashboard', 'admin.hr.dashboard', '📋', 'HR Dashboard'],
-        ['admin.hr.employees.index', 'admin.hr.employees.*', '👷', 'Employees'],
-        ['admin.hr.documents.index', 'admin.hr.documents.*', '🪪', 'Documents / IQAMA'],
-        ['admin.hr.shifts.index', 'admin.hr.shifts.*', '🔄', 'Shifts'],
-        ['admin.hr.attendance.index', 'admin.hr.attendance.*', '🕒', 'Attendance'],
-        ['admin.hr.leaves.index', 'admin.hr.leaves.*', '🌴', 'Leaves'],
-        ['admin.hr.overtime.index', 'admin.hr.overtime.*', '⏱️', 'Overtime'],
-        ['admin.hr.salary-structures.index', 'admin.hr.salary-structures.*', '🧮', 'Salary Structures'],
-        ['admin.hr.payroll.index', 'admin.hr.payroll.*', '💵', 'Payroll'],
-        ['admin.hr.eosb.index', 'admin.hr.eosb.*', '📄', 'End of Service'],
-    ] as [$route, $pattern, $icon, $label])
-        <a class="nav-item {{ request()->routeIs($pattern) ? 'active' : '' }}" href="{{ route($route) }}"><span>{{ $icon }}</span><span>{{ $label }}</span></a>
-    @endforeach
-
-    <div class="nav-title">Accounting</div>
-    @foreach ([
-        ['admin.accounting.dashboard', 'admin.accounting.dashboard', '📊', 'Accounting Dashboard'],
-        ['admin.accounting.chart-of-accounts.index', 'admin.accounting.chart-of-accounts.*', '📒', 'Chart of Accounts'],
-        ['admin.accounting.journal-entries.index', 'admin.accounting.journal-entries.*', '📓', 'Journal Entries'],
-        ['admin.accounting.general-ledger', 'admin.accounting.general-ledger', '📚', 'General Ledger'],
-        ['admin.accounting.accounts-payable.index', 'admin.accounting.accounts-payable.*', '📤', 'Accounts Payable'],
-        ['admin.accounting.accounts-receivable.index', 'admin.accounting.accounts-receivable.*', '📥', 'Accounts Receivable'],
-        ['admin.accounting.vat.index', 'admin.accounting.vat.*', '🧮', 'VAT Management'],
-        ['admin.accounting.zatca.index', 'admin.accounting.zatca.*', '🧾', 'ZATCA E-Invoicing'],
-        ['admin.accounting.reports.index', 'admin.accounting.reports.*', '📈', 'Financial Reports'],
-        ['admin.accounting.cost-centers.index', 'admin.accounting.cost-centers.*', '🎯', 'Cost Centers'],
-        ['admin.accounting.posting-rules.index', 'admin.accounting.posting-rules.*', '⚙️', 'Automatic Posting Rules'],
-    ] as [$route, $pattern, $icon, $label])
-        <a class="nav-item {{ request()->routeIs($pattern) ? 'active' : '' }}" href="{{ route($route) }}"><span>{{ $icon }}</span><span>{{ $label }}</span></a>
-    @endforeach
-
-    <div class="nav-title">Projects</div>
-    @foreach ([
-        'project-dashboard' => ['📊', 'Project Dashboard'],
-        'project-budget' => ['💰', 'Project Budget'],
-        'project-costing' => ['🧾', 'Project Costing'],
-        'site-expenses' => ['🧰', 'Site Expenses'],
-        'budget-vs-actual' => ['⚖️', 'Budget vs Actual'],
-    ] as $slug => [$icon, $label])
-        <a class="nav-item {{ request()->routeIs('admin.coming-soon') && request()->route('module') === $slug ? 'active' : '' }}" href="{{ route('admin.coming-soon', $slug) }}"><span>{{ $icon }}</span><span>{{ $label }}</span><span class="soon">Soon</span></a>
-    @endforeach
-
-    <div class="nav-title">Inventory</div>
-    @foreach ([
-        'materials' => ['📦', 'Materials'],
-        'stock-in' => ['📩', 'Stock In'],
-        'stock-out' => ['📨', 'Stock Out'],
-        'stock-transfers' => ['🔀', 'Stock Transfers'],
-        'low-stock-alerts' => ['🚨', 'Low Stock Alerts'],
-    ] as $slug => [$icon, $label])
-        <a class="nav-item {{ request()->routeIs('admin.coming-soon') && request()->route('module') === $slug ? 'active' : '' }}" href="{{ route('admin.coming-soon', $slug) }}"><span>{{ $icon }}</span><span>{{ $label }}</span><span class="soon">Soon</span></a>
-    @endforeach
-
-    <div class="nav-title">Equipment &amp; Vehicles</div>
-    @foreach ([
-        'equipment' => ['🚜', 'Equipment'],
-        'vehicles' => ['🚛', 'Vehicles'],
-        'gps-tracking' => ['🛰️', 'GPS Tracking'],
-        'maintenance' => ['🔧', 'Maintenance'],
-        'fuel-tracking' => ['⛽', 'Fuel Tracking'],
-    ] as $slug => [$icon, $label])
-        <a class="nav-item {{ request()->routeIs('admin.coming-soon') && request()->route('module') === $slug ? 'active' : '' }}" href="{{ route('admin.coming-soon', $slug) }}"><span>{{ $icon }}</span><span>{{ $label }}</span><span class="soon">Soon</span></a>
-    @endforeach
-
-    <div class="nav-title">System</div>
-    <a class="nav-item {{ request()->routeIs('admin.coming-soon') && request()->route('module') === 'reports' ? 'active' : '' }}" href="{{ route('admin.coming-soon', 'reports') }}"><span>📈</span><span>Reports</span><span class="soon">Soon</span></a>
-    <a class="nav-item {{ request()->routeIs('admin.coming-soon') && request()->route('module') === 'settings' ? 'active' : '' }}" href="{{ route('admin.coming-soon', 'settings') }}"><span>⚙️</span><span>Settings</span><span class="soon">Soon</span></a>
+                <div class="nav-group-body">
+                    @foreach ($group['items'] as $item)
+                        <a class="nav-item {{ $item['active'] ? 'active' : '' }} {{ $item['soon'] ? 'is-soon' : '' }}" href="{{ $item['url'] }}">
+                            <span>{{ $item['icon'] }}</span>
+                            <span>{{ $item['label'] }}</span>
+                            @if ($item['badge'])
+                                <span class="nav-badge">{{ $item['badge'] }}</span>
+                            @elseif ($item['soon'])
+                                <span class="soon">Soon</span>
+                            @endif
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        @endforeach
+    </nav>
 
     <div style="height:24px"></div>
 </aside>
+
+@once
+    @push('scripts')
+    <script>
+        (function () {
+            const sidebar = document.getElementById('admin-sidebar');
+            if (!sidebar) return;
+
+            const STORAGE_KEY = 'seera.sidebar.groups';
+
+            function readState() {
+                try {
+                    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+                } catch (error) {
+                    return {};
+                }
+            }
+
+            function writeState(state) {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                } catch (error) {
+                    // Storage unavailable (private mode) — collapsing still works for this page.
+                }
+            }
+
+            const state = readState();
+
+            sidebar.querySelectorAll('.nav-group').forEach(function (group) {
+                const key = group.dataset.group;
+
+                // The group holding the current page always wins over stored state.
+                if (group.dataset.hasActive === '1') {
+                    group.classList.add('open');
+                } else if (Object.prototype.hasOwnProperty.call(state, key)) {
+                    group.classList.toggle('open', state[key] === true);
+                }
+
+                const header = group.querySelector('.nav-group-header');
+                header.setAttribute('aria-expanded', group.classList.contains('open') ? 'true' : 'false');
+
+                header.addEventListener('click', function () {
+                    const open = group.classList.toggle('open');
+                    header.setAttribute('aria-expanded', open ? 'true' : 'false');
+
+                    const next = readState();
+                    next[key] = open;
+                    writeState(next);
+                });
+            });
+        })();
+    </script>
+    @endpush
+@endonce

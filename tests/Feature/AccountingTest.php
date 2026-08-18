@@ -109,7 +109,7 @@ class AccountingTest extends TestCase
     {
         $this->actingAs($this->admin())
             ->post(route('admin.accounting.chart-of-accounts.store'), [
-                'account_code' => '5600',
+                'account_code' => '5700',
                 'account_name' => 'Subcontractor Expense',
                 'account_type' => 'expense',
                 'parent_id' => $this->account('5000')->id,
@@ -119,11 +119,11 @@ class AccountingTest extends TestCase
             ])
             ->assertRedirect(route('admin.accounting.chart-of-accounts.index'));
 
-        $account = ChartOfAccount::where('account_code', '5600')->firstOrFail();
+        $account = ChartOfAccount::where('account_code', '5700')->firstOrFail();
 
         $this->actingAs($this->admin())
             ->put(route('admin.accounting.chart-of-accounts.update', $account), [
-                'account_code' => '5600',
+                'account_code' => '5700',
                 'account_name' => 'Subcontractor Costs',
                 'account_type' => 'expense',
                 'opening_balance' => 0,

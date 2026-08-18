@@ -12,8 +12,9 @@ class Permission extends Model
      * so an omitted action would be silently revoked on save.
      */
     public const ACTIONS = [
-        'view', 'create', 'edit', 'delete', 'approve',
+        'view', 'create', 'edit', 'delete', 'approve', 'reject',
         'export', 'mobile', 'post', 'process', 'retry',
+        'receive', 'issue', 'transfer', 'adjust',
     ];
 
     protected $fillable = ['module', 'module_group', 'action'];

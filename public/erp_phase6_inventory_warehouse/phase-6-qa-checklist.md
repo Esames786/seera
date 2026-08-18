@@ -1,0 +1,28 @@
+# Phase 6 Inventory & Warehouse QA Checklist
+
+- [ ] Inventory dashboard loads
+- [ ] Items listing loads
+- [ ] Item create works
+- [ ] Item update works
+- [ ] Category create works
+- [ ] Unit create works
+- [ ] Warehouse stock summary loads
+- [ ] Stock on hand screen loads
+- [ ] Low stock status visible
+- [ ] Purchase request create works
+- [ ] Purchase request approval works
+- [ ] Purchase order create works
+- [ ] GRN create works
+- [ ] GRN post stock increases warehouse stock
+- [ ] Stock issue decreases warehouse stock
+- [ ] Negative stock is rejected
+- [ ] Stock transfer moves stock between warehouses
+- [ ] Stock adjustment works
+- [ ] Stock ledger records movement
+- [ ] Inventory reports load
+- [ ] Accounting posting creates journal entry
+- [ ] Posted documents become read-only
+- [ ] Sidebar grouping/collapse works
+- [ ] Active sidebar group stays open
+- [ ] Previous tests remain passing
+- [ ] New Phase 6 tests pass

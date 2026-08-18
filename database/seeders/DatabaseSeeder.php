@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
         $this->seedActivityLogs();
         $this->call(Phase3HrSeeder::class);
         $this->call(Phase4AccountingSeeder::class);
+        $this->call(Phase6InventorySeeder::class);
     }
 
     private function seedDepartments(): void
@@ -105,6 +106,14 @@ class DatabaseSeeder extends Seeder
             'description' => 'Can manage site attendance, site expenses, and approvals for assigned project/site.',
         ]);
 
+        $warehouseIncharge = Role::create([
+            'name' => 'Warehouse Incharge', 'code' => 'WAREHOUSE_INCHARGE',
+            'department_id' => $departments['EQP'], 'parent_id' => $inventoryManager->id,
+            'level' => 3, 'access_scope' => 'Warehouse Level',
+            'default_dashboard' => 'Inventory Dashboard', 'mobile_app_access' => true,
+            'description' => 'Receives, issues, transfers and adjusts stock for assigned warehouses. No master data or accounting access.',
+        ]);
+
         Role::create([
             'name' => 'Mechanic', 'code' => 'MECHANIC',
             'department_id' => $departments['EQP'], 'parent_id' => $siteSupervisor->id,
@@ -129,6 +138,11 @@ class DatabaseSeeder extends Seeder
             'Accounting Dashboard', 'Chart of Accounts', 'Journal Entries',
             'General Ledger', 'Accounts Payable', 'Accounts Receivable',
             'VAT Management', 'Financial Reports', 'Cost Centers', 'Auto Posting Rules',
+            // Phase 6 inventory modules.
+            'Inventory Dashboard', 'Items', 'Item Categories', 'Units',
+            'Warehouse Stock', 'Purchase Requests', 'Purchase Orders',
+            'Goods Receipts', 'Stock Issues', 'Stock Transfers',
+            'Stock Adjustments', 'Stock Ledger', 'Inventory Reports',
         ];
 
         foreach ($modules as $module) {
@@ -179,6 +193,10 @@ class DatabaseSeeder extends Seeder
                 // Project cost visibility only.
                 'Financial Reports' => ['view', 'export'],
                 'Cost Centers' => ['view'],
+                // Approves site material requests and watches project consumption.
+                'Purchase Requests' => ['view', 'approve', 'reject', 'export'],
+                'Inventory Reports' => ['view', 'export'],
+                'Warehouse Stock' => ['view'],
             ],
             $inventoryManager->id => [
                 'Dashboard' => ['view'],
@@ -186,6 +204,32 @@ class DatabaseSeeder extends Seeder
                 'Equipment' => ['view', 'create', 'edit'],
                 'Vehicles' => ['view', 'create', 'edit'],
                 'Reports' => ['view'],
+                // Full inventory control across every warehouse.
+                'Inventory Dashboard' => ['view', 'export'],
+                'Items' => ['view', 'create', 'edit', 'delete', 'export'],
+                'Item Categories' => ['view', 'create', 'edit', 'delete'],
+                'Units' => ['view', 'create', 'edit', 'delete'],
+                'Warehouse Stock' => ['view', 'export'],
+                'Purchase Requests' => ['view', 'create', 'edit', 'delete', 'approve', 'reject', 'export'],
+                'Purchase Orders' => ['view', 'create', 'edit', 'delete', 'approve', 'export'],
+                'Goods Receipts' => ['view', 'create', 'edit', 'delete', 'receive', 'post', 'export'],
+                'Stock Issues' => ['view', 'create', 'edit', 'delete', 'issue', 'post', 'export'],
+                'Stock Transfers' => ['view', 'create', 'edit', 'delete', 'transfer', 'export'],
+                'Stock Adjustments' => ['view', 'create', 'edit', 'delete', 'approve', 'adjust', 'post', 'export'],
+                'Stock Ledger' => ['view', 'export'],
+                'Inventory Reports' => ['view', 'export'],
+            ],
+            // Warehouse-floor role: moves stock, but owns no master data,
+            // no purchasing approval and no accounting.
+            $warehouseIncharge->id => [
+                'Dashboard' => ['view'],
+                'Warehouse Stock' => ['view'],
+                'Stock Ledger' => ['view'],
+                'Goods Receipts' => ['view', 'create', 'receive', 'post'],
+                'Stock Issues' => ['view', 'create', 'issue', 'post'],
+                'Stock Transfers' => ['view', 'create', 'transfer'],
+                'Stock Adjustments' => ['view', 'create', 'adjust'],
+                'Inventory Reports' => ['view', 'export'],
             ],
             $siteSupervisor->id => [
                 'Dashboard' => ['view'],
@@ -195,6 +239,9 @@ class DatabaseSeeder extends Seeder
                 'Sites' => ['view'],
                 'Inventory' => ['view', 'create'],
                 'Equipment' => ['view', 'mobile'],
+                // Raises material requests for the assigned site.
+                'Purchase Requests' => ['view', 'create'],
+                'Warehouse Stock' => ['view'],
             ],
         ];
 

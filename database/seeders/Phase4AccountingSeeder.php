@@ -56,6 +56,7 @@ class Phase4AccountingSeeder extends Seeder
                 ]],
                 ['1200', 'Accounts Receivable', 'asset', 'debit', []],
                 ['1300', 'Input VAT Receivable', 'asset', 'debit', []],
+                ['1400', 'Inventory Asset', 'asset', 'debit', []],
             ]],
             ['2000', 'Liabilities', 'liability', 'credit', [
                 ['2100', 'Accounts Payable', 'liability', 'credit', []],
@@ -77,12 +78,13 @@ class Phase4AccountingSeeder extends Seeder
                 ['5300', 'Fuel Expense', 'expense', 'debit', []],
                 ['5400', 'Maintenance Expense', 'expense', 'debit', []],
                 ['5500', 'Equipment Expense', 'expense', 'debit', []],
+                ['5600', 'Inventory Adjustment Expense', 'expense', 'debit', []],
             ]],
         ];
 
         // VAT-bearing and cost-center-bearing accounts, by code.
         $vatAccounts = ['1300', '2200', '2210'];
-        $costCenterAccounts = ['4100', '4200', '5100', '5200', '5300', '5400', '5500'];
+        $costCenterAccounts = ['4100', '4200', '5100', '5200', '5300', '5400', '5500', '5600'];
 
         $create = function (array $nodes, ?int $parentId) use (&$create, $vatAccounts, $costCenterAccounts) {
             foreach ($nodes as [$code, $name, $type, $normal, $children]) {
@@ -155,7 +157,9 @@ class Phase4AccountingSeeder extends Seeder
         $rules = [
             ['Payroll', 'Payroll Approved', '5100', '2300', 'Employee Project / Department', true, true, 'Salary expense against salary payable when a payroll run is approved.'],
             ['Site Expense', 'Site Expense Approved', '5200', '1110', 'Selected Project / Site', false, true, 'Expense category linked account against cash when a site expense is approved.'],
-            ['Inventory', 'Inventory Purchase', '5200', '2100', 'Warehouse / Project', false, true, 'Inventory asset against accounts payable on material purchase.'],
+            ['Inventory', 'Inventory Purchase', '1400', '2100', 'Warehouse / Project', true, false, 'Inventory asset and input VAT against accounts payable when a goods receipt is posted.'],
+            ['Inventory', 'Stock Issued', '5200', '1400', 'Selected Project / Site', true, false, 'Project material expense against inventory asset when stock is issued.'],
+            ['Inventory', 'Stock Adjusted', '5600', '1400', 'Warehouse / Project', true, false, 'Inventory adjustment expense against inventory asset on a stock loss. A gain reverses the sides.'],
             ['Customer Invoice', 'Invoice Approved', '1200', '4100', 'Invoice Project', true, false, 'Accounts receivable against revenue and output VAT when an invoice is approved.'],
             ['Supplier Bill', 'Bill Approved', '5200', '2100', 'Selected Project / Site', true, false, 'Expense and input VAT against accounts payable when a supplier bill is approved.'],
             ['Supplier Payment', 'Payment Recorded', '2100', '1120', 'None', true, false, 'Accounts payable against bank when a supplier payment is recorded.'],
