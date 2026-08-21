@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\EnsureActiveUser;
 use App\Http\Middleware\EnsureRequestWithinScope;
+use App\Http\Middleware\EnsurePasswordChanged;
 use App\Http\Middleware\EnsureUserHasPermission;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'active' => EnsureActiveUser::class,
             'permission' => EnsureUserHasPermission::class,
             'scope' => EnsureRequestWithinScope::class,
+            'password.changed' => EnsurePasswordChanged::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

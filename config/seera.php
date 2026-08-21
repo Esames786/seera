@@ -8,4 +8,8 @@ return [
         'username' => env('SEERA_ADMIN_USERNAME'),
         'password' => env('SEERA_ADMIN_PASSWORD'),
     ],
+    'organization' => [
+        // Domain used to build login emails for the organization chart accounts.
+        'email_domain' => env('SEERA_ORG_EMAIL_DOMAIN', 'seera.local'),
+    ],
 ];

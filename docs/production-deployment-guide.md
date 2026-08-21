@@ -166,6 +166,39 @@ php artisan migrate:status
 
 After the production administrator has been created, remove `SEERA_ADMIN_PASSWORD` from `.env`. Keep the other bootstrap values only if useful for documentation. The production seeder deliberately refuses to run without a 16-character bootstrap password.
 
+### 5a. Organization chart login accounts
+
+`ProductionSeeder` creates only the bootstrap administrator. To create the twelve
+staff accounts from the company organization chart, run:
+
+```bash
+php artisan db:seed --class=OrganizationHierarchySeeder --force
+```
+
+Set the login domain first, otherwise the accounts are created on the
+`seera.local` placeholder:
+
+```dotenv
+SEERA_ORG_EMAIL_DOMAIN=your-company-domain.com
+```
+
+The seeder also creates the departments, roles, designations and role permissions
+those accounts depend on, so it is safe to run against a database that has only
+been through `ProductionSeeder`.
+
+Every account is created with the shared default password `123456` and the
+`must_change_password` flag set. On first sign-in the panel is locked to the
+"Set Your Password" screen until the holder chooses their own; no other admin
+route is reachable until then.
+
+The seeder is idempotent and re-running it will **not** reset a password someone
+has already changed. It also refuses to touch an account whose username is
+already taken by somebody else, reporting a skip instead.
+
+Because `123456` is a weak shared secret, treat the window between seeding and
+first sign-in as sensitive: seed the accounts only when the staff are ready to
+log in, and confirm afterwards that no account still shows `must_change_password`.
+
 ## 6. Cache and release
 
 ```bash

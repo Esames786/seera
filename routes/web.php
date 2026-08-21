@@ -47,6 +47,7 @@ use App\Http\Controllers\Admin\Master\ProjectController;
 use App\Http\Controllers\Admin\Master\SiteController;
 use App\Http\Controllers\Admin\Master\SupplierController;
 use App\Http\Controllers\Admin\Master\WarehouseController;
+use App\Http\Controllers\Admin\PasswordChangeController;
 use App\Http\Controllers\Admin\PermissionMatrixController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\RoleHierarchyController;
@@ -78,7 +79,17 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 | Admin (Phase 1 + Phase 2)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'active', 'permission', 'scope'])->prefix('admin')->name('admin.')->group(function () {
+/*
+ * Setting your own password is not a permissioned action, so it sits outside the
+ * permission and scope checks. Without this an account issued with the shared
+ * default password would be redirected here and then refused entry.
+ */
+Route::middleware(['auth', 'active'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('set-password', [PasswordChangeController::class, 'edit'])->name('password.change');
+    Route::post('set-password', [PasswordChangeController::class, 'update'])->name('password.change.update');
+});
+
+Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Users

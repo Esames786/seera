@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
     'warehouse_id', 'joining_date', 'contract_type', 'iqama_number',
     'iqama_expiry_date', 'mobile_access', 'two_factor_enabled', 'temporary_access',
     'access_start_date', 'access_end_date', 'last_login_at', 'status',
+    'must_change_password', 'password_changed_at',
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
@@ -45,6 +46,8 @@ class User extends Authenticatable
             'mobile_access' => 'boolean',
             'two_factor_enabled' => 'boolean',
             'temporary_access' => 'boolean',
+            'must_change_password' => 'boolean',
+            'password_changed_at' => 'datetime',
         ];
     }
 
