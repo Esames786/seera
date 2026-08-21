@@ -6,7 +6,7 @@
 <aside class="sidebar" id="admin-sidebar">
     <div class="sidebar-header">
         <a class="brand" href="{{ route('admin.dashboard') }}">
-            <span class="logo-icon">S</span><span>{{ config('app.name') }} ERP</span>
+            <span class="logo-icon">S</span><span>{{ config('app.name') }}</span>
         </a>
         <div class="small" style="margin-top:5px;color:#94a3b8">Admin Web Portal</div>
     </div>
