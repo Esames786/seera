@@ -506,6 +506,44 @@ class InventoryTest extends TestCase
         $this->assertTrue($adjustment->journalEntry->isBalanced());
     }
 
+    public function test_stock_adjustment_uses_live_balance_when_posted(): void
+    {
+        $row = $this->stockedRow();
+        $original = (float) $row->quantity;
+        $target = $original - 5;
+
+        $this->actingAs($this->admin())->post(route('admin.inventory.stock-adjustments.store'), [
+            'warehouse_id' => $row->warehouse_id,
+            'item_id' => $row->item_id,
+            'adjustment_date' => now()->toDateString(),
+            'adjusted_quantity' => $target,
+            'reason' => 'Live balance regression',
+        ])->assertRedirect();
+
+        $adjustment = StockAdjustment::where('reason', 'Live balance regression')->firstOrFail();
+        $item = Item::findOrFail($row->item_id);
+        app(\App\Services\Inventory\StockService::class)->receive(
+            $item,
+            $row->warehouse_id,
+            10,
+            (float) $row->average_cost,
+            ['movement_type' => 'grn', 'movement_date' => now()->toDateString()]
+        );
+
+        $this->actingAs($this->admin())->post(route('admin.inventory.stock-adjustments.approve', $adjustment))->assertRedirect();
+        $this->actingAs($this->admin())->post(route('admin.inventory.stock-adjustments.post', $adjustment))->assertRedirect();
+
+        $adjustment->refresh();
+        $this->assertSame(number_format($original + 10, 3, '.', ''), (string) $adjustment->current_quantity);
+        $this->assertSame('-15.000', (string) $adjustment->difference_quantity);
+        $this->assertEqualsWithDelta($target, $this->stockFor($row->item_id, $row->warehouse_id), 0.001);
+        $this->assertEqualsWithDelta(
+            abs((float) $adjustment->difference_quantity) * (float) $adjustment->unit_cost,
+            (float) $adjustment->adjustment_value,
+            0.01
+        );
+    }
+
     public function test_stock_ledger_records_every_movement(): void
     {
         $this->actingAs($this->admin())

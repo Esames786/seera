@@ -31,7 +31,7 @@ class StockAdjustment extends Model
 
     public function isEditable(): bool
     {
-        return in_array($this->status, ['draft', 'approved'], true);
+        return $this->status === 'draft';
     }
 
     public function isLoss(): bool
@@ -63,6 +63,7 @@ class StockAdjustment extends Model
     {
         $prefix = 'ADJ-'.$year.'-';
 
-        return $prefix.str_pad((string) (static::where('adjustment_number', 'like', $prefix.'%')->count() + 1), 4, '0', STR_PAD_LEFT);
+        return app(\App\Services\DocumentNumberService::class)
+            ->next('stock-adjustment-'.$year, $prefix, 'stock_adjustments', 'adjustment_number');
     }
 }

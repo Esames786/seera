@@ -1,6 +1,6 @@
 @php /** @var \App\Models\Employee|null $employee */ $employee = $employee ?? null; @endphp
 
-<form method="POST" action="{{ $employee ? route('admin.hr.employees.update', $employee) : route('admin.hr.employees.store') }}">
+<form method="POST" action="{{ $employee ? route("admin.hr.employees.update", $employee) : route("admin.hr.employees.store") }}" enctype="multipart/form-data">
     @csrf
     @if ($employee) @method('PUT') @endif
 
@@ -37,7 +37,7 @@
             <select id="designation_id" name="designation_id" class="select">
                 <option value="">Select...</option>
                 @foreach ($designations as $designation)
-                    <option value="{{ $designation->id }}" @selected(old('designation_id', $employee?->designation_id) == $designation->id)>{{ $designation->name }}</option>
+                    <option value="{{ $designation->id }}" data-parent="{{ $designation->department_id }}" @selected(old("designation_id", $employee?->designation_id) == $designation->id)>{{ $designation->name }}</option>
                 @endforeach
             </select>
         </div>
@@ -64,7 +64,7 @@
             <select id="site_id" name="site_id" class="select">
                 <option value="">Select...</option>
                 @foreach ($sites as $site)
-                    <option value="{{ $site->id }}" @selected(old('site_id', $employee?->site_id) == $site->id)>{{ $site->name }}</option>
+                    <option value="{{ $site->id }}" data-parent="{{ $site->project_id }}" @selected(old("site_id", $employee?->site_id) == $site->id)>{{ $site->name }}</option>
                 @endforeach
             </select>
         </div>
@@ -86,6 +86,14 @@
                 @endforeach
             </select>
         </div>
+        <div>
+            <label for="employee_classification">Employee Classification *</label>
+            <select id="employee_classification" name="employee_classification" class="select" required>
+                @foreach ($classifications as $classification)
+                    <option value="{{ $classification }}" @selected(old('employee_classification', $employee?->employee_classification ?? 'Sponsorship') === $classification)>{{ $classification }}</option>
+                @endforeach
+            </select>
+        </div>
         <div><label for="contract_start_date">Contract Start</label><input id="contract_start_date" name="contract_start_date" type="date" class="input" value="{{ old('contract_start_date', $employee?->contract_start_date?->toDateString()) }}"/></div>
         <div><label for="contract_end_date">Contract End</label><input id="contract_end_date" name="contract_end_date" type="date" class="input" value="{{ old('contract_end_date', $employee?->contract_end_date?->toDateString()) }}"/></div>
         <div>
@@ -98,22 +106,31 @@
         </div>
     </x-admin.form-section>
 
-    <x-admin.form-section title="C. Saudi Documents" columns="3">
+    <x-admin.form-section title="C. Documents" columns="3">
         <div><label for="iqama_number">IQAMA Number</label><input id="iqama_number" name="iqama_number" class="input" value="{{ old('iqama_number', $employee?->iqama_number) }}" placeholder="245XXXXXXX"/></div>
         <div><label for="iqama_expiry_date">IQAMA Expiry Date</label><input id="iqama_expiry_date" name="iqama_expiry_date" type="date" class="input" value="{{ old('iqama_expiry_date', $employee?->iqama_expiry_date?->toDateString()) }}"/></div>
         <div><label for="passport_number">Passport Number</label><input id="passport_number" name="passport_number" class="input" value="{{ old('passport_number', $employee?->passport_number) }}" placeholder="AB1234567"/></div>
         <div><label for="passport_expiry_date">Passport Expiry Date</label><input id="passport_expiry_date" name="passport_expiry_date" type="date" class="input" value="{{ old('passport_expiry_date', $employee?->passport_expiry_date?->toDateString()) }}"/></div>
+        <div><label for="insurance_number">Insurance Number</label><input id="insurance_number" name="insurance_number" class="input" value="{{ old('insurance_number', $employee?->insurance_number) }}" placeholder="INS-000000"/></div>
+        <div><label for="insurance_expiry_date">Insurance Expiry Date</label><input id="insurance_expiry_date" name="insurance_expiry_date" type="date" class="input" value="{{ old('insurance_expiry_date', $employee?->insurance_expiry_date?->toDateString()) }}"/></div>
+        <div><label for="driving_license_number">Driving License Number</label><input id="driving_license_number" name="driving_license_number" class="input" value="{{ old('driving_license_number', $employee?->driving_license_number) }}" placeholder="DL-000000"/></div>
+        <div><label for="driving_license_expiry_date">Driving License Expiry</label><input id="driving_license_expiry_date" name="driving_license_expiry_date" type="date" class="input" value="{{ old('driving_license_expiry_date', $employee?->driving_license_expiry_date?->toDateString()) }}"/></div>
         <div class="full">
             <div class="help-box">
-                Document files are uploaded from
-                <a href="{{ route('admin.hr.documents.create') }}" style="color:var(--blue);font-weight:700">Employee Documents</a>,
-                where each document keeps its own issue date, expiry date and validity status.
+                Numbers and expiry dates are kept here. Upload the files in Section E below. The
+                <a href="{{ route('admin.hr.documents.index') }}" style="color:var(--blue);font-weight:700">Employee Documents</a>
+                screen is a read-only register of IQAMA, passport, contract, insurance, driving license and other files.
             </div>
         </div>
     </x-admin.form-section>
 
     <x-admin.form-section title="D. Payroll Information" columns="3">
         <div><label for="basic_salary">Basic Salary (SAR) *</label><input id="basic_salary" name="basic_salary" type="number" step="0.01" min="0" class="input" value="{{ old('basic_salary', $employee?->basic_salary ?? 0) }}" required/></div>
+        <div><label for="housing_allowance">Housing Allowance</label><input id="housing_allowance" name="housing_allowance" type="number" step="0.01" min="0" class="input" value="{{ old('housing_allowance', $employee?->housing_allowance ?? 0) }}"/></div>
+        <div><label for="transport_allowance">Transport Allowance</label><input id="transport_allowance" name="transport_allowance" type="number" step="0.01" min="0" class="input" value="{{ old('transport_allowance', $employee?->transport_allowance ?? 0) }}"/></div>
+        <div><label for="food_allowance">Food Allowance</label><input id="food_allowance" name="food_allowance" type="number" step="0.01" min="0" class="input" value="{{ old('food_allowance', $employee?->food_allowance ?? 0) }}"/></div>
+        <div><label for="fuel_allowance">Fuel Allowance</label><input id="fuel_allowance" name="fuel_allowance" type="number" step="0.01" min="0" class="input" value="{{ old('fuel_allowance', $employee?->fuel_allowance ?? 0) }}"/></div>
+        <div><label for="other_allowance">Other Allowance</label><input id="other_allowance" name="other_allowance" type="number" step="0.01" min="0" class="input" value="{{ old('other_allowance', $employee?->other_allowance ?? 0) }}"/></div>
         <div>
             <label for="payment_method">Payment Method *</label>
             <select id="payment_method" name="payment_method" class="select" required>
@@ -124,9 +141,81 @@
         </div>
         <div><label for="bank_name">Bank Name</label><input id="bank_name" name="bank_name" class="input" value="{{ old('bank_name', $employee?->bank_name) }}" placeholder="Al Rajhi Bank"/></div>
         <div><label for="iban">IBAN</label><input id="iban" name="iban" class="input" value="{{ old('iban', $employee?->iban) }}" placeholder="SA00 0000 0000 0000"/></div>
+        <div class="full">
+            <div class="help-box">
+                These allowances are the employee default. The payroll run uses the active
+                <a href="{{ route('admin.hr.salary-structures.index') }}" style="color:var(--blue);font-weight:700">salary structure</a>,
+                which is pre-filled from these values and can add further allowance or deduction items.
+            </div>
+        </div>
     </x-admin.form-section>
 
-    <x-admin.form-section title="E. Access" columns="3">
+    <x-admin.form-section title="E. Document Attachments">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="min-width:170px">Document Type</th>
+                        <th style="min-width:150px">Number</th>
+                        <th style="width:160px">Issue Date</th>
+                        <th style="width:160px">Expiry Date</th>
+                        <th style="min-width:200px">File</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for ($i = 0; $i < 4; $i++)
+                        <tr>
+                            <td>
+                                <select name="documents[{{ $i }}][document_type]" class="select">
+                                    <option value="">Select type...</option>
+                                    @foreach (\App\Models\EmployeeDocument::TYPES as $type)
+                                        <option value="{{ $type }}" @selected(old("documents.$i.document_type") === $type)>{{ $type }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td><input name="documents[{{ $i }}][document_number]" class="input" value="{{ old("documents.$i.document_number") }}"/></td>
+                            <td><input name="documents[{{ $i }}][issue_date]" type="date" class="input" value="{{ old("documents.$i.issue_date") }}"/></td>
+                            <td><input name="documents[{{ $i }}][expiry_date]" type="date" class="input" value="{{ old("documents.$i.expiry_date") }}"/></td>
+                            <td><input name="documents[{{ $i }}][file]" type="file" class="input"/></td>
+                        </tr>
+                    @endfor
+                </tbody>
+            </table>
+        </div>
+        <div class="small" style="margin-top:10px">
+            Attach IQAMA, passport, contract, medical insurance, driving license or any other file here. Rows without a document type are ignored.
+        </div>
+
+        @if ($employee && $employee->documents->isNotEmpty())
+            <br/>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Already Attached</th><th>Number</th><th>Expiry</th><th>Validity</th><th>File</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($employee->documents as $document)
+                            <tr>
+                                <td>{{ $document->document_type }}</td>
+                                <td>{{ $document->document_number ?? '-' }}</td>
+                                <td>{{ $document->expiry_date?->toDateString() ?? '-' }}</td>
+                                <td><x-admin.status-badge :status="$document->validityStatus()"/></td>
+                                <td>
+                                    @if ($document->file_path)
+                                        <a href="{{ route('admin.hr.documents.download', $document) }}" style="color:var(--blue);font-weight:700">Download</a>
+                                    @else
+                                        <span class="small">Not uploaded</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </x-admin.form-section>
+
+    <x-admin.form-section title="F. Access" columns="3">
         <div>
             <label for="user_id">Link User Account</label>
             <select id="user_id" name="user_id" class="select">
@@ -150,3 +239,6 @@
         <button type="submit" class="btn primary">{{ $employee ? 'Update Employee' : 'Save Employee' }}</button>
     </div>
 </form>
+
+<x-admin.dependent-select parent="department_id" child="designation_id" placeholder="designations"/>
+<x-admin.dependent-select parent="project_id" child="site_id" placeholder="sites"/>

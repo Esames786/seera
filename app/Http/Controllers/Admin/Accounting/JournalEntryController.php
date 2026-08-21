@@ -129,23 +129,24 @@ class JournalEntryController extends Controller
      */
     public function post(Request $request, JournalEntry $journal_entry): RedirectResponse
     {
-        if ($journal_entry->status === 'posted') {
-            return back()->withErrors(['journal' => 'This journal entry is already posted.']);
-        }
+        DB::transaction(function () use ($journal_entry, $request) {
+            $entry = JournalEntry::whereKey($journal_entry->id)->lockForUpdate()->firstOrFail();
+            if ($entry->status === 'posted') {
+                throw ValidationException::withMessages(['journal' => 'This journal entry is already posted.']);
+            }
+            if ($entry->status === 'cancelled') {
+                throw ValidationException::withMessages(['journal' => 'A cancelled journal entry cannot be posted.']);
+            }
+            if (! $entry->isBalanced()) {
+                throw ValidationException::withMessages(['journal' => 'Total debit must equal total credit before posting.']);
+            }
 
-        if ($journal_entry->status === 'cancelled') {
-            return back()->withErrors(['journal' => 'A cancelled journal entry cannot be posted.']);
-        }
-
-        if (! $journal_entry->isBalanced()) {
-            return back()->withErrors(['journal' => 'Total debit must equal total credit before posting.']);
-        }
-
-        $journal_entry->update([
-            'status' => 'posted',
-            'posted_by' => $request->user()->id,
-            'posted_at' => now(),
-        ]);
+            $entry->update([
+                'status' => 'posted',
+                'posted_by' => $request->user()->id,
+                'posted_at' => now(),
+            ]);
+        });
 
         ActivityLog::record($request, 'Accounting', 'Posted journal entry', $journal_entry->journal_number);
 

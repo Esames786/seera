@@ -135,6 +135,12 @@ class StockTransferController extends Controller
 
         try {
             DB::transaction(function () use ($stock_transfer, $request) {
+                $stock_transfer = StockTransfer::whereKey($stock_transfer->id)->lockForUpdate()->firstOrFail();
+                if ($stock_transfer->status !== 'draft') {
+                    throw ValidationException::withMessages(['transfer' => 'Only a draft transfer can be dispatched.']);
+                }
+                $stock_transfer->load('lines.item');
+
                 $total = 0.0;
 
                 foreach ($stock_transfer->lines as $line) {
@@ -188,6 +194,12 @@ class StockTransferController extends Controller
         $stock_transfer->load('lines.item');
 
         DB::transaction(function () use ($stock_transfer, $request) {
+            $stock_transfer = StockTransfer::whereKey($stock_transfer->id)->lockForUpdate()->firstOrFail();
+            if ($stock_transfer->status !== 'dispatched') {
+                throw ValidationException::withMessages(['transfer' => 'Only a dispatched transfer can be received.']);
+            }
+            $stock_transfer->load('lines.item');
+
             foreach ($stock_transfer->lines as $line) {
                 if (! $line->item) {
                     continue;

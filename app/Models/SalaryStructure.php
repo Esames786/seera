@@ -8,7 +8,7 @@ class SalaryStructure extends Model
 {
     protected $fillable = [
         'employee_id', 'basic_salary', 'housing_allowance', 'transport_allowance',
-        'food_allowance', 'other_allowance', 'fixed_deduction',
+        'food_allowance', 'fuel_allowance', 'other_allowance', 'fixed_deduction',
         'effective_from', 'effective_to', 'status',
     ];
 
@@ -21,6 +21,7 @@ class SalaryStructure extends Model
             'housing_allowance' => 'decimal:2',
             'transport_allowance' => 'decimal:2',
             'food_allowance' => 'decimal:2',
+            'fuel_allowance' => 'decimal:2',
             'other_allowance' => 'decimal:2',
             'fixed_deduction' => 'decimal:2',
         ];
@@ -34,6 +35,7 @@ class SalaryStructure extends Model
         return (float) $this->housing_allowance
             + (float) $this->transport_allowance
             + (float) $this->food_allowance
+            + (float) $this->fuel_allowance
             + (float) $this->other_allowance
             + (float) $this->items->where('item_type', 'allowance')->sum('amount');
     }

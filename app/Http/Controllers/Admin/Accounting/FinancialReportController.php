@@ -19,9 +19,7 @@ use Illuminate\View\View;
 
 class FinancialReportController extends Controller
 {
-    public function __construct(private readonly PostingService $posting)
-    {
-    }
+    public function __construct(private readonly PostingService $posting) {}
 
     public function index(): View
     {
@@ -130,23 +128,24 @@ class FinancialReportController extends Controller
     public function projectCostReport(Request $request): View
     {
         $projects = Project::with('customer')->orderBy('name')->get();
+        $expenseIds = ChartOfAccount::where('account_type', 'expense')->pluck('id');
+        $revenueIds = ChartOfAccount::where('account_type', 'revenue')->pluck('id');
+        $costs = JournalEntryLine::whereIn('chart_of_account_id', $expenseIds)
+            ->whereHas('journalEntry', fn ($q) => $this->applyEntryFilters($q, $request))
+            ->groupBy('project_id')->selectRaw('project_id, COALESCE(SUM(debit), 0) as total')->pluck('total', 'project_id');
+        $revenues = JournalEntryLine::whereIn('chart_of_account_id', $revenueIds)
+            ->whereHas('journalEntry', fn ($q) => $this->applyEntryFilters($q, $request))
+            ->groupBy('project_id')->selectRaw('project_id, COALESCE(SUM(credit), 0) as total')->pluck('total', 'project_id');
+        $bills = SupplierBill::where('status', '!=', 'draft')
+            ->groupBy('project_id')->selectRaw('project_id, COALESCE(SUM(total_amount), 0) as total')->pluck('total', 'project_id');
+        $invoices = CustomerInvoice::where('payment_status', '!=', 'draft')
+            ->groupBy('project_id')->selectRaw('project_id, COALESCE(SUM(total_amount), 0) as total')->pluck('total', 'project_id');
 
-        $rows = $projects->map(function (Project $project) use ($request) {
-            $expenseIds = ChartOfAccount::where('account_type', 'expense')->pluck('id');
-            $revenueIds = ChartOfAccount::where('account_type', 'revenue')->pluck('id');
-
-            $cost = (float) JournalEntryLine::where('project_id', $project->id)
-                ->whereIn('chart_of_account_id', $expenseIds)
-                ->whereHas('journalEntry', fn ($q) => $this->applyEntryFilters($q, $request))
-                ->sum('debit');
-
-            $revenue = (float) JournalEntryLine::where('project_id', $project->id)
-                ->whereIn('chart_of_account_id', $revenueIds)
-                ->whereHas('journalEntry', fn ($q) => $this->applyEntryFilters($q, $request))
-                ->sum('credit');
-
-            $billed = (float) SupplierBill::where('project_id', $project->id)->where('status', '!=', 'draft')->sum('total_amount');
-            $invoiced = (float) CustomerInvoice::where('project_id', $project->id)->where('payment_status', '!=', 'draft')->sum('total_amount');
+        $rows = $projects->map(function (Project $project) use ($costs, $revenues, $bills, $invoices) {
+            $cost = (float) ($costs[$project->id] ?? 0);
+            $revenue = (float) ($revenues[$project->id] ?? 0);
+            $billed = (float) ($bills[$project->id] ?? 0);
+            $invoiced = (float) ($invoices[$project->id] ?? 0);
 
             return [
                 'project' => $project,
@@ -172,25 +171,29 @@ class FinancialReportController extends Controller
      */
     private function movements(Request $request): Collection
     {
-        $rows = JournalEntryLine::query()
-            ->join('chart_of_accounts', 'chart_of_accounts.id', '=', 'journal_entry_lines.chart_of_account_id')
+        $totals = JournalEntryLine::query()
             ->whereHas('journalEntry', fn ($q) => $this->applyEntryFilters($q, $request))
             ->when($request->filled('cost_center'), fn ($q) => $q->where('journal_entry_lines.cost_center_id', $request->integer('cost_center')))
             ->when($request->filled('project'), fn ($q) => $q->where('journal_entry_lines.project_id', $request->integer('project')))
             ->when($request->filled('site'), fn ($q) => $q->where('journal_entry_lines.site_id', $request->integer('site')))
-            ->groupBy('chart_of_accounts.id', 'chart_of_accounts.account_code', 'chart_of_accounts.account_name', 'chart_of_accounts.account_type')
-            ->orderBy('chart_of_accounts.account_code')
-            ->selectRaw('chart_of_accounts.id as account_id, chart_of_accounts.account_code, chart_of_accounts.account_name, chart_of_accounts.account_type, COALESCE(SUM(journal_entry_lines.debit), 0) as debit, COALESCE(SUM(journal_entry_lines.credit), 0) as credit')
-            ->get();
+            ->groupBy('chart_of_account_id')
+            ->selectRaw('chart_of_account_id, COALESCE(SUM(debit), 0) as debit, COALESCE(SUM(credit), 0) as credit')
+            ->get()
+            ->keyBy('chart_of_account_id');
 
-        return $rows->map(fn ($row) => [
-            'account_id' => $row->account_id,
-            'account_code' => $row->account_code,
-            'account_name' => $row->account_name,
-            'account_type' => $row->account_type,
-            'debit' => round((float) $row->debit, 2),
-            'credit' => round((float) $row->credit, 2),
-        ]);
+        return ChartOfAccount::orderBy('account_code')->get()->map(function (ChartOfAccount $account) use ($totals) {
+            $movement = $totals->get($account->id);
+            $opening = (float) $account->opening_balance;
+
+            return [
+                'account_id' => $account->id,
+                'account_code' => $account->account_code,
+                'account_name' => $account->account_name,
+                'account_type' => $account->account_type,
+                'debit' => round((float) ($movement?->debit ?? 0) + ($account->normal_balance === 'debit' ? $opening : 0), 2),
+                'credit' => round((float) ($movement?->credit ?? 0) + ($account->normal_balance === 'credit' ? $opening : 0), 2),
+            ];
+        });
     }
 
     /**

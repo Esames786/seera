@@ -67,6 +67,7 @@ class StockIssue extends Model
     {
         $prefix = 'ISS-'.$year.'-';
 
-        return $prefix.str_pad((string) (static::where('issue_number', 'like', $prefix.'%')->count() + 1), 4, '0', STR_PAD_LEFT);
+        return app(\App\Services\DocumentNumberService::class)
+            ->next('stock-issue-'.$year, $prefix, 'stock_issues', 'issue_number');
     }
 }

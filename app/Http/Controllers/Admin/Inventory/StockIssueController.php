@@ -145,6 +145,12 @@ class StockIssueController extends Controller
 
         try {
             DB::transaction(function () use ($stock_issue, $request) {
+                $stock_issue = StockIssue::whereKey($stock_issue->id)->lockForUpdate()->firstOrFail();
+                if ($stock_issue->status !== 'draft') {
+                    throw ValidationException::withMessages(['issue' => 'This stock issue is already posted.']);
+                }
+                $stock_issue->load('lines.item');
+
                 $total = 0.0;
 
                 foreach ($stock_issue->lines as $line) {

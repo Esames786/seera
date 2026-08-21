@@ -64,7 +64,7 @@ Route::get('/', fn () => redirect()->route(auth()->check() ? 'admin.dashboard' :
 */
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.attempt');
     Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
     Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
     Route::get('/reset-password', [AuthController::class, 'showResetPassword'])->name('password.reset');
@@ -78,7 +78,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 | Admin (Phase 1 + Phase 2)
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'active', 'permission', 'scope'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Users
@@ -124,7 +124,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', [HrDashboardController::class, 'index'])->name('dashboard');
 
         Route::resource('employees', EmployeeController::class);
-        Route::resource('documents', EmployeeDocumentController::class)->except(['show']);
+        Route::get('documents', [EmployeeDocumentController::class, 'index'])->name('documents.index');
+        Route::get('documents/{document}/download', [EmployeeDocumentController::class, 'download'])->name('documents.download');
         Route::resource('shifts', ShiftController::class)->except(['show']);
 
         Route::resource('attendance', AttendanceController::class)

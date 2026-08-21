@@ -14,14 +14,13 @@ use App\Services\Accounting\PostingService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AccountsReceivableController extends Controller
 {
-    public function __construct(private readonly PostingService $posting)
-    {
-    }
+    public function __construct(private readonly PostingService $posting) {}
 
     public function index(Request $request): View
     {
@@ -135,20 +134,22 @@ class AccountsReceivableController extends Controller
      */
     public function approve(Request $request, CustomerInvoice $accounts_receivable): RedirectResponse
     {
-        if ($accounts_receivable->payment_status !== 'draft') {
-            return back()->withErrors(['invoice' => 'Only a draft invoice can be approved.']);
-        }
+        [$entry, $record] = DB::transaction(function () use ($accounts_receivable, $request) {
+            $accounts_receivable = CustomerInvoice::whereKey($accounts_receivable->id)->lockForUpdate()->firstOrFail();
+            if ($accounts_receivable->payment_status !== 'draft') {
+                throw ValidationException::withMessages(['invoice' => 'Only a draft invoice can be approved.']);
+            }
 
-        $entry = $this->posting->postCustomerInvoice($accounts_receivable, $request->user()->id);
+            $entry = $this->posting->postCustomerInvoice($accounts_receivable, $request->user()->id);
+            $accounts_receivable->update([
+                'payment_status' => 'unpaid',
+                'received_amount' => 0,
+                'balance_amount' => $accounts_receivable->total_amount,
+                'journal_entry_id' => $entry?->id,
+            ]);
 
-        $accounts_receivable->update([
-            'payment_status' => 'unpaid',
-            'received_amount' => 0,
-            'balance_amount' => $accounts_receivable->total_amount,
-            'journal_entry_id' => $entry?->id,
-        ]);
-
-        $record = $this->posting->createZatcaRecord($accounts_receivable);
+            return [$entry, $this->posting->createZatcaRecord($accounts_receivable)];
+        });
 
         ActivityLog::record($request, 'Accounting', 'Approved customer invoice', $accounts_receivable->invoice_number);
 
@@ -170,14 +171,10 @@ class AccountsReceivableController extends Controller
      */
     public function storeReceipt(Request $request, CustomerInvoice $accounts_receivable): RedirectResponse
     {
-        if (in_array($accounts_receivable->payment_status, ['draft', 'cancelled'], true)) {
-            return back()->withErrors(['receipt' => 'Approve the invoice before recording a receipt.']);
-        }
-
         $data = $request->validate([
             'receipt_date' => ['required', 'date'],
-            'receipt_account_id' => ['required', 'exists:chart_of_accounts,id'],
-            'amount' => ['required', 'numeric', 'min:0.01', 'max:'.max((float) $accounts_receivable->balance_amount, 0.01)],
+            'receipt_account_id' => ['required', Rule::exists('chart_of_accounts', 'id')->where(fn ($query) => $query->whereIn('account_code', [PostingService::CASH, PostingService::BANK])->where('status', 'active'))],
+            'amount' => ['required', 'numeric', 'min:0.01'],
             'reference_number' => ['nullable', 'string', 'max:100'],
             'notes' => ['nullable', 'string'],
         ], [
@@ -185,6 +182,14 @@ class AccountsReceivableController extends Controller
         ]);
 
         $receipt = DB::transaction(function () use ($accounts_receivable, $data, $request) {
+            $accounts_receivable = CustomerInvoice::whereKey($accounts_receivable->id)->lockForUpdate()->firstOrFail();
+            if (in_array($accounts_receivable->payment_status, ['draft', 'cancelled', 'paid'], true)) {
+                throw ValidationException::withMessages(['receipt' => 'This invoice is not open for receipt.']);
+            }
+            if ((float) $data['amount'] > (float) $accounts_receivable->balance_amount + 0.001) {
+                throw ValidationException::withMessages(['amount' => 'The receipt cannot be more than the outstanding balance.']);
+            }
+
             $receipt = CustomerReceipt::create($data + [
                 'customer_id' => $accounts_receivable->customer_id,
                 'customer_invoice_id' => $accounts_receivable->id,

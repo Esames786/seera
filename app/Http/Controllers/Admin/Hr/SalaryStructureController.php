@@ -114,6 +114,7 @@ class SalaryStructureController extends Controller
             'housing_allowance' => ['required', 'numeric', 'min:0'],
             'transport_allowance' => ['required', 'numeric', 'min:0'],
             'food_allowance' => ['required', 'numeric', 'min:0'],
+            'fuel_allowance' => ['required', 'numeric', 'min:0'],
             'other_allowance' => ['required', 'numeric', 'min:0'],
             'fixed_deduction' => ['required', 'numeric', 'min:0'],
             'effective_from' => ['required', 'date'],

@@ -12,8 +12,13 @@ class Employee extends Model
         'emergency_contact', 'nationality', 'department_id', 'designation_id',
         'branch_id', 'project_id', 'site_id', 'manager_id', 'user_id',
         'joining_date', 'contract_type', 'contract_start_date', 'contract_end_date',
+        'employee_classification',
         'iqama_number', 'iqama_expiry_date', 'passport_number', 'passport_expiry_date',
-        'basic_salary', 'payment_method', 'bank_name', 'iban',
+        'insurance_number', 'insurance_expiry_date',
+        'driving_license_number', 'driving_license_expiry_date',
+        'basic_salary', 'housing_allowance', 'transport_allowance', 'food_allowance',
+        'fuel_allowance', 'other_allowance',
+        'payment_method', 'bank_name', 'iban',
         'mobile_access', 'status',
     ];
 
@@ -25,7 +30,14 @@ class Employee extends Model
             'contract_end_date' => 'date',
             'iqama_expiry_date' => 'date',
             'passport_expiry_date' => 'date',
+            'insurance_expiry_date' => 'date',
+            'driving_license_expiry_date' => 'date',
             'basic_salary' => 'decimal:2',
+            'housing_allowance' => 'decimal:2',
+            'transport_allowance' => 'decimal:2',
+            'food_allowance' => 'decimal:2',
+            'fuel_allowance' => 'decimal:2',
+            'other_allowance' => 'decimal:2',
             'mobile_access' => 'boolean',
         ];
     }

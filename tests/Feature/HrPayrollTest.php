@@ -35,7 +35,6 @@ class HrPayrollTest extends TestCase
     public function test_hr_screens_return_ok(): void
     {
         $employee = Employee::firstOrFail();
-        $document = EmployeeDocument::firstOrFail();
         $shift = Shift::firstOrFail();
         $attendance = AttendanceRecord::firstOrFail();
         $leave = LeaveRequest::firstOrFail();
@@ -47,7 +46,7 @@ class HrPayrollTest extends TestCase
         $urls = [
             '/admin/hr/dashboard',
             '/admin/hr/employees', '/admin/hr/employees/create', "/admin/hr/employees/{$employee->id}", "/admin/hr/employees/{$employee->id}/edit",
-            '/admin/hr/documents', '/admin/hr/documents/create', "/admin/hr/documents/{$document->id}/edit",
+            '/admin/hr/documents',
             '/admin/hr/shifts', '/admin/hr/shifts/create', "/admin/hr/shifts/{$shift->id}/edit",
             '/admin/hr/attendance', '/admin/hr/attendance/create', "/admin/hr/attendance/{$attendance->id}/edit",
             '/admin/hr/leaves', '/admin/hr/leaves/create', "/admin/hr/leaves/{$leave->id}", "/admin/hr/leaves/{$leave->id}/edit",
@@ -85,6 +84,7 @@ class HrPayrollTest extends TestCase
                 'first_name' => 'Test',
                 'last_name' => 'Worker',
                 'contract_type' => 'Full Time',
+                'employee_classification' => 'Sponsorship',
                 'basic_salary' => 5000,
                 'payment_method' => 'Bank Transfer',
                 'status' => 'active',
@@ -105,6 +105,7 @@ class HrPayrollTest extends TestCase
                 'employee_code' => $existing->employee_code,
                 'first_name' => 'Duplicate',
                 'contract_type' => 'Full Time',
+                'employee_classification' => 'Sponsorship',
                 'basic_salary' => 1000,
                 'payment_method' => 'Cash',
                 'status' => 'active',
@@ -122,6 +123,7 @@ class HrPayrollTest extends TestCase
                 'first_name' => $employee->first_name,
                 'last_name' => $employee->last_name,
                 'contract_type' => 'Contract',
+                'employee_classification' => 'Freelancer',
                 'basic_salary' => 12345,
                 'payment_method' => 'Cash',
                 'status' => 'active',
@@ -142,23 +144,39 @@ class HrPayrollTest extends TestCase
         $this->assertDatabaseHas('employees', ['id' => $employee->id, 'status' => 'inactive']);
     }
 
-    public function test_document_can_be_created_and_expiry_status_is_visible(): void
+    public function test_documents_are_attached_from_the_employee_form(): void
     {
         $employee = Employee::firstOrFail();
+        $before = $employee->documents()->count();
 
         $this->actingAs($this->admin())
-            ->post(route('admin.hr.documents.store'), [
-                'employee_id' => $employee->id,
-                'document_type' => 'IQAMA',
-                'document_number' => '2451234567',
-                'issue_date' => now()->subYear()->toDateString(),
-                'expiry_date' => now()->addDays(20)->toDateString(),
+            ->put(route('admin.hr.employees.update', $employee), [
+                'employee_code' => $employee->employee_code,
+                'first_name' => $employee->first_name,
+                'last_name' => $employee->last_name,
+                'contract_type' => $employee->contract_type,
+                'employee_classification' => 'Sponsorship',
+                'basic_salary' => $employee->basic_salary,
+                'payment_method' => 'Bank Transfer',
                 'status' => 'active',
+                'documents' => [
+                    [
+                        'document_type' => 'Medical Insurance',
+                        'document_number' => 'INS-TEST-001',
+                        'issue_date' => now()->subYear()->toDateString(),
+                        'expiry_date' => now()->addDays(20)->toDateString(),
+                    ],
+                ],
             ])
-            ->assertRedirect(route('admin.hr.documents.index'));
+            ->assertRedirect(route('admin.hr.employees.index'));
 
-        $this->assertDatabaseHas('employee_documents', ['document_number' => '2451234567']);
+        $this->assertSame($before + 1, $employee->documents()->count());
+        $this->assertDatabaseHas('employee_documents', [
+            'employee_id' => $employee->id,
+            'document_number' => 'INS-TEST-001',
+        ]);
 
+        // The documents screen is a read-only register.
         $this->actingAs($this->admin())
             ->get(route('admin.hr.documents.index', ['validity' => 'expiring']))
             ->assertOk()
@@ -317,6 +335,7 @@ class HrPayrollTest extends TestCase
                 'housing_allowance' => 1500,
                 'transport_allowance' => 600,
                 'food_allowance' => 300,
+                'fuel_allowance' => 0,
                 'other_allowance' => 0,
                 'fixed_deduction' => 100,
                 'effective_from' => '2026-01-01',
@@ -394,9 +413,11 @@ class HrPayrollTest extends TestCase
             ->post(route('admin.hr.eosb.store'), [
                 'employee_id' => $employee->id,
                 'termination_date' => '2026-08-31',
+                'termination_reason' => 'end_of_contract',
                 'service_years' => 3.5,
                 'last_basic_salary' => 6500,
                 'eosb_amount' => 12000,
+                'manual_override' => 1,
                 'leave_salary' => 2000,
                 'other_dues' => 500,
                 'deductions' => 500,
@@ -437,7 +458,7 @@ class HrPayrollTest extends TestCase
         $this->assertSame(20, SalaryStructure::count());
         $this->assertSame(1, PayrollRun::count());
         $this->assertGreaterThan(0, PayrollRun::firstOrFail()->items()->count());
-        $this->assertSame(1, EndOfServiceRecord::count());
+        $this->assertSame(3, EndOfServiceRecord::count());
         $this->assertDatabaseCount('employee_shift_assignments', 20);
     }
 }

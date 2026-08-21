@@ -101,6 +101,7 @@ class PurchaseOrder extends Model
     {
         $prefix = 'PO-'.$year.'-';
 
-        return $prefix.str_pad((string) (static::where('po_number', 'like', $prefix.'%')->count() + 1), 4, '0', STR_PAD_LEFT);
+        return app(\App\Services\DocumentNumberService::class)
+            ->next('purchase-order-'.$year, $prefix, 'purchase_orders', 'po_number');
     }
 }

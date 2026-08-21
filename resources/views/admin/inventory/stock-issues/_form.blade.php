@@ -37,7 +37,7 @@
             <select id="site_id" name="site_id" class="select">
                 <option value="">No site</option>
                 @foreach ($sites as $site)
-                    <option value="{{ $site->id }}" @selected(old('site_id', $issue?->site_id) == $site->id)>{{ $site->name }}</option>
+                    <option value="{{ $site->id }}" data-parent="{{ $site->project_id }}" @selected(old('site_id', $issue?->site_id) == $site->id)>{{ $site->name }}</option>
                 @endforeach
             </select>
         </div>
@@ -76,3 +76,5 @@
         <button type="submit" class="btn primary">{{ $issue ? 'Update Stock Issue' : 'Save Stock Issue' }}</button>
     </div>
 </form>
+
+<x-admin.dependent-select parent="project_id" child="site_id" placeholder="sites"/>

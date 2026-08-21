@@ -94,8 +94,7 @@ class CustomerInvoice extends Model
     public static function nextNumber(int $year): string
     {
         $prefix = 'INV-'.$year.'-';
-        $sequence = static::where('invoice_number', 'like', $prefix.'%')->count() + 1;
-
-        return $prefix.str_pad((string) $sequence, 4, '0', STR_PAD_LEFT);
+        return app(\App\Services\DocumentNumberService::class)
+            ->next('invoice-'.$year, $prefix, 'customer_invoices', 'invoice_number');
     }
 }

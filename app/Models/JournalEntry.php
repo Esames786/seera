@@ -71,8 +71,7 @@ class JournalEntry extends Model
     public static function nextNumber(int $year): string
     {
         $prefix = 'JV-'.$year.'-';
-        $sequence = static::where('journal_number', 'like', $prefix.'%')->count() + 1;
-
-        return $prefix.str_pad((string) $sequence, 4, '0', STR_PAD_LEFT);
+        return app(\App\Services\DocumentNumberService::class)
+            ->next('journal-'.$year, $prefix, 'journal_entries', 'journal_number');
     }
 }

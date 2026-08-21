@@ -16,14 +16,13 @@ use App\Services\Accounting\PostingService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AccountsPayableController extends Controller
 {
-    public function __construct(private readonly PostingService $posting)
-    {
-    }
+    public function __construct(private readonly PostingService $posting) {}
 
     public function index(Request $request): View
     {
@@ -136,18 +135,22 @@ class AccountsPayableController extends Controller
      */
     public function approve(Request $request, SupplierBill $accounts_payable): RedirectResponse
     {
-        if ($accounts_payable->status !== 'draft') {
-            return back()->withErrors(['bill' => 'Only a draft supplier bill can be approved.']);
-        }
+        $entry = DB::transaction(function () use ($accounts_payable, $request) {
+            $accounts_payable = SupplierBill::whereKey($accounts_payable->id)->lockForUpdate()->firstOrFail();
+            if ($accounts_payable->status !== 'draft') {
+                throw ValidationException::withMessages(['bill' => 'Only a draft supplier bill can be approved.']);
+            }
 
-        $entry = $this->posting->postSupplierBill($accounts_payable, $request->user()->id);
+            $entry = $this->posting->postSupplierBill($accounts_payable, $request->user()->id);
+            $accounts_payable->update([
+                'status' => 'unpaid',
+                'paid_amount' => 0,
+                'balance_amount' => $accounts_payable->total_amount,
+                'journal_entry_id' => $entry?->id,
+            ]);
 
-        $accounts_payable->update([
-            'status' => 'unpaid',
-            'paid_amount' => 0,
-            'balance_amount' => $accounts_payable->total_amount,
-            'journal_entry_id' => $entry?->id,
-        ]);
+            return $entry;
+        });
 
         ActivityLog::record($request, 'Accounting', 'Approved supplier bill', $accounts_payable->bill_number);
 
@@ -169,14 +172,10 @@ class AccountsPayableController extends Controller
      */
     public function storePayment(Request $request, SupplierBill $accounts_payable): RedirectResponse
     {
-        if (in_array($accounts_payable->status, ['draft', 'cancelled'], true)) {
-            return back()->withErrors(['payment' => 'Approve the bill before recording a payment.']);
-        }
-
         $data = $request->validate([
             'payment_date' => ['required', 'date'],
-            'payment_account_id' => ['required', 'exists:chart_of_accounts,id'],
-            'amount' => ['required', 'numeric', 'min:0.01', 'max:'.max((float) $accounts_payable->balance_amount, 0.01)],
+            'payment_account_id' => ['required', Rule::exists('chart_of_accounts', 'id')->where(fn ($query) => $query->whereIn('account_code', [PostingService::CASH, PostingService::BANK])->where('status', 'active'))],
+            'amount' => ['required', 'numeric', 'min:0.01'],
             'reference_number' => ['nullable', 'string', 'max:100'],
             'notes' => ['nullable', 'string'],
         ], [
@@ -184,6 +183,14 @@ class AccountsPayableController extends Controller
         ]);
 
         $payment = DB::transaction(function () use ($accounts_payable, $data, $request) {
+            $accounts_payable = SupplierBill::whereKey($accounts_payable->id)->lockForUpdate()->firstOrFail();
+            if (in_array($accounts_payable->status, ['draft', 'cancelled', 'paid'], true)) {
+                throw ValidationException::withMessages(['payment' => 'This bill is not open for payment.']);
+            }
+            if ((float) $data['amount'] > (float) $accounts_payable->balance_amount + 0.001) {
+                throw ValidationException::withMessages(['amount' => 'The payment cannot be more than the outstanding balance.']);
+            }
+
             $payment = SupplierPayment::create($data + [
                 'supplier_id' => $accounts_payable->supplier_id,
                 'supplier_bill_id' => $accounts_payable->id,

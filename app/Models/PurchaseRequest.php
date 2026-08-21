@@ -70,6 +70,7 @@ class PurchaseRequest extends Model
     {
         $prefix = 'PR-'.$year.'-';
 
-        return $prefix.str_pad((string) (static::where('pr_number', 'like', $prefix.'%')->count() + 1), 4, '0', STR_PAD_LEFT);
+        return app(\App\Services\DocumentNumberService::class)
+            ->next('purchase-request-'.$year, $prefix, 'purchase_requests', 'pr_number');
     }
 }

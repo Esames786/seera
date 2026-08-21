@@ -114,15 +114,17 @@ class StockAdjustmentController extends Controller
 
     public function approve(Request $request, StockAdjustment $stock_adjustment): RedirectResponse
     {
-        if ($stock_adjustment->status !== 'draft') {
-            return back()->withErrors(['adjustment' => 'Only a draft adjustment can be approved.']);
-        }
-
-        $stock_adjustment->update([
-            'status' => 'approved',
-            'approved_by' => $request->user()->id,
-            'approved_at' => now(),
-        ]);
+        DB::transaction(function () use ($request, $stock_adjustment) {
+            $adjustment = StockAdjustment::whereKey($stock_adjustment->id)->lockForUpdate()->firstOrFail();
+            if ($adjustment->status !== 'draft') {
+                throw \Illuminate\Validation\ValidationException::withMessages(['adjustment' => 'Only a draft adjustment can be approved.']);
+            }
+            $adjustment->update([
+                'status' => 'approved',
+                'approved_by' => $request->user()->id,
+                'approved_at' => now(),
+            ]);
+        });
 
         ActivityLog::record($request, 'Inventory', 'Approved stock adjustment', $stock_adjustment->adjustment_number);
 
@@ -134,14 +136,15 @@ class StockAdjustmentController extends Controller
      */
     public function post(Request $request, StockAdjustment $stock_adjustment): RedirectResponse
     {
-        if ($stock_adjustment->status !== 'approved') {
-            return back()->withErrors(['adjustment' => 'Only an approved adjustment can be posted.']);
-        }
-
-        $stock_adjustment->load('item');
-
         try {
             DB::transaction(function () use ($stock_adjustment, $request) {
+                $stock_adjustment = StockAdjustment::whereKey($stock_adjustment->id)->lockForUpdate()->firstOrFail();
+
+                if ($stock_adjustment->status !== 'approved') {
+                    throw new InsufficientStockException('Only an approved adjustment can be posted.');
+                }
+
+                $stock_adjustment->load('item');
                 $entry = $this->stock->adjust(
                     $stock_adjustment->item,
                     $stock_adjustment->warehouse_id,
@@ -156,12 +159,14 @@ class StockAdjustmentController extends Controller
                     ]
                 );
 
-                $difference = (float) $stock_adjustment->adjusted_quantity - (float) $stock_adjustment->current_quantity;
+                $difference = round((float) $entry->in_quantity - (float) $entry->out_quantity, 3);
+                $liveCurrentQuantity = round((float) $entry->balance_quantity - $difference, 3);
 
                 $stock_adjustment->update([
-                    'difference_quantity' => round($difference, 3),
+                    'current_quantity' => $liveCurrentQuantity,
+                    'difference_quantity' => $difference,
                     'unit_cost' => $entry->unit_cost,
-                    'adjustment_value' => round(abs($difference) * (float) $entry->unit_cost, 2),
+                    'adjustment_value' => $entry->value,
                     'adjustment_type' => $difference < 0 ? 'decrease' : 'increase',
                     'status' => 'posted',
                 ]);

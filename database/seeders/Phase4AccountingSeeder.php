@@ -33,7 +33,7 @@ class Phase4AccountingSeeder extends Seeder
     public function run(): void
     {
         $this->posting = app(PostingService::class);
-        $this->financeUserId = User::where('email', 'fatima@example.com')->value('id');
+        $this->financeUserId = User::where('email', 'zubair@example.com')->value('id');
 
         $this->seedChartOfAccounts();
         $this->seedCostCenters();

@@ -63,6 +63,7 @@ class StockTransfer extends Model
     {
         $prefix = 'TRF-'.$year.'-';
 
-        return $prefix.str_pad((string) (static::where('transfer_number', 'like', $prefix.'%')->count() + 1), 4, '0', STR_PAD_LEFT);
+        return app(\App\Services\DocumentNumberService::class)
+            ->next('stock-transfer-'.$year, $prefix, 'stock_transfers', 'transfer_number');
     }
 }

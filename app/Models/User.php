@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 #[Fillable([
@@ -23,6 +24,8 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    private ?Collection $cachedEffectiveRoles = null;
 
     /**
      * Get the attributes that should be cast.
@@ -85,6 +88,57 @@ class User extends Authenticatable
     public function primaryRole(): ?Role
     {
         return $this->roles->firstWhere('pivot.is_primary', true) ?? $this->roles->first();
+    }
+
+    public function hasPermission(string $module, string $action): bool
+    {
+        return $this->effectiveRoleModels()->contains(fn (Role $role) => $role->permissions
+            ->contains(fn (Permission $permission) => $permission->module === $module && $permission->action === $action));
+    }
+
+    public function effectiveAccessScope(): string
+    {
+        $scopes = $this->effectiveRoleModels()->pluck('access_scope');
+
+        if ($scopes->contains(fn ($scope) => in_array($scope, ['All Company', 'Company Level'], true))) {
+            return 'company';
+        }
+        if ($scopes->contains('Project Level')) {
+            return 'project';
+        }
+        if ($scopes->contains('Site Level')) {
+            return 'site';
+        }
+        if ($scopes->contains('Warehouse Level')) {
+            return 'warehouse';
+        }
+
+        return 'none';
+    }
+
+    private function effectiveRoleModels(): Collection
+    {
+        return $this->cachedEffectiveRoles ??= $this->effectiveRolesQuery()->with('permissions')->get();
+    }
+
+    private function effectiveRolesQuery()
+    {
+        return $this->roles()
+            ->where('roles.status', 'active')
+            ->where(function ($query) {
+                $query->where('user_roles.is_temporary', false)
+                    ->orWhere(function ($temporary) {
+                        $temporary->where('user_roles.is_temporary', true)
+                            ->where(function ($dates) {
+                                $dates->whereNull('user_roles.access_start_date')
+                                    ->orWhereDate('user_roles.access_start_date', '<=', today());
+                            })
+                            ->where(function ($dates) {
+                                $dates->whereNull('user_roles.access_end_date')
+                                    ->orWhereDate('user_roles.access_end_date', '>=', today());
+                            });
+                    });
+            });
     }
 
     public function activityLogs()

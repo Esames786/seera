@@ -148,6 +148,12 @@ class GoodsReceiptController extends Controller
         }
 
         DB::transaction(function () use ($goods_receipt, $request) {
+            $goods_receipt = GoodsReceipt::whereKey($goods_receipt->id)->lockForUpdate()->firstOrFail();
+            if ($goods_receipt->status !== 'draft') {
+                throw ValidationException::withMessages(['grn' => 'This goods receipt is already posted.']);
+            }
+            $goods_receipt->load('lines.item', 'warehouse', 'purchaseOrder.lines');
+
             foreach ($goods_receipt->lines as $line) {
                 $accepted = (float) $line->accepted_quantity;
 

@@ -68,6 +68,7 @@ class GoodsReceipt extends Model
     {
         $prefix = 'GRN-'.$year.'-';
 
-        return $prefix.str_pad((string) (static::where('grn_number', 'like', $prefix.'%')->count() + 1), 4, '0', STR_PAD_LEFT);
+        return app(\App\Services\DocumentNumberService::class)
+            ->next('grn-'.$year, $prefix, 'goods_receipts', 'grn_number');
     }
 }

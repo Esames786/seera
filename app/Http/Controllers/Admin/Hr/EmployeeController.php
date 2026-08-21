@@ -13,7 +13,12 @@ use App\Models\Site;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use RuntimeException;
+use Throwable;
 
 class EmployeeController extends Controller
 {
@@ -55,7 +60,21 @@ class EmployeeController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $employee = Employee::create($this->validated($request));
+        $data = $this->validated($request);
+        $documents = $this->validatedDocuments($request);
+        $storedPaths = [];
+
+        try {
+            $employee = DB::transaction(function () use ($request, $data, $documents, &$storedPaths) {
+                $employee = Employee::create($data);
+                $this->syncDocuments($request, $employee, $documents, $storedPaths);
+
+                return $employee;
+            });
+        } catch (Throwable $exception) {
+            Storage::disk('local')->delete($storedPaths);
+            throw $exception;
+        }
 
         ActivityLog::record($request, 'HR', 'Created employee', $employee->name);
 
@@ -96,7 +115,19 @@ class EmployeeController extends Controller
 
     public function update(Request $request, Employee $employee): RedirectResponse
     {
-        $employee->update($this->validated($request, $employee));
+        $data = $this->validated($request, $employee);
+        $documents = $this->validatedDocuments($request);
+        $storedPaths = [];
+
+        try {
+            DB::transaction(function () use ($request, $employee, $data, $documents, &$storedPaths) {
+                $employee->update($data);
+                $this->syncDocuments($request, $employee, $documents, $storedPaths);
+            });
+        } catch (Throwable $exception) {
+            Storage::disk('local')->delete($storedPaths);
+            throw $exception;
+        }
 
         ActivityLog::record($request, 'HR', 'Updated employee', $employee->name);
 
@@ -117,6 +148,49 @@ class EmployeeController extends Controller
             ->with('status', 'Employee "'.$employee->name.'" deactivated. Historical records are kept.');
     }
 
+    /**
+     * Documents are attached from the employee form itself; the Documents
+     * screen is a read-only register of everything already on the system.
+     */
+    private function syncDocuments(Request $request, Employee $employee, array $rows, array &$storedPaths): void
+    {
+        foreach ($rows as $index => $row) {
+            if (blank($row['document_type'] ?? null)) {
+                continue;
+            }
+
+            $path = null;
+            if ($request->hasFile("documents.{$index}.file")) {
+                $path = $request->file("documents.{$index}.file")->store('hr-documents', 'local');
+                if (! $path) {
+                    throw new RuntimeException('The employee document could not be stored.');
+                }
+                $storedPaths[] = $path;
+            }
+
+            $employee->documents()->create([
+                'document_type' => $row['document_type'],
+                'document_number' => $row['document_number'] ?? null,
+                'issue_date' => $row['issue_date'] ?? null,
+                'expiry_date' => $row['expiry_date'] ?? null,
+                'file_path' => $path,
+                'status' => 'active',
+            ]);
+        }
+    }
+
+    private function validatedDocuments(Request $request): array
+    {
+        return $request->validate([
+            'documents' => ['nullable', 'array'],
+            'documents.*.document_type' => ['nullable', 'string', 'max:100'],
+            'documents.*.document_number' => ['nullable', 'string', 'max:100'],
+            'documents.*.issue_date' => ['nullable', 'date'],
+            'documents.*.expiry_date' => ['nullable', 'date', 'after_or_equal:documents.*.issue_date'],
+            'documents.*.file' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png,webp', 'max:5120'],
+        ])['documents'] ?? [];
+    }
+
     private function validated(Request $request, ?Employee $employee = null): array
     {
         $data = $request->validate([
@@ -128,21 +202,31 @@ class EmployeeController extends Controller
             'emergency_contact' => ['nullable', 'string', 'max:50'],
             'nationality' => ['nullable', 'string', 'max:100'],
             'department_id' => ['nullable', 'exists:departments,id'],
-            'designation_id' => ['nullable', 'exists:designations,id'],
+            'designation_id' => ['nullable', Rule::exists('designations', 'id')->where(fn ($query) => $query->where('department_id', $request->input('department_id')))],
             'branch_id' => ['nullable', 'exists:branches,id'],
             'project_id' => ['nullable', 'exists:projects,id'],
-            'site_id' => ['nullable', 'exists:sites,id'],
+            'site_id' => ['nullable', Rule::exists('sites', 'id')->where(fn ($query) => $query->where('project_id', $request->input('project_id')))],
             'manager_id' => ['nullable', 'exists:users,id'],
             'user_id' => ['nullable', 'exists:users,id'],
             'joining_date' => ['nullable', 'date'],
             'contract_type' => ['required', 'string', 'max:50'],
+            'employee_classification' => ['required', 'in:Sponsorship,Freelancer'],
             'contract_start_date' => ['nullable', 'date'],
             'contract_end_date' => ['nullable', 'date', 'after_or_equal:contract_start_date'],
             'iqama_number' => ['nullable', 'string', 'max:50'],
             'iqama_expiry_date' => ['nullable', 'date'],
             'passport_number' => ['nullable', 'string', 'max:50'],
             'passport_expiry_date' => ['nullable', 'date'],
+            'insurance_number' => ['nullable', 'string', 'max:50'],
+            'insurance_expiry_date' => ['nullable', 'date'],
+            'driving_license_number' => ['nullable', 'string', 'max:50'],
+            'driving_license_expiry_date' => ['nullable', 'date'],
             'basic_salary' => ['required', 'numeric', 'min:0'],
+            'housing_allowance' => ['nullable', 'numeric', 'min:0'],
+            'transport_allowance' => ['nullable', 'numeric', 'min:0'],
+            'food_allowance' => ['nullable', 'numeric', 'min:0'],
+            'fuel_allowance' => ['nullable', 'numeric', 'min:0'],
+            'other_allowance' => ['nullable', 'numeric', 'min:0'],
             'payment_method' => ['required', 'string', 'max:50'],
             'bank_name' => ['nullable', 'string', 'max:100'],
             'iban' => ['nullable', 'string', 'max:50'],
@@ -151,6 +235,11 @@ class EmployeeController extends Controller
         ]);
 
         $data['mobile_access'] = $request->boolean('mobile_access');
+
+        // Allowances are optional on the form but always stored as a number.
+        foreach (['housing_allowance', 'transport_allowance', 'food_allowance', 'fuel_allowance', 'other_allowance'] as $allowance) {
+            $data[$allowance] = (float) ($data[$allowance] ?? 0);
+        }
 
         return $data;
     }
@@ -171,6 +260,7 @@ class EmployeeController extends Controller
         return $this->filterOptions() + [
             'users' => User::orderBy('name')->get(),
             'contractTypes' => ['Full Time', 'Part Time', 'Contract', 'Temporary'],
+            'classifications' => ['Sponsorship', 'Freelancer'],
             'paymentMethods' => ['Bank Transfer', 'Cash'],
             'nationalities' => ['Saudi', 'Pakistani', 'Indian', 'Bangladeshi', 'Egyptian', 'Filipino', 'Other'],
         ];

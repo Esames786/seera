@@ -210,9 +210,8 @@ class PayrollRunController extends Controller
     private function nextCode(int $year, int $month): string
     {
         $prefix = sprintf('PR-%04d%02d', $year, $month);
-        $sequence = PayrollRun::where('code', 'like', $prefix.'%')->count() + 1;
-
-        return sprintf('%s-%02d', $prefix, $sequence);
+        return app(\App\Services\DocumentNumberService::class)
+            ->next('payroll-'.$year.'-'.$month, $prefix.'-', 'payroll_runs', 'code', 2);
     }
 
     private function validated(Request $request): array

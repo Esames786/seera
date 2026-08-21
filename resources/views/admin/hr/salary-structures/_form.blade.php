@@ -30,6 +30,7 @@
         <div><label for="housing_allowance">Housing Allowance *</label><input id="housing_allowance" name="housing_allowance" type="number" step="0.01" min="0" class="input" value="{{ old('housing_allowance', $structure?->housing_allowance ?? 0) }}" required/></div>
         <div><label for="transport_allowance">Transport Allowance *</label><input id="transport_allowance" name="transport_allowance" type="number" step="0.01" min="0" class="input" value="{{ old('transport_allowance', $structure?->transport_allowance ?? 0) }}" required/></div>
         <div><label for="food_allowance">Food Allowance *</label><input id="food_allowance" name="food_allowance" type="number" step="0.01" min="0" class="input" value="{{ old('food_allowance', $structure?->food_allowance ?? 0) }}" required/></div>
+        <div><label for="fuel_allowance">Fuel Allowance *</label><input id="fuel_allowance" name="fuel_allowance" type="number" step="0.01" min="0" class="input" value="{{ old('fuel_allowance', $structure?->fuel_allowance ?? 0) }}" required/></div>
         <div><label for="other_allowance">Other Allowance *</label><input id="other_allowance" name="other_allowance" type="number" step="0.01" min="0" class="input" value="{{ old('other_allowance', $structure?->other_allowance ?? 0) }}" required/></div>
         <div><label for="fixed_deduction">Fixed Deduction *</label><input id="fixed_deduction" name="fixed_deduction" type="number" step="0.01" min="0" class="input" value="{{ old('fixed_deduction', $structure?->fixed_deduction ?? 0) }}" required/></div>
         <div>

@@ -29,6 +29,7 @@
             @csrf
             @method('PUT')
             <input type="hidden" name="role_id" value="{{ $selectedRole->id }}"/>
+            <input type="hidden" name="search" value="{{ request('search') }}"/>
 
             <x-admin.data-table title="Module Permission Matrix" :subtitle="'Role: '.$selectedRole->name" class="permission-table">
                 <x-slot:headerActions>
@@ -50,6 +51,7 @@
                                 @php $permission = $permissions->firstWhere('action', $action); @endphp
                                 <td>
                                     @if ($permission)
+                                        <input type="hidden" name="visible_permission_ids[]" value="{{ $permission->id }}"/>
                                         <input class="checkbox" type="checkbox" name="permissions[]" value="{{ $permission->id }}" @checked(in_array($permission->id, $grantedIds))/>
                                     @endif
                                 </td>

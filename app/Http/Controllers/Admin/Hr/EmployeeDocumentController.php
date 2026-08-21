@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin\Hr;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityLog;
 use App\Models\Employee;
 use App\Models\EmployeeDocument;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class EmployeeDocumentController extends Controller
 {
@@ -53,67 +53,18 @@ class EmployeeDocumentController extends Controller
         ] + $this->formOptions());
     }
 
-    public function create(): View
+    public function download(EmployeeDocument $document): StreamedResponse
     {
-        return view('admin.hr.documents.create', $this->formOptions());
-    }
+        abort_unless($document->file_path, 404);
 
-    public function store(Request $request): RedirectResponse
-    {
-        $document = EmployeeDocument::create($this->validated($request));
-
-        ActivityLog::record($request, 'HR', 'Created employee document', $document->document_type.' - '.$document->employee->name);
-
-        return redirect()->route('admin.hr.documents.index')
-            ->with('status', 'Document saved successfully.');
-    }
-
-    public function edit(EmployeeDocument $document): View
-    {
-        return view('admin.hr.documents.edit', ['document' => $document] + $this->formOptions());
-    }
-
-    public function update(Request $request, EmployeeDocument $document): RedirectResponse
-    {
-        $document->update($this->validated($request));
-
-        ActivityLog::record($request, 'HR', 'Updated employee document', $document->document_type.' - '.$document->employee->name);
-
-        return redirect()->route('admin.hr.documents.index')
-            ->with('status', 'Document updated successfully.');
-    }
-
-    public function destroy(Request $request, EmployeeDocument $document): RedirectResponse
-    {
-        $label = $document->document_type.' - '.$document->employee->name;
-        $document->delete();
-
-        ActivityLog::record($request, 'HR', 'Deleted employee document', $label);
-
-        return redirect()->route('admin.hr.documents.index')
-            ->with('status', 'Document deleted successfully.');
-    }
-
-    private function validated(Request $request): array
-    {
-        $data = $request->validate([
-            'employee_id' => ['required', 'exists:employees,id'],
-            'document_type' => ['required', 'string', 'max:100'],
-            'document_number' => ['nullable', 'string', 'max:100'],
-            'issue_date' => ['nullable', 'date'],
-            'expiry_date' => ['nullable', 'date', 'after_or_equal:issue_date'],
-            'file' => ['nullable', 'file', 'max:5120'],
-            'status' => ['required', 'in:active,inactive'],
-            'notes' => ['nullable', 'string'],
-        ]);
-
-        unset($data['file']);
-
-        if ($request->hasFile('file')) {
-            $data['file_path'] = $request->file('file')->store('hr-documents', 'public');
+        if (Storage::disk('local')->exists($document->file_path)) {
+            return Storage::disk('local')->download($document->file_path);
         }
 
-        return $data;
+        // Existing deployments may still have files written by the former public-disk workflow.
+        abort_unless(Storage::disk('public')->exists($document->file_path), 404);
+
+        return Storage::disk('public')->download($document->file_path);
     }
 
     private function formOptions(): array

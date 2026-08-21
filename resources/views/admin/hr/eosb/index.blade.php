@@ -4,7 +4,7 @@
 @section('breadcrumb', 'HR &amp; Payroll / End of Service Benefits')
 
 @section('content')
-    <x-admin.page-header title="End of Service Benefits" description="Saudi EOSB foundation with manual, editable calculation fields">
+    <x-admin.page-header title="End of Service Benefits" description="Saudi EOSB calculations with immutable approved settlements">
         <a class="btn primary" href="{{ route('admin.hr.eosb.create') }}">+ Add EOSB Record</a>
     </x-admin.page-header>
 
@@ -16,7 +16,7 @@
     </div>
 
     <div class="note">
-        Saudi-compliant EOSB calculation rules are finalized in a later business-rule phase. For now HR creates draft records and enters or edits amounts manually.
+        Gratuity follows the configured Saudi rules: half a month's wage for each of the first five years, a full month's wage for each year after that, on the final wage. Resignation scales the award by length of service; termination, contract completion and Article 87 exceptions pay in full. HR can document a manual override while the record is draft.
     </div>
     <br/>
 
@@ -35,13 +35,14 @@
 
     <x-admin.data-table title="End of Service Records">
         <thead>
-            <tr><th>Employee</th><th>Termination Date</th><th>Service Years</th><th>Last Basic</th><th>EOSB</th><th>Leave Salary</th><th>Other Dues</th><th>Deductions</th><th>Final Amount</th><th>Status</th><th>Actions</th></tr>
+            <tr><th>Employee</th><th>Termination Date</th><th>Reason</th><th>Service Years</th><th>Last Basic</th><th>EOSB</th><th>Leave Salary</th><th>Other Dues</th><th>Deductions</th><th>Final Amount</th><th>Status</th><th>Actions</th></tr>
         </thead>
         <tbody>
             @forelse ($records as $record)
                 <tr>
                     <td><a href="{{ route('admin.hr.employees.show', $record->employee) }}" style="color:var(--blue);font-weight:700">{{ $record->employee->name }}</a></td>
                     <td>{{ $record->termination_date->toDateString() }}</td>
+                    <td>{{ $record->reasonLabel() }}</td>
                     <td>{{ $record->service_years }}</td>
                     <td>SAR {{ number_format($record->last_basic_salary, 2) }}</td>
                     <td>SAR {{ number_format($record->eosb_amount, 2) }}</td>
@@ -53,8 +54,8 @@
                     <td>
                         <x-admin.action-buttons
                             :view="route('admin.hr.eosb.show', $record)"
-                            :edit="route('admin.hr.eosb.edit', $record)"
-                            :delete="route('admin.hr.eosb.destroy', $record)"
+                            :edit="$record->isEditable() ? route('admin.hr.eosb.edit', $record) : null"
+                            :delete="$record->isEditable() ? route('admin.hr.eosb.destroy', $record) : null"
                             :name="$record->employee->name.' EOSB'">
                             @if ($record->status === 'draft')
                                 <form method="POST" action="{{ route('admin.hr.eosb.approve', $record) }}">
@@ -66,7 +67,7 @@
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="11" class="table-empty">No end of service records found.</td></tr>
+                <tr><td colspan="12" class="table-empty">No end of service records found.</td></tr>
             @endforelse
         </tbody>
         <x-slot:footer>

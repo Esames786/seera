@@ -27,7 +27,7 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (! Auth::attempt($credentials + ['status' => 'active'], $request->boolean('remember'))) {
             ActivityLog::record($request, 'Security', 'Failed login', 'Invalid credentials for '.$credentials['email'], 'failed');
 
             return back()

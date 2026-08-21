@@ -30,7 +30,7 @@
 
     <x-admin.data-table title="Salary Structures Listing">
         <thead>
-            <tr><th>Employee</th><th>Basic</th><th>Housing</th><th>Transport</th><th>Food</th><th>Other</th><th>Deduction</th><th>Net</th><th>Effective From</th><th>Status</th><th>Actions</th></tr>
+            <tr><th>Employee</th><th>Basic</th><th>Housing</th><th>Transport</th><th>Food</th><th>Fuel</th><th>Other</th><th>Deduction</th><th>Net</th><th>Effective From</th><th>Status</th><th>Actions</th></tr>
         </thead>
         <tbody>
             @forelse ($structures as $structure)
@@ -40,6 +40,7 @@
                     <td>SAR {{ number_format($structure->housing_allowance, 2) }}</td>
                     <td>SAR {{ number_format($structure->transport_allowance, 2) }}</td>
                     <td>SAR {{ number_format($structure->food_allowance, 2) }}</td>
+                    <td>SAR {{ number_format($structure->fuel_allowance, 2) }}</td>
                     <td>SAR {{ number_format($structure->other_allowance, 2) }}</td>
                     <td>SAR {{ number_format($structure->totalDeductions(), 2) }}</td>
                     <td><strong>SAR {{ number_format($structure->netSalary(), 2) }}</strong></td>
@@ -54,7 +55,7 @@
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="11" class="table-empty">No salary structures found for the selected filters.</td></tr>
+                <tr><td colspan="12" class="table-empty">No salary structures found for the selected filters.</td></tr>
             @endforelse
         </tbody>
         <x-slot:footer>

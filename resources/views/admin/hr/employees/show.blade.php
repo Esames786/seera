@@ -5,7 +5,7 @@
 
 @section('content')
     <x-admin.page-header :title="$employee->name" :description="'Employee profile with HR history and payroll context'">
-        <a class="btn outline" href="{{ route('admin.hr.documents.create', ['employee' => $employee->id]) }}">+ Add Document</a>
+        <a class="btn outline" href="{{ route("admin.hr.employees.edit", $employee) }}#documents">+ Attach Document</a>
         <a class="btn primary" href="{{ route('admin.hr.employees.edit', $employee) }}">Edit Employee</a>
     </x-admin.page-header>
 
@@ -47,13 +47,14 @@
                 <tr><th>Project / Site</th><td>{{ $employee->project?->name ?? 'Head Office' }}@if($employee->site) / {{ $employee->site->name }}@endif</td></tr>
                 <tr><th>Manager</th><td>{{ $employee->manager?->name ?? '-' }}</td></tr>
                 <tr><th>Joining Date</th><td>{{ $employee->joining_date?->toDateString() ?? '-' }}</td></tr>
+                <tr><th>Classification</th><td><span class="badge blue">{{ $employee->employee_classification }}</span></td></tr>
                 <tr><th>Contract</th><td>{{ $employee->contract_type }} ({{ $employee->contract_start_date?->toDateString() ?? '-' }} → {{ $employee->contract_end_date?->toDateString() ?? 'Open' }})</td></tr>
                 <tr><th>Linked User Account</th><td>{{ $employee->user?->name ?? 'Not linked' }}</td></tr>
             </tbody>
         </x-admin.data-table>
 
         <div>
-            <x-admin.data-table title="Personal &amp; Saudi Documents" class="detail-table">
+            <x-admin.data-table title="Personal &amp; Documents" class="detail-table">
                 <tbody>
                     <tr><th>Email</th><td>{{ $employee->email ?? '-' }}</td></tr>
                     <tr><th>Phone</th><td>{{ $employee->phone ?? '-' }}</td></tr>
@@ -63,12 +64,21 @@
                     <tr><th>IQAMA Expiry</th><td>{{ $employee->iqama_expiry_date?->toDateString() ?? '-' }} <x-admin.status-badge :status="$employee->iqamaStatus()"/></td></tr>
                     <tr><th>Passport Number</th><td>{{ $employee->passport_number ?? '-' }}</td></tr>
                     <tr><th>Passport Expiry</th><td>{{ $employee->passport_expiry_date?->toDateString() ?? '-' }}</td></tr>
+                    <tr><th>Insurance Number</th><td>{{ $employee->insurance_number ?? '-' }}</td></tr>
+                    <tr><th>Insurance Expiry</th><td>{{ $employee->insurance_expiry_date?->toDateString() ?? '-' }}</td></tr>
+                    <tr><th>Driving License</th><td>{{ $employee->driving_license_number ?? '-' }}</td></tr>
+                    <tr><th>License Expiry</th><td>{{ $employee->driving_license_expiry_date?->toDateString() ?? '-' }}</td></tr>
                 </tbody>
             </x-admin.data-table>
 
             <x-admin.data-table title="Payroll Information" class="detail-table">
                 <tbody>
                     <tr><th>Basic Salary</th><td>SAR {{ number_format($employee->basic_salary, 2) }}</td></tr>
+                    <tr><th>Housing Allowance</th><td>SAR {{ number_format($employee->housing_allowance, 2) }}</td></tr>
+                    <tr><th>Transport Allowance</th><td>SAR {{ number_format($employee->transport_allowance, 2) }}</td></tr>
+                    <tr><th>Food Allowance</th><td>SAR {{ number_format($employee->food_allowance, 2) }}</td></tr>
+                    <tr><th>Fuel Allowance</th><td>SAR {{ number_format($employee->fuel_allowance, 2) }}</td></tr>
+                    <tr><th>Other Allowance</th><td>SAR {{ number_format($employee->other_allowance, 2) }}</td></tr>
                     <tr><th>Payment Method</th><td>{{ $employee->payment_method }}</td></tr>
                     <tr><th>Bank Name</th><td>{{ $employee->bank_name ?? '-' }}</td></tr>
                     <tr><th>IBAN</th><td>{{ $employee->iban ?? '-' }}</td></tr>
@@ -79,7 +89,7 @@
 
     <x-admin.data-table title="Documents" id="documents">
         <x-slot:headerActions>
-            <a class="btn sm primary" href="{{ route('admin.hr.documents.create', ['employee' => $employee->id]) }}">+ Add Document</a>
+            <a class="btn sm primary" href="{{ route("admin.hr.employees.edit", $employee) }}">+ Attach Document</a>
         </x-slot:headerActions>
         <thead>
             <tr><th>Type</th><th>Number</th><th>Issue</th><th>Expiry</th><th>Validity</th><th>File</th></tr>

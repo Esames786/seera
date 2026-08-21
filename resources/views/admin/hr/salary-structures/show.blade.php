@@ -25,6 +25,7 @@
                 <tr><th>Housing Allowance</th><td>SAR {{ number_format($structure->housing_allowance, 2) }}</td></tr>
                 <tr><th>Transport Allowance</th><td>SAR {{ number_format($structure->transport_allowance, 2) }}</td></tr>
                 <tr><th>Food Allowance</th><td>SAR {{ number_format($structure->food_allowance, 2) }}</td></tr>
+                <tr><th>Fuel Allowance</th><td>SAR {{ number_format($structure->fuel_allowance, 2) }}</td></tr>
                 <tr><th>Other Allowance</th><td>SAR {{ number_format($structure->other_allowance, 2) }}</td></tr>
                 <tr><th>Fixed Deduction</th><td>SAR {{ number_format($structure->fixed_deduction, 2) }}</td></tr>
                 <tr><th>Status</th><td><x-admin.status-badge :status="$structure->status"/></td></tr>

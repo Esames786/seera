@@ -19,6 +19,7 @@ use App\Models\SalaryStructure;
 use App\Models\Shift;
 use App\Models\Site;
 use App\Models\User;
+use App\Services\Hr\GratuityCalculator;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
@@ -83,33 +84,35 @@ class Phase3HrSeeder extends Seeder
         $sites = Site::pluck('id', 'code');
         $users = User::pluck('id', 'email');
 
-        $manager = $users['ashfaq@example.com'];
+        $manager = $users['nabeel@example.com'];
         $hrManager = $users['zubair@example.com'];
 
+        // The organization chart, then the wider site workforce.
+        // [first, last, department, designation, branch, project, site, salary, nationality, user, mobile, classification]
         $rows = [
-            ['Omar', 'Al Otaibi', 'ADMIN', null, 'BR-RYD', null, null, 25000, 'Saudi', $users['admin@example.com'], true],
-            ['Nabeel', 'Ahmed', 'SITE', 'Site Supervisor', 'BR-RYD', 'PRJ-001', 'SITE-A', 8500, 'Pakistani', $users['nabeel@example.com'], true],
-            ['Kamran', 'Iqbal', 'EQP', 'Mechanic', 'BR-JED', 'PRJ-002', 'SITE-YARD', 4200, 'Pakistani', $users['kamran@example.com'], true],
-            ['Fatima', 'Al Harbi', 'FIN', 'Finance Manager', 'BR-RYD', null, null, 18000, 'Saudi', $users['fatima@example.com'], false],
-            ['Zubair', 'Khan', 'HR', 'HR Manager', 'BR-JED', null, null, 16000, 'Pakistani', $hrManager, false],
-            ['Waiz', 'Rahman', 'SITE', 'Site Supervisor', 'BR-JED', 'PRJ-002', 'SITE-YARD', 8000, 'Bangladeshi', $users['waiz@example.com'], true],
-            ['Uzaid', 'Malik', 'SITE', 'Site Supervisor', 'BR-DMM', 'PRJ-003', 'SITE-D1', 7800, 'Pakistani', $users['uzaid@example.com'], true],
-            ['Imran', 'Shah', 'EQP', 'Mechanic', 'BR-DMM', 'PRJ-003', 'SITE-D1', 4000, 'Pakistani', $users['imran@example.com'], true],
-            ['Pradip', 'Kumar', 'SITE', null, 'BR-RYD', 'PRJ-001', 'SITE-A', 3200, 'Indian', null, true],
-            ['Rashid', 'Al Zahrani', 'PRJ', 'Project Manager', 'BR-RYD', 'PRJ-001', null, 20000, 'Saudi', $manager, true],
-            ['Sami', 'Ullah', 'SITE', null, 'BR-RYD', 'PRJ-001', 'SITE-B', 3000, 'Pakistani', null, true],
-            ['Jose', 'Ramirez', 'SITE', null, 'BR-RYD', 'PRJ-001', 'SITE-B', 3400, 'Filipino', null, true],
-            ['Ahmed', 'Mostafa', 'EQP', 'Store Keeper', 'BR-JED', 'PRJ-002', 'SITE-YARD', 4600, 'Egyptian', null, true],
-            ['Bilal', 'Hussain', 'SITE', null, 'BR-JED', 'PRJ-002', 'SITE-YARD', 3100, 'Pakistani', null, true],
-            ['Rakib', 'Hasan', 'SITE', null, 'BR-DMM', 'PRJ-003', 'SITE-D1', 2950, 'Bangladeshi', null, true],
-            ['Vinod', 'Sharma', 'SITE', null, 'BR-DMM', 'PRJ-003', 'SITE-D1', 3050, 'Indian', null, true],
-            ['Khalid', 'Al Dosari', 'PRJ', null, 'BR-DMM', 'PRJ-003', null, 12000, 'Saudi', null, false],
-            ['Noor', 'Alam', 'HR', null, 'BR-RYD', null, null, 7000, 'Pakistani', null, false],
-            ['Salman', 'Farooq', 'FIN', null, 'BR-RYD', null, null, 9000, 'Pakistani', null, false],
-            ['Yusuf', 'Idris', 'EQP', 'Mechanic', 'BR-JED', 'PRJ-002', 'SITE-YARD', 4300, 'Egyptian', null, true],
+            ['Omar', 'Mukhtar', 'ADMIN', 'General Manager', 'BR-RYD', null, null, 45000, 'Saudi', $users['admin@example.com'], true, 'Sponsorship'],
+            ['Nabeel', 'Mukhtar', 'PRJ', 'Project Manager', 'BR-RYD', 'PRJ-001', null, 22000, 'Pakistani', $users['nabeel@example.com'], true, 'Sponsorship'],
+            ['Zubair', 'Ahmed', 'FIN', 'Accounts Manager', 'BR-RYD', null, null, 18000, 'Pakistani', $users['zubair@example.com'], false, 'Sponsorship'],
+            ['Zulfiqar', '', 'PUR', 'Purchase Manager', 'BR-RYD', null, null, 16000, 'Pakistani', $users['zulfiqar@example.com'], false, 'Sponsorship'],
+            ['Waleed', '', 'HR', 'HR Manager', 'BR-RYD', null, null, 16000, 'Saudi', $users['waleed@example.com'], false, 'Sponsorship'],
+            ['Abdullah', 'Mukhtar', 'MKT', 'Marketing Manager', 'BR-RYD', null, null, 15000, 'Saudi', $users['abdullah@example.com'], false, 'Sponsorship'],
+            ['Zafar', 'Ali', 'SITE', 'Site In-Charge', 'BR-RYD', 'PRJ-001', 'SITE-A', 9500, 'Pakistani', $users['zafar@example.com'], true, 'Sponsorship'],
+            ['Abdullah', 'Shahmeer', 'FIN', 'Account Assistant', 'BR-RYD', null, null, 7500, 'Pakistani', $users['shahmeer@example.com'], false, 'Sponsorship'],
+            ['Ayaz', '', 'PUR', 'Purchase Assistant', 'BR-RYD', null, null, 7000, 'Pakistani', $users['ayaz@example.com'], false, 'Sponsorship'],
+            ['Kamran', '', 'SITE', 'Mechanic', 'BR-JED', 'PRJ-002', 'SITE-YARD', 4200, 'Pakistani', $users['kamran@example.com'], true, 'Sponsorship'],
+            ['Shaban', '', 'SITE', 'Operator', 'BR-RYD', 'PRJ-001', 'SITE-B', 3800, 'Pakistani', $users['shaban@example.com'], true, 'Sponsorship'],
+            ['Rizwan', '', 'SITE', 'Operator', 'BR-DMM', 'PRJ-003', 'SITE-D1', 3800, 'Pakistani', $users['rizwan@example.com'], true, 'Sponsorship'],
+            ['Pradip', 'Kumar', 'SITE', null, 'BR-RYD', 'PRJ-001', 'SITE-A', 3200, 'Indian', null, true, 'Sponsorship'],
+            ['Sami', 'Ullah', 'SITE', null, 'BR-RYD', 'PRJ-001', 'SITE-B', 3000, 'Pakistani', null, true, 'Freelancer'],
+            ['Jose', 'Ramirez', 'SITE', null, 'BR-RYD', 'PRJ-001', 'SITE-B', 3400, 'Filipino', null, true, 'Sponsorship'],
+            ['Ahmed', 'Mostafa', 'PUR', 'Store Keeper', 'BR-JED', 'PRJ-002', 'SITE-YARD', 4600, 'Egyptian', null, true, 'Sponsorship'],
+            ['Bilal', 'Hussain', 'SITE', null, 'BR-JED', 'PRJ-002', 'SITE-YARD', 3100, 'Pakistani', null, true, 'Freelancer'],
+            ['Rakib', 'Hasan', 'SITE', null, 'BR-DMM', 'PRJ-003', 'SITE-D1', 2950, 'Bangladeshi', null, true, 'Sponsorship'],
+            ['Vinod', 'Sharma', 'SITE', null, 'BR-DMM', 'PRJ-003', 'SITE-D1', 3050, 'Indian', null, true, 'Freelancer'],
+            ['Yusuf', 'Idris', 'SITE', 'Mechanic', 'BR-JED', 'PRJ-002', 'SITE-YARD', 4300, 'Egyptian', null, true, 'Sponsorship'],
         ];
 
-        foreach ($rows as $index => [$first, $last, $deptCode, $designation, $branchCode, $projectCode, $siteCode, $salary, $nationality, $userId, $mobile]) {
+        foreach ($rows as $index => [$first, $last, $deptCode, $designation, $branchCode, $projectCode, $siteCode, $salary, $nationality, $userId, $mobile, $classification]) {
             $joining = Carbon::create(2024, 1, 1)->addDays($index * 37);
 
             Employee::create([
@@ -129,6 +132,7 @@ class Phase3HrSeeder extends Seeder
                 'user_id' => $userId,
                 'joining_date' => $joining->toDateString(),
                 'contract_type' => $index % 5 === 0 ? 'Contract' : 'Full Time',
+                'employee_classification' => $classification,
                 'contract_start_date' => $joining->toDateString(),
                 'contract_end_date' => $joining->copy()->addYears(2)->toDateString(),
                 'iqama_number' => $nationality === 'Saudi' ? null : '24'.str_pad((string) (500000 + $index * 137), 8, '0', STR_PAD_LEFT),
@@ -137,6 +141,11 @@ class Phase3HrSeeder extends Seeder
                 'passport_number' => 'AB'.str_pad((string) (1000000 + $index * 913), 7, '0', STR_PAD_LEFT),
                 'passport_expiry_date' => now()->addYears(2)->addDays($index * 11)->toDateString(),
                 'basic_salary' => $salary,
+                'housing_allowance' => round($salary * 0.25, 2),
+                'transport_allowance' => round($salary * 0.10, 2),
+                'food_allowance' => $mobile ? 300 : 0,
+                'fuel_allowance' => $mobile ? 250 : 0,
+                'other_allowance' => 0,
                 'payment_method' => $index % 7 === 0 ? 'Cash' : 'Bank Transfer',
                 'bank_name' => $index % 7 === 0 ? null : 'Al Rajhi Bank',
                 'iban' => $index % 7 === 0 ? null : 'SA'.str_pad((string) (4400000000000000 + $index), 22, '0', STR_PAD_LEFT),
@@ -332,6 +341,7 @@ class Phase3HrSeeder extends Seeder
                 'housing_allowance' => round($basic * 0.25, 2),
                 'transport_allowance' => round($basic * 0.10, 2),
                 'food_allowance' => $index % 3 === 0 ? 300 : 0,
+                'fuel_allowance' => $index % 4 === 0 ? 250 : 0,
                 'other_allowance' => 0,
                 'fixed_deduction' => $index % 6 === 0 ? 150 : 0,
                 'effective_from' => now()->startOfYear()->toDateString(),
@@ -416,25 +426,45 @@ class Phase3HrSeeder extends Seeder
         ]);
     }
 
+    /**
+     * Three settlements covering the reasons that matter: employer termination
+     * pays in full, resignation is scaled by length of service.
+     */
     private function seedEndOfService($employees): void
     {
-        $employee = $employees->firstWhere('status', 'inactive') ?? $employees->last();
-        $basic = (float) $employee->basic_salary;
-        $serviceYears = 3.5;
-        $eosb = round(($basic / 2) * 5 + $basic * ($serviceYears - 5 > 0 ? $serviceYears - 5 : 0), 2);
+        $calculator = new GratuityCalculator();
 
-        EndOfServiceRecord::create([
-            'employee_id' => $employee->id,
-            'termination_date' => now()->endOfMonth()->toDateString(),
-            'service_years' => $serviceYears,
-            'last_basic_salary' => $basic,
-            'eosb_amount' => $eosb,
-            'leave_salary' => 2000,
-            'other_dues' => 500,
-            'deductions' => 500,
-            'final_amount' => round($eosb + 2000 + 500 - 500, 2),
-            'reason' => 'Contract completed.',
-            'status' => 'draft',
-        ]);
+        $rows = [
+            [$employees->firstWhere('status', 'inactive') ?? $employees->last(), 3.5, 'termination', 'draft', 'Contract completed.'],
+            [$employees->get(13), 6.25, 'resignation', 'approved', 'Resigned after six years of service.'],
+            [$employees->get(17), 1.5, 'resignation', 'draft', 'Resigned inside the first two years.'],
+        ];
+
+        foreach ($rows as [$employee, $serviceYears, $reason, $status, $note]) {
+            if (! $employee) {
+                continue;
+            }
+
+            $basic = (float) $employee->basic_salary;
+            $calculation = $calculator->calculate($basic, $serviceYears, $reason);
+
+            EndOfServiceRecord::create([
+                'employee_id' => $employee->id,
+                'termination_date' => now()->endOfMonth()->toDateString(),
+                'termination_reason' => $reason,
+                'service_years' => $serviceYears,
+                'last_basic_salary' => $basic,
+                'gratuity_before_adjustment' => $calculation['base'],
+                'entitlement_percentage' => $calculation['percentage'],
+                'eosb_amount' => $calculation['gratuity'],
+                'manual_override' => false,
+                'leave_salary' => 2000,
+                'other_dues' => 500,
+                'deductions' => 500,
+                'final_amount' => round($calculation['gratuity'] + 2000 + 500 - 500, 2),
+                'reason' => $note,
+                'status' => $status,
+            ]);
+        }
     }
 }

@@ -62,7 +62,7 @@
                     <select id="designation_id" name="designation_id" class="select">
                         <option value="">Select...</option>
                         @foreach ($designations as $designation)
-                            <option value="{{ $designation->id }}" @selected(old('designation_id', $user?->designation_id) == $designation->id)>{{ $designation->name }}</option>
+                            <option value="{{ $designation->id }}" data-parent="{{ $designation->department_id }}" @selected(old("designation_id", $user?->designation_id) == $designation->id)>{{ $designation->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -121,7 +121,7 @@
                     <select id="site_id" name="site_id" class="select">
                         <option value="">All Sites</option>
                         @foreach ($sites as $site)
-                            <option value="{{ $site->id }}" @selected(old('site_id', $user?->site_id) == $site->id)>{{ $site->name }}</option>
+                            <option value="{{ $site->id }}" data-parent="{{ $site->project_id }}" @selected(old("site_id", $user?->site_id) == $site->id)>{{ $site->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -143,3 +143,6 @@
         </div>
     </div>
 </form>
+
+<x-admin.dependent-select parent="department_id" child="designation_id" placeholder="designations"/>
+<x-admin.dependent-select parent="project_id" child="site_id" placeholder="sites"/>

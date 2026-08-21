@@ -41,12 +41,13 @@ class DatabaseSeeder extends Seeder
     private function seedDepartments(): void
     {
         $departments = [
-            ['name' => 'Administration', 'code' => 'ADMIN', 'description' => 'System administration and access control'],
-            ['name' => 'Finance', 'code' => 'FIN', 'description' => 'Finance Manager, Accountant, Payables'],
-            ['name' => 'Human Resource', 'code' => 'HR', 'description' => 'HR Manager, Payroll, Documents'],
-            ['name' => 'Projects', 'code' => 'PRJ', 'description' => 'Project Manager, Engineers'],
-            ['name' => 'Site Operations', 'code' => 'SITE', 'description' => 'Supervisors, Mechanics, Workers'],
-            ['name' => 'Equipment', 'code' => 'EQP', 'description' => 'Equipment, Vehicles, Maintenance'],
+            ['name' => 'Administration', 'code' => 'ADMIN', 'description' => 'General management and access control'],
+            ['name' => 'Accounts', 'code' => 'FIN', 'description' => 'Accounts Manager, Account Assistant, payables and receivables'],
+            ['name' => 'Human Resource', 'code' => 'HR', 'description' => 'HR Manager, payroll, documents'],
+            ['name' => 'Projects', 'code' => 'PRJ', 'description' => 'Project Manager and engineers'],
+            ['name' => 'Site Operations', 'code' => 'SITE', 'description' => 'Site In-Charge, mechanics, operators'],
+            ['name' => 'Purchase', 'code' => 'PUR', 'description' => 'Purchase Manager, Purchase Assistant, stores'],
+            ['name' => 'Marketing', 'code' => 'MKT', 'description' => 'Marketing and business development'],
         ];
 
         foreach ($departments as $department) {
@@ -58,20 +59,22 @@ class DatabaseSeeder extends Seeder
     {
         $departments = Department::pluck('id', 'code');
 
+        // Roles follow the company organization chart. The role is the access
+        // level; the job title itself lives on the designation.
         $superAdmin = Role::create([
             'name' => 'Super Admin', 'code' => 'SUPER_ADMIN',
             'department_id' => $departments['ADMIN'], 'level' => 1,
             'access_scope' => 'All Company', 'default_dashboard' => 'Admin Dashboard',
             'mobile_app_access' => true, 'is_system' => true,
-            'description' => 'Full access to every module and setting.',
+            'description' => 'General Manager level. Full access to every module and setting.',
         ]);
 
-        $financeManager = Role::create([
-            'name' => 'Finance Manager', 'code' => 'FINANCE_MANAGER',
+        $accountsManager = Role::create([
+            'name' => 'Accounts Manager', 'code' => 'FINANCE_MANAGER',
             'department_id' => $departments['FIN'], 'parent_id' => $superAdmin->id,
             'level' => 2, 'access_scope' => 'Company Level',
             'default_dashboard' => 'Finance Dashboard',
-            'description' => 'Manages accounting, payables, receivables and VAT.',
+            'description' => 'Manages accounting, payables, receivables, VAT and payroll approval.',
         ]);
 
         $hrManager = Role::create([
@@ -90,25 +93,57 @@ class DatabaseSeeder extends Seeder
             'description' => 'Manages assigned projects, budgets and site approvals.',
         ]);
 
+        $purchaseManager = Role::create([
+            'name' => 'Purchase Manager', 'code' => 'PURCHASE_MANAGER',
+            'department_id' => $departments['PUR'], 'parent_id' => $superAdmin->id,
+            'level' => 2, 'access_scope' => 'Company Level',
+            'default_dashboard' => 'Inventory Dashboard',
+            'description' => 'Owns purchase requests, purchase orders and supplier relationships.',
+        ]);
+
+        $marketingManager = Role::create([
+            'name' => 'Marketing Manager', 'code' => 'MARKETING_MANAGER',
+            'department_id' => $departments['MKT'], 'parent_id' => $superAdmin->id,
+            'level' => 2, 'access_scope' => 'Company Level',
+            'default_dashboard' => 'Admin Dashboard',
+            'description' => 'Manages customers, tenders and business development.',
+        ]);
+
         $inventoryManager = Role::create([
             'name' => 'Inventory Manager', 'code' => 'INVENTORY_MANAGER',
-            'department_id' => $departments['EQP'], 'parent_id' => $superAdmin->id,
+            'department_id' => $departments['PUR'], 'parent_id' => $superAdmin->id,
             'level' => 2, 'access_scope' => 'Company Level',
             'default_dashboard' => 'Inventory Dashboard',
             'description' => 'Manages warehouses, materials and stock movements.',
         ]);
 
-        $siteSupervisor = Role::create([
-            'name' => 'Site Supervisor', 'code' => 'SITE_SUPERVISOR',
+        $siteInCharge = Role::create([
+            'name' => 'Site In-Charge', 'code' => 'SITE_SUPERVISOR',
             'department_id' => $departments['SITE'], 'parent_id' => $projectManager->id,
             'level' => 3, 'access_scope' => 'Site Level',
             'default_dashboard' => 'Site Dashboard', 'mobile_app_access' => true,
-            'description' => 'Can manage site attendance, site expenses, and approvals for assigned project/site.',
+            'description' => 'Runs the site: attendance, site expenses and approvals for the assigned project and site.',
+        ]);
+
+        $accountAssistant = Role::create([
+            'name' => 'Account Assistant', 'code' => 'ACCOUNT_ASSISTANT',
+            'department_id' => $departments['FIN'], 'parent_id' => $accountsManager->id,
+            'level' => 3, 'access_scope' => 'Company Level',
+            'default_dashboard' => 'Finance Dashboard',
+            'description' => 'Enters bills, invoices and journals for the Accounts Manager to approve.',
+        ]);
+
+        $purchaseAssistant = Role::create([
+            'name' => 'Purchase Assistant', 'code' => 'PURCHASE_ASSISTANT',
+            'department_id' => $departments['PUR'], 'parent_id' => $purchaseManager->id,
+            'level' => 3, 'access_scope' => 'Company Level',
+            'default_dashboard' => 'Inventory Dashboard',
+            'description' => 'Prepares purchase orders and follows up deliveries.',
         ]);
 
         $warehouseIncharge = Role::create([
             'name' => 'Warehouse Incharge', 'code' => 'WAREHOUSE_INCHARGE',
-            'department_id' => $departments['EQP'], 'parent_id' => $inventoryManager->id,
+            'department_id' => $departments['PUR'], 'parent_id' => $inventoryManager->id,
             'level' => 3, 'access_scope' => 'Warehouse Level',
             'default_dashboard' => 'Inventory Dashboard', 'mobile_app_access' => true,
             'description' => 'Receives, issues, transfers and adjusts stock for assigned warehouses. No master data or accounting access.',
@@ -116,36 +151,29 @@ class DatabaseSeeder extends Seeder
 
         Role::create([
             'name' => 'Mechanic', 'code' => 'MECHANIC',
-            'department_id' => $departments['EQP'], 'parent_id' => $siteSupervisor->id,
+            'department_id' => $departments['SITE'], 'parent_id' => $siteInCharge->id,
             'level' => 4, 'access_scope' => 'Site Level',
             'default_dashboard' => 'Site Dashboard', 'mobile_app_access' => true,
             'description' => 'Submits equipment issues, fuel and maintenance requests.',
         ]);
 
         Role::create([
+            'name' => 'Operator', 'code' => 'OPERATOR',
+            'department_id' => $departments['SITE'], 'parent_id' => $siteInCharge->id,
+            'level' => 4, 'access_scope' => 'Site Level',
+            'default_dashboard' => 'Site Dashboard', 'mobile_app_access' => true,
+            'description' => 'Operates machinery on site. Mobile attendance and basic site requests.',
+        ]);
+
+        Role::create([
             'name' => 'Site Worker', 'code' => 'SITE_WORKER',
-            'department_id' => $departments['SITE'], 'parent_id' => $siteSupervisor->id,
+            'department_id' => $departments['SITE'], 'parent_id' => $siteInCharge->id,
             'level' => 4, 'access_scope' => 'Site Level',
             'default_dashboard' => 'Site Dashboard', 'mobile_app_access' => true,
             'description' => 'Mobile attendance and basic site requests only.',
         ]);
 
-        $modules = [
-            'Dashboard', 'Users', 'Roles', 'Accounting', 'HR', 'Payroll',
-            'Attendance', 'Projects', 'Sites', 'Inventory', 'Site Expenses',
-            'Equipment', 'Vehicles', 'ZATCA Invoicing', 'Reports', 'Settings',
-            // Phase 4 accounting modules.
-            'Accounting Dashboard', 'Chart of Accounts', 'Journal Entries',
-            'General Ledger', 'Accounts Payable', 'Accounts Receivable',
-            'VAT Management', 'Financial Reports', 'Cost Centers', 'Auto Posting Rules',
-            // Phase 6 inventory modules.
-            'Inventory Dashboard', 'Items', 'Item Categories', 'Units',
-            'Warehouse Stock', 'Purchase Requests', 'Purchase Orders',
-            'Goods Receipts', 'Stock Issues', 'Stock Transfers',
-            'Stock Adjustments', 'Stock Ledger', 'Inventory Reports',
-        ];
-
-        foreach ($modules as $module) {
+        foreach (Permission::MODULES as $module) {
             foreach (Permission::ACTIONS as $action) {
                 Permission::create(['module' => $module, 'action' => $action]);
             }
@@ -154,7 +182,7 @@ class DatabaseSeeder extends Seeder
         $superAdmin->permissions()->attach(Permission::pluck('id'));
 
         $grants = [
-            $financeManager->id => [
+            $accountsManager->id => [
                 'Dashboard' => ['view', 'export'],
                 'Accounting' => ['view', 'create', 'edit', 'approve', 'export'],
                 'Payroll' => ['view', 'approve', 'export'],
@@ -219,6 +247,44 @@ class DatabaseSeeder extends Seeder
                 'Stock Ledger' => ['view', 'export'],
                 'Inventory Reports' => ['view', 'export'],
             ],
+            $purchaseManager->id => [
+                'Dashboard' => ['view'],
+                'Inventory Dashboard' => ['view'],
+                'Suppliers' => ['view', 'create', 'edit'],
+                'Expense Categories' => ['view'],
+                'Warehouses' => ['view'],
+                'Purchase Requests' => ['view', 'create', 'edit', 'approve', 'reject', 'export'],
+                'Purchase Orders' => ['view', 'create', 'edit', 'approve', 'export'],
+                'Goods Receipts' => ['view', 'export'],
+                'Inventory Reports' => ['view', 'export'],
+            ],
+            $accountAssistant->id => [
+                'Dashboard' => ['view'],
+                'Accounting Dashboard' => ['view'],
+                'Chart of Accounts' => ['view'],
+                'Journal Entries' => ['view', 'create', 'edit'],
+                'General Ledger' => ['view'],
+                'Accounts Payable' => ['view', 'create', 'edit'],
+                'Accounts Receivable' => ['view', 'create', 'edit'],
+                'Financial Reports' => ['view'],
+                'Cost Centers' => ['view'],
+            ],
+            $purchaseAssistant->id => [
+                'Dashboard' => ['view'],
+                'Inventory Dashboard' => ['view'],
+                'Suppliers' => ['view'],
+                'Warehouses' => ['view'],
+                'Purchase Requests' => ['view', 'create', 'edit'],
+                'Purchase Orders' => ['view', 'create', 'edit'],
+                'Goods Receipts' => ['view'],
+                'Inventory Reports' => ['view'],
+            ],
+            $marketingManager->id => [
+                'Dashboard' => ['view'],
+                'Customers' => ['view', 'create', 'edit'],
+                'Projects' => ['view'],
+                'Reports' => ['view', 'export'],
+            ],
             // Warehouse-floor role: moves stock, but owns no master data,
             // no purchasing approval and no accounting.
             $warehouseIncharge->id => [
@@ -231,7 +297,7 @@ class DatabaseSeeder extends Seeder
                 'Stock Adjustments' => ['view', 'create', 'adjust'],
                 'Inventory Reports' => ['view', 'export'],
             ],
-            $siteSupervisor->id => [
+            $siteInCharge->id => [
                 'Dashboard' => ['view'],
                 'Attendance' => ['view', 'create', 'edit', 'approve', 'mobile'],
                 'Site Expenses' => ['view', 'create', 'approve', 'mobile'],
@@ -253,6 +319,16 @@ class DatabaseSeeder extends Seeder
                 ->all();
             Role::find($roleId)->permissions()->attach($permissionIds);
         }
+
+        foreach (['MECHANIC', 'OPERATOR', 'SITE_WORKER'] as $roleCode) {
+            $role = Role::where('code', $roleCode)->firstOrFail();
+            $permissionIds = Permission::where(function ($query) {
+                $query->where(fn ($module) => $module->where('module', 'Dashboard')->where('action', 'view'))
+                    ->orWhere(fn ($module) => $module->where('module', 'Attendance')->whereIn('action', ['view', 'create', 'mobile']))
+                    ->orWhere(fn ($module) => $module->where('module', 'Equipment')->whereIn('action', ['view', 'mobile']));
+            })->pluck('id');
+            $role->permissions()->attach($permissionIds);
+        }
     }
 
     private function seedDesignations(): void
@@ -260,13 +336,21 @@ class DatabaseSeeder extends Seeder
         $departments = Department::pluck('id', 'code');
         $roles = Role::pluck('id', 'code');
 
+        // Job titles from the organization chart. Each one belongs to a single
+        // department, which is what drives the dependent designation dropdown.
         $designations = [
-            ['name' => 'Finance Manager', 'department_id' => $departments['FIN'], 'grade' => 'L3', 'default_role_id' => $roles['FINANCE_MANAGER'], 'mobile_access_default' => false],
+            ['name' => 'General Manager', 'department_id' => $departments['ADMIN'], 'grade' => 'L5', 'default_role_id' => $roles['SUPER_ADMIN'], 'mobile_access_default' => true],
+            ['name' => 'Accounts Manager', 'department_id' => $departments['FIN'], 'grade' => 'L3', 'default_role_id' => $roles['FINANCE_MANAGER'], 'mobile_access_default' => false],
+            ['name' => 'Account Assistant', 'department_id' => $departments['FIN'], 'grade' => 'L2', 'default_role_id' => $roles['ACCOUNT_ASSISTANT'], 'mobile_access_default' => false],
             ['name' => 'HR Manager', 'department_id' => $departments['HR'], 'grade' => 'L3', 'default_role_id' => $roles['HR_MANAGER'], 'mobile_access_default' => false],
             ['name' => 'Project Manager', 'department_id' => $departments['PRJ'], 'grade' => 'L3', 'default_role_id' => $roles['PROJECT_MANAGER'], 'mobile_access_default' => true],
-            ['name' => 'Site Supervisor', 'department_id' => $departments['SITE'], 'grade' => 'L2', 'default_role_id' => $roles['SITE_SUPERVISOR'], 'mobile_access_default' => true],
-            ['name' => 'Mechanic', 'department_id' => $departments['EQP'], 'grade' => 'L1', 'default_role_id' => $roles['MECHANIC'], 'mobile_access_default' => true],
-            ['name' => 'Store Keeper', 'department_id' => $departments['EQP'], 'grade' => 'L1', 'default_role_id' => $roles['INVENTORY_MANAGER'], 'mobile_access_default' => true],
+            ['name' => 'Site In-Charge', 'department_id' => $departments['SITE'], 'grade' => 'L2', 'default_role_id' => $roles['SITE_SUPERVISOR'], 'mobile_access_default' => true],
+            ['name' => 'Mechanic', 'department_id' => $departments['SITE'], 'grade' => 'L1', 'default_role_id' => $roles['MECHANIC'], 'mobile_access_default' => true],
+            ['name' => 'Operator', 'department_id' => $departments['SITE'], 'grade' => 'L1', 'default_role_id' => $roles['OPERATOR'], 'mobile_access_default' => true],
+            ['name' => 'Purchase Manager', 'department_id' => $departments['PUR'], 'grade' => 'L3', 'default_role_id' => $roles['PURCHASE_MANAGER'], 'mobile_access_default' => false],
+            ['name' => 'Purchase Assistant', 'department_id' => $departments['PUR'], 'grade' => 'L2', 'default_role_id' => $roles['PURCHASE_ASSISTANT'], 'mobile_access_default' => false],
+            ['name' => 'Store Keeper', 'department_id' => $departments['PUR'], 'grade' => 'L1', 'default_role_id' => $roles['WAREHOUSE_INCHARGE'], 'mobile_access_default' => true],
+            ['name' => 'Marketing Manager', 'department_id' => $departments['MKT'], 'grade' => 'L3', 'default_role_id' => $roles['MARKETING_MANAGER'], 'mobile_access_default' => false],
         ];
 
         foreach ($designations as $designation) {
@@ -353,34 +437,62 @@ class DatabaseSeeder extends Seeder
         $branches = Branch::pluck('id', 'code');
         $roles = Role::pluck('id', 'code');
 
-        $users = [
-            ['name' => 'Admin User', 'email' => 'admin@example.com', 'employee_id' => 'EMP-001', 'username' => 'admin', 'phone' => '+966 50 000 1111', 'department_id' => $departments['ADMIN'], 'branch_id' => $branches['BR-RYD'], 'role' => 'SUPER_ADMIN', 'mobile_access' => true, 'two_factor_enabled' => true, 'joining_date' => '2026-01-01', 'last_login_at' => now()],
-            ['name' => 'M. Bin Ashfaq', 'email' => 'ashfaq@example.com', 'employee_id' => 'EMP-002', 'username' => 'ashfaq', 'phone' => '+966 50 222 1111', 'department_id' => $departments['PRJ'], 'designation_id' => $designations['Project Manager'], 'branch_id' => $branches['BR-RYD'], 'role' => 'PROJECT_MANAGER', 'mobile_access' => true, 'joining_date' => '2026-01-05', 'last_login_at' => now()->subHours(3)],
-            ['name' => 'Fatima Al Harbi', 'email' => 'fatima@example.com', 'employee_id' => 'EMP-004', 'username' => 'fatima', 'phone' => '+966 55 444 2222', 'department_id' => $departments['FIN'], 'designation_id' => $designations['Finance Manager'], 'branch_id' => $branches['BR-RYD'], 'role' => 'FINANCE_MANAGER', 'two_factor_enabled' => true, 'joining_date' => '2026-01-10', 'last_login_at' => now()->subDay()],
-            ['name' => 'Zubair Khan', 'email' => 'zubair@example.com', 'employee_id' => 'EMP-005', 'username' => 'zubair', 'phone' => '+966 55 555 3333', 'department_id' => $departments['HR'], 'designation_id' => $designations['HR Manager'], 'branch_id' => $branches['BR-JED'], 'role' => 'HR_MANAGER', 'joining_date' => '2026-01-12', 'last_login_at' => now()->subHours(6)],
-            ['name' => 'Nabeel Ahmed', 'email' => 'nabeel@example.com', 'employee_id' => 'EMP-007', 'username' => 'nabeel', 'phone' => '+966 55 888 2222', 'department_id' => $departments['SITE'], 'designation_id' => $designations['Site Supervisor'], 'branch_id' => $branches['BR-RYD'], 'role' => 'SITE_SUPERVISOR', 'mobile_access' => true, 'joining_date' => '2026-01-01', 'last_login_at' => now()->subHour()],
-            ['name' => 'Waiz Rahman', 'email' => 'waiz@example.com', 'employee_id' => 'EMP-008', 'username' => 'waiz', 'phone' => '+966 55 888 4444', 'department_id' => $departments['SITE'], 'designation_id' => $designations['Site Supervisor'], 'branch_id' => $branches['BR-JED'], 'role' => 'SITE_SUPERVISOR', 'mobile_access' => true, 'joining_date' => '2026-02-01', 'last_login_at' => now()->subDays(2)],
-            ['name' => 'Uzaid Malik', 'email' => 'uzaid@example.com', 'employee_id' => 'EMP-009', 'username' => 'uzaid', 'phone' => '+966 55 888 5555', 'department_id' => $departments['SITE'], 'designation_id' => $designations['Site Supervisor'], 'branch_id' => $branches['BR-DMM'], 'role' => 'SITE_SUPERVISOR', 'mobile_access' => true, 'joining_date' => '2026-02-15', 'last_login_at' => now()->subDays(3)],
-            ['name' => 'Kamran Iqbal', 'email' => 'kamran@example.com', 'employee_id' => 'EMP-011', 'username' => 'kamran', 'phone' => '+966 55 999 3333', 'department_id' => $departments['EQP'], 'designation_id' => $designations['Mechanic'], 'branch_id' => $branches['BR-JED'], 'role' => 'MECHANIC', 'mobile_access' => true, 'status' => 'pending', 'joining_date' => '2026-03-01', 'last_login_at' => now()->subDay()],
-            ['name' => 'Imran Shah', 'email' => 'imran@example.com', 'employee_id' => 'EMP-012', 'username' => 'imran', 'phone' => '+966 55 999 4444', 'department_id' => $departments['EQP'], 'designation_id' => $designations['Mechanic'], 'branch_id' => $branches['BR-DMM'], 'role' => 'MECHANIC', 'mobile_access' => true, 'status' => 'inactive', 'joining_date' => '2026-03-10'],
+        // The real company organization chart.
+        // [name, email, username, department, designation, branch, role, mobile, status]
+        $roster = [
+            ['Omar Mukhtar', 'admin', 'ADMIN', 'General Manager', 'BR-RYD', 'SUPER_ADMIN', true, 'active', '2020-01-01'],
+            ['Nabeel Mukhtar', 'nabeel', 'PRJ', 'Project Manager', 'BR-RYD', 'PROJECT_MANAGER', true, 'active', '2020-03-01'],
+            ['Zubair Ahmed', 'zubair', 'FIN', 'Accounts Manager', 'BR-RYD', 'FINANCE_MANAGER', false, 'active', '2020-04-01'],
+            ['Zulfiqar', 'zulfiqar', 'PUR', 'Purchase Manager', 'BR-RYD', 'PURCHASE_MANAGER', false, 'active', '2020-06-01'],
+            ['Waleed', 'waleed', 'HR', 'HR Manager', 'BR-RYD', 'HR_MANAGER', false, 'active', '2020-07-01'],
+            ['Abdullah Mukhtar', 'abdullah', 'MKT', 'Marketing Manager', 'BR-RYD', 'MARKETING_MANAGER', false, 'active', '2021-01-15'],
+            ['Zafar Ali', 'zafar', 'SITE', 'Site In-Charge', 'BR-RYD', 'SITE_SUPERVISOR', true, 'active', '2021-02-01'],
+            ['Abdullah Shahmeer', 'shahmeer', 'FIN', 'Account Assistant', 'BR-RYD', 'ACCOUNT_ASSISTANT', false, 'active', '2021-05-01'],
+            ['Ayaz', 'ayaz', 'PUR', 'Purchase Assistant', 'BR-RYD', 'PURCHASE_ASSISTANT', false, 'active', '2021-06-15'],
+            ['Kamran', 'kamran', 'SITE', 'Mechanic', 'BR-JED', 'MECHANIC', true, 'pending', '2022-03-01'],
+            ['Shaban', 'shaban', 'SITE', 'Operator', 'BR-RYD', 'OPERATOR', true, 'active', '2022-05-01'],
+            ['Rizwan', 'rizwan', 'SITE', 'Operator', 'BR-DMM', 'OPERATOR', true, 'active', '2022-09-01'],
         ];
 
-        foreach ($users as $data) {
-            $roleCode = $data['role'];
-            unset($data['role']);
+        foreach ($roster as $index => [$name, $username, $deptCode, $designation, $branchCode, $roleCode, $mobile, $status, $joining]) {
+            $user = User::create([
+                'name' => $name,
+                'email' => $username.'@example.com',
+                'employee_id' => sprintf('EMP-%03d', $index + 1),
+                'username' => $username,
+                'phone' => '+966 5'.(($index % 6) + 1).' '.str_pad((string) (100 + $index), 3, '0', STR_PAD_LEFT).' '.str_pad((string) (2000 + $index), 4, '0', STR_PAD_LEFT),
+                'department_id' => $departments[$deptCode],
+                'designation_id' => $designations[$designation] ?? null,
+                'branch_id' => $branches[$branchCode],
+                'mobile_access' => $mobile,
+                'two_factor_enabled' => $index < 3,
+                'status' => $status,
+                'joining_date' => $joining,
+                'last_login_at' => now()->subHours($index + 1),
+                'password' => 'password',
+            ]);
 
-            $user = User::create($data + ['password' => 'password']);
             $user->roles()->attach($roles[$roleCode], ['is_primary' => true]);
         }
 
-        // Wire up managers/heads now that users exist.
-        Department::where('code', 'FIN')->update(['head_user_id' => User::where('email', 'fatima@example.com')->value('id')]);
-        Department::where('code', 'HR')->update(['head_user_id' => User::where('email', 'zubair@example.com')->value('id')]);
-        Department::where('code', 'SITE')->update(['head_user_id' => User::where('email', 'nabeel@example.com')->value('id')]);
-        Department::where('code', 'PRJ')->update(['head_user_id' => User::where('email', 'ashfaq@example.com')->value('id')]);
+        // Department heads and branch managers, per the organization chart.
+        $heads = [
+            'ADMIN' => 'admin@example.com',
+            'FIN' => 'zubair@example.com',
+            'HR' => 'waleed@example.com',
+            'PRJ' => 'nabeel@example.com',
+            'SITE' => 'zafar@example.com',
+            'PUR' => 'zulfiqar@example.com',
+            'MKT' => 'abdullah@example.com',
+        ];
+
+        foreach ($heads as $code => $email) {
+            Department::where('code', $code)->update(['head_user_id' => User::where('email', $email)->value('id')]);
+        }
+
         Branch::where('code', 'BR-RYD')->update(['manager_id' => User::where('email', 'admin@example.com')->value('id')]);
-        Branch::where('code', 'BR-JED')->update(['manager_id' => User::where('email', 'zubair@example.com')->value('id')]);
-        Branch::where('code', 'BR-DMM')->update(['manager_id' => User::where('email', 'uzaid@example.com')->value('id')]);
+        Branch::where('code', 'BR-JED')->update(['manager_id' => User::where('email', 'zulfiqar@example.com')->value('id')]);
+        Branch::where('code', 'BR-DMM')->update(['manager_id' => User::where('email', 'zafar@example.com')->value('id')]);
     }
 
     private function seedProjectsSitesWarehouses(): void
@@ -392,7 +504,7 @@ class DatabaseSeeder extends Seeder
         $riyadhTower = Project::create([
             'name' => 'Riyadh Tower', 'code' => 'PRJ-001',
             'customer_id' => $customers['CUS-001'], 'branch_id' => $branches['BR-RYD'],
-            'manager_id' => $users['ashfaq@example.com'],
+            'manager_id' => $users['nabeel@example.com'],
             'start_date' => '2026-01-01', 'end_date' => '2026-12-30',
             'budget' => 2500000, 'location' => 'Al Olaya District, Riyadh',
             'description' => '22-floor commercial tower with basement parking.',
@@ -402,7 +514,7 @@ class DatabaseSeeder extends Seeder
         $jeddahWarehouse = Project::create([
             'name' => 'Jeddah Warehouse', 'code' => 'PRJ-002',
             'customer_id' => $customers['CUS-002'], 'branch_id' => $branches['BR-JED'],
-            'manager_id' => $users['ashfaq@example.com'],
+            'manager_id' => $users['nabeel@example.com'],
             'start_date' => '2026-02-15', 'end_date' => '2026-10-15',
             'budget' => 1400000, 'location' => 'Industrial Area, Jeddah',
             'description' => 'Logistics warehouse with loading docks and office block.',
@@ -412,7 +524,7 @@ class DatabaseSeeder extends Seeder
         $dammamRoad = Project::create([
             'name' => 'Dammam Road Extension', 'code' => 'PRJ-003',
             'customer_id' => $customers['CUS-003'], 'branch_id' => $branches['BR-DMM'],
-            'manager_id' => $users['ashfaq@example.com'],
+            'manager_id' => $users['nabeel@example.com'],
             'start_date' => '2026-03-01', 'end_date' => '2027-03-01',
             'budget' => 3800000, 'location' => 'Eastern Ring Road, Dammam',
             'description' => 'Road extension and drainage infrastructure works.',
@@ -426,23 +538,23 @@ class DatabaseSeeder extends Seeder
             'address' => 'Al Olaya District, Riyadh', 'status' => 'active',
         ]);
 
-        Site::create([
+        $blockB = Site::create([
             'name' => 'Block B', 'code' => 'SITE-B', 'project_id' => $riyadhTower->id,
-            'supervisor_id' => $users['waiz@example.com'],
+            'supervisor_id' => $users['shaban@example.com'],
             'latitude' => 24.7150, 'longitude' => 46.6790, 'geofence_radius' => 250,
             'address' => 'Al Olaya District, Riyadh', 'status' => 'active',
         ]);
 
-        Site::create([
+        $equipmentYard = Site::create([
             'name' => 'Equipment Yard', 'code' => 'SITE-YARD', 'project_id' => $jeddahWarehouse->id,
-            'supervisor_id' => $users['uzaid@example.com'],
+            'supervisor_id' => $users['zafar@example.com'],
             'latitude' => 21.4858, 'longitude' => 39.1925, 'geofence_radius' => 500,
             'geofence_enabled' => false, 'address' => 'Industrial Area, Jeddah', 'status' => 'draft',
         ]);
 
-        Site::create([
+        $dammamSite = Site::create([
             'name' => 'Section 1 - Drainage', 'code' => 'SITE-D1', 'project_id' => $dammamRoad->id,
-            'supervisor_id' => $users['uzaid@example.com'],
+            'supervisor_id' => $users['zafar@example.com'],
             'latitude' => 26.4207, 'longitude' => 50.0888, 'geofence_radius' => 800,
             'address' => 'Eastern Ring Road, Dammam', 'status' => 'active',
         ]);
@@ -469,6 +581,18 @@ class DatabaseSeeder extends Seeder
         // Assign scope to the site supervisor used in demos.
         User::where('email', 'nabeel@example.com')->update([
             'project_id' => $riyadhTower->id, 'site_id' => $blockA->id,
+        ]);
+        User::where('email', 'zafar@example.com')->update([
+            'project_id' => $dammamRoad->id, 'site_id' => $dammamSite->id,
+        ]);
+        User::where('email', 'shaban@example.com')->update([
+            'project_id' => $riyadhTower->id, 'site_id' => $blockB->id,
+        ]);
+        User::where('email', 'rizwan@example.com')->update([
+            'project_id' => $dammamRoad->id, 'site_id' => $dammamSite->id,
+        ]);
+        User::where('email', 'kamran@example.com')->update([
+            'project_id' => $jeddahWarehouse->id, 'site_id' => $equipmentYard->id,
         ]);
     }
 
@@ -517,16 +641,16 @@ class DatabaseSeeder extends Seeder
         $users = User::pluck('id', 'email');
 
         $logs = [
-            ['user_id' => $users['admin@example.com'], 'user_name' => 'Admin User', 'module' => 'Roles', 'action' => 'Updated role permission', 'old_value' => 'Approve: No', 'new_value' => 'Approve: Yes', 'ip_address' => '192.168.1.15', 'status' => 'success', 'created_at' => now()->subHours(2)],
-            ['user_id' => $users['fatima@example.com'], 'user_name' => 'Fatima Al Harbi', 'module' => 'Users', 'action' => 'Assigned role', 'old_value' => 'None', 'new_value' => 'Finance Manager', 'ip_address' => '192.168.1.20', 'status' => 'success', 'created_at' => now()->subHours(4)],
-            ['user_id' => $users['ashfaq@example.com'], 'user_name' => 'M. Bin Ashfaq', 'module' => 'Projects', 'action' => 'Created project', 'new_value' => 'Riyadh Tower', 'ip_address' => '192.168.1.22', 'status' => 'success', 'created_at' => now()->subDay()],
-            ['user_id' => $users['zubair@example.com'], 'user_name' => 'Zubair Khan', 'module' => 'Suppliers', 'action' => 'Added supplier', 'new_value' => 'Saudi Cement Supplier', 'ip_address' => '192.168.1.30', 'status' => 'success', 'created_at' => now()->subDay()],
-            ['user_id' => $users['nabeel@example.com'], 'user_name' => 'Nabeel Ahmed', 'module' => 'Sites', 'action' => 'Updated geo-fence radius', 'old_value' => '200 m', 'new_value' => '300 m', 'ip_address' => '10.0.0.14', 'status' => 'reviewed', 'created_at' => now()->subDays(2)],
+            ['user_id' => $users['admin@example.com'], 'user_name' => 'Omar Mukhtar', 'module' => 'Roles', 'action' => 'Updated role permission', 'old_value' => 'Approve: No', 'new_value' => 'Approve: Yes', 'ip_address' => '192.168.1.15', 'status' => 'success', 'created_at' => now()->subHours(2)],
+            ['user_id' => $users['zubair@example.com'], 'user_name' => 'Zubair Ahmed', 'module' => 'Users', 'action' => 'Assigned role', 'old_value' => 'None', 'new_value' => 'Accounts Manager', 'ip_address' => '192.168.1.20', 'status' => 'success', 'created_at' => now()->subHours(4)],
+            ['user_id' => $users['nabeel@example.com'], 'user_name' => 'Nabeel Mukhtar', 'module' => 'Projects', 'action' => 'Created project', 'new_value' => 'Riyadh Tower', 'ip_address' => '192.168.1.22', 'status' => 'success', 'created_at' => now()->subDay()],
+            ['user_id' => $users['zubair@example.com'], 'user_name' => 'Waleed', 'module' => 'Suppliers', 'action' => 'Added supplier', 'new_value' => 'Saudi Cement Supplier', 'ip_address' => '192.168.1.30', 'status' => 'success', 'created_at' => now()->subDay()],
+            ['user_id' => $users['nabeel@example.com'], 'user_name' => 'Zafar Ali', 'module' => 'Sites', 'action' => 'Updated geo-fence radius', 'old_value' => '200 m', 'new_value' => '300 m', 'ip_address' => '10.0.0.14', 'status' => 'reviewed', 'created_at' => now()->subDays(2)],
             ['user_id' => null, 'user_name' => 'System', 'module' => 'Security', 'action' => 'Failed login', 'new_value' => 'Invalid password', 'ip_address' => '185.10.1.2', 'status' => 'failed', 'created_at' => now()->subDays(2)],
-            ['user_id' => $users['admin@example.com'], 'user_name' => 'Admin User', 'module' => 'Company', 'action' => 'Updated VAT details', 'old_value' => 'VAT 5%', 'new_value' => 'VAT 15%', 'ip_address' => '192.168.1.15', 'status' => 'success', 'created_at' => now()->subDays(3)],
-            ['user_id' => $users['admin@example.com'], 'user_name' => 'Admin User', 'module' => 'Workflows', 'action' => 'Created approval workflow', 'new_value' => 'Site Expense Approval', 'ip_address' => '192.168.1.15', 'status' => 'success', 'created_at' => now()->subDays(4)],
-            ['user_id' => $users['kamran@example.com'], 'user_name' => 'Kamran Iqbal', 'module' => 'Equipment', 'action' => 'Updated equipment issue', 'ip_address' => '10.0.0.31', 'status' => 'success', 'created_at' => now()->subDays(4)],
-            ['user_id' => $users['nabeel@example.com'], 'user_name' => 'Nabeel Ahmed', 'module' => 'Attendance', 'action' => 'Approved site attendance', 'ip_address' => '10.0.0.14', 'status' => 'success', 'created_at' => now()->subDays(5)],
+            ['user_id' => $users['admin@example.com'], 'user_name' => 'Omar Mukhtar', 'module' => 'Company', 'action' => 'Updated VAT details', 'old_value' => 'VAT 5%', 'new_value' => 'VAT 15%', 'ip_address' => '192.168.1.15', 'status' => 'success', 'created_at' => now()->subDays(3)],
+            ['user_id' => $users['admin@example.com'], 'user_name' => 'Omar Mukhtar', 'module' => 'Workflows', 'action' => 'Created approval workflow', 'new_value' => 'Site Expense Approval', 'ip_address' => '192.168.1.15', 'status' => 'success', 'created_at' => now()->subDays(4)],
+            ['user_id' => $users['kamran@example.com'], 'user_name' => 'Kamran', 'module' => 'Equipment', 'action' => 'Updated equipment issue', 'ip_address' => '10.0.0.31', 'status' => 'success', 'created_at' => now()->subDays(4)],
+            ['user_id' => $users['nabeel@example.com'], 'user_name' => 'Zafar Ali', 'module' => 'Attendance', 'action' => 'Approved site attendance', 'ip_address' => '10.0.0.14', 'status' => 'success', 'created_at' => now()->subDays(5)],
         ];
 
         foreach ($logs as $log) {

@@ -31,7 +31,7 @@ class StabilizationTest extends TestCase
     public function test_assign_users_to_role_persists(): void
     {
         $role = Role::where('code', 'MECHANIC')->firstOrFail();
-        $newUser = User::where('email', 'waiz@example.com')->firstOrFail();
+        $newUser = User::where('email', 'shaban@example.com')->firstOrFail();
         $userIds = $role->users()->pluck('users.id')->push($newUser->id)->all();
 
         $this->actingAs($this->admin())
@@ -49,7 +49,7 @@ class StabilizationTest extends TestCase
     public function test_assign_users_removal_persists(): void
     {
         $role = Role::where('code', 'SITE_SUPERVISOR')->firstOrFail();
-        $removed = User::where('email', 'uzaid@example.com')->firstOrFail();
+        $removed = User::where('email', 'zafar@example.com')->firstOrFail();
         $keptIds = $role->users()->pluck('users.id')->reject(fn ($id) => $id === $removed->id)->values()->all();
 
         $this->actingAs($this->admin())
@@ -198,7 +198,7 @@ class StabilizationTest extends TestCase
         $workflow = ApprovalWorkflow::where('name', 'Site Expense Approval')->with('steps.approverRole')->firstOrFail();
 
         $this->assertSame(
-            ['Site Supervisor', 'Project Manager', 'Finance Manager'],
+            ['Site In-Charge', 'Project Manager', 'Accounts Manager'],
             $workflow->steps->pluck('approverRole.name')->all()
         );
     }

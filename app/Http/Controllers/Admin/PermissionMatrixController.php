@@ -35,10 +35,23 @@ class PermissionMatrixController extends Controller
 
     public function update(Request $request): RedirectResponse
     {
-        $request->validate(['role_id' => ['required', 'exists:roles,id']]);
+        $data = $request->validate([
+            'role_id' => ['required', 'exists:roles,id'],
+            'search' => ['nullable', 'string', 'max:100'],
+            'visible_permission_ids' => ['nullable', 'array'],
+            'visible_permission_ids.*' => ['integer', 'exists:permissions,id'],
+            'permissions' => ['nullable', 'array'],
+            'permissions.*' => ['integer', 'exists:permissions,id'],
+        ]);
 
         $role = Role::findOrFail($request->integer('role_id'));
-        $role->permissions()->sync($request->input('permissions', []));
+        $visibleIds = Permission::query()
+            ->when(filled($data['search'] ?? null), fn ($query) => $query->where('module', 'like', '%'.$data['search'].'%'))
+            ->pluck('id');
+        $submittedIds = collect($data['permissions'] ?? [])->map(fn ($id) => (int) $id)->intersect($visibleIds);
+        $preservedIds = $role->permissions()->pluck('permissions.id')->diff($visibleIds);
+
+        $role->permissions()->sync($preservedIds->merge($submittedIds)->unique()->all());
 
         ActivityLog::record($request, 'Roles', 'Updated role permissions', $role->name);
 

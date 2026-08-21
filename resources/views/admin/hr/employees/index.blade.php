@@ -62,7 +62,7 @@
         <thead>
             <tr>
                 <th>Code</th><th>Name</th><th>Department</th><th>Designation</th>
-                <th>Project / Site</th><th>IQAMA Expiry</th><th>Basic Salary</th>
+                <th>Project / Site</th><th>Classification</th><th>IQAMA Expiry</th><th>Basic Salary</th>
                 <th>Mobile</th><th>Status</th><th>Actions</th>
             </tr>
         </thead>
@@ -74,6 +74,7 @@
                     <td>{{ $employee->department?->name ?? '-' }}</td>
                     <td>{{ $employee->designation?->name ?? '-' }}</td>
                     <td>{{ $employee->project?->name ?? 'Head Office' }}@if($employee->site) / {{ $employee->site->name }}@endif</td>
+                    <td><span class="badge blue">{{ $employee->employee_classification }}</span></td>
                     <td>
                         {{ $employee->iqama_expiry_date?->toDateString() ?? '-' }}
                         <x-admin.status-badge :status="$employee->iqamaStatus()"/>
@@ -90,7 +91,7 @@
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="10" class="table-empty">No employees found for the selected filters.</td></tr>
+                <tr><td colspan="11" class="table-empty">No employees found for the selected filters.</td></tr>
             @endforelse
         </tbody>
         <x-slot:footer>

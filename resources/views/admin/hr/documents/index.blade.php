@@ -4,9 +4,7 @@
 @section('breadcrumb', 'HR &amp; Payroll / Documents / IQAMA')
 
 @section('content')
-    <x-admin.page-header title="Employee Documents / IQAMA" description="Track document validity, expiry alerts and uploaded files">
-        <a class="btn primary" href="{{ route('admin.hr.documents.create') }}">+ Add Document</a>
-    </x-admin.page-header>
+    <x-admin.page-header title="Employee Documents / IQAMA" description="Read-only register of every employee document on the system. Documents are attached from the employee form.">    </x-admin.page-header>
 
     <div class="card-grid">
         <x-admin.metric-card color="blue" :value="$totalDocuments" label="Total Documents"/>
@@ -42,7 +40,7 @@
 
     <x-admin.data-table title="Documents Listing">
         <thead>
-            <tr><th>Employee</th><th>Type</th><th>Number</th><th>Issue</th><th>Expiry</th><th>Validity</th><th>File</th><th>Status</th><th>Actions</th></tr>
+            <tr><th>Employee</th><th>Type</th><th>Number</th><th>Issue</th><th>Expiry</th><th>Validity</th><th>File</th><th>Status</th></tr>
         </thead>
         <tbody>
             @forelse ($documents as $document)
@@ -55,21 +53,15 @@
                     <td><x-admin.status-badge :status="$document->validityStatus()"/></td>
                     <td>
                         @if ($document->file_path)
-                            <a href="{{ asset('storage/'.$document->file_path) }}" style="color:var(--blue);font-weight:700">Uploaded</a>
+                            <a href="{{ route('admin.hr.documents.download', $document) }}" style="color:var(--blue);font-weight:700">Download</a>
                         @else
                             <span class="small">Not uploaded</span>
                         @endif
                     </td>
                     <td><x-admin.status-badge :status="$document->status"/></td>
-                    <td>
-                        <x-admin.action-buttons
-                            :edit="route('admin.hr.documents.edit', $document)"
-                            :delete="route('admin.hr.documents.destroy', $document)"
-                            :name="$document->document_type.' - '.$document->employee->name"/>
-                    </td>
                 </tr>
             @empty
-                <tr><td colspan="9" class="table-empty">No documents found for the selected filters.</td></tr>
+                <tr><td colspan="8" class="table-empty">No documents found for the selected filters.</td></tr>
             @endforelse
         </tbody>
         <x-slot:footer>

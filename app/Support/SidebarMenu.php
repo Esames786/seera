@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Http\Middleware\EnsureUserHasPermission;
 use App\Models\JournalEntry;
 use App\Models\LeaveRequest;
 use Illuminate\Support\Facades\Schema;
@@ -21,7 +22,7 @@ class SidebarMenu
     {
         $badges = static::badges();
 
-        return array_values(array_filter([
+        $groups = [
             [
                 'key' => 'main',
                 'label' => 'Main',
@@ -112,7 +113,13 @@ class SidebarMenu
                     static::soon('settings', '⚙️', 'System Settings'),
                 ],
             ],
-        ]));
+        ];
+
+        foreach ($groups as &$group) {
+            $group['items'] = array_values(array_filter($group['items']));
+        }
+
+        return array_values(array_filter($groups, fn ($group) => $group && $group['items'] !== []));
     }
 
     /**
@@ -159,8 +166,13 @@ class SidebarMenu
      * @param  string|array<int, string>  $pattern
      * @return array<string, mixed>
      */
-    private static function link(string $route, string|array $pattern, string $icon, string $label, ?int $badge = null): array
+    private static function link(string $route, string|array $pattern, string $icon, string $label, ?int $badge = null): ?array
     {
+        [$module] = EnsureUserHasPermission::permissionForRoute($route);
+        if (auth()->check() && (! $module || ! auth()->user()->hasPermission($module, 'view'))) {
+            return null;
+        }
+
         $patterns = (array) $pattern;
 
         return [
@@ -176,8 +188,13 @@ class SidebarMenu
     /**
      * @return array<string, mixed>
      */
-    private static function soon(string $module, string $icon, string $label): array
+    private static function soon(string $module, string $icon, string $label): ?array
     {
+        [$permissionModule] = EnsureUserHasPermission::permissionForRoute('admin.coming-soon', $module);
+        if (auth()->check() && ! auth()->user()->hasPermission($permissionModule, 'view')) {
+            return null;
+        }
+
         return [
             'url' => route('admin.coming-soon', $module),
             'active' => request()->routeIs('admin.coming-soon') && request()->route('module') === $module,

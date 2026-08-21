@@ -5,6 +5,7 @@ namespace App\Services\Inventory;
 use App\Models\Item;
 use App\Models\StockLedgerEntry;
 use App\Models\WarehouseStock;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Single entry point for every warehouse stock movement.
@@ -22,11 +23,15 @@ class StockService
      */
     public function receive(Item $item, int $warehouseId, float $quantity, float $unitCost, array $context = []): StockLedgerEntry
     {
+        if (DB::transactionLevel() === 0) {
+            return DB::transaction(fn () => $this->receive($item, $warehouseId, $quantity, $unitCost, $context));
+        }
+
         if ($quantity <= 0) {
             throw new InsufficientStockException('Received quantity must be greater than zero.');
         }
 
-        $stock = $this->stockRow($item->id, $warehouseId);
+        $stock = $this->lockedStockRow($item->id, $warehouseId);
 
         $oldQuantity = (float) $stock->quantity;
         $oldValue = (float) $stock->total_value;
@@ -51,11 +56,15 @@ class StockService
      */
     public function issue(Item $item, int $warehouseId, float $quantity, array $context = []): StockLedgerEntry
     {
+        if (DB::transactionLevel() === 0) {
+            return DB::transaction(fn () => $this->issue($item, $warehouseId, $quantity, $context));
+        }
+
         if ($quantity <= 0) {
             throw new InsufficientStockException('Issued quantity must be greater than zero.');
         }
 
-        $stock = $this->stockRow($item->id, $warehouseId);
+        $stock = $this->lockedStockRow($item->id, $warehouseId);
         $available = (float) $stock->quantity;
 
         if ($quantity > $available + 0.0001) {
@@ -86,6 +95,10 @@ class StockService
      */
     public function transfer(Item $item, int $fromWarehouseId, int $toWarehouseId, float $quantity, array $context = []): array
     {
+        if (DB::transactionLevel() === 0) {
+            return DB::transaction(fn () => $this->transfer($item, $fromWarehouseId, $toWarehouseId, $quantity, $context));
+        }
+
         $unitCost = (float) $this->stockRow($item->id, $fromWarehouseId)->average_cost;
 
         $out = $this->issue($item, $fromWarehouseId, $quantity, $context + ['movement_type' => 'transfer_out']);
@@ -99,7 +112,11 @@ class StockService
      */
     public function adjust(Item $item, int $warehouseId, float $targetQuantity, array $context = []): StockLedgerEntry
     {
-        $stock = $this->stockRow($item->id, $warehouseId);
+        if (DB::transactionLevel() === 0) {
+            return DB::transaction(fn () => $this->adjust($item, $warehouseId, $targetQuantity, $context));
+        }
+
+        $stock = $this->lockedStockRow($item->id, $warehouseId);
         $difference = round($targetQuantity - (float) $stock->quantity, 3);
 
         if ($difference === 0.0) {
@@ -130,12 +147,31 @@ class StockService
         );
     }
 
+    private function lockedStockRow(int $itemId, int $warehouseId): WarehouseStock
+    {
+        DB::table('warehouse_stocks')->insertOrIgnore([
+            'item_id' => $itemId,
+            'warehouse_id' => $warehouseId,
+            'quantity' => 0,
+            'reserved_quantity' => 0,
+            'average_cost' => 0,
+            'total_value' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return WarehouseStock::where('item_id', $itemId)
+            ->where('warehouse_id', $warehouseId)
+            ->lockForUpdate()
+            ->firstOrFail();
+    }
+
     /**
      * Blended average across every warehouse holding the item.
      */
     private function companyAverageCost(Item $item): float
     {
-        $rows = WarehouseStock::where('item_id', $item->id)->get();
+        $rows = WarehouseStock::withoutGlobalScope('user_access')->where('item_id', $item->id)->get();
         $quantity = (float) $rows->sum('quantity');
 
         if ($quantity <= 0) {

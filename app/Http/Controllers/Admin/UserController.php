@@ -14,6 +14,8 @@ use App\Models\User;
 use App\Models\Warehouse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -57,8 +59,12 @@ class UserController extends Controller
         $roleId = $data['role_id'];
         unset($data['role_id']);
 
-        $user = User::create($data + ['password' => $request->input('password', 'password')]);
-        $user->roles()->attach($roleId, ['is_primary' => true]);
+        $user = DB::transaction(function () use ($data, $roleId, $request) {
+            $user = User::create($data + ['password' => $request->input('password', 'password')]);
+            $user->roles()->attach($roleId, ['is_primary' => true]);
+
+            return $user;
+        });
 
         ActivityLog::record($request, 'Users', 'Created user', $user->name.' ('.$user->email.')');
 
@@ -92,8 +98,10 @@ class UserController extends Controller
             $data['password'] = $request->input('password');
         }
 
-        $user->update($data);
-        $user->roles()->sync([$roleId => ['is_primary' => true]]);
+        DB::transaction(function () use ($user, $data, $roleId) {
+            $user->update($data);
+            $user->roles()->sync([$roleId => ['is_primary' => true]]);
+        });
 
         ActivityLog::record($request, 'Users', 'Updated user', $user->name.' ('.$user->email.')');
 
@@ -120,10 +128,10 @@ class UserController extends Controller
             'phone' => ['nullable', 'string', 'max:30'],
             'language' => ['nullable', 'string', 'max:20'],
             'department_id' => ['nullable', 'exists:departments,id'],
-            'designation_id' => ['nullable', 'exists:designations,id'],
+            'designation_id' => ['nullable', Rule::exists('designations', 'id')->where(fn ($query) => $query->where('department_id', $request->input('department_id')))],
             'branch_id' => ['nullable', 'exists:branches,id'],
             'project_id' => ['nullable', 'exists:projects,id'],
-            'site_id' => ['nullable', 'exists:sites,id'],
+            'site_id' => ['nullable', Rule::exists('sites', 'id')->where(fn ($query) => $query->where('project_id', $request->input('project_id')))],
             'warehouse_id' => ['nullable', 'exists:warehouses,id'],
             'joining_date' => ['nullable', 'date'],
             'contract_type' => ['nullable', 'string', 'max:50'],
