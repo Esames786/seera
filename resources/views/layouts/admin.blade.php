@@ -27,6 +27,7 @@
 </div>
 
 <x-admin.delete-modal/>
+@stack('modals')
 
 <script>
     (function () {

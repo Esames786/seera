@@ -238,3 +238,17 @@ If deployment fails before users resume work:
 6. Run `php artisan up` only after the old application and restored database agree.
 
 Do not attempt a code-only rollback after `migrate:fresh`; restoring the matching database and storage backup is mandatory.
+
+## 9. September 2026 client change round
+
+The release implementing the client's 5 September 2026 feedback (see
+`docs/client-change-register-2026-09-07-status.md`) is additive: two migrations
+(`2026_09_07_*`) add purchase-order line fields, a `purchase_order_attachments`
+table and `users.employee_classification`. Deploy with Path A:
+
+```bash
+php artisan migrate --force
+```
+
+No seeder is required. Supplier quotation files are stored under
+`storage/app/private/purchase-orders/quotations`; keep `storage/app` in the backup set.

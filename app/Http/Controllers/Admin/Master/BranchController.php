@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Branch;
 use App\Models\User;
+use App\Support\CodeGenerator;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -39,11 +41,16 @@ class BranchController extends Controller
         return view('admin.master.branches.create', ['managers' => User::orderBy('name')->get()]);
     }
 
-    public function store(Request $request): RedirectResponse
+    /** Also serves the "+ New" dialog on project, user and employee forms (JSON). */
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $branch = Branch::create($this->validated($request));
 
         ActivityLog::record($request, 'Branches', 'Created branch', $branch->name);
+
+        if ($request->wantsJson()) {
+            return response()->json(['id' => $branch->id, 'label' => $branch->name, 'code' => $branch->code], 201);
+        }
 
         return redirect()->route('admin.master.branches.index')->with('status', 'Branch "'.$branch->name.'" created successfully.');
     }
@@ -88,9 +95,9 @@ class BranchController extends Controller
 
     private function validated(Request $request, ?Branch $branch = null): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'code' => ['required', 'string', 'max:50', 'unique:branches,code'.($branch ? ','.$branch->id : '')],
+            'code' => ['nullable', 'string', 'max:50', 'unique:branches,code'.($branch ? ','.$branch->id : '')],
             'city' => ['nullable', 'string', 'max:100'],
             'manager_id' => ['nullable', 'exists:users,id'],
             'phone' => ['nullable', 'string', 'max:30'],
@@ -98,5 +105,11 @@ class BranchController extends Controller
             'address' => ['nullable', 'string'],
             'status' => ['required', 'in:active,inactive'],
         ]);
+
+        if (blank($data['code'] ?? null)) {
+            $data['code'] = $branch ? $branch->code : CodeGenerator::sequential('branches', 'code', 'BR-');
+        }
+
+        return $data;
     }
 }

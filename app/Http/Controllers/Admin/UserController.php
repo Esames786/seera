@@ -7,11 +7,13 @@ use App\Models\ActivityLog;
 use App\Models\Branch;
 use App\Models\Department;
 use App\Models\Designation;
+use App\Models\Employee;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\Site;
 use App\Models\User;
 use App\Models\Warehouse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +22,9 @@ use Illuminate\View\View;
 
 class UserController extends Controller
 {
+    /** Issued when an account is created without an explicit password. */
+    public const DEFAULT_PASSWORD = '123456';
+
     public function index(Request $request): View
     {
         $users = User::with(['department', 'roles', 'project', 'site', 'branch'])
@@ -53,27 +58,45 @@ class UserController extends Controller
         return view('admin.users.create', $this->formOptions());
     }
 
-    public function store(Request $request): RedirectResponse
+    /**
+     * Also serves the "+ New" dialog on the project form (Project Manager) as
+     * JSON. An account created without a password gets the shared default and
+     * must choose its own on first sign-in.
+     */
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $data = $this->validated($request);
         $roleId = $data['role_id'];
         unset($data['role_id']);
 
-        $user = DB::transaction(function () use ($data, $roleId, $request) {
-            $user = User::create($data + ['password' => $request->input('password', 'password')]);
+        $password = $request->filled('password') ? $request->input('password') : self::DEFAULT_PASSWORD;
+        $data['must_change_password'] = ! $request->filled('password');
+
+        $user = DB::transaction(function () use ($data, $roleId, $password) {
+            $user = User::create($data + ['password' => $password]);
             $user->roles()->attach($roleId, ['is_primary' => true]);
+            $this->syncEmployeeClassification($user);
 
             return $user;
         });
 
         ActivityLog::record($request, 'Users', 'Created user', $user->name.' ('.$user->email.')');
 
+        if ($request->wantsJson()) {
+            return response()->json([
+                'id' => $user->id,
+                'label' => $user->name,
+                'email' => $user->email,
+                'must_change_password' => $user->must_change_password,
+            ], 201);
+        }
+
         return redirect()->route('admin.users.index')->with('status', 'User "'.$user->name.'" created successfully.');
     }
 
     public function show(User $user): View
     {
-        $user->load(['department', 'designation', 'branch', 'project', 'site', 'warehouse', 'roles.parent', 'roles.permissions']);
+        $user->load(['department', 'designation', 'branch', 'project', 'site', 'warehouse', 'roles.parent', 'roles.permissions', 'employee']);
 
         return view('admin.users.show', [
             'user' => $user,
@@ -83,7 +106,7 @@ class UserController extends Controller
 
     public function edit(User $user): View
     {
-        $user->load('roles');
+        $user->load(['roles', 'employee']);
 
         return view('admin.users.edit', ['user' => $user] + $this->formOptions());
     }
@@ -101,6 +124,7 @@ class UserController extends Controller
         DB::transaction(function () use ($user, $data, $roleId) {
             $user->update($data);
             $user->roles()->sync([$roleId => ['is_primary' => true]]);
+            $this->syncEmployeeClassification($user);
         });
 
         ActivityLog::record($request, 'Users', 'Updated user', $user->name.' ('.$user->email.')');
@@ -116,6 +140,21 @@ class UserController extends Controller
         ActivityLog::record($request, 'Users', 'Deactivated user', $user->name.' ('.$user->email.')');
 
         return redirect()->route('admin.users.index')->with('status', 'User "'.$user->name.'" has been deactivated.');
+    }
+
+    /**
+     * One answer per person: the classification chosen on the user screen is
+     * copied onto the linked HR employee record, if there is one.
+     */
+    private function syncEmployeeClassification(User $user): void
+    {
+        if (! $user->employee_classification) {
+            return;
+        }
+
+        Employee::where('user_id', $user->id)
+            ->where('employee_classification', '!=', $user->employee_classification)
+            ->update(['employee_classification' => $user->employee_classification]);
     }
 
     private function validated(Request $request, ?User $user = null): array
@@ -135,6 +174,7 @@ class UserController extends Controller
             'warehouse_id' => ['nullable', 'exists:warehouses,id'],
             'joining_date' => ['nullable', 'date'],
             'contract_type' => ['nullable', 'string', 'max:50'],
+            'employee_classification' => ['nullable', Rule::in(Employee::CLASSIFICATIONS)],
             'iqama_number' => ['nullable', 'string', 'max:50'],
             'iqama_expiry_date' => ['nullable', 'date'],
             'mobile_access' => ['nullable', 'boolean'],
@@ -157,6 +197,8 @@ class UserController extends Controller
             'sites' => Site::orderBy('name')->get(),
             'warehouses' => Warehouse::orderBy('name')->get(),
             'roles' => Role::orderBy('level')->orderBy('name')->get(),
+            'roleTypes' => Role::TYPES,
+            'classifications' => Employee::CLASSIFICATIONS,
         ];
     }
 }

@@ -7,6 +7,9 @@ use Illuminate\Support\Str;
 
 class Employee extends Model
 {
+    /** Company-sponsored staff versus outside freelancers (client requirement). */
+    public const CLASSIFICATIONS = ['Sponsorship', 'Freelancer'];
+
     protected $fillable = [
         'employee_code', 'first_name', 'last_name', 'email', 'phone',
         'emergency_contact', 'nationality', 'department_id', 'designation_id',

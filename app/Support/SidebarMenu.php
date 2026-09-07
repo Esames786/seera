@@ -48,9 +48,15 @@ class SidebarMenu
                 'label' => 'Master Setup',
                 'items' => [
                     static::link('admin.master.company-profile', 'admin.master.company-profile', '🏢', 'Company Profile'),
-                    static::link('admin.master.branches.index', 'admin.master.branches.*', '🏬', 'Branches'),
-                    static::link('admin.master.departments.index', 'admin.master.departments.*', '🗂️', 'Departments'),
-                    static::link('admin.master.designations.index', 'admin.master.designations.*', '🪪', 'Designations'),
+                    // Branches, departments and designations are created inline from the
+                    // user/employee forms; one hub entry replaces three menu items (CR-10).
+                    static::anyLink(
+                        'admin.master.organization',
+                        ['admin.master.organization', 'admin.master.branches.*', 'admin.master.departments.*', 'admin.master.designations.*'],
+                        '🏬',
+                        'Organization Structure',
+                        EnsureUserHasPermission::ANY_OF['master.organization']
+                    ),
                     static::link('admin.master.projects.index', 'admin.master.projects.*', '🏗️', 'Projects'),
                     static::link('admin.master.sites.index', 'admin.master.sites.*', '📍', 'Sites / Geo-Fence'),
                     static::link('admin.master.warehouses.index', 'admin.master.warehouses.*', '🏭', 'Warehouses'),
@@ -182,6 +188,30 @@ class SidebarMenu
             'label' => $label,
             'soon' => false,
             'badge' => $badge > 0 ? $badge : null,
+        ];
+    }
+
+    /**
+     * A link that opens for anyone who may view at least one of the given
+     * modules; the page itself shows only what the user may see.
+     *
+     * @param  array<int, string>  $pattern
+     * @param  array<int, string>  $modules
+     * @return array<string, mixed>
+     */
+    private static function anyLink(string $route, array $pattern, string $icon, string $label, array $modules): ?array
+    {
+        if (auth()->check() && ! EnsureUserHasPermission::canViewAnyOf(auth()->user(), $modules)) {
+            return null;
+        }
+
+        return [
+            'url' => route($route),
+            'active' => request()->routeIs(...$pattern),
+            'icon' => $icon,
+            'label' => $label,
+            'soon' => false,
+            'badge' => null,
         ];
     }
 

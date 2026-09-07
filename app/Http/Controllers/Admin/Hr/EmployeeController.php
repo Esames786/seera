@@ -68,6 +68,7 @@ class EmployeeController extends Controller
             $employee = DB::transaction(function () use ($request, $data, $documents, &$storedPaths) {
                 $employee = Employee::create($data);
                 $this->syncDocuments($request, $employee, $documents, $storedPaths);
+                $this->syncUserClassification($employee);
 
                 return $employee;
             });
@@ -123,6 +124,7 @@ class EmployeeController extends Controller
             DB::transaction(function () use ($request, $employee, $data, $documents, &$storedPaths) {
                 $employee->update($data);
                 $this->syncDocuments($request, $employee, $documents, $storedPaths);
+                $this->syncUserClassification($employee);
             });
         } catch (Throwable $exception) {
             Storage::disk('local')->delete($storedPaths);
@@ -146,6 +148,21 @@ class EmployeeController extends Controller
 
         return redirect()->route('admin.hr.employees.index')
             ->with('status', 'Employee "'.$employee->name.'" deactivated. Historical records are kept.');
+    }
+
+    /**
+     * The classification lives on both the HR record and the login it is linked
+     * to; saving either side updates the other so there is one answer per person.
+     */
+    private function syncUserClassification(Employee $employee): void
+    {
+        if (! $employee->user_id) {
+            return;
+        }
+
+        User::whereKey($employee->user_id)
+            ->where(fn ($q) => $q->whereNull('employee_classification')->orWhere('employee_classification', '!=', $employee->employee_classification))
+            ->update(['employee_classification' => $employee->employee_classification]);
     }
 
     /**
@@ -210,7 +227,7 @@ class EmployeeController extends Controller
             'user_id' => ['nullable', 'exists:users,id'],
             'joining_date' => ['nullable', 'date'],
             'contract_type' => ['required', 'string', 'max:50'],
-            'employee_classification' => ['required', 'in:Sponsorship,Freelancer'],
+            'employee_classification' => ['required', Rule::in(Employee::CLASSIFICATIONS)],
             'contract_start_date' => ['nullable', 'date'],
             'contract_end_date' => ['nullable', 'date', 'after_or_equal:contract_start_date'],
             'iqama_number' => ['nullable', 'string', 'max:50'],
@@ -260,7 +277,7 @@ class EmployeeController extends Controller
         return $this->filterOptions() + [
             'users' => User::orderBy('name')->get(),
             'contractTypes' => ['Full Time', 'Part Time', 'Contract', 'Temporary'],
-            'classifications' => ['Sponsorship', 'Freelancer'],
+            'classifications' => Employee::CLASSIFICATIONS,
             'paymentMethods' => ['Bank Transfer', 'Cash'],
             'nationalities' => ['Saudi', 'Pakistani', 'Indian', 'Bangladeshi', 'Egyptian', 'Filipino', 'Other'],
         ];

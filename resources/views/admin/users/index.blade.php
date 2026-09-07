@@ -35,9 +35,6 @@
                 <option value="{{ $status }}" @selected(request('status') === $status)>{{ ucfirst($status) }}</option>
             @endforeach
         </select>
-        <x-slot:actions>
-            <a class="btn primary" href="{{ route('admin.users.create') }}">+ Add New User</a>
-        </x-slot:actions>
     </x-admin.filter-bar>
 
     <x-admin.data-table title="Users Listing" subtitle="ERP user table with role and scope">

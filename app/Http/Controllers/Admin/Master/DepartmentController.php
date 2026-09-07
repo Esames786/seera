@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Department;
 use App\Models\User;
+use App\Support\CodeGenerator;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -37,11 +39,16 @@ class DepartmentController extends Controller
         return view('admin.master.departments.create', ['heads' => User::orderBy('name')->get()]);
     }
 
-    public function store(Request $request): RedirectResponse
+    /** Also serves the "+ New" dialog on user, employee and role forms (JSON). */
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $department = Department::create($this->validated($request));
 
         ActivityLog::record($request, 'Departments', 'Created department', $department->name);
+
+        if ($request->wantsJson()) {
+            return response()->json(['id' => $department->id, 'label' => $department->name, 'code' => $department->code], 201);
+        }
 
         return redirect()->route('admin.master.departments.index')->with('status', 'Department "'.$department->name.'" created successfully.');
     }
@@ -86,12 +93,18 @@ class DepartmentController extends Controller
 
     private function validated(Request $request, ?Department $department = null): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'code' => ['required', 'string', 'max:50', 'unique:departments,code'.($department ? ','.$department->id : '')],
+            'code' => ['nullable', 'string', 'max:50', 'unique:departments,code'.($department ? ','.$department->id : '')],
             'head_user_id' => ['nullable', 'exists:users,id'],
             'description' => ['nullable', 'string'],
             'status' => ['required', 'in:active,inactive'],
         ]);
+
+        if (blank($data['code'] ?? null)) {
+            $data['code'] = $department ? $department->code : CodeGenerator::fromName('departments', 'code', $data['name']);
+        }
+
+        return $data;
     }
 }

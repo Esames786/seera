@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 #[Fillable([
     'name', 'email', 'password', 'employee_id', 'username', 'phone', 'language',
     'department_id', 'designation_id', 'branch_id', 'project_id', 'site_id',
-    'warehouse_id', 'joining_date', 'contract_type', 'iqama_number',
+    'warehouse_id', 'joining_date', 'contract_type', 'employee_classification', 'iqama_number',
     'iqama_expiry_date', 'mobile_access', 'two_factor_enabled', 'temporary_access',
     'access_start_date', 'access_end_date', 'last_login_at', 'status',
     'must_change_password', 'password_changed_at',
@@ -79,6 +79,12 @@ class User extends Authenticatable
     public function warehouse()
     {
         return $this->belongsTo(Warehouse::class);
+    }
+
+    /** The HR employee record linked to this login, if any. */
+    public function employee()
+    {
+        return $this->hasOne(Employee::class);
     }
 
     public function roles()

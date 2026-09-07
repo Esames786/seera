@@ -50,6 +50,7 @@
                     <tr><th>Designation</th><td>{{ $user->designation?->name ?? '-' }}</td></tr>
                     <tr><th>Branch</th><td>{{ $user->branch?->name ?? '-' }}</td></tr>
                     <tr><th>Contract Type</th><td>{{ $user->contract_type ?? '-' }}</td></tr>
+                    <tr><th>Classification</th><td>{{ $user->employee_classification ?? $user->employee?->employee_classification ?? '-' }}</td></tr>
                     <tr><th>Iqama Number</th><td>{{ $user->iqama_number ?? '-' }} @if($user->iqama_expiry_date)<span class="small">(expires {{ $user->iqama_expiry_date->format('M d, Y') }})</span>@endif</td></tr>
                     <tr><th>Mobile App Access</th><td><x-admin.status-badge :status="$user->mobile_access ? 'enabled' : 'disabled'"/></td></tr>
                     <tr><th>Two Factor Auth</th><td><x-admin.status-badge :status="$user->two_factor_enabled ? 'enabled' : 'disabled'"/></td></tr>

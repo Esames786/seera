@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin\Master;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Supplier;
+use App\Support\CodeGenerator;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -41,11 +43,16 @@ class SupplierController extends Controller
         return view('admin.master.suppliers.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    /** Also serves the "+ New" dialog on purchase forms (JSON). */
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $supplier = Supplier::create($this->validated($request));
 
         ActivityLog::record($request, 'Suppliers', 'Created supplier', $supplier->name);
+
+        if ($request->wantsJson()) {
+            return response()->json(['id' => $supplier->id, 'label' => $supplier->name, 'code' => $supplier->code], 201);
+        }
 
         return redirect()->route('admin.master.suppliers.index')->with('status', 'Supplier "'.$supplier->name.'" created successfully.');
     }
@@ -81,9 +88,9 @@ class SupplierController extends Controller
 
     private function validated(Request $request, ?Supplier $supplier = null): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'code' => ['required', 'string', 'max:50', 'unique:suppliers,code'.($supplier ? ','.$supplier->id : '')],
+            'code' => ['nullable', 'string', 'max:50', 'unique:suppliers,code'.($supplier ? ','.$supplier->id : '')],
             'category' => ['nullable', 'string', 'max:100'],
             'vat_number' => ['nullable', 'string', 'max:50'],
             'cr_number' => ['nullable', 'string', 'max:50'],
@@ -96,5 +103,11 @@ class SupplierController extends Controller
             'address' => ['nullable', 'string'],
             'status' => ['required', 'in:active,inactive'],
         ]);
+
+        if (blank($data['code'] ?? null)) {
+            $data['code'] = $supplier ? $supplier->code : CodeGenerator::sequential('suppliers', 'code', 'SUP-');
+        }
+
+        return $data;
     }
 }

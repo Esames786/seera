@@ -1,4 +1,8 @@
-@php /** @var \App\Models\Employee|null $employee */ $employee = $employee ?? null; @endphp
+@php
+    /** @var \App\Models\Employee|null $employee */
+    $employee = $employee ?? null;
+    $documentRows = max(count(old('documents', [])), 4);
+@endphp
 
 <form method="POST" action="{{ $employee ? route("admin.hr.employees.update", $employee) : route("admin.hr.employees.store") }}" enctype="multipart/form-data">
     @csrf
@@ -24,7 +28,15 @@
     <x-admin.form-section title="B. Employment Information" columns="3">
         <div><label for="employee_code">Employee Code *</label><input id="employee_code" name="employee_code" class="input" value="{{ old('employee_code', $employee?->employee_code) }}" placeholder="EMP-014" required/></div>
         <div>
-            <label for="department_id">Department</label>
+            <div class="label-row">
+                <label for="department_id">Department</label>
+                <x-admin.quick-create id="qc-department" target="department_id" :url="route('admin.master.departments.store')" title="New Department" permission="Departments">
+                    <div><label for="qc-dept-name">Department Name *</label><input id="qc-dept-name" name="name" class="input" required/></div>
+                    <div><label for="qc-dept-code">Code</label><input id="qc-dept-code" name="code" class="input" placeholder="Auto if blank"/></div>
+                    <div class="full"><label for="qc-dept-description">Description</label><textarea id="qc-dept-description" name="description" class="textarea" rows="2"></textarea></div>
+                    <input type="hidden" name="status" value="active"/>
+                </x-admin.quick-create>
+            </div>
             <select id="department_id" name="department_id" class="select">
                 <option value="">Select...</option>
                 @foreach ($departments as $department)
@@ -33,7 +45,31 @@
             </select>
         </div>
         <div>
-            <label for="designation_id">Designation</label>
+            <div class="label-row">
+                <label for="designation_id">Designation</label>
+                <x-admin.quick-create id="qc-designation" target="designation_id" :url="route('admin.master.designations.store')" title="New Designation" permission="Designations">
+                    <div class="full"><label for="qc-desig-name">Designation Name *</label><input id="qc-desig-name" name="name" class="input" required/></div>
+                    <div>
+                        <label for="qc-desig-department">Department *</label>
+                        <select id="qc-desig-department" name="department_id" class="select" data-prefill-from="department_id" required>
+                            <option value="">Select...</option>
+                            @foreach ($departments as $department)
+                                <option value="{{ $department->id }}">{{ $department->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label for="qc-desig-grade">Grade / Level</label>
+                        <select id="qc-desig-grade" name="grade" class="select">
+                            <option value="">Select...</option>
+                            @foreach (['L1', 'L2', 'L3', 'L4', 'L5'] as $grade)
+                                <option>{{ $grade }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <input type="hidden" name="status" value="active"/>
+                </x-admin.quick-create>
+            </div>
             <select id="designation_id" name="designation_id" class="select">
                 <option value="">Select...</option>
                 @foreach ($designations as $designation)
@@ -42,7 +78,16 @@
             </select>
         </div>
         <div>
-            <label for="branch_id">Branch</label>
+            <div class="label-row">
+                <label for="branch_id">Branch</label>
+                <x-admin.quick-create id="qc-branch" target="branch_id" :url="route('admin.master.branches.store')" title="New Branch" permission="Branches">
+                    <div><label for="qc-branch-name">Branch Name *</label><input id="qc-branch-name" name="name" class="input" required/></div>
+                    <div><label for="qc-branch-code">Code</label><input id="qc-branch-code" name="code" class="input" placeholder="Auto if blank"/></div>
+                    <div><label for="qc-branch-city">City</label><input id="qc-branch-city" name="city" class="input" placeholder="Riyadh"/></div>
+                    <div><label for="qc-branch-phone">Phone</label><input id="qc-branch-phone" name="phone" class="input" placeholder="+966..."/></div>
+                    <input type="hidden" name="status" value="active"/>
+                </x-admin.quick-create>
+            </div>
             <select id="branch_id" name="branch_id" class="select">
                 <option value="">Select...</option>
                 @foreach ($branches as $branch)
@@ -160,31 +205,25 @@
                         <th style="width:160px">Issue Date</th>
                         <th style="width:160px">Expiry Date</th>
                         <th style="min-width:200px">File</th>
+                        <th style="width:40px"></th>
                     </tr>
                 </thead>
-                <tbody>
-                    @for ($i = 0; $i < 4; $i++)
-                        <tr>
-                            <td>
-                                <select name="documents[{{ $i }}][document_type]" class="select">
-                                    <option value="">Select type...</option>
-                                    @foreach (\App\Models\EmployeeDocument::TYPES as $type)
-                                        <option value="{{ $type }}" @selected(old("documents.$i.document_type") === $type)>{{ $type }}</option>
-                                    @endforeach
-                                </select>
-                            </td>
-                            <td><input name="documents[{{ $i }}][document_number]" class="input" value="{{ old("documents.$i.document_number") }}"/></td>
-                            <td><input name="documents[{{ $i }}][issue_date]" type="date" class="input" value="{{ old("documents.$i.issue_date") }}"/></td>
-                            <td><input name="documents[{{ $i }}][expiry_date]" type="date" class="input" value="{{ old("documents.$i.expiry_date") }}"/></td>
-                            <td><input name="documents[{{ $i }}][file]" type="file" class="input"/></td>
-                        </tr>
+                <tbody id="document-rows">
+                    @for ($i = 0; $i < $documentRows; $i++)
+                        @include('admin.hr.employees._document-row', ['i' => $i])
                     @endfor
                 </tbody>
             </table>
         </div>
-        <div class="small" style="margin-top:10px">
-            Attach IQAMA, passport, contract, medical insurance, driving license or any other file here. Rows without a document type are ignored.
+        <template id="document-row-template">
+            @include('admin.hr.employees._document-row', ['i' => '__INDEX__'])
+        </template>
+        <div class="dynamic-rows-actions">
+            <button type="button" class="btn outline" id="add-document-row">+ Add Document</button>
+            <span class="small">Attach IQAMA, passport, contract, medical insurance, driving license or any other file. Rows without a document type are ignored.</span>
         </div>
+        @error('documents.*.file')<div class="field-error">{{ $message }}</div>@enderror
+        @error('documents.*.expiry_date')<div class="field-error">{{ $message }}</div>@enderror
 
         @if ($employee && $employee->documents->isNotEmpty())
             <br/>
@@ -242,3 +281,4 @@
 
 <x-admin.dependent-select parent="department_id" child="designation_id" placeholder="designations"/>
 <x-admin.dependent-select parent="project_id" child="site_id" placeholder="sites"/>
+<x-admin.dynamic-rows body="document-rows" template="document-row-template" add="add-document-row" min="1"/>

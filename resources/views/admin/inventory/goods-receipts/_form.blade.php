@@ -7,7 +7,7 @@
         'ordered_quantity' => (float) $line->quantity,
         'received_quantity' => $line->outstandingQuantity(),
         'accepted_quantity' => $line->outstandingQuantity(),
-        'unit_cost' => (float) $line->unit_price,
+        'unit_cost' => $line->netUnitPrice(),
     ])->all() ?? [];
     $lineData = old('lines', $grn?->lines->map(fn ($line) => [
         'item_id' => $line->item_id,

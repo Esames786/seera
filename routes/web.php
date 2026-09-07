@@ -43,6 +43,7 @@ use App\Http\Controllers\Admin\Master\CustomerController;
 use App\Http\Controllers\Admin\Master\DepartmentController;
 use App\Http\Controllers\Admin\Master\DesignationController;
 use App\Http\Controllers\Admin\Master\ExpenseCategoryController;
+use App\Http\Controllers\Admin\Master\OrganizationStructureController;
 use App\Http\Controllers\Admin\Master\ProjectController;
 use App\Http\Controllers\Admin\Master\SiteController;
 use App\Http\Controllers\Admin\Master\SupplierController;
@@ -118,6 +119,7 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
     Route::prefix('master')->name('master.')->group(function () {
         Route::get('company-profile', [CompanyProfileController::class, 'edit'])->name('company-profile');
         Route::put('company-profile', [CompanyProfileController::class, 'update'])->name('company-profile.update');
+        Route::get('organization', [OrganizationStructureController::class, 'index'])->name('organization');
 
         Route::resource('branches', BranchController::class);
         Route::resource('departments', DepartmentController::class);
@@ -229,6 +231,9 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::resource('purchase-requests', PurchaseRequestController::class);
 
         Route::post('purchase-orders/{purchase_order}/approve', [PurchaseOrderController::class, 'approve'])->name('purchase-orders.approve');
+        Route::post('purchase-orders/{purchase_order}/attachments', [PurchaseOrderController::class, 'storeAttachment'])->name('purchase-orders.attachments.store');
+        Route::get('purchase-orders/{purchase_order}/attachments/{attachment}', [PurchaseOrderController::class, 'downloadAttachment'])->name('purchase-orders.attachments.download');
+        Route::delete('purchase-orders/{purchase_order}/attachments/{attachment}', [PurchaseOrderController::class, 'destroyAttachment'])->name('purchase-orders.attachments.destroy');
         Route::resource('purchase-orders', PurchaseOrderController::class);
 
         Route::post('goods-receipts/{goods_receipt}/post-stock', [GoodsReceiptController::class, 'postStock'])->name('goods-receipts.post-stock');

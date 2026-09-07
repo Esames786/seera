@@ -34,9 +34,6 @@
                 <option value="{{ $scope }}" @selected(request('scope') === $scope)>{{ $scope }}</option>
             @endforeach
         </select>
-        <x-slot:actions>
-            <a class="btn primary" href="{{ route('admin.roles.create') }}">+ Add New Role</a>
-        </x-slot:actions>
     </x-admin.filter-bar>
 
     <x-admin.data-table title="Roles Listing" subtitle="Role table with hierarchy, scope, and actions">

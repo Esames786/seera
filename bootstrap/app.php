@@ -24,7 +24,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        // Browser navigation always gets HTML. JSON is rendered for the API and for
+        // the inline "+ New" dialogs, which fetch() the store routes with
+        // Accept: application/json and show validation errors in place.
         $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*'),
+            fn (Request $request) => $request->is('api/*') || $request->wantsJson(),
         );
     })->create();

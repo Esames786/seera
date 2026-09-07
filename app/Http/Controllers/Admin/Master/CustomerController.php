@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin\Master;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Customer;
+use App\Support\CodeGenerator;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -40,11 +42,16 @@ class CustomerController extends Controller
         return view('admin.master.customers.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    /** Also serves the "+ New" dialog on the project form (JSON). */
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $customer = Customer::create($this->validated($request));
 
         ActivityLog::record($request, 'Customers', 'Created customer', $customer->name);
+
+        if ($request->wantsJson()) {
+            return response()->json(['id' => $customer->id, 'label' => $customer->name, 'code' => $customer->code], 201);
+        }
 
         return redirect()->route('admin.master.customers.index')->with('status', 'Customer "'.$customer->name.'" created successfully.');
     }
@@ -86,9 +93,9 @@ class CustomerController extends Controller
 
     private function validated(Request $request, ?Customer $customer = null): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'code' => ['required', 'string', 'max:50', 'unique:customers,code'.($customer ? ','.$customer->id : '')],
+            'code' => ['nullable', 'string', 'max:50', 'unique:customers,code'.($customer ? ','.$customer->id : '')],
             'type' => ['required', 'in:Company,Individual'],
             'vat_number' => ['nullable', 'string', 'max:50'],
             'cr_number' => ['nullable', 'string', 'max:50'],
@@ -101,5 +108,12 @@ class CustomerController extends Controller
             'billing_address' => ['nullable', 'string'],
             'status' => ['required', 'in:active,inactive'],
         ]);
+
+        // The quick-create dialog leaves the code blank; the full form still asks for it.
+        if (blank($data['code'] ?? null)) {
+            $customer ? ($data['code'] = $customer->code) : ($data['code'] = CodeGenerator::sequential('customers', 'code', 'CUS-'));
+        }
+
+        return $data;
     }
 }

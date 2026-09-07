@@ -15,7 +15,66 @@
             </div>
 
             <x-admin.form-section title="Role & Quick Capabilities">
-                <label for="role_id">Primary Role</label>
+                <div class="label-row">
+                    <label for="role_id">Primary Role</label>
+                    <x-admin.quick-create id="qc-role" target="role_id" :url="route('admin.roles.store')" title="New Role" permission="Roles" submit="Create Role" :wide="true">
+                        <div>
+                            <label for="qc-role-department">Department</label>
+                            <select id="qc-role-department" name="department_id" class="select" data-prefill-from="department_id">
+                                <option value="">Select...</option>
+                                @foreach ($departments as $department)
+                                    <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="qc-role-type">Role Type</label>
+                            <select id="qc-role-type" name="role_type" class="select">
+                                <option value="">Custom name...</option>
+                                @foreach ($roleTypes as $type)
+                                    <option value="{{ $type }}">{{ $type }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div><label for="qc-role-name">Role Name *</label><input id="qc-role-name" name="name" class="input" required/></div>
+                        <div><label for="qc-role-code">Role Code</label><input id="qc-role-code" name="code" class="input" placeholder="Generated from the name"/></div>
+                        <div>
+                            <label for="qc-role-scope">Access Scope *</label>
+                            <select id="qc-role-scope" name="access_scope" class="select" required>
+                                @foreach (['Company Level', 'Branch Level', 'Project Level', 'Site Level', 'Warehouse Level', 'All Company'] as $scope)
+                                    <option>{{ $scope }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="qc-role-level">Role Level *</label>
+                            <select id="qc-role-level" name="level" class="select" required>
+                                @foreach (range(1, 6) as $level)
+                                    <option value="{{ $level }}" @selected($level === 3)>Level {{ $level }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="qc-role-copy">Start with permissions of</label>
+                            <select id="qc-role-copy" name="copy_permissions_from" class="select">
+                                <option value="">No permissions yet</option>
+                                @foreach ($roles as $template)
+                                    <option value="{{ $template->id }}">{{ $template->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="qc-role-mobile">Mobile App Access</label>
+                            <select id="qc-role-mobile" name="mobile_app_access" class="select">
+                                <option value="0">Not Allowed</option>
+                                <option value="1">Allowed</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="status" value="active"/>
+                        <input type="hidden" name="can_approve_child_requests" value="1"/>
+                        <div class="full help-box">Fine-tune the new role's permissions afterwards on the Permission Matrix. Copying from an existing role gives it a sensible starting point.</div>
+                    </x-admin.quick-create>
+                </div>
                 <select id="role_id" name="role_id" class="select" required>
                     <option value="">Select role...</option>
                     @foreach ($roles as $role)
@@ -49,7 +108,15 @@
 
             <x-admin.form-section title="Employment Information" columns="3">
                 <div>
-                    <label for="department_id">Department</label>
+                    <div class="label-row">
+                        <label for="department_id">Department</label>
+                        <x-admin.quick-create id="qc-department" target="department_id" :url="route('admin.master.departments.store')" title="New Department" permission="Departments">
+                            <div><label for="qc-dept-name">Department Name *</label><input id="qc-dept-name" name="name" class="input" required/></div>
+                            <div><label for="qc-dept-code">Code</label><input id="qc-dept-code" name="code" class="input" placeholder="Auto if blank"/></div>
+                            <div class="full"><label for="qc-dept-description">Description</label><textarea id="qc-dept-description" name="description" class="textarea" rows="2"></textarea></div>
+                            <input type="hidden" name="status" value="active"/>
+                        </x-admin.quick-create>
+                    </div>
                     <select id="department_id" name="department_id" class="select">
                         <option value="">Select...</option>
                         @foreach ($departments as $department)
@@ -58,11 +125,44 @@
                     </select>
                 </div>
                 <div>
-                    <label for="designation_id">Designation</label>
+                    <div class="label-row">
+                        <label for="designation_id">Designation</label>
+                        <x-admin.quick-create id="qc-designation" target="designation_id" :url="route('admin.master.designations.store')" title="New Designation" permission="Designations">
+                            <div class="full"><label for="qc-desig-name">Designation Name *</label><input id="qc-desig-name" name="name" class="input" required/></div>
+                            <div>
+                                <label for="qc-desig-department">Department *</label>
+                                <select id="qc-desig-department" name="department_id" class="select" data-prefill-from="department_id" required>
+                                    <option value="">Select...</option>
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="qc-desig-grade">Grade / Level</label>
+                                <select id="qc-desig-grade" name="grade" class="select">
+                                    <option value="">Select...</option>
+                                    @foreach (['L1', 'L2', 'L3', 'L4', 'L5'] as $grade)
+                                        <option>{{ $grade }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <input type="hidden" name="status" value="active"/>
+                        </x-admin.quick-create>
+                    </div>
                     <select id="designation_id" name="designation_id" class="select">
                         <option value="">Select...</option>
                         @foreach ($designations as $designation)
                             <option value="{{ $designation->id }}" data-parent="{{ $designation->department_id }}" @selected(old("designation_id", $user?->designation_id) == $designation->id)>{{ $designation->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label for="employee_classification">Employee Classification</label>
+                    <select id="employee_classification" name="employee_classification" class="select">
+                        <option value="">Not set</option>
+                        @foreach ($classifications as $classification)
+                            <option value="{{ $classification }}" @selected(old('employee_classification', $user?->employee_classification ?? $user?->employee?->employee_classification) === $classification)>{{ $classification }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -82,7 +182,7 @@
             <x-admin.form-section title="Access & Security" columns="3">
                 <div>
                     <label for="password">{{ $user ? 'New Password (leave blank to keep)' : 'Password' }}</label>
-                    <input id="password" name="password" type="password" class="input" placeholder="••••••••" @if(!$user) value="password" @endif/>
+                    <input id="password" name="password" type="password" class="input" placeholder="{{ $user ? '••••••••' : 'Blank = '.\App\Http\Controllers\Admin\UserController::DEFAULT_PASSWORD.', must change at first login' }}"/>
                 </div>
                 <div>
                     <label for="status">Account Status *</label>
@@ -99,7 +199,16 @@
 
             <x-admin.form-section title="Project / Site / Warehouse Scope" columns="3">
                 <div>
-                    <label for="branch_id">Assigned Branch</label>
+                    <div class="label-row">
+                        <label for="branch_id">Assigned Branch</label>
+                        <x-admin.quick-create id="qc-branch" target="branch_id" :url="route('admin.master.branches.store')" title="New Branch" permission="Branches">
+                            <div><label for="qc-branch-name">Branch Name *</label><input id="qc-branch-name" name="name" class="input" required/></div>
+                            <div><label for="qc-branch-code">Code</label><input id="qc-branch-code" name="code" class="input" placeholder="Auto if blank"/></div>
+                            <div><label for="qc-branch-city">City</label><input id="qc-branch-city" name="city" class="input" placeholder="Riyadh"/></div>
+                            <div><label for="qc-branch-phone">Phone</label><input id="qc-branch-phone" name="phone" class="input" placeholder="+966..."/></div>
+                            <input type="hidden" name="status" value="active"/>
+                        </x-admin.quick-create>
+                    </div>
                     <select id="branch_id" name="branch_id" class="select">
                         <option value="">All Branches</option>
                         @foreach ($branches as $branch)
@@ -146,3 +255,35 @@
 
 <x-admin.dependent-select parent="department_id" child="designation_id" placeholder="designations"/>
 <x-admin.dependent-select parent="project_id" child="site_id" placeholder="sites"/>
+
+@push('scripts')
+<script>
+    // Department + role type suggest a consistent role name/code inside the "New Role" dialog.
+    (function () {
+        var type = document.getElementById('qc-role-type');
+        var department = document.getElementById('qc-role-department');
+        var name = document.getElementById('qc-role-name');
+        var code = document.getElementById('qc-role-code');
+        if (!type || !name || !code) return;
+
+        var nameTouched = false;
+        var codeTouched = false;
+
+        function toCode(value) {
+            return value.toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+        }
+
+        function suggest() {
+            if (!type.value) return;
+            var departmentName = department && department.value ? department.options[department.selectedIndex].textContent.trim() : '';
+            if (!nameTouched) name.value = (departmentName ? departmentName + ' ' : '') + type.value;
+            if (!codeTouched) code.value = toCode(name.value);
+        }
+
+        type.addEventListener('change', function () { nameTouched = false; suggest(); });
+        if (department) department.addEventListener('change', suggest);
+        name.addEventListener('input', function () { nameTouched = name.value !== ''; if (!codeTouched) code.value = toCode(name.value); });
+        code.addEventListener('input', function () { codeTouched = code.value !== ''; });
+    })();
+</script>
+@endpush

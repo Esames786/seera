@@ -15,6 +15,7 @@ class EnsureUserHasPermission
         'roles' => 'Roles',
         'activity-logs' => 'Activity Logs',
         'master.company-profile' => 'Company Profile',
+        'master.organization' => 'Departments',
         'master.branches' => 'Branches',
         'master.departments' => 'Departments',
         'master.designations' => 'Designations',
@@ -60,14 +61,50 @@ class EnsureUserHasPermission
         'inventory.stock-adjustments' => 'Stock Adjustments',
     ];
 
+    /**
+     * Pages that combine several masters open for anyone who may view at
+     * least one of them (the page itself only shows what the user may see).
+     *
+     * @var array<string, array<int, string>>
+     */
+    public const ANY_OF = [
+        'master.organization' => ['Branches', 'Departments', 'Designations'],
+    ];
+
     public function handle(Request $request, Closure $next): Response
     {
         $routeName = (string) $request->route()?->getName();
+        $name = str($routeName)->after('admin.')->toString();
+
+        if (isset(self::ANY_OF[$name])) {
+            abort_unless(
+                $request->user() && self::canViewAnyOf($request->user(), self::ANY_OF[$name]),
+                403,
+                'You do not have permission to perform this action.'
+            );
+
+            return $next($request);
+        }
+
         [$module, $action] = self::permissionForRoute($routeName, $request->route('module'));
 
         abort_unless($module && $request->user()?->hasPermission($module, $action), 403, 'You do not have permission to perform this action.');
 
         return $next($request);
+    }
+
+    /**
+     * @param  array<int, string>  $modules
+     */
+    public static function canViewAnyOf(\App\Models\User $user, array $modules): bool
+    {
+        foreach ($modules as $module) {
+            if ($user->hasPermission($module, 'view')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /** @return array{0: ?string, 1: string} */

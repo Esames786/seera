@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Branch;
 use App\Models\Customer;
+use App\Models\Department;
 use App\Models\Project;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -109,6 +111,9 @@ class ProjectController extends Controller
             'customers' => Customer::orderBy('name')->get(),
             'branches' => Branch::orderBy('name')->get(),
             'managers' => User::orderBy('name')->get(),
+            // For the inline "new project manager account" dialog.
+            'departments' => Department::orderBy('name')->get(),
+            'roles' => Role::where('status', 'active')->orderBy('level')->orderBy('name')->get(),
         ];
     }
 }

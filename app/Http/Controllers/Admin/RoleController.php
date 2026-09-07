@@ -8,12 +8,19 @@ use App\Models\Department;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
+use App\Support\CodeGenerator;
+use App\Support\PermissionGroups;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class RoleController extends Controller
 {
+    /** Actions shown in the compact matrix embedded in the role form. */
+    public const FORM_ACTIONS = ['view', 'create', 'edit', 'delete', 'approve', 'export', 'mobile'];
+
     public function index(Request $request): View
     {
         $roles = Role::with(['department', 'parent'])
@@ -42,13 +49,43 @@ class RoleController extends Controller
         return view('admin.roles.create', $this->formOptions());
     }
 
-    public function store(Request $request): RedirectResponse
+    /**
+     * Also answers the "+ New Role" dialog on the user form with JSON. That
+     * dialog can copy another role's permissions so a new role starts from a
+     * sensible template instead of nothing.
+     */
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $data = $this->validated($request);
-        $role = Role::create($data);
-        $role->permissions()->sync($request->input('permissions', []));
+
+        if (blank($data['code'] ?? null)) {
+            $data['code'] = $this->uniqueCode(CodeGenerator::roleCode($data['name']));
+        }
+
+        $permissionIds = collect($request->input('permissions', []))->map(fn ($id) => (int) $id);
+
+        if ($request->filled('copy_permissions_from')) {
+            $template = Role::with('permissions')->findOrFail($request->integer('copy_permissions_from'));
+            $permissionIds = $permissionIds->merge($template->permissions->pluck('id'));
+        }
+
+        $role = DB::transaction(function () use ($data, $permissionIds) {
+            $role = Role::create($data);
+            $role->permissions()->sync($permissionIds->unique()->values()->all());
+
+            return $role;
+        });
 
         ActivityLog::record($request, 'Roles', 'Created role', $role->name);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'id' => $role->id,
+                'label' => $role->name,
+                'parent' => $role->department_id,
+                'code' => $role->code,
+            ], 201);
+        }
 
         return redirect()->route('admin.roles.index')->with('status', 'Role "'.$role->name.'" created successfully.');
     }
@@ -74,11 +111,20 @@ class RoleController extends Controller
         return view('admin.roles.edit', ['role' => $role] + $this->formOptions());
     }
 
+    /**
+     * The role code is a stable identifier and is never rewritten here. The
+     * embedded matrix only shows some actions, so permissions it did not
+     * render are preserved rather than silently revoked.
+     */
     public function update(Request $request, Role $role): RedirectResponse
     {
         $data = $this->validated($request, $role);
-        $role->update($data);
-        $role->permissions()->sync($request->input('permissions', []));
+        unset($data['code']);
+
+        DB::transaction(function () use ($request, $role, $data) {
+            $role->update($data);
+            $role->permissions()->sync($this->mergedPermissionIds($request, $role));
+        });
 
         ActivityLog::record($request, 'Roles', 'Updated role', $role->name);
 
@@ -173,11 +219,43 @@ class RoleController extends Controller
             ->with('status', 'Assignments for "'.$role->name.'" saved successfully ('.$userIds->count().' users).');
     }
 
+    /**
+     * Permissions the form rendered are taken from the submission; anything it
+     * did not render (other actions, filtered modules) keeps its current state.
+     *
+     * @return array<int, int>
+     */
+    private function mergedPermissionIds(Request $request, Role $role): array
+    {
+        $submitted = collect($request->input('permissions', []))->map(fn ($id) => (int) $id);
+
+        if (! $request->has('visible_permission_ids')) {
+            return $submitted->unique()->values()->all();
+        }
+
+        $visible = collect($request->input('visible_permission_ids', []))->map(fn ($id) => (int) $id);
+        $preserved = $role->permissions()->pluck('permissions.id')->diff($visible);
+
+        return $preserved->merge($submitted->intersect($visible))->unique()->values()->all();
+    }
+
+    private function uniqueCode(string $base): string
+    {
+        $code = $base;
+        $suffix = 1;
+
+        while (Role::where('code', $code)->exists()) {
+            $suffix++;
+            $code = $base.'_'.$suffix;
+        }
+
+        return $code;
+    }
+
     private function validated(Request $request, ?Role $role = null): array
     {
-        return $request->validate([
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'code' => ['required', 'string', 'max:100', 'unique:roles,code'.($role ? ','.$role->id : '')],
             'department_id' => ['nullable', 'exists:departments,id'],
             'parent_id' => ['nullable', 'exists:roles,id', $role ? 'not_in:'.$role->id : ''],
             'level' => ['required', 'integer', 'min:1', 'max:10'],
@@ -187,15 +265,39 @@ class RoleController extends Controller
             'can_approve_child_requests' => ['nullable', 'boolean'],
             'description' => ['nullable', 'string'],
             'status' => ['required', 'in:active,inactive'],
+            'permissions' => ['nullable', 'array'],
+            'permissions.*' => ['integer', 'exists:permissions,id'],
+            'visible_permission_ids' => ['nullable', 'array'],
+            'visible_permission_ids.*' => ['integer', 'exists:permissions,id'],
+            'copy_permissions_from' => ['nullable', 'exists:roles,id'],
+        ];
+
+        // A new role may leave the code blank to have it derived from the name.
+        // Existing codes are identifiers and are not editable.
+        if (! $role) {
+            $rules['code'] = ['nullable', 'string', 'max:100', 'regex:/^[A-Z0-9_]+$/', 'unique:roles,code'];
+        }
+
+        $data = $request->validate($rules, [
+            'code.regex' => 'Role codes use capital letters, numbers and underscores only, e.g. SITE_SUPERVISOR.',
         ]);
+
+        unset($data['permissions'], $data['visible_permission_ids'], $data['copy_permissions_from']);
+
+        return $data;
     }
 
     private function formOptions(): array
     {
+        $departments = Department::orderBy('name')->get();
+
         return [
-            'departments' => Department::orderBy('name')->get(),
+            'departments' => $departments,
             'parentRoles' => Role::orderBy('level')->orderBy('name')->get(),
             'permissionModules' => Permission::orderBy('id')->get()->groupBy('module'),
+            'formActions' => self::FORM_ACTIONS,
+            'roleTypes' => Role::TYPES,
+            'permissionGroups' => PermissionGroups::byDepartmentId($departments),
         ];
     }
 }

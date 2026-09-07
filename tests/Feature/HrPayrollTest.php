@@ -267,7 +267,7 @@ class HrPayrollTest extends TestCase
             ])
             ->assertRedirect(route('admin.hr.leaves.index'));
 
-        $leave = LeaveRequest::whereDate('start_date', '2026-09-01')->firstOrFail();
+        $leave = LeaveRequest::whereDate('start_date', '2026-09-01')->latest('id')->firstOrFail();
         $this->assertSame('3.0', (string) $leave->total_days);
     }
 

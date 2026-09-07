@@ -6,6 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
+    /**
+     * Standard role types. Combined with the department they give a consistent
+     * name and code (Purchase + Assistant => "Purchase Assistant" /
+     * PURCHASE_ASSISTANT) so the same job is never spelt three ways.
+     */
+    public const TYPES = [
+        'Manager', 'Assistant', 'Supervisor', 'In-Charge', 'Officer',
+        'Coordinator', 'Engineer', 'Accountant', 'Operator', 'Mechanic',
+        'Store Keeper', 'Worker',
+    ];
+
     protected $fillable = [
         'name', 'code', 'department_id', 'parent_id', 'level', 'access_scope',
         'default_dashboard', 'mobile_app_access', 'can_approve_child_requests',

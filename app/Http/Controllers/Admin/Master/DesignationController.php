@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Department;
 use App\Models\Designation;
 use App\Models\Role;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -37,11 +38,24 @@ class DesignationController extends Controller
         return view('admin.master.designations.create', $this->formOptions());
     }
 
-    public function store(Request $request): RedirectResponse
+    /**
+     * Also serves the "+ New" dialog on user and employee forms (JSON). The
+     * department is returned as "parent" so the dependent dropdown can file
+     * the new designation under the right department straight away.
+     */
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $designation = Designation::create($this->validated($request));
 
         ActivityLog::record($request, 'Designations', 'Created designation', $designation->name);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'id' => $designation->id,
+                'label' => $designation->name,
+                'parent' => $designation->department_id,
+            ], 201);
+        }
 
         return redirect()->route('admin.master.designations.index')->with('status', 'Designation "'.$designation->name.'" created successfully.');
     }

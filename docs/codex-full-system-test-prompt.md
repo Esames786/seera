@@ -120,3 +120,41 @@ A single report with:
 
 Rank everything by severity. For each finding give a concrete failing case, not a
 general observation. If you claim a rule is broken, prove it with steps or a test.
+
+## Addendum — September 2026 client change round (CR-01 to CR-13)
+
+Reference: `docs/client-change-register-2026-09-07-status.md`. Test these behaviours in
+addition to everything above.
+
+- Inline "+ New" dialogs (project, user, employee, role and purchase order forms). The
+  dialog posts to the normal store route with `Accept: application/json` and must
+  return `{id, label}` (designations also return `parent`). Confirm: the new record is
+  selected without reloading, the rest of the form keeps its input, validation errors
+  render inside the dialog, and a user without `create` on that module never sees the
+  button and gets 403 on the JSON request
+- A blank `code` on customers, suppliers, branches and departments is filled by
+  `App\Support\CodeGenerator`; two rapid inline creates must not collide
+- Role form: `visible_permission_ids[]` drives what a save may change; permissions not
+  rendered (Post, Process, Receive, Issue, Transfer, Adjust, filtered modules) must
+  survive a save. Role code is derived from the name when blank and can never change
+  via update, even if a `code` field is posted
+- Permission matrix `group` filter (`App\Support\PermissionGroups`) is display only.
+  Prove that saving with a group active does not revoke anything outside the group
+- "All" row checkbox and Select all visible / Clear visible are client-side; the server
+  must only ever see `permissions[]`
+- Employee documents: unlimited rows via `+ Add Document`; removing an unsaved row must
+  not affect saved documents; file rules unchanged (pdf/jpg/png/webp, 5 MB)
+- Purchase orders: per-line `description`, `discount_percent`, `vat_rate` (blank = order
+  default). Check rounding per line, header `discount_amount`, and that a GRN raised
+  from the order pre-fills `unit_cost` with `PurchaseOrderLine::netUnitPrice()` (the
+  discounted price). Client sample: 1 x 28,500 at 15% = 32,775.00
+- PO quotations: `purchase_order_attachments`, private disk, download only through
+  `admin.inventory.purchase-orders.attachments.download`; removable only while draft;
+  uploads allowed until received/cancelled; invalid files must not leave a saved order
+- User `employee_classification` is mirrored onto the linked employee and back
+- Sidebar: Branches/Departments/Designations are replaced by one Organization
+  Structure entry (`admin.master.organization`), visible if the user may view any of
+  the three; the three full pages still work and are still permission-checked
+- Users created with a blank password get `123456` + `must_change_password`
+- Known not implemented: CR-08 (multiple reporting lines / staged approval) and the
+  four SOON modules. Report them as gaps, do not build them

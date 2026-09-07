@@ -8,7 +8,25 @@
         <div><label for="name">Project Name *</label><input id="name" name="name" class="input" value="{{ old('name', $project?->name) }}" required/></div>
         <div><label for="code">Project Code *</label><input id="code" name="code" class="input" value="{{ old('code', $project?->code) }}" placeholder="PRJ-001" required/></div>
         <div>
-            <label for="customer_id">Client Name *</label>
+            <div class="label-row">
+                <label for="customer_id">Client Name *</label>
+                <x-admin.quick-create id="qc-customer" target="customer_id" :url="route('admin.master.customers.store')" title="New Client" permission="Customers" submit="Create Client">
+                    <div class="full"><label for="qc-cust-name">Client Name *</label><input id="qc-cust-name" name="name" class="input" required/></div>
+                    <div>
+                        <label for="qc-cust-type">Type *</label>
+                        <select id="qc-cust-type" name="type" class="select" required>
+                            <option>Company</option>
+                            <option>Individual</option>
+                        </select>
+                    </div>
+                    <div><label for="qc-cust-code">Code</label><input id="qc-cust-code" name="code" class="input" placeholder="Auto if blank"/></div>
+                    <div><label for="qc-cust-vat">VAT Number</label><input id="qc-cust-vat" name="vat_number" class="input"/></div>
+                    <div><label for="qc-cust-phone">Phone</label><input id="qc-cust-phone" name="phone" class="input" placeholder="+966..."/></div>
+                    <div><label for="qc-cust-contact">Contact Person</label><input id="qc-cust-contact" name="contact_person" class="input"/></div>
+                    <div><label for="qc-cust-email">Email</label><input id="qc-cust-email" name="email" type="email" class="input"/></div>
+                    <input type="hidden" name="status" value="active"/>
+                </x-admin.quick-create>
+            </div>
             <select id="customer_id" name="customer_id" class="select">
                 <option value="">Select...</option>
                 @foreach ($customers as $customer)
@@ -17,7 +35,16 @@
             </select>
         </div>
         <div>
-            <label for="branch_id">Branch *</label>
+            <div class="label-row">
+                <label for="branch_id">Branch *</label>
+                <x-admin.quick-create id="qc-branch" target="branch_id" :url="route('admin.master.branches.store')" title="New Branch" permission="Branches">
+                    <div><label for="qc-branch-name">Branch Name *</label><input id="qc-branch-name" name="name" class="input" required/></div>
+                    <div><label for="qc-branch-code">Code</label><input id="qc-branch-code" name="code" class="input" placeholder="Auto if blank"/></div>
+                    <div><label for="qc-branch-city">City</label><input id="qc-branch-city" name="city" class="input" placeholder="Riyadh"/></div>
+                    <div><label for="qc-branch-phone">Phone</label><input id="qc-branch-phone" name="phone" class="input" placeholder="+966..."/></div>
+                    <input type="hidden" name="status" value="active"/>
+                </x-admin.quick-create>
+            </div>
             <select id="branch_id" name="branch_id" class="select">
                 <option value="">Select...</option>
                 @foreach ($branches as $branch)
@@ -26,7 +53,34 @@
             </select>
         </div>
         <div>
-            <label for="manager_id">Project Manager *</label>
+            <div class="label-row">
+                <label for="manager_id">Project Manager *</label>
+                <x-admin.quick-create id="qc-manager" target="manager_id" :url="route('admin.users.store')" title="New Project Manager Account" permission="Users" submit="Create Account" :wide="true">
+                    <div><label for="qc-mgr-name">Full Name *</label><input id="qc-mgr-name" name="name" class="input" required/></div>
+                    <div><label for="qc-mgr-email">Email *</label><input id="qc-mgr-email" name="email" type="email" class="input" required/></div>
+                    <div><label for="qc-mgr-phone">Phone</label><input id="qc-mgr-phone" name="phone" class="input" placeholder="+966..."/></div>
+                    <div>
+                        <label for="qc-mgr-department">Department</label>
+                        <select id="qc-mgr-department" name="department_id" class="select">
+                            <option value="">Select...</option>
+                            @foreach ($departments as $department)
+                                <option value="{{ $department->id }}">{{ $department->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="full">
+                        <label for="qc-mgr-role">Role *</label>
+                        <select id="qc-mgr-role" name="role_id" class="select" required>
+                            <option value="">Select role...</option>
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->id }}" @selected($role->code === 'PROJECT_MANAGER')>{{ $role->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <input type="hidden" name="status" value="active"/>
+                    <div class="full help-box">The account is created with the temporary password <strong>{{ \App\Http\Controllers\Admin\UserController::DEFAULT_PASSWORD }}</strong> and must set its own password at first sign-in.</div>
+                </x-admin.quick-create>
+            </div>
             <select id="manager_id" name="manager_id" class="select">
                 <option value="">Select...</option>
                 @foreach ($managers as $manager)

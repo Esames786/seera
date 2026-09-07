@@ -8,6 +8,8 @@
     Filters a child select down to the options that belong to the currently
     chosen parent. Each child option carries data-parent="{id}"; options with
     no data-parent stay visible so unassigned records are still selectable.
+    A record created inline (quick-create) announces itself with a
+    "seera:option-added" event so the cached option list picks it up.
 --}}
 @once
     @push('scripts')
@@ -26,9 +28,9 @@
                 };
             });
 
-            function render() {
+            function render(forceValue) {
                 const selected = parent.value;
-                const current = child.value;
+                const current = forceValue || child.value;
 
                 child.innerHTML = '';
 
@@ -55,7 +57,16 @@
                 }
             }
 
-            parent.addEventListener('change', render);
+            parent.addEventListener('change', function () { render(); });
+
+            child.addEventListener('seera:option-added', function (event) {
+                const added = event.detail || {};
+                if (!options.some(function (option) { return option.value === added.value; })) {
+                    options.push({ value: added.value, label: added.label, parent: added.parent || '' });
+                }
+                render(added.value);
+            });
+
             render();
         };
     </script>

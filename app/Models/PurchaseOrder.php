@@ -11,7 +11,7 @@ class PurchaseOrder extends Model
     protected $fillable = [
         'po_number', 'purchase_request_id', 'supplier_id', 'po_date',
         'expected_delivery_date', 'project_id', 'site_id', 'warehouse_id',
-        'taxable_amount', 'vat_rate', 'vat_amount', 'total_amount',
+        'taxable_amount', 'discount_amount', 'vat_rate', 'vat_amount', 'total_amount',
         'status', 'approved_by', 'approved_at', 'notes',
     ];
 
@@ -22,6 +22,7 @@ class PurchaseOrder extends Model
             'expected_delivery_date' => 'date',
             'approved_at' => 'datetime',
             'taxable_amount' => 'decimal:2',
+            'discount_amount' => 'decimal:2',
             'vat_rate' => 'decimal:2',
             'vat_amount' => 'decimal:2',
             'total_amount' => 'decimal:2',
@@ -36,6 +37,12 @@ class PurchaseOrder extends Model
     public function canReceive(): bool
     {
         return in_array($this->status, ['approved', 'partially_received'], true);
+    }
+
+    /** Quotations can be added until the order is closed or cancelled. */
+    public function acceptsAttachments(): bool
+    {
+        return ! in_array($this->status, ['received', 'cancelled'], true);
     }
 
     /** Move the PO along the receiving track from its line quantities. */
@@ -90,6 +97,11 @@ class PurchaseOrder extends Model
     public function lines()
     {
         return $this->hasMany(PurchaseOrderLine::class);
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(PurchaseOrderAttachment::class);
     }
 
     public function goodsReceipts()
