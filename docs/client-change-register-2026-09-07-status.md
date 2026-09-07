@@ -66,3 +66,13 @@ php artisan optimize && php artisan up
 ```
 
 No seeder run is required. Quotation files are written to `storage/app/private/purchase-orders/quotations`; include `storage/app` in backups.
+
+## Client review page
+
+A static walkthrough for the client lives at `public/client-review/` and is served at
+`/client-review/` on any deployment (for example `https://seera.tech-brit.co.uk/client-review/`).
+Each stop pairs the client's own screenshot and voice note (copied to `media/` as
+`I01…I16.jpeg` and `A01…A20.ogg`) with the updated screen rendered from the real code
+(`screens/`). The frames are static: links are inert and the "+ New" dialogs use a
+practice endpoint, so nothing typed there is saved. The page is `noindex`, but anyone with
+the link can open it; move it behind the admin login if the client prefers.

@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Seera Change Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root {
+  --bg: #eceff3; --surface: #ffffff; --surface-2: #f4f6f9; --ink: #171f29; --muted: #5d6b7c; --line: #d6dce4;
+  --accent: #c9761a; --accent-ink: #7a4406; --accent-bg: #fbeedd;
+  --built: #1c7c45; --built-bg: #e3f3ea; --open: #b3452b; --open-bg: #fbe8e3; --partly: #8a6400; --partly-bg: #fff3c9;
+  --frame: #232b36; --shadow: 0 18px 40px rgba(23, 31, 41, .12);
+  --display: "Archivo", "Segoe UI", Arial, sans-serif; --body: "IBM Plex Sans", "Segoe UI", Arial, sans-serif; --mono: "IBM Plex Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10161d; --surface: #1a222c; --surface-2: #212b37; --ink: #e7ecf2; --muted: #9aa7b6; --line: #2d3946;
+    --accent: #e69a3a; --accent-ink: #ffd9a8; --accent-bg: #3a2a14;
+    --built: #4cc27a; --built-bg: #173324; --open: #f08a6b; --open-bg: #3a1f18; --partly: #e0b64a; --partly-bg: #3a3010;
+    --frame: #0b0f14; --shadow: 0 18px 40px rgba(0, 0, 0, .45);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #10161d; --surface: #1a222c; --surface-2: #212b37; --ink: #e7ecf2; --muted: #9aa7b6; --line: #2d3946;
+  --accent: #e69a3a; --accent-ink: #ffd9a8; --accent-bg: #3a2a14;
+  --built: #4cc27a; --built-bg: #173324; --open: #f08a6b; --open-bg: #3a1f18; --partly: #e0b64a; --partly-bg: #3a3010;
+  --frame: #0b0f14; --shadow: 0 18px 40px rgba(0, 0, 0, .45);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55; }
+a { color: inherit; }
+b { font-weight: 600; }
+h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+.mono { font-family: var(--mono); font-size: 12px; letter-spacing: .02em; }
+
+.shell { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 28px; max-width: 1480px; margin: 0 auto; padding: 28px 28px 80px; }
+@media (max-width: 1000px) { .shell { grid-template-columns: 1fr; padding: 18px 14px 60px; } .index { position: static; } }
+
+.index { position: sticky; top: 20px; align-self: start; display: flex; flex-direction: column; gap: 4px; }
+.index .eyebrow { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); padding: 0 10px 8px; }
+.index a { display: flex; gap: 10px; align-items: center; padding: 7px 10px; border-radius: 6px; text-decoration: none; font-size: 13.5px; color: var(--ink); }
+.index a:hover, .index a:focus-visible { background: var(--surface); outline: none; }
+.index .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot.built { background: var(--built); } .dot.partly { background: var(--partly); } .dot.open { background: var(--open); }
+
+.masthead { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 24px; align-items: start; margin-bottom: 30px; }
+@media (max-width: 1000px) { .masthead { grid-template-columns: 1fr; } }
+.masthead h1 { font-size: 34px; font-weight: 700; line-height: 1.1; }
+.masthead .lede { color: var(--muted); max-width: 60ch; margin-top: 12px; }
+.facts { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; }
+.facts h2 { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+.facts dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 16px; margin: 0; font-size: 14px; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; }
+.tally { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; }
+.pill.built { background: var(--built-bg); color: var(--built); } .pill.partly { background: var(--partly-bg); color: var(--partly); } .pill.open { background: var(--open-bg); color: var(--open); }
+.pill.cr { background: var(--accent-bg); color: var(--accent-ink); font-family: var(--mono); font-weight: 500; font-size: 12px; }
+.pill.id { background: var(--surface-2); color: var(--muted); font-family: var(--mono); font-weight: 500; font-size: 12px; border: 1px solid var(--line); }
+
+.legend { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 34px; }
+@media (max-width: 800px) { .legend { grid-template-columns: 1fr; } }
+.legend div { padding: 12px 14px; border-left: 3px solid var(--accent); background: var(--surface); font-size: 13.5px; }
+.legend strong { display: block; font-family: var(--display); font-weight: 600; margin-bottom: 2px; }
+
+.stop { margin-bottom: 44px; scroll-margin-top: 20px; }
+.stop-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 14px; margin-bottom: 14px; }
+.stop-head h2 { font-size: 24px; font-weight: 600; }
+.stop-head .route { color: var(--muted); font-size: 13.5px; }
+.stop-head .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+
+.stop-body { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 1100px) { .stop-body { grid-template-columns: 1fr; } }
+
+.asked { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.asked .label { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); padding: 12px 16px 0; }
+.asked p { margin: 6px 16px 14px; font-size: 14px; }
+.shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; padding: 0 16px 14px; }
+.shot { border: 0; padding: 0; background: var(--surface-2); border-radius: 6px; overflow: hidden; cursor: zoom-in; text-align: left; display: flex; flex-direction: column; }
+.shot img { display: block; width: 100%; height: 150px; object-fit: cover; object-position: top; }
+.shot span { font-size: 11.5px; color: var(--muted); padding: 6px 8px; line-height: 1.35; }
+.shot span b { font-family: var(--mono); font-weight: 500; color: var(--ink); }
+.notes { border-top: 1px solid var(--line); padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 12px; }
+.note .who { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.note p { margin: 0 0 6px; font-size: 13.5px; }
+.note audio { width: 100%; height: 34px; }
+
+.built-col { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.frame { background: var(--frame); border-radius: 12px; padding: 10px 10px 12px; box-shadow: var(--shadow); }
+.frame .bar { display: flex; align-items: center; gap: 10px; padding: 2px 4px 10px; color: #b7c1cd; font-size: 12.5px; }
+.frame .bar .lights { display: flex; gap: 5px; }
+.frame .bar .lights i { width: 10px; height: 10px; border-radius: 50%; background: #3d4a58; display: block; }
+.frame .bar .url { font-family: var(--mono); background: rgba(255, 255, 255, .06); border-radius: 5px; padding: 3px 10px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.frame .bar .live { font-family: var(--mono); font-size: 11px; color: #ffd9a8; white-space: nowrap; }
+.frame iframe { display: block; width: 100%; height: 760px; border: 0; border-radius: 6px; background: #f3f6fb; }
+.changes { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 18px; }
+@media (max-width: 800px) { .changes { grid-template-columns: 1fr; } }
+.changes .label { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin-bottom: 8px; }
+.changes ul { margin: 0; padding-left: 18px; font-size: 14px; display: flex; flex-direction: column; gap: 6px; }
+.changes .try { background: var(--accent-bg); color: var(--accent-ink); border-radius: 8px; padding: 12px 14px; font-size: 14px; align-self: start; }
+.changes .try .label { color: var(--accent-ink); opacity: .8; }
+
+dialog.lightbox { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1100px); }
+dialog.lightbox::backdrop { background: rgba(10, 14, 20, .82); }
+dialog.lightbox img { display: block; max-width: 96vw; max-height: 90vh; border-radius: 8px; }
+dialog.lightbox figcaption { color: #dfe6ee; font-size: 13px; text-align: center; padding: 10px; font-family: var(--body); }
+button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+</head>
+<body>
+
+
+<div class="shell">
+  <nav class="index" aria-label="Screens">
+    <div class="eyebrow">Screen by screen</div>
+          <a href="#project"><span class="dot built"></span>Create Project</a>
+          <a href="#users-list"><span class="dot built"></span>Users Listing</a>
+          <a href="#user-form"><span class="dot built"></span>Add New User</a>
+          <a href="#roles-list"><span class="dot built"></span>Roles Listing</a>
+          <a href="#role-form"><span class="dot built"></span>Create Role</a>
+          <a href="#role-edit"><span class="dot partly"></span>Edit Role: Site In-Charge</a>
+          <a href="#matrix"><span class="dot built"></span>Permission Matrix</a>
+          <a href="#master-menu"><span class="dot built"></span>Master Setup menu</a>
+          <a href="#documents"><span class="dot built"></span>Employee › E. Document Attachments</a>
+          <a href="#po-form"><span class="dot built"></span>Add Purchase Order</a>
+          <a href="#po-show"><span class="dot built"></span>Purchase Order detail</a>
+          <a href="#soon"><span class="dot open"></span>Still marked SOON</a>
+      </nav>
+
+  <main>
+    <header class="masthead">
+      <div>
+        <h1>What changed, screen by screen</h1>
+        <p class="lede">Every stop pairs what the client sent on 5 September (screenshot and voice note) with the screen as it is now. The frames are the real application code rendered against seeded demo data, not drawings.</p>
+        <div class="tally">
+          <span class="pill built">10 screens built</span>
+          <span class="pill partly">1 built with one item open</span>
+          <span class="pill open">1 stop not built</span>
+        </div>
+      </div>
+            <aside class="facts">
+        <h2>How to use this page</h2>
+        <dl>
+          <dt>Source</dt><dd>Your screenshots and voice notes from 5 September 2026, in the order you sent them.</dd>
+          <dt>Screens</dt><dd>Live renders of the updated system with demo data. Scroll and click inside each frame.</dd>
+          <dt>Try it</dt><dd>The <b>+ New</b> dialogs work against a practice server here; nothing you type is saved.</dd>
+          <dt>Real system</dt><dd>Sign in to the ERP with your own account to use the same screens on real data.</dd>
+          <dt>Feedback</dt><dd>Reply with the stop name (for example "Create Role") and what should change.</dd>
+        </dl>
+      </aside>
+          </header>
+
+    <section class="legend" aria-label="How to read each stop">
+      <div><strong>Client asked</strong>Screenshot IDs (I01…I16) and voice notes (A01…A20) follow the requirements register. Tap a screenshot to enlarge; press play to hear the note.</div>
+      <div><strong>Screen now</strong>The dark frame is the live screen, scrollable and clickable. Sidebar, forms, matrices and dialogs behave as on the real system.</div>
+      <div><strong>What changed / Try it</strong>Plain-language list of the changes on that screen and one thing to click to see it work.</div>
+    </section>
+
+        <article class="stop" id="project">
+      <div class="stop-head">
+        <h2>Create Project</h2>
+        <span class="route">Master Setup › Projects › Add</span>
+        <div class="tags">
+          <span class="pill cr">CR-01</span>          <span class="pill built">Built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>Client Name, Branch and Project Manager should offer &quot;Create&quot; in place, like the Wafiq customer dropdown, instead of sending the user to another page.</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/I01.jpeg" data-caption="I01 · Create Project form">
+                <img src="media/I01.jpeg" alt="Create Project form" loading="lazy">
+                <span><b>I01</b> Create Project form</span>
+              </button>
+                                        <button class="shot" type="button" data-full="media/I02.jpeg" data-caption="I02 · Reference: Wafiq customer dropdown with &quot;+ Create contact&quot;">
+                <img src="media/I02.jpeg" alt="Reference: Wafiq customer dropdown with &quot;+ Create contact&quot;" loading="lazy">
+                <span><b>I02</b> Reference: Wafiq customer dropdown with &quot;+ Create contact&quot;</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">A02</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Use the Wafiq reference: wherever there is a dropdown, offer Create right there.</p>
+                <audio controls preload="none" src="media/A02.ogg"></audio>
+              </div>
+                          <div class="note">
+                <div class="who"><span class="pill id">A03</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Apply Add to Client Name, Project Manager and Branch; no moving to another window.</p>
+                <audio controls preload="none" src="media/A03.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+          <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/master/projects/create</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Create Project preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/projects-create.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li>A small <b>+ New</b> button sits beside Client Name, Branch and Project Manager.</li><li>Each opens a dialog with only the fields needed right now; the record is saved, added to the dropdown and selected. The rest of the project form is untouched.</li><li>Project Manager creates a login account with the temporary password 123456 and a forced password change at first sign-in.</li><li>The button is rendered only for users who may create that record; the server refuses others.</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Click <b>+ New</b> next to Client Name, type a name, press Create. Leave the name empty first to see the inline validation.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+        <article class="stop" id="users-list">
+      <div class="stop-head">
+        <h2>Users Listing</h2>
+        <span class="route">Administration › Users</span>
+        <div class="tags">
+          <span class="pill cr">CR-02</span>          <span class="pill built">Built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>Two &quot;+ Add New User&quot; buttons open the same form and confuse people. Keep one.</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/I03.jpeg" data-caption="I03 · Users listing with two Add New User buttons">
+                <img src="media/I03.jpeg" alt="Users listing with two Add New User buttons" loading="lazy">
+                <span><b>I03</b> Users listing with two Add New User buttons</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">A05</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Users listing shows Add New User in two places; show it once.</p>
+                <audio controls preload="none" src="media/A05.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+          <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/users</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Users Listing preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/users-index.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li>The filter-bar copy is gone; the page-header button remains.</li><li>Search, filters and pagination are unchanged.</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Count the blue buttons: one.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+        <article class="stop" id="user-form">
+      <div class="stop-head">
+        <h2>Add New User</h2>
+        <span class="route">Administration › Users › Add</span>
+        <div class="tags">
+          <span class="pill cr">CR-04</span><span class="pill cr">CR-09</span><span class="pill cr">CR-01</span><span class="pill cr">CR-10</span>          <span class="pill built">Built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>Employee Classification (own staff vs Freelancer) on this screen; finish the whole user setup in one flow including creating a role; create Department, Branch or Designation from the dropdown.</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/I04.jpeg" data-caption="I04 · User form, Employment Information">
+                <img src="media/I04.jpeg" alt="User form, Employment Information" loading="lazy">
+                <span><b>I04</b> User form, Employment Information</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">A04</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Employee Classification with two categories: own / sponsored staff and Freelancer.</p>
+                <audio controls preload="none" src="media/A04.ogg"></audio>
+              </div>
+                          <div class="note">
+                <div class="who"><span class="pill id">A12</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Bring role selection and creation into User setup; fewer separate screens; use a dialog from the form.</p>
+                <audio controls preload="none" src="media/A12.ogg"></audio>
+              </div>
+                          <div class="note">
+                <div class="who"><span class="pill id">A15</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Branch / Department should not be separate menu options; create them from the user form.</p>
+                <audio controls preload="none" src="media/A15.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+          <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/users/create</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Add New User preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/users-create.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li><b>Employee Classification</b> (Sponsorship / Freelancer) added to Employment Information and kept in step with the linked HR employee record.</li><li><b>+ New</b> beside Department, Designation and Assigned Branch. A new designation is filed under the department already chosen.</li><li><b>+ New Role</b> beside Primary Role: department, role type, suggested name and code, access scope, level and "start with permissions of…" to copy an existing role.</li><li>Leaving the password blank issues 123456 with a forced change at first login (same rule as the organisation-chart accounts).</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Pick a Department, then <b>+ New</b> on Designation (the department is pre-filled). Then open <b>+ New Role</b>, choose Purchase and Assistant and watch the name and code fill in.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+        <article class="stop" id="roles-list">
+      <div class="stop-head">
+        <h2>Roles Listing</h2>
+        <span class="route">Administration › Roles</span>
+        <div class="tags">
+          <span class="pill cr">CR-03</span>          <span class="pill built">Built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>Same duplicate button problem as Users.</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/I05.jpeg" data-caption="I05 · Roles listing with two Add New Role buttons">
+                <img src="media/I05.jpeg" alt="Roles listing with two Add New Role buttons" loading="lazy">
+                <span><b>I05</b> Roles listing with two Add New Role buttons</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">A06</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Roles listing also repeats Add New Role; show it once.</p>
+                <audio controls preload="none" src="media/A06.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+          <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/roles</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Roles Listing preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/roles-index.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li>One "+ Add New Role" in the header.</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Same check as Users.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+        <article class="stop" id="role-form">
+      <div class="stop-head">
+        <h2>Create Role</h2>
+        <span class="route">Administration › Roles › Add</span>
+        <div class="tags">
+          <span class="pill cr">CR-05</span><span class="pill cr">CR-06</span><span class="pill cr">CR-07</span>          <span class="pill built">Built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>An All checkbox before View so a row is granted in one click; show only the modules relevant to the chosen department; role name and code from consistent options rather than typed.</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/I06.jpeg" data-caption="I06 · Create Role: access and permission matrix">
+                <img src="media/I06.jpeg" alt="Create Role: access and permission matrix" loading="lazy">
+                <span><b>I06</b> Create Role: access and permission matrix</span>
+              </button>
+                                        <button class="shot" type="button" data-full="media/I07.jpeg" data-caption="I07 · Create Role: basic information">
+                <img src="media/I07.jpeg" alt="Create Role: basic information" loading="lazy">
+                <span><b>I07</b> Create Role: basic information</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">A07</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Too many clicks: add an All checkbox before View for each row, then untick exceptions.</p>
+                <audio controls preload="none" src="media/A07.ogg"></audio>
+              </div>
+                          <div class="note">
+                <div class="who"><span class="pill id">A08</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Show only the permissions relevant to the department or role (Accounts, HR, purchasing, site).</p>
+                <audio controls preload="none" src="media/A08.ogg"></audio>
+              </div>
+                          <div class="note">
+                <div class="who"><span class="pill id">A09</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Selecting Accounts should show its related permissions; likewise HR or Marketing.</p>
+                <audio controls preload="none" src="media/A09.ogg"></audio>
+              </div>
+                          <div class="note">
+                <div class="who"><span class="pill id">A13</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Role Name and Code from consistent options, not retyped; spelling differences break filtering.</p>
+                <audio controls preload="none" src="media/A13.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+          <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/roles/create</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Create Role preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/roles-create.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li><b>Role Type</b> (Manager, Assistant, Supervisor, In-Charge, …) plus Department fills a consistent name and code: Purchase + Assistant becomes "Purchase Assistant" / PURCHASE_ASSISTANT. Code is generated from the name when left blank.</li><li><b>All</b> column first in the matrix; ticking it grants the row, then any single action can be unticked. Partly ticked rows show a half-filled box.</li><li>Choosing a department narrows the matrix to that department's modules. <b>Show all modules</b> brings everything back. Hidden modules keep whatever they had.</li><li><b>Select all visible</b> / <b>Clear visible</b> act on the rows currently shown.</li><li>Actions this compact matrix does not show (Post, Process, Receive, Issue, Transfer, Adjust) are no longer revoked when the form is saved.</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Select Department = Purchase and Role Type = Assistant. Scroll to the matrix: only purchase and stores modules remain. Tick <b>All</b> on Purchase Orders, then untick Delete.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+        <article class="stop" id="role-edit">
+      <div class="stop-head">
+        <h2>Edit Role: Site In-Charge</h2>
+        <span class="route">Administration › Roles › Edit</span>
+        <div class="tags">
+          <span class="pill cr">CR-07</span><span class="pill cr">CR-08</span>          <span class="pill partly">Built, one item open</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>Consistent codes; and a person should be able to report to two contacts, with approval passing from Site Supervisor to Purchase Assistant to Purchase Manager.</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/I09.jpeg" data-caption="I09 · Edit Role: Site In-Charge">
+                <img src="media/I09.jpeg" alt="Edit Role: Site In-Charge" loading="lazy">
+                <span><b>I09</b> Edit Role: Site In-Charge</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">A10</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>A mechanic may report to both Site Supervisor and Purchase; approval flows Site Supervisor, Purchase Assistant, Purchase Manager.</p>
+                <audio controls preload="none" src="media/A10.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+          <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/roles/8/edit</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Edit Role: Site In-Charge preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/roles-edit-site.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li>The role code (SITE_SUPERVISOR) is read-only after creation: it identifies the role everywhere, the display name stays editable.</li><li>Everything from Create Role applies here too: All column, department filter, safe saving.</li><li><b>Not built: two reporting lines and staged approval (CR-08).</b> The voice note mixes who is informed, who approves and in what order. Before building it the client needs to confirm: do both contacts approve or is one informed only; is the order Site In-Charge → Purchase Assistant → Purchase Manager fixed; does it apply to purchase requests only or also leave, overtime and stock; is the second line per role or per person.</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Note the locked Role Code and the department filter already applied for Site Operations.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+        <article class="stop" id="matrix">
+      <div class="stop-head">
+        <h2>Permission Matrix</h2>
+        <span class="route">Administration › Permission Matrix</span>
+        <div class="tags">
+          <span class="pill cr">CR-05</span><span class="pill cr">CR-06</span>          <span class="pill built">Built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>The standalone matrix should also show only the relevant modules; an HR role should not require scrolling past warehouses, suppliers and customers.</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/I08.jpeg" data-caption="I08 · Standalone Permission Matrix (15 actions)">
+                <img src="media/I08.jpeg" alt="Standalone Permission Matrix (15 actions)" loading="lazy">
+                <span><b>I08</b> Standalone Permission Matrix (15 actions)</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">A11</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Apply the relevant-module filter on the Permission Matrix page too.</p>
+                <audio controls preload="none" src="media/A11.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+          <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/roles/permission-matrix?role=3</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Permission Matrix preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/permission-matrix.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li>Opens on the role's own department group ("Modules for: Human Resource" for HR Manager). The second dropdown switches group or shows all modules.</li><li><b>All</b> column and Select all visible / Clear visible, as on the role form.</li><li>Only the rows on screen are saved; everything filtered out keeps its current permissions.</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Tick <b>All</b> on Attendance. Change the group dropdown to see how another department's list looks.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+        <article class="stop" id="master-menu">
+      <div class="stop-head">
+        <h2>Master Setup menu</h2>
+        <span class="route">Master Setup › Organization Structure</span>
+        <div class="tags">
+          <span class="pill cr">CR-10</span><span class="pill cr">CR-01</span>          <span class="pill built">Built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>Branches, Departments and Designations should not be separate options in that menu; they should be created from the user form.</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/I10.jpeg" data-caption="I10 · Master Setup navigation">
+                <img src="media/I10.jpeg" alt="Master Setup navigation" loading="lazy">
+                <span><b>I10</b> Master Setup navigation</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">A15</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Branch / Department should not be separate menu options; create them from the user form.</p>
+                <audio controls preload="none" src="media/A15.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+          <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/master/organization</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Master Setup menu preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/organization.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li>The three menu entries are replaced by one <b>Organization Structure</b> entry (see the sidebar on the left of the preview).</li><li>It shows counts and the latest records for each list, with "Open full list" and "+ Add" for the users who may create them. Nothing was deleted; the full pages still exist.</li><li>Day-to-day creation happens inline from the User and Employee forms (previous stops).</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Open the Master Setup group in the sidebar: Company Profile, Organization Structure, Projects, Sites, Warehouses, Expense Categories, Suppliers, Customers.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+        <article class="stop" id="documents">
+      <div class="stop-head">
+        <h2>Employee › E. Document Attachments</h2>
+        <span class="route">HR › Employees › Edit</span>
+        <div class="tags">
+          <span class="pill cr">CR-11</span>          <span class="pill built">Built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>After IQAMA, Passport, Contract and Medical Insurance the four rows are used up. How is a fifth document (driving licence) added?</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/I11.jpeg" data-caption="I11 · Employee Section E: four fixed attachment rows">
+                <img src="media/I11.jpeg" alt="Employee Section E: four fixed attachment rows" loading="lazy">
+                <span><b>I11</b> Employee Section E: four fixed attachment rows</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">A14</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Only four attachment rows; how is a fifth document added?</p>
+                <audio controls preload="none" src="media/A14.ogg"></audio>
+              </div>
+                          <div class="note">
+                <div class="who"><span class="pill id">A17</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>The Add New option is not there yet; expected later.</p>
+                <audio controls preload="none" src="media/A17.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+          <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/hr/employees/1/edit</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Employee › E. Document Attachments preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/employees-edit.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li><b>+ Add Document</b> adds as many rows as needed; the × at the end of a row removes an unsaved row.</li><li>Documents already attached are listed separately below with their download links and are never affected by adding or removing new rows.</li><li>File rules are unchanged: PDF, JPG, PNG or WEBP, 5 MB each, stored privately.</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Scroll to section E and press <b>+ Add Document</b> twice.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+        <article class="stop" id="po-form">
+      <div class="stop-head">
+        <h2>Add Purchase Order</h2>
+        <span class="route">Inventory › Purchase Orders › Add</span>
+        <div class="tags">
+          <span class="pill cr">CR-12</span><span class="pill cr">CR-13</span><span class="pill cr">CR-01</span>          <span class="pill built">Built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>Upload the supplier quotation (digital or scanned) and give the order lines the boxes shown in the reference: description, quantity, price, tax rate, discount and total.</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/I12.jpeg" data-caption="I12 · Purchase Order: order lines (item, qty, price only)">
+                <img src="media/I12.jpeg" alt="Purchase Order: order lines (item, qty, price only)" loading="lazy">
+                <span><b>I12</b> Purchase Order: order lines (item, qty, price only)</span>
+              </button>
+                                        <button class="shot" type="button" data-full="media/I13.jpeg" data-caption="I13 · Purchase Order: order information">
+                <img src="media/I13.jpeg" alt="Purchase Order: order information" loading="lazy">
+                <span><b>I13</b> Purchase Order: order information</span>
+              </button>
+                                        <button class="shot" type="button" data-full="media/I15.jpeg" data-caption="I15 · Reference: commercial line editor (description, tax, discount, total)">
+                <img src="media/I15.jpeg" alt="Reference: commercial line editor (description, tax, discount, total)" loading="lazy">
+                <span><b>I15</b> Reference: commercial line editor (description, tax, discount, total)</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">A18</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Upload the supplier quotation on the purchase order, digital or scanned.</p>
+                <audio controls preload="none" src="media/A18.ogg"></audio>
+              </div>
+                          <div class="note">
+                <div class="who"><span class="pill id">A19</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Purchase order details need the boxes shown in the reference image.</p>
+                <audio controls preload="none" src="media/A19.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+          <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/inventory/purchase-orders/create</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Add Purchase Order preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/po-create.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li>Order lines now have <b>Item, Description, Qty, Unit Price, Disc %, VAT %</b> and a live <b>Line Total</b>. Blank VAT % follows the order default.</li><li><b>+ Add Line</b> and × per row; live Gross / Discount / Taxable / VAT / Total footer. The server recalculates everything on save.</li><li><b>Supplier Quotation</b> section accepts PDF or image files (10 MB each, up to 10). Files are private and downloadable only by users with Purchase Orders access.</li><li><b>+ New</b> beside Supplier for a supplier that is not in the list yet.</li><li>The client's reference figures check out: 1 × 28,500 at 15% VAT gives 32,775.00.</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Enter Qty 1, Unit Price 28500 on the first line and watch the footer. Add 10 in Disc % on a second line. Press <b>+ Add Line</b>.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+        <article class="stop" id="po-show">
+      <div class="stop-head">
+        <h2>Purchase Order detail</h2>
+        <span class="route">Inventory › Purchase Orders › View</span>
+        <div class="tags">
+          <span class="pill cr">CR-12</span><span class="pill cr">CR-13</span>          <span class="pill built">Built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>Same request: the quotation must live with the order.</p>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">A18</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Upload the supplier quotation on the purchase order, digital or scanned.</p>
+                <audio controls preload="none" src="media/A18.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+          <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/inventory/purchase-orders/6</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Purchase Order detail preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/po-show.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li><b>Supplier Quotations</b> panel lists every file with size, who uploaded it and when; an upload box accepts more files until the order is fully received or cancelled.</li><li>While the order is a draft a file can be removed; once approved, quotations are kept for audit.</li><li>Order Lines show Description, Disc %, Taxable, VAT % per line; Order Information shows total line discounts.</li><li>A goods receipt raised from this order values stock at the discounted unit price.</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              The two files shown are demo rows for this preview; downloads work on the real system.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+        <article class="stop" id="soon">
+      <div class="stop-head">
+        <h2>Still marked SOON</h2>
+        <span class="route">Operations · Reports</span>
+        <div class="tags">
+          <span class="pill cr">CR-14</span><span class="pill cr">CR-08</span>          <span class="pill open">Not built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>The client will review again once the outstanding work is finished. The screenshots show four unfinished entries.</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/I14.jpeg" data-caption="I14 · Operations menu with SOON entries">
+                <img src="media/I14.jpeg" alt="Operations menu with SOON entries" loading="lazy">
+                <span><b>I14</b> Operations menu with SOON entries</span>
+              </button>
+                                        <button class="shot" type="button" data-full="media/I16.jpeg" data-caption="I16 · Reports menu with SOON entries">
+                <img src="media/I16.jpeg" alt="Reports menu with SOON entries" loading="lazy">
+                <span><b>I16</b> Reports menu with SOON entries</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">A20</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Once the outstanding work is done, the client will go through the system again.</p>
+                <audio controls preload="none" src="media/A20.ogg"></audio>
+              </div>
+                          <div class="note">
+                <div class="who"><span class="pill id">A16</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Progress update: reviewing as time permits, more comments to follow.</p>
+                <audio controls preload="none" src="media/A16.ogg"></audio>
+              </div>
+                          <div class="note">
+                <div class="who"><span class="pill id">A01</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Introduction: screenshots plus voice notes will explain what to add and remove.</p>
+                <audio controls preload="none" src="media/A01.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+          <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/coming-soon/project-dashboard</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Still marked SOON preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/coming-soon-projects.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li><b>Not built in this round:</b> Projects &amp; Site Expenses, Equipment &amp; Vehicles (Phase 5 and 7 reference packages are in the repository), HR Reports and Project Reports. They need a scope decision: this change order or a later release.</li><li><b>Also open:</b> CR-08 staged approval (questions listed at the Edit Role stop) and the earlier English/Arabic request.</li><li>Everything else in this walkthrough is committed and tested and ready for the client's re-review.</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Open the Operations and Reports groups in the sidebar to see which entries still carry the SOON badge.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+      </main>
+</div>
+
+<dialog class="lightbox" id="lightbox">
+  <figure style="margin:0">
+    <img alt="" id="lightbox-img">
+    <figcaption id="lightbox-caption"></figcaption>
+  </figure>
+</dialog>
+
+<script>
+(function () {
+  var box = document.getElementById('lightbox');
+  var img = document.getElementById('lightbox-img');
+  var cap = document.getElementById('lightbox-caption');
+  if (!box || typeof box.showModal !== 'function') return;
+  document.querySelectorAll('.shot').forEach(function (button) {
+    button.addEventListener('click', function () {
+      img.src = button.dataset.full;
+      img.alt = button.dataset.caption;
+      cap.textContent = button.dataset.caption;
+      box.showModal();
+    });
+  });
+  box.addEventListener('click', function () { box.close(); });
+})();
+</script>
+
+</body>
+</html>
