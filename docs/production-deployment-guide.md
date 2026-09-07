@@ -175,6 +175,13 @@ staff accounts from the company organization chart, run:
 php artisan db:seed --class=OrganizationHierarchySeeder --force
 ```
 
+Or run both steps with one command (it refuses to start while the login domain
+is still the `seera.local` placeholder, and prints the resulting account list):
+
+```bash
+php artisan db:seed --class=ProductionBootstrapSeeder --force
+```
+
 Set the login domain first, otherwise the accounts are created on the
 `seera.local` placeholder:
 

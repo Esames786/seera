@@ -52,6 +52,42 @@ class ProductionBootstrapTest extends TestCase
         }
     }
 
+    public function test_the_single_bootstrap_seeder_matches_the_two_step_sequence(): void
+    {
+        config([
+            'seera.admin.name' => 'Admin User',
+            'seera.admin.email' => 'admin@seera.com',
+            'seera.admin.username' => 'admin',
+            'seera.admin.password' => 'Seera2026!Seera2026!',
+            'seera.organization.email_domain' => 'seera.com',
+        ]);
+
+        $this->seed(\Database\Seeders\ProductionBootstrapSeeder::class);
+
+        $this->assertSame(13, User::count());
+        $this->assertSame(0, User::where('email', 'like', '%@example.com')->count(), 'no demo accounts');
+        $this->assertTrue(Hash::check('Seera2026!Seera2026!', User::where('email', 'admin@seera.com')->firstOrFail()->password));
+        $this->assertTrue(User::where('email', 'omar@seera.com')->firstOrFail()->must_change_password);
+
+        // Re-running is safe: nothing duplicated, no password reset.
+        $this->seed(\Database\Seeders\ProductionBootstrapSeeder::class);
+        $this->assertSame(13, User::count());
+    }
+
+    public function test_the_bootstrap_seeder_refuses_the_placeholder_domain(): void
+    {
+        config([
+            'seera.admin.name' => 'Admin User',
+            'seera.admin.email' => 'admin@seera.com',
+            'seera.admin.username' => 'admin',
+            'seera.admin.password' => 'Seera2026!Seera2026!',
+            'seera.organization.email_domain' => 'seera.local',
+        ]);
+
+        $this->expectException(\RuntimeException::class);
+        $this->seed(\Database\Seeders\ProductionBootstrapSeeder::class);
+    }
+
     public function test_the_admin_account_is_not_disturbed_by_the_org_seeder(): void
     {
         $this->bootstrapProduction();
