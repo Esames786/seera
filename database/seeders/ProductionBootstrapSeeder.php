@@ -12,10 +12,13 @@ use RuntimeException;
  *   php artisan db:seed --class=ProductionBootstrapSeeder --force
  *
  * Runs ProductionSeeder (permission catalogue, Super Admin, the bootstrap
- * administrator from SEERA_ADMIN_* in .env, company profile) and then
+ * administrator from SEERA_ADMIN_* in .env, company profile), then
+ * ProductionChartOfAccountsSeeder (standard chart of accounts with zero
+ * balances, posting rules, current VAT period), then
  * OrganizationHierarchySeeder (departments, roles, designations and the twelve
  * organisation-chart accounts on SEERA_ORG_EMAIL_DOMAIN with the shared default
- * password and a forced change at first login). No demo data is created.
+ * password and a forced change at first login). No demo data is created and
+ * every step is idempotent, so it can be re-run after a partial setup.
  */
 class ProductionBootstrapSeeder extends Seeder
 {
@@ -31,6 +34,7 @@ class ProductionBootstrapSeeder extends Seeder
         }
 
         $this->call(ProductionSeeder::class);
+        $this->call(ProductionChartOfAccountsSeeder::class);
         $this->call(OrganizationHierarchySeeder::class);
 
         $this->command?->newLine();

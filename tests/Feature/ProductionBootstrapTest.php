@@ -74,6 +74,64 @@ class ProductionBootstrapTest extends TestCase
         $this->assertSame(13, User::count());
     }
 
+    public function test_the_bootstrap_installs_a_working_chart_of_accounts_without_demo_data(): void
+    {
+        config([
+            'seera.admin.name' => 'Admin User',
+            'seera.admin.email' => 'admin@seera.com',
+            'seera.admin.username' => 'admin',
+            'seera.admin.password' => 'Seera2026!Seera2026!',
+            'seera.organization.email_domain' => 'seera.com',
+        ]);
+
+        $this->seed(\Database\Seeders\ProductionBootstrapSeeder::class);
+
+        $payable = \App\Models\ChartOfAccount::where('account_code', '2100')->firstOrFail();
+        $this->assertSame('Accounts Payable', $payable->account_name);
+        $this->assertSame('2000', $payable->parent->account_code);
+        $this->assertSame(0.0, (float) \App\Models\ChartOfAccount::sum('opening_balance'), 'no balances are invented');
+        $this->assertSame(9, \App\Models\AutomaticPostingRule::count());
+        $this->assertSame(1, \App\Models\VatPeriod::count());
+        $this->assertSame(0, \App\Models\JournalEntry::count());
+        $this->assertSame(0, \App\Models\SupplierBill::count());
+
+        // Re-running adds nothing and changes nothing.
+        $accounts = \App\Models\ChartOfAccount::count();
+        $this->seed(\Database\Seeders\ProductionChartOfAccountsSeeder::class);
+        $this->assertSame($accounts, \App\Models\ChartOfAccount::count());
+        $this->assertSame(9, \App\Models\AutomaticPostingRule::count());
+        $this->assertSame(1, \App\Models\VatPeriod::count());
+
+        // An accountant's own change to an account survives a re-run.
+        $payable->update(['account_name' => 'Trade Creditors']);
+        $this->seed(\Database\Seeders\ProductionChartOfAccountsSeeder::class);
+        $this->assertSame('Trade Creditors', $payable->fresh()->account_name);
+
+        // The very first supplier bill on a fresh production database posts straight to the ledger.
+        $supplier = \App\Models\Supplier::create(['name' => 'First Supplier', 'code' => 'SUP-001', 'status' => 'active']);
+        $this->assertSame($payable->id, $supplier->linked_account_id, 'new suppliers link to Accounts Payable by default');
+
+        $admin = User::where('email', 'admin@seera.com')->firstOrFail();
+
+        $this->actingAs($admin)
+            ->post(route('admin.accounting.accounts-payable.store'), [
+                'supplier_id' => $supplier->id,
+                'bill_number' => 'BILL-0001',
+                'bill_date' => now()->toDateString(),
+                'vat_rate' => 15,
+                'lines' => [['description' => 'Cement', 'quantity' => 10, 'unit_price' => 100]],
+            ])
+            ->assertRedirect();
+
+        $bill = \App\Models\SupplierBill::firstOrFail();
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-payable.approve', $bill))->assertRedirect();
+
+        $entry = $bill->refresh()->journalEntry;
+        $this->assertSame('posted', $entry->status);
+        $this->assertSame(1150.0, (float) $entry->lines->firstWhere('chart_of_account_id', $payable->id)->credit);
+        $this->assertDatabaseHas('vat_transactions', ['source_reference' => 'BILL-0001', 'vat_period_id' => \App\Models\VatPeriod::first()->id]);
+    }
+
     public function test_the_bootstrap_seeder_refuses_the_placeholder_domain(): void
     {
         config([

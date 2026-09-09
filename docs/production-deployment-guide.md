@@ -175,11 +175,21 @@ staff accounts from the company organization chart, run:
 php artisan db:seed --class=OrganizationHierarchySeeder --force
 ```
 
-Or run both steps with one command (it refuses to start while the login domain
+Or run everything with one command (it refuses to start while the login domain
 is still the `seera.local` placeholder, and prints the resulting account list):
 
 ```bash
 php artisan db:seed --class=ProductionBootstrapSeeder --force
+```
+
+This also runs `ProductionChartOfAccountsSeeder`: the standard chart of accounts
+(Cash, Bank, Receivables, Payables 2100, VAT, Revenue, Expenses) with zero
+balances, the automatic posting rules, and an open VAT period for the current
+quarter. Without it no bill or invoice can post. It never overwrites an account
+that already exists, so it can be re-run at any time, also on its own:
+
+```bash
+php artisan db:seed --class=ProductionChartOfAccountsSeeder --force
 ```
 
 Set the login domain first, otherwise the accounts are created on the
