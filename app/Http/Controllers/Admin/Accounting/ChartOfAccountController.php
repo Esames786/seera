@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin\Accounting;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\ChartOfAccount;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class ChartOfAccountController extends Controller
@@ -40,11 +42,19 @@ class ChartOfAccountController extends Controller
         return view('admin.accounting.chart-of-accounts.create', $this->formOptions());
     }
 
-    public function store(Request $request): RedirectResponse
+    /**
+     * Also serves the "+ New" dialog on the supplier form (JSON), which creates
+     * a payable sub-account under Accounts Payable with a generated code.
+     */
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $account = ChartOfAccount::create($this->validated($request));
 
         ActivityLog::record($request, 'Accounting', 'Created account', $account->label());
+
+        if ($request->wantsJson()) {
+            return response()->json(['id' => $account->id, 'label' => $account->label(), 'code' => $account->account_code], 201);
+        }
 
         return redirect()->route('admin.accounting.chart-of-accounts.index')
             ->with('status', 'Account "'.$account->label().'" created successfully.');
@@ -108,7 +118,8 @@ class ChartOfAccountController extends Controller
     private function validated(Request $request, ?ChartOfAccount $account = null): array
     {
         $data = $request->validate([
-            'account_code' => ['required', 'string', 'max:20', 'unique:chart_of_accounts,account_code'.($account ? ','.$account->id : '')],
+            // A new account may leave the code blank when it has a parent; the next free code under that parent is used.
+            'account_code' => [$account ? 'required' : 'nullable', 'string', 'max:20', 'unique:chart_of_accounts,account_code'.($account ? ','.$account->id : '')],
             'account_name' => ['required', 'string', 'max:255'],
             'account_type' => ['required', 'in:asset,liability,equity,revenue,expense'],
             'parent_id' => array_filter(['nullable', 'exists:chart_of_accounts,id', $account ? 'not_in:'.$account->id : null]),
@@ -121,6 +132,16 @@ class ChartOfAccountController extends Controller
 
         $data['vat_applicable'] = $request->boolean('vat_applicable');
         $data['cost_center_required'] = $request->boolean('cost_center_required');
+
+        if (blank($data['account_code'] ?? null)) {
+            $parent = filled($data['parent_id'] ?? null) ? ChartOfAccount::find($data['parent_id']) : null;
+
+            if (! $parent) {
+                throw ValidationException::withMessages(['account_code' => 'Enter an account code, or choose a parent account so one can be generated.']);
+            }
+
+            $data['account_code'] = ChartOfAccount::nextChildCode($parent);
+        }
 
         return $data;
     }

@@ -31,11 +31,12 @@
         </x-admin.data-table>
 
         <div>
-            <div class="map-placeholder">
-                Map + Geo-Fence Circle<br>
-                {{ $site->latitude }}, {{ $site->longitude }} — radius {{ $site->geofence_radius }} m
+            <div class="table-card">
+                <div class="table-title"><span>Map + Geo-Fence Circle</span></div>
+                <div style="padding:12px">
+                    <x-admin.site-map :lat="$site->latitude" :lng="$site->longitude" :radius="$site->geofence_radius"/>
+                </div>
             </div>
-            <br/>
             <x-admin.data-table title="Warehouses on this Site">
                 <thead>
                     <tr><th>Code</th><th>Warehouse</th><th>Incharge</th><th>Status</th></tr>

@@ -1,0 +1,535 @@
+{
+    "review_date": "2026-09-09",
+    "code_baseline": "ad83f0f",
+    "source_directory": "public/new_requirement2",
+    "method": "Local small Urdu transcription and translation, medium Urdu cross-check of every new recording, contextual interpretation against all four screenshots and current source. Not a certified verbatim transcript.",
+    "images": [
+        {
+            "id": "J01",
+            "file": "WhatsApp Image 2026-09-08 at 7.44.32 PM.jpeg",
+            "screen": "Create Project",
+            "requirements": [
+                "CR-15"
+            ],
+            "observation": "The Project form already has + New for Client, Branch and Project Manager, but has no Classification field. Project name/code, dates, budget and other populated values are example data, not requested defaults.",
+            "sha256": "5db0e94e9c304cd90da38729222b4d8425803975c3b2751037a088b3f5dfc59e",
+            "bytes": 76659
+        },
+        {
+            "id": "J02",
+            "file": "WhatsApp Image 2026-09-08 at 7.44.33 PM.jpeg",
+            "screen": "Site Details — map placeholder",
+            "requirements": [
+                "CR-16"
+            ],
+            "observation": "Saved latitude/longitude and 300 m radius are shown with geo-fence and attendance settings. The right panel labeled Map + Geo-Fence Circle is a placeholder rather than a visible geographic map. The client's request targets the location display, not changing attendance settings.",
+            "sha256": "498c017dae7c55fe9efca8257f18b9a6046cd60172a2e59740c250081303ad03",
+            "bytes": 85267
+        },
+        {
+            "id": "J03",
+            "file": "WhatsApp Image 2026-09-08 at 7.44.34 PM.jpeg",
+            "screen": "Phone mapping application reference",
+            "requirements": [
+                "CR-16"
+            ],
+            "observation": "An actual street map and location marker illustrate the desired visual location context. This is not evidence that the client selected a map provider, requested GPS tracking/navigation, or asked to copy the phone application's other controls.",
+            "sha256": "5d95aef74ee44511f63a6e0e30455f9181b3a8d215484630155e807f2ccefe0f",
+            "bytes": 119365
+        },
+        {
+            "id": "J04",
+            "file": "WhatsApp Image 2026-09-08 at 7.51.24 PM.jpeg",
+            "screen": "Add Supplier — Payment Terms and Linked Payable Account",
+            "requirements": [
+                "CR-17",
+                "CR-18"
+            ],
+            "observation": "Payment Terms offers Cash, 15 Days, 30 Days and 60 Days. Linked Payable Account is a plain text field reading Accounts Payable - Suppliers. Supplier details/opening balance elsewhere on the form are context, not instructions to seed those values.",
+            "sha256": "256bb6dd1fec80ccdbc9e0b3548ebdd36b5dee21dd399bfcfe3f378d0824512c",
+            "bytes": 83298
+        }
+    ],
+    "audio": [
+        {
+            "id": "B01",
+            "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM (1).ogg",
+            "requirements": [
+                "CR-15"
+            ],
+            "images": [
+                "J01"
+            ],
+            "summary": "Add a Classification dropdown on the existing Project form, alongside its other fields. Let the user add their own classification choices from there.",
+            "confidence": "High on the field, screen and extensible dropdown; opening phrase unclear.",
+            "note": "Both Urdu passes recognize project/client/date context and Classification. The translation's drag down means dropdown in context. Do not read the malformed opening as a specification for a separate new screen; B02 and J01 confirm the missing field. No category names or employee classification are mentioned.",
+            "roman_urdu": "Isi Project form mein Classification ka dropdown chahiye, jahan hum apni classifications add kar saken.",
+            "sha256": "54e10d18512a2f58822c8eb97cd6c93abd9058c3eb3b1b87a2f97581e1ce60dd",
+            "bytes": 34975,
+            "duration_seconds": 14.6335,
+            "machine_passes": {
+                "small-translate": {
+                    "id": "B01",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM (1).ogg",
+                    "sha256": "54e10d18512a2f58822c8eb97cd6c93abd9058c3eb3b1b87a2f97581e1ce60dd",
+                    "model": "small",
+                    "task": "translate",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 14.6335,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 7,
+                            "text": "I don't want to add any screen like project, client name, date, start date and date",
+                            "avg_logprob": -0.7442291730489486,
+                            "no_speech_prob": 0.06360010802745819
+                        },
+                        {
+                            "start": 7,
+                            "end": 15,
+                            "text": "here I am adding a tab where I am adding classification and drag down",
+                            "avg_logprob": -0.7442291730489486,
+                            "no_speech_prob": 0.06360010802745819
+                        }
+                    ],
+                    "processing_seconds": 7.8
+                },
+                "small-transcribe": {
+                    "id": "B01",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM (1).ogg",
+                    "sha256": "54e10d18512a2f58822c8eb97cd6c93abd9058c3eb3b1b87a2f97581e1ce60dd",
+                    "model": "small",
+                    "task": "transcribe",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 14.6335,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 14.62,
+                            "text": "اپنی سکین نہیں ایڈ کرونا چاہرہا جیسے یہ اپشن ہے نا کہ پڑجیکٹ, کلائنڈ نیم کیکہ دیت، سٹارڈ دیت اور دیت یہاں پی ایک اپشن چاہرہوں اور ٹیپ چاہرہوں جس میں آرہوں کلاسیفکیشن جو ڈیاگڈون کریں تو اس میں اپنی ایڈ کرتے جائے اور وہ ایڈ کریں وہ چاہرہوں",
+                            "avg_logprob": -0.39586780974583596,
+                            "no_speech_prob": 0.06360010802745819
+                        }
+                    ],
+                    "processing_seconds": 10.5
+                },
+                "medium-transcribe": {
+                    "id": "B01",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM (1).ogg",
+                    "sha256": "54e10d18512a2f58822c8eb97cd6c93abd9058c3eb3b1b87a2f97581e1ce60dd",
+                    "model": "medium",
+                    "task": "transcribe",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 14.6335,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 14.9,
+                            "text": "اپنی سکرین نہیں آیڈ کرونا چاہ رہا جیسے یہ اپشن ہے نا کہ پروڈیکٹ، کلائیٹ نیم، ڈیٹ، ڈیٹ، ڈیٹ، ڈیٹ یہاں پی ایک اپشن چاہ رہا ہوں، ایک ٹیپ چاہ رہا ہوں جس میں آ رہا ہوں کلاسفکیشن جو ڈراگڑون کریں تو اس میں اپنی آیڈ کرتے جائے اور وہ آیڈ کریں وہ چاہ رہا ہوں",
+                            "avg_logprob": -0.3451325115801274,
+                            "no_speech_prob": 0.1620175838470459
+                        }
+                    ],
+                    "processing_seconds": 101.8
+                }
+            }
+        },
+        {
+            "id": "B02",
+            "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM.ogg",
+            "requirements": [
+                "CR-15"
+            ],
+            "images": [
+                "J01"
+            ],
+            "summary": "The Classification option requested earlier has not been added. The New action for adding related values is there, but that is not the missing Classification field.",
+            "confidence": "High; correction is repeated and matches the screenshot.",
+            "note": "The small English pass misrecognizes classification as classic patient near the end. Reject that phrase. Small Urdu/English describe client/branch examples; the medium pass is less complete in the middle but clearly repeats that Classification is missing. This is a follow-up on the Project form, separate from CR-04 employee classification.",
+            "roman_urdu": "New Client ya Branch add karne ka option aa gaya hai, lekin Classification ka field abhi add nahin hua.",
+            "sha256": "4345917213950080aa9fd0ee2454df55bad0106214e47d0b1e03d2ce18411f56",
+            "bytes": 37503,
+            "duration_seconds": 15.8535,
+            "machine_passes": {
+                "small-translate": {
+                    "id": "B02",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM.ogg",
+                    "sha256": "4345917213950080aa9fd0ee2454df55bad0106214e47d0b1e03d2ce18411f56",
+                    "model": "small",
+                    "task": "translate",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 15.8535,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 6,
+                            "text": "The first point was to add the classification option, it was not added.",
+                            "avg_logprob": -0.8172803990384365,
+                            "no_speech_prob": 0.02348965033888817
+                        },
+                        {
+                            "start": 6,
+                            "end": 12,
+                            "text": "The new tab option was to add the new client name or branch.",
+                            "avg_logprob": -0.8172803990384365,
+                            "no_speech_prob": 0.02348965033888817
+                        },
+                        {
+                            "start": 12,
+                            "end": 15,
+                            "text": "But this way the classic patient tab was not added.",
+                            "avg_logprob": -0.8172803990384365,
+                            "no_speech_prob": 0.02348965033888817
+                        }
+                    ],
+                    "processing_seconds": 8.9
+                },
+                "small-transcribe": {
+                    "id": "B02",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM.ogg",
+                    "sha256": "4345917213950080aa9fd0ee2454df55bad0106214e47d0b1e03d2ce18411f56",
+                    "model": "small",
+                    "task": "transcribe",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 15.8535,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 6.4,
+                            "text": "تاویز بہت سب سے پہلہ پوائنٹ اس میں جو میرا یہ تھا نا کہ اس میں کلاسی پیشن کا اپشان ایٹ کرنا وہ ایڈ نہیں ہوا",
+                            "avg_logprob": -0.44179875786240036,
+                            "no_speech_prob": 0.02348965033888817
+                        },
+                        {
+                            "start": 6.4,
+                            "end": 15.4,
+                            "text": "نیو تیب کا اپشان آگیا کہ وہیسے آپ نیا جو بھی ہے کلائن کا نام یہاں پلاان چھوکر ایٹ کر لیں لیکن اس میں کلاسی پیشن کا تیب ایٹ کرنا تھا وہ ایڈ نہیں ہوا",
+                            "avg_logprob": -0.44179875786240036,
+                            "no_speech_prob": 0.02348965033888817
+                        }
+                    ],
+                    "processing_seconds": 10.3
+                },
+                "medium-transcribe": {
+                    "id": "B02",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM.ogg",
+                    "sha256": "4345917213950080aa9fd0ee2454df55bad0106214e47d0b1e03d2ce18411f56",
+                    "model": "medium",
+                    "task": "transcribe",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 15.8535,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 6.4,
+                            "text": "سب سے پہلے پوائنٹ ہے کہ اس میں کلاسفکیشن کا اوپشن ایڈ کرنا وہ ایڈ نہیں ہوا",
+                            "avg_logprob": -0.43243564139394197,
+                            "no_speech_prob": 0.14284420013427734
+                        },
+                        {
+                            "start": 6.4,
+                            "end": 15.56,
+                            "text": "نیو ٹیپ کا اوپشن آگیا کہ وہی سے آپ نیا جو بھی ہے کلاسفکیشن کا ایڈ کرنا تھا وہ ایڈ نہیں ہوا",
+                            "avg_logprob": -0.43243564139394197,
+                            "no_speech_prob": 0.14284420013427734
+                        }
+                    ],
+                    "processing_seconds": 96.8
+                }
+            }
+        },
+        {
+            "id": "B03",
+            "file": "WhatsApp Audio 2026-09-08 at 7.44.34 PM.ogg",
+            "requirements": [
+                "CR-16"
+            ],
+            "images": [
+                "J02",
+                "J03"
+            ],
+            "summary": "Show the site's actual location visually in the right-hand Map + Geo-Fence Circle panel where only coordinate-related placeholder information is currently shown.",
+            "confidence": "High on a visible location map; map interaction/provider unspecified.",
+            "note": "The small translation sounds descriptive, but the Urdu wording is a request that the location picture should appear. J02 identifies the placeholder; J03 provides map context. Do not infer live person tracking or a mandatory phone-map vendor.",
+            "roman_urdu": "Right side par Map + Geo-Fence Circle mein us location ka map/tasveer nazar aani chahiye.",
+            "sha256": "e1b9a89a88ad5cf92730607d2604b66249b19ae6c8d30330f40e777f596b0f49",
+            "bytes": 29367,
+            "duration_seconds": 12.3135,
+            "machine_passes": {
+                "small-translate": {
+                    "id": "B03",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.44.34 PM.ogg",
+                    "sha256": "e1b9a89a88ad5cf92730607d2604b66249b19ae6c8d30330f40e777f596b0f49",
+                    "model": "small",
+                    "task": "translate",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 12.3135,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 12.3,
+                            "text": "The coordinates are shown on the right side of map geofence circle, there is a picture of the location",
+                            "avg_logprob": -0.8601482963562012,
+                            "no_speech_prob": 0.2863370478153229
+                        }
+                    ],
+                    "processing_seconds": 6.6
+                },
+                "small-transcribe": {
+                    "id": "B03",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.44.34 PM.ogg",
+                    "sha256": "e1b9a89a88ad5cf92730607d2604b66249b19ae6c8d30330f40e777f596b0f49",
+                    "model": "small",
+                    "task": "transcribe",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 12.3135,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 4.68,
+                            "text": "جو کوڈنیٹ سوال ہے اس میں کوڈنیٹ کی جگہ جہاں پر کوڈنیٹ شوہ ہو رہے نا",
+                            "avg_logprob": -0.5123289360487757,
+                            "no_speech_prob": 0.2863370478153229
+                        },
+                        {
+                            "start": 4.68,
+                            "end": 10.3,
+                            "text": "right side پر میب جیو فینس سرکل وہاں پر تصویر آنجا ہی اس لکیشن کی شوہ ہونجے",
+                            "avg_logprob": -0.5123289360487757,
+                            "no_speech_prob": 0.2863370478153229
+                        },
+                        {
+                            "start": 10.3,
+                            "end": 12.3,
+                            "text": "کہ یہاں پر یہاں پر نوری لکیشن",
+                            "avg_logprob": -0.5123289360487757,
+                            "no_speech_prob": 0.2863370478153229
+                        }
+                    ],
+                    "processing_seconds": 7.7
+                },
+                "medium-transcribe": {
+                    "id": "B03",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.44.34 PM.ogg",
+                    "sha256": "e1b9a89a88ad5cf92730607d2604b66249b19ae6c8d30330f40e777f596b0f49",
+                    "model": "medium",
+                    "task": "transcribe",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 12.3135,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 6,
+                            "text": "سوڑھی جو کوارڈنیورٹس والا ہے اس میں کوارڈنیورٹس کی جگہ جہاں پہ کوارڈنیورٹس شو ہو رہے ہیں رائیٹ سائٹ پہ",
+                            "avg_logprob": -0.3588315170176708,
+                            "no_speech_prob": 0.11395834386348724
+                        },
+                        {
+                            "start": 6,
+                            "end": 12,
+                            "text": "میب جیو فنس سرکل وہاں پہ تصویر آنجھے گی اس لوکیشن کی شو انجھے کہ یہاں پہ یہاں پن ہو رہی ہے لوکیشن",
+                            "avg_logprob": -0.3588315170176708,
+                            "no_speech_prob": 0.11395834386348724
+                        }
+                    ],
+                    "processing_seconds": 382.3
+                }
+            }
+        },
+        {
+            "id": "B04",
+            "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM (1).ogg",
+            "requirements": [
+                "CR-18"
+            ],
+            "images": [
+                "J04"
+            ],
+            "summary": "Linked Payable Account should offer a dropdown with selectable options and also a New action.",
+            "confidence": "High on both controls; financial posting semantics not specified.",
+            "note": "The small English pass repeats New and omits the dropdown, which is explicit in the original-language pass. J04 fixes the exact field label. A selectable accounting reference is a proposed implementation; the client has not explicitly stated how it changes journal posting. Some machine segment ends exceed the decoded clip by a fraction of a second.",
+            "roman_urdu": "Linked Payable Account mein bhi New ka option aur dropdown chahiye; neeche options aane chahiye.",
+            "sha256": "99508cfc6cc07dcd01dccc7019aa2b20219908364f67c269f0b95cee7537dee3",
+            "bytes": 16777,
+            "duration_seconds": 7.0535,
+            "machine_passes": {
+                "small-translate": {
+                    "id": "B04",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM (1).ogg",
+                    "sha256": "99508cfc6cc07dcd01dccc7019aa2b20219908364f67c269f0b95cee7537dee3",
+                    "model": "small",
+                    "task": "translate",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 7.0535,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 7,
+                            "text": "You have to add a new option in the linked payable account and you also have to add a new option in it",
+                            "avg_logprob": -0.8965394055401837,
+                            "no_speech_prob": 0.14042718708515167
+                        }
+                    ],
+                    "processing_seconds": 8.2
+                },
+                "small-transcribe": {
+                    "id": "B04",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM (1).ogg",
+                    "sha256": "99508cfc6cc07dcd01dccc7019aa2b20219908364f67c269f0b95cee7537dee3",
+                    "model": "small",
+                    "task": "transcribe",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 7.0535,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 6.14,
+                            "text": "یہ جو لنٹ پیبل اکاونٹا ہے اس میں بھی نیو کا ا option آپ نے آئیٹ کرنا ہے اور اس میں بھی دائگڈوان کا option رہا چاہیت",
+                            "avg_logprob": -0.5897031214676405,
+                            "no_speech_prob": 0.14042718708515167
+                        },
+                        {
+                            "start": 6.14,
+                            "end": 7.14,
+                            "text": "دیچھے option آنے چاہیت",
+                            "avg_logprob": -0.5897031214676405,
+                            "no_speech_prob": 0.14042718708515167
+                        }
+                    ],
+                    "processing_seconds": 4.7
+                },
+                "medium-transcribe": {
+                    "id": "B04",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM (1).ogg",
+                    "sha256": "99508cfc6cc07dcd01dccc7019aa2b20219908364f67c269f0b95cee7537dee3",
+                    "model": "medium",
+                    "task": "transcribe",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 7.0535,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 7.2,
+                            "text": "یہ جو لینٹ پی بل اکاونٹ ہے نا اس میں بھی نیو کا اپشن آپ نے آئیڈ کرنے اور اس میں بھی ڈائک ڈاؤن کا اپشن ہو چاہیے ڈچے اپشن آنے چاہیے",
+                            "avg_logprob": -0.47580254557488977,
+                            "no_speech_prob": 0.03471587970852852
+                        }
+                    ],
+                    "processing_seconds": 55.1
+                }
+            }
+        },
+        {
+            "id": "B05",
+            "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM.ogg",
+            "requirements": [
+                "CR-17"
+            ],
+            "images": [
+                "J04"
+            ],
+            "summary": "Give Payment Terms a New action and allow terms to be changed/added with the number of days agreed with the particular party.",
+            "confidence": "High on configurable payment terms and own day count; editing shared definitions versus supplier selection remains open.",
+            "note": "Original-language text supplies the days detail that the first translation misses. Do not infer invoice-date recalculation, late fees or instalment schedules from this short UI request. Any recognized person's name is irrelevant and is not treated as an identity claim.",
+            "roman_urdu": "Payment Terms mein New ka option dein, taake party ke agreed terms ke mutabiq apne days ki payment term bana aur select/change kar saken.",
+            "sha256": "3d86090e7e9518b47b30ed8a7b28a1b724825612a45cc1d3bfbef886b6725bf5",
+            "bytes": 35217,
+            "duration_seconds": 14.7735,
+            "machine_passes": {
+                "small-translate": {
+                    "id": "B05",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM.ogg",
+                    "sha256": "3d86090e7e9518b47b30ed8a7b28a1b724825612a45cc1d3bfbef886b6725bf5",
+                    "model": "small",
+                    "task": "translate",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 14.7735,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 15,
+                            "text": "In this tab, you have to give the new option, tab tab, you have to give the payment terms, here we can change it, we have made the payment terms according to any of the payment terms, and here we can add them.",
+                            "avg_logprob": -0.7662583207184414,
+                            "no_speech_prob": 0.0855441763997078
+                        }
+                    ],
+                    "processing_seconds": 16.7
+                },
+                "small-transcribe": {
+                    "id": "B05",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM.ogg",
+                    "sha256": "3d86090e7e9518b47b30ed8a7b28a1b724825612a45cc1d3bfbef886b6725bf5",
+                    "model": "small",
+                    "task": "transcribe",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 14.7735,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 14.8,
+                            "text": "اچھا تابیش پہ ہی اس میں بھی جو ہے نیوہ والا option ڈای والا جو دینا وہ یہاں پر آپ نے دینا یہ جو پیمرٹمز ہے گے یہاں پر ہم اس کو چیج بھی کر سکیگیں گے ہم نے کسی کی بھی جو بھی پیمرٹمز تھا اس کو بتا بھی اسی طیام اس کی پیمرٹم بنائیں گے اپنے ڈیس کی اور یہاں پر ہم ڈیس کر سکتے ہیں",
+                            "avg_logprob": -0.4408218018066736,
+                            "no_speech_prob": 0.0855441763997078
+                        }
+                    ],
+                    "processing_seconds": 24.7
+                },
+                "medium-transcribe": {
+                    "id": "B05",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM.ogg",
+                    "sha256": "3d86090e7e9518b47b30ed8a7b28a1b724825612a45cc1d3bfbef886b6725bf5",
+                    "model": "medium",
+                    "task": "transcribe",
+                    "language": "ur",
+                    "language_probability": 1,
+                    "duration": 14.7735,
+                    "segments": [
+                        {
+                            "start": 0,
+                            "end": 5.9,
+                            "text": "اچھا تابیش بھائی اس میں بھی جو ہے نا وہ نیو والا اوپشن ٹیب والا جو دینا وہ یہاں پہ آپ نے دینا ہے",
+                            "avg_logprob": -0.31379722482101485,
+                            "no_speech_prob": 0.19212491810321808
+                        },
+                        {
+                            "start": 5.9,
+                            "end": 11.26,
+                            "text": "یہ جو پیمنٹ ٹرمز ہے کہ یہاں پہ ہم اس کو چینج بھی کر سکیں گے ہم نے کسی کی بھی جو بھی پیمنٹ ٹرمز تھا اس کے مطابق",
+                            "avg_logprob": -0.31379722482101485,
+                            "no_speech_prob": 0.19212491810321808
+                        },
+                        {
+                            "start": 11.26,
+                            "end": 14.9,
+                            "text": "اسی طرح ہم اس کی پیمنٹ ٹرمز بنا کے اتنے دیس کی اور یہاں پہ ہم ایڈ کر سکتے ہیں",
+                            "avg_logprob": -0.31379722482101485,
+                            "no_speech_prob": 0.19212491810321808
+                        }
+                    ],
+                    "processing_seconds": 397.3
+                }
+            }
+        }
+    ],
+    "coverage": {
+        "source_files": 9,
+        "images_reviewed": 4,
+        "audio_reviewed": 5,
+        "medium_crosschecks": 5,
+        "audio_duration_seconds": 64.63
+    }
+}

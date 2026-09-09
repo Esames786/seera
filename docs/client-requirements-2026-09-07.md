@@ -2,6 +2,8 @@
 
 Prepared 7 September 2026 from the client files in `public/new_requirement` (filenames dated 5 September 2026).
 
+**9 September follow-up:** The [new addendum](client-requirements-2026-09-09-addendum.md) adds CR-15–CR-18 from all nine files in `public/new_requirement2`. The [combined HTML](client-requirements-2026-09-09.html) covers both rounds. This document preserves the original requirements and historical code comparison; see the [implementation status](client-change-register-2026-09-07-status.md) for the earlier changes subsequently delivered.
+
 ## Review scope and how to read this document
 
 The source package contains **36 files: 16 JPEG screenshots and 20 OGG voice notes**, approximately **8 minutes 36 seconds** of decoded speech. Every file has an individual entry in the accompanying [source review](client-requirements-2026-09-07-sources.md). The HTML edition includes expandable screenshots and playable original recordings.

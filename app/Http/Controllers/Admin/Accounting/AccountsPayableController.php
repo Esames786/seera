@@ -243,6 +243,15 @@ class AccountsPayableController extends Controller
             'lines.required' => 'Add at least one bill line.',
         ]);
 
+        // No due date typed: count the supplier's agreed payment term from the bill date (CR-17).
+        if (blank($data['due_date'] ?? null)) {
+            $term = Supplier::with('paymentTerm')->find($supplierId)?->paymentTerm;
+
+            if ($term) {
+                $data['due_date'] = \Illuminate\Support\Carbon::parse($data['bill_date'])->addDays($term->days)->toDateString();
+            }
+        }
+
         $vatRate = (float) $data['vat_rate'];
 
         $lines = collect($data['lines'])

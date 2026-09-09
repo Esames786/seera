@@ -36,6 +36,22 @@
         </div>
         <div>
             <div class="label-row">
+                <label for="project_classification_id">Classification</label>
+                <x-admin.quick-create id="qc-classification" target="project_classification_id" :url="route('admin.master.project-classifications.store')" title="New Project Classification" permission="Projects" submit="Add Classification">
+                    <div class="full"><label for="qc-cls-name">Classification Name *</label><input id="qc-cls-name" name="name" class="input" placeholder="e.g. Infrastructure, Residential, Maintenance" required/></div>
+                    <div class="full"><label for="qc-cls-description">Description</label><input id="qc-cls-description" name="description" class="input"/></div>
+                    <input type="hidden" name="status" value="active"/>
+                </x-admin.quick-create>
+            </div>
+            <select id="project_classification_id" name="project_classification_id" class="select">
+                <option value="">Not classified</option>
+                @foreach ($classifications as $classification)
+                    <option value="{{ $classification->id }}" @selected(old('project_classification_id', $project?->project_classification_id) == $classification->id)>{{ $classification->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div>
+            <div class="label-row">
                 <label for="branch_id">Branch *</label>
                 <x-admin.quick-create id="qc-branch" target="branch_id" :url="route('admin.master.branches.store')" title="New Branch" permission="Branches">
                     <div><label for="qc-branch-name">Branch Name *</label><input id="qc-branch-name" name="name" class="input" required/></div>

@@ -5,6 +5,7 @@
 
 @section('content')
     <x-admin.page-header title="Project Management Setup" description="Master project setup before budgeting, attendance, expense, inventory, and equipment assignment">
+        <a class="btn outline" href="{{ route('admin.master.project-classifications.index') }}">Classifications</a>
         <a class="btn primary" href="{{ route('admin.master.projects.create') }}">+ Create Project</a>
     </x-admin.page-header>
 
@@ -23,21 +24,24 @@
                 <option value="{{ $branch->id }}" @selected(request('branch') == $branch->id)>{{ $branch->name }}</option>
             @endforeach
         </select>
+        <select class="select" style="width:170px" name="classification">
+            <option value="">All Classifications</option>
+            @foreach ($classifications as $classification)
+                <option value="{{ $classification->id }}" @selected(request('classification') == $classification->id)>{{ $classification->name }}</option>
+            @endforeach
+        </select>
         <select class="select" style="width:150px" name="status">
             <option value="">All Status</option>
             @foreach (['active', 'planning', 'on hold', 'completed', 'inactive'] as $status)
                 <option value="{{ $status }}" @selected(request('status') === $status)>{{ ucfirst($status) }}</option>
             @endforeach
         </select>
-        <x-slot:actions>
-            <a class="btn primary" href="{{ route('admin.master.projects.create') }}">+ Create Project</a>
-        </x-slot:actions>
     </x-admin.filter-bar>
 
     <x-admin.data-table title="Projects Listing">
         <thead>
             <tr>
-                <th>Project Code</th><th>Project Name</th><th>Client</th><th>Branch</th><th>Project Manager</th>
+                <th>Project Code</th><th>Project Name</th><th>Client</th><th>Classification</th><th>Branch</th><th>Project Manager</th>
                 <th>Budget</th><th>Start</th><th>End</th><th>Status</th><th>Actions</th>
             </tr>
         </thead>
@@ -47,6 +51,7 @@
                     <td>{{ $project->code }}</td>
                     <td>{{ $project->name }}</td>
                     <td>{{ $project->customer?->name ?? '-' }}</td>
+                    <td>{{ $project->classification?->name ?? '-' }}</td>
                     <td>{{ $project->branch?->name ?? '-' }}</td>
                     <td>{{ $project->manager?->name ?? '-' }}</td>
                     <td>SAR {{ number_format($project->budget / 1000000, 1) }}M</td>

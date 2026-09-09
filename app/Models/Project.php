@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     protected $fillable = [
-        'name', 'code', 'customer_id', 'branch_id', 'manager_id',
+        'name', 'code', 'customer_id', 'project_classification_id', 'branch_id', 'manager_id',
         'start_date', 'end_date', 'budget', 'location', 'description', 'status',
     ];
 
@@ -23,6 +23,11 @@ class Project extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function classification()
+    {
+        return $this->belongsTo(ProjectClassification::class, 'project_classification_id');
     }
 
     public function branch()

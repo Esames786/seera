@@ -52,13 +52,25 @@ class PostingService
     }
 
     /**
+     * A supplier may be linked to a sub-account of Accounts Payable (client
+     * change request CR-18). Suppliers without a link, or linked to an inactive
+     * account, post to the control account exactly as before.
+     */
+    public function payableAccountFor(?\App\Models\Supplier $supplier): ?ChartOfAccount
+    {
+        $linked = $supplier?->linked_account_id ? ChartOfAccount::find($supplier->linked_account_id) : null;
+
+        return $linked && $linked->status === 'active' ? $linked : $this->account(self::PAYABLE);
+    }
+
+    /**
      * Debit expense/inventory accounts and input VAT, credit accounts payable.
      */
     public function postSupplierBill(SupplierBill $bill, ?int $userId = null): ?JournalEntry
     {
         $bill->loadMissing('lines', 'supplier');
 
-        $payable = $this->account(self::PAYABLE);
+        $payable = $this->payableAccountFor($bill->supplier);
         $inputVat = $this->account(self::INPUT_VAT);
         $fallbackExpense = $this->account(self::MATERIAL_EXPENSE);
 
@@ -142,7 +154,7 @@ class PostingService
     {
         $payment->loadMissing('supplier');
 
-        $payable = $this->account(self::PAYABLE);
+        $payable = $this->payableAccountFor($payment->supplier);
         $paymentAccount = $payment->payment_account_id
             ? ChartOfAccount::find($payment->payment_account_id)
             : $this->account(self::BANK);
@@ -299,7 +311,7 @@ class PostingService
     {
         $grn->loadMissing('lines.item', 'supplier', 'warehouse');
 
-        $payable = $this->account(self::PAYABLE);
+        $payable = $this->payableAccountFor($grn->supplier);
         $inputVat = $this->account(self::INPUT_VAT);
         $defaultInventory = $this->account(self::INVENTORY_ASSET);
 

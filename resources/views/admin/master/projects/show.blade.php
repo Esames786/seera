@@ -20,6 +20,7 @@
             <tbody>
                 <tr><th>Project Code</th><td>{{ $project->code }}</td></tr>
                 <tr><th>Client</th><td>{{ $project->customer?->name ?? '-' }}</td></tr>
+                <tr><th>Classification</th><td>{{ $project->classification?->name ?? '-' }}</td></tr>
                 <tr><th>Branch</th><td>{{ $project->branch?->name ?? '-' }}</td></tr>
                 <tr><th>Project Manager</th><td>{{ $project->manager?->name ?? '-' }}</td></tr>
                 <tr><th>Start Date</th><td>{{ $project->start_date?->format('d M Y') ?? '-' }}</td></tr>

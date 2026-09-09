@@ -67,6 +67,24 @@ php artisan optimize && php artisan up
 
 No seeder run is required. Quotation files are written to `storage/app/private/purchase-orders/quotations`; include `storage/app` in backups.
 
+## Round 2 — 8 September follow-up (CR-15 to CR-18)
+
+Source: [client-requirements-2026-09-09-addendum.md](client-requirements-2026-09-09-addendum.md) (four screenshots, five voice notes). Built 9 September 2026; covered by `tests/Feature/ClientChangeRequestsRound2Test.php`.
+
+| ID | Client request | Status | What was delivered |
+|---|---|---|---|
+| CR-15 | Classification dropdown on the Project form with its own **+ New**; the company adds its own names | **Done** | New `project_classifications` list. Dropdown with **+ New** on the project form, shown on the project page, column and filter on the Projects list, maintenance page reachable from the Projects list ("Classifications"). List starts empty by design. Separate from the Sponsorship / Freelancer field on people. |
+| CR-16 | Show the real location in the Map + Geo-Fence Circle panel | **Done** | Leaflet + OpenStreetMap map (no API key) on Site details: pin at the saved coordinates, geo-fence radius as a circle, view fitted to the circle. The site form has the same map as a picker: click or drag sets latitude/longitude, the radius field resizes the circle live. Sites without coordinates show a plain message. |
+| CR-17 | Payment Terms with **+ New** and an agreed number of days | **Done** | New `payment_terms` list (name + days) seeded with Cash / 15 / 30 / 60 by the migration; existing suppliers mapped by their old text. Dropdown with **+ New** on the supplier form, maintenance page from the Suppliers list. A supplier bill saved without a due date falls due after the supplier's days. |
+| CR-18 | Linked Payable Account as a dropdown with **+ New** | **Done** | Dropdown of the Accounts Payable control account (2100) and its sub-accounts, **+ New** creates a liability sub-account with a generated code (2101, 2102 …). Bills, payments and goods receipts post to the supplier's linked account; suppliers without one keep posting to 2100. The finance dashboard payables figure totals the whole 2100 group. Existing text values are mapped to 2100. |
+
+Decisions taken (all reversible):
+
+1. **Posting follows the link.** The label promises an accounting link, so it is one. The dropdown is restricted to 2100 and its children, which keeps the control total meaningful; anything else is refused on save.
+2. **OpenStreetMap tiles** are used directly. Fine for a few dozen sites; if usage grows, switch the tile URL to a paid provider or Google Maps with a key (one line in `components/admin/site-map.blade.php`).
+3. **Days count from the bill date** in calendar days, 0–365. Business-day terms, discounts and instalments were not requested.
+4. **Legacy text columns** (`suppliers.payment_terms`, `suppliers.linked_account`) are kept and written automatically from the linked records, so older reports and the seeders keep working.
+
 ## Client review page
 
 A static walkthrough for the client lives at `public/client-review/` and is served at

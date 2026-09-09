@@ -422,6 +422,12 @@ tr:hover td { background: #fbfdff; }
 .hub-card .hub-actions { display: flex; gap: 8px; }
 @media (max-width: 1000px) { .hub-grid, .totals-box { grid-template-columns: 1fr 1fr; } }
 
+/* Site map with geo-fence (CR-16) ------------------------------------ */
+.site-map { width: 100%; border: 1px solid var(--line); border-radius: 7px; background: #e9eef5; position: relative; overflow: hidden; z-index: 0; }
+.site-map-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 13px; font-weight: 700; text-align: center; padding: 20px; }
+.site-map .leaflet-container { font-family: inherit; }
+.site-map-note { margin-top: 8px; }
+
 </style>
 </head>
 <body>
@@ -776,7 +782,7 @@ tr:hover td { background: #fbfdff; }
         <span title="Settings">⚙️</span>
                     <div class="avatar" title="Omar Mukhtar">OM</div>
             <form method="POST" action="http://seera.test/logout">
-                <input type="hidden" name="_token" value="7mQl6xn5jtIgPgFvL1X2HrBs7C6JG18gAKshQr8Z" autocomplete="off">                <button type="submit" class="btn sm outline">Logout</button>
+                <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                <button type="submit" class="btn sm outline">Logout</button>
             </form>
             </div>
 </div>
@@ -861,7 +867,7 @@ tr:hover td { background: #fbfdff; }
                     <td>1</td>
                     <td><span class="badge green">Active</span>
 </td>
-                    <td>Sep 07, 2026</td>
+                    <td>Sep 09, 2026</td>
                     <td>
                         <div class="actions">
             <a class="btn sm primary" href="http://seera.test/admin/roles/1">View</a>
@@ -878,7 +884,7 @@ tr:hover td { background: #fbfdff; }
                     <td>1</td>
                     <td><span class="badge green">Active</span>
 </td>
-                    <td>Sep 07, 2026</td>
+                    <td>Sep 09, 2026</td>
                     <td>
                         <div class="actions">
             <a class="btn sm primary" href="http://seera.test/admin/roles/2">View</a>
@@ -896,7 +902,7 @@ tr:hover td { background: #fbfdff; }
                     <td>1</td>
                     <td><span class="badge green">Active</span>
 </td>
-                    <td>Sep 07, 2026</td>
+                    <td>Sep 09, 2026</td>
                     <td>
                         <div class="actions">
             <a class="btn sm primary" href="http://seera.test/admin/roles/3">View</a>
@@ -914,7 +920,7 @@ tr:hover td { background: #fbfdff; }
                     <td>0</td>
                     <td><span class="badge green">Active</span>
 </td>
-                    <td>Sep 07, 2026</td>
+                    <td>Sep 09, 2026</td>
                     <td>
                         <div class="actions">
             <a class="btn sm primary" href="http://seera.test/admin/roles/7">View</a>
@@ -932,7 +938,7 @@ tr:hover td { background: #fbfdff; }
                     <td>1</td>
                     <td><span class="badge green">Active</span>
 </td>
-                    <td>Sep 07, 2026</td>
+                    <td>Sep 09, 2026</td>
                     <td>
                         <div class="actions">
             <a class="btn sm primary" href="http://seera.test/admin/roles/6">View</a>
@@ -950,7 +956,7 @@ tr:hover td { background: #fbfdff; }
                     <td>1</td>
                     <td><span class="badge green">Active</span>
 </td>
-                    <td>Sep 07, 2026</td>
+                    <td>Sep 09, 2026</td>
                     <td>
                         <div class="actions">
             <a class="btn sm primary" href="http://seera.test/admin/roles/4">View</a>
@@ -968,7 +974,7 @@ tr:hover td { background: #fbfdff; }
                     <td>1</td>
                     <td><span class="badge green">Active</span>
 </td>
-                    <td>Sep 07, 2026</td>
+                    <td>Sep 09, 2026</td>
                     <td>
                         <div class="actions">
             <a class="btn sm primary" href="http://seera.test/admin/roles/5">View</a>
@@ -986,7 +992,7 @@ tr:hover td { background: #fbfdff; }
                     <td>1</td>
                     <td><span class="badge green">Active</span>
 </td>
-                    <td>Sep 07, 2026</td>
+                    <td>Sep 09, 2026</td>
                     <td>
                         <div class="actions">
             <a class="btn sm primary" href="http://seera.test/admin/roles/9">View</a>
@@ -1004,7 +1010,7 @@ tr:hover td { background: #fbfdff; }
                     <td>1</td>
                     <td><span class="badge green">Active</span>
 </td>
-                    <td>Sep 07, 2026</td>
+                    <td>Sep 09, 2026</td>
                     <td>
                         <div class="actions">
             <a class="btn sm primary" href="http://seera.test/admin/roles/10">View</a>
@@ -1022,7 +1028,7 @@ tr:hover td { background: #fbfdff; }
                     <td>1</td>
                     <td><span class="badge green">Active</span>
 </td>
-                    <td>Sep 07, 2026</td>
+                    <td>Sep 09, 2026</td>
                     <td>
                         <div class="actions">
             <a class="btn sm primary" href="http://seera.test/admin/roles/8">View</a>
@@ -1062,7 +1068,7 @@ tr:hover td { background: #fbfdff; }
         <div class="modal-foot">
             <button type="button" class="btn outline js-modal-close">Cancel</button>
             <form method="POST" action="#">
-                <input type="hidden" name="_token" value="7mQl6xn5jtIgPgFvL1X2HrBs7C6JG18gAKshQr8Z" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <button type="submit" class="btn danger">Confirm Delete</button>
+                <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <button type="submit" class="btn danger">Confirm Delete</button>
             </form>
         </div>
     </div>

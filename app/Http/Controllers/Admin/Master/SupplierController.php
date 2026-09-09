@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Admin\Master;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\ChartOfAccount;
+use App\Models\PaymentTerm;
 use App\Models\Supplier;
 use App\Support\CodeGenerator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class SupplierController extends Controller
@@ -40,7 +43,7 @@ class SupplierController extends Controller
 
     public function create(): View
     {
-        return view('admin.master.suppliers.create');
+        return view('admin.master.suppliers.create', $this->formOptions());
     }
 
     /** Also serves the "+ New" dialog on purchase forms (JSON). */
@@ -59,12 +62,14 @@ class SupplierController extends Controller
 
     public function show(Supplier $supplier): View
     {
+        $supplier->load(['paymentTerm', 'linkedAccount']);
+
         return view('admin.master.suppliers.show', ['supplier' => $supplier]);
     }
 
     public function edit(Supplier $supplier): View
     {
-        return view('admin.master.suppliers.edit', ['supplier' => $supplier]);
+        return view('admin.master.suppliers.edit', ['supplier' => $supplier] + $this->formOptions());
     }
 
     public function update(Request $request, Supplier $supplier): RedirectResponse
@@ -99,7 +104,10 @@ class SupplierController extends Controller
             'phone' => ['nullable', 'string', 'max:30'],
             'email' => ['nullable', 'email', 'max:255'],
             'payment_terms' => ['nullable', 'string', 'max:50'],
+            'payment_term_id' => ['nullable', Rule::exists('payment_terms', 'id')->where('status', 'active')],
             'linked_account' => ['nullable', 'string', 'max:255'],
+            // Only the payables control account or an account beneath it may be linked (CR-18).
+            'linked_account_id' => ['nullable', Rule::in(ChartOfAccount::payableChoices()->pluck('id')->all())],
             'address' => ['nullable', 'string'],
             'status' => ['required', 'in:active,inactive'],
         ]);
@@ -109,5 +117,14 @@ class SupplierController extends Controller
         }
 
         return $data;
+    }
+
+    private function formOptions(): array
+    {
+        return [
+            'paymentTerms' => PaymentTerm::active()->orderBy('days')->orderBy('name')->get(),
+            'payableAccounts' => ChartOfAccount::payableChoices(),
+            'payableControl' => ChartOfAccount::payableControl(),
+        ];
     }
 }

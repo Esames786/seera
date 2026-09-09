@@ -44,6 +44,8 @@ use App\Http\Controllers\Admin\Master\DepartmentController;
 use App\Http\Controllers\Admin\Master\DesignationController;
 use App\Http\Controllers\Admin\Master\ExpenseCategoryController;
 use App\Http\Controllers\Admin\Master\OrganizationStructureController;
+use App\Http\Controllers\Admin\Master\PaymentTermController;
+use App\Http\Controllers\Admin\Master\ProjectClassificationController;
 use App\Http\Controllers\Admin\Master\ProjectController;
 use App\Http\Controllers\Admin\Master\SiteController;
 use App\Http\Controllers\Admin\Master\SupplierController;
@@ -124,10 +126,16 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::resource('branches', BranchController::class);
         Route::resource('departments', DepartmentController::class);
         Route::resource('designations', DesignationController::class);
+        Route::resource('project-classifications', ProjectClassificationController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->parameters(['project-classifications' => 'project_classification']);
         Route::resource('projects', ProjectController::class);
         Route::resource('sites', SiteController::class);
         Route::resource('warehouses', WarehouseController::class);
         Route::resource('expense-categories', ExpenseCategoryController::class);
+        Route::resource('payment-terms', PaymentTermController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->parameters(['payment-terms' => 'payment_term']);
         Route::resource('suppliers', SupplierController::class);
         Route::resource('customers', CustomerController::class);
     });

@@ -67,6 +67,8 @@ h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; letter-
 .legend strong { display: block; font-family: var(--display); font-weight: 600; margin-bottom: 2px; }
 
 .stop { margin-bottom: 44px; scroll-margin-top: 20px; }
+.round-title { font-size: 13px; font-family: var(--mono); text-transform: uppercase; letter-spacing: .12em; color: var(--muted); border-top: 1px solid var(--line); padding-top: 26px; margin: 0 0 22px; }
+.frame-note { background: var(--partly-bg); color: var(--partly); border-radius: 8px; padding: 10px 14px; font-size: 13px; }
 .stop-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 14px; margin-bottom: 14px; }
 .stop-head h2 { font-size: 24px; font-weight: 600; }
 .stop-head .route { color: var(--muted); font-size: 13.5px; }
@@ -116,28 +118,33 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
 
 <div class="shell">
   <nav class="index" aria-label="Screens">
-    <div class="eyebrow">Screen by screen</div>
-          <a href="#project"><span class="dot built"></span>Create Project</a>
-          <a href="#users-list"><span class="dot built"></span>Users Listing</a>
-          <a href="#user-form"><span class="dot built"></span>Add New User</a>
-          <a href="#roles-list"><span class="dot built"></span>Roles Listing</a>
-          <a href="#role-form"><span class="dot built"></span>Create Role</a>
-          <a href="#role-edit"><span class="dot partly"></span>Edit Role: Site In-Charge</a>
-          <a href="#matrix"><span class="dot built"></span>Permission Matrix</a>
-          <a href="#master-menu"><span class="dot built"></span>Master Setup menu</a>
-          <a href="#documents"><span class="dot built"></span>Employee › E. Document Attachments</a>
-          <a href="#po-form"><span class="dot built"></span>Add Purchase Order</a>
-          <a href="#po-show"><span class="dot built"></span>Purchase Order detail</a>
-          <a href="#soon"><span class="dot open"></span>Still marked SOON</a>
+                  <div class="eyebrow" >Round 1 · 5 September</div>
+            <a href="#project"><span class="dot built"></span>Create Project</a>
+                <a href="#users-list"><span class="dot built"></span>Users Listing</a>
+                <a href="#user-form"><span class="dot built"></span>Add New User</a>
+                <a href="#roles-list"><span class="dot built"></span>Roles Listing</a>
+                <a href="#role-form"><span class="dot built"></span>Create Role</a>
+                <a href="#role-edit"><span class="dot partly"></span>Edit Role: Site In-Charge</a>
+                <a href="#matrix"><span class="dot built"></span>Permission Matrix</a>
+                <a href="#master-menu"><span class="dot built"></span>Master Setup menu</a>
+                <a href="#documents"><span class="dot built"></span>Employee › E. Document Attachments</a>
+                <a href="#po-form"><span class="dot built"></span>Add Purchase Order</a>
+                <a href="#po-show"><span class="dot built"></span>Purchase Order detail</a>
+                <a href="#soon"><span class="dot open"></span>Still marked SOON</a>
+                  <div class="eyebrow" style="padding-top:14px">Round 2 · 8 September</div>
+            <a href="#r2-project"><span class="dot built"></span>Create Project — Classification</a>
+                <a href="#r2-site"><span class="dot built"></span>Site Details — Map + Geo-Fence Circle</a>
+                <a href="#r2-site-edit"><span class="dot built"></span>Edit Site — place the pin on the map</a>
+                <a href="#r2-supplier"><span class="dot built"></span>Supplier — Payment Terms and Linked Payable Account</a>
       </nav>
 
   <main>
     <header class="masthead">
       <div>
         <h1>What changed, screen by screen</h1>
-        <p class="lede">Every stop pairs what the client sent on 5 September (screenshot and voice note) with the screen as it is now. The frames are the real application code rendered against seeded demo data, not drawings.</p>
+        <p class="lede">Every stop pairs what the client sent (screenshot and voice note, 5 September and the 8 September follow-up) with the screen as it is now. The frames are the real application code rendered against seeded demo data, not drawings.</p>
         <div class="tally">
-          <span class="pill built">10 screens built</span>
+          <span class="pill built">14 screens built</span>
           <span class="pill partly">1 built with one item open</span>
           <span class="pill open">1 stop not built</span>
         </div>
@@ -145,7 +152,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
             <aside class="facts">
         <h2>How to use this page</h2>
         <dl>
-          <dt>Source</dt><dd>Your screenshots and voice notes from 5 September 2026, in the order you sent them.</dd>
+          <dt>Source</dt><dd>Your screenshots and voice notes from 5 September and the 8 September follow-up, in the order you sent them.</dd>
           <dt>Screens</dt><dd>Live renders of the updated system with demo data. Scroll and click inside each frame.</dd>
           <dt>Try it</dt><dd>The <b>+ New</b> dialogs work against a practice server here; nothing you type is saved.</dd>
           <dt>Real system</dt><dd>Sign in to the ERP with your own account to use the same screens on real data.</dd>
@@ -160,6 +167,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
       <div><strong>What changed / Try it</strong>Plain-language list of the changes on that screen and one thing to click to see it work.</div>
     </section>
 
+              <h2 class="round-title">Round 1 · 5 September</h2>
         <article class="stop" id="project">
       <div class="stop-head">
         <h2>Create Project</h2>
@@ -197,7 +205,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
 
         <div class="built-col">
-          <div class="frame">
+                    <div class="frame">
             <div class="bar">
               <span class="lights"><i></i><i></i><i></i></span>
               <span class="url">seera.test/admin/master/projects/create</span>
@@ -218,7 +226,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
       </div>
     </article>
-        <article class="stop" id="users-list">
+            <article class="stop" id="users-list">
       <div class="stop-head">
         <h2>Users Listing</h2>
         <span class="route">Administration › Users</span>
@@ -246,7 +254,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
 
         <div class="built-col">
-          <div class="frame">
+                    <div class="frame">
             <div class="bar">
               <span class="lights"><i></i><i></i><i></i></span>
               <span class="url">seera.test/admin/users</span>
@@ -267,7 +275,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
       </div>
     </article>
-        <article class="stop" id="user-form">
+            <article class="stop" id="user-form">
       <div class="stop-head">
         <h2>Add New User</h2>
         <span class="route">Administration › Users › Add</span>
@@ -305,7 +313,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
 
         <div class="built-col">
-          <div class="frame">
+                    <div class="frame">
             <div class="bar">
               <span class="lights"><i></i><i></i><i></i></span>
               <span class="url">seera.test/admin/users/create</span>
@@ -326,7 +334,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
       </div>
     </article>
-        <article class="stop" id="roles-list">
+            <article class="stop" id="roles-list">
       <div class="stop-head">
         <h2>Roles Listing</h2>
         <span class="route">Administration › Roles</span>
@@ -354,7 +362,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
 
         <div class="built-col">
-          <div class="frame">
+                    <div class="frame">
             <div class="bar">
               <span class="lights"><i></i><i></i><i></i></span>
               <span class="url">seera.test/admin/roles</span>
@@ -375,7 +383,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
       </div>
     </article>
-        <article class="stop" id="role-form">
+            <article class="stop" id="role-form">
       <div class="stop-head">
         <h2>Create Role</h2>
         <span class="route">Administration › Roles › Add</span>
@@ -422,7 +430,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
 
         <div class="built-col">
-          <div class="frame">
+                    <div class="frame">
             <div class="bar">
               <span class="lights"><i></i><i></i><i></i></span>
               <span class="url">seera.test/admin/roles/create</span>
@@ -443,7 +451,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
       </div>
     </article>
-        <article class="stop" id="role-edit">
+            <article class="stop" id="role-edit">
       <div class="stop-head">
         <h2>Edit Role: Site In-Charge</h2>
         <span class="route">Administration › Roles › Edit</span>
@@ -471,7 +479,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
 
         <div class="built-col">
-          <div class="frame">
+                    <div class="frame">
             <div class="bar">
               <span class="lights"><i></i><i></i><i></i></span>
               <span class="url">seera.test/admin/roles/8/edit</span>
@@ -492,7 +500,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
       </div>
     </article>
-        <article class="stop" id="matrix">
+            <article class="stop" id="matrix">
       <div class="stop-head">
         <h2>Permission Matrix</h2>
         <span class="route">Administration › Permission Matrix</span>
@@ -520,7 +528,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
 
         <div class="built-col">
-          <div class="frame">
+                    <div class="frame">
             <div class="bar">
               <span class="lights"><i></i><i></i><i></i></span>
               <span class="url">seera.test/admin/roles/permission-matrix?role=3</span>
@@ -541,7 +549,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
       </div>
     </article>
-        <article class="stop" id="master-menu">
+            <article class="stop" id="master-menu">
       <div class="stop-head">
         <h2>Master Setup menu</h2>
         <span class="route">Master Setup › Organization Structure</span>
@@ -569,7 +577,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
 
         <div class="built-col">
-          <div class="frame">
+                    <div class="frame">
             <div class="bar">
               <span class="lights"><i></i><i></i><i></i></span>
               <span class="url">seera.test/admin/master/organization</span>
@@ -590,7 +598,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
       </div>
     </article>
-        <article class="stop" id="documents">
+            <article class="stop" id="documents">
       <div class="stop-head">
         <h2>Employee › E. Document Attachments</h2>
         <span class="route">HR › Employees › Edit</span>
@@ -623,7 +631,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
 
         <div class="built-col">
-          <div class="frame">
+                    <div class="frame">
             <div class="bar">
               <span class="lights"><i></i><i></i><i></i></span>
               <span class="url">seera.test/admin/hr/employees/1/edit</span>
@@ -644,7 +652,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
       </div>
     </article>
-        <article class="stop" id="po-form">
+            <article class="stop" id="po-form">
       <div class="stop-head">
         <h2>Add Purchase Order</h2>
         <span class="route">Inventory › Purchase Orders › Add</span>
@@ -685,7 +693,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
 
         <div class="built-col">
-          <div class="frame">
+                    <div class="frame">
             <div class="bar">
               <span class="lights"><i></i><i></i><i></i></span>
               <span class="url">seera.test/admin/inventory/purchase-orders/create</span>
@@ -706,7 +714,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
       </div>
     </article>
-        <article class="stop" id="po-show">
+            <article class="stop" id="po-show">
       <div class="stop-head">
         <h2>Purchase Order detail</h2>
         <span class="route">Inventory › Purchase Orders › View</span>
@@ -728,7 +736,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
 
         <div class="built-col">
-          <div class="frame">
+                    <div class="frame">
             <div class="bar">
               <span class="lights"><i></i><i></i><i></i></span>
               <span class="url">seera.test/admin/inventory/purchase-orders/6</span>
@@ -749,7 +757,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
       </div>
     </article>
-        <article class="stop" id="soon">
+            <article class="stop" id="soon">
       <div class="stop-head">
         <h2>Still marked SOON</h2>
         <span class="route">Operations · Reports</span>
@@ -791,7 +799,7 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
         </div>
 
         <div class="built-col">
-          <div class="frame">
+                    <div class="frame">
             <div class="bar">
               <span class="lights"><i></i><i></i><i></i></span>
               <span class="url">seera.test/admin/coming-soon/project-dashboard</span>
@@ -808,6 +816,217 @@ button:focus-visible, a:focus-visible, .shot:focus-visible { outline: 2px solid 
             <div class="try">
               <div class="label">Try it in the frame</div>
               Open the Operations and Reports groups in the sidebar to see which entries still carry the SOON badge.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+              <h2 class="round-title">Round 2 · 8 September</h2>
+        <article class="stop" id="r2-project">
+      <div class="stop-head">
+        <h2>Create Project — Classification</h2>
+        <span class="route">Master Setup › Projects › Add</span>
+        <div class="tags">
+          <span class="pill cr">CR-15</span>          <span class="pill built">Built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>The first point, a Classification option on the Project form, was missing: a dropdown where the company adds its own classifications, not a new screen.</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/J01.jpeg" data-caption="J01 · Create Project: + New buttons present, no Classification field">
+                <img src="media/J01.jpeg" alt="Create Project: + New buttons present, no Classification field" loading="lazy">
+                <span><b>J01</b> Create Project: + New buttons present, no Classification field</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">B02</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>My first point, the Classification option, was not added. The + New for client/branch came, but not Classification.</p>
+                <audio controls preload="none" src="media/B02.ogg"></audio>
+              </div>
+                          <div class="note">
+                <div class="who"><span class="pill id">B01</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>No new screen: on this Project form add a Classification dropdown where we keep adding our own classifications.</p>
+                <audio controls preload="none" src="media/B01.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+                    <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/master/projects/create</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Create Project — Classification preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/projects-create.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li><b>Classification</b> dropdown added next to Client Name, with its own <b>+ New</b>. The list starts empty; the company defines its own names (Infrastructure, Residential, Maintenance Contract are demo entries here).</li><li>Saved on the project, shown on the project page and as a column and filter on the Projects list.</li><li>A small <b>Classifications</b> page (button on the Projects list) renames or deactivates entries; one still used by projects cannot be deleted.</li><li>This is separate from the Sponsorship / Freelancer classification on people, which stays as delivered.</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Press <b>+ New</b> beside Classification, type "Road Works", Add. It appears selected. Try the same name twice to see the duplicate message.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+            <article class="stop" id="r2-site">
+      <div class="stop-head">
+        <h2>Site Details — Map + Geo-Fence Circle</h2>
+        <span class="route">Master Setup › Sites › View</span>
+        <div class="tags">
+          <span class="pill cr">CR-16</span>          <span class="pill built">Built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>Where the coordinates are shown, the Map + Geo-Fence Circle panel should show the real location with the pin, like the phone map.</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/J02.jpeg" data-caption="J02 · Site Details: Map + Geo-Fence Circle still a placeholder">
+                <img src="media/J02.jpeg" alt="Site Details: Map + Geo-Fence Circle still a placeholder" loading="lazy">
+                <span><b>J02</b> Site Details: Map + Geo-Fence Circle still a placeholder</span>
+              </button>
+                                        <button class="shot" type="button" data-full="media/J03.jpeg" data-caption="J03 · Reference: phone map showing the location pin">
+                <img src="media/J03.jpeg" alt="Reference: phone map showing the location pin" loading="lazy">
+                <span><b>J03</b> Reference: phone map showing the location pin</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">B03</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Where the coordinates show, the Map + Geo-Fence Circle box on the right should show a picture of the location with the pin.</p>
+                <audio controls preload="none" src="media/B03.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+                    <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/master/sites/1</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Site Details — Map + Geo-Fence Circle preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/sites-show.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li>The placeholder is replaced by a real <b>OpenStreetMap</b> map centred on the saved latitude/longitude, with the site pin and the geo-fence radius drawn as a circle.</li><li>The view is fitted to the circle, so the whole attendance boundary is visible at once. Zoom and pan as needed.</li><li>No API key or paid service is required. A site without coordinates shows a clear "no coordinates saved" message instead of an empty box.</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Scroll and zoom inside the map. The blue circle is the 300 m geo-fence for this demo site.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+            <article class="stop" id="r2-site-edit">
+      <div class="stop-head">
+        <h2>Edit Site — place the pin on the map</h2>
+        <span class="route">Master Setup › Sites › Edit</span>
+        <div class="tags">
+          <span class="pill cr">CR-16</span>          <span class="pill built">Built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>Same request, applied to the form: coordinates should not have to be typed by hand.</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/J02.jpeg" data-caption="J02 · Site Details: Map + Geo-Fence Circle still a placeholder">
+                <img src="media/J02.jpeg" alt="Site Details: Map + Geo-Fence Circle still a placeholder" loading="lazy">
+                <span><b>J02</b> Site Details: Map + Geo-Fence Circle still a placeholder</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">B03</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Where the coordinates show, the Map + Geo-Fence Circle box on the right should show a picture of the location with the pin.</p>
+                <audio controls preload="none" src="media/B03.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+                    <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/master/sites/1/edit</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Edit Site — place the pin on the map preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/sites-edit.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li>The form has the same map. <b>Click</b> anywhere to drop the pin, or <b>drag</b> it; latitude and longitude fill in automatically.</li><li>Changing the Geo-Fence Radius field resizes the circle immediately, so the boundary can be judged before saving.</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Click a different spot on the map and watch the Latitude and Longitude fields update. Change the radius to 500 and see the circle grow.            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+            <article class="stop" id="r2-supplier">
+      <div class="stop-head">
+        <h2>Supplier — Payment Terms and Linked Payable Account</h2>
+        <span class="route">Master Setup › Suppliers › Edit</span>
+        <div class="tags">
+          <span class="pill cr">CR-17</span><span class="pill cr">CR-18</span>          <span class="pill built">Built</span>
+        </div>
+      </div>
+      <div class="stop-body">
+        <div class="asked">
+          <div class="label">Client asked</div>
+          <p>Payment Terms needs a + New with the agreed number of days per party; Linked Payable Account should be a dropdown with options and a + New.</p>
+                    <div class="shots">
+                                        <button class="shot" type="button" data-full="media/J04.jpeg" data-caption="J04 · Add Supplier: fixed Payment Terms, text-only Linked Payable Account">
+                <img src="media/J04.jpeg" alt="Add Supplier: fixed Payment Terms, text-only Linked Payable Account" loading="lazy">
+                <span><b>J04</b> Add Supplier: fixed Payment Terms, text-only Linked Payable Account</span>
+              </button>
+                      </div>
+                    <div class="notes">
+                          <div class="note">
+                <div class="who"><span class="pill id">B05</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Give Payment Terms a New option; the number of days should follow what is agreed with each party.</p>
+                <audio controls preload="none" src="media/B05.ogg"></audio>
+              </div>
+                          <div class="note">
+                <div class="who"><span class="pill id">B04</span><span class="mono" style="color:var(--muted)">voice note</span></div>
+                <p>Linked Payable Account should be a dropdown with the options underneath, plus a New option.</p>
+                <audio controls preload="none" src="media/B04.ogg"></audio>
+              </div>
+                      </div>
+        </div>
+
+        <div class="built-col">
+                    <div class="frame">
+            <div class="bar">
+              <span class="lights"><i></i><i></i><i></i></span>
+              <span class="url">seera.test/admin/master/suppliers/1/edit</span>
+              <span class="live">rendered from commit 17aeba0</span>
+            </div>
+            <iframe title="Supplier — Payment Terms and Linked Payable Account preview" loading="lazy" sandbox="allow-scripts allow-same-origin allow-modals" src="screens/suppliers-edit.html"></iframe>
+          </div>
+          <div class="changes">
+            <div>
+              <div class="label">What changed on this screen</div>
+              <ul>
+                <li><b>Payment Terms</b> is now a list you extend: <b>+ New</b> asks for a name and the number of days from the bill date. Cash, 15, 30 and 60 days are already there; this demo supplier is on a custom 45 Days.</li><li>A supplier bill saved without a due date now falls due after the supplier's agreed days.</li><li><b>Linked Payable Account</b> is a dropdown of the Accounts Payable account and its sub-accounts, with <b>+ New</b> to create a sub-account (code generated, e.g. 2101) without leaving the form.</li><li>Bills, payments and goods receipts for the supplier post to the linked account; suppliers without a specific link keep posting to Accounts Payable exactly as before, and the finance dashboard total covers the whole group.</li>              </ul>
+            </div>
+            <div class="try">
+              <div class="label">Try it in the frame</div>
+              Press <b>+ New</b> beside Payment Terms, enter "90 Days" and 90, Add Term. Then <b>+ New</b> beside Linked Payable Account and create "Accounts Payable - Gulf Steel".            </div>
           </div>
         </div>
       </div>

@@ -259,3 +259,10 @@ php artisan migrate --force
 
 No seeder is required. Supplier quotation files are stored under
 `storage/app/private/purchase-orders/quotations`; keep `storage/app` in the backup set.
+
+The 9 September follow-up (CR-15 to CR-18) adds one more additive migration
+(`2026_09_09_000001_*`) that creates the project-classification and payment-term
+lists, inserts the four existing payment-term choices and links suppliers to the
+Accounts Payable account. Again `php artisan migrate --force` is enough. Site maps
+load Leaflet from cdnjs and tiles from openstreetmap.org in the user's browser; the
+server itself needs no outbound access or API key.

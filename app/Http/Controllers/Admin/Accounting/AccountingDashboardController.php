@@ -27,7 +27,7 @@ class AccountingDashboardController extends Controller
 
         return view('admin.accounting.dashboard', [
             'cashBalance' => $this->balanceOf(PostingService::CASH) + $this->balanceOf(PostingService::BANK),
-            'payableBalance' => $this->balanceOf(PostingService::PAYABLE),
+            'payableBalance' => $this->groupBalanceOf(PostingService::PAYABLE),
             'receivableBalance' => $this->balanceOf(PostingService::RECEIVABLE),
             'vatPayable' => round($outputVat - $inputVat, 2),
             'outputVat' => round($outputVat, 2),
@@ -57,6 +57,16 @@ class AccountingDashboardController extends Controller
     private function balanceOf(string $code): float
     {
         return round($this->posting->account($code)?->postedBalance() ?? 0, 2);
+    }
+
+    /**
+     * A control account together with its sub-accounts: suppliers may be
+     * linked to an account beneath Accounts Payable, so the headline figure
+     * has to cover the whole group.
+     */
+    private function groupBalanceOf(string $code): float
+    {
+        return round($this->posting->account($code)?->groupBalance() ?? 0, 2);
     }
 
     /**

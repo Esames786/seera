@@ -422,6 +422,12 @@ tr:hover td { background: #fbfdff; }
 .hub-card .hub-actions { display: flex; gap: 8px; }
 @media (max-width: 1000px) { .hub-grid, .totals-box { grid-template-columns: 1fr 1fr; } }
 
+/* Site map with geo-fence (CR-16) ------------------------------------ */
+.site-map { width: 100%; border: 1px solid var(--line); border-radius: 7px; background: #e9eef5; position: relative; overflow: hidden; z-index: 0; }
+.site-map-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 13px; font-weight: 700; text-align: center; padding: 20px; }
+.site-map .leaflet-container { font-family: inherit; }
+.site-map-note { margin-top: 8px; }
+
 </style>
 </head>
 <body>
@@ -776,7 +782,7 @@ tr:hover td { background: #fbfdff; }
         <span title="Settings">⚙️</span>
                     <div class="avatar" title="Omar Mukhtar">OM</div>
             <form method="POST" action="http://seera.test/logout">
-                <input type="hidden" name="_token" value="7mQl6xn5jtIgPgFvL1X2HrBs7C6JG18gAKshQr8Z" autocomplete="off">                <button type="submit" class="btn sm outline">Logout</button>
+                <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                <button type="submit" class="btn sm outline">Logout</button>
             </form>
             </div>
 </div>
@@ -792,7 +798,7 @@ tr:hover td { background: #fbfdff; }
 </div>
 
     <form method="POST" action="http://seera.test/admin/master/projects">
-    <input type="hidden" name="_token" value="7mQl6xn5jtIgPgFvL1X2HrBs7C6JG18gAKshQr8Z" autocomplete="off">    
+    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">    
     <div class="form-section">
     <div class="section-title">Project Information</div>
     <div class="section-body form-grid three">
@@ -810,6 +816,20 @@ tr:hover td { background: #fbfdff; }
                                     <option value="1" >ABC Holdings</option>
                                     <option value="3" >Najd Development</option>
                                     <option value="2" >XYZ Trading</option>
+                            </select>
+        </div>
+        <div>
+            <div class="label-row">
+                <label for="project_classification_id">Classification</label>
+                <button type="button" class="quick-create-trigger" data-quick-create="qc-classification" title="New Project Classification">+ New</button>
+
+    
+                </div>
+            <select id="project_classification_id" name="project_classification_id" class="select">
+                <option value="">Not classified</option>
+                                    <option value="1" >Infrastructure</option>
+                                    <option value="3" >Maintenance Contract</option>
+                                    <option value="2" >Residential</option>
                             </select>
         </div>
         <div>
@@ -889,7 +909,7 @@ tr:hover td { background: #fbfdff; }
         <div class="modal-foot">
             <button type="button" class="btn outline js-modal-close">Cancel</button>
             <form method="POST" action="#">
-                <input type="hidden" name="_token" value="7mQl6xn5jtIgPgFvL1X2HrBs7C6JG18gAKshQr8Z" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <button type="submit" class="btn danger">Confirm Delete</button>
+                <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <button type="submit" class="btn danger">Confirm Delete</button>
             </form>
         </div>
     </div>
@@ -901,7 +921,7 @@ tr:hover td { background: #fbfdff; }
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="7mQl6xn5jtIgPgFvL1X2HrBs7C6JG18gAKshQr8Z" autocomplete="off">                    <div class="modal-body">
+                    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                    <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
                         <div class="form-grid"><div class="full"><label for="qc-cust-name">Client Name *</label><input id="qc-cust-name" name="name" class="input" required/></div>
                     <div>
@@ -925,6 +945,26 @@ tr:hover td { background: #fbfdff; }
                 </form>
             </div>
         </div>
+            <div class="modal-overlay quick-create-modal" id="qc-classification" data-target="project_classification_id" data-url="http://seera.test/admin/master/project-classifications">
+            <div class="modal-card ">
+                <div class="modal-head">
+                    <span>New Project Classification</span>
+                    <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
+                </div>
+                <form class="quick-create-form" novalidate>
+                    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                    <div class="modal-body">
+                        <div class="alert qc-error" hidden></div>
+                        <div class="form-grid"><div class="full"><label for="qc-cls-name">Classification Name *</label><input id="qc-cls-name" name="name" class="input" placeholder="e.g. Infrastructure, Residential, Maintenance" required/></div>
+                    <div class="full"><label for="qc-cls-description">Description</label><input id="qc-cls-description" name="description" class="input"/></div>
+                    <input type="hidden" name="status" value="active"/></div>
+                    </div>
+                    <div class="modal-foot">
+                        <button type="button" class="btn outline js-qc-close">Cancel</button>
+                        <button type="submit" class="btn primary">Add Classification</button>
+                    </div>
+                </form>
+            </div>
+        </div>
             <div class="modal-overlay quick-create-modal" id="qc-branch" data-target="branch_id" data-url="http://seera.test/admin/master/branches">
             <div class="modal-card ">
                 <div class="modal-head">
@@ -932,7 +972,7 @@ tr:hover td { background: #fbfdff; }
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="7mQl6xn5jtIgPgFvL1X2HrBs7C6JG18gAKshQr8Z" autocomplete="off">                    <div class="modal-body">
+                    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                    <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
                         <div class="form-grid"><div><label for="qc-branch-name">Branch Name *</label><input id="qc-branch-name" name="name" class="input" required/></div>
                     <div><label for="qc-branch-code">Code</label><input id="qc-branch-code" name="code" class="input" placeholder="Auto if blank"/></div>
@@ -954,7 +994,7 @@ tr:hover td { background: #fbfdff; }
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="7mQl6xn5jtIgPgFvL1X2HrBs7C6JG18gAKshQr8Z" autocomplete="off">                    <div class="modal-body">
+                    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                    <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
                         <div class="form-grid"><div><label for="qc-mgr-name">Full Name *</label><input id="qc-mgr-name" name="name" class="input" required/></div>
                     <div><label for="qc-mgr-email">Email *</label><input id="qc-mgr-email" name="email" type="email" class="input" required/></div>

@@ -11,7 +11,7 @@
     <div class="card-grid">
         <x-admin.metric-card color="blue" :value="strtoupper($supplier->code)" label="Supplier Code"/>
         <x-admin.metric-card color="yellow" :value="'SAR '.number_format($supplier->opening_balance)" label="Payable Balance"/>
-        <x-admin.metric-card color="green" :value="$supplier->payment_terms ?? '-'" label="Payment Terms"/>
+        <x-admin.metric-card color="green" :value="$supplier->paymentTerm?->label() ?? $supplier->payment_terms ?? '-'" label="Payment Terms"/>
         <x-admin.metric-card color="cyan" :value="$supplier->category ?? '-'" label="Category"/>
     </div>
 
@@ -26,7 +26,8 @@
                 <tr><th>Contact Person</th><td>{{ $supplier->contact_person ?? '-' }}</td></tr>
                 <tr><th>Phone</th><td>{{ $supplier->phone ?? '-' }}</td></tr>
                 <tr><th>Email</th><td>{{ $supplier->email ?? '-' }}</td></tr>
-                <tr><th>Linked Payable Account</th><td>{{ $supplier->linked_account ?? '-' }}</td></tr>
+                <tr><th>Payment Terms</th><td>{{ $supplier->paymentTerm?->label() ?? $supplier->payment_terms ?? '-' }}</td></tr>
+                <tr><th>Linked Payable Account</th><td>{{ $supplier->linkedAccount?->label() ?? $supplier->linked_account ?? '-' }}</td></tr>
                 <tr><th>Address</th><td>{{ $supplier->address ?? '-' }}</td></tr>
                 <tr><th>Status</th><td><x-admin.status-badge :status="$supplier->status"/></td></tr>
             </tbody>

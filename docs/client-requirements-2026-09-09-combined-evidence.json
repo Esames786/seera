@@ -1,0 +1,3127 @@
+{
+    "review_date": "2026-09-09",
+    "rounds": {
+        "new_requirement": {
+            "review_date": "2026-09-07",
+            "code_baseline": "7cb1dd3",
+            "method": "Local faster-whisper small translation and original-language transcription; selected medium original-language cross-checks. Reviewed English meanings are separate from raw machine output.",
+            "images": [
+                {
+                    "id": "I01",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.06 PM.jpeg",
+                    "screen": "Create Project",
+                    "observation": "Project Name, Project Code (PRJ-001 placeholder), Client Name selector, Branch selector, Project Manager selector, Status, Start Date, End Date, Budget Amount (SAR), Project Location and Description. Client Name is focused. The image contains no written instruction to remove a field.",
+                    "requirements": [
+                        "CR-01"
+                    ],
+                    "sha256": "7912a24455d88a2f7dac9fd579ecd355e04bbc116ba95a4214cfde723751e75e",
+                    "bytes": 76280
+                },
+                {
+                    "id": "I02",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.08 PM.jpeg",
+                    "screen": "Reference customer selector",
+                    "observation": "An external/reference form has a Customer dropdown with a + Create contact action above the existing customers. Both Arabic and English customer names appear. This is a reference interaction, not a Seera screenshot. The voice notes identify Wafiq as the reference.",
+                    "requirements": [
+                        "CR-01"
+                    ],
+                    "sha256": "19af8148e35dd27ce9d56f179d2922a687b340e679bb394ede8c003a741cabcb",
+                    "bytes": 23196
+                },
+                {
+                    "id": "I03",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.09 PM.jpeg",
+                    "screen": "Users Listing",
+                    "observation": "Two + Add New User buttons: one in the page header and another in the filter bar. Search, department/role/status filters, four metric cards, and a users table are visible. Counts (13 total, 13 active, 6 mobile, 0 locked/inactive) describe the captured data, not required fixed values.",
+                    "requirements": [
+                        "CR-02",
+                        "CR-09",
+                        "CR-01"
+                    ],
+                    "sha256": "c28d1af1d545c55aaed6009435ffcc86da8d6982bf00023a5520164cd81ffb78",
+                    "bytes": 94496
+                },
+                {
+                    "id": "I04",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.11 PM.jpeg",
+                    "screen": "User Employment Information",
+                    "observation": "Department, Designation, Joining Date, Contract Type, Iqama Number and Iqama Expiry Date. This block matches the USER form in the current source, rather than the separately numbered employee form.",
+                    "requirements": [
+                        "CR-04"
+                    ],
+                    "sha256": "fc3633a36d1569b09edfaea1de7581df0fac35fe0367e681dec3623eb0d32a6f",
+                    "bytes": 33039
+                },
+                {
+                    "id": "I05",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.12 PM.jpeg",
+                    "screen": "Roles Listing",
+                    "observation": "Two + Add New Role buttons: header and filter bar. Search, department/status/scope filters, and four metric cards. Counts of 14 roles, 14 active roles, 13 assigned users and 0 approval workflows are snapshot data.",
+                    "requirements": [
+                        "CR-03"
+                    ],
+                    "sha256": "9a1239d94d5dbd96dcebd186b9ea9309482704eb3b85438d95f54ec0a532e36e",
+                    "bytes": 47914
+                },
+                {
+                    "id": "I06",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.13 PM.jpeg",
+                    "screen": "Create Role access and permissions",
+                    "observation": "Access Scope, Mobile App Access and Can Approve Child Requests above an embedded Permission Matrix with View, Create, Edit, Delete, Approve, Export and Mobile columns. Rows include Dashboard, Users, Roles, Accounting, HR, Payroll, Attendance, Projects, Sites, Inventory, Site Expenses, Equipment, Vehicles and a partly visible ZATCA Invoicing row.",
+                    "requirements": [
+                        "CR-05",
+                        "CR-06",
+                        "CR-09",
+                        "CR-01"
+                    ],
+                    "sha256": "070f5e69be0abdc1e9f23c5dcdcbfea80069b6ac043c9c6baf1633b8c889bd76",
+                    "bytes": 110161
+                },
+                {
+                    "id": "I07",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.14 PM.jpeg",
+                    "screen": "Create Role basic information",
+                    "observation": "Role Name, Role Code, Department dropdown, Parent Role, Role Level, Default Dashboard and Description. Department options shown are Accounts, Administration, Human Resource, Marketing, Projects, Purchase and Site Operations. Access Scope controls appear below.",
+                    "requirements": [
+                        "CR-06",
+                        "CR-09",
+                        "CR-01",
+                        "CR-07"
+                    ],
+                    "sha256": "a77192f6c9c903f0476ea0b39406a303b867521d010bcdf7815cc7387a35eb9f",
+                    "bytes": 98909
+                },
+                {
+                    "id": "I08",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.15 PM.jpeg",
+                    "screen": "Standalone Permission Matrix",
+                    "observation": "Accounts Manager selected; module search, Apply and Save Permissions. Fifteen action columns: View, Create, Edit, Delete, Approve, Reject, Export, Mobile Access, Post, Process, Retry, Receive, Issue, Transfer, Adjust. This is more complete than the seven-column role-form matrix in I06.",
+                    "requirements": [
+                        "CR-05",
+                        "CR-06",
+                        "CR-09",
+                        "CR-01"
+                    ],
+                    "sha256": "2265e0ce8358dd157dfb3dd832aee543a464d8325a96d81d199520abe434e9ee",
+                    "bytes": 135846
+                },
+                {
+                    "id": "I09",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.16 PM.jpeg",
+                    "screen": "Edit Role: Site In-Charge",
+                    "observation": "Name Site In-Charge; code SITE_SUPERVISOR; Department Site Operations; Parent Role Project Manager; Level 3; Active; Default Dashboard Admin Dashboard; Access Scope Site Level; Mobile Allowed; Can Approve Child Requests Yes.",
+                    "requirements": [
+                        "CR-08",
+                        "CR-09",
+                        "CR-01",
+                        "CR-07"
+                    ],
+                    "sha256": "443883d89fafc9f95bba155a637c389d7f398c0f4196db443f45a5f04b7503d0",
+                    "bytes": 92905
+                },
+                {
+                    "id": "I10",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.18 PM.jpeg",
+                    "screen": "Master Setup navigation",
+                    "observation": "Company Profile, Branches, Departments, Designations, Projects, Sites / Geo-Fence and Warehouses. Designations is selected. It is navigation context; it does not show designation field changes by itself.",
+                    "requirements": [
+                        "CR-10",
+                        "CR-01",
+                        "CR-09"
+                    ],
+                    "sha256": "eb676e87125164e6279098f2f06511984e8528ae0d9048e9baf5a535d66d2f69",
+                    "bytes": 11789
+                },
+                {
+                    "id": "I11",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.19 PM.jpeg",
+                    "screen": "Employee Section E: Document Attachments",
+                    "observation": "Four visible rows with Document Type, Number, Issue Date, Expiry Date and File. Selected types are IQAMA, Passport, Contract and Medical Insurance. Help text also mentions driving license and other files, but there is no visible Add Row control.",
+                    "requirements": [
+                        "CR-11",
+                        "CR-01"
+                    ],
+                    "sha256": "609e47eaab73e0d50bffee6fd5c9004dca3c396ab8739679ba234c28e795e728",
+                    "bytes": 78582
+                },
+                {
+                    "id": "I12",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.21 PM (1).jpeg",
+                    "screen": "Purchase Order: Order Lines",
+                    "observation": "Four fixed-looking rows with Item selector, Quantity and Unit Price only. No line description, discount, line tax selector, line total or Add Row control is visible. Help text says taxable amount, VAT and total are calculated from quantity, price and order VAT rate.",
+                    "requirements": [
+                        "CR-13"
+                    ],
+                    "sha256": "fde71bc7073fe821b1694473890a382e12e2ea79b188a555934e413330612af4",
+                    "bytes": 49849
+                },
+                {
+                    "id": "I13",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.21 PM.jpeg",
+                    "screen": "Add Purchase Order: Order Information",
+                    "observation": "Supplier, PO Date, Expected Delivery, Source Purchase Request, Deliver To Warehouse, header VAT Rate (15), Project, Site and Notes. Site displays No matching sites. The date shown is 08/29/2026, which is captured form data rather than the delivery date of this requirement package.",
+                    "requirements": [
+                        "CR-12"
+                    ],
+                    "sha256": "f4c3335455811007e0d62a19644d98c871ca04b3cadae1e7084d6aeb74365b05",
+                    "bytes": 72687
+                },
+                {
+                    "id": "I14",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.22 PM (1).jpeg",
+                    "screen": "Operations navigation: unfinished modules",
+                    "observation": "Payroll and End of Service are live-looking entries. Projects & Site Expenses and Equipment & Vehicles have SOON badges.",
+                    "requirements": [
+                        "CR-14"
+                    ],
+                    "sha256": "dfb26473ac8c73ef6eee9999b73badc13bd13242cfbca1719435548fc5923600",
+                    "bytes": 8508
+                },
+                {
+                    "id": "I15",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.22 PM.jpeg",
+                    "screen": "Reference commercial line editor",
+                    "observation": "External/reference editor with SAR currency, Prices are exc. tax, Edit Fields, Description, Qty, Price, Tax rate, Discount and Total. Example line: Cable Pulling Machine with TUV Certified Operator (Rope Length 1000m), quantity 1, price 28500, tax 15%, optional percentage discount, total 32775.00. Drag handle and delete icon appear. The sample values are reference data, not required product defaults.",
+                    "requirements": [
+                        "CR-13"
+                    ],
+                    "sha256": "2a1712c7e462c590f26d9698c38a5f3627be7aa0aa75fcccc554461509907632",
+                    "bytes": 30017
+                },
+                {
+                    "id": "I16",
+                    "file": "WhatsApp Image 2026-09-05 at 5.00.23 PM.jpeg",
+                    "screen": "Reports navigation: unfinished reports",
+                    "observation": "Inventory Reports is visible as an available entry. HR Reports and Project Reports carry SOON badges. The screenshot alone does not specify report columns, filters or calculations.",
+                    "requirements": [
+                        "CR-14"
+                    ],
+                    "sha256": "034dea655121d0b30e02dd0cb035e71fa6a985d2f4ea2b9e3b2e91a5d6d97087",
+                    "bytes": 6601
+                }
+            ],
+            "audio": [
+                {
+                    "id": "A01",
+                    "summary": "Introduction: the client will send screenshots and accompanying voice messages to explain what to add and remove because writing alone may not communicate the intended changes clearly.",
+                    "requirements": [],
+                    "images": [
+                        "I01"
+                    ],
+                    "confidence": "Clear context; no separate functional change.",
+                    "note": "I01 is the first screenshot in the package, not a screen-specific requirement from this introduction.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.06 PM.ogg",
+                    "bytes": 46290,
+                    "sha256": "26e4a83a9a2e83d2f63fd749e4367fb1de6fd39750523307274d384b4d63c02c",
+                    "duration_seconds": 19.4535,
+                    "machine_translation": {
+                        "id": "A01",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.06 PM.ogg",
+                        "sha256": "26e4a83a9a2e83d2f63fd749e4367fb1de6fd39750523307274d384b4d63c02c",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "ur",
+                        "language_probability": 0.7508108615875244,
+                        "duration": 19.4535,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 20,
+                                "text": "Assalam-o-Aliakum, I will share the screen shot with you, I will also tell you what is to be changed in it because I don't think you will be able to understand it in writing and I will be able to explain it to you, so I will also share the screen shot with you and tell you what should be added in each screen shot and what should be finished from it.",
+                                "avg_logprob": -0.6663624420762062,
+                                "no_speech_prob": 0.2648942172527313
+                            }
+                        ],
+                        "processing_seconds": 30.8
+                    },
+                    "machine_original_language": {
+                        "id": "A01",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.06 PM.ogg",
+                        "sha256": "26e4a83a9a2e83d2f63fd749e4367fb1de6fd39750523307274d384b4d63c02c",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 19.4535,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 1,
+                                "text": "اسلام علیکم",
+                                "avg_logprob": -0.40461236931556877,
+                                "no_speech_prob": 0.2648942172527313
+                            },
+                            {
+                                "start": 1,
+                                "end": 4,
+                                "text": "تابیش میں میں سیکنشوڈ آپ کے ساتھ شرکتا جاؤں گا",
+                                "avg_logprob": -0.40461236931556877,
+                                "no_speech_prob": 0.2648942172527313
+                            },
+                            {
+                                "start": 4,
+                                "end": 7,
+                                "text": "ساسد آپ کو بتاتا جاؤں گا کہ اس میں کیا کیا چیز ہونا ہے",
+                                "avg_logprob": -0.40461236931556877,
+                                "no_speech_prob": 0.2648942172527313
+                            },
+                            {
+                                "start": 7,
+                                "end": 10,
+                                "text": "کیونکہ لکھنے میں مجھے نہیں لکھتا کہ آپ اندرسٹین کر پہنے گے",
+                                "avg_logprob": -0.40461236931556877,
+                                "no_speech_prob": 0.2648942172527313
+                            },
+                            {
+                                "start": 10,
+                                "end": 12,
+                                "text": "اور میں اپنی باس سے دیگی سے سمجھا پہنگا ہوں گا",
+                                "avg_logprob": -0.40461236931556877,
+                                "no_speech_prob": 0.2648942172527313
+                            },
+                            {
+                                "start": 12,
+                                "end": 15,
+                                "text": "تو میں اس لئے آپ کو ساسد وہ اس میسج کرتا جاؤں گا",
+                                "avg_logprob": -0.40461236931556877,
+                                "no_speech_prob": 0.2648942172527313
+                            },
+                            {
+                                "start": 15,
+                                "end": 18,
+                                "text": "ہر سیکنشوڈ بھی متلی کہ اس میں کیا اڑیشن انجائی ہے کیا",
+                                "avg_logprob": -0.40461236931556877,
+                                "no_speech_prob": 0.2648942172527313
+                            },
+                            {
+                                "start": 18,
+                                "end": 20,
+                                "text": "کیا اس میسج ختم ہونا چاہیے",
+                                "avg_logprob": -0.40461236931556877,
+                                "no_speech_prob": 0.2648942172527313
+                            }
+                        ],
+                        "processing_seconds": 17.8
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A02",
+                    "summary": "Use the Wafiq reference: where a dropdown appears, offer Create in that context so a missing record can be created there instead of opening a separate page.",
+                    "requirements": [
+                        "CR-01"
+                    ],
+                    "images": [
+                        "I02"
+                    ],
+                    "confidence": "Clear request; original-language pass resolves the garbled dropdown/window terms in the English machine translation.",
+                    "note": "The short reference note and the longer A03 explain the same interaction. Do not interpret 'different videos' in the raw translation literally.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.08 PM (1).ogg",
+                    "bytes": 23348,
+                    "sha256": "0fcd95f6fa6c1d8698f1eb865cba7cdb8a59ad4313f19bfc2fb92d3504d61b14",
+                    "duration_seconds": 10.0135,
+                    "machine_translation": {
+                        "id": "A02",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.08 PM (1).ogg",
+                        "sha256": "0fcd95f6fa6c1d8698f1eb865cba7cdb8a59ad4313f19bfc2fb92d3504d61b14",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "ur",
+                        "language_probability": 0.9691340327262878,
+                        "duration": 10.0135,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 10,
+                                "text": "In Wafiq, where there is a jack-down option, it gives you the option to create it and you can make it from there and open it from different videos.",
+                                "avg_logprob": -0.8594022989273071,
+                                "no_speech_prob": 0.009989028796553612
+                            }
+                        ],
+                        "processing_seconds": 15.4
+                    },
+                    "machine_original_language": {
+                        "id": "A02",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.08 PM (1).ogg",
+                        "sha256": "0fcd95f6fa6c1d8698f1eb865cba7cdb8a59ad4313f19bfc2fb92d3504d61b14",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 10.0135,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 10,
+                                "text": "جو وافق میں جہاں پر جیگڈون کا ا option آتا ہے وہاں پر وہییٹ کا ساتھ ہی ا option دیتا ہے کہ آپ اسی تیم نیا وہی سے بنالے ناکہ علاق ویڈیو سے جہاں کے اپنے کر کے بنائے",
+                                "avg_logprob": -0.5132284830975277,
+                                "no_speech_prob": 0.009989028796553612
+                            }
+                        ],
+                        "processing_seconds": 13
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A03",
+                    "summary": "Apply the Add option broadly to dropdowns such as Client Name, Project Manager and Branch. If the required name/record is missing, create it from the current form. Do not require moving to another window/page; the client also mentions place/city selection as an example.",
+                    "requirements": [
+                        "CR-01"
+                    ],
+                    "images": [
+                        "I01",
+                        "I02"
+                    ],
+                    "confidence": "Clear request, supported by both language passes and the reference screenshot.",
+                    "note": "The exact list of eligible record selectors and required fields for each quick-create flow is not specified.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.08 PM.ogg",
+                    "bytes": 84025,
+                    "sha256": "048017918187dfee2fc0887b4bbbf38ca5b8c24f78ccb73ade47f54694a24450",
+                    "duration_seconds": 35.9735,
+                    "machine_translation": {
+                        "id": "A03",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.08 PM.ogg",
+                        "sha256": "048017918187dfee2fc0887b4bbbf38ca5b8c24f78ccb73ade47f54694a24450",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "hi",
+                        "language_probability": 0.7585155963897705,
+                        "duration": 35.9735,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 10,
+                                "text": "If you want to select something like client's name, project manager, branch, you need to add an option to it.",
+                                "avg_logprob": -0.780750256664348,
+                                "no_speech_prob": 0.6799521446228027
+                            },
+                            {
+                                "start": 10,
+                                "end": 19,
+                                "text": "If you don't have a name show, you can add it from here, not from any other window.",
+                                "avg_logprob": -0.780750256664348,
+                                "no_speech_prob": 0.6799521446228027
+                            },
+                            {
+                                "start": 19,
+                                "end": 21,
+                                "text": "you can add it from here",
+                                "avg_logprob": -0.4774891722359155,
+                                "no_speech_prob": 0.524179995059967
+                            },
+                            {
+                                "start": 21,
+                                "end": 23,
+                                "text": "you can see this option everywhere",
+                                "avg_logprob": -0.4774891722359155,
+                                "no_speech_prob": 0.524179995059967
+                            },
+                            {
+                                "start": 23,
+                                "end": 25,
+                                "text": "wherever there is a background",
+                                "avg_logprob": -0.4774891722359155,
+                                "no_speech_prob": 0.524179995059967
+                            },
+                            {
+                                "start": 25,
+                                "end": 27,
+                                "text": "you have to select someone's name",
+                                "avg_logprob": -0.4774891722359155,
+                                "no_speech_prob": 0.524179995059967
+                            },
+                            {
+                                "start": 27,
+                                "end": 29,
+                                "text": "you have to select a branch",
+                                "avg_logprob": -0.4774891722359155,
+                                "no_speech_prob": 0.524179995059967
+                            },
+                            {
+                                "start": 29,
+                                "end": 31,
+                                "text": "you have to select any city",
+                                "avg_logprob": -0.4774891722359155,
+                                "no_speech_prob": 0.524179995059967
+                            },
+                            {
+                                "start": 31,
+                                "end": 33,
+                                "text": "there should be an option to add",
+                                "avg_logprob": -0.4774891722359155,
+                                "no_speech_prob": 0.524179995059967
+                            },
+                            {
+                                "start": 33,
+                                "end": 35,
+                                "text": "you can add it from there",
+                                "avg_logprob": -0.4774891722359155,
+                                "no_speech_prob": 0.524179995059967
+                            },
+                            {
+                                "start": 35,
+                                "end": 37,
+                                "text": "we will not go to the next window",
+                                "avg_logprob": -0.4774891722359155,
+                                "no_speech_prob": 0.524179995059967
+                            }
+                        ],
+                        "processing_seconds": 35.3
+                    },
+                    "machine_original_language": {
+                        "id": "A03",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.08 PM.ogg",
+                        "sha256": "048017918187dfee2fc0887b4bbbf38ca5b8c24f78ccb73ade47f54694a24450",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 35.9735,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 10.12,
+                                "text": "جو بھی ویڈوز دیکھڑاون ہوتی ہے نا جس میں ہم نے کچھ ایسی سلٹ کرنی ہے جیسے کلائن کا نیم ہے پرجیک مینجر ہے برانچ ہے اس میں اپشن رہا چاہیئے ایڈ کا",
+                                "avg_logprob": -0.3446363110012478,
+                                "no_speech_prob": 0.6799521446228027
+                            },
+                            {
+                                "start": 10.12,
+                                "end": 19.12,
+                                "text": "کہ آپ اگر ایک نام شو نہیں ہو رہا آپ پہلے ایڈ نہیں ہے تو وہ یہی سے آپ اس کو ایڈ کر سکے نہ کہ آپ کو کسی اور ویڈو کے اوپر جاکے اس کو ایڈ کرنا پڑے",
+                                "avg_logprob": -0.3446363110012478,
+                                "no_speech_prob": 0.6799521446228027
+                            },
+                            {
+                                "start": 19.12,
+                                "end": 26.2,
+                                "text": "وہ یہی سے آپ اس کو ایٹ کر سکے یہ ایک option آپ دیکھنے یہ ہر جگہ پہ جہاں پہ بھی دیگنوٹ ہے جہاں پہ بھی ہم نے کسی کا نام سلٹ کرنا ہے",
+                                "avg_logprob": -0.43366088630249783,
+                                "no_speech_prob": 0.4742085635662079
+                            },
+                            {
+                                "start": 26.2,
+                                "end": 33.6,
+                                "text": "کھو برانٹ سلٹ کرنی ہے سٹی سلٹ کرنی ہے کچھ بھی سلٹ کرنا ہے اس میں ایڈ کا option لازمی ہونا چاہیے کہ ہم مہی سے اس کو ایڈ کر سکے",
+                                "avg_logprob": -0.43366088630249783,
+                                "no_speech_prob": 0.4742085635662079
+                            },
+                            {
+                                "start": 33.6,
+                                "end": 35.92,
+                                "text": "next window پہ ہمیں نا جانا",
+                                "avg_logprob": -0.43366088630249783,
+                                "no_speech_prob": 0.4742085635662079
+                            }
+                        ],
+                        "processing_seconds": 73.3
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A04",
+                    "summary": "Repeat the earlier request for an Employee Classification choice with two categories: the company's own/sponsored staff and Freelancer. The client contrasts 'our own' with someone from outside.",
+                    "requirements": [
+                        "CR-04"
+                    ],
+                    "images": [
+                        "I04"
+                    ],
+                    "confidence": "Category distinction is clear; the precise spoken label for company staff is uncertain even in the larger-model pass.",
+                    "note": "Both models render the first label approximately as 'self ...'. The current Employee code uses Sponsorship / Freelancer; reuse that only as a proposed mapping pending confirmation. I04 is the User form, where this field is absent.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.11 PM (1).ogg",
+                    "bytes": 42513,
+                    "sha256": "c3c4cd19b5296d51fde8ac3021437b577d955319ab789026edfe120035e0b9d4",
+                    "duration_seconds": 18.1535,
+                    "machine_translation": {
+                        "id": "A04",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.11 PM (1).ogg",
+                        "sha256": "c3c4cd19b5296d51fde8ac3021437b577d955319ab789026edfe120035e0b9d4",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "ur",
+                        "language_probability": 0.7585380673408508,
+                        "duration": 18.1535,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 7,
+                                "text": "last time I told you to add a code window in which you can add a cell phone or a freelancer.",
+                                "avg_logprob": -0.87819718545483,
+                                "no_speech_prob": 0.04485033079981804
+                            },
+                            {
+                                "start": 7,
+                                "end": 15,
+                                "text": "The employee's classification can be made into two options, whether it is a freelancer or a self fact.",
+                                "avg_logprob": -0.87819718545483,
+                                "no_speech_prob": 0.04485033079981804
+                            },
+                            {
+                                "start": 15,
+                                "end": 18,
+                                "text": "Whether it is our own or free of charge.",
+                                "avg_logprob": -0.87819718545483,
+                                "no_speech_prob": 0.04485033079981804
+                            }
+                        ],
+                        "processing_seconds": 15.6
+                    },
+                    "machine_original_language": {
+                        "id": "A04",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.11 PM (1).ogg",
+                        "sha256": "c3c4cd19b5296d51fde8ac3021437b577d955319ab789026edfe120035e0b9d4",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 18.1535,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 7,
+                                "text": "یہاں پر ایک اور ونڈو میں لازم بھی بتایا تھا کہ ایڈ کر دیں جس میں اپشان ہو کہ یہ سیل فونڈ ہے یا فریلانسر ہے",
+                                "avg_logprob": -0.4992379287193561,
+                                "no_speech_prob": 0.04485033079981804
+                            },
+                            {
+                                "start": 7,
+                                "end": 15.4,
+                                "text": "ایمپلوئی کی کلاسف پیشن جو ہے وہ بنا دیں کہ اس میں دو اپشان ہو جائیں کہ وہ فریلانس ہے یا سیل فرق",
+                                "avg_logprob": -0.4992379287193561,
+                                "no_speech_prob": 0.04485033079981804
+                            },
+                            {
+                                "start": 15.4,
+                                "end": 18.4,
+                                "text": "لہذا ہمارا اپنا ہے یا بھر سے عزادی سے بھی ہے",
+                                "avg_logprob": -0.4992379287193561,
+                                "no_speech_prob": 0.04485033079981804
+                            }
+                        ],
+                        "processing_seconds": 24
+                    },
+                    "machine_medium_crosscheck": {
+                        "id": "A04",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.11 PM (1).ogg",
+                        "sha256": "c3c4cd19b5296d51fde8ac3021437b577d955319ab789026edfe120035e0b9d4",
+                        "model": "medium",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 18.1535,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 7,
+                                "text": "یہاں پہ ایک اور وینڈو میں نے آسٹن بھی بتایا تھا کہ ایڈ کر دیں جس میں اوپشن ہوں کہ یہ سیل فونڈ ہے یا فریلانسر ہے",
+                                "avg_logprob": -0.3237445566516656,
+                                "no_speech_prob": 0.030271854251623154
+                            },
+                            {
+                                "start": 7,
+                                "end": 15,
+                                "text": "ایمپلوئے کی کلاسفکیشن جو ہے وہ بنا دیں کہ اس میں دو اوپشن ہو جائیں کہ وہ فریلانسر ہے یا سیل فونڈ ہے",
+                                "avg_logprob": -0.3237445566516656,
+                                "no_speech_prob": 0.030271854251623154
+                            },
+                            {
+                                "start": 15,
+                                "end": 18,
+                                "text": "یعنی ہمارا اپنا ہے یا باری سے ازاد ویسے بھی ہے",
+                                "avg_logprob": -0.3237445566516656,
+                                "no_speech_prob": 0.030271854251623154
+                            }
+                        ],
+                        "processing_seconds": 51.6
+                    }
+                },
+                {
+                    "id": "A05",
+                    "summary": "Users Listing has Add New User in two places. Both open the same form; show it once to avoid confusion.",
+                    "requirements": [
+                        "CR-02"
+                    ],
+                    "images": [
+                        "I03"
+                    ],
+                    "confidence": "Clear request and exact screenshot match.",
+                    "note": "Which of the two locations to retain is not specified.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.11 PM.ogg",
+                    "bytes": 38740,
+                    "sha256": "8f2719fba7151007df0e517095e2e22d84e77662c7b18ea37f7e91c714712b0a",
+                    "duration_seconds": 16.2735,
+                    "machine_translation": {
+                        "id": "A05",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.11 PM.ogg",
+                        "sha256": "8f2719fba7151007df0e517095e2e22d84e77662c7b18ea37f7e91c714712b0a",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "hi",
+                        "language_probability": 0.5536217093467712,
+                        "duration": 16.2735,
+                        "segments": [
+                            {
+                                "start": 0.08,
+                                "end": 7.08,
+                                "text": "When we go to the user, there is an add new user here, it is also fine, why is it giving two places?",
+                                "avg_logprob": -0.7553669463756473,
+                                "no_speech_prob": 0.12822440266609192
+                            },
+                            {
+                                "start": 7.08,
+                                "end": 14.08,
+                                "text": "The purpose of both is the same, I have opened both the windows and one of them opens from the front, so let's do it from one place, let's end it from another place.",
+                                "avg_logprob": -0.7553669463756473,
+                                "no_speech_prob": 0.12822440266609192
+                            },
+                            {
+                                "start": 14.08,
+                                "end": 16.08,
+                                "text": "There will be a confusion, why are there two places?",
+                                "avg_logprob": -0.7553669463756473,
+                                "no_speech_prob": 0.12822440266609192
+                            }
+                        ],
+                        "processing_seconds": 22.3
+                    },
+                    "machine_original_language": {
+                        "id": "A05",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.11 PM.ogg",
+                        "sha256": "8f2719fba7151007df0e517095e2e22d84e77662c7b18ea37f7e91c714712b0a",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 16.2735,
+                        "segments": [
+                            {
+                                "start": 0.08,
+                                "end": 7.08,
+                                "text": "یہ جاتے ہیں تو یہاں پہلے دو جگہ ایڈ دیوزر دے رہا ہے اس کو ایک جگہ بھی ٹھیک ہے یہ دو جگہ کیوں دے رہا ہے",
+                                "avg_logprob": -0.430460559917085,
+                                "no_speech_prob": 0.12822440266609192
+                            },
+                            {
+                                "start": 7.08,
+                                "end": 14.08,
+                                "text": "دونوں کا مقصہ تو ایک ہی ہے میں نے دونوں وڈوز اپن کی آگے سے تو ایک وڈو اپن ہوتی ہے تو اس کو ایک جگہ ہی کردے دوسری جگہ ساکتن کردے ہیں",
+                                "avg_logprob": -0.430460559917085,
+                                "no_speech_prob": 0.12822440266609192
+                            },
+                            {
+                                "start": 14.08,
+                                "end": 16.08,
+                                "text": "ایسے کنفیوزن ہوگی یہ دو کیوں ہے",
+                                "avg_logprob": -0.430460559917085,
+                                "no_speech_prob": 0.12822440266609192
+                            }
+                        ],
+                        "processing_seconds": 30.2
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A06",
+                    "summary": "Roles Listing also repeats Add New Role; show the action only once.",
+                    "requirements": [
+                        "CR-03"
+                    ],
+                    "images": [
+                        "I05"
+                    ],
+                    "confidence": "Clear English first-pass meaning, corroborated by the exact duplicate buttons. Original-language small-model output is unreliable.",
+                    "note": "The original-language pass hallucinated unrelated text and ran beyond the approximately six-second clip. That output is retained as machine evidence only and rejected as a source of requirements.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.12 PM.ogg",
+                    "bytes": 13696,
+                    "sha256": "f6296e190c429e85d6f4cdc9ad99e09ef6e430c91995359de9272b0083db7976",
+                    "duration_seconds": 5.8935,
+                    "machine_translation": {
+                        "id": "A06",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.12 PM.ogg",
+                        "sha256": "f6296e190c429e85d6f4cdc9ad99e09ef6e430c91995359de9272b0083db7976",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "ur",
+                        "language_probability": 0.7230353951454163,
+                        "duration": 5.8935,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 6,
+                                "text": "The same option has been given here twice. Add new role, let's do it once.",
+                                "avg_logprob": -0.9341826113787565,
+                                "no_speech_prob": 0.039517004042863846
+                            }
+                        ],
+                        "processing_seconds": 11.8
+                    },
+                    "machine_original_language": {
+                        "id": "A06",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.12 PM.ogg",
+                        "sha256": "f6296e190c429e85d6f4cdc9ad99e09ef6e430c91995359de9272b0083db7976",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 5.8935,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 12.68,
+                                "text": "ایک دفعہ دیگی ل formulation ھوڑ کرنے میں اہمی نادows کے ا πεرہ بارہ کے لئے ایک دفعہ کے لئے ایک بہت ساتھ بات کر دیئے Eso میں اہمی اہل مرانزیہ بات کرنے کی اہمی روحلہ ہے۔",
+                                "avg_logprob": -2.4260884809494017,
+                                "no_speech_prob": 0.039517004042863846
+                            }
+                        ],
+                        "processing_seconds": 122
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A07",
+                    "summary": "Permission assignment takes too many individual clicks. Add an All checkbox BEFORE View for each module row, selecting View/Create/Edit/Delete/Approve/Export/Mobile together, then allow exceptions such as Delete to be unticked.",
+                    "requirements": [
+                        "CR-05"
+                    ],
+                    "images": [
+                        "I06",
+                        "I08"
+                    ],
+                    "confidence": "Clear request; the original-language pass recovers the explicit All-column-before-View instruction omitted in the English translation.",
+                    "note": "A row-level All control is explicitly requested. A whole-matrix Select All Visible control is additional design guidance, not explicitly required by this note.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.13 PM.ogg",
+                    "bytes": 120769,
+                    "sha256": "abd97cafba8d9d628b36ef6ae0f12c1837853e25a23bf2ca8671eacf15ef3df4",
+                    "duration_seconds": 51.0935,
+                    "machine_translation": {
+                        "id": "A07",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.13 PM.ogg",
+                        "sha256": "abd97cafba8d9d628b36ef6ae0f12c1837853e25a23bf2ca8671eacf15ef3df4",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "hi",
+                        "language_probability": 0.6019687652587891,
+                        "duration": 51.0935,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 6,
+                                "text": "the option of assign, it will be lengthy",
+                                "avg_logprob": -0.6038216671141068,
+                                "no_speech_prob": 0.7959134578704834
+                            },
+                            {
+                                "start": 6,
+                                "end": 10,
+                                "text": "there is a person who has to give all the options on the dashboard",
+                                "avg_logprob": -0.6038216671141068,
+                                "no_speech_prob": 0.7959134578704834
+                            },
+                            {
+                                "start": 10,
+                                "end": 13,
+                                "text": "so here is the option of select all",
+                                "avg_logprob": -0.6038216671141068,
+                                "no_speech_prob": 0.7959134578704834
+                            },
+                            {
+                                "start": 13,
+                                "end": 18,
+                                "text": "it will be easy to select all and if there is a option to delete it",
+                                "avg_logprob": -0.6038216671141068,
+                                "no_speech_prob": 0.7959134578704834
+                            },
+                            {
+                                "start": 18,
+                                "end": 21,
+                                "text": "then uncheck it and the rest will be checking",
+                                "avg_logprob": -0.6038216671141068,
+                                "no_speech_prob": 0.7959134578704834
+                            },
+                            {
+                                "start": 21,
+                                "end": 25,
+                                "text": "because there are so many permissions and then there are so many options",
+                                "avg_logprob": -0.6038216671141068,
+                                "no_speech_prob": 0.7959134578704834
+                            },
+                            {
+                                "start": 25,
+                                "end": 28,
+                                "text": "it will be lengthy, it will take a lot of time to create an id",
+                                "avg_logprob": -0.6038216671141068,
+                                "no_speech_prob": 0.7959134578704834
+                            },
+                            {
+                                "start": 28,
+                                "end": 51,
+                                "text": "If we click on all option, then we will uncheck all option, if we click on all option, then it will be easier to make an id, because there are many options, and it will take a long time to click on one option",
+                                "avg_logprob": -0.878626151726796,
+                                "no_speech_prob": 0.13726872205734253
+                            }
+                        ],
+                        "processing_seconds": 40.5
+                    },
+                    "machine_original_language": {
+                        "id": "A07",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.13 PM.ogg",
+                        "sha256": "abd97cafba8d9d628b36ef6ae0f12c1837853e25a23bf2ca8671eacf15ef3df4",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 51.0935,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 9.8,
+                                "text": "اچھا یہ جو اصائن کا option ہے اس میں کافی لینٹی ہو جائے گا کہ ایک آدمی ہے اس کو ڈیشپورٹ پر سارے option ہم نے دے لے ہیں",
+                                "avg_logprob": -0.36329693688286674,
+                                "no_speech_prob": 0.7959134578704834
+                            },
+                            {
+                                "start": 9.8,
+                                "end": 18.5,
+                                "text": "تو یہاں پر ایک option ہے سلکٹ آل کا اس میں یہ اصائنی رہ گی کہ سلکٹ آل کر کے اگر کوئی ایک اتا option ختم بھی کرنا ہے جیسے ڈیلیٹ کا option نہیں اس کو دےنا",
+                                "avg_logprob": -0.36329693688286674,
+                                "no_speech_prob": 0.7959134578704834
+                            },
+                            {
+                                "start": 18.5,
+                                "end": 24.8,
+                                "text": "تو اس پر انچیک کریں گے تو باقی چیک رہے گے بیسے سنگل سنگل کیونکہ اتنی ساری پرمیشنز ہے اور اس کے پر آگے اتنے سارے option ہے",
+                                "avg_logprob": -0.36329693688286674,
+                                "no_speech_prob": 0.7959134578704834
+                            },
+                            {
+                                "start": 24.8,
+                                "end": 51.09,
+                                "text": "ایک ایڈی کرییٹ کرنے بھی کافی ٹائم لگے گا اس میں اگر آپ ایک اپشان دیتا نا ویو سے پہلے اوڈ کا دیتے اوڈ پی اگر ہم ٹک کریں اور ویو کرییٹ ایڈی ٹیلیٹ اپرووڈ اور موبائل یہ ساری چیک ہو جائیں تو وہ زیادہ بہتر اس میں سے بھی جو ختم کرنا ہوگا اس کو ہم ان چیک کر دیں گے یہ چیز اگر ہو سکتے دو یہ زرا ایڈی بنانے میں تھوڑا اسان لے گا جلدی ہو جائے گا کافی زارے اپشان لیں اور اس طرح سے ایک",
+                                "avg_logprob": -0.37209716796875,
+                                "no_speech_prob": 0.40952104330062866
+                            }
+                        ],
+                        "processing_seconds": 66.7
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A08",
+                    "summary": "Simplify permissions using the selected department/role: Accounts should show accounting-related permissions, a Site Supervisor should not have irrelevant accounting choices, HR should show relevant HR/payroll options, and purchasing should show relevant inventory options. Showing everything makes account setup difficult.",
+                    "requirements": [
+                        "CR-06"
+                    ],
+                    "images": [
+                        "I06",
+                        "I07"
+                    ],
+                    "confidence": "Clear contextual-filtering request; full department-to-module mapping is not supplied.",
+                    "note": "The audio mentions access scope as well as role/department; record scope and permission grouping must remain conceptually separate. A09/A11 reinforce the intended filtering.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.14 PM.ogg",
+                    "bytes": 104077,
+                    "sha256": "dd9039dfacb64e2d16117f0418eeaab5effa77d834aa4282c1c4a9b27407f8af",
+                    "duration_seconds": 43.9335,
+                    "machine_translation": {
+                        "id": "A08",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.14 PM.ogg",
+                        "sha256": "dd9039dfacb64e2d16117f0418eeaab5effa77d834aa4282c1c4a9b27407f8af",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "hi",
+                        "language_probability": 0.9294772148132324,
+                        "duration": 43.9335,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 10,
+                                "text": "I don't know if it can be added or not. If we have an assess scope, we can select a company level or a branch level.",
+                                "avg_logprob": -0.6230642018693217,
+                                "no_speech_prob": 0.6595325469970703
+                            },
+                            {
+                                "start": 10,
+                                "end": 19,
+                                "text": "In this, there is an option of employer role. If it is accounted, then the permission matrix below it is only open related to accounts.",
+                                "avg_logprob": -0.6230642018693217,
+                                "no_speech_prob": 0.6595325469970703
+                            },
+                            {
+                                "start": 19,
+                                "end": 25,
+                                "text": "It should not be open. Now it is quite simple. It is difficult to make an ID like this.",
+                                "avg_logprob": -0.6230642018693217,
+                                "no_speech_prob": 0.6595325469970703
+                            },
+                            {
+                                "start": 25,
+                                "end": 28.5,
+                                "text": "If site supervisor is opening, then there is no connection to the account.",
+                                "avg_logprob": -0.5318618294520255,
+                                "no_speech_prob": 0.1961519867181778
+                            },
+                            {
+                                "start": 28.5,
+                                "end": 31.5,
+                                "text": "If HR is opening, then it is only related to payroll.",
+                                "avg_logprob": -0.5318618294520255,
+                                "no_speech_prob": 0.1961519867181778
+                            },
+                            {
+                                "start": 31.5,
+                                "end": 36,
+                                "text": "If jazer is opening, then it is only related to inventory.",
+                                "avg_logprob": -0.5318618294520255,
+                                "no_speech_prob": 0.1961519867181778
+                            },
+                            {
+                                "start": 36,
+                                "end": 41,
+                                "text": "If we simplify it like this, then it will be easy.",
+                                "avg_logprob": -0.5318618294520255,
+                                "no_speech_prob": 0.1961519867181778
+                            },
+                            {
+                                "start": 41,
+                                "end": 44,
+                                "text": "It is very difficult to create an ID like this.",
+                                "avg_logprob": -0.5318618294520255,
+                                "no_speech_prob": 0.1961519867181778
+                            }
+                        ],
+                        "processing_seconds": 17.4
+                    },
+                    "machine_original_language": {
+                        "id": "A08",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.14 PM.ogg",
+                        "sha256": "dd9039dfacb64e2d16117f0418eeaab5effa77d834aa4282c1c4a9b27407f8af",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 43.9335,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 9.8,
+                                "text": "اس میں مجھے نہیں بتا ایڈ ہو سکتے کہ نہیں اگر ہم نے اسے سکوپ ہے اس میں ہم جیسے کہ کمپنی لیویہ کوئی بھی چیز سلٹ کر لیں براش لیوے سلٹ کر لیں",
+                                "avg_logprob": -0.42207954781797696,
+                                "no_speech_prob": 0.6595325469970703
+                            },
+                            {
+                                "start": 9.8,
+                                "end": 18.8,
+                                "text": "اسی میں ایک اوپشن ہو امپلوئر آل کا اگر جیسے اکانٹرٹ ہے تو اس کے نیچے جو پرمیشن میٹرکس کھل رہی ہے نا وہ صرف اکانٹ سے لیٹڈ کھل رہی ہو",
+                                "avg_logprob": -0.42207954781797696,
+                                "no_speech_prob": 0.6595325469970703
+                            },
+                            {
+                                "start": 18.8,
+                                "end": 24.6,
+                                "text": "تکہ وہ اور نہ کھلیں اب یہ کافی ساری ہے تو اس طرح سے ایک ڈی بنانا مشکل کام ہے",
+                                "avg_logprob": -0.42207954781797696,
+                                "no_speech_prob": 0.6595325469970703
+                            },
+                            {
+                                "start": 24.6,
+                                "end": 28.6,
+                                "text": "اگر سائٹ سوپرویزر کی کھل رہی ہے تو اس کا کون سے کوئی تعلق نہیں ہے",
+                                "avg_logprob": -0.3961599438531058,
+                                "no_speech_prob": 0.3767164647579193
+                            },
+                            {
+                                "start": 28.6,
+                                "end": 31.6,
+                                "text": "اگر hr کی کھل رہی ہے تو اس کا صرف پیرول سے تعلق ہے",
+                                "avg_logprob": -0.3961599438531058,
+                                "no_speech_prob": 0.3767164647579193
+                            },
+                            {
+                                "start": 31.6,
+                                "end": 35.6,
+                                "text": "اگر پرجیزر کی کھل رہی ہے تو اس کی صرف انمیٹری سے اور اس سب چیزوں سے تعلق ہے",
+                                "avg_logprob": -0.3961599438531058,
+                                "no_speech_prob": 0.3767164647579193
+                            },
+                            {
+                                "start": 35.6,
+                                "end": 40.6,
+                                "text": "اگر اگر ہم اس کو سیمپلیفائی کر دینا تو یہ زرا اسان ہو جائے گا",
+                                "avg_logprob": -0.3961599438531058,
+                                "no_speech_prob": 0.3767164647579193
+                            },
+                            {
+                                "start": 40.6,
+                                "end": 43.6,
+                                "text": "یہ کافی مشکل ہے ایڈی کی ریٹ کرنا اس صور پر",
+                                "avg_logprob": -0.3961599438531058,
+                                "no_speech_prob": 0.3767164647579193
+                            }
+                        ],
+                        "processing_seconds": 51.5
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A09",
+                    "summary": "When Accounts is selected in the dropdown, display its related permissions instead of the whole permission matrix; likewise for Human Resources or Marketing. Let the administrator select what is needed from the relevant set.",
+                    "requirements": [
+                        "CR-06"
+                    ],
+                    "images": [
+                        "I07",
+                        "I08"
+                    ],
+                    "confidence": "Clear reinforcement of contextual permission display.",
+                    "note": "I07 shows the Department dropdown; I08 is the standalone matrix context. Filename adjacency does not prove the client was viewing only one of these screens.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.15 PM.ogg",
+                    "bytes": 42731,
+                    "sha256": "c8bbff14157eeb90b43470e2cf84b23421fa3e173d6fd6a6fa5bde3b6146e2f5",
+                    "duration_seconds": 18.1535,
+                    "machine_translation": {
+                        "id": "A09",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.15 PM.ogg",
+                        "sha256": "c8bbff14157eeb90b43470e2cf84b23421fa3e173d6fd6a6fa5bde3b6146e2f5",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "hi",
+                        "language_probability": 0.9424211978912354,
+                        "duration": 18.1535,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 8,
+                                "text": "as you can see here I have drag down the account, when I select the account, the permission matrix is only given to the account, the rest is not given",
+                                "avg_logprob": -0.8247947548116956,
+                                "no_speech_prob": 0.07791104167699814
+                            },
+                            {
+                                "start": 8,
+                                "end": 18,
+                                "text": "if here I select the human resources, the marketing, then the permission matrix is given, all are not given, whatever you want to add, just add it",
+                                "avg_logprob": -0.8247947548116956,
+                                "no_speech_prob": 0.07791104167699814
+                            }
+                        ],
+                        "processing_seconds": 9
+                    },
+                    "machine_original_language": {
+                        "id": "A09",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.15 PM.ogg",
+                        "sha256": "c8bbff14157eeb90b43470e2cf84b23421fa3e173d6fd6a6fa5bde3b6146e2f5",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 18.1535,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 8,
+                                "text": "جیسے یہ دیکھے میں نے یہاں پر ڈریکڈون کیا نتہ اکاونس ہے جب میں اکاونس سلک کروں نہ تو پرمیشن میٹرکس صرف اکاونس لیٹی دائیں باقی نہ آئیں",
+                                "avg_logprob": -0.4496884283920129,
+                                "no_speech_prob": 0.07791104167699814
+                            },
+                            {
+                                "start": 8,
+                                "end": 15,
+                                "text": "اگر یہاں پر میں اس کی جگہ ہوبل اصوشی سلک کرتا ہوں، مارکڈین سلک کرتا ہوں تو اسی کی پرمیشن میٹرکس آئیں، ساری نہ آئیں",
+                                "avg_logprob": -0.4496884283920129,
+                                "no_speech_prob": 0.07791104167699814
+                            },
+                            {
+                                "start": 15,
+                                "end": 18,
+                                "text": "جو وہ ایڈ کرنی ہے بس وہ ہی ہم ایڈ کریں پر اس میں سے",
+                                "avg_logprob": -0.4496884283920129,
+                                "no_speech_prob": 0.07791104167699814
+                            }
+                        ],
+                        "processing_seconds": 25.5
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A10",
+                    "summary": "Allow more than one reporting/approval contact. A mechanic may need to inform both the Site Supervisor and the Purchase Assistant/Manager about a problem and required materials. The example describes approval moving from Site Supervisor to Purchase Assistant and then Purchase Manager.",
+                    "requirements": [
+                        "CR-08"
+                    ],
+                    "images": [
+                        "I09"
+                    ],
+                    "confidence": "Clear need for multiple contacts; exact approval versus notification rules remain open.",
+                    "note": "Do not convert the spoken 'two parents' example straight into two unconditional approvers. The same note mixes reporting, informing and sequential approval.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.17 PM (1).ogg",
+                    "bytes": 112743,
+                    "sha256": "1ba132a0588b39a80d73534fbb81eebe3169082390a70830613d3a4b4a4b14ae",
+                    "duration_seconds": 48.6335,
+                    "machine_translation": {
+                        "id": "A10",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.17 PM (1).ogg",
+                        "sha256": "1ba132a0588b39a80d73534fbb81eebe3169082390a70830613d3a4b4a4b14ae",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "hi",
+                        "language_probability": 0.6315575242042542,
+                        "duration": 48.6335,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 5.5,
+                                "text": "The parent can have two parents, one person can have two parents too.",
+                                "avg_logprob": -0.5764406380199251,
+                                "no_speech_prob": 0.8173900246620178
+                            },
+                            {
+                                "start": 5.5,
+                                "end": 15,
+                                "text": "One mechanic is to inform the site supervisor and to inform the purchase manager or the purchase assistant that I need this demand.",
+                                "avg_logprob": -0.5764406380199251,
+                                "no_speech_prob": 0.8173900246620178
+                            },
+                            {
+                                "start": 15,
+                                "end": 25,
+                                "text": "So there can be two approvers. First the site supervisor will approve and then the purchase assistant will approve and then the approval of the purchase assistant will be given to the purchase manager.",
+                                "avg_logprob": -0.5764406380199251,
+                                "no_speech_prob": 0.8173900246620178
+                            },
+                            {
+                                "start": 25,
+                                "end": 27,
+                                "text": "This is how it will become a hierarchy.",
+                                "avg_logprob": -0.5865543335676193,
+                                "no_speech_prob": 0.4582301676273346
+                            },
+                            {
+                                "start": 27,
+                                "end": 29,
+                                "text": "Because it is a mechanic.",
+                                "avg_logprob": -0.5865543335676193,
+                                "no_speech_prob": 0.4582301676273346
+                            },
+                            {
+                                "start": 29,
+                                "end": 33,
+                                "text": "He has told both the people on the side that this is the problem.",
+                                "avg_logprob": -0.5865543335676193,
+                                "no_speech_prob": 0.4582301676273346
+                            },
+                            {
+                                "start": 33,
+                                "end": 35,
+                                "text": "And I want this luggage.",
+                                "avg_logprob": -0.5865543335676193,
+                                "no_speech_prob": 0.4582301676273346
+                            },
+                            {
+                                "start": 35,
+                                "end": 39,
+                                "text": "And he has to guide that luggage to the assistant or the purchase manager.",
+                                "avg_logprob": -0.5865543335676193,
+                                "no_speech_prob": 0.4582301676273346
+                            },
+                            {
+                                "start": 39,
+                                "end": 43,
+                                "text": "So in this way the hierarchy can go in a double way.",
+                                "avg_logprob": -0.5865543335676193,
+                                "no_speech_prob": 0.4582301676273346
+                            },
+                            {
+                                "start": 43,
+                                "end": 45,
+                                "text": "That he has a link with two people.",
+                                "avg_logprob": -0.5865543335676193,
+                                "no_speech_prob": 0.4582301676273346
+                            },
+                            {
+                                "start": 45,
+                                "end": 47,
+                                "text": "He has to inform two people.",
+                                "avg_logprob": -0.5865543335676193,
+                                "no_speech_prob": 0.4582301676273346
+                            },
+                            {
+                                "start": 47,
+                                "end": 49,
+                                "text": "These are the things.",
+                                "avg_logprob": -0.5865543335676193,
+                                "no_speech_prob": 0.4582301676273346
+                            }
+                        ],
+                        "processing_seconds": 17.8
+                    },
+                    "machine_original_language": {
+                        "id": "A10",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.17 PM (1).ogg",
+                        "sha256": "1ba132a0588b39a80d73534fbb81eebe3169082390a70830613d3a4b4a4b14ae",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 48.6335,
+                        "segments": [
+                            {
+                                "start": 30,
+                                "end": 36.56,
+                                "text": "اس کا سایت والے کو بھی بتانا ہے کہ سایت پیئے یہ مسئل ہے اور یہ سمان چاہیے اور وہی سمان اس نے گائیٹ کرنا ہے",
+                                "avg_logprob": -0.4190690801902251,
+                                "no_speech_prob": 0.4287283718585968
+                            },
+                            {
+                                "start": 36.56,
+                                "end": 39,
+                                "text": "پرچیز ایسیسٹرن کو یا پرچیز بینجر کو",
+                                "avg_logprob": -0.4190690801902251,
+                                "no_speech_prob": 0.4287283718585968
+                            },
+                            {
+                                "start": 39,
+                                "end": 42.76,
+                                "text": "تو اس طرح سے ہرار کی دبل میں بھی جا سکتی ہے کسی بندے کی",
+                                "avg_logprob": -0.4190690801902251,
+                                "no_speech_prob": 0.4287283718585968
+                            },
+                            {
+                                "start": 42.76,
+                                "end": 48,
+                                "text": "کہ اس کا دو بندوں کی سال لنگٹ ہے اس نے دو بندوں کو انفارم کرنا ہے یہ چیز ہے",
+                                "avg_logprob": -0.4190690801902251,
+                                "no_speech_prob": 0.4287283718585968
+                            }
+                        ],
+                        "processing_seconds": 110.2
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A11",
+                    "summary": "Apply relevant-module filtering to the separate Permission Matrix page too. Choosing an HR role should not require scrolling through unrelated warehouses, expense categories, suppliers or customers merely to assign HR permissions.",
+                    "requirements": [
+                        "CR-06"
+                    ],
+                    "images": [
+                        "I08"
+                    ],
+                    "confidence": "Clear request, supported by the visible standalone matrix.",
+                    "note": "This is about simplifying role setup, not permission to remove existing grants whenever rows are hidden.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.17 PM.ogg",
+                    "bytes": 78400,
+                    "sha256": "6886457d7f0164cd4493725f8e5774898712be7d2574b55c4f9f567c5d01cf97",
+                    "duration_seconds": 33.1335,
+                    "machine_translation": {
+                        "id": "A11",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.17 PM.ogg",
+                        "sha256": "6886457d7f0164cd4493725f8e5774898712be7d2574b55c4f9f567c5d01cf97",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "hi",
+                        "language_probability": 0.8558714389801025,
+                        "duration": 33.1335,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 8,
+                                "text": "Next is the permission matrix window where you can select any of the permissions that you want to have.",
+                                "avg_logprob": -0.757729161603778,
+                                "no_speech_prob": 0.5939671993255615
+                            },
+                            {
+                                "start": 8,
+                                "end": 11,
+                                "text": "This is the option if you want to enter the previous role.",
+                                "avg_logprob": -0.757729161603778,
+                                "no_speech_prob": 0.5939671993255615
+                            },
+                            {
+                                "start": 11,
+                                "end": 16,
+                                "text": "And open the same permission matrix that is related to it.",
+                                "avg_logprob": -0.757729161603778,
+                                "no_speech_prob": 0.5939671993255615
+                            },
+                            {
+                                "start": 16,
+                                "end": 20,
+                                "text": "For example, if you have HR, then you can go down and tick it.",
+                                "avg_logprob": -0.757729161603778,
+                                "no_speech_prob": 0.5939671993255615
+                            },
+                            {
+                                "start": 20,
+                                "end": 22,
+                                "text": "So all the other things are not related to it.",
+                                "avg_logprob": -0.757729161603778,
+                                "no_speech_prob": 0.5939671993255615
+                            },
+                            {
+                                "start": 22,
+                                "end": 27,
+                                "text": "Warehouse, expense categories, suppliers, customers are not related to it.",
+                                "avg_logprob": -0.757729161603778,
+                                "no_speech_prob": 0.5939671993255615
+                            },
+                            {
+                                "start": 27,
+                                "end": 33,
+                                "text": "So this should not be a show for him, so that we can quickly create an ID for him.",
+                                "avg_logprob": -0.6607712085048357,
+                                "no_speech_prob": 0.541021466255188
+                            }
+                        ],
+                        "processing_seconds": 14.1
+                    },
+                    "machine_original_language": {
+                        "id": "A11",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.17 PM.ogg",
+                        "sha256": "6886457d7f0164cd4493725f8e5774898712be7d2574b55c4f9f567c5d01cf97",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 33.1335,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 8.26,
+                                "text": "جیسے نیس جو پرمیشن میٹرکس والی ویڈو ہے اس میں آپ نے جب رول جو بھی سلیٹ کریں تو اس کو بتا رہتا ہے کہ وہ اس کو کون کسی پرمیشنز بھی لی بھی ہے",
+                                "avg_logprob": -0.3719380111229129,
+                                "no_speech_prob": 0.5939671993255615
+                            },
+                            {
+                                "start": 8.26,
+                                "end": 16.4,
+                                "text": "یہی ہی option اگر پیسلی رول والے option میں آجائے تو اور اوپن ہی وہی پرمیشن میٹرکس ہوں جو اس سے لیٹیڈ ہے باقی نہ ہو",
+                                "avg_logprob": -0.3719380111229129,
+                                "no_speech_prob": 0.5939671993255615
+                            },
+                            {
+                                "start": 16.4,
+                                "end": 22.9,
+                                "text": "لیسے اب آپ نے hr ہے تو اس میں آپ نے بالکل لیچے جا کے سارے ٹک کیم ہے تو بھی باقی سب اس سے لیٹیڈ نہیں ہے",
+                                "avg_logprob": -0.3719380111229129,
+                                "no_speech_prob": 0.5939671993255615
+                            },
+                            {
+                                "start": 22.9,
+                                "end": 30.22,
+                                "text": "یا اکسپینس کیاٹیکریز یا سپلائیز یا کسٹرمز یا اس سے لیٹیڈ نہیں یا تو یہ اس کو شو ہی نہیں ہونے چاہئے اس کے لیے",
+                                "avg_logprob": -0.5199025334598862,
+                                "no_speech_prob": 0.5964539051055908
+                            },
+                            {
+                                "start": 30.22,
+                                "end": 33.2,
+                                "text": "تاکہ ہم جلدی سے ایک ڈیٹ کر سکتا ہے اور ہمارے لئے سانی ہوں",
+                                "avg_logprob": -0.5199025334598862,
+                                "no_speech_prob": 0.5964539051055908
+                            }
+                        ],
+                        "processing_seconds": 17.8
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A12",
+                    "summary": "Bring role selection/creation into User setup and give Create New from its dropdown. Reduce the many small separate screens. Related information should be completed in one continuous user-creation flow, like the earlier employee-document attachment discussion. A dialog opened from the current form is preferable to backing out and navigating separately.",
+                    "requirements": [
+                        "CR-09",
+                        "CR-01"
+                    ],
+                    "images": [
+                        "I03",
+                        "I06",
+                        "I07",
+                        "I08",
+                        "I09"
+                    ],
+                    "confidence": "Clear request; larger-model original-language review is used to resolve negation errors in the initial English translation.",
+                    "note": "The raw small-model translation incorrectly reverses the same-window/different-window document example. It is not a request to move documents back to a separate screen.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.18 PM (1).ogg",
+                    "bytes": 121654,
+                    "sha256": "92f869064db658816d0ab9f4a0243c7969a89325e7917d9be0c33d362710c296",
+                    "duration_seconds": 51.2735,
+                    "machine_translation": {
+                        "id": "A12",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.18 PM (1).ogg",
+                        "sha256": "92f869064db658816d0ab9f4a0243c7969a89325e7917d9be0c33d362710c296",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "hi",
+                        "language_probability": 0.6157980561256409,
+                        "duration": 51.2735,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 11,
+                                "text": "If we take this role in the user, we give the option of new creation by dragging it out there, then it will be very easy for us.",
+                                "avg_logprob": -0.7227344316978978,
+                                "no_speech_prob": 0.8028532266616821
+                            },
+                            {
+                                "start": 11,
+                                "end": 14,
+                                "text": "Now you can see the dashboard is full.",
+                                "avg_logprob": -0.7227344316978978,
+                                "no_speech_prob": 0.8028532266616821
+                            },
+                            {
+                                "start": 14,
+                                "end": 20,
+                                "text": "So many small items should be in the simplified one.",
+                                "avg_logprob": -0.7227344316978978,
+                                "no_speech_prob": 0.8028532266616821
+                            },
+                            {
+                                "start": 20,
+                                "end": 24,
+                                "text": "If you want to see it, you can do it.",
+                                "avg_logprob": -0.7227344316978978,
+                                "no_speech_prob": 0.8028532266616821
+                            },
+                            {
+                                "start": 24,
+                                "end": 29,
+                                "text": "when we create a user, all the things should be in the same window",
+                                "avg_logprob": -0.5940907877318713,
+                                "no_speech_prob": 0.7163404822349548
+                            },
+                            {
+                                "start": 29,
+                                "end": 31,
+                                "text": "not that we should go in different windows",
+                                "avg_logprob": -0.5940907877318713,
+                                "no_speech_prob": 0.7163404822349548
+                            },
+                            {
+                                "start": 31,
+                                "end": 34,
+                                "text": "like we had a discussion about employees earlier",
+                                "avg_logprob": -0.5940907877318713,
+                                "no_speech_prob": 0.7163404822349548
+                            },
+                            {
+                                "start": 34,
+                                "end": 36,
+                                "text": "when we are creating a new employee",
+                                "avg_logprob": -0.5940907877318713,
+                                "no_speech_prob": 0.7163404822349548
+                            },
+                            {
+                                "start": 36,
+                                "end": 42,
+                                "text": "so we should attach the documents in different windows",
+                                "avg_logprob": -0.5940907877318713,
+                                "no_speech_prob": 0.7163404822349548
+                            },
+                            {
+                                "start": 42,
+                                "end": 45,
+                                "text": "not that it should be in the same window",
+                                "avg_logprob": -0.5940907877318713,
+                                "no_speech_prob": 0.7163404822349548
+                            },
+                            {
+                                "start": 45,
+                                "end": 48,
+                                "text": "if the new window opens from that window, it will not open",
+                                "avg_logprob": -0.5940907877318713,
+                                "no_speech_prob": 0.7163404822349548
+                            },
+                            {
+                                "start": 48,
+                                "end": 51,
+                                "text": "not that we should go back again and open a new window",
+                                "avg_logprob": -0.5940907877318713,
+                                "no_speech_prob": 0.7163404822349548
+                            }
+                        ],
+                        "processing_seconds": 16.7
+                    },
+                    "machine_original_language": {
+                        "id": "A12",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.18 PM (1).ogg",
+                        "sha256": "92f869064db658816d0ab9f4a0243c7969a89325e7917d9be0c33d362710c296",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 51.2735,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 14,
+                                "text": "لیگا اگر یہ رول کو بھی ہم ایزر میں ہی لیے جائے نا اس کو ایک ہی کر دیں اور وہی پہ جو جیسے میں نے قاعدی دریک دون کر کے نیو کی ویکریشن کا اوپشن ہم دے دیں تو ہمارے لیے نا بہت اسان ہو جائے گا ابھی یہ بہت زیادہ اس کا دیش پول بھی آپ دیکھناو پہ بھر گیا ہے",
+                                "avg_logprob": -0.7006523810492622,
+                                "no_speech_prob": 0.8028532266616821
+                            },
+                            {
+                                "start": 14,
+                                "end": 19.84,
+                                "text": "تو کافی ساتھ چیزیں چھوٹی ایٹ ہوئی گئی۔ ساری ایک سمپلیفائیٹ ایک میں ہوں گی چاہیے۔",
+                                "avg_logprob": -0.5206572808159722,
+                                "no_speech_prob": 0.8883616328239441
+                            },
+                            {
+                                "start": 19.84,
+                                "end": 28.88,
+                                "text": "اس میں بھی اگر دیکھنے گا آپ کر سکتے ہیں اس کو سارا کچھ جو ہے ایک use جب کریئٹ کر رہے ہیں تو اس کے مطلعی جو چیزیں انا ہوں ساری ایک ہی وندو میں ہوں گئی۔",
+                                "avg_logprob": -0.5206572808159722,
+                                "no_speech_prob": 0.8883616328239441
+                            },
+                            {
+                                "start": 28.88,
+                                "end": 35.68,
+                                "text": "ناکہ ہمیں علاگ علاگ ویڈنو میں جانجے جیسے ہماری پہلے امپلوئے کے بارے میں دیسنیشن ہوئی تھی کہ جب ہم کوئی نیا امپلوئے آئیٹ کر رہے ہیں",
+                                "avg_logprob": -0.3662350548638238,
+                                "no_speech_prob": 0.29587212204933167
+                            },
+                            {
+                                "start": 35.68,
+                                "end": 41.68,
+                                "text": "تو اس کی علاگ علاگ جاکے ہم اس کی جو ڈوکومٹسہ ہم علاگ ویڈنو میں جاکے تیچ کر رہے ہیں",
+                                "avg_logprob": -0.3662350548638238,
+                                "no_speech_prob": 0.29587212204933167
+                            },
+                            {
+                                "start": 41.68,
+                                "end": 44.68,
+                                "text": "اس کی details علاگ ویڈنو میں دے رہے ہیں ناکہ وہ ایک ہی ویڈنو بلون رہنا چاہیے",
+                                "avg_logprob": -0.3662350548638238,
+                                "no_speech_prob": 0.29587212204933167
+                            },
+                            {
+                                "start": 44.68,
+                                "end": 47.68,
+                                "text": "اسی ویڈڈو سے نیو ویڈڈو اپن ہو جائے تو وہ زیادہ بیٹھنے گا",
+                                "avg_logprob": -0.3934670926510603,
+                                "no_speech_prob": 0.32478103041648865
+                            },
+                            {
+                                "start": 47.68,
+                                "end": 49.68,
+                                "text": "نہ کہ ہمیں دوبارہ سے پیچھے جاکے",
+                                "avg_logprob": -0.3934670926510603,
+                                "no_speech_prob": 0.32478103041648865
+                            },
+                            {
+                                "start": 49.68,
+                                "end": 51.68,
+                                "text": "نئی ویڈڈو اپن ہونا چاہئے",
+                                "avg_logprob": -0.3934670926510603,
+                                "no_speech_prob": 0.32478103041648865
+                            }
+                        ],
+                        "processing_seconds": 97.5
+                    },
+                    "machine_medium_crosscheck": {
+                        "id": "A12",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.18 PM (1).ogg",
+                        "sha256": "92f869064db658816d0ab9f4a0243c7969a89325e7917d9be0c33d362710c296",
+                        "model": "medium",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 51.2735,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 8.64,
+                                "text": "اور اگر یہ رول کو بھی ہم یوزر میں ہی لے جائے نا اس کو ایک ہی کرتے ہیں اور وہی پہ جو جیسے میں نے کہا کہ ڈریک ڈاؤن کر کے نیو کرییشن کا اوپشن ہم دے دیں",
+                                "avg_logprob": -0.2873531426323785,
+                                "no_speech_prob": 0.5555657148361206
+                            },
+                            {
+                                "start": 8.64,
+                                "end": 14.56,
+                                "text": "تو ہمارے لینا بہت اسان ہو جائے گا اب یہ بہت زیادہ اس کا ڈیشپوٹ بھی آپ دیکھ رہے ہیں کہ بھر گیا ہے",
+                                "avg_logprob": -0.2873531426323785,
+                                "no_speech_prob": 0.5555657148361206
+                            },
+                            {
+                                "start": 14.56,
+                                "end": 20.24,
+                                "text": "تو کافی سارے چیزیں چھوٹ چھوٹ چھوٹ آئے گئے یہ ساری ایک سمپلی فائیڈ ایک میں ہونی چاہیئے",
+                                "avg_logprob": -0.2873531426323785,
+                                "no_speech_prob": 0.5555657148361206
+                            },
+                            {
+                                "start": 20.24,
+                                "end": 24.6,
+                                "text": "اور اس میں بھی اگر دیکھنے اگر آپ کر سکتے ہیں اس کو تو اس کو سارا کچھ جو ہے ایک",
+                                "avg_logprob": -0.31495677100287545,
+                                "no_speech_prob": 0.7437209486961365
+                            },
+                            {
+                                "start": 24.6,
+                                "end": 28.68,
+                                "text": "یوزر جب کر رہے ہیں تو اس کے مطلب جو چیزیں ہیں وہ ساری ایک ہی ویڈو میں ہونا چاہیئے",
+                                "avg_logprob": -0.31495677100287545,
+                                "no_speech_prob": 0.7437209486961365
+                            },
+                            {
+                                "start": 28.68,
+                                "end": 32.72,
+                                "text": "نہ کہ ہمیں الک الک ویڈو میں جان چاہیئے جیسے ہماری پہلے ایمپلائی کے",
+                                "avg_logprob": -0.31495677100287545,
+                                "no_speech_prob": 0.7437209486961365
+                            },
+                            {
+                                "start": 32.72,
+                                "end": 37.4,
+                                "text": "بارے میں دستنیشن ہوئی تھی کہ جب ہم کوئی نیا ایمپلائی آئیٹ کر رہے ہیں تو اس کی جو ہے",
+                                "avg_logprob": -0.31495677100287545,
+                                "no_speech_prob": 0.7437209486961365
+                            },
+                            {
+                                "start": 37.4,
+                                "end": 42.6,
+                                "text": "ہم اس کی جو ڈوکومیٹس ہم ویڈو میں جاکے ڈیٹیلز ویڈو میں دے رہے ہیں",
+                                "avg_logprob": -0.3432668457297902,
+                                "no_speech_prob": 0.5906879901885986
+                            },
+                            {
+                                "start": 42.6,
+                                "end": 44.6,
+                                "text": "ناکے وہ ایک ہی ویڈو میں ہونا چاہیے",
+                                "avg_logprob": -0.3432668457297902,
+                                "no_speech_prob": 0.5906879901885986
+                            },
+                            {
+                                "start": 44.6,
+                                "end": 47.6,
+                                "text": "اس ہی ویڈو سے نیو ویڈو اپن ہو جائے تو وہ زیادہ بہت ہی نہیں",
+                                "avg_logprob": -0.3432668457297902,
+                                "no_speech_prob": 0.5906879901885986
+                            },
+                            {
+                                "start": 47.6,
+                                "end": 51.6,
+                                "text": "ناکے ہمیں دوبارہ سے پچھے جاکے نیو ویڈو اپنا ہونا چاہیے",
+                                "avg_logprob": -0.3432668457297902,
+                                "no_speech_prob": 0.5906879901885986
+                            }
+                        ],
+                        "processing_seconds": 262.5
+                    }
+                },
+                {
+                    "id": "A13",
+                    "summary": "Role Name and Role Code should be selected or populated from consistent options rather than typed repeatedly. Spelling differences will make filtering inconsistent. Use the established department/role hierarchy and existing manager/supervisor/assistant roles as the basis.",
+                    "requirements": [
+                        "CR-07"
+                    ],
+                    "images": [
+                        "I07",
+                        "I09"
+                    ],
+                    "confidence": "Clear standardization request; how role templates and new roles coexist needs a decision.",
+                    "note": "Do not infer that every child must have the same code as its parent. The parent-role comparison is about consistent selection; exact identity-generation rules are not given.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.18 PM.ogg",
+                    "bytes": 146714,
+                    "sha256": "5e2c23cfe452157143e2be9d573c35655016bf092755eb3d73c47127d9b359e0",
+                    "duration_seconds": 62.4935,
+                    "machine_translation": {
+                        "id": "A13",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.18 PM.ogg",
+                        "sha256": "5e2c23cfe452157143e2be9d573c35655016bf092755eb3d73c47127d9b359e0",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "hi",
+                        "language_probability": 0.6799595952033997,
+                        "duration": 62.4935,
+                        "segments": [
+                            {
+                                "start": 0.02,
+                                "end": 15.02,
+                                "text": "The role name and the role code in this option should also come from the auto drag down, so that because of the spelling, if we put a filter in it, then there is no spelling, there is no spelling, there are no changes in it.",
+                                "avg_logprob": -0.7612501989517894,
+                                "no_speech_prob": 0.834412157535553
+                            },
+                            {
+                                "start": 15.02,
+                                "end": 32.02,
+                                "text": "It should be on the auto department like the department is on the auto that the account is the administration, the role code is the same, side supervisor, side supervisor, side manager, account and account assistant, HR, HR assistant, project manager, the role code is the same, the role name is the same.",
+                                "avg_logprob": -0.6486580959137749,
+                                "no_speech_prob": 0.8260213136672974
+                            },
+                            {
+                                "start": 32.02,
+                                "end": 37.02,
+                                "text": "So this should be the same according to the hierarchy.",
+                                "avg_logprob": -0.4926798425169073,
+                                "no_speech_prob": 0.8411464691162109
+                            },
+                            {
+                                "start": 37.02,
+                                "end": 39.02,
+                                "text": "For example, you have made a parent role.",
+                                "avg_logprob": -0.4926798425169073,
+                                "no_speech_prob": 0.8411464691162109
+                            },
+                            {
+                                "start": 39.02,
+                                "end": 41.02,
+                                "text": "This is the same parent role.",
+                                "avg_logprob": -0.4926798425169073,
+                                "no_speech_prob": 0.8411464691162109
+                            },
+                            {
+                                "start": 41.02,
+                                "end": 43.02,
+                                "text": "This will also come in the role code.",
+                                "avg_logprob": -0.4926798425169073,
+                                "no_speech_prob": 0.8411464691162109
+                            },
+                            {
+                                "start": 43.02,
+                                "end": 45.02,
+                                "text": "Because whoever has a parent,",
+                                "avg_logprob": -0.4926798425169073,
+                                "no_speech_prob": 0.8411464691162109
+                            },
+                            {
+                                "start": 45.02,
+                                "end": 47.02,
+                                "text": "whoever has a parent,",
+                                "avg_logprob": -0.4926798425169073,
+                                "no_speech_prob": 0.8411464691162109
+                            },
+                            {
+                                "start": 47.02,
+                                "end": 49.02,
+                                "text": "whoever has a child,",
+                                "avg_logprob": -0.4926798425169073,
+                                "no_speech_prob": 0.8411464691162109
+                            },
+                            {
+                                "start": 49.02,
+                                "end": 51.02,
+                                "text": "they are working under someone.",
+                                "avg_logprob": -0.4926798425169073,
+                                "no_speech_prob": 0.8411464691162109
+                            },
+                            {
+                                "start": 51.02,
+                                "end": 53.02,
+                                "text": "So this should come in the same role code",
+                                "avg_logprob": -0.4926798425169073,
+                                "no_speech_prob": 0.8411464691162109
+                            },
+                            {
+                                "start": 53.02,
+                                "end": 55.02,
+                                "text": "and this should come in the same role name.",
+                                "avg_logprob": -0.4926798425169073,
+                                "no_speech_prob": 0.8411464691162109
+                            },
+                            {
+                                "start": 55.02,
+                                "end": 57.02,
+                                "text": "So make it a little easy",
+                                "avg_logprob": -0.4926798425169073,
+                                "no_speech_prob": 0.8411464691162109
+                            },
+                            {
+                                "start": 57.02,
+                                "end": 59.02,
+                                "text": "so that it is easier to use",
+                                "avg_logprob": -0.4926798425169073,
+                                "no_speech_prob": 0.8411464691162109
+                            },
+                            {
+                                "start": 59.02,
+                                "end": 62.02,
+                                "text": "or things which are more simplified",
+                                "avg_logprob": -0.6814126438564725,
+                                "no_speech_prob": 0.21394069492816925
+                            }
+                        ],
+                        "processing_seconds": 24
+                    },
+                    "machine_original_language": {
+                        "id": "A13",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.18 PM.ogg",
+                        "sha256": "5e2c23cfe452157143e2be9d573c35655016bf092755eb3d73c47127d9b359e0",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 62.4935,
+                        "segments": [
+                            {
+                                "start": 30.02,
+                                "end": 34.7,
+                                "text": "رولکوڈ ایک ہے رول لیم بھی ایک کی ہے تو یہ ایک ہی اس کو ہرارکی کے",
+                                "avg_logprob": -0.35231914520263674,
+                                "no_speech_prob": 0.8912379741668701
+                            },
+                            {
+                                "start": 34.7,
+                                "end": 38.22,
+                                "text": "مطابق جانا جائگڈون اوپشن میں ہونا چاہئے جیسے پیرنڈ رول آپ نے",
+                                "avg_logprob": -0.35231914520263674,
+                                "no_speech_prob": 0.8912379741668701
+                            },
+                            {
+                                "start": 38.22,
+                                "end": 42.02,
+                                "text": "بنایا ہے اس طرح یہ ہی پیرنڈ رول جو ہیں یہ رولکوڈ میں بھی آئیں گی",
+                                "avg_logprob": -0.35231914520263674,
+                                "no_speech_prob": 0.8912379741668701
+                            },
+                            {
+                                "start": 42.02,
+                                "end": 46.26,
+                                "text": "کیونکہ جو کسی کا پیرنڈ ہوگا وہ خود بھی اس کا کوئی اور آگے",
+                                "avg_logprob": -0.35231914520263674,
+                                "no_speech_prob": 0.8912379741668701
+                            },
+                            {
+                                "start": 46.26,
+                                "end": 49.74,
+                                "text": "پیرنڈ ہوگا وہ آگے کسی کا چائلڈ ہوگا وہ کسی کے اندر کام کر رہا",
+                                "avg_logprob": -0.35231914520263674,
+                                "no_speech_prob": 0.8912379741668701
+                            },
+                            {
+                                "start": 49.74,
+                                "end": 61.74,
+                                "text": "اس کو تھوڑا سا جوانا ایزی کریں تاکہ use کرنے میں اسان لے اور چیزیں جوانا زیادہ سبلیفائیڈ ہو.",
+                                "avg_logprob": -0.5591929038365682,
+                                "no_speech_prob": 0.36223670840263367
+                            }
+                        ],
+                        "processing_seconds": 151
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A14",
+                    "summary": "The attachment section has only four rows. After IQAMA, Passport, Contract and Medical Insurance, how can a fifth document be added? Provide a way to add more rows.",
+                    "requirements": [
+                        "CR-11"
+                    ],
+                    "images": [
+                        "I11"
+                    ],
+                    "confidence": "Clear request and exact screenshot match.",
+                    "note": "The dropdown offers more types than the visible rows. No required maximum or saved-file deletion policy is stated.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.19 PM (1).ogg",
+                    "bytes": 54136,
+                    "sha256": "45fab23ec78e1196e588f00256e977619c1e7f20f57a7da6328deaa8b3b68975",
+                    "duration_seconds": 24.4935,
+                    "machine_translation": {
+                        "id": "A14",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.19 PM (1).ogg",
+                        "sha256": "45fab23ec78e1196e588f00256e977619c1e7f20f57a7da6328deaa8b3b68975",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "ur",
+                        "language_probability": 0.6468459963798523,
+                        "duration": 24.4935,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 9,
+                                "text": "This is the option given in the document attachment, there are total 4 bars in it, but there may be more documents, so how will we add bars in it?",
+                                "avg_logprob": -0.6595093400801643,
+                                "no_speech_prob": 0.3055042028427124
+                            },
+                            {
+                                "start": 9,
+                                "end": 16,
+                                "text": "For example, if we drag down, then the option is given in 5 DM, but there are 4 bars in it.",
+                                "avg_logprob": -0.6595093400801643,
+                                "no_speech_prob": 0.3055042028427124
+                            },
+                            {
+                                "start": 16,
+                                "end": 20,
+                                "text": "So in one we have put the work, in the second we have put the passport, in the third we have put the contract, in the fourth we have put the medical insurance.",
+                                "avg_logprob": -0.6595093400801643,
+                                "no_speech_prob": 0.3055042028427124
+                            },
+                            {
+                                "start": 20,
+                                "end": 24,
+                                "text": "In the fifth, how will we make a bar in it?",
+                                "avg_logprob": -0.6595093400801643,
+                                "no_speech_prob": 0.3055042028427124
+                            }
+                        ],
+                        "processing_seconds": 10.6
+                    },
+                    "machine_original_language": {
+                        "id": "A14",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.19 PM (1).ogg",
+                        "sha256": "45fab23ec78e1196e588f00256e977619c1e7f20f57a7da6328deaa8b3b68975",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 24.4935,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 2.62,
+                                "text": "جو آپ نے اپنے اپنے اپنے اپنے چار باٹکویکنٹ سوالہ بہت اچھان دیا ہے",
+                                "avg_logprob": -1.3168778483072916,
+                                "no_speech_prob": 0.3055042028427124
+                            },
+                            {
+                                "start": 2.64,
+                                "end": 9.04,
+                                "text": "اس میں ٹوریل چار بھاٹکتے ہیں لیکن اپنے کو ساتھ بھی ہوسکتے تھے تو ہم اس میں باٹکی بہت کیس乎ی ایڈ کریں گے بزید",
+                                "avg_logprob": -1.3168778483072916,
+                                "no_speech_prob": 0.3055042028427124
+                            },
+                            {
+                                "start": 9.18,
+                                "end": 13.64,
+                                "text": "دیہاadores ڈےگڈون کریں تو اپنے پانچ دیئے میں",
+                                "avg_logprob": -1.3168778483072916,
+                                "no_speech_prob": 0.3055042028427124
+                            },
+                            {
+                                "start": 13.64,
+                                "end": 15.4,
+                                "text": "لیکن یہاں بہت پاپٹ کار ہے",
+                                "avg_logprob": -1.3168778483072916,
+                                "no_speech_prob": 0.3055042028427124
+                            },
+                            {
+                                "start": 15.54,
+                                "end": 20.64,
+                                "text": "تو ایک میں ہم نے کامہ لگا دے یہاں پاسبہ دیسٹر میں کھہٹچوٹھیں میڈیکلنشوانس",
+                                "avg_logprob": -1.3168778483072916,
+                                "no_speech_prob": 0.3055042028427124
+                            },
+                            {
+                                "start": 20.64,
+                                "end": 23.44,
+                                "text": "پانچ ماں بار کیسے بنے گا اس کے اندرگی میں جلو تائیگا",
+                                "avg_logprob": -0.5959198113643762,
+                                "no_speech_prob": 0.057028401643037796
+                            }
+                        ],
+                        "processing_seconds": 82.2
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A15",
+                    "summary": "The separate Branch/Department options should not be in that location. When creating a user, offer Create New from the relevant dropdown and create Department, Branch or Designation there, instead of navigating back to separate master screens.",
+                    "requirements": [
+                        "CR-10",
+                        "CR-01",
+                        "CR-09"
+                    ],
+                    "images": [
+                        "I10"
+                    ],
+                    "confidence": "Inline creation and reducing separate menu options are clear; larger-model original-language review confirms Designation is named too.",
+                    "note": "Exact grouping/hiding and the remaining maintenance route need confirmation. The original English translation's final sentence repeats itself and is not a reliable literal instruction. The screenshot includes other master entries that the client does not explicitly ask to remove.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.19 PM.ogg",
+                    "bytes": 52658,
+                    "sha256": "b7cd8bfbf9bc9dcdd24814a727672a857a4741155df914c85dea5749280c17d9",
+                    "duration_seconds": 23.1135,
+                    "machine_translation": {
+                        "id": "A15",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.19 PM.ogg",
+                        "sha256": "b7cd8bfbf9bc9dcdd24814a727672a857a4741155df914c85dea5749280c17d9",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "hi",
+                        "language_probability": 0.6340286731719971,
+                        "duration": 23.1135,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 5.5,
+                                "text": "These options should not be given to the branch or department.",
+                                "avg_logprob": -0.7282998093536922,
+                                "no_speech_prob": 0.20698684453964233
+                            },
+                            {
+                                "start": 5.5,
+                                "end": 16,
+                                "text": "When we create a user, we should give the option to create a new department or branch.",
+                                "avg_logprob": -0.7282998093536922,
+                                "no_speech_prob": 0.20698684453964233
+                            },
+                            {
+                                "start": 16,
+                                "end": 23,
+                                "text": "Instead of creating a new department or branch, we should create a new department or branch.",
+                                "avg_logprob": -0.7282998093536922,
+                                "no_speech_prob": 0.20698684453964233
+                            }
+                        ],
+                        "processing_seconds": 7.2
+                    },
+                    "machine_original_language": {
+                        "id": "A15",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.19 PM.ogg",
+                        "sha256": "b7cd8bfbf9bc9dcdd24814a727672a857a4741155df914c85dea5749280c17d9",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 23.1135,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 5.32,
+                                "text": "یہ برانچیز دپارٹمنٹ یہ یہاں پہنی ہونے چاہیے",
+                                "avg_logprob": -0.4200747232179384,
+                                "no_speech_prob": 0.20698684453964233
+                            },
+                            {
+                                "start": 5.32,
+                                "end": 10.32,
+                                "text": "اس کو وہی پہ جب ہمیوزر بنائے نا اس میں جب ہم دیگڈون کریں دپارٹمنٹ کو",
+                                "avg_logprob": -0.4200747232179384,
+                                "no_speech_prob": 0.20698684453964233
+                            },
+                            {
+                                "start": 10.32,
+                                "end": 13.72,
+                                "text": "تو وہاں پہ ہی اوپشن میں دینا چاہیے کہ کریٹ کا",
+                                "avg_logprob": -0.4200747232179384,
+                                "no_speech_prob": 0.20698684453964233
+                            },
+                            {
+                                "start": 13.72,
+                                "end": 15.82,
+                                "text": "وہی سے ہم کریٹ کر کے وہی پہ آئیٹ کر دیں",
+                                "avg_logprob": -0.4200747232179384,
+                                "no_speech_prob": 0.20698684453964233
+                            },
+                            {
+                                "start": 15.82,
+                                "end": 20.82,
+                                "text": "بجائے کے ہم یہاں آگے نیو دپارٹمنٹ برانچ یا دیزنیشن بنائے",
+                                "avg_logprob": -0.4200747232179384,
+                                "no_speech_prob": 0.20698684453964233
+                            },
+                            {
+                                "start": 20.82,
+                                "end": 22.82,
+                                "text": "وہ وہی سے ہمیں کریٹ کرنا چاہیے",
+                                "avg_logprob": -0.4200747232179384,
+                                "no_speech_prob": 0.20698684453964233
+                            }
+                        ],
+                        "processing_seconds": 10.9
+                    },
+                    "machine_medium_crosscheck": {
+                        "id": "A15",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.19 PM.ogg",
+                        "sha256": "b7cd8bfbf9bc9dcdd24814a727672a857a4741155df914c85dea5749280c17d9",
+                        "model": "medium",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 23.1135,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 2,
+                                "text": "یہ ویڈیو اوپشنز ہے نا",
+                                "avg_logprob": -0.2919029847585729,
+                                "no_speech_prob": 0.09933813661336899
+                            },
+                            {
+                                "start": 2,
+                                "end": 5.64,
+                                "text": "یہ برانچیز ڈپارٹمنٹ یہ یہاں پہ نہیں ہونے چاہیے",
+                                "avg_logprob": -0.2919029847585729,
+                                "no_speech_prob": 0.09933813661336899
+                            },
+                            {
+                                "start": 5.64,
+                                "end": 10.68,
+                                "text": "اس کو وہیں پہ جب ہم یوزر بنائے نا اس میں ہی جب ہم ڈیپارٹمنٹ کو ڈریگڈنڈ کریں",
+                                "avg_logprob": -0.2919029847585729,
+                                "no_speech_prob": 0.09933813661336899
+                            },
+                            {
+                                "start": 10.68,
+                                "end": 13.68,
+                                "text": "تو وہاں پہ ہی اوپشن ہمیں دینا چاہیے کہ کرییٹ کا",
+                                "avg_logprob": -0.2919029847585729,
+                                "no_speech_prob": 0.09933813661336899
+                            },
+                            {
+                                "start": 13.68,
+                                "end": 16.18,
+                                "text": "وہیں سے ہم کرییٹ کر کے وہیں پہ آیڈ کرتے ہیں",
+                                "avg_logprob": -0.2919029847585729,
+                                "no_speech_prob": 0.09933813661336899
+                            },
+                            {
+                                "start": 16.18,
+                                "end": 20.78,
+                                "text": "بجائے کہ ہم یہاں آکے نیو ڈپارٹمنٹ، برانچ یا ڈیزنیشن بنائے",
+                                "avg_logprob": -0.2919029847585729,
+                                "no_speech_prob": 0.09933813661336899
+                            },
+                            {
+                                "start": 20.78,
+                                "end": 22.78,
+                                "text": "وہ وہیں سے ہمیں کرییٹ کرنا چاہیے",
+                                "avg_logprob": -0.2919029847585729,
+                                "no_speech_prob": 0.09933813661336899
+                            }
+                        ],
+                        "processing_seconds": 74
+                    }
+                },
+                {
+                    "id": "A16",
+                    "summary": "Progress update: the client is checking the system as time permits, sending comments along the way, and plans to work through more of it and send further observations.",
+                    "requirements": [],
+                    "images": [],
+                    "confidence": "Informational, recovered in the original-language pass.",
+                    "note": "The first English pass returned 'Thank you for watching this video', which is a recognition error and was discarded. No new feature is specified here.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.20 PM (1).ogg",
+                    "bytes": 20519,
+                    "sha256": "5789d2f183c21d26ad657e7ed738b1a268d8838fc2e5aa1b2784c43c34b8ea50",
+                    "duration_seconds": 8.8735,
+                    "machine_translation": {
+                        "id": "A16",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.20 PM (1).ogg",
+                        "sha256": "5789d2f183c21d26ad657e7ed738b1a268d8838fc2e5aa1b2784c43c34b8ea50",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "ur",
+                        "language_probability": 0.9546110033988953,
+                        "duration": 8.8735,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 9,
+                                "text": "Thank you for watching this video.",
+                                "avg_logprob": -0.9728720784187317,
+                                "no_speech_prob": 0.03670069947838783
+                            }
+                        ],
+                        "processing_seconds": 5.5
+                    },
+                    "machine_original_language": {
+                        "id": "A16",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.20 PM (1).ogg",
+                        "sha256": "5789d2f183c21d26ad657e7ed738b1a268d8838fc2e5aa1b2784c43c34b8ea50",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 8.8735,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 5.22,
+                                "text": "اسلام علیکم نہیں میں ابھی کر رہا ہوں جیسے ایسے بیچ میں ٹائم بلہ مصاصد آپ کو اس لے بیشتا جا رہا ہوں",
+                                "avg_logprob": -0.49294131994247437,
+                                "no_speech_prob": 0.03670069947838783
+                            },
+                            {
+                                "start": 5.22,
+                                "end": 8.82,
+                                "text": "ابھی آج پھر میں مزید بڑکین کروں گا اس پر میں آپ کو پھر بیچوں گا انشاء اللہ",
+                                "avg_logprob": -0.49294131994247437,
+                                "no_speech_prob": 0.03670069947838783
+                            }
+                        ],
+                        "processing_seconds": 6.8
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A17",
+                    "summary": "The Add New option is not there currently; the client expects it to be added later.",
+                    "requirements": [
+                        "CR-11",
+                        "CR-01"
+                    ],
+                    "images": [
+                        "I11"
+                    ],
+                    "confidence": "Add New is clear; its target is not named in this very short note.",
+                    "note": "Link to the preceding attachment-row discussion is contextual. Do not use it alone to mandate Add Row across all tables or to infer a delivery date.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.20 PM.ogg",
+                    "bytes": 7298,
+                    "sha256": "6289a356d8d5a9608acde7751b57d90f103e772a25c55f669688d92bc8f56d33",
+                    "duration_seconds": 3.1135,
+                    "machine_translation": {
+                        "id": "A17",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.20 PM.ogg",
+                        "sha256": "6289a356d8d5a9608acde7751b57d90f103e772a25c55f669688d92bc8f56d33",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "ur",
+                        "language_probability": 0.5572595000267029,
+                        "duration": 3.1135,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 3.08,
+                                "text": "You can add new option later",
+                                "avg_logprob": -0.9754919475979276,
+                                "no_speech_prob": 0.012748746201395988
+                            }
+                        ],
+                        "processing_seconds": 5.3
+                    },
+                    "machine_original_language": {
+                        "id": "A17",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.20 PM.ogg",
+                        "sha256": "6289a356d8d5a9608acde7751b57d90f103e772a25c55f669688d92bc8f56d33",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 3.1135,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 3,
+                                "text": "ابھی تو اس میں نہیں ہے وہ آپ بات میں ایڈ کریں گے ایڈ نیو کو اپشن",
+                                "avg_logprob": -0.4824737616947719,
+                                "no_speech_prob": 0.012748746201395988
+                            }
+                        ],
+                        "processing_seconds": 3.6
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A18",
+                    "summary": "Add an upload option on the purchase order for the supplier quotation, whether received as a digital file or on paper and then scanned.",
+                    "requirements": [
+                        "CR-12"
+                    ],
+                    "images": [
+                        "I13"
+                    ],
+                    "confidence": "Clear request.",
+                    "note": "The number of allowed quotations, required/optional status and handling after approval are not specified.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.21 PM.ogg",
+                    "bytes": 40868,
+                    "sha256": "8fdd91beb0f1db156f8b53f4c562ae2e863b1dd91c0b9e6cec3bebccdb78fd43",
+                    "duration_seconds": 17.1335,
+                    "machine_translation": {
+                        "id": "A18",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.21 PM.ogg",
+                        "sha256": "8fdd91beb0f1db156f8b53f4c562ae2e863b1dd91c0b9e6cec3bebccdb78fd43",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "ur",
+                        "language_probability": 0.9707155227661133,
+                        "duration": 17.1335,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 4,
+                                "text": "Assalam-o-Aliakum, how are you, Tabish bhai?",
+                                "avg_logprob": -0.5756279309590657,
+                                "no_speech_prob": 0.042252592742443085
+                            },
+                            {
+                                "start": 4,
+                                "end": 8,
+                                "text": "Tabish bhai, we have to add one thing in the purchase order",
+                                "avg_logprob": -0.5756279309590657,
+                                "no_speech_prob": 0.042252592742443085
+                            },
+                            {
+                                "start": 8,
+                                "end": 11,
+                                "text": "that we can upload the quotation in it.",
+                                "avg_logprob": -0.5756279309590657,
+                                "no_speech_prob": 0.042252592742443085
+                            },
+                            {
+                                "start": 11,
+                                "end": 15,
+                                "text": "When we have got the quotation in soft or in hard",
+                                "avg_logprob": -0.5756279309590657,
+                                "no_speech_prob": 0.042252592742443085
+                            },
+                            {
+                                "start": 15,
+                                "end": 18,
+                                "text": "we can scan it and add the quotation here.",
+                                "avg_logprob": -0.5756279309590657,
+                                "no_speech_prob": 0.042252592742443085
+                            }
+                        ],
+                        "processing_seconds": 8
+                    },
+                    "machine_original_language": {
+                        "id": "A18",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.21 PM.ogg",
+                        "sha256": "8fdd91beb0f1db156f8b53f4c562ae2e863b1dd91c0b9e6cec3bebccdb78fd43",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 17.1335,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 17.08,
+                                "text": "اچھا تابش بائی یہ پچیز اور دو والا اس میں ایک چیز ایڈ کرنی ہے کہ کوتیشن وہ ہم اس میں ساتھ اپلوٹ کر سکے جو ہمیں کوتیشن آئے نا سوفت میں یا ہاڈ میں بھی آئے تو اس کو سکین کر کے ہم یہاں کوتیشن ساتھ ایڈ کرنے",
+                                "avg_logprob": -0.4051627896048806,
+                                "no_speech_prob": 0.042252592742443085
+                            }
+                        ],
+                        "processing_seconds": 7
+                    },
+                    "machine_medium_crosscheck": null
+                },
+                {
+                    "id": "A19",
+                    "summary": "The purchase-order detail section also needs the boxes/details shown in the reference image.",
+                    "requirements": [
+                        "CR-13"
+                    ],
+                    "images": [
+                        "I12",
+                        "I15"
+                    ],
+                    "confidence": "PO context recovered in original-language review; precise field scope is obtained from the supplied reference image and remains subject to the noted decisions.",
+                    "note": "The first English translation lost the purchase-order context. The note is brief and does not define tax or discount business rules, currency conversion, or configurable-column behavior.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.22 PM.ogg",
+                    "bytes": 20178,
+                    "sha256": "88d1e4e673063ecddca264391647bc0b613807d0b410d09a403093af77464612",
+                    "duration_seconds": 8.4935,
+                    "machine_translation": {
+                        "id": "A19",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.22 PM.ogg",
+                        "sha256": "88d1e4e673063ecddca264391647bc0b613807d0b410d09a403093af77464612",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "hi",
+                        "language_probability": 0.7696475982666016,
+                        "duration": 8.4935,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 8.5,
+                                "text": "In this box you will need all the details of the box.",
+                                "avg_logprob": -1.2547315657138824,
+                                "no_speech_prob": 0.05413547158241272
+                            }
+                        ],
+                        "processing_seconds": 11.9
+                    },
+                    "machine_original_language": {
+                        "id": "A19",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.22 PM.ogg",
+                        "sha256": "88d1e4e673063ecddca264391647bc0b613807d0b410d09a403093af77464612",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 8.4935,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 3.8,
+                                "text": "یہ جو اس میں اپنے پرچے روٹر میں ڈیٹیلس بنائیں گے",
+                                "avg_logprob": -0.5005363326474844,
+                                "no_speech_prob": 0.05413547158241272
+                            },
+                            {
+                                "start": 3.8,
+                                "end": 5.8,
+                                "text": "اس میں یہ سارے بوکسیز بھی چاہیے ہوں گے",
+                                "avg_logprob": -0.5005363326474844,
+                                "no_speech_prob": 0.05413547158241272
+                            },
+                            {
+                                "start": 5.8,
+                                "end": 8.4,
+                                "text": "یہ ڈیٹیل بھی چاہیے ہوگا توڑا",
+                                "avg_logprob": -0.5005363326474844,
+                                "no_speech_prob": 0.05413547158241272
+                            }
+                        ],
+                        "processing_seconds": 5.6
+                    },
+                    "machine_medium_crosscheck": {
+                        "id": "A19",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.22 PM.ogg",
+                        "sha256": "88d1e4e673063ecddca264391647bc0b613807d0b410d09a403093af77464612",
+                        "model": "medium",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 8.4935,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 5.64,
+                                "text": "یہ جو اس میں آپ نے پچھے روڈو میں ڈیٹیلز بنائی گئی نا اس میں یہ سارے بوکسز بھی چاہیے ہوں گے",
+                                "avg_logprob": -0.46853079525537267,
+                                "no_speech_prob": 0.03703312575817108
+                            },
+                            {
+                                "start": 5.64,
+                                "end": 8.64,
+                                "text": "یہ ڈیٹیلز بھی چاہیے ہوگا تھوڑا نا",
+                                "avg_logprob": -0.46853079525537267,
+                                "no_speech_prob": 0.03703312575817108
+                            }
+                        ],
+                        "processing_seconds": 26.4
+                    }
+                },
+                {
+                    "id": "A20",
+                    "summary": "Once the outstanding work is completed, the client will review/confirm it. The rest has been checked and the changes have been communicated; after rectification the client will go through the system again.",
+                    "requirements": [
+                        "CR-14"
+                    ],
+                    "images": [
+                        "I14",
+                        "I16"
+                    ],
+                    "confidence": "Client re-review instruction is clear; relation to the SOON screenshots is contextual, not a full specification for those modules.",
+                    "note": "The initial English output about 'dishes' was a recognition error and was discarded. Neither this note nor the SOON screenshots supplies full requirements for the unfinished modules.",
+                    "file": "WhatsApp Audio 2026-09-05 at 5.00.23 PM.ogg",
+                    "bytes": 37618,
+                    "sha256": "532b221716e61c27e0c366c4d426e2e1eb00e7bcd41cec6ec98abd65af0a3b11",
+                    "duration_seconds": 16.0735,
+                    "machine_translation": {
+                        "id": "A20",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.23 PM.ogg",
+                        "sha256": "532b221716e61c27e0c366c4d426e2e1eb00e7bcd41cec6ec98abd65af0a3b11",
+                        "model": "small",
+                        "task": "translate",
+                        "language": "ur",
+                        "language_probability": 0.7619943022727966,
+                        "duration": 16.0735,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 7,
+                                "text": "I have checked the rest of the dishes.",
+                                "avg_logprob": -1.0665914465983708,
+                                "no_speech_prob": 0.1649908870458603
+                            },
+                            {
+                                "start": 7,
+                                "end": 16,
+                                "text": "I will show you the rest of the dishes.",
+                                "avg_logprob": -1.0665914465983708,
+                                "no_speech_prob": 0.1649908870458603
+                            }
+                        ],
+                        "processing_seconds": 14.7
+                    },
+                    "machine_original_language": {
+                        "id": "A20",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.23 PM.ogg",
+                        "sha256": "532b221716e61c27e0c366c4d426e2e1eb00e7bcd41cec6ec98abd65af0a3b11",
+                        "model": "small",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 16.0735,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 16,
+                                "text": "یہ مکمل ہوگا تو پھر میں آپ کوکے کر دیتا ہوں باکی ساری میں دیکلی ہے جو جو چینیوٹ سے آپ کو بتا دیتا دیتا ہے جب آپ ریکٹیفہ کر دیتا تو بہت ایک دفعہ پھر ایک دفعہ گو ٹھو کھڑھو کھڑھو۔",
+                                "avg_logprob": -0.6973228350020292,
+                                "no_speech_prob": 0.1649908870458603
+                            }
+                        ],
+                        "processing_seconds": 7.5
+                    },
+                    "machine_medium_crosscheck": {
+                        "id": "A20",
+                        "file": "WhatsApp Audio 2026-09-05 at 5.00.23 PM.ogg",
+                        "sha256": "532b221716e61c27e0c366c4d426e2e1eb00e7bcd41cec6ec98abd65af0a3b11",
+                        "model": "medium",
+                        "task": "transcribe",
+                        "language": "ur",
+                        "language_probability": 1,
+                        "duration": 16.0735,
+                        "segments": [
+                            {
+                                "start": 0,
+                                "end": 6.82,
+                                "text": "جی تابیش بھائی میں نے باقی ساری چیکھ کر لیا ہے یہ اب دو آپ اس کو کروا دیں مکمل یہ تو کافی ٹائم سے اس روپ کے آرہے ہیں",
+                                "avg_logprob": -0.4983165101234957,
+                                "no_speech_prob": 0.06758977472782135
+                            },
+                            {
+                                "start": 6.82,
+                                "end": 16.24,
+                                "text": "یہ مکمل ہوگا تو میں آپ کو اک کر لیتا ہوں باقی ساری میں دیکھ لیا ہے جو چینیس کی آپ کو بتا دیا ہے جب آپ کو ڈیکٹیفر کرتے ہیں تو میجھے بتائیں کہ میں دوبادہ پھر ایک دفعہ گو ٹھو کر لوں",
+                                "avg_logprob": -0.4983165101234957,
+                                "no_speech_prob": 0.06758977472782135
+                            }
+                        ],
+                        "processing_seconds": 50.8
+                    }
+                }
+            ],
+            "coverage": {
+                "source_files": 36,
+                "images_reviewed": 16,
+                "audio_reviewed": 20,
+                "audio_duration_seconds": 515.77,
+                "medium_crosschecks": 5
+            }
+        },
+        "new_requirement2": {
+            "review_date": "2026-09-09",
+            "code_baseline": "ad83f0f",
+            "source_directory": "public/new_requirement2",
+            "method": "Local small Urdu transcription and translation, medium Urdu cross-check of every new recording, contextual interpretation against all four screenshots and current source. Not a certified verbatim transcript.",
+            "images": [
+                {
+                    "id": "J01",
+                    "file": "WhatsApp Image 2026-09-08 at 7.44.32 PM.jpeg",
+                    "screen": "Create Project",
+                    "requirements": [
+                        "CR-15"
+                    ],
+                    "observation": "The Project form already has + New for Client, Branch and Project Manager, but has no Classification field. Project name/code, dates, budget and other populated values are example data, not requested defaults.",
+                    "sha256": "5db0e94e9c304cd90da38729222b4d8425803975c3b2751037a088b3f5dfc59e",
+                    "bytes": 76659
+                },
+                {
+                    "id": "J02",
+                    "file": "WhatsApp Image 2026-09-08 at 7.44.33 PM.jpeg",
+                    "screen": "Site Details — map placeholder",
+                    "requirements": [
+                        "CR-16"
+                    ],
+                    "observation": "Saved latitude/longitude and 300 m radius are shown with geo-fence and attendance settings. The right panel labeled Map + Geo-Fence Circle is a placeholder rather than a visible geographic map. The client's request targets the location display, not changing attendance settings.",
+                    "sha256": "498c017dae7c55fe9efca8257f18b9a6046cd60172a2e59740c250081303ad03",
+                    "bytes": 85267
+                },
+                {
+                    "id": "J03",
+                    "file": "WhatsApp Image 2026-09-08 at 7.44.34 PM.jpeg",
+                    "screen": "Phone mapping application reference",
+                    "requirements": [
+                        "CR-16"
+                    ],
+                    "observation": "An actual street map and location marker illustrate the desired visual location context. This is not evidence that the client selected a map provider, requested GPS tracking/navigation, or asked to copy the phone application's other controls.",
+                    "sha256": "5d95aef74ee44511f63a6e0e30455f9181b3a8d215484630155e807f2ccefe0f",
+                    "bytes": 119365
+                },
+                {
+                    "id": "J04",
+                    "file": "WhatsApp Image 2026-09-08 at 7.51.24 PM.jpeg",
+                    "screen": "Add Supplier — Payment Terms and Linked Payable Account",
+                    "requirements": [
+                        "CR-17",
+                        "CR-18"
+                    ],
+                    "observation": "Payment Terms offers Cash, 15 Days, 30 Days and 60 Days. Linked Payable Account is a plain text field reading Accounts Payable - Suppliers. Supplier details/opening balance elsewhere on the form are context, not instructions to seed those values.",
+                    "sha256": "256bb6dd1fec80ccdbc9e0b3548ebdd36b5dee21dd399bfcfe3f378d0824512c",
+                    "bytes": 83298
+                }
+            ],
+            "audio": [
+                {
+                    "id": "B01",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM (1).ogg",
+                    "requirements": [
+                        "CR-15"
+                    ],
+                    "images": [
+                        "J01"
+                    ],
+                    "summary": "Add a Classification dropdown on the existing Project form, alongside its other fields. Let the user add their own classification choices from there.",
+                    "confidence": "High on the field, screen and extensible dropdown; opening phrase unclear.",
+                    "note": "Both Urdu passes recognize project/client/date context and Classification. The translation's drag down means dropdown in context. Do not read the malformed opening as a specification for a separate new screen; B02 and J01 confirm the missing field. No category names or employee classification are mentioned.",
+                    "roman_urdu": "Isi Project form mein Classification ka dropdown chahiye, jahan hum apni classifications add kar saken.",
+                    "sha256": "54e10d18512a2f58822c8eb97cd6c93abd9058c3eb3b1b87a2f97581e1ce60dd",
+                    "bytes": 34975,
+                    "duration_seconds": 14.6335,
+                    "machine_passes": {
+                        "small-translate": {
+                            "id": "B01",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM (1).ogg",
+                            "sha256": "54e10d18512a2f58822c8eb97cd6c93abd9058c3eb3b1b87a2f97581e1ce60dd",
+                            "model": "small",
+                            "task": "translate",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 14.6335,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 7,
+                                    "text": "I don't want to add any screen like project, client name, date, start date and date",
+                                    "avg_logprob": -0.7442291730489486,
+                                    "no_speech_prob": 0.06360010802745819
+                                },
+                                {
+                                    "start": 7,
+                                    "end": 15,
+                                    "text": "here I am adding a tab where I am adding classification and drag down",
+                                    "avg_logprob": -0.7442291730489486,
+                                    "no_speech_prob": 0.06360010802745819
+                                }
+                            ],
+                            "processing_seconds": 7.8
+                        },
+                        "small-transcribe": {
+                            "id": "B01",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM (1).ogg",
+                            "sha256": "54e10d18512a2f58822c8eb97cd6c93abd9058c3eb3b1b87a2f97581e1ce60dd",
+                            "model": "small",
+                            "task": "transcribe",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 14.6335,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 14.62,
+                                    "text": "اپنی سکین نہیں ایڈ کرونا چاہرہا جیسے یہ اپشن ہے نا کہ پڑجیکٹ, کلائنڈ نیم کیکہ دیت، سٹارڈ دیت اور دیت یہاں پی ایک اپشن چاہرہوں اور ٹیپ چاہرہوں جس میں آرہوں کلاسیفکیشن جو ڈیاگڈون کریں تو اس میں اپنی ایڈ کرتے جائے اور وہ ایڈ کریں وہ چاہرہوں",
+                                    "avg_logprob": -0.39586780974583596,
+                                    "no_speech_prob": 0.06360010802745819
+                                }
+                            ],
+                            "processing_seconds": 10.5
+                        },
+                        "medium-transcribe": {
+                            "id": "B01",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM (1).ogg",
+                            "sha256": "54e10d18512a2f58822c8eb97cd6c93abd9058c3eb3b1b87a2f97581e1ce60dd",
+                            "model": "medium",
+                            "task": "transcribe",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 14.6335,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 14.9,
+                                    "text": "اپنی سکرین نہیں آیڈ کرونا چاہ رہا جیسے یہ اپشن ہے نا کہ پروڈیکٹ، کلائیٹ نیم، ڈیٹ، ڈیٹ، ڈیٹ، ڈیٹ یہاں پی ایک اپشن چاہ رہا ہوں، ایک ٹیپ چاہ رہا ہوں جس میں آ رہا ہوں کلاسفکیشن جو ڈراگڑون کریں تو اس میں اپنی آیڈ کرتے جائے اور وہ آیڈ کریں وہ چاہ رہا ہوں",
+                                    "avg_logprob": -0.3451325115801274,
+                                    "no_speech_prob": 0.1620175838470459
+                                }
+                            ],
+                            "processing_seconds": 101.8
+                        }
+                    }
+                },
+                {
+                    "id": "B02",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM.ogg",
+                    "requirements": [
+                        "CR-15"
+                    ],
+                    "images": [
+                        "J01"
+                    ],
+                    "summary": "The Classification option requested earlier has not been added. The New action for adding related values is there, but that is not the missing Classification field.",
+                    "confidence": "High; correction is repeated and matches the screenshot.",
+                    "note": "The small English pass misrecognizes classification as classic patient near the end. Reject that phrase. Small Urdu/English describe client/branch examples; the medium pass is less complete in the middle but clearly repeats that Classification is missing. This is a follow-up on the Project form, separate from CR-04 employee classification.",
+                    "roman_urdu": "New Client ya Branch add karne ka option aa gaya hai, lekin Classification ka field abhi add nahin hua.",
+                    "sha256": "4345917213950080aa9fd0ee2454df55bad0106214e47d0b1e03d2ce18411f56",
+                    "bytes": 37503,
+                    "duration_seconds": 15.8535,
+                    "machine_passes": {
+                        "small-translate": {
+                            "id": "B02",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM.ogg",
+                            "sha256": "4345917213950080aa9fd0ee2454df55bad0106214e47d0b1e03d2ce18411f56",
+                            "model": "small",
+                            "task": "translate",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 15.8535,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 6,
+                                    "text": "The first point was to add the classification option, it was not added.",
+                                    "avg_logprob": -0.8172803990384365,
+                                    "no_speech_prob": 0.02348965033888817
+                                },
+                                {
+                                    "start": 6,
+                                    "end": 12,
+                                    "text": "The new tab option was to add the new client name or branch.",
+                                    "avg_logprob": -0.8172803990384365,
+                                    "no_speech_prob": 0.02348965033888817
+                                },
+                                {
+                                    "start": 12,
+                                    "end": 15,
+                                    "text": "But this way the classic patient tab was not added.",
+                                    "avg_logprob": -0.8172803990384365,
+                                    "no_speech_prob": 0.02348965033888817
+                                }
+                            ],
+                            "processing_seconds": 8.9
+                        },
+                        "small-transcribe": {
+                            "id": "B02",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM.ogg",
+                            "sha256": "4345917213950080aa9fd0ee2454df55bad0106214e47d0b1e03d2ce18411f56",
+                            "model": "small",
+                            "task": "transcribe",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 15.8535,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 6.4,
+                                    "text": "تاویز بہت سب سے پہلہ پوائنٹ اس میں جو میرا یہ تھا نا کہ اس میں کلاسی پیشن کا اپشان ایٹ کرنا وہ ایڈ نہیں ہوا",
+                                    "avg_logprob": -0.44179875786240036,
+                                    "no_speech_prob": 0.02348965033888817
+                                },
+                                {
+                                    "start": 6.4,
+                                    "end": 15.4,
+                                    "text": "نیو تیب کا اپشان آگیا کہ وہیسے آپ نیا جو بھی ہے کلائن کا نام یہاں پلاان چھوکر ایٹ کر لیں لیکن اس میں کلاسی پیشن کا تیب ایٹ کرنا تھا وہ ایڈ نہیں ہوا",
+                                    "avg_logprob": -0.44179875786240036,
+                                    "no_speech_prob": 0.02348965033888817
+                                }
+                            ],
+                            "processing_seconds": 10.3
+                        },
+                        "medium-transcribe": {
+                            "id": "B02",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.44.33 PM.ogg",
+                            "sha256": "4345917213950080aa9fd0ee2454df55bad0106214e47d0b1e03d2ce18411f56",
+                            "model": "medium",
+                            "task": "transcribe",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 15.8535,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 6.4,
+                                    "text": "سب سے پہلے پوائنٹ ہے کہ اس میں کلاسفکیشن کا اوپشن ایڈ کرنا وہ ایڈ نہیں ہوا",
+                                    "avg_logprob": -0.43243564139394197,
+                                    "no_speech_prob": 0.14284420013427734
+                                },
+                                {
+                                    "start": 6.4,
+                                    "end": 15.56,
+                                    "text": "نیو ٹیپ کا اوپشن آگیا کہ وہی سے آپ نیا جو بھی ہے کلاسفکیشن کا ایڈ کرنا تھا وہ ایڈ نہیں ہوا",
+                                    "avg_logprob": -0.43243564139394197,
+                                    "no_speech_prob": 0.14284420013427734
+                                }
+                            ],
+                            "processing_seconds": 96.8
+                        }
+                    }
+                },
+                {
+                    "id": "B03",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.44.34 PM.ogg",
+                    "requirements": [
+                        "CR-16"
+                    ],
+                    "images": [
+                        "J02",
+                        "J03"
+                    ],
+                    "summary": "Show the site's actual location visually in the right-hand Map + Geo-Fence Circle panel where only coordinate-related placeholder information is currently shown.",
+                    "confidence": "High on a visible location map; map interaction/provider unspecified.",
+                    "note": "The small translation sounds descriptive, but the Urdu wording is a request that the location picture should appear. J02 identifies the placeholder; J03 provides map context. Do not infer live person tracking or a mandatory phone-map vendor.",
+                    "roman_urdu": "Right side par Map + Geo-Fence Circle mein us location ka map/tasveer nazar aani chahiye.",
+                    "sha256": "e1b9a89a88ad5cf92730607d2604b66249b19ae6c8d30330f40e777f596b0f49",
+                    "bytes": 29367,
+                    "duration_seconds": 12.3135,
+                    "machine_passes": {
+                        "small-translate": {
+                            "id": "B03",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.44.34 PM.ogg",
+                            "sha256": "e1b9a89a88ad5cf92730607d2604b66249b19ae6c8d30330f40e777f596b0f49",
+                            "model": "small",
+                            "task": "translate",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 12.3135,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 12.3,
+                                    "text": "The coordinates are shown on the right side of map geofence circle, there is a picture of the location",
+                                    "avg_logprob": -0.8601482963562012,
+                                    "no_speech_prob": 0.2863370478153229
+                                }
+                            ],
+                            "processing_seconds": 6.6
+                        },
+                        "small-transcribe": {
+                            "id": "B03",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.44.34 PM.ogg",
+                            "sha256": "e1b9a89a88ad5cf92730607d2604b66249b19ae6c8d30330f40e777f596b0f49",
+                            "model": "small",
+                            "task": "transcribe",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 12.3135,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 4.68,
+                                    "text": "جو کوڈنیٹ سوال ہے اس میں کوڈنیٹ کی جگہ جہاں پر کوڈنیٹ شوہ ہو رہے نا",
+                                    "avg_logprob": -0.5123289360487757,
+                                    "no_speech_prob": 0.2863370478153229
+                                },
+                                {
+                                    "start": 4.68,
+                                    "end": 10.3,
+                                    "text": "right side پر میب جیو فینس سرکل وہاں پر تصویر آنجا ہی اس لکیشن کی شوہ ہونجے",
+                                    "avg_logprob": -0.5123289360487757,
+                                    "no_speech_prob": 0.2863370478153229
+                                },
+                                {
+                                    "start": 10.3,
+                                    "end": 12.3,
+                                    "text": "کہ یہاں پر یہاں پر نوری لکیشن",
+                                    "avg_logprob": -0.5123289360487757,
+                                    "no_speech_prob": 0.2863370478153229
+                                }
+                            ],
+                            "processing_seconds": 7.7
+                        },
+                        "medium-transcribe": {
+                            "id": "B03",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.44.34 PM.ogg",
+                            "sha256": "e1b9a89a88ad5cf92730607d2604b66249b19ae6c8d30330f40e777f596b0f49",
+                            "model": "medium",
+                            "task": "transcribe",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 12.3135,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 6,
+                                    "text": "سوڑھی جو کوارڈنیورٹس والا ہے اس میں کوارڈنیورٹس کی جگہ جہاں پہ کوارڈنیورٹس شو ہو رہے ہیں رائیٹ سائٹ پہ",
+                                    "avg_logprob": -0.3588315170176708,
+                                    "no_speech_prob": 0.11395834386348724
+                                },
+                                {
+                                    "start": 6,
+                                    "end": 12,
+                                    "text": "میب جیو فنس سرکل وہاں پہ تصویر آنجھے گی اس لوکیشن کی شو انجھے کہ یہاں پہ یہاں پن ہو رہی ہے لوکیشن",
+                                    "avg_logprob": -0.3588315170176708,
+                                    "no_speech_prob": 0.11395834386348724
+                                }
+                            ],
+                            "processing_seconds": 382.3
+                        }
+                    }
+                },
+                {
+                    "id": "B04",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM (1).ogg",
+                    "requirements": [
+                        "CR-18"
+                    ],
+                    "images": [
+                        "J04"
+                    ],
+                    "summary": "Linked Payable Account should offer a dropdown with selectable options and also a New action.",
+                    "confidence": "High on both controls; financial posting semantics not specified.",
+                    "note": "The small English pass repeats New and omits the dropdown, which is explicit in the original-language pass. J04 fixes the exact field label. A selectable accounting reference is a proposed implementation; the client has not explicitly stated how it changes journal posting. Some machine segment ends exceed the decoded clip by a fraction of a second.",
+                    "roman_urdu": "Linked Payable Account mein bhi New ka option aur dropdown chahiye; neeche options aane chahiye.",
+                    "sha256": "99508cfc6cc07dcd01dccc7019aa2b20219908364f67c269f0b95cee7537dee3",
+                    "bytes": 16777,
+                    "duration_seconds": 7.0535,
+                    "machine_passes": {
+                        "small-translate": {
+                            "id": "B04",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM (1).ogg",
+                            "sha256": "99508cfc6cc07dcd01dccc7019aa2b20219908364f67c269f0b95cee7537dee3",
+                            "model": "small",
+                            "task": "translate",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 7.0535,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 7,
+                                    "text": "You have to add a new option in the linked payable account and you also have to add a new option in it",
+                                    "avg_logprob": -0.8965394055401837,
+                                    "no_speech_prob": 0.14042718708515167
+                                }
+                            ],
+                            "processing_seconds": 8.2
+                        },
+                        "small-transcribe": {
+                            "id": "B04",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM (1).ogg",
+                            "sha256": "99508cfc6cc07dcd01dccc7019aa2b20219908364f67c269f0b95cee7537dee3",
+                            "model": "small",
+                            "task": "transcribe",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 7.0535,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 6.14,
+                                    "text": "یہ جو لنٹ پیبل اکاونٹا ہے اس میں بھی نیو کا ا option آپ نے آئیٹ کرنا ہے اور اس میں بھی دائگڈوان کا option رہا چاہیت",
+                                    "avg_logprob": -0.5897031214676405,
+                                    "no_speech_prob": 0.14042718708515167
+                                },
+                                {
+                                    "start": 6.14,
+                                    "end": 7.14,
+                                    "text": "دیچھے option آنے چاہیت",
+                                    "avg_logprob": -0.5897031214676405,
+                                    "no_speech_prob": 0.14042718708515167
+                                }
+                            ],
+                            "processing_seconds": 4.7
+                        },
+                        "medium-transcribe": {
+                            "id": "B04",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM (1).ogg",
+                            "sha256": "99508cfc6cc07dcd01dccc7019aa2b20219908364f67c269f0b95cee7537dee3",
+                            "model": "medium",
+                            "task": "transcribe",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 7.0535,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 7.2,
+                                    "text": "یہ جو لینٹ پی بل اکاونٹ ہے نا اس میں بھی نیو کا اپشن آپ نے آئیڈ کرنے اور اس میں بھی ڈائک ڈاؤن کا اپشن ہو چاہیے ڈچے اپشن آنے چاہیے",
+                                    "avg_logprob": -0.47580254557488977,
+                                    "no_speech_prob": 0.03471587970852852
+                                }
+                            ],
+                            "processing_seconds": 55.1
+                        }
+                    }
+                },
+                {
+                    "id": "B05",
+                    "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM.ogg",
+                    "requirements": [
+                        "CR-17"
+                    ],
+                    "images": [
+                        "J04"
+                    ],
+                    "summary": "Give Payment Terms a New action and allow terms to be changed/added with the number of days agreed with the particular party.",
+                    "confidence": "High on configurable payment terms and own day count; editing shared definitions versus supplier selection remains open.",
+                    "note": "Original-language text supplies the days detail that the first translation misses. Do not infer invoice-date recalculation, late fees or instalment schedules from this short UI request. Any recognized person's name is irrelevant and is not treated as an identity claim.",
+                    "roman_urdu": "Payment Terms mein New ka option dein, taake party ke agreed terms ke mutabiq apne days ki payment term bana aur select/change kar saken.",
+                    "sha256": "3d86090e7e9518b47b30ed8a7b28a1b724825612a45cc1d3bfbef886b6725bf5",
+                    "bytes": 35217,
+                    "duration_seconds": 14.7735,
+                    "machine_passes": {
+                        "small-translate": {
+                            "id": "B05",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM.ogg",
+                            "sha256": "3d86090e7e9518b47b30ed8a7b28a1b724825612a45cc1d3bfbef886b6725bf5",
+                            "model": "small",
+                            "task": "translate",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 14.7735,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 15,
+                                    "text": "In this tab, you have to give the new option, tab tab, you have to give the payment terms, here we can change it, we have made the payment terms according to any of the payment terms, and here we can add them.",
+                                    "avg_logprob": -0.7662583207184414,
+                                    "no_speech_prob": 0.0855441763997078
+                                }
+                            ],
+                            "processing_seconds": 16.7
+                        },
+                        "small-transcribe": {
+                            "id": "B05",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM.ogg",
+                            "sha256": "3d86090e7e9518b47b30ed8a7b28a1b724825612a45cc1d3bfbef886b6725bf5",
+                            "model": "small",
+                            "task": "transcribe",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 14.7735,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 14.8,
+                                    "text": "اچھا تابیش پہ ہی اس میں بھی جو ہے نیوہ والا option ڈای والا جو دینا وہ یہاں پر آپ نے دینا یہ جو پیمرٹمز ہے گے یہاں پر ہم اس کو چیج بھی کر سکیگیں گے ہم نے کسی کی بھی جو بھی پیمرٹمز تھا اس کو بتا بھی اسی طیام اس کی پیمرٹم بنائیں گے اپنے ڈیس کی اور یہاں پر ہم ڈیس کر سکتے ہیں",
+                                    "avg_logprob": -0.4408218018066736,
+                                    "no_speech_prob": 0.0855441763997078
+                                }
+                            ],
+                            "processing_seconds": 24.7
+                        },
+                        "medium-transcribe": {
+                            "id": "B05",
+                            "file": "WhatsApp Audio 2026-09-08 at 7.51.25 PM.ogg",
+                            "sha256": "3d86090e7e9518b47b30ed8a7b28a1b724825612a45cc1d3bfbef886b6725bf5",
+                            "model": "medium",
+                            "task": "transcribe",
+                            "language": "ur",
+                            "language_probability": 1,
+                            "duration": 14.7735,
+                            "segments": [
+                                {
+                                    "start": 0,
+                                    "end": 5.9,
+                                    "text": "اچھا تابیش بھائی اس میں بھی جو ہے نا وہ نیو والا اوپشن ٹیب والا جو دینا وہ یہاں پہ آپ نے دینا ہے",
+                                    "avg_logprob": -0.31379722482101485,
+                                    "no_speech_prob": 0.19212491810321808
+                                },
+                                {
+                                    "start": 5.9,
+                                    "end": 11.26,
+                                    "text": "یہ جو پیمنٹ ٹرمز ہے کہ یہاں پہ ہم اس کو چینج بھی کر سکیں گے ہم نے کسی کی بھی جو بھی پیمنٹ ٹرمز تھا اس کے مطابق",
+                                    "avg_logprob": -0.31379722482101485,
+                                    "no_speech_prob": 0.19212491810321808
+                                },
+                                {
+                                    "start": 11.26,
+                                    "end": 14.9,
+                                    "text": "اسی طرح ہم اس کی پیمنٹ ٹرمز بنا کے اتنے دیس کی اور یہاں پہ ہم ایڈ کر سکتے ہیں",
+                                    "avg_logprob": -0.31379722482101485,
+                                    "no_speech_prob": 0.19212491810321808
+                                }
+                            ],
+                            "processing_seconds": 397.3
+                        }
+                    }
+                }
+            ],
+            "coverage": {
+                "source_files": 9,
+                "images_reviewed": 4,
+                "audio_reviewed": 5,
+                "medium_crosschecks": 5,
+                "audio_duration_seconds": 64.63
+            }
+        }
+    },
+    "coverage": {
+        "source_files": 45,
+        "images_reviewed": 20,
+        "audio_reviewed": 25,
+        "consolidated_requirements": 18,
+        "audio_duration_seconds": 580.4
+    }
+}

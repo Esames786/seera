@@ -422,6 +422,12 @@ tr:hover td { background: #fbfdff; }
 .hub-card .hub-actions { display: flex; gap: 8px; }
 @media (max-width: 1000px) { .hub-grid, .totals-box { grid-template-columns: 1fr 1fr; } }
 
+/* Site map with geo-fence (CR-16) ------------------------------------ */
+.site-map { width: 100%; border: 1px solid var(--line); border-radius: 7px; background: #e9eef5; position: relative; overflow: hidden; z-index: 0; }
+.site-map-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 13px; font-weight: 700; text-align: center; padding: 20px; }
+.site-map .leaflet-container { font-family: inherit; }
+.site-map-note { margin-top: 8px; }
+
 </style>
 </head>
 <body>
@@ -776,7 +782,7 @@ tr:hover td { background: #fbfdff; }
         <span title="Settings">⚙️</span>
                     <div class="avatar" title="Omar Mukhtar">OM</div>
             <form method="POST" action="http://seera.test/logout">
-                <input type="hidden" name="_token" value="7mQl6xn5jtIgPgFvL1X2HrBs7C6JG18gAKshQr8Z" autocomplete="off">                <button type="submit" class="btn sm outline">Logout</button>
+                <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                <button type="submit" class="btn sm outline">Logout</button>
             </form>
             </div>
 </div>
@@ -793,7 +799,7 @@ tr:hover td { background: #fbfdff; }
 
     
     <form method="POST" action="http://seera.test/admin/inventory/purchase-orders" enctype="multipart/form-data">
-    <input type="hidden" name="_token" value="7mQl6xn5jtIgPgFvL1X2HrBs7C6JG18gAKshQr8Z" autocomplete="off">    
+    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">    
     <div class="form-section">
     <div class="section-title">Order Information</div>
     <div class="section-body form-grid three">
@@ -811,7 +817,7 @@ tr:hover td { background: #fbfdff; }
                                     <option value="1" >Saudi Cement Supplier</option>
                             </select>
         </div>
-        <div><label for="po_date">PO Date *</label><input id="po_date" name="po_date" type="date" class="input" value="2026-09-07" required/></div>
+        <div><label for="po_date">PO Date *</label><input id="po_date" name="po_date" type="date" class="input" value="2026-09-09" required/></div>
         <div><label for="expected_delivery_date">Expected Delivery</label><input id="expected_delivery_date" name="expected_delivery_date" type="date" class="input" value=""/></div>
         <div>
             <label for="purchase_request_id">Source Purchase Request</label>
@@ -1091,7 +1097,7 @@ tr:hover td { background: #fbfdff; }
         <div class="modal-foot">
             <button type="button" class="btn outline js-modal-close">Cancel</button>
             <form method="POST" action="#">
-                <input type="hidden" name="_token" value="7mQl6xn5jtIgPgFvL1X2HrBs7C6JG18gAKshQr8Z" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <button type="submit" class="btn danger">Confirm Delete</button>
+                <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <button type="submit" class="btn danger">Confirm Delete</button>
             </form>
         </div>
     </div>
@@ -1103,7 +1109,7 @@ tr:hover td { background: #fbfdff; }
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="7mQl6xn5jtIgPgFvL1X2HrBs7C6JG18gAKshQr8Z" autocomplete="off">                    <div class="modal-body">
+                    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                    <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
                         <div class="form-grid"><div class="full"><label for="qc-sup-name">Supplier Name *</label><input id="qc-sup-name" name="name" class="input" required/></div>
                     <div><label for="qc-sup-code">Code</label><input id="qc-sup-code" name="code" class="input" placeholder="Auto if blank"/></div>

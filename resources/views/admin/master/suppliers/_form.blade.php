@@ -1,4 +1,8 @@
-@php /** @var \App\Models\Supplier|null $supplier */ $supplier = $supplier ?? null; @endphp
+@php
+    /** @var \App\Models\Supplier|null $supplier */
+    $supplier = $supplier ?? null;
+    $defaultTerm = $paymentTerms->firstWhere('name', $supplier?->payment_terms ?? 'Cash') ?? $paymentTerms->first();
+@endphp
 
 <form method="POST" action="{{ $supplier ? route('admin.master.suppliers.update', $supplier) : route('admin.master.suppliers.store') }}">
     @csrf
@@ -23,14 +27,47 @@
         <div><label for="phone">Phone</label><input id="phone" name="phone" class="input" value="{{ old('phone', $supplier?->phone) }}" placeholder="+966..."/></div>
         <div><label for="email">Email</label><input id="email" name="email" type="email" class="input" value="{{ old('email', $supplier?->email) }}"/></div>
         <div>
-            <label for="payment_terms">Payment Terms</label>
-            <select id="payment_terms" name="payment_terms" class="select">
-                @foreach (['Cash', '15 Days', '30 Days', '60 Days'] as $terms)
-                    <option @selected(old('payment_terms', $supplier?->payment_terms ?? 'Cash') === $terms)>{{ $terms }}</option>
+            <div class="label-row">
+                <label for="payment_term_id">Payment Terms</label>
+                <x-admin.quick-create id="qc-payment-term" target="payment_term_id" :url="route('admin.master.payment-terms.store')" title="New Payment Term" permission="Suppliers" submit="Add Term">
+                    <div><label for="qc-term-name">Name *</label><input id="qc-term-name" name="name" class="input" placeholder="e.g. 45 Days" required/></div>
+                    <div><label for="qc-term-days">Days from bill date *</label><input id="qc-term-days" name="days" type="number" min="0" max="365" class="input" value="30" required/></div>
+                    <div class="full"><label for="qc-term-description">Description</label><input id="qc-term-description" name="description" class="input" placeholder="As agreed with the supplier"/></div>
+                    <input type="hidden" name="status" value="active"/>
+                </x-admin.quick-create>
+            </div>
+            <select id="payment_term_id" name="payment_term_id" class="select">
+                <option value="">Not set</option>
+                @foreach ($paymentTerms as $term)
+                    <option value="{{ $term->id }}" @selected(old('payment_term_id', $supplier?->payment_term_id ?? $defaultTerm?->id) == $term->id)>{{ $term->label() }}</option>
                 @endforeach
             </select>
+            <div class="small" style="margin-top:4px">Bills without a due date fall due this many days after the bill date.</div>
         </div>
-        <div><label for="linked_account">Linked Payable Account</label><input id="linked_account" name="linked_account" class="input" value="{{ old('linked_account', $supplier?->linked_account ?? 'Accounts Payable - Suppliers') }}"/></div>
+        <div>
+            <div class="label-row">
+                <label for="linked_account_id">Linked Payable Account</label>
+                <x-admin.quick-create id="qc-payable-account" target="linked_account_id" :url="route('admin.accounting.chart-of-accounts.store')" title="New Payable Sub-Account" permission="Chart of Accounts" submit="Create Account">
+                    <div class="full"><label for="qc-acc-name">Account Name *</label><input id="qc-acc-name" name="account_name" class="input" placeholder="e.g. Accounts Payable - Gulf Steel" required/></div>
+                    <div><label for="qc-acc-code">Account Code</label><input id="qc-acc-code" name="account_code" class="input" placeholder="Auto: next under {{ $payableControl?->account_code ?? '2100' }}"/></div>
+                    <div><label for="qc-acc-opening">Opening Balance (SAR)</label><input id="qc-acc-opening" name="opening_balance" type="number" step="0.01" class="input" value="0" required/></div>
+                    <input type="hidden" name="parent_id" value="{{ $payableControl?->id }}"/>
+                    <input type="hidden" name="account_type" value="liability"/>
+                    <input type="hidden" name="normal_balance" value="credit"/>
+                    <input type="hidden" name="status" value="active"/>
+                    <div class="full help-box">Created as a liability sub-account under {{ $payableControl?->label() ?? 'Accounts Payable' }}, so the payables total on the dashboard still includes it.</div>
+                </x-admin.quick-create>
+            </div>
+            <select id="linked_account_id" name="linked_account_id" class="select">
+                @if ($payableAccounts->isEmpty())
+                    <option value="">No payable account in the chart of accounts</option>
+                @endif
+                @foreach ($payableAccounts as $account)
+                    <option value="{{ $account->id }}" @selected(old('linked_account_id', $supplier?->linked_account_id ?? $payableControl?->id) == $account->id)>{{ $account->label() }}</option>
+                @endforeach
+            </select>
+            <div class="small" style="margin-top:4px">Bills, payments and goods receipts for this supplier post to this account.</div>
+        </div>
         <div>
             <label for="status">Status *</label>
             <select id="status" name="status" class="select" required>

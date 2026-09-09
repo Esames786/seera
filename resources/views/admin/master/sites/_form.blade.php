@@ -72,17 +72,18 @@
         </div>
 
         <div>
-            <div class="map-placeholder">
-                Map + Geo-Fence Circle<br>
-                @if ($site?->latitude)
-                    {{ $site->latitude }}, {{ $site->longitude }} — radius {{ $site->geofence_radius }} m
-                @else
-                    Set latitude, longitude and radius to preview the geo-fence.
-                @endif
+            <div class="table-card">
+                <div class="table-title"><span>Map + Geo-Fence Circle</span></div>
+                <div style="padding:12px">
+                    <x-admin.site-map
+                        :lat="old('latitude', $site?->latitude)"
+                        :lng="old('longitude', $site?->longitude)"
+                        :radius="old('geofence_radius', $site?->geofence_radius ?? 300)"
+                        :editable="true"/>
+                </div>
             </div>
-            <br/>
             <div class="note">
-                The map with a circular geo-fence preview will be connected to mobile attendance check-in/check-out in the mobile app phase.
+                Click the map to drop the site pin; latitude and longitude fill in automatically. The circle follows the geo-fence radius and is what mobile attendance check-in will be tested against.
             </div>
         </div>
     </div>
