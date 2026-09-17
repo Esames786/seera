@@ -172,7 +172,7 @@ class AccountsReceivableController extends Controller
     public function storeReceipt(Request $request, CustomerInvoice $accounts_receivable): RedirectResponse
     {
         $data = $request->validate([
-            'receipt_date' => ['required', 'date'],
+            'receipt_date' => ['required', 'date', 'before_or_equal:today'],
             'receipt_account_id' => ['required', Rule::exists('chart_of_accounts', 'id')->where(fn ($query) => $query->whereIn('account_code', [PostingService::CASH, PostingService::BANK])->where('status', 'active'))],
             'amount' => ['required', 'numeric', 'min:0.01'],
             'reference_number' => ['nullable', 'string', 'max:100'],
@@ -217,7 +217,7 @@ class AccountsReceivableController extends Controller
         $data = $request->validate([
             'customer_id' => ['required', 'exists:customers,id'],
             'invoice_number' => ['nullable', 'string', 'max:100', 'unique:customer_invoices,invoice_number'.($invoice ? ','.$invoice->id : '')],
-            'invoice_date' => ['required', 'date'],
+            'invoice_date' => ['required', 'date', 'before_or_equal:today'],
             'due_date' => ['nullable', 'date', 'after_or_equal:invoice_date'],
             'project_id' => ['nullable', 'exists:projects,id'],
             'cost_center_id' => ['nullable', 'exists:cost_centers,id'],

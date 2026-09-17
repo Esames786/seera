@@ -43,6 +43,7 @@ use App\Http\Controllers\Admin\Master\CustomerController;
 use App\Http\Controllers\Admin\Master\DepartmentController;
 use App\Http\Controllers\Admin\Master\DesignationController;
 use App\Http\Controllers\Admin\Master\ExpenseCategoryController;
+use App\Http\Controllers\Admin\Master\LookupValueController;
 use App\Http\Controllers\Admin\Master\OrganizationStructureController;
 use App\Http\Controllers\Admin\Master\PaymentTermController;
 use App\Http\Controllers\Admin\Master\ProjectClassificationController;
@@ -136,7 +137,12 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::resource('payment-terms', PaymentTermController::class)
             ->only(['index', 'store', 'update', 'destroy'])
             ->parameters(['payment-terms' => 'payment_term']);
+        Route::post('lookup-values', [LookupValueController::class, 'store'])->name('lookup-values.store');
         Route::resource('suppliers', SupplierController::class);
+        Route::post('customers/{customer}/contacts', [CustomerController::class, 'storeContact'])->name('customers.contacts.store');
+        Route::delete('customers/{customer}/contacts/{contact}', [CustomerController::class, 'destroyContact'])->name('customers.contacts.destroy');
+        Route::post('customers/{customer}/notes', [CustomerController::class, 'storeNote'])->name('customers.notes.store');
+        Route::delete('customers/{customer}/notes/{note}', [CustomerController::class, 'destroyNote'])->name('customers.notes.destroy');
         Route::resource('customers', CustomerController::class);
     });
 

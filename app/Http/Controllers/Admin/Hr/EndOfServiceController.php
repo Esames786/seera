@@ -129,14 +129,21 @@ class EndOfServiceController extends Controller
             'termination_date' => ['required', 'date'],
             'termination_reason' => ['required', 'in:'.implode(',', GratuityCalculator::REASONS)],
             'service_years' => ['required', 'numeric', 'min:0', 'max:60'],
-            'last_basic_salary' => ['required', 'numeric', 'min:0'],
+            'last_basic_salary' => ['required', 'numeric', 'gt:0'],
             'eosb_amount' => ['nullable', 'numeric', 'min:0'],
             'manual_override' => ['nullable', 'boolean'],
-            'leave_salary' => ['required', 'numeric', 'min:0'],
-            'other_dues' => ['required', 'numeric', 'min:0'],
-            'deductions' => ['required', 'numeric', 'min:0'],
+            // Optional amounts (NR-19): the form no longer stars them and 0 is a valid answer.
+            'leave_salary' => ['nullable', 'numeric', 'min:0'],
+            'other_dues' => ['nullable', 'numeric', 'min:0'],
+            'deductions' => ['nullable', 'numeric', 'min:0'],
             'reason' => ['nullable', 'string'],
+        ], [
+            'last_basic_salary.gt' => 'Enter the employee\'s final wage; it cannot be zero.',
         ]);
+
+        foreach (['leave_salary', 'other_dues', 'deductions'] as $optional) {
+            $data[$optional] = (float) ($data[$optional] ?? 0);
+        }
 
         $override = $request->boolean('manual_override');
 

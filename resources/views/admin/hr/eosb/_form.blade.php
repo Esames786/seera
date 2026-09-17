@@ -48,9 +48,10 @@
     </x-admin.form-section>
 
     <x-admin.form-section title="C. Other Dues and Deductions" columns="3">
-        <div><label for="leave_salary">Leave Salary *</label><input id="leave_salary" name="leave_salary" type="number" step="0.01" min="0" class="input" value="{{ old('leave_salary', $record?->leave_salary ?? 0) }}" required/></div>
-        <div><label for="other_dues">Other Dues *</label><input id="other_dues" name="other_dues" type="number" step="0.01" min="0" class="input" value="{{ old('other_dues', $record?->other_dues ?? 0) }}" required/></div>
-        <div><label for="deductions">Deductions *</label><input id="deductions" name="deductions" type="number" step="0.01" min="0" class="input" value="{{ old('deductions', $record?->deductions ?? 0) }}" required/></div>
+        <div><label for="leave_salary">Leave Salary</label><input id="leave_salary" name="leave_salary" type="number" step="0.01" min="0" class="input" value="{{ old('leave_salary', $record?->leave_salary ?? 0) }}"/></div>
+        <div><label for="other_dues">Other Dues</label><input id="other_dues" name="other_dues" type="number" step="0.01" min="0" class="input" value="{{ old('other_dues', $record?->other_dues ?? 0) }}"/></div>
+        <div><label for="deductions">Deductions</label><input id="deductions" name="deductions" type="number" step="0.01" min="0" class="input" value="{{ old('deductions', $record?->deductions ?? 0) }}"/></div>
+        <div class="full small">Optional amounts; leave at 0 when nothing applies. Fields marked * above must be filled before the record can be saved.</div>
         <div class="full"><label for="reason">Notes</label><textarea id="reason" name="reason" class="textarea">{{ old('reason', $record?->reason) }}</textarea></div>
     </x-admin.form-section>
 

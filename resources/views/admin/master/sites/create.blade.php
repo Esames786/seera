@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Add Site')
-@section('breadcrumb', 'Master Setup / Sites / Add Site')
+@section('title', 'Add Location')
+@section('breadcrumb', 'Master Setup / Locations / Add Location')
 
 @section('content')
-    <x-admin.page-header title="Add Site" description="Create a construction site with geo-fence settings"/>
+    <x-admin.page-header title="Add Location" description="Create an office or site location with its geo-fence"/>
 
     @include('admin.master.sites._form')
 @endsection

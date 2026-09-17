@@ -37,11 +37,16 @@ class ProjectClassificationController extends Controller
             ->with('status', 'Classification "'.$classification->name.'" created.');
     }
 
-    public function update(Request $request, ProjectClassification $project_classification): RedirectResponse
+    /** Also serves the inline "Edit" on the project form (JSON), see NR-25. */
+    public function update(Request $request, ProjectClassification $project_classification): RedirectResponse|JsonResponse
     {
         $project_classification->update($this->validated($request, $project_classification));
 
         ActivityLog::record($request, 'Projects', 'Updated project classification', $project_classification->name);
+
+        if ($request->wantsJson()) {
+            return response()->json(['id' => $project_classification->id, 'label' => $project_classification->name]);
+        }
 
         return redirect()->route('admin.master.project-classifications.index')
             ->with('status', 'Classification "'.$project_classification->name.'" updated.');
@@ -70,7 +75,7 @@ class ProjectClassificationController extends Controller
             'status' => ['nullable', 'in:active,inactive'],
         ], ['name.unique' => 'That classification already exists; pick it from the list.']);
 
-        $data['status'] = $data['status'] ?? 'active';
+        $data['status'] = $data['status'] ?? $classification?->status ?? 'active';
 
         return $data;
     }

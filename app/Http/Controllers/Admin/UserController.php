@@ -172,7 +172,7 @@ class UserController extends Controller
             'project_id' => ['nullable', 'exists:projects,id'],
             'site_id' => ['nullable', Rule::exists('sites', 'id')->where(fn ($query) => $query->where('project_id', $request->input('project_id')))],
             'warehouse_id' => ['nullable', 'exists:warehouses,id'],
-            'joining_date' => ['nullable', 'date'],
+            'joining_date' => ['nullable', 'date', 'before_or_equal:today'],
             'contract_type' => ['nullable', 'string', 'max:50'],
             'employee_classification' => ['nullable', Rule::in(Employee::CLASSIFICATIONS)],
             'iqama_number' => ['nullable', 'string', 'max:50'],

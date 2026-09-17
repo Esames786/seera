@@ -173,7 +173,7 @@ class AccountsPayableController extends Controller
     public function storePayment(Request $request, SupplierBill $accounts_payable): RedirectResponse
     {
         $data = $request->validate([
-            'payment_date' => ['required', 'date'],
+            'payment_date' => ['required', 'date', 'before_or_equal:today'],
             'payment_account_id' => ['required', Rule::exists('chart_of_accounts', 'id')->where(fn ($query) => $query->whereIn('account_code', [PostingService::CASH, PostingService::BANK])->where('status', 'active'))],
             'amount' => ['required', 'numeric', 'min:0.01'],
             'reference_number' => ['nullable', 'string', 'max:100'],
@@ -223,7 +223,7 @@ class AccountsPayableController extends Controller
                 'required', 'string', 'max:100',
                 'unique:supplier_bills,bill_number,'.($bill?->id ?? 'NULL').',id,supplier_id,'.$supplierId,
             ],
-            'bill_date' => ['required', 'date'],
+            'bill_date' => ['required', 'date', 'before_or_equal:today'],
             'due_date' => ['nullable', 'date', 'after_or_equal:bill_date'],
             'reference_number' => ['nullable', 'string', 'max:100'],
             'project_id' => ['nullable', 'exists:projects,id'],

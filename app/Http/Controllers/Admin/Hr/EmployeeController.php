@@ -10,7 +10,9 @@ use App\Models\Designation;
 use App\Models\Employee;
 use App\Models\Project;
 use App\Models\Site;
+use App\Models\LookupValue;
 use App\Models\User;
+use App\Support\CodeGenerator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -111,7 +113,7 @@ class EmployeeController extends Controller
 
     public function edit(Employee $employee): View
     {
-        return view('admin.hr.employees.edit', ['employee' => $employee] + $this->formOptions());
+        return view('admin.hr.employees.edit', ['employee' => $employee] + $this->formOptions($employee));
     }
 
     public function update(Request $request, Employee $employee): RedirectResponse
@@ -202,7 +204,7 @@ class EmployeeController extends Controller
             'documents' => ['nullable', 'array'],
             'documents.*.document_type' => ['nullable', 'string', 'max:100'],
             'documents.*.document_number' => ['nullable', 'string', 'max:100'],
-            'documents.*.issue_date' => ['nullable', 'date'],
+            'documents.*.issue_date' => ['nullable', 'date', 'before_or_equal:today'],
             'documents.*.expiry_date' => ['nullable', 'date', 'after_or_equal:documents.*.issue_date'],
             'documents.*.file' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png,webp', 'max:5120'],
         ])['documents'] ?? [];
@@ -211,7 +213,8 @@ class EmployeeController extends Controller
     private function validated(Request $request, ?Employee $employee = null): array
     {
         $data = $request->validate([
-            'employee_code' => ['required', 'string', 'max:50', 'unique:employees,employee_code'.($employee ? ','.$employee->id : '')],
+            // Blank on a new employee means "number it for me" (NR-03): the prefix follows the classification.
+            'employee_code' => [$employee ? 'required' : 'nullable', 'string', 'max:50', 'unique:employees,employee_code'.($employee ? ','.$employee->id : '')],
             'first_name' => ['required', 'string', 'max:100'],
             'last_name' => ['nullable', 'string', 'max:100'],
             'email' => ['nullable', 'email', 'max:255'],
@@ -225,7 +228,7 @@ class EmployeeController extends Controller
             'site_id' => ['nullable', Rule::exists('sites', 'id')->where(fn ($query) => $query->where('project_id', $request->input('project_id')))],
             'manager_id' => ['nullable', 'exists:users,id'],
             'user_id' => ['nullable', 'exists:users,id'],
-            'joining_date' => ['nullable', 'date'],
+            'joining_date' => ['nullable', 'date', 'before_or_equal:today'],
             'contract_type' => ['required', 'string', 'max:50'],
             'employee_classification' => ['required', Rule::in(Employee::CLASSIFICATIONS)],
             'contract_start_date' => ['nullable', 'date'],
@@ -253,6 +256,11 @@ class EmployeeController extends Controller
 
         $data['mobile_access'] = $request->boolean('mobile_access');
 
+        if (! $employee && blank($data['employee_code'] ?? null)) {
+            $prefix = config('seera.employee_codes.'.$data['employee_classification'], 'EMP-');
+            $data['employee_code'] = CodeGenerator::sequential('employees', 'employee_code', $prefix);
+        }
+
         // Allowances are optional on the form but always stored as a number.
         foreach (['housing_allowance', 'transport_allowance', 'food_allowance', 'fuel_allowance', 'other_allowance'] as $allowance) {
             $data[$allowance] = (float) ($data[$allowance] ?? 0);
@@ -272,14 +280,15 @@ class EmployeeController extends Controller
         ];
     }
 
-    private function formOptions(): array
+    private function formOptions(?Employee $employee = null): array
     {
         return $this->filterOptions() + [
             'users' => User::orderBy('name')->get(),
             'contractTypes' => ['Full Time', 'Part Time', 'Contract', 'Temporary'],
             'classifications' => Employee::CLASSIFICATIONS,
+            'codePrefixes' => config('seera.employee_codes'),
             'paymentMethods' => ['Bank Transfer', 'Cash'],
-            'nationalities' => ['Saudi', 'Pakistani', 'Indian', 'Bangladeshi', 'Egyptian', 'Filipino', 'Other'],
+            'nationalities' => LookupValue::options('nationality', $employee?->nationality),
         ];
     }
 }

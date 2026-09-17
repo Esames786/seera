@@ -113,7 +113,7 @@ class AttendanceController extends Controller
             'project_id' => ['nullable', 'exists:projects,id'],
             'site_id' => ['nullable', 'exists:sites,id'],
             'shift_id' => ['nullable', 'exists:shifts,id'],
-            'attendance_date' => ['required', 'date', $uniquePerDay],
+            'attendance_date' => ['required', 'date', 'before_or_equal:today', $uniquePerDay],
             'check_in' => ['nullable', 'date_format:H:i'],
             'check_out' => ['nullable', 'date_format:H:i'],
             'late_minutes' => ['required', 'integer', 'min:0', 'max:1440'],

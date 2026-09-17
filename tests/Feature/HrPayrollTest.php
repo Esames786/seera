@@ -210,7 +210,7 @@ class HrPayrollTest extends TestCase
             ->post(route('admin.hr.attendance.store'), [
                 'employee_id' => $employee->id,
                 'shift_id' => $shift->id,
-                'attendance_date' => now()->addDays(30)->toDateString(),
+                'attendance_date' => now()->subDays(45)->toDateString(),
                 'check_in' => '08:05',
                 'check_out' => '17:20',
                 'late_minutes' => 0,

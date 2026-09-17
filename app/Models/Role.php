@@ -47,6 +47,24 @@ class Role extends Model
         return $this->hasMany(Role::class, 'parent_id');
     }
 
+    /**
+     * Ids of every role beneath this one in the reporting hierarchy.
+     *
+     * @return array<int, int>
+     */
+    public function descendantIds(): array
+    {
+        $ids = [];
+        $frontier = [$this->id];
+
+        while ($frontier !== []) {
+            $frontier = static::whereIn('parent_id', $frontier)->pluck('id')->all();
+            $ids = array_merge($ids, $frontier);
+        }
+
+        return $ids;
+    }
+
     public function permissions()
     {
         return $this->belongsToMany(Permission::class, 'role_permissions');

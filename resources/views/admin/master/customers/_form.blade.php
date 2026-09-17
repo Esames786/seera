@@ -6,12 +6,21 @@
 
     <x-admin.form-section title="Customer Information" columns="3">
         <div><label for="name">Customer Name *</label><input id="name" name="name" class="input" value="{{ old('name', $customer?->name) }}" required/></div>
-        <div><label for="code">Customer Code *</label><input id="code" name="code" class="input" value="{{ old('code', $customer?->code) }}" placeholder="CUS-001" required/></div>
+        <div><label for="code">Customer Code</label><input id="code" name="code" class="input" value="{{ old('code', $customer?->code) }}" placeholder="Auto: CUS-001"/></div>
         <div>
             <label for="type">Customer Type</label>
             <select id="type" name="type" class="select">
                 <option @selected(old('type', $customer?->type ?? 'Company') === 'Company')>Company</option>
                 <option @selected(old('type', $customer?->type) === 'Individual')>Individual</option>
+            </select>
+        </div>
+        <div>
+            <label for="rating">Customer Rating</label>
+            <select id="rating" name="rating" class="select">
+                <option value="">Not rated</option>
+                @foreach ($ratings as $rating)
+                    <option value="{{ $rating }}" @selected(old('rating', $customer?->rating) === $rating)>{{ $rating }} @if($rating === 'Green')— pays on time @elseif($rating === 'Amber')— follow up @else— payment risk @endif</option>
+                @endforeach
             </select>
         </div>
         <div><label for="vat_number">VAT Number</label><input id="vat_number" name="vat_number" class="input" value="{{ old('vat_number', $customer?->vat_number) }}" placeholder="300XXXXXXXXXXXX"/></div>
@@ -30,6 +39,7 @@
             </select>
         </div>
         <div class="full"><label for="billing_address">Billing Address</label><textarea id="billing_address" name="billing_address" class="textarea" placeholder="Customer billing address for ZATCA invoices...">{{ old('billing_address', $customer?->billing_address) }}</textarea></div>
+        <div class="full small">Office and site contact people, and shared notes, are added on the customer's page after saving.</div>
     </x-admin.form-section>
 
     <div class="form-actions">

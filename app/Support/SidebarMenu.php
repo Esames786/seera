@@ -58,7 +58,7 @@ class SidebarMenu
                         EnsureUserHasPermission::ANY_OF['master.organization']
                     ),
                     static::link('admin.master.projects.index', 'admin.master.projects.*', '🏗️', 'Projects'),
-                    static::link('admin.master.sites.index', 'admin.master.sites.*', '📍', 'Sites / Geo-Fence'),
+                    static::link('admin.master.sites.index', 'admin.master.sites.*', '📍', 'Locations'),
                     static::link('admin.master.warehouses.index', 'admin.master.warehouses.*', '🏭', 'Warehouses'),
                     static::link('admin.master.expense-categories.index', 'admin.master.expense-categories.*', '🏷️', 'Expense Categories'),
                     static::link('admin.master.suppliers.index', 'admin.master.suppliers.*', '🚚', 'Suppliers'),

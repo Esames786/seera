@@ -7,6 +7,8 @@
     'submit' => 'Save',
     'label' => '+ New',
     'wide' => false,
+    'editUrl' => null,     // optional PUT endpoint with __ID__ placeholder; adds an "Edit" trigger for the selected option
+    'editLabel' => 'Edit',
 ])
 
 {{--
@@ -15,17 +17,26 @@
     without leaving (or losing) the form the user was filling in. Fields with
     data-prefill-from="some_select_id" are pre-filled from the main form when
     the dialog opens (e.g. the department already chosen for the user).
+
+    With edit-url the same dialog also edits the option currently selected
+    (client change request NR-25): fields with data-edit-from="label" are
+    filled from the option text and the form is sent as PUT.
 --}}
 @php $allowed = auth()->check() && auth()->user()->hasPermission($permission, 'create'); @endphp
 
 @if ($allowed)
-    <button type="button" class="quick-create-trigger" data-quick-create="{{ $id }}" title="{{ $title }}">{{ $label }}</button>
+    <span class="quick-create-triggers">
+        <button type="button" class="quick-create-trigger" data-quick-create="{{ $id }}" title="{{ $title }}">{{ $label }}</button>
+        @if ($editUrl)
+            <button type="button" class="quick-create-trigger" data-quick-edit="{{ $id }}" title="Edit the selected {{ strtolower($title) }}">{{ $editLabel }}</button>
+        @endif
+    </span>
 
     @push('modals')
-        <div class="modal-overlay quick-create-modal" id="{{ $id }}" data-target="{{ $target }}" data-url="{{ $url }}">
+        <div class="modal-overlay quick-create-modal" id="{{ $id }}" data-target="{{ $target }}" data-url="{{ $url }}" @if($editUrl) data-edit-url="{{ $editUrl }}" @endif>
             <div class="modal-card {{ $wide ? 'wide' : '' }}">
                 <div class="modal-head">
-                    <span>{{ $title }}</span>
+                    <span><span class="qc-mode-label">New</span> {{ $title }}</span>
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
@@ -52,13 +63,41 @@
                     return input ? input.value : '';
                 }
 
-                function open(modal) {
+                function firstTarget(modal) {
+                    var id = (modal.dataset.target || '').split(',')[0].trim();
+                    return id ? document.getElementById(id) : null;
+                }
+
+                function open(modal, mode) {
                     if (!modal) return;
                     clearErrors(modal);
-                    modal.querySelectorAll('[data-prefill-from]').forEach(function (field) {
-                        var source = document.getElementById(field.dataset.prefillFrom);
-                        if (source && source.value) field.value = source.value;
-                    });
+                    var form = modal.querySelector('.quick-create-form');
+                    form.reset();
+                    form.dataset.mode = mode;
+                    delete form.dataset.editId;
+
+                    var modeLabel = modal.querySelector('.qc-mode-label');
+                    if (modeLabel) modeLabel.textContent = mode === 'edit' ? 'Edit' : 'New';
+
+                    if (mode === 'edit') {
+                        var select = firstTarget(modal);
+                        var option = select && select.value ? select.options[select.selectedIndex] : null;
+                        if (!option) {
+                            showErrors(modal, { message: 'Choose an entry in the dropdown first, then press Edit.' });
+                            modal.classList.add('open');
+                            return;
+                        }
+                        form.dataset.editId = select.value;
+                        modal.querySelectorAll('[data-edit-from="label"]').forEach(function (field) {
+                            field.value = option.textContent.trim();
+                        });
+                    } else {
+                        modal.querySelectorAll('[data-prefill-from]').forEach(function (field) {
+                            var source = document.getElementById(field.dataset.prefillFrom);
+                            if (source && source.value) field.value = source.value;
+                        });
+                    }
+
                     modal.classList.add('open');
                     var first = modal.querySelector('input:not([type=hidden]), select, textarea');
                     if (first) first.focus();
@@ -112,11 +151,26 @@
                     select.dispatchEvent(new Event('change', { bubbles: true }));
                 }
 
+                function renameOption(select, record) {
+                    var value = String(record.id);
+                    Array.prototype.forEach.call(select.options, function (option) {
+                        if (option.value === value) option.textContent = record.label;
+                    });
+                    select.value = value;
+                    select.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+
                 document.addEventListener('click', function (event) {
                     var trigger = event.target.closest('[data-quick-create]');
                     if (trigger) {
                         event.preventDefault();
-                        open(document.getElementById(trigger.dataset.quickCreate));
+                        open(document.getElementById(trigger.dataset.quickCreate), 'create');
+                        return;
+                    }
+                    var editor = event.target.closest('[data-quick-edit]');
+                    if (editor) {
+                        event.preventDefault();
+                        open(document.getElementById(editor.dataset.quickEdit), 'edit');
                         return;
                     }
                     var closer = event.target.closest('.quick-create-modal .js-qc-close');
@@ -136,10 +190,20 @@
 
                     var modal = form.closest('.quick-create-modal');
                     var button = form.querySelector('[type=submit]');
+                    var editing = form.dataset.mode === 'edit' && form.dataset.editId;
+                    if (form.dataset.mode === 'edit' && !form.dataset.editId) return;
+
                     clearErrors(modal);
                     button.disabled = true;
 
-                    fetch(modal.dataset.url, {
+                    var body = new FormData(form);
+                    var url = modal.dataset.url;
+                    if (editing) {
+                        url = modal.dataset.editUrl.replace('__ID__', form.dataset.editId);
+                        body.append('_method', 'PUT');
+                    }
+
+                    fetch(url, {
                         method: 'POST',
                         credentials: 'same-origin',
                         headers: {
@@ -147,7 +211,7 @@
                             'X-Requested-With': 'XMLHttpRequest',
                             'X-CSRF-TOKEN': tokenFor(form)
                         },
-                        body: new FormData(form)
+                        body: body
                     }).then(function (response) {
                         return response.json().catch(function () { return {}; }).then(function (payload) {
                             if (response.status === 422) {
@@ -160,7 +224,8 @@
                             }
                             modal.dataset.target.split(',').forEach(function (id) {
                                 var select = document.getElementById(id.trim());
-                                if (select) addOption(select, payload);
+                                if (!select) return;
+                                if (editing) renameOption(select, payload); else addOption(select, payload);
                             });
                             form.reset();
                             close(modal);

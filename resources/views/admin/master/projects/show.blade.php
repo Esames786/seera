@@ -4,14 +4,17 @@
 @section('breadcrumb', 'Master Setup / Projects / Project Details')
 
 @section('content')
-    <x-admin.page-header :title="$project->name" description="Project overview with sites and warehouses">
+    <x-admin.page-header :title="$project->name" description="Project overview with locations, team, suppliers and warehouses">
+        @if (auth()->user()->hasPermission('Sites', 'create'))
+            <a class="btn outline" href="{{ route('admin.master.sites.create', ['project' => $project->id]) }}">+ Add Location</a>
+        @endif
         <a class="btn primary" href="{{ route('admin.master.projects.edit', $project) }}">Edit Project</a>
     </x-admin.page-header>
 
     <div class="card-grid">
         <x-admin.metric-card color="blue" :value="'SAR '.number_format($project->budget / 1000000, 1).'M'" label="Budget"/>
-        <x-admin.metric-card color="green" :value="$project->sites->count()" label="Sites"/>
-        <x-admin.metric-card color="yellow" :value="$project->warehouses->count()" label="Warehouses"/>
+        <x-admin.metric-card color="green" :value="$project->sites->count()" label="Locations"/>
+        <x-admin.metric-card color="yellow" :value="$project->employees->count()" label="Assigned Staff"/>
         <x-admin.metric-card color="cyan" :value="$project->end_date ? $project->end_date->format('d M Y') : '-'" label="Target Completion"/>
     </div>
 
@@ -33,9 +36,9 @@
         </x-admin.data-table>
 
         <div>
-            <x-admin.data-table title="Sites in this Project">
+            <x-admin.data-table title="Locations in this Project" subtitle="Sites with geo-fence for attendance">
                 <thead>
-                    <tr><th>Code</th><th>Site</th><th>Supervisor</th><th>Geo-Fence</th><th>Status</th></tr>
+                    <tr><th>Code</th><th>Location</th><th>Supervisor</th><th>Geo-Fence</th><th>Status</th></tr>
                 </thead>
                 <tbody>
                     @forelse ($project->sites as $site)
@@ -47,7 +50,45 @@
                             <td><x-admin.status-badge :status="$site->status"/></td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="table-empty">No sites in this project yet.</td></tr>
+                        <tr><td colspan="5" class="table-empty">No locations in this project yet. Use + Add Location above.</td></tr>
+                    @endforelse
+                </tbody>
+            </x-admin.data-table>
+
+            <x-admin.data-table title="Assigned Staff" subtitle="Employees whose project is this one">
+                <thead>
+                    <tr><th>Code</th><th>Name</th><th>Designation</th><th>Location</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    @forelse ($project->employees as $employee)
+                        <tr>
+                            <td>{{ $employee->employee_code }}</td>
+                            <td><a href="{{ route('admin.hr.employees.show', $employee) }}" style="color:var(--blue);font-weight:700">{{ $employee->name }}</a></td>
+                            <td>{{ $employee->designation?->name ?? '-' }}</td>
+                            <td>{{ $employee->site?->name ?? '-' }}</td>
+                            <td><x-admin.status-badge :status="$employee->status"/></td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="5" class="table-empty">No employees assigned. Set the Project on the employee form.</td></tr>
+                    @endforelse
+                </tbody>
+            </x-admin.data-table>
+
+            <x-admin.data-table title="Suppliers for this Project">
+                <thead>
+                    <tr><th>Code</th><th>Supplier</th><th>City</th><th>Rating</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    @forelse ($project->suppliers as $supplier)
+                        <tr>
+                            <td>{{ $supplier->code }}</td>
+                            <td><a href="{{ route('admin.master.suppliers.show', $supplier) }}" style="color:var(--blue);font-weight:700">{{ $supplier->name }}</a></td>
+                            <td>{{ $supplier->city ?? '-' }}</td>
+                            <td>@if($supplier->rating)<span class="badge {{ match ($supplier->rating) { 'Green' => 'green', 'Amber' => 'yellow', default => 'red' } }}">{{ $supplier->rating }}</span>@else - @endif</td>
+                            <td><x-admin.status-badge :status="$supplier->status"/></td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="5" class="table-empty">No suppliers linked. Tick this project on the supplier form.</td></tr>
                     @endforelse
                 </tbody>
             </x-admin.data-table>

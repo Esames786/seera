@@ -9,11 +9,12 @@ use App\Models\Project;
 use App\Models\Role;
 use App\Models\Site;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
         return view('admin.dashboard', [
             'totalStaff' => User::count(),
@@ -23,7 +24,8 @@ class DashboardController extends Controller
             'totalProjects' => Project::count(),
             'activeSites' => Site::where('status', 'active')->count(),
             'geoFencedSites' => Site::where('geofence_enabled', true)->count(),
-            'recentLogs' => ActivityLog::with('user')->latest('created_at')->limit(6)->get(),
+            // Only the activity of people under the viewer in the hierarchy (NR-32).
+            'recentLogs' => ActivityLog::with('user')->visibleTo($request->user())->latest('created_at')->limit(6)->get(),
             'projects' => Project::with(['customer', 'manager'])->latest()->limit(5)->get(),
         ]);
     }

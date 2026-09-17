@@ -82,6 +82,10 @@ class DeploymentHardeningTest extends TestCase
         $assigned = Project::withoutGlobalScopes()->findOrFail($manager->project_id);
         $other = Project::withoutGlobalScopes()->whereKeyNot($manager->project_id)->firstOrFail();
 
+        // A manager also sees projects assigned to them on the project form (NR-34),
+        // so hand this one to somebody else to make it genuinely out of scope.
+        Project::withoutGlobalScopes()->whereKey($other->id)->update(['manager_id' => $this->admin()->id]);
+
         $this->actingAs($manager)
             ->get(route('admin.master.projects.index'))
             ->assertOk()

@@ -5,12 +5,17 @@ namespace App\Http\Middleware;
 use App\Models\Employee;
 use App\Models\Site;
 use App\Models\Warehouse;
+use App\Services\UserAccessScopeService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureRequestWithinScope
 {
+    public function __construct(private readonly UserAccessScopeService $scopes)
+    {
+    }
+
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->isMethodSafe() || ! $request->user()) {
@@ -26,7 +31,15 @@ class EnsureRequestWithinScope
         $assignedWarehouse = $user->warehouse_id
             ? Warehouse::withoutGlobalScopes()->find($user->warehouse_id)
             : null;
-        $allowedProjectId = $scope === 'warehouse' ? $assignedWarehouse?->project_id : $user->project_id;
+
+        // A project-level user may act in every project they manage (NR-34), not
+        // only the one pinned on their user record.
+        $allowedProjectIds = match ($scope) {
+            'warehouse' => array_filter([$assignedWarehouse?->project_id]),
+            'project' => $this->scopes->projectIdsFor($user),
+            default => array_filter([$user->project_id]),
+        };
+        $defaultProjectId = $scope === 'warehouse' ? $assignedWarehouse?->project_id : $this->scopes->defaultProjectIdFor($user);
         $allowedSiteId = $scope === 'warehouse' ? $assignedWarehouse?->site_id : $user->site_id;
 
         abort_if(
@@ -36,22 +49,24 @@ class EnsureRequestWithinScope
         );
 
         if ($scope === 'project' && ! $request->filled('project_id')) {
-            $request->merge(['project_id' => $allowedProjectId]);
+            $request->merge(['project_id' => $defaultProjectId]);
         } elseif ($scope === 'site') {
             $request->merge([
-                'project_id' => $request->filled('project_id') ? $request->input('project_id') : $allowedProjectId,
+                'project_id' => $request->filled('project_id') ? $request->input('project_id') : $defaultProjectId,
                 'site_id' => $request->filled('site_id') ? $request->input('site_id') : $allowedSiteId,
             ]);
         } elseif ($scope === 'warehouse' && ! $request->filled('warehouse_id')) {
             $request->merge(['warehouse_id' => $user->warehouse_id]);
         }
 
-        $this->assertId($request->input('project_id'), $allowedProjectId, 'project');
+        if ($request->filled('project_id')) {
+            abort_unless(in_array((int) $request->input('project_id'), array_map('intval', $allowedProjectIds), true), 403, 'The selected project is outside your access scope.');
+        }
 
         if ($request->filled('site_id')) {
             $site = Site::withoutGlobalScopes()->find($request->integer('site_id'));
             $allowed = $scope === 'project'
-                ? $site && (int) $site->project_id === (int) $allowedProjectId
+                ? $site && in_array((int) $site->project_id, array_map('intval', $allowedProjectIds), true)
                 : $site && (int) $site->id === (int) $allowedSiteId;
             abort_unless($allowed, 403, 'The selected site is outside your access scope.');
         }
@@ -62,7 +77,7 @@ class EnsureRequestWithinScope
             }
             $warehouse = Warehouse::withoutGlobalScopes()->find($request->integer($field));
             $allowed = match ($scope) {
-                'project' => $warehouse && (int) $warehouse->project_id === (int) $allowedProjectId,
+                'project' => $warehouse && in_array((int) $warehouse->project_id, array_map('intval', $allowedProjectIds), true),
                 'site' => $warehouse && (int) $warehouse->site_id === (int) $allowedSiteId,
                 'warehouse' => $warehouse && (int) $warehouse->id === (int) $user->warehouse_id,
                 default => false,
@@ -73,7 +88,7 @@ class EnsureRequestWithinScope
         if ($request->filled('to_warehouse_id') && $scope !== 'warehouse') {
             $warehouse = Warehouse::withoutGlobalScopes()->find($request->integer('to_warehouse_id'));
             $allowed = $scope === 'project'
-                ? $warehouse && (int) $warehouse->project_id === (int) $allowedProjectId
+                ? $warehouse && in_array((int) $warehouse->project_id, array_map('intval', $allowedProjectIds), true)
                 : $warehouse && (int) $warehouse->site_id === (int) $allowedSiteId;
             abort_unless($allowed, 403, 'The destination warehouse is outside your access scope.');
         }
@@ -81,7 +96,7 @@ class EnsureRequestWithinScope
         if ($request->filled('employee_id')) {
             $employee = Employee::withoutGlobalScopes()->find($request->integer('employee_id'));
             $allowed = match ($scope) {
-                'project' => $employee && (int) $employee->project_id === (int) $allowedProjectId,
+                'project' => $employee && in_array((int) $employee->project_id, array_map('intval', $allowedProjectIds), true),
                 'site' => $employee && (int) $employee->site_id === (int) $allowedSiteId,
                 default => false,
             };
@@ -89,12 +104,5 @@ class EnsureRequestWithinScope
         }
 
         return $next($request);
-    }
-
-    private function assertId(mixed $submitted, mixed $allowed, string $label): void
-    {
-        if (filled($submitted)) {
-            abort_unless($allowed && (int) $submitted === (int) $allowed, 403, 'The selected '.$label.' is outside your access scope.');
-        }
     }
 }

@@ -26,6 +26,9 @@ class AccountingDashboardController extends Controller
         $inputVat = (float) VatTransaction::where('vat_type', 'input')->sum('vat_amount');
 
         return view('admin.accounting.dashboard', [
+            // Cash and bank are shown under separate heads (NR-22); the combined figure stays for older views.
+            'cashOnHand' => $this->balanceOf(PostingService::CASH),
+            'bankBalance' => $this->balanceOf(PostingService::BANK),
             'cashBalance' => $this->balanceOf(PostingService::CASH) + $this->balanceOf(PostingService::BANK),
             'payableBalance' => $this->groupBalanceOf(PostingService::PAYABLE),
             'receivableBalance' => $this->balanceOf(PostingService::RECEIVABLE),

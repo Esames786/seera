@@ -35,16 +35,18 @@
     <x-admin.data-table title="Customers Listing">
         <thead>
             <tr>
-                <th>Customer Code</th><th>Customer Name</th><th>VAT Number</th><th>Contact Person</th>
+                <th>Customer Code</th><th>Customer Name</th><th>Rating</th><th>Overdue</th><th>Contact Person</th>
                 <th>Total Projects</th><th>Receivable</th><th>Status</th><th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @forelse ($customers as $customer)
+                @php $overdue = $customer->overdueSummary(); @endphp
                 <tr>
                     <td>{{ $customer->code }}</td>
                     <td>{{ $customer->name }}</td>
-                    <td>{{ $customer->vat_number ?? '-' }}</td>
+                    <td>@if($customer->rating)<span class="badge {{ match ($customer->rating) { 'Green' => 'green', 'Amber' => 'yellow', default => 'red' } }}">{{ $customer->rating }}</span>@else <span class="small">-</span> @endif</td>
+                    <td>@if($overdue['days'] > 0)<span class="badge red">{{ $overdue['days'] }} days · SAR {{ number_format($overdue['amount']) }}</span>@else <span class="small">-</span> @endif</td>
                     <td>{{ $customer->contact_person ?? '-' }}</td>
                     <td>{{ $customer->projects_count }}</td>
                     <td>SAR {{ number_format($customer->opening_receivable / 1000, 1) }}K</td>

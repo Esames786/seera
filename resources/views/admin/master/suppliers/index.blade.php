@@ -23,6 +23,12 @@
                 <option value="{{ $category }}" @selected(request('category') === $category)>{{ $category }}</option>
             @endforeach
         </select>
+        <select class="select" style="width:130px" name="rating">
+            <option value="">All Ratings</option>
+            @foreach ($ratings as $rating)
+                <option value="{{ $rating }}" @selected(request('rating') === $rating)>{{ $rating }}</option>
+            @endforeach
+        </select>
         <select class="select" style="width:140px" name="status">
             <option value="">All Status</option>
             <option value="active" @selected(request('status') === 'active')>Active</option>
@@ -36,7 +42,7 @@
     <x-admin.data-table title="Suppliers Listing">
         <thead>
             <tr>
-                <th>Supplier Code</th><th>Supplier Name</th><th>VAT Number</th><th>Phone</th>
+                <th>Supplier Code</th><th>Supplier Name</th><th>City</th><th>Rating</th><th>Phone</th>
                 <th>Category</th><th>Payable Balance</th><th>Status</th><th>Actions</th>
             </tr>
         </thead>
@@ -45,7 +51,8 @@
                 <tr>
                     <td>{{ $supplier->code }}</td>
                     <td>{{ $supplier->name }}</td>
-                    <td>{{ $supplier->vat_number ?? '-' }}</td>
+                    <td>{{ $supplier->city ?? '-' }}</td>
+                    <td>@if($supplier->rating)<span class="badge {{ match ($supplier->rating) { 'Green' => 'green', 'Amber' => 'yellow', default => 'red' } }}">{{ $supplier->rating }}</span>@else <span class="small">-</span> @endif</td>
                     <td>{{ $supplier->phone ?? '-' }}</td>
                     <td>{{ $supplier->category ?? '-' }}</td>
                     <td>SAR {{ number_format($supplier->opening_balance / 1000, 1) }}K</td>

@@ -6,9 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Supplier extends Model
 {
+    /** Traffic-light supplier rating (client change request NR-04). */
+    public const RATINGS = ['Green', 'Amber', 'Red'];
+
+    /** Payment channels a supplier accepts (NR-05); narrows the payment account choices. */
+    public const PAYMENT_TYPES = ['Cash', 'Bank', 'Both'];
+
     protected $fillable = [
-        'name', 'code', 'category', 'vat_number', 'cr_number', 'opening_balance',
-        'contact_person', 'phone', 'email', 'payment_terms', 'payment_term_id',
+        'name', 'code', 'category', 'city', 'rating', 'vat_number', 'cr_number', 'opening_balance',
+        'contact_person', 'phone', 'email', 'bank_name', 'bank_account_name', 'iban',
+        'allowed_payment_types', 'payment_terms', 'payment_term_id',
         'linked_account', 'linked_account_id', 'address', 'status',
     ];
 
@@ -49,6 +56,16 @@ class Supplier extends Model
         });
     }
 
+    /** Account codes this supplier may be paid from, given the channels it accepts. */
+    public function allowedPaymentAccountCodes(): array
+    {
+        return match ($this->allowed_payment_types) {
+            'Cash' => [\App\Services\Accounting\PostingService::CASH],
+            'Bank' => [\App\Services\Accounting\PostingService::BANK],
+            default => [\App\Services\Accounting\PostingService::CASH, \App\Services\Accounting\PostingService::BANK],
+        };
+    }
+
     public function paymentTerm()
     {
         return $this->belongsTo(PaymentTerm::class);
@@ -57,5 +74,16 @@ class Supplier extends Model
     public function linkedAccount()
     {
         return $this->belongsTo(ChartOfAccount::class, 'linked_account_id');
+    }
+
+    /** Projects this supplier works for (NR-01). */
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'supplier_projects')->withTimestamps();
+    }
+
+    public function bills()
+    {
+        return $this->hasMany(SupplierBill::class);
     }
 }

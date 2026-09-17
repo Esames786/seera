@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Site Details')
-@section('breadcrumb', 'Master Setup / Sites / Site Details')
+@section('title', 'Location Details')
+@section('breadcrumb', 'Master Setup / Locations / Location Details')
 
 @section('content')
-    <x-admin.page-header :title="$site->name" description="Site overview with geo-fence and warehouses">
-        <a class="btn primary" href="{{ route('admin.master.sites.edit', $site) }}">Edit Site</a>
+    <x-admin.page-header :title="$site->name" description="Location overview with geo-fence and warehouses">
+        <a class="btn primary" href="{{ route('admin.master.sites.edit', $site) }}">Edit Location</a>
     </x-admin.page-header>
 
     <div class="card-grid">

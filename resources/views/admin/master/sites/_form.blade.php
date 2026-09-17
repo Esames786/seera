@@ -14,7 +14,7 @@
                     <select id="project_id" name="project_id" class="select">
                         <option value="">Select...</option>
                         @foreach ($projects as $project)
-                            <option value="{{ $project->id }}" @selected(old('project_id', $site?->project_id) == $project->id)>{{ $project->name }}</option>
+                            <option value="{{ $project->id }}" @selected(old('project_id', $site?->project_id ?? request('project')) == $project->id)>{{ $project->name }}</option>
                         @endforeach
                     </select>
                 </div>

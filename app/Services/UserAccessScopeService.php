@@ -2,12 +2,16 @@
 
 namespace App\Services;
 
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class UserAccessScopeService
 {
+    /** @var array<int, array<int, int>> Per-request cache of the projects each user may see. */
+    private array $projectIds = [];
+
     public function apply(Builder $query, Model $model, User $user): void
     {
         $scope = $user->effectiveAccessScope();
@@ -60,18 +64,45 @@ class UserAccessScopeService
         };
     }
 
+    /**
+     * Projects a project-level user may work in: the project assigned on the
+     * user record plus every project where they are the Project Manager
+     * (client change request NR-34: a manager assigned on the project form
+     * could not see that project).
+     *
+     * @return array<int, int>
+     */
+    public function projectIdsFor(User $user): array
+    {
+        return $this->projectIds[$user->id] ??= collect([$user->project_id])
+            ->merge(Project::withoutGlobalScopes()->where('manager_id', $user->id)->pluck('id'))
+            ->filter()
+            ->map(fn ($id) => (int) $id)
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    /** The project used when a project-level user does not choose one explicitly. */
+    public function defaultProjectIdFor(User $user): ?int
+    {
+        return $user->project_id ?: ($this->projectIdsFor($user)[0] ?? null);
+    }
+
     private function projectScope(Builder $query, string $table, User $user): void
     {
-        if (! $user->project_id) {
+        $projectIds = $this->projectIdsFor($user);
+
+        if ($projectIds === []) {
             $query->whereRaw('1 = 0');
         } elseif ($table === 'projects') {
-            $query->whereKey($user->project_id);
+            $query->whereKey($projectIds);
         } elseif (in_array($table, ['sites', 'warehouses', 'employees', 'journal_entry_lines', 'supplier_bills', 'customer_invoices', 'purchase_requests', 'purchase_orders', 'stock_issues', 'stock_ledger_entries'], true)) {
-            $query->where($table.'.project_id', $user->project_id);
+            $query->whereIn($table.'.project_id', $projectIds);
         } elseif (in_array($table, ['goods_receipts', 'stock_adjustments', 'warehouse_stocks'], true)) {
-            $query->whereHas('warehouse', fn ($warehouse) => $warehouse->where('project_id', $user->project_id));
+            $query->whereHas('warehouse', fn ($warehouse) => $warehouse->whereIn('project_id', $projectIds));
         } elseif ($table === 'stock_transfers') {
-            $query->whereHas('fromWarehouse', fn ($warehouse) => $warehouse->where('project_id', $user->project_id));
+            $query->whereHas('fromWarehouse', fn ($warehouse) => $warehouse->whereIn('project_id', $projectIds));
         }
     }
 
@@ -84,13 +115,13 @@ class UserAccessScopeService
         } elseif (in_array($table, ['warehouses', 'employees', 'journal_entry_lines', 'supplier_bills', 'purchase_requests', 'purchase_orders', 'stock_issues', 'stock_ledger_entries'], true)) {
             $query->where($table.'.site_id', $user->site_id);
         } elseif ($table === 'projects') {
-            $query->whereKey($user->project_id ?? 0);
+            $query->whereKey($this->projectIdsFor($user) ?: [0]);
         } elseif (in_array($table, ['goods_receipts', 'stock_adjustments', 'warehouse_stocks'], true)) {
             $query->whereHas('warehouse', fn ($warehouse) => $warehouse->where('site_id', $user->site_id));
         } elseif ($table === 'stock_transfers') {
             $query->whereHas('fromWarehouse', fn ($warehouse) => $warehouse->where('site_id', $user->site_id));
         } elseif ($table === 'customer_invoices') {
-            $query->where('project_id', $user->project_id ?? 0);
+            $query->whereIn('project_id', $this->projectIdsFor($user) ?: [0]);
         }
     }
 

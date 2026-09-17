@@ -26,6 +26,8 @@ class EnsureUserHasPermission
         'master.expense-categories' => 'Expense Categories',
         'master.suppliers' => 'Suppliers',
         'master.payment-terms' => 'Suppliers',
+        // Any signed-in user may reach the shared dropdown endpoint; the controller checks the list's own module.
+        'master.lookup-values' => 'Dashboard',
         'master.customers' => 'Customers',
         'hr.dashboard' => 'HR',
         'hr.employees' => 'HR',

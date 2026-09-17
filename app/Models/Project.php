@@ -49,4 +49,16 @@ class Project extends Model
     {
         return $this->hasMany(Warehouse::class);
     }
+
+    /** Suppliers linked to this project (NR-01). */
+    public function suppliers()
+    {
+        return $this->belongsToMany(Supplier::class, 'supplier_projects')->withTimestamps();
+    }
+
+    /** Employees assigned to this project (NR-15). */
+    public function employees()
+    {
+        return $this->hasMany(Employee::class);
+    }
 }

@@ -10,22 +10,29 @@
     </x-admin.page-header>
 
     <div class="card-grid">
-        <x-admin.metric-card color="green" :value="'SAR '.number_format($cashBalance, 2)" label="Cash / Bank Balance"/>
+        <x-admin.metric-card color="green" :value="'SAR '.number_format($cashOnHand, 2)" label="Cash in Hand"/>
+        <x-admin.metric-card color="cyan" :value="'SAR '.number_format($bankBalance, 2)" label="Bank Balance"/>
         <x-admin.metric-card color="red" :value="'SAR '.number_format($payableBalance, 2)" label="Accounts Payable"/>
         <x-admin.metric-card color="blue" :value="'SAR '.number_format($receivableBalance, 2)" label="Accounts Receivable"/>
-        <x-admin.metric-card color="yellow" :value="'SAR '.number_format($vatPayable, 2)" label="VAT Payable"/>
     </div>
 
     <div class="card-grid">
+        <x-admin.metric-card color="yellow" :value="'SAR '.number_format($vatPayable, 2)" label="VAT Payable"/>
         <x-admin.metric-card color="yellow" :value="$unpostedJournals" label="Unposted Journals"/>
         <x-admin.metric-card color="red" :value="$zatcaFailed" label="ZATCA Failed Invoices"/>
         <x-admin.metric-card color="cyan" :value="'SAR '.number_format($monthlyRevenue, 2)" label="Monthly Revenue"/>
-        <x-admin.metric-card color="blue" :value="'SAR '.number_format($monthlyExpenses, 2)" label="Monthly Expenses"/>
+    </div>
+
+    <div class="help-box">
+        <strong>ZATCA Failed Invoices</strong> counts approved customer invoices whose e-invoice record is in the
+        <em>failed</em> state: the invoice was approved and a ZATCA record was generated, but the clearance attempt was
+        rejected or did not complete. Open the record from the ZATCA list to read the reason and press Retry; it leaves
+        this count once the record is cleared or reported. Draft invoices are not counted.
     </div>
 
     <div class="split even">
         <div>
-            <x-admin.data-table title="Profit &amp; Expense Trend" subtitle="Current month">
+            <x-admin.data-table title="Profit & Expense Trend" subtitle="Current month">
                 <thead>
                     <tr><th>Measure</th><th>Amount</th></tr>
                 </thead>
@@ -55,7 +62,7 @@
     </div>
 
     <div class="split even">
-        <x-admin.data-table title="Payable Aging" subtitle="Outstanding supplier balances">
+        <x-admin.data-table title="Payable Ageing" subtitle="Outstanding supplier balances by days overdue">
             <thead>
                 <tr><th>Bucket</th><th>Amount</th></tr>
             </thead>
@@ -67,7 +74,7 @@
             </tbody>
         </x-admin.data-table>
 
-        <x-admin.data-table title="Receivable Aging" subtitle="Outstanding customer balances">
+        <x-admin.data-table title="Receivable Ageing" subtitle="Outstanding customer balances by days overdue">
             <thead>
                 <tr><th>Bucket</th><th>Amount</th></tr>
             </thead>

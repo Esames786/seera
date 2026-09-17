@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Sites')
-@section('breadcrumb', 'Master Setup / Sites / Geo-Fence')
+@section('title', 'Locations')
+@section('breadcrumb', 'Master Setup / Locations')
 
 @section('content')
-    <x-admin.page-header title="Site Management with Geo-Fence" description="Construction sites used by mobile attendance, expenses, material consumption, and equipment assignment">
-        <a class="btn primary" href="{{ route('admin.master.sites.create') }}">+ Add Site</a>
+    <x-admin.page-header title="Locations" description="Office and site locations with geo-fence, used by attendance, expenses, materials and equipment">
+        <a class="btn primary" href="{{ route('admin.master.sites.create') }}">+ Add Location</a>
     </x-admin.page-header>
 
     <div class="card-grid">
@@ -30,11 +30,11 @@
             @endforeach
         </select>
         <x-slot:actions>
-            <a class="btn primary" href="{{ route('admin.master.sites.create') }}">+ Add Site</a>
+            <a class="btn primary" href="{{ route('admin.master.sites.create') }}">+ Add Location</a>
         </x-slot:actions>
     </x-admin.filter-bar>
 
-    <x-admin.data-table title="Sites Listing">
+    <x-admin.data-table title="Locations">
         <thead>
             <tr>
                 <th>Site Code</th><th>Site Name</th><th>Project</th><th>Supervisor</th>

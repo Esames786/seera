@@ -2,6 +2,7 @@
     /** @var \App\Models\Supplier|null $supplier */
     $supplier = $supplier ?? null;
     $defaultTerm = $paymentTerms->firstWhere('name', $supplier?->payment_terms ?? 'Cash') ?? $paymentTerms->first();
+    $selectedProjects = collect(old('project_ids', $supplier?->projects->pluck('id')->all() ?? []))->map(fn ($id) => (int) $id);
 @endphp
 
 <form method="POST" action="{{ $supplier ? route('admin.master.suppliers.update', $supplier) : route('admin.master.suppliers.store') }}">
@@ -10,13 +11,29 @@
 
     <x-admin.form-section title="Supplier Information" columns="3">
         <div><label for="name">Supplier Name *</label><input id="name" name="name" class="input" value="{{ old('name', $supplier?->name) }}" required/></div>
-        <div><label for="code">Supplier Code *</label><input id="code" name="code" class="input" value="{{ old('code', $supplier?->code) }}" placeholder="SUP-001" required/></div>
+        <div><label for="code">Supplier Code</label><input id="code" name="code" class="input" value="{{ old('code', $supplier?->code) }}" placeholder="Auto: SUP-001"/></div>
         <div>
-            <label for="category">Supplier Category</label>
+            <div class="label-row">
+                <label for="category">Supplier Category</label>
+                <x-admin.quick-create id="qc-supplier-category" target="category" :url="route('admin.master.lookup-values.store')" title="New Supplier Category" permission="Suppliers" submit="Add Category">
+                    <div class="full"><label for="qc-cat-value">Category Name *</label><input id="qc-cat-value" name="value" class="input" placeholder="e.g. Scaffolding, Transport" required/></div>
+                    <input type="hidden" name="type" value="supplier_category"/>
+                </x-admin.quick-create>
+            </div>
             <select id="category" name="category" class="select">
                 <option value="">Select...</option>
-                @foreach (['Materials', 'Fuel', 'Equipment', 'Services', 'Subcontractor'] as $category)
-                    <option @selected(old('category', $supplier?->category) === $category)>{{ $category }}</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category }}" @selected(old('category', $supplier?->category) === $category)>{{ $category }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div><label for="city">City / Location</label><input id="city" name="city" class="input" value="{{ old('city', $supplier?->city) }}" placeholder="Riyadh, Jeddah, Dammam..."/></div>
+        <div>
+            <label for="rating">Supplier Rating</label>
+            <select id="rating" name="rating" class="select">
+                <option value="">Not rated</option>
+                @foreach ($ratings as $rating)
+                    <option value="{{ $rating }}" @selected(old('rating', $supplier?->rating) === $rating)>{{ $rating }} @if($rating === 'Green')— preferred @elseif($rating === 'Amber')— use with care @else— avoid @endif</option>
                 @endforeach
             </select>
         </div>
@@ -26,6 +43,17 @@
         <div><label for="contact_person">Contact Person</label><input id="contact_person" name="contact_person" class="input" value="{{ old('contact_person', $supplier?->contact_person) }}"/></div>
         <div><label for="phone">Phone</label><input id="phone" name="phone" class="input" value="{{ old('phone', $supplier?->phone) }}" placeholder="+966..."/></div>
         <div><label for="email">Email</label><input id="email" name="email" type="email" class="input" value="{{ old('email', $supplier?->email) }}"/></div>
+        <div>
+            <label for="status">Status *</label>
+            <select id="status" name="status" class="select" required>
+                <option value="active" @selected(old('status', $supplier?->status ?? 'active') === 'active')>Active</option>
+                <option value="inactive" @selected(old('status', $supplier?->status) === 'inactive')>Inactive</option>
+            </select>
+        </div>
+        <div class="full"><label for="address">Address</label><textarea id="address" name="address" class="textarea" placeholder="Supplier address...">{{ old('address', $supplier?->address) }}</textarea></div>
+    </x-admin.form-section>
+
+    <x-admin.form-section title="Payment & Banking" columns="3">
         <div>
             <div class="label-row">
                 <label for="payment_term_id">Payment Terms</label>
@@ -43,6 +71,15 @@
                 @endforeach
             </select>
             <div class="small" style="margin-top:4px">Bills without a due date fall due this many days after the bill date.</div>
+        </div>
+        <div>
+            <label for="allowed_payment_types">Accepted Payment Types</label>
+            <select id="allowed_payment_types" name="allowed_payment_types" class="select">
+                @foreach ($paymentTypes as $type)
+                    <option value="{{ $type }}" @selected(old('allowed_payment_types', $supplier?->allowed_payment_types ?? 'Both') === $type)>{{ $type }}</option>
+                @endforeach
+            </select>
+            <div class="small" style="margin-top:4px">Limits the cash / bank accounts offered when recording a payment to this supplier.</div>
         </div>
         <div>
             <div class="label-row">
@@ -68,14 +105,25 @@
             </select>
             <div class="small" style="margin-top:4px">Bills, payments and goods receipts for this supplier post to this account.</div>
         </div>
-        <div>
-            <label for="status">Status *</label>
-            <select id="status" name="status" class="select" required>
-                <option value="active" @selected(old('status', $supplier?->status ?? 'active') === 'active')>Active</option>
-                <option value="inactive" @selected(old('status', $supplier?->status) === 'inactive')>Inactive</option>
-            </select>
-        </div>
-        <div class="full"><label for="address">Address</label><textarea id="address" name="address" class="textarea" placeholder="Supplier address...">{{ old('address', $supplier?->address) }}</textarea></div>
+        <div><label for="bank_name">Bank Name</label><input id="bank_name" name="bank_name" class="input" value="{{ old('bank_name', $supplier?->bank_name) }}" placeholder="Al Rajhi Bank"/></div>
+        <div><label for="bank_account_name">Account Holder Name</label><input id="bank_account_name" name="bank_account_name" class="input" value="{{ old('bank_account_name', $supplier?->bank_account_name) }}"/></div>
+        <div><label for="iban">IBAN</label><input id="iban" name="iban" class="input" value="{{ old('iban', $supplier?->iban) }}" placeholder="SA00 0000 0000 0000 0000 0000"/></div>
+    </x-admin.form-section>
+
+    <x-admin.form-section title="Projects this Supplier Works For">
+        @if ($projects->isEmpty())
+            <div class="small">No projects yet. Suppliers can be linked once projects exist.</div>
+        @else
+            <div class="form-grid three">
+                @foreach ($projects as $project)
+                    <label class="check-line" style="margin:0">
+                        <input class="checkbox" type="checkbox" name="project_ids[]" value="{{ $project->id }}" @checked($selectedProjects->contains($project->id))/>
+                        {{ $project->code }} — {{ $project->name }}
+                    </label>
+                @endforeach
+            </div>
+            <div class="small" style="margin-top:10px">Linked suppliers are listed on each project's page.</div>
+        @endif
     </x-admin.form-section>
 
     <div class="form-actions">

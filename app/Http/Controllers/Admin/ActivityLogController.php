@@ -12,6 +12,7 @@ class ActivityLogController extends Controller
     public function index(Request $request): View
     {
         $logs = ActivityLog::with('user')
+            ->visibleTo($request->user())
             ->when($request->filled('search'), function ($query) use ($request) {
                 $search = $request->string('search');
                 $query->where(fn ($q) => $q
@@ -28,7 +29,7 @@ class ActivityLogController extends Controller
 
         return view('admin.activity-logs.index', [
             'logs' => $logs,
-            'modules' => ActivityLog::query()->distinct()->orderBy('module')->pluck('module'),
+            'modules' => ActivityLog::query()->visibleTo($request->user())->distinct()->orderBy('module')->pluck('module'),
         ]);
     }
 }

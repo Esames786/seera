@@ -12,7 +12,13 @@
         <div><label for="first_name">First Name *</label><input id="first_name" name="first_name" class="input" value="{{ old('first_name', $employee?->first_name) }}" required/></div>
         <div><label for="last_name">Last Name</label><input id="last_name" name="last_name" class="input" value="{{ old('last_name', $employee?->last_name) }}"/></div>
         <div>
-            <label for="nationality">Nationality</label>
+            <div class="label-row">
+                <label for="nationality">Nationality</label>
+                <x-admin.quick-create id="qc-nationality" target="nationality" :url="route('admin.master.lookup-values.store')" title="New Nationality" permission="HR" submit="Add Nationality">
+                    <div class="full"><label for="qc-nat-value">Nationality *</label><input id="qc-nat-value" name="value" class="input" placeholder="e.g. Jordanian" required/></div>
+                    <input type="hidden" name="type" value="nationality"/>
+                </x-admin.quick-create>
+            </div>
             <select id="nationality" name="nationality" class="select">
                 <option value="">Select...</option>
                 @foreach ($nationalities as $nationality)
@@ -26,7 +32,11 @@
     </x-admin.form-section>
 
     <x-admin.form-section title="B. Employment Information" columns="3">
-        <div><label for="employee_code">Employee Code *</label><input id="employee_code" name="employee_code" class="input" value="{{ old('employee_code', $employee?->employee_code) }}" placeholder="EMP-014" required/></div>
+        <div>
+            <label for="employee_code">Employee Code {{ $employee ? '*' : '(auto)' }}</label>
+            <input id="employee_code" name="employee_code" class="input" value="{{ old('employee_code', $employee?->employee_code) }}" placeholder="{{ $employee ? '' : 'Leave blank: '.($codePrefixes['Sponsorship'] ?? 'SP-').'001 / '.($codePrefixes['Freelancer'] ?? 'FL-').'001' }}" @if($employee) required @endif/>
+            @unless ($employee)<div class="small" style="margin-top:4px">Numbered automatically by classification, or type your own code.</div>@endunless
+        </div>
         <div>
             <div class="label-row">
                 <label for="department_id">Department</label>
@@ -122,7 +132,7 @@
                 @endforeach
             </select>
         </div>
-        <div><label for="joining_date">Joining Date</label><input id="joining_date" name="joining_date" type="date" class="input" value="{{ old('joining_date', $employee?->joining_date?->toDateString()) }}"/></div>
+        <div><label for="joining_date">Joining Date</label><input id="joining_date" name="joining_date" type="date" class="input" max="{{ now()->toDateString() }}" value="{{ old('joining_date', $employee?->joining_date?->toDateString()) }}"/></div>
         <div>
             <label for="contract_type">Contract Type *</label>
             <select id="contract_type" name="contract_type" class="select" required>

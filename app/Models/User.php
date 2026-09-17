@@ -99,6 +99,44 @@ class User extends Authenticatable
         return $this->roles->firstWhere('pivot.is_primary', true) ?? $this->roles->first();
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->effectiveRoleModels()->contains(fn (Role $role) => $role->code === 'SUPER_ADMIN');
+    }
+
+    /**
+     * Users whose activity this user may see (client change request NR-32).
+     * Null means everyone (Super Admin). Otherwise: the user themselves plus
+     * everyone whose role sits beneath one of their roles in the hierarchy,
+     * never a Super Admin.
+     *
+     * @return array<int, int>|null
+     */
+    public function visibleUserIds(): ?array
+    {
+        if ($this->isSuperAdmin()) {
+            return null;
+        }
+
+        $descendantRoleIds = $this->effectiveRoleModels()
+            ->flatMap(fn (Role $role) => $role->descendantIds())
+            ->unique()
+            ->values();
+
+        $subordinates = $descendantRoleIds->isEmpty()
+            ? collect()
+            : static::whereHas('roles', fn ($query) => $query->whereIn('roles.id', $descendantRoleIds))->pluck('id');
+
+        $superAdmins = static::whereHas('roles', fn ($query) => $query->where('roles.code', 'SUPER_ADMIN'))->pluck('id');
+
+        return $subordinates->push($this->id)
+            ->diff($superAdmins)
+            ->unique()
+            ->map(fn ($id) => (int) $id)
+            ->values()
+            ->all();
+    }
+
     public function hasPermission(string $module, string $action): bool
     {
         return $this->effectiveRoleModels()->contains(fn (Role $role) => $role->permissions

@@ -58,7 +58,10 @@ class ProjectController extends Controller
 
     public function show(Project $project): View
     {
-        $project->load(['customer', 'branch', 'manager', 'classification', 'sites.supervisor', 'warehouses']);
+        $project->load([
+            'customer', 'branch', 'manager', 'classification', 'sites.supervisor', 'warehouses',
+            'suppliers', 'employees.designation', 'employees.site',
+        ]);
 
         return view('admin.master.projects.show', ['project' => $project]);
     }
