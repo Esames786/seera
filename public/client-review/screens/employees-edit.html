@@ -523,7 +523,7 @@ tr:hover td { background: #fbfdff; }
                                                     </a>
                                             <a class="nav-item  " href="http://seera.test/admin/master/sites">
                             <span>📍</span>
-                            <span>Sites / Geo-Fence</span>
+                            <span>Locations</span>
                                                     </a>
                                             <a class="nav-item  " href="http://seera.test/admin/master/warehouses">
                             <span>🏭</span>
@@ -723,6 +723,26 @@ tr:hover td { background: #fbfdff; }
                                     </div>
             </div>
                     
+            <div class="nav-group " data-group="marketing" >
+                <button type="button" class="nav-group-header" aria-expanded="false">
+                    <span>Marketing</span>
+                                            <span class="nav-badge">1</span>
+                                        <span class="chevron" aria-hidden="true">▸</span>
+                </button>
+
+                <div class="nav-group-body">
+                                            <a class="nav-item  " href="http://seera.test/admin/marketing/leads">
+                            <span>📣</span>
+                            <span>Leads &amp; Visits</span>
+                                                            <span class="nav-badge">1</span>
+                                                    </a>
+                                            <a class="nav-item  " href="http://seera.test/admin/marketing/report">
+                            <span>🗒️</span>
+                            <span>Visit Report</span>
+                                                    </a>
+                                    </div>
+            </div>
+                    
             <div class="nav-group " data-group="reports" >
                 <button type="button" class="nav-group-header" aria-expanded="false">
                     <span>Reports</span>
@@ -782,7 +802,7 @@ tr:hover td { background: #fbfdff; }
         <span title="Settings">⚙️</span>
                     <div class="avatar" title="Omar Mukhtar">OM</div>
             <form method="POST" action="http://seera.test/logout">
-                <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                <button type="submit" class="btn sm outline">Logout</button>
+                <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                <button type="submit" class="btn sm outline">Logout</button>
             </form>
             </div>
 </div>
@@ -798,14 +818,21 @@ tr:hover td { background: #fbfdff; }
 </div>
 
     <form method="POST" action="http://seera.test/admin/hr/employees/1" enctype="multipart/form-data">
-    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">     <input type="hidden" name="_method" value="PUT"> 
+    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">     <input type="hidden" name="_method" value="PUT"> 
     <div class="form-section">
     <div class="section-title">A. Personal Information</div>
     <div class="section-body form-grid three">
         <div><label for="first_name">First Name *</label><input id="first_name" name="first_name" class="input" value="Omar" required/></div>
         <div><label for="last_name">Last Name</label><input id="last_name" name="last_name" class="input" value="Mukhtar"/></div>
         <div>
-            <label for="nationality">Nationality</label>
+            <div class="label-row">
+                <label for="nationality">Nationality</label>
+                <span class="quick-create-triggers">
+        <button type="button" class="quick-create-trigger" data-quick-create="qc-nationality" title="New Nationality">+ New</button>
+            </span>
+
+    
+                            </div>
             <select id="nationality" name="nationality" class="select">
                 <option value="">Select...</option>
                                     <option value="Saudi" selected>Saudi</option>
@@ -814,6 +841,10 @@ tr:hover td { background: #fbfdff; }
                                     <option value="Bangladeshi" >Bangladeshi</option>
                                     <option value="Egyptian" >Egyptian</option>
                                     <option value="Filipino" >Filipino</option>
+                                    <option value="Yemeni" >Yemeni</option>
+                                    <option value="Sudanese" >Sudanese</option>
+                                    <option value="Nepali" >Nepali</option>
+                                    <option value="Sri Lankan" >Sri Lankan</option>
                                     <option value="Other" >Other</option>
                             </select>
         </div>
@@ -826,14 +857,19 @@ tr:hover td { background: #fbfdff; }
     <div class="form-section">
     <div class="section-title">B. Employment Information</div>
     <div class="section-body form-grid three">
-        <div><label for="employee_code">Employee Code *</label><input id="employee_code" name="employee_code" class="input" value="EMP-001" placeholder="EMP-014" required/></div>
+        <div>
+            <label for="employee_code">Employee Code *</label>
+            <input id="employee_code" name="employee_code" class="input" value="EMP-001" placeholder=""  required />
+                    </div>
         <div>
             <div class="label-row">
                 <label for="department_id">Department</label>
-                <button type="button" class="quick-create-trigger" data-quick-create="qc-department" title="New Department">+ New</button>
+                <span class="quick-create-triggers">
+        <button type="button" class="quick-create-trigger" data-quick-create="qc-department" title="New Department">+ New</button>
+            </span>
 
     
-                            </div>
+                </div>
             <select id="department_id" name="department_id" class="select">
                 <option value="">Select...</option>
                                     <option value="2" >Accounts</option>
@@ -848,7 +884,9 @@ tr:hover td { background: #fbfdff; }
         <div>
             <div class="label-row">
                 <label for="designation_id">Designation</label>
-                <button type="button" class="quick-create-trigger" data-quick-create="qc-designation" title="New Designation">+ New</button>
+                <span class="quick-create-triggers">
+        <button type="button" class="quick-create-trigger" data-quick-create="qc-designation" title="New Designation">+ New</button>
+            </span>
 
     
                 </div>
@@ -871,7 +909,9 @@ tr:hover td { background: #fbfdff; }
         <div>
             <div class="label-row">
                 <label for="branch_id">Branch</label>
-                <button type="button" class="quick-create-trigger" data-quick-create="qc-branch" title="New Branch">+ New</button>
+                <span class="quick-create-triggers">
+        <button type="button" class="quick-create-trigger" data-quick-create="qc-branch" title="New Branch">+ New</button>
+            </span>
 
     
                 </div>
@@ -919,7 +959,7 @@ tr:hover td { background: #fbfdff; }
                                     <option value="4" >Zulfiqar</option>
                             </select>
         </div>
-        <div><label for="joining_date">Joining Date</label><input id="joining_date" name="joining_date" type="date" class="input" value="2024-01-01"/></div>
+        <div><label for="joining_date">Joining Date</label><input id="joining_date" name="joining_date" type="date" class="input" max="2026-09-17" value="2024-01-01"/></div>
         <div>
             <label for="contract_type">Contract Type *</label>
             <select id="contract_type" name="contract_type" class="select" required>
@@ -939,6 +979,11 @@ tr:hover td { background: #fbfdff; }
         <div><label for="contract_start_date">Contract Start</label><input id="contract_start_date" name="contract_start_date" type="date" class="input" value="2024-01-01"/></div>
         <div><label for="contract_end_date">Contract End</label><input id="contract_end_date" name="contract_end_date" type="date" class="input" value="2026-01-01"/></div>
         <div>
+            <label for="annual_leave_entitlement">Annual Leave Entitlement (days / year)</label>
+            <input id="annual_leave_entitlement" name="annual_leave_entitlement" type="number" min="0" max="365" class="input" value="21"/>
+            <div class="small" style="margin-top:4px">Approved Annual Leave is deducted from this on the employee's profile.</div>
+        </div>
+        <div>
             <label for="status">Status *</label>
             <select id="status" name="status" class="select" required>
                                     <option value="active" selected>Active</option>
@@ -951,28 +996,7 @@ tr:hover td { background: #fbfdff; }
 </div>
 
     <div class="form-section">
-    <div class="section-title">C. Documents</div>
-    <div class="section-body form-grid three">
-        <div><label for="iqama_number">IQAMA Number</label><input id="iqama_number" name="iqama_number" class="input" value="" placeholder="245XXXXXXX"/></div>
-        <div><label for="iqama_expiry_date">IQAMA Expiry Date</label><input id="iqama_expiry_date" name="iqama_expiry_date" type="date" class="input" value=""/></div>
-        <div><label for="passport_number">Passport Number</label><input id="passport_number" name="passport_number" class="input" value="AB1000000" placeholder="AB1234567"/></div>
-        <div><label for="passport_expiry_date">Passport Expiry Date</label><input id="passport_expiry_date" name="passport_expiry_date" type="date" class="input" value="2028-09-09"/></div>
-        <div><label for="insurance_number">Insurance Number</label><input id="insurance_number" name="insurance_number" class="input" value="" placeholder="INS-000000"/></div>
-        <div><label for="insurance_expiry_date">Insurance Expiry Date</label><input id="insurance_expiry_date" name="insurance_expiry_date" type="date" class="input" value=""/></div>
-        <div><label for="driving_license_number">Driving License Number</label><input id="driving_license_number" name="driving_license_number" class="input" value="" placeholder="DL-000000"/></div>
-        <div><label for="driving_license_expiry_date">Driving License Expiry</label><input id="driving_license_expiry_date" name="driving_license_expiry_date" type="date" class="input" value=""/></div>
-        <div class="full">
-            <div class="help-box">
-                Numbers and expiry dates are kept here. Upload the files in Section E below. The
-                <a href="http://seera.test/admin/hr/documents" style="color:var(--blue);font-weight:700">Employee Documents</a>
-                screen is a read-only register of IQAMA, passport, contract, insurance, driving license and other files.
-            </div>
-        </div>
-    </div>
-</div>
-
-    <div class="form-section">
-    <div class="section-title">D. Payroll Information</div>
+    <div class="section-title">C. Payroll Information</div>
     <div class="section-body form-grid three">
         <div><label for="basic_salary">Basic Salary (SAR) *</label><input id="basic_salary" name="basic_salary" type="number" step="0.01" min="0" class="input" value="45000.00" required/></div>
         <div><label for="housing_allowance">Housing Allowance</label><input id="housing_allowance" name="housing_allowance" type="number" step="0.01" min="0" class="input" value="11250.00"/></div>
@@ -1000,14 +1024,81 @@ tr:hover td { background: #fbfdff; }
 </div>
 
     <div class="form-section">
-    <div class="section-title">E. Document Attachments</div>
+    <div class="section-title">D. Documents &amp;amp; Attachments</div>
     <div class="section-body ">
+        <div class="help-box">
+            IQAMA, passport, insurance and driving licence numbers and expiry dates are kept here, once, together with the file.
+            The employee list, the HR dashboard and the <a href="http://seera.test/admin/hr/documents" style="color:var(--blue);font-weight:700">Documents register</a> all read these rows.
+            Use <em>Profession / Class</em> for the IQAMA profession or the licence class (private, heavy, light).
+        </div>
+
+                    <div class="small" style="margin-bottom:6px"><strong>Already attached.</strong> Change the details or choose a new file to renew a document; expiry alerts follow these values.</div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="min-width:150px">Document Type</th>
+                            <th style="min-width:150px">Profession / Class</th>
+                            <th style="min-width:140px">Number</th>
+                            <th style="width:160px">Issue Date</th>
+                            <th style="width:160px">Expiry Date</th>
+                            <th>Validity</th>
+                            <th style="min-width:200px">File</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                                                                                <tr>
+                                <td>Passport</td>
+                                <td><input name="existing_documents[1][document_subtype]" class="input" list="document-subtypes" value="" placeholder="Profession / licence class"/></td>
+                                <td><input name="existing_documents[1][document_number]" class="input" value="AB1000000"/></td>
+                                <td><input name="existing_documents[1][issue_date]" type="date" class="input" max="2026-09-17" value="2023-09-17"/></td>
+                                <td><input name="existing_documents[1][expiry_date]" type="date" class="input" value="2028-09-17"/></td>
+                                <td><span class="badge green">Valid</span>
+</td>
+                                <td>
+                                                                            <span class="small">No file yet</span>
+                                                                        <input name="existing_documents[1][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp" title="Choose a file to replace the current one" style="margin-top:4px"/>
+                                </td>
+                            </tr>
+                                                                                <tr>
+                                <td>Driving License</td>
+                                <td><input name="existing_documents[2][document_subtype]" class="input" list="document-subtypes" value="" placeholder="Profession / licence class"/></td>
+                                <td><input name="existing_documents[2][document_number]" class="input" value="DL-8000"/></td>
+                                <td><input name="existing_documents[2][issue_date]" type="date" class="input" max="2026-09-17" value="2024-09-17"/></td>
+                                <td><input name="existing_documents[2][expiry_date]" type="date" class="input" value="2026-10-17"/></td>
+                                <td><span class="badge yellow">Expiring soon</span>
+</td>
+                                <td>
+                                                                            <span class="small">No file yet</span>
+                                                                        <input name="existing_documents[2][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp" title="Choose a file to replace the current one" style="margin-top:4px"/>
+                                </td>
+                            </tr>
+                                                                                <tr>
+                                <td>Contract</td>
+                                <td><input name="existing_documents[3][document_subtype]" class="input" list="document-subtypes" value="" placeholder="Profession / licence class"/></td>
+                                <td><input name="existing_documents[3][document_number]" class="input" value="CT-EMP-001"/></td>
+                                <td><input name="existing_documents[3][issue_date]" type="date" class="input" max="2026-09-17" value="2024-01-01"/></td>
+                                <td><input name="existing_documents[3][expiry_date]" type="date" class="input" value="2026-01-01"/></td>
+                                <td><span class="badge red">Expired</span>
+</td>
+                                <td>
+                                                                            <span class="small">No file yet</span>
+                                                                        <input name="existing_documents[3][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp" title="Choose a file to replace the current one" style="margin-top:4px"/>
+                                </td>
+                            </tr>
+                                            </tbody>
+                </table>
+            </div>
+                                    <br/>
+            <div class="small" style="margin-bottom:6px"><strong>Add documents</strong></div>
+        
         <div class="table-wrap">
             <table>
                 <thead>
                     <tr>
-                        <th style="min-width:170px">Document Type</th>
-                        <th style="min-width:150px">Number</th>
+                        <th style="min-width:150px">Document Type</th>
+                        <th style="min-width:150px">Profession / Class</th>
+                        <th style="min-width:140px">Number</th>
                         <th style="width:160px">Issue Date</th>
                         <th style="width:160px">Expiry Date</th>
                         <th style="min-width:200px">File</th>
@@ -1027,8 +1118,9 @@ tr:hover td { background: #fbfdff; }
                             <option value="Other" >Other</option>
                     </select>
     </td>
+    <td><input name="documents[0][document_subtype]" class="input" list="document-subtypes" value="" placeholder="Profession / licence class"/></td>
     <td><input name="documents[0][document_number]" class="input" value=""/></td>
-    <td><input name="documents[0][issue_date]" type="date" class="input" value=""/></td>
+    <td><input name="documents[0][issue_date]" type="date" class="input" max="2026-09-17" value=""/></td>
     <td><input name="documents[0][expiry_date]" type="date" class="input" value=""/></td>
     <td><input name="documents[0][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp"/></td>
     <td><button type="button" class="row-remove" title="Remove row" aria-label="Remove row">&times;</button></td>
@@ -1045,8 +1137,9 @@ tr:hover td { background: #fbfdff; }
                             <option value="Other" >Other</option>
                     </select>
     </td>
+    <td><input name="documents[1][document_subtype]" class="input" list="document-subtypes" value="" placeholder="Profession / licence class"/></td>
     <td><input name="documents[1][document_number]" class="input" value=""/></td>
-    <td><input name="documents[1][issue_date]" type="date" class="input" value=""/></td>
+    <td><input name="documents[1][issue_date]" type="date" class="input" max="2026-09-17" value=""/></td>
     <td><input name="documents[1][expiry_date]" type="date" class="input" value=""/></td>
     <td><input name="documents[1][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp"/></td>
     <td><button type="button" class="row-remove" title="Remove row" aria-label="Remove row">&times;</button></td>
@@ -1063,8 +1156,9 @@ tr:hover td { background: #fbfdff; }
                             <option value="Other" >Other</option>
                     </select>
     </td>
+    <td><input name="documents[2][document_subtype]" class="input" list="document-subtypes" value="" placeholder="Profession / licence class"/></td>
     <td><input name="documents[2][document_number]" class="input" value=""/></td>
-    <td><input name="documents[2][issue_date]" type="date" class="input" value=""/></td>
+    <td><input name="documents[2][issue_date]" type="date" class="input" max="2026-09-17" value=""/></td>
     <td><input name="documents[2][expiry_date]" type="date" class="input" value=""/></td>
     <td><input name="documents[2][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp"/></td>
     <td><button type="button" class="row-remove" title="Remove row" aria-label="Remove row">&times;</button></td>
@@ -1081,8 +1175,9 @@ tr:hover td { background: #fbfdff; }
                             <option value="Other" >Other</option>
                     </select>
     </td>
+    <td><input name="documents[3][document_subtype]" class="input" list="document-subtypes" value="" placeholder="Profession / licence class"/></td>
     <td><input name="documents[3][document_number]" class="input" value=""/></td>
-    <td><input name="documents[3][issue_date]" type="date" class="input" value=""/></td>
+    <td><input name="documents[3][issue_date]" type="date" class="input" max="2026-09-17" value=""/></td>
     <td><input name="documents[3][expiry_date]" type="date" class="input" value=""/></td>
     <td><input name="documents[3][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp"/></td>
     <td><button type="button" class="row-remove" title="Remove row" aria-label="Remove row">&times;</button></td>
@@ -1103,63 +1198,25 @@ tr:hover td { background: #fbfdff; }
                             <option value="Other" >Other</option>
                     </select>
     </td>
+    <td><input name="documents[__INDEX__][document_subtype]" class="input" list="document-subtypes" value="" placeholder="Profession / licence class"/></td>
     <td><input name="documents[__INDEX__][document_number]" class="input" value=""/></td>
-    <td><input name="documents[__INDEX__][issue_date]" type="date" class="input" value=""/></td>
+    <td><input name="documents[__INDEX__][issue_date]" type="date" class="input" max="2026-09-17" value=""/></td>
     <td><input name="documents[__INDEX__][expiry_date]" type="date" class="input" value=""/></td>
     <td><input name="documents[__INDEX__][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp"/></td>
     <td><button type="button" class="row-remove" title="Remove row" aria-label="Remove row">&times;</button></td>
 </tr>
         </template>
+        <datalist id="document-subtypes">
+                    </datalist>
         <div class="dynamic-rows-actions">
             <button type="button" class="btn outline" id="add-document-row">+ Add Document</button>
-            <span class="small">Attach IQAMA, passport, contract, medical insurance, driving license or any other file. Rows without a document type are ignored.</span>
+            <span class="small">Attach IQAMA, passport, contract, medical insurance, driving licence or any other file. Rows without a document type are ignored.</span>
         </div>
-                
-                    <br/>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr><th>Already Attached</th><th>Number</th><th>Expiry</th><th>Validity</th><th>File</th></tr>
-                    </thead>
-                    <tbody>
-                                                    <tr>
-                                <td>Passport</td>
-                                <td>AB1000000</td>
-                                <td>2028-09-09</td>
-                                <td><span class="badge green">Valid</span>
-</td>
-                                <td>
-                                                                            <span class="small">Not uploaded</span>
-                                                                    </td>
-                            </tr>
-                                                    <tr>
-                                <td>Driving License</td>
-                                <td>DL-8000</td>
-                                <td>2026-10-09</td>
-                                <td><span class="badge yellow">Expiring soon</span>
-</td>
-                                <td>
-                                                                            <span class="small">Not uploaded</span>
-                                                                    </td>
-                            </tr>
-                                                    <tr>
-                                <td>Contract</td>
-                                <td>CT-EMP-001</td>
-                                <td>2026-01-01</td>
-                                <td><span class="badge red">Expired</span>
-</td>
-                                <td>
-                                                                            <span class="small">Not uploaded</span>
-                                                                    </td>
-                            </tr>
-                                            </tbody>
-                </table>
-            </div>
     </div>
 </div>
 
     <div class="form-section">
-    <div class="section-title">F. Access</div>
+    <div class="section-title">E. Access</div>
     <div class="section-body form-grid three">
         <div>
             <label for="user_id">Link User Account</label>
@@ -1212,19 +1269,38 @@ tr:hover td { background: #fbfdff; }
         <div class="modal-foot">
             <button type="button" class="btn outline js-modal-close">Cancel</button>
             <form method="POST" action="#">
-                <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <button type="submit" class="btn danger">Confirm Delete</button>
+                <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <button type="submit" class="btn danger">Confirm Delete</button>
             </form>
         </div>
     </div>
 </div>
-        <div class="modal-overlay quick-create-modal" id="qc-department" data-target="department_id" data-url="http://seera.test/admin/master/departments">
+        <div class="modal-overlay quick-create-modal" id="qc-nationality" data-target="nationality" data-url="http://seera.test/admin/master/lookup-values" >
             <div class="modal-card ">
                 <div class="modal-head">
-                    <span>New Department</span>
+                    <span><span class="qc-mode-label">New</span> New Nationality</span>
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                    <div class="modal-body">
+                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
+                        <div class="alert qc-error" hidden></div>
+                        <div class="form-grid"><div class="full"><label for="qc-nat-value">Nationality *</label><input id="qc-nat-value" name="value" class="input" placeholder="e.g. Jordanian" required/></div>
+                    <input type="hidden" name="type" value="nationality"/></div>
+                    </div>
+                    <div class="modal-foot">
+                        <button type="button" class="btn outline js-qc-close">Cancel</button>
+                        <button type="submit" class="btn primary">Add Nationality</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+            <div class="modal-overlay quick-create-modal" id="qc-department" data-target="department_id" data-url="http://seera.test/admin/master/departments" >
+            <div class="modal-card ">
+                <div class="modal-head">
+                    <span><span class="qc-mode-label">New</span> New Department</span>
+                    <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
+                </div>
+                <form class="quick-create-form" novalidate>
+                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
                         <div class="form-grid"><div><label for="qc-dept-name">Department Name *</label><input id="qc-dept-name" name="name" class="input" required/></div>
                     <div><label for="qc-dept-code">Code</label><input id="qc-dept-code" name="code" class="input" placeholder="Auto if blank"/></div>
@@ -1238,14 +1314,14 @@ tr:hover td { background: #fbfdff; }
                 </form>
             </div>
         </div>
-            <div class="modal-overlay quick-create-modal" id="qc-designation" data-target="designation_id" data-url="http://seera.test/admin/master/designations">
+            <div class="modal-overlay quick-create-modal" id="qc-designation" data-target="designation_id" data-url="http://seera.test/admin/master/designations" >
             <div class="modal-card ">
                 <div class="modal-head">
-                    <span>New Designation</span>
+                    <span><span class="qc-mode-label">New</span> New Designation</span>
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                    <div class="modal-body">
+                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
                         <div class="form-grid"><div class="full"><label for="qc-desig-name">Designation Name *</label><input id="qc-desig-name" name="name" class="input" required/></div>
                     <div>
@@ -1281,14 +1357,14 @@ tr:hover td { background: #fbfdff; }
                 </form>
             </div>
         </div>
-            <div class="modal-overlay quick-create-modal" id="qc-branch" data-target="branch_id" data-url="http://seera.test/admin/master/branches">
+            <div class="modal-overlay quick-create-modal" id="qc-branch" data-target="branch_id" data-url="http://seera.test/admin/master/branches" >
             <div class="modal-card ">
                 <div class="modal-head">
-                    <span>New Branch</span>
+                    <span><span class="qc-mode-label">New</span> New Branch</span>
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                    <div class="modal-body">
+                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
                         <div class="form-grid"><div><label for="qc-branch-name">Branch Name *</label><input id="qc-branch-name" name="name" class="input" required/></div>
                     <div><label for="qc-branch-code">Code</label><input id="qc-branch-code" name="code" class="input" placeholder="Auto if blank"/></div>
@@ -1334,13 +1410,41 @@ tr:hover td { background: #fbfdff; }
                     return input ? input.value : '';
                 }
 
-                function open(modal) {
+                function firstTarget(modal) {
+                    var id = (modal.dataset.target || '').split(',')[0].trim();
+                    return id ? document.getElementById(id) : null;
+                }
+
+                function open(modal, mode) {
                     if (!modal) return;
                     clearErrors(modal);
-                    modal.querySelectorAll('[data-prefill-from]').forEach(function (field) {
-                        var source = document.getElementById(field.dataset.prefillFrom);
-                        if (source && source.value) field.value = source.value;
-                    });
+                    var form = modal.querySelector('.quick-create-form');
+                    form.reset();
+                    form.dataset.mode = mode;
+                    delete form.dataset.editId;
+
+                    var modeLabel = modal.querySelector('.qc-mode-label');
+                    if (modeLabel) modeLabel.textContent = mode === 'edit' ? 'Edit' : 'New';
+
+                    if (mode === 'edit') {
+                        var select = firstTarget(modal);
+                        var option = select && select.value ? select.options[select.selectedIndex] : null;
+                        if (!option) {
+                            showErrors(modal, { message: 'Choose an entry in the dropdown first, then press Edit.' });
+                            modal.classList.add('open');
+                            return;
+                        }
+                        form.dataset.editId = select.value;
+                        modal.querySelectorAll('[data-edit-from="label"]').forEach(function (field) {
+                            field.value = option.textContent.trim();
+                        });
+                    } else {
+                        modal.querySelectorAll('[data-prefill-from]').forEach(function (field) {
+                            var source = document.getElementById(field.dataset.prefillFrom);
+                            if (source && source.value) field.value = source.value;
+                        });
+                    }
+
                     modal.classList.add('open');
                     var first = modal.querySelector('input:not([type=hidden]), select, textarea');
                     if (first) first.focus();
@@ -1394,11 +1498,26 @@ tr:hover td { background: #fbfdff; }
                     select.dispatchEvent(new Event('change', { bubbles: true }));
                 }
 
+                function renameOption(select, record) {
+                    var value = String(record.id);
+                    Array.prototype.forEach.call(select.options, function (option) {
+                        if (option.value === value) option.textContent = record.label;
+                    });
+                    select.value = value;
+                    select.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+
                 document.addEventListener('click', function (event) {
                     var trigger = event.target.closest('[data-quick-create]');
                     if (trigger) {
                         event.preventDefault();
-                        open(document.getElementById(trigger.dataset.quickCreate));
+                        open(document.getElementById(trigger.dataset.quickCreate), 'create');
+                        return;
+                    }
+                    var editor = event.target.closest('[data-quick-edit]');
+                    if (editor) {
+                        event.preventDefault();
+                        open(document.getElementById(editor.dataset.quickEdit), 'edit');
                         return;
                     }
                     var closer = event.target.closest('.quick-create-modal .js-qc-close');
@@ -1418,10 +1537,20 @@ tr:hover td { background: #fbfdff; }
 
                     var modal = form.closest('.quick-create-modal');
                     var button = form.querySelector('[type=submit]');
+                    var editing = form.dataset.mode === 'edit' && form.dataset.editId;
+                    if (form.dataset.mode === 'edit' && !form.dataset.editId) return;
+
                     clearErrors(modal);
                     button.disabled = true;
 
-                    fetch(modal.dataset.url, {
+                    var body = new FormData(form);
+                    var url = modal.dataset.url;
+                    if (editing) {
+                        url = modal.dataset.editUrl.replace('__ID__', form.dataset.editId);
+                        body.append('_method', 'PUT');
+                    }
+
+                    fetch(url, {
                         method: 'POST',
                         credentials: 'same-origin',
                         headers: {
@@ -1429,7 +1558,7 @@ tr:hover td { background: #fbfdff; }
                             'X-Requested-With': 'XMLHttpRequest',
                             'X-CSRF-TOKEN': tokenFor(form)
                         },
-                        body: new FormData(form)
+                        body: body
                     }).then(function (response) {
                         return response.json().catch(function () { return {}; }).then(function (payload) {
                             if (response.status === 422) {
@@ -1442,7 +1571,8 @@ tr:hover td { background: #fbfdff; }
                             }
                             modal.dataset.target.split(',').forEach(function (id) {
                                 var select = document.getElementById(id.trim());
-                                if (select) addOption(select, payload);
+                                if (!select) return;
+                                if (editing) renameOption(select, payload); else addOption(select, payload);
                             });
                             form.reset();
                             close(modal);

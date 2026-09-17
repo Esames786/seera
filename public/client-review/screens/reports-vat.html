@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Edit Supplier - Seera</title>
+    <title>VAT Report - Seera</title>
     <style>
 /* ------------------------------------------------------------------
    Seera Construction ERP - central admin stylesheet
@@ -502,8 +502,8 @@ tr:hover td { background: #fbfdff; }
                                     </div>
             </div>
                     
-            <div class="nav-group open" data-group="master-setup"  data-has-active="1" >
-                <button type="button" class="nav-group-header" aria-expanded="true">
+            <div class="nav-group " data-group="master-setup" >
+                <button type="button" class="nav-group-header" aria-expanded="false">
                     <span>Master Setup</span>
                                         <span class="chevron" aria-hidden="true">▸</span>
                 </button>
@@ -533,7 +533,7 @@ tr:hover td { background: #fbfdff; }
                             <span>🏷️</span>
                             <span>Expense Categories</span>
                                                     </a>
-                                            <a class="nav-item active " href="http://seera.test/admin/master/suppliers">
+                                            <a class="nav-item  " href="http://seera.test/admin/master/suppliers">
                             <span>🚚</span>
                             <span>Suppliers</span>
                                                     </a>
@@ -743,14 +743,14 @@ tr:hover td { background: #fbfdff; }
                                     </div>
             </div>
                     
-            <div class="nav-group " data-group="reports" >
-                <button type="button" class="nav-group-header" aria-expanded="false">
+            <div class="nav-group open" data-group="reports"  data-has-active="1" >
+                <button type="button" class="nav-group-header" aria-expanded="true">
                     <span>Reports</span>
                                         <span class="chevron" aria-hidden="true">▸</span>
                 </button>
 
                 <div class="nav-group-body">
-                                            <a class="nav-item  " href="http://seera.test/admin/accounting/reports">
+                                            <a class="nav-item active " href="http://seera.test/admin/accounting/reports">
                             <span>📈</span>
                             <span>Accounting Reports</span>
                                                     </a>
@@ -794,7 +794,7 @@ tr:hover td { background: #fbfdff; }
     <main class="content">
         <div class="topbar">
     <div class="breadcrumb">
-        <a href="http://seera.test/admin/dashboard">Home</a> / Master Setup / Suppliers / Edit Supplier
+        <a href="http://seera.test/admin/dashboard">Home</a> / Accounting / Financial Reports / VAT Report
     </div>
     <div class="topbar-right">
         <span title="Search">🔎</span>
@@ -811,142 +811,130 @@ tr:hover td { background: #fbfdff; }
                         
                 <div class="page-header">
     <div>
-        <h1 class="page-title">Edit Supplier: Saudi Cement Supplier</h1>
-                    <p class="page-desc">Update supplier information</p>
+        <h1 class="page-title">VAT Report</h1>
+                    <p class="page-desc">Output VAT, input VAT and VAT payable per period</p>
             </div>
-    <div class="page-actions"><a class="btn outline" href="http://seera.test/admin/master/suppliers/1">View Details</a></div>
+    <div class="page-actions"><a class="btn outline" href="http://seera.test/admin/accounting/vat">VAT Management</a>
+        <a class="btn outline" href="http://seera.test/admin/accounting/reports">All Reports</a></div>
 </div>
 
-    <form method="POST" action="http://seera.test/admin/master/suppliers/1">
-    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">     <input type="hidden" name="_method" value="PUT"> 
-    <div class="form-section">
-    <div class="section-title">Supplier Information</div>
-    <div class="section-body form-grid three">
-        <div><label for="name">Supplier Name *</label><input id="name" name="name" class="input" value="Saudi Cement Supplier" required/></div>
-        <div><label for="code">Supplier Code</label><input id="code" name="code" class="input" value="SUP-001" placeholder="Auto: SUP-001"/></div>
-        <div>
-            <div class="label-row">
-                <label for="category">Supplier Category</label>
-                <span class="quick-create-triggers">
-        <button type="button" class="quick-create-trigger" data-quick-create="qc-supplier-category" title="New Supplier Category">+ New</button>
-            </span>
-
-    
-                            </div>
-            <select id="category" name="category" class="select">
-                <option value="">Select...</option>
-                                    <option value="Materials" selected>Materials</option>
-                                    <option value="Fuel" >Fuel</option>
-                                    <option value="Equipment" >Equipment</option>
-                                    <option value="Services" >Services</option>
-                                    <option value="Subcontractor" >Subcontractor</option>
-                            </select>
-        </div>
-        <div><label for="city">City / Location</label><input id="city" name="city" class="input" value="Riyadh" placeholder="Riyadh, Jeddah, Dammam..."/></div>
-        <div>
-            <label for="rating">Supplier Rating</label>
-            <select id="rating" name="rating" class="select">
-                <option value="">Not rated</option>
-                                    <option value="Green" selected>Green — preferred </option>
-                                    <option value="Amber" >Amber — use with care </option>
-                                    <option value="Red" >Red — avoid </option>
-                            </select>
-        </div>
-        <div><label for="vat_number">VAT Number</label><input id="vat_number" name="vat_number" class="input" value="300123123100003" placeholder="300XXXXXXXXXXXX"/></div>
-        <div><label for="cr_number">CR Number</label><input id="cr_number" name="cr_number" class="input" value="1010123123" placeholder="1010XXXXXX"/></div>
-        <div><label for="opening_balance">Opening Balance (SAR)</label><input id="opening_balance" name="opening_balance" type="number" step="0.01" class="input" value="42000.00"/></div>
-        <div><label for="contact_person">Contact Person</label><input id="contact_person" name="contact_person" class="input" value="Ahmed"/></div>
-        <div><label for="phone">Phone</label><input id="phone" name="phone" class="input" value="+966 50 700 1111" placeholder="+966..."/></div>
-        <div><label for="email">Email</label><input id="email" name="email" type="email" class="input" value="sales@saudicement.sa"/></div>
-        <div>
-            <label for="status">Status *</label>
-            <select id="status" name="status" class="select" required>
-                <option value="active" selected>Active</option>
-                <option value="inactive" >Inactive</option>
+    <form method="GET"  class="toolbar">
+    <div class="toolbar-left"><select class="select" style="width:170px" name="preset" data-report-preset title="Quick date range">
+                    <option value="this_month" >This Month</option>
+                    <option value="last_month" >Last Month</option>
+                    <option value="this_quarter" >This Quarter</option>
+                    <option value="last_quarter" >Last Quarter</option>
+                    <option value="year_to_date" >Year to Date</option>
+                    <option value="this_year" selected>This Year</option>
+                    <option value="last_year" >Last Year</option>
+                    <option value="custom" >Custom Range</option>
             </select>
-        </div>
-        <div class="full"><label for="address">Address</label><textarea id="address" name="address" class="textarea" placeholder="Supplier address...">Industrial City 2, Riyadh</textarea></div>
-    </div>
-</div>
-
-    <div class="form-section">
-    <div class="section-title">Payment &amp; Banking</div>
-    <div class="section-body form-grid three">
-        <div>
-            <div class="label-row">
-                <label for="payment_term_id">Payment Terms</label>
-                <span class="quick-create-triggers">
-        <button type="button" class="quick-create-trigger" data-quick-create="qc-payment-term" title="New Payment Term">+ New</button>
-            </span>
-
-    
-                </div>
-            <select id="payment_term_id" name="payment_term_id" class="select">
-                <option value="">Not set</option>
-                                    <option value="1" >Cash</option>
-                                    <option value="2" >15 Days (15 days)</option>
-                                    <option value="3" >30 Days (30 days)</option>
-                                    <option value="5" selected>45 Days (45 days)</option>
-                                    <option value="4" >60 Days (60 days)</option>
-                            </select>
-            <div class="small" style="margin-top:4px">Bills without a due date fall due this many days after the bill date.</div>
-        </div>
-        <div>
-            <label for="allowed_payment_types">Accepted Payment Types</label>
-            <select id="allowed_payment_types" name="allowed_payment_types" class="select">
-                                    <option value="Cash" >Cash</option>
-                                    <option value="Bank" selected>Bank</option>
-                                    <option value="Both" >Both</option>
-                            </select>
-            <div class="small" style="margin-top:4px">Limits the cash / bank accounts offered when recording a payment to this supplier.</div>
-        </div>
-        <div>
-            <div class="label-row">
-                <label for="linked_account_id">Linked Payable Account</label>
-                <span class="quick-create-triggers">
-        <button type="button" class="quick-create-trigger" data-quick-create="qc-payable-account" title="New Payable Sub-Account">+ New</button>
-            </span>
-
-    
-                </div>
-            <select id="linked_account_id" name="linked_account_id" class="select">
-                                                    <option value="9" >2100 - Accounts Payable</option>
-                                    <option value="25" selected>2101 - Accounts Payable - Saudi Cement Supplier</option>
-                            </select>
-            <div class="small" style="margin-top:4px">Bills, payments and goods receipts for this supplier post to this account.</div>
-        </div>
-        <div><label for="bank_name">Bank Name</label><input id="bank_name" name="bank_name" class="input" value="Al Rajhi Bank" placeholder="Al Rajhi Bank"/></div>
-        <div><label for="bank_account_name">Account Holder Name</label><input id="bank_account_name" name="bank_account_name" class="input" value="Saudi Cement Supplier Co."/></div>
-        <div><label for="iban">IBAN</label><input id="iban" name="iban" class="input" value="SA03 8000 0000 6080 1016 7519" placeholder="SA00 0000 0000 0000 0000 0000"/></div>
-    </div>
-</div>
-
-    <div class="form-section">
-    <div class="section-title">Projects this Supplier Works For</div>
-    <div class="section-body ">
-        <div class="form-grid three">
-                                    <label class="check-line" style="margin:0">
-                        <input class="checkbox" type="checkbox" name="project_ids[]" value="3" />
-                        PRJ-003 — Dammam Road Extension
-                    </label>
-                                    <label class="check-line" style="margin:0">
-                        <input class="checkbox" type="checkbox" name="project_ids[]" value="2" checked/>
-                        PRJ-002 — Jeddah Warehouse
-                    </label>
-                                    <label class="check-line" style="margin:0">
-                        <input class="checkbox" type="checkbox" name="project_ids[]" value="1" checked/>
-                        PRJ-001 — Riyadh Tower
-                    </label>
-                            </div>
-            <div class="small" style="margin-top:10px">Linked suppliers are listed on each project's page.</div>
-    </div>
-</div>
-
-    <div class="form-actions">
-        <a class="btn outline" href="http://seera.test/admin/master/suppliers">Cancel</a>
-        <button type="submit" class="btn primary">Update Supplier</button>
+    <input class="input" style="width:150px" type="date" name="from" value="2026-01-01" title="From"/>
+    <input class="input" style="width:150px" type="date" name="to" value="2026-12-31" title="To"/>
+                <select class="select" style="width:150px" name="status">
+            <option value="">All Status</option>
+                            <option value="draft" >Draft</option>
+                            <option value="finalized" >Finalized</option>
+                            <option value="submitted" >Submitted</option>
+                    </select></div>
+    <div class="toolbar-right">
+        <button type="submit" class="btn outline">Filter</button>
+        <a class="btn outline" href="http://seera.test/admin/accounting/reports/vat-report">Reset</a>
+        <button type="submit" name="export" value="csv" class="btn outline" title="Download the report as it is filtered here, for Excel">Export Excel (CSV)</button>
+        <button type="button" class="btn outline" onclick="window.print()">Export PDF</button>
     </div>
 </form>
+
+<div class="small" style="margin:-6px 0 14px 2px">
+    Showing: <strong>This Year: 2026-01-01 to 2026-12-31</strong>
+            · pick <em>Custom Range</em> or edit the dates for another period
+    </div>
+
+<script>
+    (function () {
+        document.querySelectorAll('[data-report-preset]').forEach(function (select) {
+            var form = select.form;
+            if (!form) return;
+            var dates = form.querySelectorAll('input[type="date"]');
+
+            // Choosing a preset applies it immediately; typing a date switches to a custom range.
+            select.addEventListener('change', function () {
+                if (select.value !== 'custom') {
+                    dates.forEach(function (input) { input.value = ''; });
+                    form.submit();
+                }
+            });
+            dates.forEach(function (input) {
+                input.addEventListener('change', function () { select.value = 'custom'; });
+            });
+        });
+    })();
+</script>
+
+    <div class="card-grid">
+        <div class="card metric blue">
+    <div class="value">SAR 111,000.00</div>
+    <div class="label">Total Output VAT</div>
+</div>
+        <div class="card metric cyan">
+    <div class="value">SAR 35,100.00</div>
+    <div class="label">Total Input VAT</div>
+</div>
+        <div class="card metric yellow">
+    <div class="value">SAR 75,900.00</div>
+    <div class="label">Total VAT Payable</div>
+</div>
+        <div class="card metric green">
+    <div class="value">2</div>
+    <div class="label">VAT Periods</div>
+</div>
+    </div>
+
+    <div class="table-card">
+            <div class="table-title">
+            <span>VAT by Period </span>
+            
+        </div>
+        <div class="table-wrap">
+        <table >
+            <thead>
+            <tr><th>Period</th><th>Start</th><th>End</th><th>Sales Taxable</th><th>Output VAT</th><th>Purchase Taxable</th><th>Input VAT</th><th>VAT Payable</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+                            <tr>
+                    <td><a href="http://seera.test/admin/accounting/vat/2" style="color:var(--blue);font-weight:700">Q3 2026</a></td>
+                    <td>2026-07-01</td>
+                    <td>2026-09-30</td>
+                    <td>740,000.00</td>
+                    <td>111,000.00</td>
+                    <td>234,000.00</td>
+                    <td>35,100.00</td>
+                    <td><strong>75,900.00</strong></td>
+                    <td><span class="badge yellow">Draft</span>
+</td>
+                </tr>
+                            <tr>
+                    <td><a href="http://seera.test/admin/accounting/vat/1" style="color:var(--blue);font-weight:700">Q2 2026</a></td>
+                    <td>2026-04-01</td>
+                    <td>2026-06-30</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                    <td><strong>0.00</strong></td>
+                    <td><span class="badge green">Finalized</span>
+</td>
+                </tr>
+                    </tbody>
+        </table>
+    </div>
+            <div class="table-footer"><span><strong>Totals</strong></span>
+            <span><strong>Output SAR 111,000.00 &nbsp; | &nbsp; Input SAR 35,100.00 &nbsp; | &nbsp; Payable SAR 75,900.00</strong></span></div>
+    </div>
+
+    <div class="note">
+        VAT Payable = Output VAT − Input VAT, at the standard Saudi rate of 15%. Official filing and ZATCA submission are handled in the compliance phase.
+    </div>
         </section>
     </main>
 </div>
@@ -969,72 +957,7 @@ tr:hover td { background: #fbfdff; }
         </div>
     </div>
 </div>
-        <div class="modal-overlay quick-create-modal" id="qc-supplier-category" data-target="category" data-url="http://seera.test/admin/master/lookup-values" >
-            <div class="modal-card ">
-                <div class="modal-head">
-                    <span><span class="qc-mode-label">New</span> New Supplier Category</span>
-                    <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
-                </div>
-                <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
-                        <div class="alert qc-error" hidden></div>
-                        <div class="form-grid"><div class="full"><label for="qc-cat-value">Category Name *</label><input id="qc-cat-value" name="value" class="input" placeholder="e.g. Scaffolding, Transport" required/></div>
-                    <input type="hidden" name="type" value="supplier_category"/></div>
-                    </div>
-                    <div class="modal-foot">
-                        <button type="button" class="btn outline js-qc-close">Cancel</button>
-                        <button type="submit" class="btn primary">Add Category</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-            <div class="modal-overlay quick-create-modal" id="qc-payment-term" data-target="payment_term_id" data-url="http://seera.test/admin/master/payment-terms" >
-            <div class="modal-card ">
-                <div class="modal-head">
-                    <span><span class="qc-mode-label">New</span> New Payment Term</span>
-                    <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
-                </div>
-                <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
-                        <div class="alert qc-error" hidden></div>
-                        <div class="form-grid"><div><label for="qc-term-name">Name *</label><input id="qc-term-name" name="name" class="input" placeholder="e.g. 45 Days" required/></div>
-                    <div><label for="qc-term-days">Days from bill date *</label><input id="qc-term-days" name="days" type="number" min="0" max="365" class="input" value="30" required/></div>
-                    <div class="full"><label for="qc-term-description">Description</label><input id="qc-term-description" name="description" class="input" placeholder="As agreed with the supplier"/></div>
-                    <input type="hidden" name="status" value="active"/></div>
-                    </div>
-                    <div class="modal-foot">
-                        <button type="button" class="btn outline js-qc-close">Cancel</button>
-                        <button type="submit" class="btn primary">Add Term</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-            <div class="modal-overlay quick-create-modal" id="qc-payable-account" data-target="linked_account_id" data-url="http://seera.test/admin/accounting/chart-of-accounts" >
-            <div class="modal-card ">
-                <div class="modal-head">
-                    <span><span class="qc-mode-label">New</span> New Payable Sub-Account</span>
-                    <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
-                </div>
-                <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
-                        <div class="alert qc-error" hidden></div>
-                        <div class="form-grid"><div class="full"><label for="qc-acc-name">Account Name *</label><input id="qc-acc-name" name="account_name" class="input" placeholder="e.g. Accounts Payable - Gulf Steel" required/></div>
-                    <div><label for="qc-acc-code">Account Code</label><input id="qc-acc-code" name="account_code" class="input" placeholder="Auto: next under 2100"/></div>
-                    <div><label for="qc-acc-opening">Opening Balance (SAR)</label><input id="qc-acc-opening" name="opening_balance" type="number" step="0.01" class="input" value="0" required/></div>
-                    <input type="hidden" name="parent_id" value="9"/>
-                    <input type="hidden" name="account_type" value="liability"/>
-                    <input type="hidden" name="normal_balance" value="credit"/>
-                    <input type="hidden" name="status" value="active"/>
-                    <div class="full help-box">Created as a liability sub-account under 2100 - Accounts Payable, so the payables total on the dashboard still includes it.</div></div>
-                    </div>
-                    <div class="modal-foot">
-                        <button type="button" class="btn outline js-qc-close">Cancel</button>
-                        <button type="submit" class="btn primary">Create Account</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    
+
 <script>
     (function () {
         const overlay = document.getElementById('delete-modal');
@@ -1058,189 +981,7 @@ tr:hover td { background: #fbfdff; }
         });
     })();
 </script>
-        <script>
-            (function () {
-                function tokenFor(form) {
-                    var input = form.querySelector('input[name="_token"]');
-                    return input ? input.value : '';
-                }
-
-                function firstTarget(modal) {
-                    var id = (modal.dataset.target || '').split(',')[0].trim();
-                    return id ? document.getElementById(id) : null;
-                }
-
-                function open(modal, mode) {
-                    if (!modal) return;
-                    clearErrors(modal);
-                    var form = modal.querySelector('.quick-create-form');
-                    form.reset();
-                    form.dataset.mode = mode;
-                    delete form.dataset.editId;
-
-                    var modeLabel = modal.querySelector('.qc-mode-label');
-                    if (modeLabel) modeLabel.textContent = mode === 'edit' ? 'Edit' : 'New';
-
-                    if (mode === 'edit') {
-                        var select = firstTarget(modal);
-                        var option = select && select.value ? select.options[select.selectedIndex] : null;
-                        if (!option) {
-                            showErrors(modal, { message: 'Choose an entry in the dropdown first, then press Edit.' });
-                            modal.classList.add('open');
-                            return;
-                        }
-                        form.dataset.editId = select.value;
-                        modal.querySelectorAll('[data-edit-from="label"]').forEach(function (field) {
-                            field.value = option.textContent.trim();
-                        });
-                    } else {
-                        modal.querySelectorAll('[data-prefill-from]').forEach(function (field) {
-                            var source = document.getElementById(field.dataset.prefillFrom);
-                            if (source && source.value) field.value = source.value;
-                        });
-                    }
-
-                    modal.classList.add('open');
-                    var first = modal.querySelector('input:not([type=hidden]), select, textarea');
-                    if (first) first.focus();
-                }
-
-                function close(modal) {
-                    if (modal) modal.classList.remove('open');
-                }
-
-                function clearErrors(modal) {
-                    modal.querySelectorAll('.qc-field-error').forEach(function (el) { el.remove(); });
-                    var box = modal.querySelector('.qc-error');
-                    box.hidden = true;
-                    box.textContent = '';
-                }
-
-                function showErrors(modal, payload) {
-                    var box = modal.querySelector('.qc-error');
-                    box.textContent = payload.message || 'Please correct the highlighted fields.';
-                    box.hidden = false;
-                    Object.keys(payload.errors || {}).forEach(function (name) {
-                        var field = modal.querySelector('[name="' + name + '"]');
-                        if (!field) return;
-                        var error = document.createElement('div');
-                        error.className = 'field-error qc-field-error';
-                        var messages = payload.errors[name];
-                        error.textContent = Array.isArray(messages) ? messages[0] : messages;
-                        field.insertAdjacentElement('afterend', error);
-                    });
-                }
-
-                function addOption(select, record) {
-                    var value = String(record.id);
-                    var parent = (record.parent === undefined || record.parent === null) ? '' : String(record.parent);
-                    var existing = Array.prototype.find.call(select.options, function (o) { return o.value === value; });
-
-                    if (!existing) {
-                        var option = document.createElement('option');
-                        option.value = value;
-                        option.textContent = record.label;
-                        if (parent) option.dataset.parent = parent;
-                        select.appendChild(option);
-                    }
-
-                    // Dependent selects keep their own option cache; let them add it first.
-                    select.dispatchEvent(new CustomEvent('seera:option-added', {
-                        detail: { value: value, label: record.label, parent: parent }
-                    }));
-
-                    select.value = value;
-                    select.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-
-                function renameOption(select, record) {
-                    var value = String(record.id);
-                    Array.prototype.forEach.call(select.options, function (option) {
-                        if (option.value === value) option.textContent = record.label;
-                    });
-                    select.value = value;
-                    select.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-
-                document.addEventListener('click', function (event) {
-                    var trigger = event.target.closest('[data-quick-create]');
-                    if (trigger) {
-                        event.preventDefault();
-                        open(document.getElementById(trigger.dataset.quickCreate), 'create');
-                        return;
-                    }
-                    var editor = event.target.closest('[data-quick-edit]');
-                    if (editor) {
-                        event.preventDefault();
-                        open(document.getElementById(editor.dataset.quickEdit), 'edit');
-                        return;
-                    }
-                    var closer = event.target.closest('.quick-create-modal .js-qc-close');
-                    if (closer) {
-                        close(closer.closest('.quick-create-modal'));
-                        return;
-                    }
-                    if (event.target.classList && event.target.classList.contains('quick-create-modal')) {
-                        close(event.target);
-                    }
-                });
-
-                document.addEventListener('submit', function (event) {
-                    var form = event.target.closest('.quick-create-form');
-                    if (!form) return;
-                    event.preventDefault();
-
-                    var modal = form.closest('.quick-create-modal');
-                    var button = form.querySelector('[type=submit]');
-                    var editing = form.dataset.mode === 'edit' && form.dataset.editId;
-                    if (form.dataset.mode === 'edit' && !form.dataset.editId) return;
-
-                    clearErrors(modal);
-                    button.disabled = true;
-
-                    var body = new FormData(form);
-                    var url = modal.dataset.url;
-                    if (editing) {
-                        url = modal.dataset.editUrl.replace('__ID__', form.dataset.editId);
-                        body.append('_method', 'PUT');
-                    }
-
-                    fetch(url, {
-                        method: 'POST',
-                        credentials: 'same-origin',
-                        headers: {
-                            'Accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': tokenFor(form)
-                        },
-                        body: body
-                    }).then(function (response) {
-                        return response.json().catch(function () { return {}; }).then(function (payload) {
-                            if (response.status === 422) {
-                                showErrors(modal, payload);
-                                return;
-                            }
-                            if (!response.ok || !payload.id) {
-                                showErrors(modal, { message: payload.message || ('The record could not be saved (' + response.status + ').') });
-                                return;
-                            }
-                            modal.dataset.target.split(',').forEach(function (id) {
-                                var select = document.getElementById(id.trim());
-                                if (!select) return;
-                                if (editing) renameOption(select, payload); else addOption(select, payload);
-                            });
-                            form.reset();
-                            close(modal);
-                        });
-                    }).catch(function () {
-                        showErrors(modal, { message: 'Network error. Please try again.' });
-                    }).finally(function () {
-                        button.disabled = false;
-                    });
-                });
-            })();
-        </script>
-            <script>
+    <script>
         (function () {
             const sidebar = document.getElementById('admin-sidebar');
             if (!sidebar) return;

@@ -523,7 +523,7 @@ tr:hover td { background: #fbfdff; }
                                                     </a>
                                             <a class="nav-item  " href="http://seera.test/admin/master/sites">
                             <span>📍</span>
-                            <span>Sites / Geo-Fence</span>
+                            <span>Locations</span>
                                                     </a>
                                             <a class="nav-item  " href="http://seera.test/admin/master/warehouses">
                             <span>🏭</span>
@@ -723,6 +723,26 @@ tr:hover td { background: #fbfdff; }
                                     </div>
             </div>
                     
+            <div class="nav-group " data-group="marketing" >
+                <button type="button" class="nav-group-header" aria-expanded="false">
+                    <span>Marketing</span>
+                                            <span class="nav-badge">1</span>
+                                        <span class="chevron" aria-hidden="true">▸</span>
+                </button>
+
+                <div class="nav-group-body">
+                                            <a class="nav-item  " href="http://seera.test/admin/marketing/leads">
+                            <span>📣</span>
+                            <span>Leads &amp; Visits</span>
+                                                            <span class="nav-badge">1</span>
+                                                    </a>
+                                            <a class="nav-item  " href="http://seera.test/admin/marketing/report">
+                            <span>🗒️</span>
+                            <span>Visit Report</span>
+                                                    </a>
+                                    </div>
+            </div>
+                    
             <div class="nav-group " data-group="reports" >
                 <button type="button" class="nav-group-header" aria-expanded="false">
                     <span>Reports</span>
@@ -782,7 +802,7 @@ tr:hover td { background: #fbfdff; }
         <span title="Settings">⚙️</span>
                     <div class="avatar" title="Omar Mukhtar">OM</div>
             <form method="POST" action="http://seera.test/logout">
-                <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                <button type="submit" class="btn sm outline">Logout</button>
+                <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                <button type="submit" class="btn sm outline">Logout</button>
             </form>
             </div>
 </div>
@@ -798,7 +818,7 @@ tr:hover td { background: #fbfdff; }
 </div>
 
     <form method="POST" action="http://seera.test/admin/master/projects">
-    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">    
+    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">    
     <div class="form-section">
     <div class="section-title">Project Information</div>
     <div class="section-body form-grid three">
@@ -807,7 +827,9 @@ tr:hover td { background: #fbfdff; }
         <div>
             <div class="label-row">
                 <label for="customer_id">Client Name *</label>
-                <button type="button" class="quick-create-trigger" data-quick-create="qc-customer" title="New Client">+ New</button>
+                <span class="quick-create-triggers">
+        <button type="button" class="quick-create-trigger" data-quick-create="qc-customer" title="New Client">+ New</button>
+            </span>
 
     
                             </div>
@@ -821,7 +843,10 @@ tr:hover td { background: #fbfdff; }
         <div>
             <div class="label-row">
                 <label for="project_classification_id">Classification</label>
-                <button type="button" class="quick-create-trigger" data-quick-create="qc-classification" title="New Project Classification">+ New</button>
+                <span class="quick-create-triggers">
+        <button type="button" class="quick-create-trigger" data-quick-create="qc-classification" title="Project Classification">+ New</button>
+                    <button type="button" class="quick-create-trigger" data-quick-edit="qc-classification" title="Edit the selected project classification">Edit</button>
+            </span>
 
     
                 </div>
@@ -835,7 +860,9 @@ tr:hover td { background: #fbfdff; }
         <div>
             <div class="label-row">
                 <label for="branch_id">Branch *</label>
-                <button type="button" class="quick-create-trigger" data-quick-create="qc-branch" title="New Branch">+ New</button>
+                <span class="quick-create-triggers">
+        <button type="button" class="quick-create-trigger" data-quick-create="qc-branch" title="New Branch">+ New</button>
+            </span>
 
     
                 </div>
@@ -849,7 +876,9 @@ tr:hover td { background: #fbfdff; }
         <div>
             <div class="label-row">
                 <label for="manager_id">Project Manager *</label>
-                <button type="button" class="quick-create-trigger" data-quick-create="qc-manager" title="New Project Manager Account">+ New</button>
+                <span class="quick-create-triggers">
+        <button type="button" class="quick-create-trigger" data-quick-create="qc-manager" title="New Project Manager Account">+ New</button>
+            </span>
 
     
                 </div>
@@ -909,19 +938,19 @@ tr:hover td { background: #fbfdff; }
         <div class="modal-foot">
             <button type="button" class="btn outline js-modal-close">Cancel</button>
             <form method="POST" action="#">
-                <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <button type="submit" class="btn danger">Confirm Delete</button>
+                <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                <input type="hidden" name="_method" value="DELETE">                <button type="submit" class="btn danger">Confirm Delete</button>
             </form>
         </div>
     </div>
 </div>
-        <div class="modal-overlay quick-create-modal" id="qc-customer" data-target="customer_id" data-url="http://seera.test/admin/master/customers">
+        <div class="modal-overlay quick-create-modal" id="qc-customer" data-target="customer_id" data-url="http://seera.test/admin/master/customers" >
             <div class="modal-card ">
                 <div class="modal-head">
-                    <span>New Client</span>
+                    <span><span class="qc-mode-label">New</span> New Client</span>
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                    <div class="modal-body">
+                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
                         <div class="form-grid"><div class="full"><label for="qc-cust-name">Client Name *</label><input id="qc-cust-name" name="name" class="input" required/></div>
                     <div>
@@ -945,34 +974,34 @@ tr:hover td { background: #fbfdff; }
                 </form>
             </div>
         </div>
-            <div class="modal-overlay quick-create-modal" id="qc-classification" data-target="project_classification_id" data-url="http://seera.test/admin/master/project-classifications">
+            <div class="modal-overlay quick-create-modal" id="qc-classification" data-target="project_classification_id" data-url="http://seera.test/admin/master/project-classifications"  data-edit-url="http://seera.test/admin/master/project-classifications/__ID__" >
             <div class="modal-card ">
                 <div class="modal-head">
-                    <span>New Project Classification</span>
+                    <span><span class="qc-mode-label">New</span> Project Classification</span>
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                    <div class="modal-body">
+                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
-                        <div class="form-grid"><div class="full"><label for="qc-cls-name">Classification Name *</label><input id="qc-cls-name" name="name" class="input" placeholder="e.g. Infrastructure, Residential, Maintenance" required/></div>
+                        <div class="form-grid"><div class="full"><label for="qc-cls-name">Classification Name *</label><input id="qc-cls-name" name="name" class="input" placeholder="e.g. Infrastructure, Residential, Maintenance" data-edit-from="label" required/></div>
                     <div class="full"><label for="qc-cls-description">Description</label><input id="qc-cls-description" name="description" class="input"/></div>
                     <input type="hidden" name="status" value="active"/></div>
                     </div>
                     <div class="modal-foot">
                         <button type="button" class="btn outline js-qc-close">Cancel</button>
-                        <button type="submit" class="btn primary">Add Classification</button>
+                        <button type="submit" class="btn primary">Save Classification</button>
                     </div>
                 </form>
             </div>
         </div>
-            <div class="modal-overlay quick-create-modal" id="qc-branch" data-target="branch_id" data-url="http://seera.test/admin/master/branches">
+            <div class="modal-overlay quick-create-modal" id="qc-branch" data-target="branch_id" data-url="http://seera.test/admin/master/branches" >
             <div class="modal-card ">
                 <div class="modal-head">
-                    <span>New Branch</span>
+                    <span><span class="qc-mode-label">New</span> New Branch</span>
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                    <div class="modal-body">
+                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
                         <div class="form-grid"><div><label for="qc-branch-name">Branch Name *</label><input id="qc-branch-name" name="name" class="input" required/></div>
                     <div><label for="qc-branch-code">Code</label><input id="qc-branch-code" name="code" class="input" placeholder="Auto if blank"/></div>
@@ -987,14 +1016,14 @@ tr:hover td { background: #fbfdff; }
                 </form>
             </div>
         </div>
-            <div class="modal-overlay quick-create-modal" id="qc-manager" data-target="manager_id" data-url="http://seera.test/admin/users">
+            <div class="modal-overlay quick-create-modal" id="qc-manager" data-target="manager_id" data-url="http://seera.test/admin/users" >
             <div class="modal-card wide">
                 <div class="modal-head">
-                    <span>New Project Manager Account</span>
+                    <span><span class="qc-mode-label">New</span> New Project Manager Account</span>
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="kAJ3PrAxMdDZ9BmQAQBZKbphbHqJIDYcw7MXzwWo" autocomplete="off">                    <div class="modal-body">
+                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
                         <div class="form-grid"><div><label for="qc-mgr-name">Full Name *</label><input id="qc-mgr-name" name="name" class="input" required/></div>
                     <div><label for="qc-mgr-email">Email *</label><input id="qc-mgr-email" name="email" type="email" class="input" required/></div>
@@ -1073,13 +1102,41 @@ tr:hover td { background: #fbfdff; }
                     return input ? input.value : '';
                 }
 
-                function open(modal) {
+                function firstTarget(modal) {
+                    var id = (modal.dataset.target || '').split(',')[0].trim();
+                    return id ? document.getElementById(id) : null;
+                }
+
+                function open(modal, mode) {
                     if (!modal) return;
                     clearErrors(modal);
-                    modal.querySelectorAll('[data-prefill-from]').forEach(function (field) {
-                        var source = document.getElementById(field.dataset.prefillFrom);
-                        if (source && source.value) field.value = source.value;
-                    });
+                    var form = modal.querySelector('.quick-create-form');
+                    form.reset();
+                    form.dataset.mode = mode;
+                    delete form.dataset.editId;
+
+                    var modeLabel = modal.querySelector('.qc-mode-label');
+                    if (modeLabel) modeLabel.textContent = mode === 'edit' ? 'Edit' : 'New';
+
+                    if (mode === 'edit') {
+                        var select = firstTarget(modal);
+                        var option = select && select.value ? select.options[select.selectedIndex] : null;
+                        if (!option) {
+                            showErrors(modal, { message: 'Choose an entry in the dropdown first, then press Edit.' });
+                            modal.classList.add('open');
+                            return;
+                        }
+                        form.dataset.editId = select.value;
+                        modal.querySelectorAll('[data-edit-from="label"]').forEach(function (field) {
+                            field.value = option.textContent.trim();
+                        });
+                    } else {
+                        modal.querySelectorAll('[data-prefill-from]').forEach(function (field) {
+                            var source = document.getElementById(field.dataset.prefillFrom);
+                            if (source && source.value) field.value = source.value;
+                        });
+                    }
+
                     modal.classList.add('open');
                     var first = modal.querySelector('input:not([type=hidden]), select, textarea');
                     if (first) first.focus();
@@ -1133,11 +1190,26 @@ tr:hover td { background: #fbfdff; }
                     select.dispatchEvent(new Event('change', { bubbles: true }));
                 }
 
+                function renameOption(select, record) {
+                    var value = String(record.id);
+                    Array.prototype.forEach.call(select.options, function (option) {
+                        if (option.value === value) option.textContent = record.label;
+                    });
+                    select.value = value;
+                    select.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+
                 document.addEventListener('click', function (event) {
                     var trigger = event.target.closest('[data-quick-create]');
                     if (trigger) {
                         event.preventDefault();
-                        open(document.getElementById(trigger.dataset.quickCreate));
+                        open(document.getElementById(trigger.dataset.quickCreate), 'create');
+                        return;
+                    }
+                    var editor = event.target.closest('[data-quick-edit]');
+                    if (editor) {
+                        event.preventDefault();
+                        open(document.getElementById(editor.dataset.quickEdit), 'edit');
                         return;
                     }
                     var closer = event.target.closest('.quick-create-modal .js-qc-close');
@@ -1157,10 +1229,20 @@ tr:hover td { background: #fbfdff; }
 
                     var modal = form.closest('.quick-create-modal');
                     var button = form.querySelector('[type=submit]');
+                    var editing = form.dataset.mode === 'edit' && form.dataset.editId;
+                    if (form.dataset.mode === 'edit' && !form.dataset.editId) return;
+
                     clearErrors(modal);
                     button.disabled = true;
 
-                    fetch(modal.dataset.url, {
+                    var body = new FormData(form);
+                    var url = modal.dataset.url;
+                    if (editing) {
+                        url = modal.dataset.editUrl.replace('__ID__', form.dataset.editId);
+                        body.append('_method', 'PUT');
+                    }
+
+                    fetch(url, {
                         method: 'POST',
                         credentials: 'same-origin',
                         headers: {
@@ -1168,7 +1250,7 @@ tr:hover td { background: #fbfdff; }
                             'X-Requested-With': 'XMLHttpRequest',
                             'X-CSRF-TOKEN': tokenFor(form)
                         },
-                        body: new FormData(form)
+                        body: body
                     }).then(function (response) {
                         return response.json().catch(function () { return {}; }).then(function (payload) {
                             if (response.status === 422) {
@@ -1181,7 +1263,8 @@ tr:hover td { background: #fbfdff; }
                             }
                             modal.dataset.target.split(',').forEach(function (id) {
                                 var select = document.getElementById(id.trim());
-                                if (select) addOption(select, payload);
+                                if (!select) return;
+                                if (editing) renameOption(select, payload); else addOption(select, payload);
                             });
                             form.reset();
                             close(modal);

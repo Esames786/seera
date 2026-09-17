@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Edit Supplier - Seera</title>
+    <title>Employee Details - Seera</title>
     <style>
 /* ------------------------------------------------------------------
    Seera Construction ERP - central admin stylesheet
@@ -502,8 +502,8 @@ tr:hover td { background: #fbfdff; }
                                     </div>
             </div>
                     
-            <div class="nav-group open" data-group="master-setup"  data-has-active="1" >
-                <button type="button" class="nav-group-header" aria-expanded="true">
+            <div class="nav-group " data-group="master-setup" >
+                <button type="button" class="nav-group-header" aria-expanded="false">
                     <span>Master Setup</span>
                                         <span class="chevron" aria-hidden="true">▸</span>
                 </button>
@@ -533,7 +533,7 @@ tr:hover td { background: #fbfdff; }
                             <span>🏷️</span>
                             <span>Expense Categories</span>
                                                     </a>
-                                            <a class="nav-item active " href="http://seera.test/admin/master/suppliers">
+                                            <a class="nav-item  " href="http://seera.test/admin/master/suppliers">
                             <span>🚚</span>
                             <span>Suppliers</span>
                                                     </a>
@@ -544,8 +544,8 @@ tr:hover td { background: #fbfdff; }
                                     </div>
             </div>
                     
-            <div class="nav-group " data-group="operations" >
-                <button type="button" class="nav-group-header" aria-expanded="false">
+            <div class="nav-group open" data-group="operations"  data-has-active="1" >
+                <button type="button" class="nav-group-header" aria-expanded="true">
                     <span>Operations</span>
                                             <span class="nav-badge">3</span>
                                         <span class="chevron" aria-hidden="true">▸</span>
@@ -556,7 +556,7 @@ tr:hover td { background: #fbfdff; }
                             <span>📋</span>
                             <span>HR Dashboard</span>
                                                     </a>
-                                            <a class="nav-item  " href="http://seera.test/admin/hr/employees">
+                                            <a class="nav-item active " href="http://seera.test/admin/hr/employees">
                             <span>👷</span>
                             <span>Employees</span>
                                                     </a>
@@ -794,7 +794,7 @@ tr:hover td { background: #fbfdff; }
     <main class="content">
         <div class="topbar">
     <div class="breadcrumb">
-        <a href="http://seera.test/admin/dashboard">Home</a> / Master Setup / Suppliers / Edit Supplier
+        <a href="http://seera.test/admin/dashboard">Home</a> / HR &amp;amp; Payroll / Employees / Employee Details
     </div>
     <div class="topbar-right">
         <span title="Search">🔎</span>
@@ -811,142 +811,374 @@ tr:hover td { background: #fbfdff; }
                         
                 <div class="page-header">
     <div>
-        <h1 class="page-title">Edit Supplier: Saudi Cement Supplier</h1>
-                    <p class="page-desc">Update supplier information</p>
+        <h1 class="page-title">Nabeel Mukhtar</h1>
+                    <p class="page-desc">Employee profile with HR history and payroll context</p>
             </div>
-    <div class="page-actions"><a class="btn outline" href="http://seera.test/admin/master/suppliers/1">View Details</a></div>
+    <div class="page-actions"><a class="btn outline" href="http://seera.test/admin/hr/employees/2/edit#documents">+ Attach Document</a>
+        <a class="btn primary" href="http://seera.test/admin/hr/employees/2/edit">Edit Employee</a></div>
 </div>
 
-    <form method="POST" action="http://seera.test/admin/master/suppliers/1">
-    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">     <input type="hidden" name="_method" value="PUT"> 
-    <div class="form-section">
-    <div class="section-title">Supplier Information</div>
-    <div class="section-body form-grid three">
-        <div><label for="name">Supplier Name *</label><input id="name" name="name" class="input" value="Saudi Cement Supplier" required/></div>
-        <div><label for="code">Supplier Code</label><input id="code" name="code" class="input" value="SUP-001" placeholder="Auto: SUP-001"/></div>
+    <div class="card profile-head">
+        <div class="avatar lg">NM</div>
         <div>
-            <div class="label-row">
-                <label for="category">Supplier Category</label>
-                <span class="quick-create-triggers">
-        <button type="button" class="quick-create-trigger" data-quick-create="qc-supplier-category" title="New Supplier Category">+ New</button>
-            </span>
-
-    
-                            </div>
-            <select id="category" name="category" class="select">
-                <option value="">Select...</option>
-                                    <option value="Materials" selected>Materials</option>
-                                    <option value="Fuel" >Fuel</option>
-                                    <option value="Equipment" >Equipment</option>
-                                    <option value="Services" >Services</option>
-                                    <option value="Subcontractor" >Subcontractor</option>
-                            </select>
+            <h2 style="margin:0 0 8px">Nabeel Mukhtar</h2>
+            <div class="pill-row">
+                <span class="badge blue">EMP-002</span>
+                <span class="badge green">Active</span>
+                <span class="badge purple">Project Manager</span>
+                <span class="badge gray">Riyadh Tower</span>
+                <span class="badge green">Yes</span>
+            </div>
         </div>
-        <div><label for="city">City / Location</label><input id="city" name="city" class="input" value="Riyadh" placeholder="Riyadh, Jeddah, Dammam..."/></div>
-        <div>
-            <label for="rating">Supplier Rating</label>
-            <select id="rating" name="rating" class="select">
-                <option value="">Not rated</option>
-                                    <option value="Green" selected>Green — preferred </option>
-                                    <option value="Amber" >Amber — use with care </option>
-                                    <option value="Red" >Red — avoid </option>
-                            </select>
-        </div>
-        <div><label for="vat_number">VAT Number</label><input id="vat_number" name="vat_number" class="input" value="300123123100003" placeholder="300XXXXXXXXXXXX"/></div>
-        <div><label for="cr_number">CR Number</label><input id="cr_number" name="cr_number" class="input" value="1010123123" placeholder="1010XXXXXX"/></div>
-        <div><label for="opening_balance">Opening Balance (SAR)</label><input id="opening_balance" name="opening_balance" type="number" step="0.01" class="input" value="42000.00"/></div>
-        <div><label for="contact_person">Contact Person</label><input id="contact_person" name="contact_person" class="input" value="Ahmed"/></div>
-        <div><label for="phone">Phone</label><input id="phone" name="phone" class="input" value="+966 50 700 1111" placeholder="+966..."/></div>
-        <div><label for="email">Email</label><input id="email" name="email" type="email" class="input" value="sales@saudicement.sa"/></div>
-        <div>
-            <label for="status">Status *</label>
-            <select id="status" name="status" class="select" required>
-                <option value="active" selected>Active</option>
-                <option value="inactive" >Inactive</option>
-            </select>
-        </div>
-        <div class="full"><label for="address">Address</label><textarea id="address" name="address" class="textarea" placeholder="Supplier address...">Industrial City 2, Riyadh</textarea></div>
     </div>
+
+    <div class="card-grid">
+        <div class="card metric blue">
+    <div class="value">SAR 22,000.00</div>
+    <div class="label">Basic Salary</div>
 </div>
-
-    <div class="form-section">
-    <div class="section-title">Payment &amp; Banking</div>
-    <div class="section-body form-grid three">
-        <div>
-            <div class="label-row">
-                <label for="payment_term_id">Payment Terms</label>
-                <span class="quick-create-triggers">
-        <button type="button" class="quick-create-trigger" data-quick-create="qc-payment-term" title="New Payment Term">+ New</button>
-            </span>
-
-    
-                </div>
-            <select id="payment_term_id" name="payment_term_id" class="select">
-                <option value="">Not set</option>
-                                    <option value="1" >Cash</option>
-                                    <option value="2" >15 Days (15 days)</option>
-                                    <option value="3" >30 Days (30 days)</option>
-                                    <option value="5" selected>45 Days (45 days)</option>
-                                    <option value="4" >60 Days (60 days)</option>
-                            </select>
-            <div class="small" style="margin-top:4px">Bills without a due date fall due this many days after the bill date.</div>
-        </div>
-        <div>
-            <label for="allowed_payment_types">Accepted Payment Types</label>
-            <select id="allowed_payment_types" name="allowed_payment_types" class="select">
-                                    <option value="Cash" >Cash</option>
-                                    <option value="Bank" selected>Bank</option>
-                                    <option value="Both" >Both</option>
-                            </select>
-            <div class="small" style="margin-top:4px">Limits the cash / bank accounts offered when recording a payment to this supplier.</div>
-        </div>
-        <div>
-            <div class="label-row">
-                <label for="linked_account_id">Linked Payable Account</label>
-                <span class="quick-create-triggers">
-        <button type="button" class="quick-create-trigger" data-quick-create="qc-payable-account" title="New Payable Sub-Account">+ New</button>
-            </span>
-
-    
-                </div>
-            <select id="linked_account_id" name="linked_account_id" class="select">
-                                                    <option value="9" >2100 - Accounts Payable</option>
-                                    <option value="25" selected>2101 - Accounts Payable - Saudi Cement Supplier</option>
-                            </select>
-            <div class="small" style="margin-top:4px">Bills, payments and goods receipts for this supplier post to this account.</div>
-        </div>
-        <div><label for="bank_name">Bank Name</label><input id="bank_name" name="bank_name" class="input" value="Al Rajhi Bank" placeholder="Al Rajhi Bank"/></div>
-        <div><label for="bank_account_name">Account Holder Name</label><input id="bank_account_name" name="bank_account_name" class="input" value="Saudi Cement Supplier Co."/></div>
-        <div><label for="iban">IBAN</label><input id="iban" name="iban" class="input" value="SA03 8000 0000 6080 1016 7519" placeholder="SA00 0000 0000 0000 0000 0000"/></div>
-    </div>
+        <div class="card metric red">
+    <div class="value">2026-10-04</div>
+    <div class="label">IQAMA Expiry</div>
 </div>
-
-    <div class="form-section">
-    <div class="section-title">Projects this Supplier Works For</div>
-    <div class="section-body ">
-        <div class="form-grid three">
-                                    <label class="check-line" style="margin:0">
-                        <input class="checkbox" type="checkbox" name="project_ids[]" value="3" />
-                        PRJ-003 — Dammam Road Extension
-                    </label>
-                                    <label class="check-line" style="margin:0">
-                        <input class="checkbox" type="checkbox" name="project_ids[]" value="2" checked/>
-                        PRJ-002 — Jeddah Warehouse
-                    </label>
-                                    <label class="check-line" style="margin:0">
-                        <input class="checkbox" type="checkbox" name="project_ids[]" value="1" checked/>
-                        PRJ-001 — Riyadh Tower
-                    </label>
-                            </div>
-            <div class="small" style="margin-top:10px">Linked suppliers are listed on each project's page.</div>
-    </div>
+        <div class="card metric green">
+    <div class="value">4 / 6</div>
+    <div class="label">Attendance This Month</div>
 </div>
-
-    <div class="form-actions">
-        <a class="btn outline" href="http://seera.test/admin/master/suppliers">Cancel</a>
-        <button type="submit" class="btn primary">Update Supplier</button>
+        <div class="card metric yellow">
+    <div class="value">1</div>
+    <div class="label">Pending Leave / Overtime</div>
+</div>
     </div>
-</form>
+
+    <div class="tabs">
+                    <a class="tab active" href="#overview">Overview</a>
+                    <a class="tab " href="#documents">Documents</a>
+                    <a class="tab " href="#attendance">Attendance</a>
+                    <a class="tab " href="#leaves">Leaves</a>
+                    <a class="tab " href="#overtime">Overtime</a>
+                    <a class="tab " href="#salary">Salary</a>
+                    <a class="tab " href="#payroll">Payroll History</a>
+            </div>
+    <br/>
+
+    <div class="split even" id="overview">
+        <div class="table-card">
+            <div class="table-title">
+            <span>Employment Information </span>
+            
+        </div>
+        <div class="table-wrap">
+        <table class="detail-table">
+            <tbody>
+                <tr><th>Employee Code</th><td>EMP-002</td></tr>
+                <tr><th>Department</th><td>Projects</td></tr>
+                <tr><th>Designation</th><td>Project Manager</td></tr>
+                <tr><th>Branch</th><td>Riyadh Main Branch</td></tr>
+                <tr><th>Project / Site</th><td>Riyadh Tower</td></tr>
+                <tr><th>Manager</th><td>Nabeel Mukhtar</td></tr>
+                <tr><th>Joining Date</th><td>2024-02-07</td></tr>
+                <tr><th>Classification</th><td><span class="badge blue">Sponsorship</span></td></tr>
+                <tr><th>Contract</th><td>Full Time (2024-02-07 → 2026-02-07)</td></tr>
+                <tr><th>Linked User Account</th><td>Nabeel Mukhtar</td></tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+        <div>
+            <div class="table-card">
+            <div class="table-title">
+            <span>Personal &amp;amp; Documents </span>
+            
+        </div>
+        <div class="table-wrap">
+        <table class="detail-table">
+            <tbody>
+                    <tr><th>Email</th><td>nabeel.mukhtar@company.sa</td></tr>
+                    <tr><th>Phone</th><td>+966 52 101 2001</td></tr>
+                    <tr><th>Emergency Contact</th><td>+966 55 900 1001</td></tr>
+                    <tr><th>Nationality</th><td>Pakistani</td></tr>
+                    <tr><th>IQAMA Number</th><td>2400500137</td></tr>
+                    <tr><th>IQAMA Expiry</th><td>2026-10-04 <span class="badge yellow">Expiring soon</span>
+</td></tr>
+                    <tr><th>Passport Number</th><td>AB1000913</td></tr>
+                    <tr><th>Passport Expiry</th><td>2028-09-28</td></tr>
+                    <tr><th>Insurance Number</th><td>-</td></tr>
+                    <tr><th>Insurance Expiry</th><td>-</td></tr>
+                    <tr><th>Driving License</th><td>-</td></tr>
+                    <tr><th>License Expiry</th><td>-</td></tr>
+                </tbody>
+        </table>
+    </div>
+    </div>
+
+            <div class="table-card">
+            <div class="table-title">
+            <span>Payroll Information </span>
+            
+        </div>
+        <div class="table-wrap">
+        <table class="detail-table">
+            <tbody>
+                    <tr><th>Basic Salary</th><td>SAR 22,000.00</td></tr>
+                    <tr><th>Housing Allowance</th><td>SAR 5,500.00</td></tr>
+                    <tr><th>Transport Allowance</th><td>SAR 2,200.00</td></tr>
+                    <tr><th>Food Allowance</th><td>SAR 300.00</td></tr>
+                    <tr><th>Fuel Allowance</th><td>SAR 250.00</td></tr>
+                    <tr><th>Other Allowance</th><td>SAR 0.00</td></tr>
+                    <tr><th>Payment Method</th><td>Bank Transfer</td></tr>
+                    <tr><th>Bank Name</th><td>Al Rajhi Bank</td></tr>
+                    <tr><th>IBAN</th><td>SA0000004400000000000001</td></tr>
+                </tbody>
+        </table>
+    </div>
+    </div>
+        </div>
+    </div>
+
+    <div class="table-card">
+            <div class="table-title">
+            <span>Documents </span>
+            <a class="btn sm primary" href="http://seera.test/admin/hr/employees/2/edit">+ Attach Document</a>
+        </div>
+        <div class="table-wrap">
+        <table id="documents">
+            <thead>
+            <tr><th>Type</th><th>Number</th><th>Issue</th><th>Expiry</th><th>Validity</th><th>File</th></tr>
+        </thead>
+        <tbody>
+                            <tr>
+                    <td>IQAMA</td>
+                    <td>2400500137</td>
+                    <td>2025-10-04</td>
+                    <td>2026-10-04</td>
+                    <td><span class="badge yellow">Expiring soon</span>
+</td>
+                    <td>Not uploaded</td>
+                </tr>
+                            <tr>
+                    <td>Passport</td>
+                    <td>AB1000913</td>
+                    <td>2023-09-28</td>
+                    <td>2028-09-28</td>
+                    <td><span class="badge green">Valid</span>
+</td>
+                    <td>Not uploaded</td>
+                </tr>
+                    </tbody>
+        </table>
+    </div>
+    </div>
+
+    <div class="table-card">
+            <div class="table-title">
+            <span>Recent Attendance </span>
+            
+        </div>
+        <div class="table-wrap">
+        <table id="attendance">
+            <thead>
+            <tr><th>Date</th><th>Shift</th><th>Check In</th><th>Check Out</th><th>Late</th><th>Overtime</th><th>Source</th><th>Geo-Fence</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+                            <tr>
+                    <td>2026-09-17</td>
+                    <td>Night Shift</td>
+                    <td>08:34</td>
+                    <td>17:10</td>
+                    <td>24 min</td>
+                    <td>0 min</td>
+                    <td><span class="badge blue">Manual</span>
+</td>
+                    <td><span class="badge green">Inside</span>
+</td>
+                    <td><span class="badge yellow">Late</span>
+</td>
+                </tr>
+                            <tr>
+                    <td>2026-09-16</td>
+                    <td>Night Shift</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>0 min</td>
+                    <td>0 min</td>
+                    <td><span class="badge blue">Mobile</span>
+</td>
+                    <td><span class="badge green">Inside</span>
+</td>
+                    <td><span class="badge blue">Leave</span>
+</td>
+                </tr>
+                            <tr>
+                    <td>2026-09-15</td>
+                    <td>Night Shift</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>0 min</td>
+                    <td>0 min</td>
+                    <td><span class="badge purple">Offline</span>
+</td>
+                    <td><span class="badge green">Inside</span>
+</td>
+                    <td><span class="badge red">Absent</span>
+</td>
+                </tr>
+                            <tr>
+                    <td>2026-09-14</td>
+                    <td>Night Shift</td>
+                    <td>08:03</td>
+                    <td>17:23</td>
+                    <td>0 min</td>
+                    <td>0 min</td>
+                    <td><span class="badge blue">Manual</span>
+</td>
+                    <td><span class="badge green">Inside</span>
+</td>
+                    <td><span class="badge green">Present</span>
+</td>
+                </tr>
+                            <tr>
+                    <td>2026-09-13</td>
+                    <td>Night Shift</td>
+                    <td>08:02</td>
+                    <td>17:22</td>
+                    <td>0 min</td>
+                    <td>30 min</td>
+                    <td><span class="badge blue">Mobile</span>
+</td>
+                    <td><span class="badge green">Inside</span>
+</td>
+                    <td><span class="badge green">Present</span>
+</td>
+                </tr>
+                            <tr>
+                    <td>2026-09-12</td>
+                    <td>Night Shift</td>
+                    <td>08:01</td>
+                    <td>17:21</td>
+                    <td>0 min</td>
+                    <td>15 min</td>
+                    <td><span class="badge purple">Offline</span>
+</td>
+                    <td><span class="badge green">Inside</span>
+</td>
+                    <td><span class="badge green">Present</span>
+</td>
+                </tr>
+                    </tbody>
+        </table>
+    </div>
+    </div>
+
+    <div class="split even">
+        <div class="table-card">
+            <div class="table-title">
+            <span>Leave Data <span class="small">Annual leave 2026</span></span>
+            
+        </div>
+        <div class="table-wrap">
+        <table id="leaves">
+            <thead>
+                <tr><th>Entitlement</th><th>Used (approved)</th><th>Awaiting approval</th><th>Remaining</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>21</strong> days</td>
+                    <td>0 days</td>
+                    <td>0 days</td>
+                    <td><strong style="color:var(--green)">21</strong> days</td>
+                </tr>
+                <tr><th>Type</th><th>Start → End</th><th>Days</th><th>Status</th></tr>
+                                    <tr>
+                        <td>Emergency Leave</td>
+                        <td>2026-09-14 → 2026-09-16</td>
+                        <td>3</td>
+                        <td><span class="badge green">Approved</span>
+</td>
+                    </tr>
+                            </tbody>
+        </table>
+    </div>
+    </div>
+
+        <div class="table-card">
+            <div class="table-title">
+            <span>Overtime </span>
+            
+        </div>
+        <div class="table-wrap">
+        <table id="overtime">
+            <thead>
+                <tr><th>Date</th><th>Hours</th><th>Rate</th><th>Amount</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                                    <tr>
+                        <td>2026-09-15</td>
+                        <td>2.00</td>
+                        <td>SAR 137.50</td>
+                        <td>SAR 275.00</td>
+                        <td><span class="badge yellow">Pending</span>
+</td>
+                    </tr>
+                            </tbody>
+        </table>
+    </div>
+    </div>
+    </div>
+
+    <div class="table-card">
+            <div class="table-title">
+            <span>Salary Structures </span>
+            <a class="btn sm primary" href="http://seera.test/admin/hr/salary-structures/create">+ Add Structure</a>
+        </div>
+        <div class="table-wrap">
+        <table id="salary">
+            <thead>
+            <tr><th>Effective From</th><th>Effective To</th><th>Basic</th><th>Allowances</th><th>Deductions</th><th>Net</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+                            <tr>
+                    <td>2026-01-01</td>
+                    <td>Open</td>
+                    <td>SAR 22,000.00</td>
+                    <td>SAR 7,700.00</td>
+                    <td>SAR 0.00</td>
+                    <td>SAR 29,700.00</td>
+                    <td><span class="badge green">Active</span>
+</td>
+                </tr>
+                    </tbody>
+        </table>
+    </div>
+    </div>
+
+    <div class="table-card">
+            <div class="table-title">
+            <span>Payroll History </span>
+            
+        </div>
+        <div class="table-wrap">
+        <table id="payroll">
+            <thead>
+            <tr><th>Payroll Run</th><th>Period</th><th>Basic</th><th>Allowances</th><th>Overtime</th><th>Deductions</th><th>Net</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+                            <tr>
+                    <td><a href="http://seera.test/admin/hr/payroll/1" style="color:var(--blue);font-weight:700">PR-202609-01</a></td>
+                    <td>September 2026</td>
+                    <td>SAR 22,000.00</td>
+                    <td>SAR 7,700.00</td>
+                    <td>SAR 0.00</td>
+                    <td>SAR 0.00</td>
+                    <td>SAR 29,700.00</td>
+                    <td><span class="badge yellow">Processed</span>
+</td>
+                </tr>
+                    </tbody>
+        </table>
+    </div>
+    </div>
         </section>
     </main>
 </div>
@@ -969,72 +1201,7 @@ tr:hover td { background: #fbfdff; }
         </div>
     </div>
 </div>
-        <div class="modal-overlay quick-create-modal" id="qc-supplier-category" data-target="category" data-url="http://seera.test/admin/master/lookup-values" >
-            <div class="modal-card ">
-                <div class="modal-head">
-                    <span><span class="qc-mode-label">New</span> New Supplier Category</span>
-                    <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
-                </div>
-                <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
-                        <div class="alert qc-error" hidden></div>
-                        <div class="form-grid"><div class="full"><label for="qc-cat-value">Category Name *</label><input id="qc-cat-value" name="value" class="input" placeholder="e.g. Scaffolding, Transport" required/></div>
-                    <input type="hidden" name="type" value="supplier_category"/></div>
-                    </div>
-                    <div class="modal-foot">
-                        <button type="button" class="btn outline js-qc-close">Cancel</button>
-                        <button type="submit" class="btn primary">Add Category</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-            <div class="modal-overlay quick-create-modal" id="qc-payment-term" data-target="payment_term_id" data-url="http://seera.test/admin/master/payment-terms" >
-            <div class="modal-card ">
-                <div class="modal-head">
-                    <span><span class="qc-mode-label">New</span> New Payment Term</span>
-                    <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
-                </div>
-                <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
-                        <div class="alert qc-error" hidden></div>
-                        <div class="form-grid"><div><label for="qc-term-name">Name *</label><input id="qc-term-name" name="name" class="input" placeholder="e.g. 45 Days" required/></div>
-                    <div><label for="qc-term-days">Days from bill date *</label><input id="qc-term-days" name="days" type="number" min="0" max="365" class="input" value="30" required/></div>
-                    <div class="full"><label for="qc-term-description">Description</label><input id="qc-term-description" name="description" class="input" placeholder="As agreed with the supplier"/></div>
-                    <input type="hidden" name="status" value="active"/></div>
-                    </div>
-                    <div class="modal-foot">
-                        <button type="button" class="btn outline js-qc-close">Cancel</button>
-                        <button type="submit" class="btn primary">Add Term</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-            <div class="modal-overlay quick-create-modal" id="qc-payable-account" data-target="linked_account_id" data-url="http://seera.test/admin/accounting/chart-of-accounts" >
-            <div class="modal-card ">
-                <div class="modal-head">
-                    <span><span class="qc-mode-label">New</span> New Payable Sub-Account</span>
-                    <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
-                </div>
-                <form class="quick-create-form" novalidate>
-                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
-                        <div class="alert qc-error" hidden></div>
-                        <div class="form-grid"><div class="full"><label for="qc-acc-name">Account Name *</label><input id="qc-acc-name" name="account_name" class="input" placeholder="e.g. Accounts Payable - Gulf Steel" required/></div>
-                    <div><label for="qc-acc-code">Account Code</label><input id="qc-acc-code" name="account_code" class="input" placeholder="Auto: next under 2100"/></div>
-                    <div><label for="qc-acc-opening">Opening Balance (SAR)</label><input id="qc-acc-opening" name="opening_balance" type="number" step="0.01" class="input" value="0" required/></div>
-                    <input type="hidden" name="parent_id" value="9"/>
-                    <input type="hidden" name="account_type" value="liability"/>
-                    <input type="hidden" name="normal_balance" value="credit"/>
-                    <input type="hidden" name="status" value="active"/>
-                    <div class="full help-box">Created as a liability sub-account under 2100 - Accounts Payable, so the payables total on the dashboard still includes it.</div></div>
-                    </div>
-                    <div class="modal-foot">
-                        <button type="button" class="btn outline js-qc-close">Cancel</button>
-                        <button type="submit" class="btn primary">Create Account</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    
+
 <script>
     (function () {
         const overlay = document.getElementById('delete-modal');
@@ -1058,189 +1225,7 @@ tr:hover td { background: #fbfdff; }
         });
     })();
 </script>
-        <script>
-            (function () {
-                function tokenFor(form) {
-                    var input = form.querySelector('input[name="_token"]');
-                    return input ? input.value : '';
-                }
-
-                function firstTarget(modal) {
-                    var id = (modal.dataset.target || '').split(',')[0].trim();
-                    return id ? document.getElementById(id) : null;
-                }
-
-                function open(modal, mode) {
-                    if (!modal) return;
-                    clearErrors(modal);
-                    var form = modal.querySelector('.quick-create-form');
-                    form.reset();
-                    form.dataset.mode = mode;
-                    delete form.dataset.editId;
-
-                    var modeLabel = modal.querySelector('.qc-mode-label');
-                    if (modeLabel) modeLabel.textContent = mode === 'edit' ? 'Edit' : 'New';
-
-                    if (mode === 'edit') {
-                        var select = firstTarget(modal);
-                        var option = select && select.value ? select.options[select.selectedIndex] : null;
-                        if (!option) {
-                            showErrors(modal, { message: 'Choose an entry in the dropdown first, then press Edit.' });
-                            modal.classList.add('open');
-                            return;
-                        }
-                        form.dataset.editId = select.value;
-                        modal.querySelectorAll('[data-edit-from="label"]').forEach(function (field) {
-                            field.value = option.textContent.trim();
-                        });
-                    } else {
-                        modal.querySelectorAll('[data-prefill-from]').forEach(function (field) {
-                            var source = document.getElementById(field.dataset.prefillFrom);
-                            if (source && source.value) field.value = source.value;
-                        });
-                    }
-
-                    modal.classList.add('open');
-                    var first = modal.querySelector('input:not([type=hidden]), select, textarea');
-                    if (first) first.focus();
-                }
-
-                function close(modal) {
-                    if (modal) modal.classList.remove('open');
-                }
-
-                function clearErrors(modal) {
-                    modal.querySelectorAll('.qc-field-error').forEach(function (el) { el.remove(); });
-                    var box = modal.querySelector('.qc-error');
-                    box.hidden = true;
-                    box.textContent = '';
-                }
-
-                function showErrors(modal, payload) {
-                    var box = modal.querySelector('.qc-error');
-                    box.textContent = payload.message || 'Please correct the highlighted fields.';
-                    box.hidden = false;
-                    Object.keys(payload.errors || {}).forEach(function (name) {
-                        var field = modal.querySelector('[name="' + name + '"]');
-                        if (!field) return;
-                        var error = document.createElement('div');
-                        error.className = 'field-error qc-field-error';
-                        var messages = payload.errors[name];
-                        error.textContent = Array.isArray(messages) ? messages[0] : messages;
-                        field.insertAdjacentElement('afterend', error);
-                    });
-                }
-
-                function addOption(select, record) {
-                    var value = String(record.id);
-                    var parent = (record.parent === undefined || record.parent === null) ? '' : String(record.parent);
-                    var existing = Array.prototype.find.call(select.options, function (o) { return o.value === value; });
-
-                    if (!existing) {
-                        var option = document.createElement('option');
-                        option.value = value;
-                        option.textContent = record.label;
-                        if (parent) option.dataset.parent = parent;
-                        select.appendChild(option);
-                    }
-
-                    // Dependent selects keep their own option cache; let them add it first.
-                    select.dispatchEvent(new CustomEvent('seera:option-added', {
-                        detail: { value: value, label: record.label, parent: parent }
-                    }));
-
-                    select.value = value;
-                    select.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-
-                function renameOption(select, record) {
-                    var value = String(record.id);
-                    Array.prototype.forEach.call(select.options, function (option) {
-                        if (option.value === value) option.textContent = record.label;
-                    });
-                    select.value = value;
-                    select.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-
-                document.addEventListener('click', function (event) {
-                    var trigger = event.target.closest('[data-quick-create]');
-                    if (trigger) {
-                        event.preventDefault();
-                        open(document.getElementById(trigger.dataset.quickCreate), 'create');
-                        return;
-                    }
-                    var editor = event.target.closest('[data-quick-edit]');
-                    if (editor) {
-                        event.preventDefault();
-                        open(document.getElementById(editor.dataset.quickEdit), 'edit');
-                        return;
-                    }
-                    var closer = event.target.closest('.quick-create-modal .js-qc-close');
-                    if (closer) {
-                        close(closer.closest('.quick-create-modal'));
-                        return;
-                    }
-                    if (event.target.classList && event.target.classList.contains('quick-create-modal')) {
-                        close(event.target);
-                    }
-                });
-
-                document.addEventListener('submit', function (event) {
-                    var form = event.target.closest('.quick-create-form');
-                    if (!form) return;
-                    event.preventDefault();
-
-                    var modal = form.closest('.quick-create-modal');
-                    var button = form.querySelector('[type=submit]');
-                    var editing = form.dataset.mode === 'edit' && form.dataset.editId;
-                    if (form.dataset.mode === 'edit' && !form.dataset.editId) return;
-
-                    clearErrors(modal);
-                    button.disabled = true;
-
-                    var body = new FormData(form);
-                    var url = modal.dataset.url;
-                    if (editing) {
-                        url = modal.dataset.editUrl.replace('__ID__', form.dataset.editId);
-                        body.append('_method', 'PUT');
-                    }
-
-                    fetch(url, {
-                        method: 'POST',
-                        credentials: 'same-origin',
-                        headers: {
-                            'Accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': tokenFor(form)
-                        },
-                        body: body
-                    }).then(function (response) {
-                        return response.json().catch(function () { return {}; }).then(function (payload) {
-                            if (response.status === 422) {
-                                showErrors(modal, payload);
-                                return;
-                            }
-                            if (!response.ok || !payload.id) {
-                                showErrors(modal, { message: payload.message || ('The record could not be saved (' + response.status + ').') });
-                                return;
-                            }
-                            modal.dataset.target.split(',').forEach(function (id) {
-                                var select = document.getElementById(id.trim());
-                                if (!select) return;
-                                if (editing) renameOption(select, payload); else addOption(select, payload);
-                            });
-                            form.reset();
-                            close(modal);
-                        });
-                    }).catch(function () {
-                        showErrors(modal, { message: 'Network error. Please try again.' });
-                    }).finally(function () {
-                        button.disabled = false;
-                    });
-                });
-            })();
-        </script>
-            <script>
+    <script>
         (function () {
             const sidebar = document.getElementById('admin-sidebar');
             if (!sidebar) return;

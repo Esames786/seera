@@ -276,3 +276,28 @@ lists, inserts the four existing payment-term choices and links suppliers to the
 Accounts Payable account. Again `php artisan migrate --force` is enough. Site maps
 load Leaflet from cdnjs and tiles from openstreetmap.org in the user's browser; the
 server itself needs no outbound access or API key.
+
+## 10. September 2026 media batch (NR-01 to NR-34)
+
+The 14 September batch (see `docs/client-change-register-2026-09-16-status.md`)
+adds two additive migrations (`2026_09_18_000001_*` supplier/customer/employee/leave
+fields and lookup values; `2026_09_18_000002_*` the marketing tables) and two
+idempotent seeders that an existing installation needs once:
+
+```bash
+php artisan down
+git pull --ff-only
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+php artisan db:seed --class=ProductionHrDefaultsSeeder --force   # leave types: Annual, Sick, Urgent, Unpaid
+php artisan db:seed --class=MarketingModuleSeeder --force        # Marketing permissions for Super Admin and Marketing Manager
+php artisan optimize
+php artisan up
+```
+
+Both seeders are also part of `ProductionBootstrapSeeder`, so a fresh bootstrap
+needs nothing extra. No asset rebuild is required for this round. Leave attachments
+are stored under `storage/app/private/leave-attachments`; keep `storage/app` in the
+backup set. Optional `.env` keys: `SEERA_EMPLOYEE_CODE_SPONSORSHIP` (default `SP-`),
+`SEERA_EMPLOYEE_CODE_FREELANCER` (default `FL-`) and
+`SEERA_FINANCIAL_YEAR_START_MONTH` (default `1`) for the report quick ranges.

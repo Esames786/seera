@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Edit Supplier - Seera</title>
+    <title>Add Employee - Seera</title>
     <style>
 /* ------------------------------------------------------------------
    Seera Construction ERP - central admin stylesheet
@@ -502,8 +502,8 @@ tr:hover td { background: #fbfdff; }
                                     </div>
             </div>
                     
-            <div class="nav-group open" data-group="master-setup"  data-has-active="1" >
-                <button type="button" class="nav-group-header" aria-expanded="true">
+            <div class="nav-group " data-group="master-setup" >
+                <button type="button" class="nav-group-header" aria-expanded="false">
                     <span>Master Setup</span>
                                         <span class="chevron" aria-hidden="true">▸</span>
                 </button>
@@ -533,7 +533,7 @@ tr:hover td { background: #fbfdff; }
                             <span>🏷️</span>
                             <span>Expense Categories</span>
                                                     </a>
-                                            <a class="nav-item active " href="http://seera.test/admin/master/suppliers">
+                                            <a class="nav-item  " href="http://seera.test/admin/master/suppliers">
                             <span>🚚</span>
                             <span>Suppliers</span>
                                                     </a>
@@ -544,8 +544,8 @@ tr:hover td { background: #fbfdff; }
                                     </div>
             </div>
                     
-            <div class="nav-group " data-group="operations" >
-                <button type="button" class="nav-group-header" aria-expanded="false">
+            <div class="nav-group open" data-group="operations"  data-has-active="1" >
+                <button type="button" class="nav-group-header" aria-expanded="true">
                     <span>Operations</span>
                                             <span class="nav-badge">3</span>
                                         <span class="chevron" aria-hidden="true">▸</span>
@@ -556,7 +556,7 @@ tr:hover td { background: #fbfdff; }
                             <span>📋</span>
                             <span>HR Dashboard</span>
                                                     </a>
-                                            <a class="nav-item  " href="http://seera.test/admin/hr/employees">
+                                            <a class="nav-item active " href="http://seera.test/admin/hr/employees">
                             <span>👷</span>
                             <span>Employees</span>
                                                     </a>
@@ -794,7 +794,7 @@ tr:hover td { background: #fbfdff; }
     <main class="content">
         <div class="topbar">
     <div class="breadcrumb">
-        <a href="http://seera.test/admin/dashboard">Home</a> / Master Setup / Suppliers / Edit Supplier
+        <a href="http://seera.test/admin/dashboard">Home</a> / HR &amp;amp; Payroll / Employees / Add Employee
     </div>
     <div class="topbar-right">
         <span title="Search">🔎</span>
@@ -811,142 +811,388 @@ tr:hover td { background: #fbfdff; }
                         
                 <div class="page-header">
     <div>
-        <h1 class="page-title">Edit Supplier: Saudi Cement Supplier</h1>
-                    <p class="page-desc">Update supplier information</p>
+        <h1 class="page-title">Add Employee</h1>
+                    <p class="page-desc">Create an HR employee profile with employment, document, payroll and access details</p>
             </div>
-    <div class="page-actions"><a class="btn outline" href="http://seera.test/admin/master/suppliers/1">View Details</a></div>
+    <div class="page-actions"></div>
 </div>
 
-    <form method="POST" action="http://seera.test/admin/master/suppliers/1">
-    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">     <input type="hidden" name="_method" value="PUT"> 
+    <form method="POST" action="http://seera.test/admin/hr/employees" enctype="multipart/form-data">
+    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">    
     <div class="form-section">
-    <div class="section-title">Supplier Information</div>
+    <div class="section-title">A. Personal Information</div>
     <div class="section-body form-grid three">
-        <div><label for="name">Supplier Name *</label><input id="name" name="name" class="input" value="Saudi Cement Supplier" required/></div>
-        <div><label for="code">Supplier Code</label><input id="code" name="code" class="input" value="SUP-001" placeholder="Auto: SUP-001"/></div>
+        <div><label for="first_name">First Name *</label><input id="first_name" name="first_name" class="input" value="" required/></div>
+        <div><label for="last_name">Last Name</label><input id="last_name" name="last_name" class="input" value=""/></div>
         <div>
             <div class="label-row">
-                <label for="category">Supplier Category</label>
+                <label for="nationality">Nationality</label>
                 <span class="quick-create-triggers">
-        <button type="button" class="quick-create-trigger" data-quick-create="qc-supplier-category" title="New Supplier Category">+ New</button>
+        <button type="button" class="quick-create-trigger" data-quick-create="qc-nationality" title="New Nationality">+ New</button>
             </span>
 
     
                             </div>
-            <select id="category" name="category" class="select">
+            <select id="nationality" name="nationality" class="select">
                 <option value="">Select...</option>
-                                    <option value="Materials" selected>Materials</option>
-                                    <option value="Fuel" >Fuel</option>
-                                    <option value="Equipment" >Equipment</option>
-                                    <option value="Services" >Services</option>
-                                    <option value="Subcontractor" >Subcontractor</option>
+                                    <option value="Saudi" >Saudi</option>
+                                    <option value="Pakistani" >Pakistani</option>
+                                    <option value="Indian" >Indian</option>
+                                    <option value="Bangladeshi" >Bangladeshi</option>
+                                    <option value="Egyptian" >Egyptian</option>
+                                    <option value="Filipino" >Filipino</option>
+                                    <option value="Yemeni" >Yemeni</option>
+                                    <option value="Sudanese" >Sudanese</option>
+                                    <option value="Nepali" >Nepali</option>
+                                    <option value="Sri Lankan" >Sri Lankan</option>
+                                    <option value="Other" >Other</option>
                             </select>
         </div>
-        <div><label for="city">City / Location</label><input id="city" name="city" class="input" value="Riyadh" placeholder="Riyadh, Jeddah, Dammam..."/></div>
+        <div><label for="email">Email</label><input id="email" name="email" type="email" class="input" value="" placeholder="employee@company.sa"/></div>
+        <div><label for="phone">Phone</label><input id="phone" name="phone" class="input" value="" placeholder="+966..."/></div>
+        <div><label for="emergency_contact">Emergency Contact</label><input id="emergency_contact" name="emergency_contact" class="input" value="" placeholder="+966..."/></div>
+    </div>
+</div>
+
+    <div class="form-section">
+    <div class="section-title">B. Employment Information</div>
+    <div class="section-body form-grid three">
         <div>
-            <label for="rating">Supplier Rating</label>
-            <select id="rating" name="rating" class="select">
-                <option value="">Not rated</option>
-                                    <option value="Green" selected>Green — preferred </option>
-                                    <option value="Amber" >Amber — use with care </option>
-                                    <option value="Red" >Red — avoid </option>
+            <label for="employee_code">Employee Code (auto)</label>
+            <input id="employee_code" name="employee_code" class="input" value="" placeholder="Leave blank: SP-001 / FL-001" />
+            <div class="small" style="margin-top:4px">Numbered automatically by classification, or type your own code.</div>        </div>
+        <div>
+            <div class="label-row">
+                <label for="department_id">Department</label>
+                <span class="quick-create-triggers">
+        <button type="button" class="quick-create-trigger" data-quick-create="qc-department" title="New Department">+ New</button>
+            </span>
+
+    
+                </div>
+            <select id="department_id" name="department_id" class="select">
+                <option value="">Select...</option>
+                                    <option value="2" >Accounts</option>
+                                    <option value="1" >Administration</option>
+                                    <option value="3" >Human Resource</option>
+                                    <option value="7" >Marketing</option>
+                                    <option value="4" >Projects</option>
+                                    <option value="6" >Purchase</option>
+                                    <option value="5" >Site Operations</option>
                             </select>
         </div>
-        <div><label for="vat_number">VAT Number</label><input id="vat_number" name="vat_number" class="input" value="300123123100003" placeholder="300XXXXXXXXXXXX"/></div>
-        <div><label for="cr_number">CR Number</label><input id="cr_number" name="cr_number" class="input" value="1010123123" placeholder="1010XXXXXX"/></div>
-        <div><label for="opening_balance">Opening Balance (SAR)</label><input id="opening_balance" name="opening_balance" type="number" step="0.01" class="input" value="42000.00"/></div>
-        <div><label for="contact_person">Contact Person</label><input id="contact_person" name="contact_person" class="input" value="Ahmed"/></div>
-        <div><label for="phone">Phone</label><input id="phone" name="phone" class="input" value="+966 50 700 1111" placeholder="+966..."/></div>
-        <div><label for="email">Email</label><input id="email" name="email" type="email" class="input" value="sales@saudicement.sa"/></div>
+        <div>
+            <div class="label-row">
+                <label for="designation_id">Designation</label>
+                <span class="quick-create-triggers">
+        <button type="button" class="quick-create-trigger" data-quick-create="qc-designation" title="New Designation">+ New</button>
+            </span>
+
+    
+                </div>
+            <select id="designation_id" name="designation_id" class="select">
+                <option value="">Select...</option>
+                                    <option value="3" data-parent="2" >Account Assistant</option>
+                                    <option value="2" data-parent="2" >Accounts Manager</option>
+                                    <option value="1" data-parent="1" >General Manager</option>
+                                    <option value="4" data-parent="3" >HR Manager</option>
+                                    <option value="12" data-parent="7" >Marketing Manager</option>
+                                    <option value="7" data-parent="5" >Mechanic</option>
+                                    <option value="8" data-parent="5" >Operator</option>
+                                    <option value="5" data-parent="4" >Project Manager</option>
+                                    <option value="10" data-parent="6" >Purchase Assistant</option>
+                                    <option value="9" data-parent="6" >Purchase Manager</option>
+                                    <option value="6" data-parent="5" >Site In-Charge</option>
+                                    <option value="11" data-parent="6" >Store Keeper</option>
+                            </select>
+        </div>
+        <div>
+            <div class="label-row">
+                <label for="branch_id">Branch</label>
+                <span class="quick-create-triggers">
+        <button type="button" class="quick-create-trigger" data-quick-create="qc-branch" title="New Branch">+ New</button>
+            </span>
+
+    
+                </div>
+            <select id="branch_id" name="branch_id" class="select">
+                <option value="">Select...</option>
+                                    <option value="3" >Dammam Branch</option>
+                                    <option value="2" >Jeddah Branch</option>
+                                    <option value="1" >Riyadh Main Branch</option>
+                            </select>
+        </div>
+        <div>
+            <label for="project_id">Project</label>
+            <select id="project_id" name="project_id" class="select">
+                <option value="">Head Office</option>
+                                    <option value="3" >Dammam Road Extension</option>
+                                    <option value="2" >Jeddah Warehouse</option>
+                                    <option value="1" >Riyadh Tower</option>
+                            </select>
+        </div>
+        <div>
+            <label for="site_id">Site</label>
+            <select id="site_id" name="site_id" class="select">
+                <option value="">Select...</option>
+                                    <option value="1" data-parent="1" >Block A</option>
+                                    <option value="2" data-parent="1" >Block B</option>
+                                    <option value="3" data-parent="2" >Equipment Yard</option>
+                                    <option value="4" data-parent="3" >Section 1 - Drainage</option>
+                            </select>
+        </div>
+        <div>
+            <label for="manager_id">Manager</label>
+            <select id="manager_id" name="manager_id" class="select">
+                <option value="">Select...</option>
+                                    <option value="6" >Abdullah Mukhtar</option>
+                                    <option value="8" >Abdullah Shahmeer</option>
+                                    <option value="9" >Ayaz</option>
+                                    <option value="10" >Kamran</option>
+                                    <option value="2" >Nabeel Mukhtar</option>
+                                    <option value="1" >Omar Mukhtar</option>
+                                    <option value="12" >Rizwan</option>
+                                    <option value="11" >Shaban</option>
+                                    <option value="5" >Waleed</option>
+                                    <option value="7" >Zafar Ali</option>
+                                    <option value="3" >Zubair Ahmed</option>
+                                    <option value="4" >Zulfiqar</option>
+                            </select>
+        </div>
+        <div><label for="joining_date">Joining Date</label><input id="joining_date" name="joining_date" type="date" class="input" max="2026-09-17" value=""/></div>
+        <div>
+            <label for="contract_type">Contract Type *</label>
+            <select id="contract_type" name="contract_type" class="select" required>
+                                    <option value="Full Time" selected>Full Time</option>
+                                    <option value="Part Time" >Part Time</option>
+                                    <option value="Contract" >Contract</option>
+                                    <option value="Temporary" >Temporary</option>
+                            </select>
+        </div>
+        <div>
+            <label for="employee_classification">Employee Classification *</label>
+            <select id="employee_classification" name="employee_classification" class="select" required>
+                                    <option value="Sponsorship" selected>Sponsorship</option>
+                                    <option value="Freelancer" >Freelancer</option>
+                            </select>
+        </div>
+        <div><label for="contract_start_date">Contract Start</label><input id="contract_start_date" name="contract_start_date" type="date" class="input" value=""/></div>
+        <div><label for="contract_end_date">Contract End</label><input id="contract_end_date" name="contract_end_date" type="date" class="input" value=""/></div>
+        <div>
+            <label for="annual_leave_entitlement">Annual Leave Entitlement (days / year)</label>
+            <input id="annual_leave_entitlement" name="annual_leave_entitlement" type="number" min="0" max="365" class="input" value="21"/>
+            <div class="small" style="margin-top:4px">Approved Annual Leave is deducted from this on the employee's profile.</div>
+        </div>
         <div>
             <label for="status">Status *</label>
             <select id="status" name="status" class="select" required>
-                <option value="active" selected>Active</option>
-                <option value="inactive" >Inactive</option>
-            </select>
+                                    <option value="active" selected>Active</option>
+                                    <option value="inactive" >Inactive</option>
+                                    <option value="on leave" >On leave</option>
+                                    <option value="terminated" >Terminated</option>
+                            </select>
         </div>
-        <div class="full"><label for="address">Address</label><textarea id="address" name="address" class="textarea" placeholder="Supplier address...">Industrial City 2, Riyadh</textarea></div>
     </div>
 </div>
 
     <div class="form-section">
-    <div class="section-title">Payment &amp; Banking</div>
+    <div class="section-title">C. Payroll Information</div>
+    <div class="section-body form-grid three">
+        <div><label for="basic_salary">Basic Salary (SAR) *</label><input id="basic_salary" name="basic_salary" type="number" step="0.01" min="0" class="input" value="0" required/></div>
+        <div><label for="housing_allowance">Housing Allowance</label><input id="housing_allowance" name="housing_allowance" type="number" step="0.01" min="0" class="input" value="0"/></div>
+        <div><label for="transport_allowance">Transport Allowance</label><input id="transport_allowance" name="transport_allowance" type="number" step="0.01" min="0" class="input" value="0"/></div>
+        <div><label for="food_allowance">Food Allowance</label><input id="food_allowance" name="food_allowance" type="number" step="0.01" min="0" class="input" value="0"/></div>
+        <div><label for="fuel_allowance">Fuel Allowance</label><input id="fuel_allowance" name="fuel_allowance" type="number" step="0.01" min="0" class="input" value="0"/></div>
+        <div><label for="other_allowance">Other Allowance</label><input id="other_allowance" name="other_allowance" type="number" step="0.01" min="0" class="input" value="0"/></div>
+        <div>
+            <label for="payment_method">Payment Method *</label>
+            <select id="payment_method" name="payment_method" class="select" required>
+                                    <option value="Bank Transfer" selected>Bank Transfer</option>
+                                    <option value="Cash" >Cash</option>
+                            </select>
+        </div>
+        <div><label for="bank_name">Bank Name</label><input id="bank_name" name="bank_name" class="input" value="" placeholder="Al Rajhi Bank"/></div>
+        <div><label for="iban">IBAN</label><input id="iban" name="iban" class="input" value="" placeholder="SA00 0000 0000 0000"/></div>
+        <div class="full">
+            <div class="help-box">
+                These allowances are the employee default. The payroll run uses the active
+                <a href="http://seera.test/admin/hr/salary-structures" style="color:var(--blue);font-weight:700">salary structure</a>,
+                which is pre-filled from these values and can add further allowance or deduction items.
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="form-section">
+    <div class="section-title">D. Documents &amp;amp; Attachments</div>
+    <div class="section-body ">
+        <div class="help-box">
+            IQAMA, passport, insurance and driving licence numbers and expiry dates are kept here, once, together with the file.
+            The employee list, the HR dashboard and the <a href="http://seera.test/admin/hr/documents" style="color:var(--blue);font-weight:700">Documents register</a> all read these rows.
+            Use <em>Profession / Class</em> for the IQAMA profession or the licence class (private, heavy, light).
+        </div>
+
+        
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="min-width:150px">Document Type</th>
+                        <th style="min-width:150px">Profession / Class</th>
+                        <th style="min-width:140px">Number</th>
+                        <th style="width:160px">Issue Date</th>
+                        <th style="width:160px">Expiry Date</th>
+                        <th style="min-width:200px">File</th>
+                        <th style="width:40px"></th>
+                    </tr>
+                </thead>
+                <tbody id="document-rows">
+                                            <tr data-row-index="0">
+    <td>
+        <select name="documents[0][document_type]" class="select">
+            <option value="">Select type...</option>
+                            <option value="IQAMA" >IQAMA</option>
+                            <option value="Passport" >Passport</option>
+                            <option value="Contract" >Contract</option>
+                            <option value="Medical Insurance" >Medical Insurance</option>
+                            <option value="Driving License" >Driving License</option>
+                            <option value="Other" >Other</option>
+                    </select>
+    </td>
+    <td><input name="documents[0][document_subtype]" class="input" list="document-subtypes" value="" placeholder="Profession / licence class"/></td>
+    <td><input name="documents[0][document_number]" class="input" value=""/></td>
+    <td><input name="documents[0][issue_date]" type="date" class="input" max="2026-09-17" value=""/></td>
+    <td><input name="documents[0][expiry_date]" type="date" class="input" value=""/></td>
+    <td><input name="documents[0][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp"/></td>
+    <td><button type="button" class="row-remove" title="Remove row" aria-label="Remove row">&times;</button></td>
+</tr>
+                                            <tr data-row-index="1">
+    <td>
+        <select name="documents[1][document_type]" class="select">
+            <option value="">Select type...</option>
+                            <option value="IQAMA" >IQAMA</option>
+                            <option value="Passport" >Passport</option>
+                            <option value="Contract" >Contract</option>
+                            <option value="Medical Insurance" >Medical Insurance</option>
+                            <option value="Driving License" >Driving License</option>
+                            <option value="Other" >Other</option>
+                    </select>
+    </td>
+    <td><input name="documents[1][document_subtype]" class="input" list="document-subtypes" value="" placeholder="Profession / licence class"/></td>
+    <td><input name="documents[1][document_number]" class="input" value=""/></td>
+    <td><input name="documents[1][issue_date]" type="date" class="input" max="2026-09-17" value=""/></td>
+    <td><input name="documents[1][expiry_date]" type="date" class="input" value=""/></td>
+    <td><input name="documents[1][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp"/></td>
+    <td><button type="button" class="row-remove" title="Remove row" aria-label="Remove row">&times;</button></td>
+</tr>
+                                            <tr data-row-index="2">
+    <td>
+        <select name="documents[2][document_type]" class="select">
+            <option value="">Select type...</option>
+                            <option value="IQAMA" >IQAMA</option>
+                            <option value="Passport" >Passport</option>
+                            <option value="Contract" >Contract</option>
+                            <option value="Medical Insurance" >Medical Insurance</option>
+                            <option value="Driving License" >Driving License</option>
+                            <option value="Other" >Other</option>
+                    </select>
+    </td>
+    <td><input name="documents[2][document_subtype]" class="input" list="document-subtypes" value="" placeholder="Profession / licence class"/></td>
+    <td><input name="documents[2][document_number]" class="input" value=""/></td>
+    <td><input name="documents[2][issue_date]" type="date" class="input" max="2026-09-17" value=""/></td>
+    <td><input name="documents[2][expiry_date]" type="date" class="input" value=""/></td>
+    <td><input name="documents[2][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp"/></td>
+    <td><button type="button" class="row-remove" title="Remove row" aria-label="Remove row">&times;</button></td>
+</tr>
+                                            <tr data-row-index="3">
+    <td>
+        <select name="documents[3][document_type]" class="select">
+            <option value="">Select type...</option>
+                            <option value="IQAMA" >IQAMA</option>
+                            <option value="Passport" >Passport</option>
+                            <option value="Contract" >Contract</option>
+                            <option value="Medical Insurance" >Medical Insurance</option>
+                            <option value="Driving License" >Driving License</option>
+                            <option value="Other" >Other</option>
+                    </select>
+    </td>
+    <td><input name="documents[3][document_subtype]" class="input" list="document-subtypes" value="" placeholder="Profession / licence class"/></td>
+    <td><input name="documents[3][document_number]" class="input" value=""/></td>
+    <td><input name="documents[3][issue_date]" type="date" class="input" max="2026-09-17" value=""/></td>
+    <td><input name="documents[3][expiry_date]" type="date" class="input" value=""/></td>
+    <td><input name="documents[3][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp"/></td>
+    <td><button type="button" class="row-remove" title="Remove row" aria-label="Remove row">&times;</button></td>
+</tr>
+                                    </tbody>
+            </table>
+        </div>
+        <template id="document-row-template">
+            <tr data-row-index="__INDEX__">
+    <td>
+        <select name="documents[__INDEX__][document_type]" class="select">
+            <option value="">Select type...</option>
+                            <option value="IQAMA" >IQAMA</option>
+                            <option value="Passport" >Passport</option>
+                            <option value="Contract" >Contract</option>
+                            <option value="Medical Insurance" >Medical Insurance</option>
+                            <option value="Driving License" >Driving License</option>
+                            <option value="Other" >Other</option>
+                    </select>
+    </td>
+    <td><input name="documents[__INDEX__][document_subtype]" class="input" list="document-subtypes" value="" placeholder="Profession / licence class"/></td>
+    <td><input name="documents[__INDEX__][document_number]" class="input" value=""/></td>
+    <td><input name="documents[__INDEX__][issue_date]" type="date" class="input" max="2026-09-17" value=""/></td>
+    <td><input name="documents[__INDEX__][expiry_date]" type="date" class="input" value=""/></td>
+    <td><input name="documents[__INDEX__][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp"/></td>
+    <td><button type="button" class="row-remove" title="Remove row" aria-label="Remove row">&times;</button></td>
+</tr>
+        </template>
+        <datalist id="document-subtypes">
+                    </datalist>
+        <div class="dynamic-rows-actions">
+            <button type="button" class="btn outline" id="add-document-row">+ Add Document</button>
+            <span class="small">Attach IQAMA, passport, contract, medical insurance, driving licence or any other file. Rows without a document type are ignored.</span>
+        </div>
+    </div>
+</div>
+
+    <div class="form-section">
+    <div class="section-title">E. Access</div>
     <div class="section-body form-grid three">
         <div>
-            <div class="label-row">
-                <label for="payment_term_id">Payment Terms</label>
-                <span class="quick-create-triggers">
-        <button type="button" class="quick-create-trigger" data-quick-create="qc-payment-term" title="New Payment Term">+ New</button>
-            </span>
-
-    
-                </div>
-            <select id="payment_term_id" name="payment_term_id" class="select">
-                <option value="">Not set</option>
-                                    <option value="1" >Cash</option>
-                                    <option value="2" >15 Days (15 days)</option>
-                                    <option value="3" >30 Days (30 days)</option>
-                                    <option value="5" selected>45 Days (45 days)</option>
-                                    <option value="4" >60 Days (60 days)</option>
+            <label for="user_id">Link User Account</label>
+            <select id="user_id" name="user_id" class="select">
+                <option value="">No linked account</option>
+                                    <option value="6" >Abdullah Mukhtar (abdullah@example.com)</option>
+                                    <option value="8" >Abdullah Shahmeer (shahmeer@example.com)</option>
+                                    <option value="9" >Ayaz (ayaz@example.com)</option>
+                                    <option value="10" >Kamran (kamran@example.com)</option>
+                                    <option value="2" >Nabeel Mukhtar (nabeel@example.com)</option>
+                                    <option value="1" >Omar Mukhtar (admin@example.com)</option>
+                                    <option value="12" >Rizwan (rizwan@example.com)</option>
+                                    <option value="11" >Shaban (shaban@example.com)</option>
+                                    <option value="5" >Waleed (waleed@example.com)</option>
+                                    <option value="7" >Zafar Ali (zafar@example.com)</option>
+                                    <option value="3" >Zubair Ahmed (zubair@example.com)</option>
+                                    <option value="4" >Zulfiqar (zulfiqar@example.com)</option>
                             </select>
-            <div class="small" style="margin-top:4px">Bills without a due date fall due this many days after the bill date.</div>
         </div>
         <div>
-            <label for="allowed_payment_types">Accepted Payment Types</label>
-            <select id="allowed_payment_types" name="allowed_payment_types" class="select">
-                                    <option value="Cash" >Cash</option>
-                                    <option value="Bank" selected>Bank</option>
-                                    <option value="Both" >Both</option>
-                            </select>
-            <div class="small" style="margin-top:4px">Limits the cash / bank accounts offered when recording a payment to this supplier.</div>
+            <label for="mobile_access">Mobile App Access</label>
+            <select id="mobile_access" name="mobile_access" class="select">
+                <option value="1" >Yes</option>
+                <option value="0" selected>No</option>
+            </select>
         </div>
-        <div>
-            <div class="label-row">
-                <label for="linked_account_id">Linked Payable Account</label>
-                <span class="quick-create-triggers">
-        <button type="button" class="quick-create-trigger" data-quick-create="qc-payable-account" title="New Payable Sub-Account">+ New</button>
-            </span>
-
-    
-                </div>
-            <select id="linked_account_id" name="linked_account_id" class="select">
-                                                    <option value="9" >2100 - Accounts Payable</option>
-                                    <option value="25" selected>2101 - Accounts Payable - Saudi Cement Supplier</option>
-                            </select>
-            <div class="small" style="margin-top:4px">Bills, payments and goods receipts for this supplier post to this account.</div>
-        </div>
-        <div><label for="bank_name">Bank Name</label><input id="bank_name" name="bank_name" class="input" value="Al Rajhi Bank" placeholder="Al Rajhi Bank"/></div>
-        <div><label for="bank_account_name">Account Holder Name</label><input id="bank_account_name" name="bank_account_name" class="input" value="Saudi Cement Supplier Co."/></div>
-        <div><label for="iban">IBAN</label><input id="iban" name="iban" class="input" value="SA03 8000 0000 6080 1016 7519" placeholder="SA00 0000 0000 0000 0000 0000"/></div>
-    </div>
-</div>
-
-    <div class="form-section">
-    <div class="section-title">Projects this Supplier Works For</div>
-    <div class="section-body ">
-        <div class="form-grid three">
-                                    <label class="check-line" style="margin:0">
-                        <input class="checkbox" type="checkbox" name="project_ids[]" value="3" />
-                        PRJ-003 — Dammam Road Extension
-                    </label>
-                                    <label class="check-line" style="margin:0">
-                        <input class="checkbox" type="checkbox" name="project_ids[]" value="2" checked/>
-                        PRJ-002 — Jeddah Warehouse
-                    </label>
-                                    <label class="check-line" style="margin:0">
-                        <input class="checkbox" type="checkbox" name="project_ids[]" value="1" checked/>
-                        PRJ-001 — Riyadh Tower
-                    </label>
-                            </div>
-            <div class="small" style="margin-top:10px">Linked suppliers are listed on each project's page.</div>
     </div>
 </div>
 
     <div class="form-actions">
-        <a class="btn outline" href="http://seera.test/admin/master/suppliers">Cancel</a>
-        <button type="submit" class="btn primary">Update Supplier</button>
+        <a class="btn outline" href="http://seera.test/admin/hr/employees">Cancel</a>
+        <button type="submit" class="btn primary">Save Employee</button>
     </div>
 </form>
+
         </section>
     </main>
 </div>
@@ -969,67 +1215,107 @@ tr:hover td { background: #fbfdff; }
         </div>
     </div>
 </div>
-        <div class="modal-overlay quick-create-modal" id="qc-supplier-category" data-target="category" data-url="http://seera.test/admin/master/lookup-values" >
+        <div class="modal-overlay quick-create-modal" id="qc-nationality" data-target="nationality" data-url="http://seera.test/admin/master/lookup-values" >
             <div class="modal-card ">
                 <div class="modal-head">
-                    <span><span class="qc-mode-label">New</span> New Supplier Category</span>
+                    <span><span class="qc-mode-label">New</span> New Nationality</span>
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
                     <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
-                        <div class="form-grid"><div class="full"><label for="qc-cat-value">Category Name *</label><input id="qc-cat-value" name="value" class="input" placeholder="e.g. Scaffolding, Transport" required/></div>
-                    <input type="hidden" name="type" value="supplier_category"/></div>
+                        <div class="form-grid"><div class="full"><label for="qc-nat-value">Nationality *</label><input id="qc-nat-value" name="value" class="input" placeholder="e.g. Jordanian" required/></div>
+                    <input type="hidden" name="type" value="nationality"/></div>
                     </div>
                     <div class="modal-foot">
                         <button type="button" class="btn outline js-qc-close">Cancel</button>
-                        <button type="submit" class="btn primary">Add Category</button>
+                        <button type="submit" class="btn primary">Add Nationality</button>
                     </div>
                 </form>
             </div>
         </div>
-            <div class="modal-overlay quick-create-modal" id="qc-payment-term" data-target="payment_term_id" data-url="http://seera.test/admin/master/payment-terms" >
+            <div class="modal-overlay quick-create-modal" id="qc-department" data-target="department_id" data-url="http://seera.test/admin/master/departments" >
             <div class="modal-card ">
                 <div class="modal-head">
-                    <span><span class="qc-mode-label">New</span> New Payment Term</span>
+                    <span><span class="qc-mode-label">New</span> New Department</span>
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
                     <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
-                        <div class="form-grid"><div><label for="qc-term-name">Name *</label><input id="qc-term-name" name="name" class="input" placeholder="e.g. 45 Days" required/></div>
-                    <div><label for="qc-term-days">Days from bill date *</label><input id="qc-term-days" name="days" type="number" min="0" max="365" class="input" value="30" required/></div>
-                    <div class="full"><label for="qc-term-description">Description</label><input id="qc-term-description" name="description" class="input" placeholder="As agreed with the supplier"/></div>
+                        <div class="form-grid"><div><label for="qc-dept-name">Department Name *</label><input id="qc-dept-name" name="name" class="input" required/></div>
+                    <div><label for="qc-dept-code">Code</label><input id="qc-dept-code" name="code" class="input" placeholder="Auto if blank"/></div>
+                    <div class="full"><label for="qc-dept-description">Description</label><textarea id="qc-dept-description" name="description" class="textarea" rows="2"></textarea></div>
                     <input type="hidden" name="status" value="active"/></div>
                     </div>
                     <div class="modal-foot">
                         <button type="button" class="btn outline js-qc-close">Cancel</button>
-                        <button type="submit" class="btn primary">Add Term</button>
+                        <button type="submit" class="btn primary">Save</button>
                     </div>
                 </form>
             </div>
         </div>
-            <div class="modal-overlay quick-create-modal" id="qc-payable-account" data-target="linked_account_id" data-url="http://seera.test/admin/accounting/chart-of-accounts" >
+            <div class="modal-overlay quick-create-modal" id="qc-designation" data-target="designation_id" data-url="http://seera.test/admin/master/designations" >
             <div class="modal-card ">
                 <div class="modal-head">
-                    <span><span class="qc-mode-label">New</span> New Payable Sub-Account</span>
+                    <span><span class="qc-mode-label">New</span> New Designation</span>
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
                 <form class="quick-create-form" novalidate>
                     <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
-                        <div class="form-grid"><div class="full"><label for="qc-acc-name">Account Name *</label><input id="qc-acc-name" name="account_name" class="input" placeholder="e.g. Accounts Payable - Gulf Steel" required/></div>
-                    <div><label for="qc-acc-code">Account Code</label><input id="qc-acc-code" name="account_code" class="input" placeholder="Auto: next under 2100"/></div>
-                    <div><label for="qc-acc-opening">Opening Balance (SAR)</label><input id="qc-acc-opening" name="opening_balance" type="number" step="0.01" class="input" value="0" required/></div>
-                    <input type="hidden" name="parent_id" value="9"/>
-                    <input type="hidden" name="account_type" value="liability"/>
-                    <input type="hidden" name="normal_balance" value="credit"/>
-                    <input type="hidden" name="status" value="active"/>
-                    <div class="full help-box">Created as a liability sub-account under 2100 - Accounts Payable, so the payables total on the dashboard still includes it.</div></div>
+                        <div class="form-grid"><div class="full"><label for="qc-desig-name">Designation Name *</label><input id="qc-desig-name" name="name" class="input" required/></div>
+                    <div>
+                        <label for="qc-desig-department">Department *</label>
+                        <select id="qc-desig-department" name="department_id" class="select" data-prefill-from="department_id" required>
+                            <option value="">Select...</option>
+                                                            <option value="2">Accounts</option>
+                                                            <option value="1">Administration</option>
+                                                            <option value="3">Human Resource</option>
+                                                            <option value="7">Marketing</option>
+                                                            <option value="4">Projects</option>
+                                                            <option value="6">Purchase</option>
+                                                            <option value="5">Site Operations</option>
+                                                    </select>
+                    </div>
+                    <div>
+                        <label for="qc-desig-grade">Grade / Level</label>
+                        <select id="qc-desig-grade" name="grade" class="select">
+                            <option value="">Select...</option>
+                                                            <option>L1</option>
+                                                            <option>L2</option>
+                                                            <option>L3</option>
+                                                            <option>L4</option>
+                                                            <option>L5</option>
+                                                    </select>
+                    </div>
+                    <input type="hidden" name="status" value="active"/></div>
                     </div>
                     <div class="modal-foot">
                         <button type="button" class="btn outline js-qc-close">Cancel</button>
-                        <button type="submit" class="btn primary">Create Account</button>
+                        <button type="submit" class="btn primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+            <div class="modal-overlay quick-create-modal" id="qc-branch" data-target="branch_id" data-url="http://seera.test/admin/master/branches" >
+            <div class="modal-card ">
+                <div class="modal-head">
+                    <span><span class="qc-mode-label">New</span> New Branch</span>
+                    <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
+                </div>
+                <form class="quick-create-form" novalidate>
+                    <input type="hidden" name="_token" value="4IOzxhs0TuzKpF89pU3zGxSWxVdWa0jOGYwgqO1B" autocomplete="off">                    <div class="modal-body">
+                        <div class="alert qc-error" hidden></div>
+                        <div class="form-grid"><div><label for="qc-branch-name">Branch Name *</label><input id="qc-branch-name" name="name" class="input" required/></div>
+                    <div><label for="qc-branch-code">Code</label><input id="qc-branch-code" name="code" class="input" placeholder="Auto if blank"/></div>
+                    <div><label for="qc-branch-city">City</label><input id="qc-branch-city" name="city" class="input" placeholder="Riyadh"/></div>
+                    <div><label for="qc-branch-phone">Phone</label><input id="qc-branch-phone" name="phone" class="input" placeholder="+966..."/></div>
+                    <input type="hidden" name="status" value="active"/></div>
+                    </div>
+                    <div class="modal-foot">
+                        <button type="button" class="btn outline js-qc-close">Cancel</button>
+                        <button type="submit" class="btn primary">Save</button>
                     </div>
                 </form>
             </div>
@@ -1241,6 +1527,133 @@ tr:hover td { background: #fbfdff; }
             })();
         </script>
             <script>
+        window.seeraDependentSelect = function (parentId, childId, placeholder) {
+            const parent = document.getElementById(parentId);
+            const child = document.getElementById(childId);
+            if (!parent || !child) return;
+
+            // Keep the full option list so filtering is never destructive.
+            const options = Array.from(child.options).map(function (option) {
+                return {
+                    value: option.value,
+                    label: option.textContent,
+                    parent: option.dataset.parent || '',
+                };
+            });
+
+            function render(forceValue) {
+                const selected = parent.value;
+                const current = forceValue || child.value;
+
+                child.innerHTML = '';
+
+                options
+                    .filter(function (option) {
+                        return option.value === '' || !option.parent || !selected || option.parent === selected;
+                    })
+                    .forEach(function (option) {
+                        const element = document.createElement('option');
+                        element.value = option.value;
+                        element.textContent = option.label;
+                        if (option.parent) element.dataset.parent = option.parent;
+                        if (option.value === current) element.selected = true;
+                        child.appendChild(element);
+                    });
+
+                // If the previous choice no longer belongs to this parent, clear it.
+                if (current && child.value !== current) {
+                    child.value = '';
+                }
+
+                if (child.options.length === 1 && child.options[0].value === '') {
+                    child.options[0].textContent = 'No matching ' + placeholder;
+                }
+            }
+
+            parent.addEventListener('change', function () { render(); });
+
+            child.addEventListener('seera:option-added', function (event) {
+                const added = event.detail || {};
+                if (!options.some(function (option) { return option.value === added.value; })) {
+                    options.push({ value: added.value, label: added.label, parent: added.parent || '' });
+                }
+                render(added.value);
+            });
+
+            render();
+        };
+    </script>
+    <script>
+    window.seeraDependentSelect("department_id", "designation_id", "designations");
+</script>
+<script>
+    window.seeraDependentSelect("project_id", "site_id", "sites");
+</script>
+    <script>
+        window.seeraDynamicRows = function (bodyId, templateId, addId, min) {
+            var body = document.getElementById(bodyId);
+            var template = document.getElementById(templateId);
+            var add = document.getElementById(addId);
+            if (!body || !template) return;
+
+            function rows() {
+                return body.querySelectorAll('tr[data-row-index]');
+            }
+
+            function nextIndex() {
+                var max = -1;
+                rows().forEach(function (row) {
+                    max = Math.max(max, parseInt(row.dataset.rowIndex, 10));
+                });
+                return max + 1;
+            }
+
+            function refresh() {
+                var all = rows();
+                all.forEach(function (row) {
+                    var button = row.querySelector('.row-remove');
+                    if (button) button.disabled = all.length <= min;
+                });
+                body.dispatchEvent(new CustomEvent('seera:rows-changed', { bubbles: true }));
+            }
+
+            function addRow() {
+                var index = nextIndex();
+                var holder = document.createElement('tbody');
+                holder.innerHTML = template.innerHTML.replace(/__INDEX__/g, index).trim();
+                var row = holder.querySelector('tr');
+                if (!row) return null;
+                row.dataset.rowIndex = index;
+                body.appendChild(row);
+                refresh();
+                var first = row.querySelector('select, input, textarea');
+                if (first) first.focus();
+                return row;
+            }
+
+            if (add) {
+                add.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    addRow();
+                });
+            }
+
+            body.addEventListener('click', function (event) {
+                var button = event.target.closest('.row-remove');
+                if (!button) return;
+                event.preventDefault();
+                if (rows().length <= min) return;
+                button.closest('tr').remove();
+                refresh();
+            });
+
+            refresh();
+        };
+    </script>
+    <script>
+    window.seeraDynamicRows("document-rows", "document-row-template", "add-document-row", 1);
+</script>
+    <script>
         (function () {
             const sidebar = document.getElementById('admin-sidebar');
             if (!sidebar) return;
