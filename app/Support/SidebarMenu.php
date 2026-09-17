@@ -101,6 +101,15 @@ class SidebarMenu
             ],
             static::inventoryGroup($badges),
             [
+                // Leads → visits → follow-up → manager report (client change request NR-16).
+                'key' => 'marketing',
+                'label' => 'Marketing',
+                'items' => [
+                    static::link('admin.marketing.leads.index', 'admin.marketing.leads.*', '📣', 'Leads & Visits', badge: $badges['followUps']),
+                    static::link('admin.marketing.report', 'admin.marketing.report', '🗒️', 'Visit Report'),
+                ],
+            ],
+            [
                 'key' => 'reports',
                 'label' => 'Reports',
                 'items' => array_values(array_filter([
@@ -260,6 +269,12 @@ class SidebarMenu
                 : 0,
             'lowStock' => Schema::hasTable('warehouse_stocks')
                 ? \App\Models\WarehouseStock::lowStockCount()
+                : 0,
+            'followUps' => Schema::hasTable('marketing_leads') && auth()->check()
+                ? \App\Models\MarketingLead::visibleTo(auth()->user())
+                    ->whereIn('status', \App\Models\MarketingLead::OPEN_STATUSES)
+                    ->whereDate('next_follow_up_date', '<=', today())
+                    ->count()
                 : 0,
         ];
     }

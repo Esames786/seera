@@ -17,4 +17,6 @@ return [
         'Sponsorship' => env('SEERA_EMPLOYEE_CODE_SPONSORSHIP', 'SP-'),
         'Freelancer' => env('SEERA_EMPLOYEE_CODE_FREELANCER', 'FL-'),
     ],
+    // First month of the financial year (1 = January) used by the report quick ranges (NR-21).
+    'financial_year_start_month' => (int) env('SEERA_FINANCIAL_YEAR_START_MONTH', 1),
 ];

@@ -260,6 +260,7 @@ class OrganizationHierarchySeeder extends Seeder
             ],
             'MARKETING_MANAGER' => [
                 'Dashboard' => ['view'],
+                'Marketing' => ['view', 'create', 'edit', 'delete', 'approve', 'export'],
                 'Customers' => ['view', 'create', 'edit', 'export'],
                 'Projects' => ['view'],
                 'Accounts Receivable' => ['view', 'create', 'edit', 'export'],

@@ -79,7 +79,7 @@ class PermissionGroups
         'MKT' => [
             'label' => 'Marketing',
             'modules' => [
-                'Customers', 'Projects', 'Accounts Receivable', 'ZATCA Invoicing',
+                'Marketing', 'Customers', 'Projects', 'Accounts Receivable', 'ZATCA Invoicing',
                 'Financial Reports', 'Reports',
             ],
         ],

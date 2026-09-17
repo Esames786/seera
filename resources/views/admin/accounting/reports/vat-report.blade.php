@@ -9,6 +9,8 @@
         <a class="btn outline" href="{{ route('admin.accounting.reports.index') }}">All Reports</a>
     </x-admin.page-header>
 
+    @include('admin.accounting.reports._filters', ['showScope' => false, 'showVatStatus' => true])
+
     <div class="card-grid">
         <x-admin.metric-card color="blue" :value="'SAR '.number_format($totalOutputVat, 2)" label="Total Output VAT"/>
         <x-admin.metric-card color="cyan" :value="'SAR '.number_format($totalInputVat, 2)" label="Total Input VAT"/>
@@ -34,7 +36,7 @@
                     <td><x-admin.status-badge :status="$period->status"/></td>
                 </tr>
             @empty
-                <tr><td colspan="9" class="table-empty">No VAT periods defined yet.</td></tr>
+                <tr><td colspan="9" class="table-empty">No VAT periods in the selected range.</td></tr>
             @endforelse
         </tbody>
         <x-slot:footer>

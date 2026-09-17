@@ -63,6 +63,7 @@ class EnsureUserHasPermission
         'inventory.stock-issues' => 'Stock Issues',
         'inventory.stock-transfers' => 'Stock Transfers',
         'inventory.stock-adjustments' => 'Stock Adjustments',
+        'marketing' => 'Marketing',
     ];
 
     /**
@@ -134,7 +135,7 @@ class EnsureUserHasPermission
         $suffix = str($name)->afterLast('.')->toString();
         $action = match ($suffix) {
             'create', 'store' => 'create',
-            'edit', 'update', 'cancel' => 'edit',
+            'edit', 'update', 'cancel', 'convert' => 'edit',
             'destroy' => 'delete',
             'approve', 'finalize', 'reopen' => 'approve',
             'reject' => 'reject',

@@ -14,11 +14,13 @@ use RuntimeException;
  * Runs ProductionSeeder (permission catalogue, Super Admin, the bootstrap
  * administrator from SEERA_ADMIN_* in .env, company profile), then
  * ProductionChartOfAccountsSeeder (standard chart of accounts with zero
- * balances, posting rules, current VAT period), then
- * OrganizationHierarchySeeder (departments, roles, designations and the twelve
- * organisation-chart accounts on SEERA_ORG_EMAIL_DOMAIN with the shared default
- * password and a forced change at first login). No demo data is created and
- * every step is idempotent, so it can be re-run after a partial setup.
+ * balances, posting rules, current VAT period), ProductionHrDefaultsSeeder
+ * (leave types), OrganizationHierarchySeeder (departments, roles, designations
+ * and the twelve organisation-chart accounts on SEERA_ORG_EMAIL_DOMAIN with the
+ * shared default password and a forced change at first login) and finally
+ * MarketingModuleSeeder (Marketing permissions for Super Admin and the Marketing
+ * Manager). No demo data is created and every step is idempotent, so it can be
+ * re-run after a partial setup or after an upgrade that adds a module.
  */
 class ProductionBootstrapSeeder extends Seeder
 {
@@ -37,6 +39,7 @@ class ProductionBootstrapSeeder extends Seeder
         $this->call(ProductionChartOfAccountsSeeder::class);
         $this->call(ProductionHrDefaultsSeeder::class);
         $this->call(OrganizationHierarchySeeder::class);
+        $this->call(MarketingModuleSeeder::class);
 
         $this->command?->newLine();
         $this->command?->info('Production bootstrap complete: '.User::count().' login accounts.');

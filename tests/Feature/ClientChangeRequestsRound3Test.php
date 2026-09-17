@@ -6,8 +6,12 @@ use App\Models\ActivityLog;
 use App\Models\ChartOfAccount;
 use App\Models\Customer;
 use App\Models\CustomerInvoice;
+use App\Models\Department;
 use App\Models\Employee;
 use App\Models\JournalEntry;
+use App\Models\MarketingLead;
+use App\Models\Permission;
+use App\Models\Role;
 use App\Models\SupplierBill;
 use App\Models\Project;
 use App\Models\Shift;
@@ -643,5 +647,153 @@ class ClientChangeRequestsRound3Test extends TestCase
         $invoice->refresh();
         $this->assertSame('unpaid', $invoice->payment_status);
         $this->assertSame('pending', $invoice->zatcaRecord->clearance_status);
+    }
+
+    // NR-20 / NR-21 -----------------------------------------------------------
+
+    public function test_reports_offer_quick_date_ranges_and_csv_export_of_the_same_values(): void
+    {
+        $admin = $this->user('admin@example.com');
+
+        // A preset resolves to explicit dates that are shown back to the user.
+        $quarterStart = now()->startOfQuarter()->toDateString();
+        $quarterEnd = now()->endOfQuarter()->toDateString();
+        $this->actingAs($admin)->get(route('admin.accounting.reports.trial-balance', ['preset' => 'this_quarter']))
+            ->assertOk()
+            ->assertSee('This Quarter: '.$quarterStart.' to '.$quarterEnd)
+            ->assertSee('Export Excel (CSV)');
+
+        // The CSV carries the same filtered figures.
+        $response = $this->actingAs($admin)->get(route('admin.accounting.reports.trial-balance', ['preset' => 'this_quarter', 'export' => 'csv']));
+        $response->assertOk()->assertHeader('content-type', 'text/csv; charset=UTF-8');
+        $this->assertStringContainsString('trial-balance-'.$quarterStart.'-to-'.$quarterEnd.'.csv', $response->headers->get('content-disposition'));
+        $csv = $response->streamedContent();
+        $this->assertStringContainsString('Code,Account,Type,"Debit Balance (SAR)","Credit Balance (SAR)"', $csv);
+        $this->assertStringContainsString('1120,"Bank Account",Asset,', $csv);
+        $this->assertStringContainsString(',Totals,', $csv);
+
+        foreach (['balance-sheet', 'profit-loss', 'cash-flow', 'vat-report', 'project-cost-report'] as $report) {
+            $this->actingAs($admin)->get(route('admin.accounting.reports.'.$report, ['preset' => 'this_year', 'export' => 'csv']))
+                ->assertOk()->assertHeader('content-type', 'text/csv; charset=UTF-8');
+        }
+
+        // The VAT report honours the range: Q3 2026 overlaps July-September, Q2 does not.
+        $this->actingAs($admin)->get(route('admin.accounting.reports.vat-report', ['from' => '2026-07-01', 'to' => '2026-09-30']))
+            ->assertOk()->assertSee('Q3 2026')->assertDontSee('Q2 2026');
+        $this->actingAs($admin)->get(route('admin.accounting.reports.vat-report', ['from' => '2027-01-01', 'to' => '2027-03-31']))
+            ->assertOk()->assertSee('No VAT periods in the selected range');
+
+        // A custom range is echoed as typed; garbage dates are ignored instead of crashing.
+        $this->actingAs($admin)->get(route('admin.accounting.reports.profit-loss', ['from' => '2026-01-01', 'to' => '2026-01-31']))
+            ->assertOk()->assertSee('2026-01-01 to 2026-01-31');
+        $this->actingAs($admin)->get(route('admin.accounting.reports.profit-loss', ['from' => 'not-a-date']))->assertOk();
+    }
+
+    // NR-16 -----------------------------------------------------------------
+
+    private function marketingExecutive(): User
+    {
+        $department = Department::where('code', 'MKT')->firstOrFail();
+        $managerRole = Role::where('code', 'MARKETING_MANAGER')->firstOrFail();
+
+        $role = Role::create([
+            'name' => 'Marketing Executive', 'code' => 'MARKETING_EXEC', 'department_id' => $department->id,
+            'parent_id' => $managerRole->id, 'level' => 3, 'access_scope' => 'Company Level',
+            'default_dashboard' => 'Admin Dashboard', 'status' => 'active',
+        ]);
+        $role->permissions()->attach(Permission::where('module', 'Marketing')->whereIn('action', ['view', 'create', 'edit'])->pluck('id'));
+        $role->permissions()->attach(Permission::where('module', 'Dashboard')->where('action', 'view')->pluck('id'));
+
+        $user = User::create([
+            'name' => 'Sara Executive', 'email' => 'sara@example.com', 'username' => 'sara.exec',
+            'password' => 'a-strong-password-123', 'status' => 'active',
+        ]);
+        $user->roles()->attach($role->id, ['is_primary' => true]);
+
+        return $user;
+    }
+
+    public function test_marketing_leads_flow_from_assignment_through_visits_to_a_customer(): void
+    {
+        $manager = $this->user('abdullah@example.com'); // Marketing Manager
+        $executive = $this->marketingExecutive();
+
+        // The module is visible to marketing, closed to others.
+        $this->actingAs($manager)->get(route('admin.dashboard'))->assertOk()->assertSee('Leads &amp; Visits', false);
+        $this->actingAs($this->user('zubair@example.com'))->get(route('admin.marketing.leads.index'))->assertForbidden();
+
+        // 1. The manager creates a lead and assigns it.
+        $this->actingAs($manager)->post(route('admin.marketing.leads.store'), [
+            'company_name' => 'Al Noor Real Estate', 'contact_name' => 'Eng. Faisal', 'contact_title' => 'Project Manager',
+            'contact_phone' => '0501234567', 'city' => 'Riyadh', 'location' => 'Olaya District, Riyadh',
+            'source' => 'Referral', 'requirement' => 'Villa compound, 12 units', 'estimated_value' => 2500000,
+            'assigned_to' => $executive->id, 'next_follow_up_date' => now()->addDays(3)->toDateString(),
+        ])->assertSessionHasNoErrors();
+
+        $lead = MarketingLead::where('company_name', 'Al Noor Real Estate')->firstOrFail();
+        $this->assertSame('LD-001', $lead->lead_code);
+        $this->assertSame('assigned', $lead->status);
+        $this->assertSame($manager->id, $lead->created_by);
+
+        $this->actingAs($manager)->post(route('admin.marketing.leads.store'), ['company_name' => 'Unassigned Prospect'])->assertSessionHasNoErrors();
+        $hidden = MarketingLead::where('company_name', 'Unassigned Prospect')->firstOrFail();
+        $this->assertSame('new', $hidden->status);
+
+        // 2. The executive sees only their own lead.
+        $this->actingAs($executive)->get(route('admin.marketing.leads.index'))
+            ->assertOk()->assertSee('Al Noor Real Estate')->assertDontSee('Unassigned Prospect');
+        $this->actingAs($executive)->get(route('admin.marketing.leads.show', $hidden))->assertNotFound();
+        $this->actingAs($manager)->get(route('admin.marketing.leads.index'))
+            ->assertOk()->assertSee('Al Noor Real Estate')->assertSee('Unassigned Prospect');
+
+        // 3. A visit is recorded: person met, outcome and follow-up drive the lead status.
+        $this->actingAs($executive)->post(route('admin.marketing.leads.visits.store', $lead), [
+            'visit_date' => now()->addDay()->toDateString(), 'person_met' => 'Eng. Faisal', 'outcome' => 'follow_up',
+        ])->assertSessionHasErrors('visit_date');
+
+        $this->actingAs($executive)->post(route('admin.marketing.leads.visits.store', $lead), [
+            'visit_date' => now()->toDateString(), 'visit_time' => '10:30', 'person_met' => 'Eng. Faisal', 'person_title' => 'Project Manager',
+            'outcome' => 'quotation_requested', 'remarks' => 'Wants a quotation for phase 1 by next week.',
+            'next_follow_up_date' => now()->addDays(7)->toDateString(), 'next_action' => 'Send quotation',
+        ])->assertSessionHasNoErrors();
+
+        $lead->refresh();
+        $this->assertSame('follow_up', $lead->status);
+        $this->assertSame(now()->addDays(7)->toDateString(), $lead->next_follow_up_date->toDateString());
+        $this->assertSame($executive->id, $lead->visits()->first()->user_id);
+
+        $this->actingAs($executive)->get(route('admin.marketing.leads.show', $lead))
+            ->assertOk()->assertSee('Eng. Faisal')->assertSee('Quotation requested')->assertSee('Send quotation')->assertSee('10:30');
+
+        // 4. The manager's report lists the visit and exports the same rows.
+        $this->actingAs($manager)->get(route('admin.marketing.report', ['preset' => 'this_month']))
+            ->assertOk()->assertSee('Al Noor Real Estate')->assertSee('Olaya District, Riyadh')->assertSee('Sara Executive')->assertSee('This Month');
+        $csv = $this->actingAs($manager)->get(route('admin.marketing.report', ['preset' => 'this_month', 'export' => 'csv']));
+        $csv->assertOk()->assertHeader('content-type', 'text/csv; charset=UTF-8');
+        $this->assertStringContainsString('Date,Time,Lead,Client,Location,"Person Met"', $csv->streamedContent());
+        $this->assertStringContainsString('Al Noor Real Estate', $csv->streamedContent());
+
+        // 5. Won: the lead closes and becomes a customer; no more visits afterwards.
+        $this->actingAs($executive)->post(route('admin.marketing.leads.visits.store', $lead), [
+            'visit_date' => now()->toDateString(), 'person_met' => 'Eng. Faisal', 'outcome' => 'won', 'remarks' => 'Contract signed.',
+        ])->assertSessionHasNoErrors();
+        $this->assertSame('won', $lead->fresh()->status);
+        $this->assertNull($lead->fresh()->next_follow_up_date);
+
+        $this->actingAs($executive)->post(route('admin.marketing.leads.visits.store', $lead), [
+            'visit_date' => now()->toDateString(), 'person_met' => 'Someone', 'outcome' => 'follow_up',
+        ])->assertSessionHasErrors('visit');
+
+        $this->actingAs($manager)->post(route('admin.marketing.leads.convert', $lead))->assertSessionHasNoErrors();
+        $lead->refresh();
+        $this->assertNotNull($lead->customer_id);
+        $this->assertSame('Al Noor Real Estate', $lead->customer->name);
+        $this->assertSame('Eng. Faisal', $lead->customer->contact_person);
+        $this->actingAs($manager)->get(route('admin.master.customers.show', $lead->customer))->assertOk()->assertSee('Al Noor Real Estate');
+
+        // Staff cannot delete; the manager can.
+        $this->actingAs($executive)->delete(route('admin.marketing.leads.destroy', $lead))->assertForbidden();
+        $this->actingAs($manager)->delete(route('admin.marketing.leads.destroy', $hidden))->assertRedirect(route('admin.marketing.leads.index'));
+        $this->assertDatabaseMissing('marketing_leads', ['id' => $hidden->id]);
     }
 }

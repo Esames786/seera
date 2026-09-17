@@ -19,6 +19,7 @@ class Permission extends Model
         'Warehouse Stock', 'Purchase Requests', 'Purchase Orders',
         'Goods Receipts', 'Stock Issues', 'Stock Transfers',
         'Stock Adjustments', 'Stock Ledger', 'Inventory Reports',
+        'Marketing',
     ];
 
     /**

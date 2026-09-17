@@ -281,6 +281,8 @@ class DatabaseSeeder extends Seeder
             ],
             $marketingManager->id => [
                 'Dashboard' => ['view'],
+                // Owns the lead → visit → follow-up workflow and its report (NR-16); "approve" = sees every lead.
+                'Marketing' => ['view', 'create', 'edit', 'delete', 'approve', 'export'],
                 'Customers' => ['view', 'create', 'edit'],
                 'Projects' => ['view'],
                 'Reports' => ['view', 'export'],

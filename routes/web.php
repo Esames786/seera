@@ -43,6 +43,8 @@ use App\Http\Controllers\Admin\Master\CustomerController;
 use App\Http\Controllers\Admin\Master\DepartmentController;
 use App\Http\Controllers\Admin\Master\DesignationController;
 use App\Http\Controllers\Admin\Master\ExpenseCategoryController;
+use App\Http\Controllers\Admin\Marketing\MarketingLeadController;
+use App\Http\Controllers\Admin\Marketing\MarketingReportController;
 use App\Http\Controllers\Admin\Master\LookupValueController;
 use App\Http\Controllers\Admin\Master\OrganizationStructureController;
 use App\Http\Controllers\Admin\Master\PaymentTermController;
@@ -226,6 +228,14 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
     });
 
     // Inventory & Warehouse (Phase 6)
+    // Marketing: leads → visits → follow-up → manager report (NR-16).
+    Route::prefix('marketing')->name('marketing.')->group(function () {
+        Route::get('report', [MarketingReportController::class, 'index'])->name('report');
+        Route::resource('leads', MarketingLeadController::class);
+        Route::post('leads/{lead}/visits', [MarketingLeadController::class, 'storeVisit'])->name('leads.visits.store');
+        Route::post('leads/{lead}/convert', [MarketingLeadController::class, 'convert'])->name('leads.convert');
+    });
+
     Route::prefix('inventory')->name('inventory.')->group(function () {
         Route::get('dashboard', [InventoryDashboardController::class, 'index'])->name('dashboard');
 
