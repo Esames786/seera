@@ -9,7 +9,7 @@ class EmployeeDocument extends Model
     public const TYPES = ['IQAMA', 'Passport', 'Contract', 'Medical Insurance', 'Driving License', 'Other'];
 
     protected $fillable = [
-        'employee_id', 'document_type', 'document_number', 'issue_date',
+        'employee_id', 'document_type', 'document_subtype', 'document_number', 'issue_date',
         'expiry_date', 'file_path', 'status', 'notes',
     ];
 

@@ -152,6 +152,11 @@
         <div><label for="contract_start_date">Contract Start</label><input id="contract_start_date" name="contract_start_date" type="date" class="input" value="{{ old('contract_start_date', $employee?->contract_start_date?->toDateString()) }}"/></div>
         <div><label for="contract_end_date">Contract End</label><input id="contract_end_date" name="contract_end_date" type="date" class="input" value="{{ old('contract_end_date', $employee?->contract_end_date?->toDateString()) }}"/></div>
         <div>
+            <label for="annual_leave_entitlement">Annual Leave Entitlement (days / year)</label>
+            <input id="annual_leave_entitlement" name="annual_leave_entitlement" type="number" min="0" max="365" class="input" value="{{ old('annual_leave_entitlement', $employee?->annual_leave_entitlement ?? 21) }}"/>
+            <div class="small" style="margin-top:4px">Approved Annual Leave is deducted from this on the employee's profile.</div>
+        </div>
+        <div>
             <label for="status">Status *</label>
             <select id="status" name="status" class="select" required>
                 @foreach (['active', 'inactive', 'on leave', 'terminated'] as $status)
@@ -161,25 +166,7 @@
         </div>
     </x-admin.form-section>
 
-    <x-admin.form-section title="C. Documents" columns="3">
-        <div><label for="iqama_number">IQAMA Number</label><input id="iqama_number" name="iqama_number" class="input" value="{{ old('iqama_number', $employee?->iqama_number) }}" placeholder="245XXXXXXX"/></div>
-        <div><label for="iqama_expiry_date">IQAMA Expiry Date</label><input id="iqama_expiry_date" name="iqama_expiry_date" type="date" class="input" value="{{ old('iqama_expiry_date', $employee?->iqama_expiry_date?->toDateString()) }}"/></div>
-        <div><label for="passport_number">Passport Number</label><input id="passport_number" name="passport_number" class="input" value="{{ old('passport_number', $employee?->passport_number) }}" placeholder="AB1234567"/></div>
-        <div><label for="passport_expiry_date">Passport Expiry Date</label><input id="passport_expiry_date" name="passport_expiry_date" type="date" class="input" value="{{ old('passport_expiry_date', $employee?->passport_expiry_date?->toDateString()) }}"/></div>
-        <div><label for="insurance_number">Insurance Number</label><input id="insurance_number" name="insurance_number" class="input" value="{{ old('insurance_number', $employee?->insurance_number) }}" placeholder="INS-000000"/></div>
-        <div><label for="insurance_expiry_date">Insurance Expiry Date</label><input id="insurance_expiry_date" name="insurance_expiry_date" type="date" class="input" value="{{ old('insurance_expiry_date', $employee?->insurance_expiry_date?->toDateString()) }}"/></div>
-        <div><label for="driving_license_number">Driving License Number</label><input id="driving_license_number" name="driving_license_number" class="input" value="{{ old('driving_license_number', $employee?->driving_license_number) }}" placeholder="DL-000000"/></div>
-        <div><label for="driving_license_expiry_date">Driving License Expiry</label><input id="driving_license_expiry_date" name="driving_license_expiry_date" type="date" class="input" value="{{ old('driving_license_expiry_date', $employee?->driving_license_expiry_date?->toDateString()) }}"/></div>
-        <div class="full">
-            <div class="help-box">
-                Numbers and expiry dates are kept here. Upload the files in Section E below. The
-                <a href="{{ route('admin.hr.documents.index') }}" style="color:var(--blue);font-weight:700">Employee Documents</a>
-                screen is a read-only register of IQAMA, passport, contract, insurance, driving license and other files.
-            </div>
-        </div>
-    </x-admin.form-section>
-
-    <x-admin.form-section title="D. Payroll Information" columns="3">
+    <x-admin.form-section title="C. Payroll Information" columns="3">
         <div><label for="basic_salary">Basic Salary (SAR) *</label><input id="basic_salary" name="basic_salary" type="number" step="0.01" min="0" class="input" value="{{ old('basic_salary', $employee?->basic_salary ?? 0) }}" required/></div>
         <div><label for="housing_allowance">Housing Allowance</label><input id="housing_allowance" name="housing_allowance" type="number" step="0.01" min="0" class="input" value="{{ old('housing_allowance', $employee?->housing_allowance ?? 0) }}"/></div>
         <div><label for="transport_allowance">Transport Allowance</label><input id="transport_allowance" name="transport_allowance" type="number" step="0.01" min="0" class="input" value="{{ old('transport_allowance', $employee?->transport_allowance ?? 0) }}"/></div>
@@ -205,13 +192,64 @@
         </div>
     </x-admin.form-section>
 
-    <x-admin.form-section title="E. Document Attachments">
+    <x-admin.form-section title="D. Documents &amp; Attachments">
+        <div class="help-box">
+            IQAMA, passport, insurance and driving licence numbers and expiry dates are kept here, once, together with the file.
+            The employee list, the HR dashboard and the <a href="{{ route('admin.hr.documents.index') }}" style="color:var(--blue);font-weight:700">Documents register</a> all read these rows.
+            Use <em>Profession / Class</em> for the IQAMA profession or the licence class (private, heavy, light).
+        </div>
+
+        @if ($employee && $employee->documents->isNotEmpty())
+            <div class="small" style="margin-bottom:6px"><strong>Already attached.</strong> Change the details or choose a new file to renew a document; expiry alerts follow these values.</div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="min-width:150px">Document Type</th>
+                            <th style="min-width:150px">Profession / Class</th>
+                            <th style="min-width:140px">Number</th>
+                            <th style="width:160px">Issue Date</th>
+                            <th style="width:160px">Expiry Date</th>
+                            <th>Validity</th>
+                            <th style="min-width:200px">File</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($employee->documents as $document)
+                            @php $key = "existing_documents.{$document->id}"; @endphp
+                            <tr>
+                                <td>{{ $document->document_type }}</td>
+                                <td><input name="existing_documents[{{ $document->id }}][document_subtype]" class="input" list="document-subtypes" value="{{ old("$key.document_subtype", $document->document_subtype) }}" placeholder="Profession / licence class"/></td>
+                                <td><input name="existing_documents[{{ $document->id }}][document_number]" class="input" value="{{ old("$key.document_number", $document->document_number) }}"/></td>
+                                <td><input name="existing_documents[{{ $document->id }}][issue_date]" type="date" class="input" max="{{ now()->toDateString() }}" value="{{ old("$key.issue_date", $document->issue_date?->toDateString()) }}"/></td>
+                                <td><input name="existing_documents[{{ $document->id }}][expiry_date]" type="date" class="input" value="{{ old("$key.expiry_date", $document->expiry_date?->toDateString()) }}"/></td>
+                                <td><x-admin.status-badge :status="$document->validityStatus()"/></td>
+                                <td>
+                                    @if ($document->file_path)
+                                        <a href="{{ route('admin.hr.documents.download', $document) }}" style="color:var(--blue);font-weight:700">Download current</a>
+                                    @else
+                                        <span class="small">No file yet</span>
+                                    @endif
+                                    <input name="existing_documents[{{ $document->id }}][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp" title="Choose a file to replace the current one" style="margin-top:4px"/>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            @error('existing_documents.*.file')<div class="field-error">{{ $message }}</div>@enderror
+            @error('existing_documents.*.expiry_date')<div class="field-error">{{ $message }}</div>@enderror
+            <br/>
+            <div class="small" style="margin-bottom:6px"><strong>Add documents</strong></div>
+        @endif
+
         <div class="table-wrap">
             <table>
                 <thead>
                     <tr>
-                        <th style="min-width:170px">Document Type</th>
-                        <th style="min-width:150px">Number</th>
+                        <th style="min-width:150px">Document Type</th>
+                        <th style="min-width:150px">Profession / Class</th>
+                        <th style="min-width:140px">Number</th>
                         <th style="width:160px">Issue Date</th>
                         <th style="width:160px">Expiry Date</th>
                         <th style="min-width:200px">File</th>
@@ -228,43 +266,21 @@
         <template id="document-row-template">
             @include('admin.hr.employees._document-row', ['i' => '__INDEX__'])
         </template>
+        <datalist id="document-subtypes">
+            @foreach ($documentSubtypes as $subtype)
+                <option value="{{ $subtype }}"></option>
+            @endforeach
+        </datalist>
         <div class="dynamic-rows-actions">
             <button type="button" class="btn outline" id="add-document-row">+ Add Document</button>
-            <span class="small">Attach IQAMA, passport, contract, medical insurance, driving license or any other file. Rows without a document type are ignored.</span>
+            <span class="small">Attach IQAMA, passport, contract, medical insurance, driving licence or any other file. Rows without a document type are ignored.</span>
         </div>
         @error('documents.*.file')<div class="field-error">{{ $message }}</div>@enderror
+        @error('documents.*.issue_date')<div class="field-error">{{ $message }}</div>@enderror
         @error('documents.*.expiry_date')<div class="field-error">{{ $message }}</div>@enderror
-
-        @if ($employee && $employee->documents->isNotEmpty())
-            <br/>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr><th>Already Attached</th><th>Number</th><th>Expiry</th><th>Validity</th><th>File</th></tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($employee->documents as $document)
-                            <tr>
-                                <td>{{ $document->document_type }}</td>
-                                <td>{{ $document->document_number ?? '-' }}</td>
-                                <td>{{ $document->expiry_date?->toDateString() ?? '-' }}</td>
-                                <td><x-admin.status-badge :status="$document->validityStatus()"/></td>
-                                <td>
-                                    @if ($document->file_path)
-                                        <a href="{{ route('admin.hr.documents.download', $document) }}" style="color:var(--blue);font-weight:700">Download</a>
-                                    @else
-                                        <span class="small">Not uploaded</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
     </x-admin.form-section>
 
-    <x-admin.form-section title="F. Access" columns="3">
+    <x-admin.form-section title="E. Access" columns="3">
         <div>
             <label for="user_id">Link User Account</label>
             <select id="user_id" name="user_id" class="select">

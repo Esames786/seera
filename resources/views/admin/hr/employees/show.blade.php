@@ -97,7 +97,7 @@
         <tbody>
             @forelse ($employee->documents as $document)
                 <tr>
-                    <td>{{ $document->document_type }}</td>
+                    <td>{{ $document->document_type }}@if($document->document_subtype) <span class="small">· {{ $document->document_subtype }}</span>@endif</td>
                     <td>{{ $document->document_number ?? '-' }}</td>
                     <td>{{ $document->issue_date?->toDateString() ?? '-' }}</td>
                     <td>{{ $document->expiry_date?->toDateString() ?? '-' }}</td>
@@ -134,21 +134,27 @@
     </x-admin.data-table>
 
     <div class="split even">
-        <x-admin.data-table title="Leave Requests" id="leaves">
+        <x-admin.data-table title="Leave Data" :subtitle="'Annual leave '.$leaveBalance['year']" id="leaves">
             <thead>
-                <tr><th>Type</th><th>Start</th><th>End</th><th>Days</th><th>Status</th></tr>
+                <tr><th>Entitlement</th><th>Used (approved)</th><th>Awaiting approval</th><th>Remaining</th></tr>
             </thead>
             <tbody>
+                <tr>
+                    <td><strong>{{ $leaveBalance['entitlement'] }}</strong> days</td>
+                    <td>{{ rtrim(rtrim(number_format($leaveBalance['used'], 1), '0'), '.') }} days</td>
+                    <td>{{ rtrim(rtrim(number_format($leaveBalance['pending'], 1), '0'), '.') }} days</td>
+                    <td><strong style="color:{{ $leaveBalance['remaining'] < 0 ? 'var(--red)' : 'var(--green)' }}">{{ rtrim(rtrim(number_format($leaveBalance['remaining'], 1), '0'), '.') }}</strong> days</td>
+                </tr>
+                <tr><th>Type</th><th>Start → End</th><th>Days</th><th>Status</th></tr>
                 @forelse ($leaves as $leave)
                     <tr>
-                        <td>{{ $leave->leaveType->name }}</td>
-                        <td>{{ $leave->start_date->toDateString() }}</td>
-                        <td>{{ $leave->end_date->toDateString() }}</td>
+                        <td>{{ $leave->leaveType->name }}@if($leave->attachment_path) <a href="{{ route('admin.hr.leaves.attachment', $leave) }}" title="Supporting document" style="color:var(--blue)">📎</a>@endif</td>
+                        <td>{{ $leave->start_date->toDateString() }} → {{ $leave->end_date->toDateString() }}</td>
                         <td>{{ rtrim(rtrim((string) $leave->total_days, '0'), '.') }}</td>
                         <td><x-admin.status-badge :status="$leave->status"/></td>
                     </tr>
                 @empty
-                    <tr><td colspan="5" class="table-empty">No leave requests yet.</td></tr>
+                    <tr><td colspan="4" class="table-empty">No leave taken or requested yet.</td></tr>
                 @endforelse
             </tbody>
         </x-admin.data-table>

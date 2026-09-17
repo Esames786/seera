@@ -10,7 +10,7 @@ class LeaveRequest extends Model
 
     protected $fillable = [
         'employee_id', 'leave_type_id', 'start_date', 'end_date', 'total_days',
-        'reason', 'status', 'approved_by', 'approved_at', 'rejection_reason',
+        'reason', 'attachment_path', 'attachment_name', 'status', 'approved_by', 'approved_at', 'rejection_reason',
     ];
 
     protected function casts(): array

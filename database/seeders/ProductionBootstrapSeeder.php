@@ -35,6 +35,7 @@ class ProductionBootstrapSeeder extends Seeder
 
         $this->call(ProductionSeeder::class);
         $this->call(ProductionChartOfAccountsSeeder::class);
+        $this->call(ProductionHrDefaultsSeeder::class);
         $this->call(OrganizationHierarchySeeder::class);
 
         $this->command?->newLine();

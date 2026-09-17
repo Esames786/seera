@@ -53,6 +53,18 @@
                 <option value="{{ $status }}" @selected(request('status') === $status)>{{ ucfirst($status) }}</option>
             @endforeach
         </select>
+        <select class="select" style="width:160px" name="doc_type">
+            <option value="">Any document</option>
+            @foreach ($documentTypes as $type)
+                <option value="{{ $type }}" @selected(request('doc_type') === $type)>{{ $type }}</option>
+            @endforeach
+        </select>
+        <select class="select" style="width:170px" name="doc_status">
+            <option value="">Document validity</option>
+            <option value="expired" @selected(request('doc_status') === 'expired')>Expired</option>
+            <option value="expiring" @selected(request('doc_status') === 'expiring')>Expiring in 60 days</option>
+            <option value="valid" @selected(request('doc_status') === 'valid')>Valid</option>
+        </select>
         <x-slot:actions>
             <a class="btn outline" href="{{ route('admin.hr.employees.index') }}">Reset</a>
         </x-slot:actions>

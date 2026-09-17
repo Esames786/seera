@@ -161,6 +161,7 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
 
         Route::post('leaves/{leave_request}/approve', [LeaveRequestController::class, 'approve'])->name('leaves.approve');
         Route::post('leaves/{leave_request}/reject', [LeaveRequestController::class, 'reject'])->name('leaves.reject');
+        Route::get('leaves/{leave_request}/attachment', [LeaveRequestController::class, 'attachment'])->name('leaves.attachment');
         Route::resource('leaves', LeaveRequestController::class)->parameters(['leaves' => 'leave_request']);
 
         Route::post('overtime/{overtime_record}/approve', [OvertimeController::class, 'approve'])->name('overtime.approve');

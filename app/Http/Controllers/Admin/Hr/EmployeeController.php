@@ -40,11 +40,23 @@ class EmployeeController extends Controller
             ->when($request->filled('project'), fn ($q) => $q->where('project_id', $request->integer('project')))
             ->when($request->filled('site'), fn ($q) => $q->where('site_id', $request->integer('site')))
             ->when($request->filled('status'), fn ($q) => $q->where('status', $request->string('status')))
+            // Document filters on the employee list (client change request NR-14).
+            ->when($request->filled('doc_status') || $request->filled('doc_type'), function ($query) use ($request) {
+                $today = now()->startOfDay();
+                $query->whereHas('documents', function ($documents) use ($request, $today) {
+                    $documents->where('status', 'active')
+                        ->when($request->filled('doc_type'), fn ($q) => $q->where('document_type', $request->string('doc_type')))
+                        ->when($request->string('doc_status')->toString() === 'expired', fn ($q) => $q->whereNotNull('expiry_date')->whereDate('expiry_date', '<', $today))
+                        ->when($request->string('doc_status')->toString() === 'expiring', fn ($q) => $q->whereNotNull('expiry_date')->whereDate('expiry_date', '>=', $today)->whereDate('expiry_date', '<=', $today->copy()->addDays(60)))
+                        ->when($request->string('doc_status')->toString() === 'valid', fn ($q) => $q->whereNotNull('expiry_date')->whereDate('expiry_date', '>', $today->copy()->addDays(60)));
+                });
+            })
             ->orderBy('employee_code')
             ->paginate(10)
             ->withQueryString();
 
         return view('admin.hr.employees.index', [
+            'documentTypes' => \App\Models\EmployeeDocument::TYPES,
             'employees' => $employees,
             'totalEmployees' => Employee::count(),
             'activeEmployees' => Employee::where('status', 'active')->count(),
@@ -70,6 +82,7 @@ class EmployeeController extends Controller
             $employee = DB::transaction(function () use ($request, $data, $documents, &$storedPaths) {
                 $employee = Employee::create($data);
                 $this->syncDocuments($request, $employee, $documents, $storedPaths);
+                $employee->syncDocumentSummary();
                 $this->syncUserClassification($employee);
 
                 return $employee;
@@ -96,7 +109,8 @@ class EmployeeController extends Controller
         return view('admin.hr.employees.show', [
             'employee' => $employee,
             'attendance' => $employee->attendanceRecords()->with('shift')->latest('attendance_date')->limit(10)->get(),
-            'leaves' => $employee->leaveRequests()->with('leaveType')->latest('id')->limit(10)->get(),
+            'leaves' => $employee->leaveRequests()->with('leaveType')->latest('start_date')->limit(10)->get(),
+            'leaveBalance' => $employee->leaveBalance(),
             'overtime' => $employee->overtimeRecords()->latest('overtime_date')->limit(10)->get(),
             'payrollItems' => $employee->payrollItems()->with('payrollRun')->latest('id')->limit(10)->get(),
             'presentDays' => $employee->attendanceRecords()
@@ -120,18 +134,25 @@ class EmployeeController extends Controller
     {
         $data = $this->validated($request, $employee);
         $documents = $this->validatedDocuments($request);
+        $existing = $this->validatedExistingDocuments($request, $employee);
         $storedPaths = [];
+        $replacedPaths = [];
 
         try {
-            DB::transaction(function () use ($request, $employee, $data, $documents, &$storedPaths) {
+            DB::transaction(function () use ($request, $employee, $data, $documents, $existing, &$storedPaths, &$replacedPaths) {
                 $employee->update($data);
                 $this->syncDocuments($request, $employee, $documents, $storedPaths);
+                $this->updateExistingDocuments($request, $employee, $existing, $storedPaths, $replacedPaths);
+                $employee->syncDocumentSummary();
                 $this->syncUserClassification($employee);
             });
         } catch (Throwable $exception) {
             Storage::disk('local')->delete($storedPaths);
             throw $exception;
         }
+
+        // Old files of renewed documents go only once the new ones are safely saved.
+        Storage::disk('local')->delete($replacedPaths);
 
         ActivityLog::record($request, 'HR', 'Updated employee', $employee->name);
 
@@ -189,6 +210,7 @@ class EmployeeController extends Controller
 
             $employee->documents()->create([
                 'document_type' => $row['document_type'],
+                'document_subtype' => filled($row['document_subtype'] ?? null) ? trim($row['document_subtype']) : null,
                 'document_number' => $row['document_number'] ?? null,
                 'issue_date' => $row['issue_date'] ?? null,
                 'expiry_date' => $row['expiry_date'] ?? null,
@@ -198,11 +220,70 @@ class EmployeeController extends Controller
         }
     }
 
+    /**
+     * Renewals (client change request NR-13): change the number, detail or
+     * dates of a saved document and optionally replace its file. Only rows that
+     * belong to this employee are accepted.
+     */
+    private function updateExistingDocuments(Request $request, Employee $employee, array $rows, array &$storedPaths, array &$replacedPaths): void
+    {
+        if ($rows === []) {
+            return;
+        }
+
+        $documents = $employee->documents()->whereIn('id', array_keys($rows))->get()->keyBy('id');
+
+        foreach ($rows as $id => $row) {
+            $document = $documents->get((int) $id);
+            if (! $document) {
+                continue;
+            }
+
+            $attributes = [
+                'document_subtype' => filled($row['document_subtype'] ?? null) ? trim($row['document_subtype']) : null,
+                'document_number' => $row['document_number'] ?? null,
+                'issue_date' => $row['issue_date'] ?? null,
+                'expiry_date' => $row['expiry_date'] ?? null,
+            ];
+
+            if ($request->hasFile("existing_documents.{$id}.file")) {
+                $path = $request->file("existing_documents.{$id}.file")->store('hr-documents', 'local');
+                if (! $path) {
+                    throw new RuntimeException('The renewed document could not be stored.');
+                }
+                $storedPaths[] = $path;
+                if ($document->file_path) {
+                    $replacedPaths[] = $document->file_path;
+                }
+                $attributes['file_path'] = $path;
+            }
+
+            $document->update($attributes);
+        }
+    }
+
+    private function validatedExistingDocuments(Request $request, Employee $employee): array
+    {
+        $rows = $request->validate([
+            'existing_documents' => ['nullable', 'array'],
+            'existing_documents.*.document_subtype' => ['nullable', 'string', 'max:100'],
+            'existing_documents.*.document_number' => ['nullable', 'string', 'max:100'],
+            'existing_documents.*.issue_date' => ['nullable', 'date', 'before_or_equal:today'],
+            'existing_documents.*.expiry_date' => ['nullable', 'date', 'after_or_equal:existing_documents.*.issue_date'],
+            'existing_documents.*.file' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png,webp', 'max:5120'],
+        ])['existing_documents'] ?? [];
+
+        $ownIds = $employee->documents()->pluck('id')->map(fn ($id) => (string) $id)->all();
+
+        return array_intersect_key($rows, array_flip($ownIds));
+    }
+
     private function validatedDocuments(Request $request): array
     {
         return $request->validate([
             'documents' => ['nullable', 'array'],
             'documents.*.document_type' => ['nullable', 'string', 'max:100'],
+            'documents.*.document_subtype' => ['nullable', 'string', 'max:100'],
             'documents.*.document_number' => ['nullable', 'string', 'max:100'],
             'documents.*.issue_date' => ['nullable', 'date', 'before_or_equal:today'],
             'documents.*.expiry_date' => ['nullable', 'date', 'after_or_equal:documents.*.issue_date'],
@@ -233,6 +314,7 @@ class EmployeeController extends Controller
             'employee_classification' => ['required', Rule::in(Employee::CLASSIFICATIONS)],
             'contract_start_date' => ['nullable', 'date'],
             'contract_end_date' => ['nullable', 'date', 'after_or_equal:contract_start_date'],
+            'annual_leave_entitlement' => ['nullable', 'integer', 'min:0', 'max:365'],
             'iqama_number' => ['nullable', 'string', 'max:50'],
             'iqama_expiry_date' => ['nullable', 'date'],
             'passport_number' => ['nullable', 'string', 'max:50'],
@@ -287,6 +369,7 @@ class EmployeeController extends Controller
             'contractTypes' => ['Full Time', 'Part Time', 'Contract', 'Temporary'],
             'classifications' => Employee::CLASSIFICATIONS,
             'codePrefixes' => config('seera.employee_codes'),
+            'documentSubtypes' => \App\Models\EmployeeDocument::whereNotNull('document_subtype')->distinct()->orderBy('document_subtype')->pluck('document_subtype'),
             'paymentMethods' => ['Bank Transfer', 'Cash'],
             'nationalities' => LookupValue::options('nationality', $employee?->nationality),
         ];

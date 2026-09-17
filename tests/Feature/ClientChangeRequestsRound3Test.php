@@ -352,4 +352,137 @@ class ClientChangeRequestsRound3Test extends TestCase
         $this->actingAs($admin)->get(route('admin.master.projects.show', $project))
             ->assertOk()->assertSee('Assigned Staff')->assertSee($employee->name)->assertSee('+ Add Location')->assertSee('Locations in this Project');
     }
+
+    // Stage C: NR-11 / NR-12 / NR-13 / NR-14 -----------------------------------
+
+    public function test_documents_are_one_source_with_subtypes_renewals_and_list_filters(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('local');
+        $admin = $this->user('admin@example.com');
+        $employee = Employee::firstOrFail();
+
+        // The duplicate numbers/expiry section is gone from the form.
+        $this->actingAs($admin)->get(route('admin.hr.employees.edit', $employee))
+            ->assertOk()
+            ->assertDontSee('id="iqama_number"', false)
+            ->assertSee('Profession / Class')
+            ->assertSee('Already attached');
+
+        $base = [
+            'employee_code' => $employee->employee_code, 'first_name' => $employee->first_name,
+            'contract_type' => $employee->contract_type, 'employee_classification' => 'Sponsorship',
+            'basic_salary' => $employee->basic_salary, 'payment_method' => 'Bank Transfer', 'status' => 'active',
+        ];
+        $expiry = now()->addDays(300)->toDateString();
+
+        $this->actingAs($admin)
+            ->put(route('admin.hr.employees.update', $employee), $base + [
+                'documents' => [[
+                    'document_type' => 'IQAMA', 'document_subtype' => 'Electrician', 'document_number' => '2455001122',
+                    'issue_date' => now()->subYear()->toDateString(), 'expiry_date' => $expiry,
+                    'file' => \Illuminate\Http\UploadedFile::fake()->create('iqama.pdf', 40, 'application/pdf'),
+                ]],
+            ])
+            ->assertRedirect(route('admin.hr.employees.index'));
+
+        $document = $employee->documents()->where('document_number', '2455001122')->firstOrFail();
+        $this->assertSame('Electrician', $document->document_subtype);
+        \Illuminate\Support\Facades\Storage::disk('local')->assertExists($document->file_path);
+
+        // Employee summary columns follow the document, so dashboard, list and register agree.
+        $employee->refresh();
+        $this->assertSame('2455001122', $employee->iqama_number);
+        $this->assertSame($expiry, $employee->iqama_expiry_date->toDateString());
+
+        // Renewal: new expiry and a replacement file on the existing row.
+        $oldPath = $document->file_path;
+        $renewed = now()->addDays(700)->toDateString();
+        $this->actingAs($admin)
+            ->put(route('admin.hr.employees.update', $employee), $base + [
+                'existing_documents' => [$document->id => [
+                    'document_subtype' => 'Senior Electrician', 'document_number' => '2455001122',
+                    'issue_date' => now()->toDateString(), 'expiry_date' => $renewed,
+                    'file' => \Illuminate\Http\UploadedFile::fake()->create('iqama-renewed.pdf', 40, 'application/pdf'),
+                ]],
+            ])
+            ->assertRedirect(route('admin.hr.employees.index'));
+
+        $document->refresh();
+        $this->assertSame('Senior Electrician', $document->document_subtype);
+        $this->assertSame($renewed, $document->expiry_date->toDateString());
+        $this->assertNotSame($oldPath, $document->file_path);
+        \Illuminate\Support\Facades\Storage::disk('local')->assertMissing($oldPath);
+        \Illuminate\Support\Facades\Storage::disk('local')->assertExists($document->file_path);
+        $this->assertSame($renewed, $employee->refresh()->iqama_expiry_date->toDateString());
+        $this->assertSame(1, $employee->documents()->where('document_type', 'IQAMA')->where('document_number', '2455001122')->count(), 'renewal edits the row instead of adding one');
+
+        // Rows of another employee cannot be edited through this form.
+        $other = Employee::whereKeyNot($employee->id)->firstOrFail();
+        $foreign = $other->documents()->create(['document_type' => 'Passport', 'document_number' => 'P-OTHER', 'expiry_date' => now()->subDays(5)->toDateString(), 'status' => 'active']);
+        $this->actingAs($admin)
+            ->put(route('admin.hr.employees.update', $employee), $base + ['existing_documents' => [$foreign->id => ['document_number' => 'HACKED']]])
+            ->assertRedirect();
+        $this->assertSame('P-OTHER', $foreign->fresh()->document_number);
+
+        // List filters by document type and validity.
+        $this->actingAs($admin)->get(route('admin.hr.employees.index', ['doc_type' => 'Passport', 'doc_status' => 'expired']))
+            ->assertOk()->assertSee($other->name)->assertDontSee($employee->employee_code);
+        $this->actingAs($admin)->get(route('admin.hr.employees.index', ['doc_type' => 'IQAMA', 'doc_status' => 'valid']))
+            ->assertOk()->assertSee($employee->employee_code);
+        $this->actingAs($admin)->get(route('admin.hr.employees.show', $employee))->assertOk()->assertSee('Senior Electrician');
+    }
+
+    // NR-17 / NR-18 -----------------------------------------------------------
+
+    public function test_leave_types_attachments_and_balance(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('local');
+        $admin = $this->user('admin@example.com');
+        $employee = Employee::firstOrFail();
+
+        // The production defaults add what is missing and never duplicate.
+        $before = \App\Models\LeaveType::count();
+        $this->seed(\Database\Seeders\ProductionHrDefaultsSeeder::class);
+        $this->assertSame($before + 1, \App\Models\LeaveType::count(), 'only the missing Urgent / Personal type is added');
+        $this->seed(\Database\Seeders\ProductionHrDefaultsSeeder::class);
+        $this->assertSame($before + 1, \App\Models\LeaveType::count());
+
+        $balanceBefore = $employee->leaveBalance();
+        $annual = \App\Models\LeaveType::where('code', 'ANNUAL')->firstOrFail();
+
+        $this->actingAs($admin)
+            ->post(route('admin.hr.leaves.store'), [
+                'employee_id' => $employee->id, 'leave_type_id' => $annual->id,
+                'start_date' => now()->startOfYear()->addMonths(10)->toDateString(),
+                'end_date' => now()->startOfYear()->addMonths(10)->addDays(2)->toDateString(),
+                'reason' => 'Family visit', 'status' => 'approved',
+                'attachment' => \Illuminate\Http\UploadedFile::fake()->create('tickets.pdf', 30, 'application/pdf'),
+            ])
+            ->assertRedirect(route('admin.hr.leaves.index'));
+
+        $leave = \App\Models\LeaveRequest::latest('id')->firstOrFail();
+        $this->assertSame('tickets.pdf', $leave->attachment_name);
+        \Illuminate\Support\Facades\Storage::disk('local')->assertExists($leave->attachment_path);
+        $this->actingAs($admin)->get(route('admin.hr.leaves.attachment', $leave))->assertOk()->assertDownload('tickets.pdf');
+
+        $balance = $employee->fresh()->leaveBalance();
+        $this->assertSame(21, $balance['entitlement']);
+        $this->assertSame($balanceBefore['used'] + 3.0, $balance['used']);
+        $this->assertSame(round(21 - $balance['used'], 1), $balance['remaining']);
+
+        $this->actingAs($admin)->get(route('admin.hr.employees.show', $employee))
+            ->assertOk()->assertSee('Leave Data')->assertSee('Entitlement')->assertSee('Remaining');
+        $this->actingAs($admin)->get(route('admin.hr.leaves.show', $leave))->assertOk()->assertSee('tickets.pdf')->assertSee('Remaining Balance');
+
+        // Entitlement is editable per employee.
+        $this->actingAs($admin)
+            ->put(route('admin.hr.employees.update', $employee), [
+                'employee_code' => $employee->employee_code, 'first_name' => $employee->first_name,
+                'contract_type' => $employee->contract_type, 'employee_classification' => 'Sponsorship',
+                'basic_salary' => $employee->basic_salary, 'payment_method' => 'Bank Transfer', 'status' => 'active',
+                'annual_leave_entitlement' => 30,
+            ])
+            ->assertRedirect();
+        $this->assertSame(30, $employee->fresh()->leaveBalance()['entitlement']);
+    }
 }

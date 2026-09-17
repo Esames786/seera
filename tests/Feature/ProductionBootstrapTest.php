@@ -92,6 +92,7 @@ class ProductionBootstrapTest extends TestCase
         $this->assertSame(0.0, (float) \App\Models\ChartOfAccount::sum('opening_balance'), 'no balances are invented');
         $this->assertSame(9, \App\Models\AutomaticPostingRule::count());
         $this->assertSame(1, \App\Models\VatPeriod::count());
+        $this->assertSame(['ANNUAL', 'SICK', 'UNPAID', 'URGENT'], \App\Models\LeaveType::orderBy('code')->pluck('code')->all(), 'leave types are ready for the first request (NR-17)');
         $this->assertSame(0, \App\Models\JournalEntry::count());
         $this->assertSame(0, \App\Models\SupplierBill::count());
 

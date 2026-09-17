@@ -10,10 +10,18 @@ use App\Models\LeaveType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use RuntimeException;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Throwable;
 
 class LeaveRequestController extends Controller
 {
+    public const ATTACHMENT_DISK = 'local';
+
+    public const ATTACHMENT_DIRECTORY = 'leave-attachments';
+
     public function index(Request $request): View
     {
         $leaves = LeaveRequest::with(['employee', 'leaveType', 'approver'])
@@ -45,7 +53,18 @@ class LeaveRequestController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $leave = LeaveRequest::create($this->validated($request));
+        $data = $this->validated($request);
+        $storedPath = null;
+
+        try {
+            $leave = LeaveRequest::create($data + $this->storeAttachment($request, $storedPath));
+        } catch (Throwable $exception) {
+            if ($storedPath) {
+                Storage::disk(self::ATTACHMENT_DISK)->delete($storedPath);
+            }
+            throw $exception;
+        }
+
         $leave->load('employee');
 
         ActivityLog::record($request, 'HR', 'Created leave request', $leave->employee->name);
@@ -58,7 +77,10 @@ class LeaveRequestController extends Controller
     {
         $leave_request->load(['employee.department', 'employee.designation', 'leaveType', 'approver']);
 
-        return view('admin.hr.leaves.show', ['leave' => $leave_request]);
+        return view('admin.hr.leaves.show', [
+            'leave' => $leave_request,
+            'balance' => $leave_request->employee->leaveBalance((int) $leave_request->start_date->year),
+        ]);
     }
 
     public function edit(LeaveRequest $leave_request): View
@@ -68,7 +90,24 @@ class LeaveRequestController extends Controller
 
     public function update(Request $request, LeaveRequest $leave_request): RedirectResponse
     {
-        $leave_request->update($this->validated($request));
+        $data = $this->validated($request);
+        $storedPath = null;
+        $previous = $leave_request->attachment_path;
+
+        try {
+            $attachment = $this->storeAttachment($request, $storedPath);
+            $leave_request->update($data + $attachment);
+        } catch (Throwable $exception) {
+            if ($storedPath) {
+                Storage::disk(self::ATTACHMENT_DISK)->delete($storedPath);
+            }
+            throw $exception;
+        }
+
+        if ($storedPath && $previous && $previous !== $storedPath) {
+            Storage::disk(self::ATTACHMENT_DISK)->delete($previous);
+        }
+
         $leave_request->load('employee');
 
         ActivityLog::record($request, 'HR', 'Updated leave request', $leave_request->employee->name);
@@ -80,7 +119,12 @@ class LeaveRequestController extends Controller
     public function destroy(Request $request, LeaveRequest $leave_request): RedirectResponse
     {
         $label = $leave_request->employee->name;
+        $path = $leave_request->attachment_path;
         $leave_request->delete();
+
+        if ($path) {
+            Storage::disk(self::ATTACHMENT_DISK)->delete($path);
+        }
 
         ActivityLog::record($request, 'HR', 'Deleted leave request', $label);
 
@@ -120,6 +164,33 @@ class LeaveRequestController extends Controller
         return back()->with('status', 'Leave request rejected.');
     }
 
+    /** Supporting document for a leave (doctor's note, tickets) — client change request NR-17. */
+    public function attachment(LeaveRequest $leave_request): StreamedResponse
+    {
+        abort_unless($leave_request->attachment_path && Storage::disk(self::ATTACHMENT_DISK)->exists($leave_request->attachment_path), 404);
+
+        return Storage::disk(self::ATTACHMENT_DISK)->download($leave_request->attachment_path, $leave_request->attachment_name ?: 'leave-attachment');
+    }
+
+    /**
+     * @return array<string, string> Attachment columns to merge into the request data (empty when no file).
+     */
+    private function storeAttachment(Request $request, ?string &$storedPath): array
+    {
+        if (! $request->hasFile('attachment')) {
+            return [];
+        }
+
+        $file = $request->file('attachment');
+        $storedPath = $file->store(self::ATTACHMENT_DIRECTORY, self::ATTACHMENT_DISK);
+
+        if (! $storedPath) {
+            throw new RuntimeException('The leave attachment could not be stored.');
+        }
+
+        return ['attachment_path' => $storedPath, 'attachment_name' => $file->getClientOriginalName()];
+    }
+
     private function validated(Request $request): array
     {
         $data = $request->validate([
@@ -129,9 +200,15 @@ class LeaveRequestController extends Controller
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'total_days' => ['nullable', 'numeric', 'min:0'],
             'reason' => ['nullable', 'string'],
+            'attachment' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png,webp', 'max:5120'],
             'status' => ['required', 'in:pending,approved,rejected,cancelled'],
             'rejection_reason' => ['nullable', 'string'],
+        ], [
+            'attachment.mimes' => 'Attach a PDF or an image (JPG, PNG, WEBP).',
+            'attachment.max' => 'The attachment may be at most 5 MB.',
         ]);
+
+        unset($data['attachment']);
 
         // Inclusive day count so a one-day leave counts as 1.
         $data['total_days'] = $data['total_days']
@@ -144,7 +221,7 @@ class LeaveRequestController extends Controller
     {
         return [
             'employees' => Employee::orderBy('employee_code')->get(),
-            'leaveTypes' => LeaveType::orderBy('name')->get(),
+            'leaveTypes' => LeaveType::where('status', 'active')->orderBy('name')->get(),
             'statuses' => LeaveRequest::STATUSES,
         ];
     }

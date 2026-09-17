@@ -15,7 +15,7 @@ class Employee extends Model
         'emergency_contact', 'nationality', 'department_id', 'designation_id',
         'branch_id', 'project_id', 'site_id', 'manager_id', 'user_id',
         'joining_date', 'contract_type', 'contract_start_date', 'contract_end_date',
-        'employee_classification',
+        'annual_leave_entitlement', 'employee_classification',
         'iqama_number', 'iqama_expiry_date', 'passport_number', 'passport_expiry_date',
         'insurance_number', 'insurance_expiry_date',
         'driving_license_number', 'driving_license_expiry_date',
@@ -80,6 +80,69 @@ class Employee extends Model
     public function iqamaStatus(): string
     {
         return static::expiryStatus($this->iqama_expiry_date?->toDateString());
+    }
+
+    /**
+     * Document type => the employee columns that summarise it. The attachment
+     * rows are the single source of truth (client change request NR-12); these
+     * columns are refreshed from the newest document of each type so the HR
+     * dashboard, the employee list and the register never disagree.
+     */
+    public const DOCUMENT_SUMMARY = [
+        'IQAMA' => ['iqama_number', 'iqama_expiry_date'],
+        'Passport' => ['passport_number', 'passport_expiry_date'],
+        'Medical Insurance' => ['insurance_number', 'insurance_expiry_date'],
+        'Driving License' => ['driving_license_number', 'driving_license_expiry_date'],
+    ];
+
+    public function syncDocumentSummary(): void
+    {
+        $documents = $this->documents()->where('status', 'active')->get();
+        $changes = [];
+
+        foreach (self::DOCUMENT_SUMMARY as $type => [$numberColumn, $expiryColumn]) {
+            $latest = $documents->where('document_type', $type)
+                ->sortByDesc(fn (EmployeeDocument $document) => $document->expiry_date?->timestamp ?? 0)
+                ->first();
+
+            if (! $latest) {
+                continue;
+            }
+
+            $changes[$numberColumn] = $latest->document_number ?: $this->{$numberColumn};
+            $changes[$expiryColumn] = $latest->expiry_date?->toDateString() ?? $this->{$expiryColumn}?->toDateString();
+        }
+
+        if ($changes !== []) {
+            $this->forceFill($changes)->saveQuietly();
+        }
+    }
+
+    /**
+     * Annual leave position for a year (client change request NR-18):
+     * entitlement, approved days used, days awaiting approval and the balance.
+     *
+     * @return array{year: int, entitlement: int, used: float, pending: float, remaining: float}
+     */
+    public function leaveBalance(?int $year = null): array
+    {
+        $year ??= (int) now()->year;
+        $annualTypeIds = LeaveType::where('code', 'ANNUAL')->pluck('id');
+
+        $base = $this->leaveRequests()
+            ->when($annualTypeIds->isNotEmpty(), fn ($q) => $q->whereIn('leave_type_id', $annualTypeIds))
+            ->whereYear('start_date', $year);
+
+        $used = (float) (clone $base)->where('status', 'approved')->sum('total_days');
+        $pending = (float) (clone $base)->where('status', 'pending')->sum('total_days');
+
+        return [
+            'year' => $year,
+            'entitlement' => (int) $this->annual_leave_entitlement,
+            'used' => $used,
+            'pending' => $pending,
+            'remaining' => round((int) $this->annual_leave_entitlement - $used, 1),
+        ];
     }
 
     public function department()
