@@ -192,11 +192,13 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::get('general-ledger', [GeneralLedgerController::class, 'index'])->name('general-ledger');
 
         Route::post('accounts-payable/{accounts_payable}/approve', [AccountsPayableController::class, 'approve'])->name('accounts-payable.approve');
+        Route::post('accounts-payable/{accounts_payable}/reopen', [AccountsPayableController::class, 'reopen'])->name('accounts-payable.reopen');
         Route::get('accounts-payable/{accounts_payable}/payment', [AccountsPayableController::class, 'paymentForm'])->name('accounts-payable.payment');
         Route::post('accounts-payable/{accounts_payable}/payment', [AccountsPayableController::class, 'storePayment'])->name('accounts-payable.payment.store');
         Route::resource('accounts-payable', AccountsPayableController::class);
 
         Route::post('accounts-receivable/{accounts_receivable}/approve', [AccountsReceivableController::class, 'approve'])->name('accounts-receivable.approve');
+        Route::post('accounts-receivable/{accounts_receivable}/reopen', [AccountsReceivableController::class, 'reopen'])->name('accounts-receivable.reopen');
         Route::get('accounts-receivable/{accounts_receivable}/receipt', [AccountsReceivableController::class, 'receiptForm'])->name('accounts-receivable.receipt');
         Route::post('accounts-receivable/{accounts_receivable}/receipt', [AccountsReceivableController::class, 'storeReceipt'])->name('accounts-receivable.receipt.store');
         Route::resource('accounts-receivable', AccountsReceivableController::class);

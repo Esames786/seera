@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class CustomerReceipt extends Model
 {
+    /** How the money actually arrived (client change request NR-28). */
+    public const METHODS = ['Cash', 'Bank Transfer', 'Cheque'];
+
     protected $fillable = [
         'customer_id', 'customer_invoice_id', 'receipt_date', 'receipt_account_id',
-        'amount', 'reference_number', 'journal_entry_id', 'notes',
+        'payment_method', 'amount', 'reference_number', 'journal_entry_id', 'notes',
     ];
 
     protected function casts(): array

@@ -142,11 +142,18 @@ class AccountsPayableController extends Controller
             }
 
             $entry = $this->posting->postSupplierBill($accounts_payable, $request->user()->id);
+
+            // Never approve without a ledger entry (client change request NR-30): a silent
+            // half-state would leave the bill unpaid but invisible to VAT and the dashboard.
+            if (! $entry) {
+                throw ValidationException::withMessages(['bill' => 'The bill could not be posted: the chart of accounts has no Accounts Payable (2100) or expense account. Set up the chart of accounts and approve again.']);
+            }
+
             $accounts_payable->update([
                 'status' => 'unpaid',
                 'paid_amount' => 0,
                 'balance_amount' => $accounts_payable->total_amount,
-                'journal_entry_id' => $entry?->id,
+                'journal_entry_id' => $entry->id,
             ]);
 
             return $entry;
@@ -155,16 +162,65 @@ class AccountsPayableController extends Controller
         ActivityLog::record($request, 'Accounting', 'Approved supplier bill', $accounts_payable->bill_number);
 
         return redirect()->route('admin.accounting.accounts-payable.show', $accounts_payable)
-            ->with('status', 'Supplier bill approved'.($entry ? ' and journal entry '.$entry->journal_number.' created.' : '.'));
+            ->with('status', 'Supplier bill approved and journal entry '.$entry->journal_number.' created.');
+    }
+
+    /**
+     * Correction after finalization (client change request NR-31). A Super Admin
+     * sends an approved, unpaid bill back to draft: the posted journal is undone
+     * by a reversing entry (never edited), the bill's VAT rows leave the open
+     * return, and the reason stays on the bill.
+     */
+    public function reopen(Request $request, SupplierBill $accounts_payable): RedirectResponse
+    {
+        abort_unless($request->user()->isSuperAdmin(), 403, 'Only a Super Admin can reopen a posted bill.');
+
+        $data = $request->validate(['reason' => ['required', 'string', 'max:500']], ['reason.required' => 'Give the reason for reopening; it is kept on the bill.']);
+
+        $reversal = DB::transaction(function () use ($accounts_payable, $data, $request) {
+            $bill = SupplierBill::whereKey($accounts_payable->id)->lockForUpdate()->firstOrFail();
+
+            if ($bill->status !== 'unpaid' || $bill->payments()->exists()) {
+                throw ValidationException::withMessages(['bill' => 'Only an approved bill with no payments can be reopened. Reverse the payments first.']);
+            }
+
+            $this->posting->withdrawVat('Supplier Bill', $bill->id);
+
+            $reversal = $bill->journal_entry_id
+                ? $this->posting->reverseEntry($bill->journalEntry, 'Reopened bill '.$bill->bill_number.': '.$data['reason'], $request->user()->id)
+                : null;
+
+            $bill->update([
+                'status' => 'draft',
+                'journal_entry_id' => null,
+                'paid_amount' => 0,
+                'balance_amount' => $bill->total_amount,
+                'notes' => trim(($bill->notes ? $bill->notes."\n" : '')
+                    .'Reopened '.now()->format('Y-m-d H:i').' by '.$request->user()->name.': '.$data['reason']
+                    .($reversal ? ' (reversal '.$reversal->journal_number.')' : '')),
+            ]);
+
+            return $reversal;
+        });
+
+        ActivityLog::record($request, 'Accounting', 'Reopened supplier bill', $accounts_payable->bill_number.': '.$data['reason']);
+
+        return redirect()->route('admin.accounting.accounts-payable.show', $accounts_payable)
+            ->with('status', 'Bill reopened as a draft'.($reversal ? '; reversing entry '.$reversal->journal_number.' posted' : '').'. Correct it and approve again.');
     }
 
     public function paymentForm(SupplierBill $accounts_payable): View
     {
         $accounts_payable->load(['supplier', 'payments']);
+        $allowedCodes = $accounts_payable->supplier->allowedPaymentAccountCodes();
 
         return view('admin.accounting.accounts-payable.payment', [
             'bill' => $accounts_payable,
-        ] + $this->formOptions());
+            // Only the channels this supplier accepts (client change request NR-28).
+            'paymentAccounts' => $this->formOptions()['paymentAccounts']->filter(fn ($account) => in_array($account->account_code, $allowedCodes, true))->values(),
+            'paymentMethods' => SupplierPayment::METHODS,
+            'purposes' => SupplierPayment::PURPOSES,
+        ]);
     }
 
     /**
@@ -172,15 +228,25 @@ class AccountsPayableController extends Controller
      */
     public function storePayment(Request $request, SupplierBill $accounts_payable): RedirectResponse
     {
+        $accounts_payable->loadMissing('supplier');
+        $allowedCodes = $accounts_payable->supplier->allowedPaymentAccountCodes();
+
         $data = $request->validate([
             'payment_date' => ['required', 'date', 'before_or_equal:today'],
-            'payment_account_id' => ['required', Rule::exists('chart_of_accounts', 'id')->where(fn ($query) => $query->whereIn('account_code', [PostingService::CASH, PostingService::BANK])->where('status', 'active'))],
+            'payment_account_id' => ['required', Rule::exists('chart_of_accounts', 'id')->where(fn ($query) => $query->whereIn('account_code', $allowedCodes)->where('status', 'active'))],
+            'payment_method' => ['nullable', Rule::in(SupplierPayment::METHODS)],
+            'purpose' => ['nullable', Rule::in(SupplierPayment::PURPOSES)],
             'amount' => ['required', 'numeric', 'min:0.01'],
             'reference_number' => ['nullable', 'string', 'max:100'],
             'notes' => ['nullable', 'string'],
         ], [
             'amount.max' => 'The payment cannot be more than the outstanding balance.',
+            'payment_account_id.exists' => 'This supplier accepts '.strtolower($accounts_payable->supplier->allowed_payment_types ?? 'cash and bank').' payments only; choose a matching active account.',
         ]);
+
+        // Method follows the account when not stated; purpose defaults to a plain bill payment.
+        $data['payment_method'] = $data['payment_method'] ?? (ChartOfAccount::find($data['payment_account_id'])?->account_code === PostingService::CASH ? 'Cash' : 'Bank Transfer');
+        $data['purpose'] = $data['purpose'] ?? 'Bill payment';
 
         $payment = DB::transaction(function () use ($accounts_payable, $data, $request) {
             $accounts_payable = SupplierBill::whereKey($accounts_payable->id)->lockForUpdate()->firstOrFail();
@@ -310,6 +376,8 @@ class AccountsPayableController extends Controller
                 ->where('status', 'active')
                 ->orderBy('account_code')
                 ->get(),
+            // Shown on the line selector so "default" is a named account, not a mystery (NR-27).
+            'defaultExpenseAccount' => $this->posting->account(PostingService::MATERIAL_EXPENSE),
             'paymentAccounts' => ChartOfAccount::where('account_type', 'asset')
                 ->where('status', 'active')
                 ->whereIn('account_code', [PostingService::CASH, PostingService::BANK])

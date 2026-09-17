@@ -15,6 +15,13 @@
             </form>
         @elseif (in_array($invoice->payment_status, ['unpaid', 'partially_paid']))
             <a class="btn primary" href="{{ route('admin.accounting.accounts-receivable.receipt', $invoice) }}">Record Receipt</a>
+            @if ($invoice->payment_status === 'unpaid' && $invoice->receipts()->doesntExist() && auth()->user()->isSuperAdmin() && ! in_array($invoice->zatcaRecord?->clearance_status, ['cleared', 'reported'], true))
+                <form method="POST" action="{{ route('admin.accounting.accounts-receivable.reopen', $invoice) }}" onsubmit="var reason = prompt('Reason for reopening this invoice (kept on the record):'); if (!reason) return false; this.reason.value = reason;">
+                    @csrf
+                    <input type="hidden" name="reason" value=""/>
+                    <button type="submit" class="btn danger" title="Reverse the posting, cancel the pending ZATCA record and return the invoice to draft">Reopen for Correction</button>
+                </form>
+            @endif
         @endif
     </x-admin.page-header>
 
@@ -115,18 +122,19 @@
 
     <x-admin.data-table title="Receipts">
         <thead>
-            <tr><th>Date</th><th>Account</th><th>Amount</th><th>Reference</th></tr>
+            <tr><th>Date</th><th>Account</th><th>Method</th><th>Amount</th><th>Reference</th></tr>
         </thead>
         <tbody>
             @forelse ($invoice->receipts as $receipt)
                 <tr>
                     <td>{{ $receipt->receipt_date->toDateString() }}</td>
                     <td>{{ $receipt->receiptAccount?->label() ?? '-' }}</td>
+                    <td>{{ $receipt->payment_method ?? '-' }}</td>
                     <td>SAR {{ number_format($receipt->amount, 2) }}</td>
                     <td>{{ $receipt->reference_number ?? '-' }}</td>
                 </tr>
             @empty
-                <tr><td colspan="4" class="table-empty">No receipts recorded against this invoice.</td></tr>
+                <tr><td colspan="5" class="table-empty">No receipts recorded against this invoice.</td></tr>
             @endforelse
         </tbody>
     </x-admin.data-table>

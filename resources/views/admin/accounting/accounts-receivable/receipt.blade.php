@@ -15,22 +15,38 @@
         <x-admin.metric-card color="yellow" :value="$invoice->receipts->count()" label="Receipts Recorded"/>
     </div>
 
+    @if ($receiptAccounts->isEmpty())
+        <div class="alert flash">
+            <strong>No cash or bank account available.</strong> There is no active Cash in Hand (1110) or Bank Account (1120) in the chart of accounts.
+            Create or activate one under <a href="{{ route('admin.accounting.chart-of-accounts.index') }}" style="font-weight:700">Chart of Accounts</a> before recording receipts.
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('admin.accounting.accounts-receivable.receipt.store', $invoice) }}">
         @csrf
 
         <x-admin.form-section title="Receipt Details" columns="3">
-            <div><label for="receipt_date">Receipt Date *</label><input id="receipt_date" name="receipt_date" type="date" class="input" value="{{ old('receipt_date', now()->toDateString()) }}" required/></div>
+            <div><label for="receipt_date">Receipt Date *</label><input id="receipt_date" name="receipt_date" type="date" class="input" max="{{ now()->toDateString() }}" value="{{ old('receipt_date', now()->toDateString()) }}" required/></div>
             <div>
-                <label for="receipt_account_id">Bank / Cash Account *</label>
-                <select id="receipt_account_id" name="receipt_account_id" class="select" required>
+                <label for="receipt_account_id">Received Into (Bank / Cash Account) *</label>
+                <select id="receipt_account_id" name="receipt_account_id" class="select" required @disabled($receiptAccounts->isEmpty())>
                     <option value="">Select cash or bank...</option>
                     @foreach ($receiptAccounts as $account)
                         <option value="{{ $account->id }}" @selected(old('receipt_account_id') == $account->id)>{{ $account->label() }}</option>
                     @endforeach
                 </select>
+                @error('receipt_account_id')<div class="field-error">{{ $message }}</div>@enderror
+            </div>
+            <div>
+                <label for="payment_method">Payment Method *</label>
+                <select id="payment_method" name="payment_method" class="select" required>
+                    @foreach ($paymentMethods as $method)
+                        <option value="{{ $method }}" @selected(old('payment_method', 'Bank Transfer') === $method)>{{ $method }}</option>
+                    @endforeach
+                </select>
             </div>
             <div><label for="amount">Received Amount (SAR) *</label><input id="amount" name="amount" type="number" step="0.01" min="0.01" max="{{ $invoice->balance_amount }}" class="input" value="{{ old('amount', $invoice->balance_amount) }}" required/></div>
-            <div><label for="reference_number">Reference Number</label><input id="reference_number" name="reference_number" class="input" value="{{ old('reference_number') }}" placeholder="RCPT-0705"/></div>
+            <div><label for="reference_number">Reference Number</label><input id="reference_number" name="reference_number" class="input" value="{{ old('reference_number') }}" placeholder="Transfer / cheque number"/></div>
             <div class="full"><label for="notes">Notes</label><textarea id="notes" name="notes" class="textarea">{{ old('notes') }}</textarea></div>
         </x-admin.form-section>
 
@@ -40,7 +56,7 @@
 
         <div class="form-actions">
             <a class="btn outline" href="{{ route('admin.accounting.accounts-receivable.show', $invoice) }}">Cancel</a>
-            <button type="submit" class="btn primary">Record Receipt</button>
+            <button type="submit" class="btn primary" @disabled($receiptAccounts->isEmpty())>Record Receipt</button>
         </div>
     </form>
 @endsection

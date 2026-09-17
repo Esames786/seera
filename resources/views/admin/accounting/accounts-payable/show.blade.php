@@ -15,6 +15,13 @@
             </form>
         @elseif (in_array($bill->status, ['unpaid', 'partially_paid']))
             <a class="btn primary" href="{{ route('admin.accounting.accounts-payable.payment', $bill) }}">Record Payment</a>
+            @if ($bill->status === 'unpaid' && $bill->payments->isEmpty() && auth()->user()->isSuperAdmin())
+                <form method="POST" action="{{ route('admin.accounting.accounts-payable.reopen', $bill) }}" onsubmit="var reason = prompt('Reason for reopening this bill (kept on the record):'); if (!reason) return false; this.reason.value = reason;">
+                    @csrf
+                    <input type="hidden" name="reason" value=""/>
+                    <button type="submit" class="btn danger" title="Reverse the posting and return the bill to draft for correction">Reopen for Correction</button>
+                </form>
+            @endif
         @endif
     </x-admin.page-header>
 
@@ -70,18 +77,20 @@
 
             <x-admin.data-table title="Payments">
                 <thead>
-                    <tr><th>Date</th><th>Account</th><th>Amount</th><th>Reference</th></tr>
+                    <tr><th>Date</th><th>Account</th><th>Method</th><th>Purpose</th><th>Amount</th><th>Reference</th></tr>
                 </thead>
                 <tbody>
                     @forelse ($bill->payments as $payment)
                         <tr>
                             <td>{{ $payment->payment_date->toDateString() }}</td>
                             <td>{{ $payment->paymentAccount?->label() ?? '-' }}</td>
+                            <td>{{ $payment->payment_method ?? '-' }}</td>
+                            <td>{{ $payment->purpose ?? 'Bill payment' }}</td>
                             <td>SAR {{ number_format($payment->amount, 2) }}</td>
                             <td>{{ $payment->reference_number ?? '-' }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="4" class="table-empty">No payments recorded against this bill.</td></tr>
+                        <tr><td colspan="6" class="table-empty">No payments recorded against this bill.</td></tr>
                     @endforelse
                 </tbody>
             </x-admin.data-table>

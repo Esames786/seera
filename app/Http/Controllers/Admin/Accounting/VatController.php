@@ -23,11 +23,20 @@ class VatController extends Controller
         $outputVat = (float) VatTransaction::where('vat_type', 'output')->sum('vat_amount');
         $inputVat = (float) VatTransaction::where('vat_type', 'input')->sum('vat_amount');
 
+        // Draft documents are not in the return yet (client change request NR-30); show
+        // them separately so the VAT screen and the invoice list never look out of step.
+        $draftOutputVat = (float) \App\Models\CustomerInvoice::where('payment_status', 'draft')->sum('vat_amount');
+        $draftInputVat = (float) \App\Models\SupplierBill::where('status', 'draft')->sum('vat_amount');
+
         return view('admin.accounting.vat.index', [
             'periods' => $periods,
             'outputVat' => round($outputVat, 2),
             'inputVat' => round($inputVat, 2),
             'vatPayable' => round($outputVat - $inputVat, 2),
+            'draftOutputVat' => round($draftOutputVat, 2),
+            'draftInputVat' => round($draftInputVat, 2),
+            'draftInvoices' => \App\Models\CustomerInvoice::where('payment_status', 'draft')->count(),
+            'draftBills' => \App\Models\SupplierBill::where('status', 'draft')->count(),
             'exceptions' => VatTransaction::whereNull('vat_period_id')->count(),
             'recentTransactions' => VatTransaction::latest('transaction_date')->latest('id')->limit(10)->get(),
             'statuses' => VatPeriod::STATUSES,

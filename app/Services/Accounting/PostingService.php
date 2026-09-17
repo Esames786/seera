@@ -554,10 +554,61 @@ class PostingService
     }
 
     /**
+     * Post a balanced entry that undoes another one, debit for credit (client
+     * change request NR-31). The original stays in the ledger untouched; the
+     * reversal references its journal number so the audit trail is complete.
+     */
+    public function reverseEntry(JournalEntry $entry, string $description, ?int $userId = null): JournalEntry
+    {
+        $entry->loadMissing('lines');
+
+        $lines = $entry->lines->map(fn ($line) => [
+            'chart_of_account_id' => $line->chart_of_account_id,
+            'description' => 'Reversal: '.$line->description,
+            'debit' => (float) $line->credit,
+            'credit' => (float) $line->debit,
+            'cost_center_id' => $line->cost_center_id,
+            'project_id' => $line->project_id,
+            'site_id' => $line->site_id,
+        ])->all();
+
+        return $this->createEntry([
+            'journal_date' => now()->toDateString(),
+            'reference_number' => $entry->journal_number,
+            'source_module' => 'Manual',
+            'source_id' => $entry->id,
+            'description' => $description,
+            'cost_center_id' => $entry->cost_center_id,
+        ], $lines, 'Manual', 'Reversal', $userId, true);
+    }
+
+    /**
+     * Take a document's VAT rows out of the return again when the document is
+     * sent back to draft. Refused once the period has been finalized: that
+     * needs a credit note, not a correction.
+     */
+    public function withdrawVat(string $sourceModule, int $sourceId): void
+    {
+        $rows = VatTransaction::where('source_module', $sourceModule)->where('source_id', $sourceId)->get();
+
+        foreach ($rows as $row) {
+            $period = $row->vat_period_id ? VatPeriod::find($row->vat_period_id) : null;
+
+            if ($period && in_array($period->status, ['finalized', 'submitted'], true)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'vat' => 'The VAT of this document belongs to '.$period->period_name.', which is already '.$period->status.'. It cannot be corrected; issue a credit note instead.',
+                ]);
+            }
+        }
+
+        VatTransaction::whereIn('id', $rows->pluck('id'))->delete();
+    }
+
+    /**
      * Build a balanced journal entry. The matching posting rule decides whether
      * it lands as a draft for review or is posted straight to the ledger.
      */
-    private function createEntry(array $header, array $lines, string $module, string $event, ?int $userId): JournalEntry
+    private function createEntry(array $header, array $lines, string $module, string $event, ?int $userId, ?bool $forcePost = null): JournalEntry
     {
         $lines = array_values(array_filter(
             $lines,
@@ -572,7 +623,7 @@ class PostingService
             ->where('status', 'active')
             ->first();
 
-        $autoPost = (bool) ($rule?->auto_post) && abs($totalDebit - $totalCredit) < 0.01;
+        $autoPost = ($forcePost ?? (bool) ($rule?->auto_post)) && abs($totalDebit - $totalCredit) < 0.01;
 
         return DB::transaction(function () use ($header, $lines, $totalDebit, $totalCredit, $autoPost, $userId) {
             $entry = JournalEntry::create($header + [

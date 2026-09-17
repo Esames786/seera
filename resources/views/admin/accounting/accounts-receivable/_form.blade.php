@@ -70,8 +70,8 @@
                             <td><input name="lines[{{ $i }}][quantity]" type="number" step="0.01" min="0" class="input" value="{{ $line['quantity'] ?? 1 }}"/></td>
                             <td><input name="lines[{{ $i }}][unit_price]" type="number" step="0.01" min="0" class="input" value="{{ $line['unit_price'] ?? '' }}"/></td>
                             <td>
-                                <select name="lines[{{ $i }}][revenue_account_id]" class="select">
-                                    <option value="">Default project revenue</option>
+                                <select name="lines[{{ $i }}][revenue_account_id]" class="select" title="The revenue account this line is credited to. Leave on the default for project work; pick Service Revenue for services.">
+                                    <option value="">Default: {{ $defaultRevenueAccount?->label() ?? '4100 - Project Revenue' }}</option>
                                     @foreach ($revenueAccounts as $account)
                                         <option value="{{ $account->id }}" @selected(($line['revenue_account_id'] ?? null) == $account->id)>{{ $account->label() }}</option>
                                     @endforeach

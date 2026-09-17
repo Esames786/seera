@@ -136,7 +136,7 @@ class EnsureUserHasPermission
             'create', 'store' => 'create',
             'edit', 'update', 'cancel' => 'edit',
             'destroy' => 'delete',
-            'approve', 'finalize' => 'approve',
+            'approve', 'finalize', 'reopen' => 'approve',
             'reject' => 'reject',
             'post', 'post-stock' => 'post',
             'process', 'payment', 'receipt', 'save', 'recalculate' => 'process',

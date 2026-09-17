@@ -3,7 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\ActivityLog;
+use App\Models\ChartOfAccount;
+use App\Models\Customer;
+use App\Models\CustomerInvoice;
 use App\Models\Employee;
+use App\Models\JournalEntry;
+use App\Models\SupplierBill;
 use App\Models\Project;
 use App\Models\Shift;
 use App\Models\Supplier;
@@ -484,5 +489,159 @@ class ClientChangeRequestsRound3Test extends TestCase
             ])
             ->assertRedirect();
         $this->assertSame(30, $employee->fresh()->leaveBalance()['entitlement']);
+    }
+
+    // NR-27 / NR-28 / NR-29 / NR-30 / NR-31 -----------------------------------
+
+    private function createBill(User $user, Supplier $supplier, string $number = 'BILL-NR-1'): SupplierBill
+    {
+        $this->actingAs($user)->post(route('admin.accounting.accounts-payable.store'), [
+            'supplier_id' => $supplier->id, 'bill_number' => $number,
+            'bill_date' => now()->toDateString(), 'due_date' => now()->addDays(30)->toDateString(), 'vat_rate' => 15,
+            'lines' => [['description' => 'Steel bars', 'quantity' => 10, 'unit_price' => 1000]],
+        ])->assertSessionHasNoErrors();
+
+        return SupplierBill::where('bill_number', $number)->firstOrFail();
+    }
+
+    private function createInvoice(User $user): CustomerInvoice
+    {
+        $this->actingAs($user)->post(route('admin.accounting.accounts-receivable.store'), [
+            'customer_id' => Customer::firstOrFail()->id, 'invoice_date' => now()->toDateString(),
+            'due_date' => now()->addDays(30)->toDateString(), 'vat_rate' => 15,
+            'lines' => [['description' => 'Progress claim', 'quantity' => 1, 'unit_price' => 20000]],
+        ])->assertSessionHasNoErrors();
+
+        return CustomerInvoice::latest('id')->firstOrFail();
+    }
+
+    public function test_approval_refuses_loudly_when_the_chart_of_accounts_is_incomplete(): void
+    {
+        $admin = $this->user('admin@example.com');
+        $invoice = $this->createInvoice($admin);
+
+        // The VAT screen shows the draft's VAT separately from the return (NR-30).
+        $this->actingAs($admin)->get(route('admin.accounting.vat.index'))
+            ->assertOk()
+            ->assertSee('Draft Output VAT')
+            ->assertSee(number_format(CustomerInvoice::where('payment_status', 'draft')->sum('vat_amount'), 2));
+
+        $receivable = ChartOfAccount::where('account_code', '1200')->firstOrFail();
+        $receivable->update(['account_code' => '1299']);
+
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-receivable.approve', $invoice))
+            ->assertSessionHasErrors('invoice');
+        $invoice->refresh();
+        $this->assertSame('draft', $invoice->payment_status, 'no half-approved invoice without a posting');
+        $this->assertNull($invoice->journal_entry_id);
+        $this->assertNull($invoice->zatcaRecord);
+
+        $receivable->update(['account_code' => '1200']);
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-receivable.approve', $invoice))->assertSessionHasNoErrors();
+        $this->assertSame('unpaid', $invoice->fresh()->payment_status);
+    }
+
+    public function test_supplier_payment_honours_accepted_types_method_and_purpose(): void
+    {
+        $admin = $this->user('admin@example.com');
+        $supplier = Supplier::firstOrFail();
+        $supplier->update(['allowed_payment_types' => 'Bank']);
+        $bill = $this->createBill($admin, $supplier);
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-payable.approve', $bill))->assertSessionHasNoErrors();
+
+        $cash = ChartOfAccount::where('account_code', '1110')->firstOrFail();
+        $bank = ChartOfAccount::where('account_code', '1120')->firstOrFail();
+
+        // The form only offers the channels this supplier accepts (NR-28) plus method and purpose (NR-29).
+        $this->actingAs($admin)->get(route('admin.accounting.accounts-payable.payment', $bill))
+            ->assertOk()
+            ->assertSee($bank->label())
+            ->assertDontSee($cash->label())
+            ->assertSee('Payment Method')
+            ->assertSee('Advance against this bill');
+
+        $payload = ['payment_date' => now()->toDateString(), 'amount' => 1000, 'payment_method' => 'Cash', 'purpose' => 'Advance against this bill'];
+
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-payable.payment.store', $bill), $payload + ['payment_account_id' => $cash->id])
+            ->assertSessionHasErrors('payment_account_id');
+
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-payable.payment.store', $bill), ['payment_account_id' => $bank->id, 'payment_method' => 'Bank Transfer'] + $payload)
+            ->assertSessionHasNoErrors();
+
+        $payment = $bill->payments()->firstOrFail();
+        $this->assertSame('Bank Transfer', $payment->payment_method);
+        $this->assertSame('Advance against this bill', $payment->purpose);
+        $this->actingAs($admin)->get(route('admin.accounting.accounts-payable.show', $bill))->assertOk()->assertSee('Advance against this bill');
+
+        // No usable account: clear guidance instead of an empty dropdown.
+        $bank->update(['status' => 'inactive']);
+        $this->actingAs($admin)->get(route('admin.accounting.accounts-payable.payment', $bill))
+            ->assertOk()->assertSee('No payment account available')->assertSee('Chart of Accounts');
+    }
+
+    public function test_bill_and_invoice_lines_name_their_default_accounts(): void
+    {
+        $admin = $this->user('admin@example.com');
+
+        $this->actingAs($admin)->get(route('admin.accounting.accounts-payable.create'))->assertOk()->assertSee('Default: 5200 - ');
+        $this->actingAs($admin)->get(route('admin.accounting.accounts-receivable.create'))->assertOk()->assertSee('Default: 4100 - ');
+    }
+
+    public function test_super_admin_can_reopen_posted_documents_with_a_reversing_entry(): void
+    {
+        $admin = $this->user('admin@example.com');
+        $bill = $this->createBill($admin, Supplier::firstOrFail());
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-payable.approve', $bill))->assertSessionHasNoErrors();
+        $bill->refresh();
+        $original = $bill->journalEntry;
+        $this->assertDatabaseHas('vat_transactions', ['source_module' => 'Supplier Bill', 'source_id' => $bill->id]);
+
+        // Only a Super Admin, and only with a reason.
+        $this->actingAs($this->user('zubair@example.com'))
+            ->post(route('admin.accounting.accounts-payable.reopen', $bill), ['reason' => 'Wrong VAT'])->assertForbidden();
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-payable.reopen', $bill), [])->assertSessionHasErrors('reason');
+
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-payable.reopen', $bill), ['reason' => 'VAT rate keyed as 15% instead of 0%'])
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('admin.accounting.accounts-payable.show', $bill));
+
+        $bill->refresh();
+        $this->assertSame('draft', $bill->status);
+        $this->assertNull($bill->journal_entry_id);
+        $this->assertStringContainsString('VAT rate keyed as 15% instead of 0%', $bill->notes);
+        $this->assertDatabaseMissing('vat_transactions', ['source_module' => 'Supplier Bill', 'source_id' => $bill->id]);
+
+        // The original posting is untouched; a posted reversing entry undoes it.
+        $this->assertSame('posted', $original->fresh()->status);
+        $reversal = JournalEntry::where('source_module', 'Manual')->where('source_id', $original->id)->firstOrFail();
+        $this->assertSame('posted', $reversal->status);
+        $this->assertSame($original->journal_number, $reversal->reference_number);
+        $this->assertSame((float) $original->total_debit, (float) $reversal->total_credit);
+        $payable = ChartOfAccount::where('account_code', '2100')->firstOrFail();
+        $this->assertSame(11500.0, (float) $reversal->lines->firstWhere('chart_of_account_id', $payable->id)->debit);
+
+        // Re-approval posts again; after a payment the bill can no longer be reopened.
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-payable.approve', $bill))->assertSessionHasNoErrors();
+        $this->assertSame('unpaid', $bill->fresh()->status);
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-payable.payment.store', $bill), [
+            'payment_date' => now()->toDateString(), 'amount' => 500, 'payment_method' => 'Cash', 'purpose' => 'Bill payment',
+            'payment_account_id' => ChartOfAccount::where('account_code', '1110')->firstOrFail()->id,
+        ])->assertSessionHasNoErrors();
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-payable.reopen', $bill), ['reason' => 'Try again'])->assertSessionHasErrors('bill');
+
+        // Invoices: the pending ZATCA record is cancelled and re-issued on re-approval.
+        $invoice = $this->createInvoice($admin);
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-receivable.approve', $invoice))->assertSessionHasNoErrors();
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-receivable.reopen', $invoice), ['reason' => 'Customer PO number missing'])->assertSessionHasNoErrors();
+        $invoice->refresh();
+        $this->assertSame('draft', $invoice->payment_status);
+        $this->assertNull($invoice->journal_entry_id);
+        $this->assertSame('cancelled', $invoice->zatcaRecord->clearance_status);
+        $this->assertDatabaseMissing('vat_transactions', ['source_module' => 'Customer Invoice', 'source_id' => $invoice->id]);
+
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-receivable.approve', $invoice))->assertSessionHasNoErrors();
+        $invoice->refresh();
+        $this->assertSame('unpaid', $invoice->payment_status);
+        $this->assertSame('pending', $invoice->zatcaRecord->clearance_status);
     }
 }

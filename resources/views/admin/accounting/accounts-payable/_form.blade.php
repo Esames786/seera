@@ -88,8 +88,8 @@
                                 </select>
                             </td>
                             <td>
-                                <select name="lines[{{ $i }}][chart_of_account_id]" class="select">
-                                    <option value="">Default material expense</option>
+                                <select name="lines[{{ $i }}][chart_of_account_id]" class="select" title="The expense account this line is charged to. Leave on the default for materials; pick Fuel, Maintenance or Equipment Expense for other suppliers.">
+                                    <option value="">Default: {{ $defaultExpenseAccount?->label() ?? '5200 - Material Expense' }}</option>
                                     @foreach ($expenseAccounts as $account)
                                         <option value="{{ $account->id }}" @selected(($line['chart_of_account_id'] ?? null) == $account->id)>{{ $account->label() }}</option>
                                     @endforeach

@@ -15,8 +15,14 @@
         <x-admin.metric-card color="red" :value="$exceptions" label="VAT Exceptions"/>
     </div>
 
+    <div class="card-grid">
+        <x-admin.metric-card color="yellow" :value="'SAR '.number_format($draftOutputVat, 2)" :label="'Draft Output VAT ('.$draftInvoices.' unapproved '.Str::plural('invoice', $draftInvoices).')'"/>
+        <x-admin.metric-card color="yellow" :value="'SAR '.number_format($draftInputVat, 2)" :label="'Draft Input VAT ('.$draftBills.' unapproved '.Str::plural('bill', $draftBills).')'"/>
+    </div>
+
     <div class="help-box">
-        VAT Payable = Output VAT − Input VAT. Transactions that fall outside any defined VAT period are listed as exceptions until a period covers their date.
+        VAT Payable = Output VAT − Input VAT, from approved invoices and bills only. Draft documents are shown separately as a forecast; they join the return when they are approved and posted.
+        Transactions that fall outside any defined VAT period are listed as exceptions until a period covers their date.
     </div>
 
     <x-admin.filter-bar>

@@ -141,11 +141,18 @@ class AccountsReceivableController extends Controller
             }
 
             $entry = $this->posting->postCustomerInvoice($accounts_receivable, $request->user()->id);
+
+            // Never approve without a ledger entry (client change request NR-30): the invoice
+            // would count as unpaid while missing from VAT and the dashboard.
+            if (! $entry) {
+                throw ValidationException::withMessages(['invoice' => 'The invoice could not be posted: the chart of accounts has no Accounts Receivable (1200) or revenue account. Set up the chart of accounts and approve again.']);
+            }
+
             $accounts_receivable->update([
                 'payment_status' => 'unpaid',
                 'received_amount' => 0,
                 'balance_amount' => $accounts_receivable->total_amount,
-                'journal_entry_id' => $entry?->id,
+                'journal_entry_id' => $entry->id,
             ]);
 
             return [$entry, $this->posting->createZatcaRecord($accounts_receivable)];
@@ -154,7 +161,59 @@ class AccountsReceivableController extends Controller
         ActivityLog::record($request, 'Accounting', 'Approved customer invoice', $accounts_receivable->invoice_number);
 
         return redirect()->route('admin.accounting.accounts-receivable.show', $accounts_receivable)
-            ->with('status', 'Invoice approved, ZATCA record '.$record->uuid.' created'.($entry ? ' and journal entry '.$entry->journal_number.' posted.' : '.'));
+            ->with('status', 'Invoice approved, ZATCA record '.$record->uuid.' created and journal entry '.$entry->journal_number.' posted.');
+    }
+
+    /**
+     * Correction after finalization (client change request NR-31). A Super Admin
+     * sends an approved, unpaid invoice back to draft as long as ZATCA has not
+     * cleared it: the journal is reversed, the VAT rows leave the open return and
+     * the e-invoice record is cancelled so a fresh one is issued on re-approval.
+     */
+    public function reopen(Request $request, CustomerInvoice $accounts_receivable): RedirectResponse
+    {
+        abort_unless($request->user()->isSuperAdmin(), 403, 'Only a Super Admin can reopen a posted invoice.');
+
+        $data = $request->validate(['reason' => ['required', 'string', 'max:500']], ['reason.required' => 'Give the reason for reopening; it is kept on the invoice.']);
+
+        $reversal = DB::transaction(function () use ($accounts_receivable, $data, $request) {
+            $invoice = CustomerInvoice::whereKey($accounts_receivable->id)->lockForUpdate()->firstOrFail();
+            $invoice->load('zatcaRecord');
+
+            if ($invoice->payment_status !== 'unpaid' || $invoice->receipts()->exists()) {
+                throw ValidationException::withMessages(['invoice' => 'Only an approved invoice with no receipts can be reopened.']);
+            }
+
+            if ($invoice->zatcaRecord && in_array($invoice->zatcaRecord->clearance_status, ['cleared', 'reported'], true)) {
+                throw ValidationException::withMessages(['invoice' => 'This invoice has already been cleared by ZATCA and cannot be changed. Issue a credit note instead.']);
+            }
+
+            $this->posting->withdrawVat('Customer Invoice', $invoice->id);
+
+            $reversal = $invoice->journal_entry_id
+                ? $this->posting->reverseEntry($invoice->journalEntry, 'Reopened invoice '.$invoice->invoice_number.': '.$data['reason'], $request->user()->id)
+                : null;
+
+            $invoice->zatcaRecord?->update(['clearance_status' => 'cancelled', 'failed_reason' => 'Invoice reopened for correction: '.$data['reason']]);
+
+            $invoice->update([
+                'payment_status' => 'draft',
+                'zatca_status' => 'not_generated',
+                'journal_entry_id' => null,
+                'received_amount' => 0,
+                'balance_amount' => $invoice->total_amount,
+                'notes' => trim(($invoice->notes ? $invoice->notes."\n" : '')
+                    .'Reopened '.now()->format('Y-m-d H:i').' by '.$request->user()->name.': '.$data['reason']
+                    .($reversal ? ' (reversal '.$reversal->journal_number.')' : '')),
+            ]);
+
+            return $reversal;
+        });
+
+        ActivityLog::record($request, 'Accounting', 'Reopened customer invoice', $accounts_receivable->invoice_number.': '.$data['reason']);
+
+        return redirect()->route('admin.accounting.accounts-receivable.show', $accounts_receivable)
+            ->with('status', 'Invoice reopened as a draft'.($reversal ? '; reversing entry '.$reversal->journal_number.' posted' : '').'. Correct it and approve again.');
     }
 
     public function receiptForm(CustomerInvoice $accounts_receivable): View
@@ -174,12 +233,16 @@ class AccountsReceivableController extends Controller
         $data = $request->validate([
             'receipt_date' => ['required', 'date', 'before_or_equal:today'],
             'receipt_account_id' => ['required', Rule::exists('chart_of_accounts', 'id')->where(fn ($query) => $query->whereIn('account_code', [PostingService::CASH, PostingService::BANK])->where('status', 'active'))],
+            'payment_method' => ['nullable', Rule::in(CustomerReceipt::METHODS)],
             'amount' => ['required', 'numeric', 'min:0.01'],
             'reference_number' => ['nullable', 'string', 'max:100'],
             'notes' => ['nullable', 'string'],
         ], [
             'amount.max' => 'The receipt cannot be more than the outstanding balance.',
         ]);
+
+        // Method follows the account when not stated (cash account = cash, otherwise bank transfer).
+        $data['payment_method'] = $data['payment_method'] ?? (ChartOfAccount::find($data['receipt_account_id'])?->account_code === PostingService::CASH ? 'Cash' : 'Bank Transfer');
 
         $receipt = DB::transaction(function () use ($accounts_receivable, $data, $request) {
             $accounts_receivable = CustomerInvoice::whereKey($accounts_receivable->id)->lockForUpdate()->firstOrFail();
@@ -292,6 +355,8 @@ class AccountsReceivableController extends Controller
                 ->where('status', 'active')
                 ->orderBy('account_code')
                 ->get(),
+            'defaultRevenueAccount' => $this->posting->account(PostingService::REVENUE),
+            'paymentMethods' => CustomerReceipt::METHODS,
             'receiptAccounts' => ChartOfAccount::where('account_type', 'asset')
                 ->where('status', 'active')
                 ->whereIn('account_code', [PostingService::CASH, PostingService::BANK])
