@@ -4,38 +4,64 @@ This guide applies to the hardened release after commit `8f32d728`. The producti
 
 The current project declares PHP `^8.3` and Laravel `^13.8` in `composer.json`.
 
+## 0. Server binaries (read first)
+
+On the cPanel host the plain `php` command is PHP 8.2 and `composer` is not on the
+PATH, so every artisan or composer command in this guide fails with "Your Composer
+dependencies require a PHP version >= 8.3.0" or "composer: command not found" unless
+the full paths are used. Start every SSH session with:
+
+```bash
+cd ~/seera
+PHP=/opt/cpanel/ea-php83/root/usr/bin/php
+COMPOSER="$PHP /opt/cpanel/composer/bin/composer"
+$PHP -v            # must print PHP 8.3.x
+$COMPOSER --version
+```
+
+If `/opt/cpanel/composer/bin/composer` does not exist, find it with
+`ls /opt/cpanel/composer/bin/` or `which composer`, and use that path instead.
+All commands below assume `$PHP` and `$COMPOSER` are set.
+
 ## 1. Choose the database path
 
-### Path A - preserve real production data
+### Path A - normal upgrade (preserve data)
 
-Use this whenever any production data must survive. Run only:
-
-```bash
-php artisan migrate --force
-```
-
-Do not run any seeder. The migrations are additive. The employee-document migration moves files referenced by existing employee-document rows from public storage to private storage.
-
-### Path B - erase the current test database and start production clean
-
-Use this only because the current server database has been confirmed to contain test data. This permanently deletes every current table and row:
+Use this for every release on a database that has ever been used. Run only:
 
 ```bash
-php artisan migrate:fresh --force
-php artisan db:seed --class=ProductionSeeder --force
+$PHP artisan migrate --force
 ```
 
-`ProductionSeeder` creates only:
+The migrations are additive. Seeders are only needed when a release says so in its
+own section (sections 9 and 10 below).
 
-- the Administration department;
-- the complete permission catalog;
-- the Super Admin role with all permissions;
-- one production administrator supplied through `.env`;
-- a minimal company profile.
+### Path B - brand-new, empty database only
 
-It does not create demo employees, projects, suppliers, customers, payroll, journals, invoices, stock, or activity history.
+Only for the very first setup on a database that contains no tables. It uses the same
+`migrate --force` (on an empty database it creates everything) followed by the
+bootstrap seeder:
 
-Never run `php artisan db:seed` without `--class=ProductionSeeder` in production. The default `DatabaseSeeder` intentionally creates demo users and transactions.
+```bash
+$PHP artisan migrate --force
+$PHP artisan db:seed --class=ProductionBootstrapSeeder --force
+```
+
+**`migrate:fresh` is not used anywhere in this guide.** It drops every table and has
+already erased the production database twice by accident. If a wipe is ever truly
+intended, take a `mysqldump` first and type the command deliberately, never from
+shell history.
+
+`ProductionBootstrapSeeder` creates only: the Administration department and the
+permission catalogue, the Super Admin role and the bootstrap administrator from
+`.env`, a minimal company profile, the standard chart of accounts with zero balances
+plus posting rules and the current VAT period, the leave types, the organisation-chart
+departments, roles, designations and staff accounts, and the Marketing permissions.
+It does not create demo employees, projects, suppliers, customers, payroll, journals,
+invoices, stock, or activity history.
+
+Never run `$PHP artisan db:seed` without a `--class=` in production. The default
+`DatabaseSeeder` intentionally creates demo users and transactions.
 
 ## 2. Pre-deployment checks and backups
 
@@ -45,8 +71,8 @@ From `~/seera`:
 git status --short
 git fetch origin
 git log --oneline --decorate -5 origin/main
-php -v
-composer --version
+$PHP -v
+$COMPOSER --version
 ```
 
 Stop if the worktree is not clean or `origin/main` does not contain the intended release commit.
@@ -115,9 +141,9 @@ Enable maintenance mode, update code, and install locked production dependencies
 
 ```bash
 cd ~/seera
-php artisan down --retry=60
+$PHP artisan down --retry=60
 git pull --ff-only origin main
-composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
+$COMPOSER install --no-dev --prefer-dist --optimize-autoloader --no-interaction
 ```
 
 Confirm the exact release:
@@ -138,33 +164,25 @@ Make Laravel's writable paths available to the web-server user without using wor
 
 ```bash
 chmod -R ug+rwX storage bootstrap/cache
-php artisan storage:link
+$PHP artisan storage:link
 ```
 
 If `storage:link` reports that the link already exists, verify that `public/storage` points to `storage/app/public` and continue.
 
 ## 5. Initialize the database
 
-For the confirmed test-only database, use Path B:
+Apply the migrations (this is the whole of Path A):
 
 ```bash
-php artisan migrate:fresh --force
-php artisan db:seed --class=ProductionSeeder --force
+$PHP artisan migrate --force
+$PHP artisan migrate:status
 ```
 
-For a database containing any data that must survive, use Path A instead:
+`migrate:status` must list every migration as "Ran". On an empty database (Path B)
+continue with the bootstrap seeder in 5a; on a database that is already set up, run a
+seeder only when the release section says so.
 
-```bash
-php artisan migrate --force
-```
-
-Verify migration state:
-
-```bash
-php artisan migrate:status
-```
-
-After the production administrator has been created, remove `SEERA_ADMIN_PASSWORD` from `.env`. Keep the other bootstrap values only if useful for documentation. The production seeder deliberately refuses to run without a 16-character bootstrap password.
+After the production administrator has been created, remove `SEERA_ADMIN_PASSWORD` from `.env`. Keep the other bootstrap values only if useful for documentation. The production seeder deliberately refuses to run without a 16-character bootstrap password; add the value back temporarily if the bootstrap ever has to be re-run.
 
 ### 5a. Organization chart login accounts
 
@@ -172,14 +190,14 @@ After the production administrator has been created, remove `SEERA_ADMIN_PASSWOR
 staff accounts from the company organization chart, run:
 
 ```bash
-php artisan db:seed --class=OrganizationHierarchySeeder --force
+$PHP artisan db:seed --class=OrganizationHierarchySeeder --force
 ```
 
 Or run everything with one command (it refuses to start while the login domain
 is still the `seera.local` placeholder, and prints the resulting account list):
 
 ```bash
-php artisan db:seed --class=ProductionBootstrapSeeder --force
+$PHP artisan db:seed --class=ProductionBootstrapSeeder --force
 ```
 
 This also runs `ProductionChartOfAccountsSeeder`: the standard chart of accounts
@@ -189,7 +207,7 @@ quarter. Without it no bill or invoice can post. It never overwrites an account
 that already exists, so it can be re-run at any time, also on its own:
 
 ```bash
-php artisan db:seed --class=ProductionChartOfAccountsSeeder --force
+$PHP artisan db:seed --class=ProductionChartOfAccountsSeeder --force
 ```
 
 Set the login domain first, otherwise the accounts are created on the
@@ -219,11 +237,11 @@ log in, and confirm afterwards that no account still shows `must_change_password
 ## 6. Cache and release
 
 ```bash
-php artisan optimize:clear
-php artisan optimize
-php artisan about
-php artisan route:list
-php artisan up
+$PHP artisan optimize:clear
+$PHP artisan optimize
+$PHP artisan about
+$PHP artisan route:list
+$PHP artisan up
 ```
 
 The deployment is not complete unless every command exits successfully.
@@ -251,8 +269,8 @@ If deployment fails before users resume work:
 2. Restore the database from `seera-before-release.sql`.
 3. Restore `storage/app` from its archive.
 4. Return the checkout to the previously recorded release commit using the hosting provider's approved deployment method.
-5. Run `composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction` and `php artisan optimize`.
-6. Run `php artisan up` only after the old application and restored database agree.
+5. Run `$COMPOSER install --no-dev --prefer-dist --optimize-autoloader --no-interaction` and `$PHP artisan optimize`.
+6. Run `$PHP artisan up` only after the old application and restored database agree.
 
 Do not attempt a code-only rollback after `migrate:fresh`; restoring the matching database and storage backup is mandatory.
 
@@ -264,7 +282,7 @@ The release implementing the client's 5 September 2026 feedback (see
 table and `users.employee_classification`. Deploy with Path A:
 
 ```bash
-php artisan migrate --force
+$PHP artisan migrate --force
 ```
 
 No seeder is required. Supplier quotation files are stored under
@@ -273,7 +291,7 @@ No seeder is required. Supplier quotation files are stored under
 The 9 September follow-up (CR-15 to CR-18) adds one more additive migration
 (`2026_09_09_000001_*`) that creates the project-classification and payment-term
 lists, inserts the four existing payment-term choices and links suppliers to the
-Accounts Payable account. Again `php artisan migrate --force` is enough. Site maps
+Accounts Payable account. Again `$PHP artisan migrate --force` is enough. Site maps
 load Leaflet from cdnjs and tiles from openstreetmap.org in the user's browser; the
 server itself needs no outbound access or API key.
 
@@ -285,18 +303,25 @@ fields and lookup values; `2026_09_18_000002_*` the marketing tables) and two
 idempotent seeders that an existing installation needs once:
 
 ```bash
-php artisan down
+cd ~/seera
+PHP=/opt/cpanel/ea-php83/root/usr/bin/php
+COMPOSER="$PHP /opt/cpanel/composer/bin/composer"
+
+$PHP artisan down
 git pull --ff-only
-composer install --no-dev --optimize-autoloader
-php artisan migrate --force
-php artisan db:seed --class=ProductionHrDefaultsSeeder --force   # leave types: Annual, Sick, Urgent, Unpaid
-php artisan db:seed --class=MarketingModuleSeeder --force        # Marketing permissions for Super Admin and Marketing Manager
-php artisan optimize
-php artisan up
+$COMPOSER install --no-dev --optimize-autoloader
+$PHP artisan migrate --force
+$PHP artisan db:seed --class=ProductionHrDefaultsSeeder --force   # leave types: Annual, Sick, Urgent, Unpaid
+$PHP artisan db:seed --class=MarketingModuleSeeder --force        # Marketing permissions for Super Admin and Marketing Manager
+$PHP artisan optimize
+$PHP artisan up
 ```
 
-Both seeders are also part of `ProductionBootstrapSeeder`, so a fresh bootstrap
-needs nothing extra. No asset rebuild is required for this round. Leave attachments
+Both seeders are also part of `ProductionBootstrapSeeder`, so a database that was
+bootstrapped after this release needs nothing extra. If the database is empty
+(for example after an accidental wipe), skip the two seeders above and run
+`$PHP artisan db:seed --class=ProductionBootstrapSeeder --force` instead, with
+`SEERA_ADMIN_PASSWORD` and `SEERA_ORG_EMAIL_DOMAIN` present in `.env`. No asset rebuild is required for this round. Leave attachments
 are stored under `storage/app/private/leave-attachments`; keep `storage/app` in the
 backup set. Optional `.env` keys: `SEERA_EMPLOYEE_CODE_SPONSORSHIP` (default `SP-`),
 `SEERA_EMPLOYEE_CODE_FREELANCER` (default `FL-`) and
