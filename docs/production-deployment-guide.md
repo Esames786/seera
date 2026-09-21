@@ -326,3 +326,26 @@ are stored under `storage/app/private/leave-attachments`; keep `storage/app` in 
 backup set. Optional `.env` keys: `SEERA_EMPLOYEE_CODE_SPONSORSHIP` (default `SP-`),
 `SEERA_EMPLOYEE_CODE_FREELANCER` (default `FL-`) and
 `SEERA_FINANCIAL_YEAR_START_MONTH` (default `1`) for the report quick ranges.
+
+## 11. September 2026 client feedback (FR-01 to FR-06)
+
+The 21 September feedback (see `docs/client-change-register-2026-09-21-status.md`)
+adds one additive migration, `2026_09_21_000001_add_document_type_lookup_values`,
+which seeds the six standard employee document types into `lookup_values` and
+carries over any type already stored. No seeder and no asset rebuild are needed:
+
+```bash
+cd ~/seera
+PHP=/opt/cpanel/ea-php83/root/usr/bin/php
+
+$PHP artisan down
+git pull --ff-only
+$PHP artisan migrate --force
+$PHP artisan optimize
+$PHP artisan up
+```
+
+After deploying, saving an employee creates their first salary structure from the
+pay on the employee form. Employees already in the system get theirs the first time
+they are edited; there is no automatic backfill, because writing salary records for
+every existing employee needs the client's approval.
