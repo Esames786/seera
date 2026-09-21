@@ -33,10 +33,63 @@
 
     <x-admin.form-section title="B. Employment Information" columns="3">
         <div>
-            <label for="employee_code">Employee Code {{ $employee ? '*' : '(auto)' }}</label>
-            <input id="employee_code" name="employee_code" class="input" value="{{ old('employee_code', $employee?->employee_code) }}" placeholder="{{ $employee ? '' : 'Leave blank: '.($codePrefixes['Sponsorship'] ?? 'SP-').'001 / '.($codePrefixes['Freelancer'] ?? 'FL-').'001' }}" @if($employee) required @endif/>
-            @unless ($employee)<div class="small" style="margin-top:4px">Numbered automatically by classification, or type your own code.</div>@endunless
+            <label for="employee_code">Employee Code {{ $employee ? '*' : '' }}</label>
+            @if ($employee)
+                <input id="employee_code" name="employee_code" class="input" value="{{ old('employee_code', $employee->employee_code) }}" required/>
+            @else
+                {{-- The next number is shown straight away (FR-06). The real field stays --}}
+                {{-- empty so the server assigns the number at save and two people --}}
+                {{-- filling the form at the same time cannot take the same code. --}}
+                <input id="employee_code_preview" class="input" value="{{ $nextCodes[old('employee_classification', 'Sponsorship')] ?? reset($nextCodes) }}" readonly aria-label="Employee code assigned automatically"/>
+                <input id="employee_code" name="employee_code" class="input" value="{{ old('employee_code') }}" placeholder="Your own code" style="margin-top:6px" hidden/>
+                <label class="small" style="display:flex;align-items:center;gap:6px;margin-top:6px">
+                    <input type="checkbox" id="employee_code_manual" @checked(old('employee_code'))/> Enter my own code instead
+                </label>
+                <div class="small" id="employee_code_note" style="margin-top:4px">Assigned when you save; it follows the classification below.</div>
+            @endif
+            @error('employee_code')<div class="field-error">{{ $message }}</div>@enderror
         </div>
+
+        @unless ($employee)
+            <script>
+                (function () {
+                    // The shown code follows the classification, and the manual box
+                    // swaps the preview for a field you type yourself (FR-06).
+                    var codes = @json($nextCodes);
+                    var preview = document.getElementById('employee_code_preview');
+                    var real = document.getElementById('employee_code');
+                    var manual = document.getElementById('employee_code_manual');
+                    var note = document.getElementById('employee_code_note');
+                    var classification = document.getElementById('employee_classification');
+                    if (!preview || !real || !manual) return;
+
+                    function apply() {
+                        var own = manual.checked;
+                        preview.hidden = own;
+                        real.hidden = !own;
+                        if (note) {
+                            note.textContent = own
+                                ? 'Your code must not already be in use.'
+                                : 'Assigned when you save; it follows the classification below.';
+                        }
+                        if (own) {
+                            real.focus();
+                        } else {
+                            real.value = '';
+                        }
+                    }
+
+                    if (classification) {
+                        classification.addEventListener('change', function () {
+                            if (codes[classification.value]) preview.value = codes[classification.value];
+                        });
+                    }
+
+                    manual.addEventListener('change', apply);
+                    apply();
+                })();
+            </script>
+        @endunless
         <div>
             <div class="label-row">
                 <label for="department_id">Department</label>
@@ -149,7 +202,7 @@
                 @endforeach
             </select>
         </div>
-        <div><label for="contract_start_date">Contract Start</label><input id="contract_start_date" name="contract_start_date" type="date" class="input" value="{{ old('contract_start_date', $employee?->contract_start_date?->toDateString()) }}"/></div>
+        <div><label for="contract_start_date">Contract Start</label><input id="contract_start_date" name="contract_start_date" type="date" class="input" max="{{ now()->toDateString() }}" value="{{ old('contract_start_date', $employee?->contract_start_date?->toDateString()) }}"/>@error('contract_start_date')<div class="field-error">{{ $message }}</div>@enderror</div>
         <div><label for="contract_end_date">Contract End</label><input id="contract_end_date" name="contract_end_date" type="date" class="input" value="{{ old('contract_end_date', $employee?->contract_end_date?->toDateString()) }}"/></div>
         <div>
             <label for="annual_leave_entitlement">Annual Leave Entitlement (days / year)</label>
@@ -185,18 +238,33 @@
         <div><label for="iban">IBAN</label><input id="iban" name="iban" class="input" value="{{ old('iban', $employee?->iban) }}" placeholder="SA00 0000 0000 0000"/></div>
         <div class="full">
             <div class="help-box">
-                These allowances are the employee default. The payroll run uses the active
-                <a href="{{ route('admin.hr.salary-structures.index') }}" style="color:var(--blue);font-weight:700">salary structure</a>,
-                which is pre-filled from these values and can add further allowance or deduction items.
+                Enter the pay once, here.
+                @if ($employee)
+                    Saving creates the employee's first
+                    <a href="{{ route('admin.hr.salary-structures.index') }}" style="color:var(--blue);font-weight:700">salary structure</a> from these figures if they have none.
+                    An existing structure is left untouched so past payroll stays as it was run; raise a new structure from the employee page after a raise.
+                @else
+                    Saving creates the employee's first
+                    <a href="{{ route('admin.hr.salary-structures.index') }}" style="color:var(--blue);font-weight:700">salary structure</a> from these figures,
+                    effective from the contract start date. Further allowance or deduction items can be added to it later.
+                @endif
             </div>
         </div>
     </x-admin.form-section>
 
-    <x-admin.form-section title="D. Documents &amp; Attachments">
+    <x-admin.form-section title="D. Documents & Attachments">
         <div class="help-box">
             IQAMA, passport, insurance and driving licence numbers and expiry dates are kept here, once, together with the file.
             The employee list, the HR dashboard and the <a href="{{ route('admin.hr.documents.index') }}" style="color:var(--blue);font-weight:700">Documents register</a> all read these rows.
             Use <em>Profession / Class</em> for the IQAMA profession or the licence class (private, heavy, light).
+        </div>
+
+        <div class="label-row" style="margin-bottom:8px">
+            <span class="small"><strong>Document types.</strong> Not in the list? Add your own, for example a Muqeem paper, and it stays available for every employee.</span>
+            <x-admin.quick-create id="qc-document-type" target-selector=".js-document-type" :url="route('admin.master.lookup-values.store')" title="New Document Type" permission="HR" submit="Add Document Type">
+                <div class="full"><label for="qc-doc-type-value">Document Type *</label><input id="qc-doc-type-value" name="value" class="input" placeholder="e.g. Muqeem Paper" required/></div>
+                <input type="hidden" name="type" value="document_type"/>
+            </x-admin.quick-create>
         </div>
 
         @if ($employee && $employee->documents->isNotEmpty())
@@ -226,11 +294,14 @@
                                 <td><x-admin.status-badge :status="$document->validityStatus()"/></td>
                                 <td>
                                     @if ($document->file_path)
-                                        <a href="{{ route('admin.hr.documents.download', $document) }}" style="color:var(--blue);font-weight:700">Download current</a>
+                                        <a href="{{ route('admin.hr.documents.view', $document) }}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">View</a>
+                                        <span class="small">·</span>
+                                        <a href="{{ route('admin.hr.documents.download', $document) }}" style="color:var(--blue);font-weight:700">Download</a>
                                     @else
                                         <span class="small">No file yet</span>
                                     @endif
-                                    <input name="existing_documents[{{ $document->id }}][file]" type="file" class="input" accept=".pdf,.jpg,.jpeg,.png,.webp" title="Choose a file to replace the current one" style="margin-top:4px"/>
+                                    <input name="existing_documents[{{ $document->id }}][file]" type="file" class="input js-document-file" accept=".pdf,.jpg,.jpeg,.png,.webp" title="Choose a file to replace the current one" style="margin-top:4px"/>
+                                    <div class="small js-file-preview" style="margin-top:4px" hidden></div>
                                 </td>
                             </tr>
                         @endforeach
@@ -275,6 +346,51 @@
             <button type="button" class="btn outline" id="add-document-row">+ Add Document</button>
             <span class="small">Attach IQAMA, passport, contract, medical insurance, driving licence or any other file. Rows without a document type are ignored.</span>
         </div>
+
+        <script>
+            (function () {
+                // Show the chosen file, with an Open link, before anything is saved,
+                // so a wrong attachment is caught here rather than after Save (FR-03).
+                document.addEventListener('change', function (event) {
+                    var input = event.target.closest('.js-document-file');
+                    if (!input) return;
+
+                    var box = input.parentElement.querySelector('.js-file-preview');
+                    if (!box) return;
+
+                    if (box.dataset.url) {
+                        URL.revokeObjectURL(box.dataset.url);
+                        delete box.dataset.url;
+                    }
+
+                    var file = input.files && input.files[0];
+                    if (!file) {
+                        box.hidden = true;
+                        box.textContent = '';
+                        return;
+                    }
+
+                    var url = URL.createObjectURL(file);
+                    box.dataset.url = url;
+                    box.innerHTML = '';
+
+                    var name = document.createElement('span');
+                    name.textContent = file.name + ' (' + Math.round(file.size / 1024) + ' KB) ';
+                    box.appendChild(name);
+
+                    var link = document.createElement('a');
+                    link.href = url;
+                    link.target = '_blank';
+                    link.rel = 'noopener';
+                    link.style.color = 'var(--blue)';
+                    link.style.fontWeight = '700';
+                    link.textContent = 'Open to check';
+                    box.appendChild(link);
+
+                    box.hidden = false;
+                });
+            })();
+        </script>
         @error('documents.*.file')<div class="field-error">{{ $message }}</div>@enderror
         @error('documents.*.issue_date')<div class="field-error">{{ $message }}</div>@enderror
         @error('documents.*.expiry_date')<div class="field-error">{{ $message }}</div>@enderror

@@ -177,8 +177,11 @@ class PayrollRunController extends Controller
             ->orderByDesc('effective_from')
             ->first();
 
+        // Without a structure the employee's own profile is used for the allowances
+        // too, not the basic salary alone: dropping them silently understated the
+        // pay of anyone whose structure had not been created yet (client feedback FR-04).
         $basic = (float) ($structure?->basic_salary ?? $employee->basic_salary);
-        $allowances = (float) ($structure?->totalAllowances() ?? 0);
+        $allowances = $structure ? (float) $structure->totalAllowances() : $employee->defaultAllowanceTotal();
         $deductions = (float) ($structure?->totalDeductions() ?? 0);
 
         $overtime = (float) OvertimeRecord::where('employee_id', $employee->id)
@@ -203,7 +206,7 @@ class PayrollRunController extends Controller
             'net_amount' => round($gross - $deductions, 2),
             'present_days' => (clone $attendance)->whereIn('status', ['present', 'late'])->count(),
             'leave_days' => (clone $attendance)->where('status', 'leave')->count(),
-            'remarks' => $structure ? null : 'No salary structure - employee basic salary used.',
+            'remarks' => $structure ? null : 'No salary structure - the employee profile basic salary and allowances were used.',
         ];
     }
 

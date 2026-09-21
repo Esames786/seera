@@ -36,9 +36,20 @@ class SalaryStructureController extends Controller
         ] + $this->formOptions());
     }
 
-    public function create(): View
+    /**
+     * Opened from the employee page with ?employee=ID, the form arrives filled
+     * with the pay already entered on that employee, so the same figures are
+     * never typed twice (client feedback FR-04).
+     */
+    public function create(Request $request): View
     {
-        return view('admin.hr.salary-structures.create', $this->formOptions());
+        $employee = $request->filled('employee')
+            ? Employee::find($request->integer('employee'))
+            : null;
+
+        return view('admin.hr.salary-structures.create', [
+            'prefillEmployee' => $employee,
+        ] + $this->formOptions());
     }
 
     public function store(Request $request): RedirectResponse
@@ -145,8 +156,14 @@ class SalaryStructureController extends Controller
 
     private function formOptions(): array
     {
+        $employees = Employee::orderBy('employee_code')->get();
+
         return [
-            'employees' => Employee::orderBy('employee_code')->get(),
+            'employees' => $employees,
+            // Choosing an employee fills the amounts from their profile (FR-04).
+            'employeeDefaults' => $employees->mapWithKeys(fn (Employee $employee) => [
+                $employee->id => $employee->payrollDefaults() + ['effective_from' => $employee->salaryEffectiveFrom()],
+            ]),
         ];
     }
 }

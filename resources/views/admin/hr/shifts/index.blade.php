@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Shifts')
-@section('breadcrumb', 'HR &amp; Payroll / Shifts')
+@section('breadcrumb', 'HR & Payroll / Shifts')
 
 @section('content')
     <x-admin.page-header title="Shift Management" description="Define shift timing, break, grace minutes and the overtime threshold">

@@ -155,6 +155,7 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::resource('employees', EmployeeController::class);
         Route::get('documents', [EmployeeDocumentController::class, 'index'])->name('documents.index');
         Route::get('documents/{document}/download', [EmployeeDocumentController::class, 'download'])->name('documents.download');
+        Route::get('documents/{document}/view', [EmployeeDocumentController::class, 'view'])->name('documents.view');
         Route::resource('shifts', ShiftController::class)->except(['show']);
 
         Route::resource('attendance', AttendanceController::class)

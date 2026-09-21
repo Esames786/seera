@@ -4,7 +4,7 @@
 @section('breadcrumb', 'Marketing / Leads & Visits')
 
 @section('content')
-    <x-admin.page-header title="Leads &amp; Visits" description="Prospects the marketing team is working on: create a lead, assign it, record each visit and its follow-up">
+    <x-admin.page-header title="Leads & Visits" description="Prospects the marketing team is working on: create a lead, assign it, record each visit and its follow-up">
         <a class="btn outline" href="{{ route('admin.marketing.report') }}">Visit Report</a>
         @if (auth()->user()->hasPermission('Marketing', 'create'))
             <a class="btn primary" href="{{ route('admin.marketing.leads.create') }}">+ New Lead</a>

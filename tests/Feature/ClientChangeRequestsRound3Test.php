@@ -325,8 +325,9 @@ class ClientChangeRequestsRound3Test extends TestCase
         $this->actingAs($admin)->post(route('admin.hr.employees.store'), $payload('Manual Code', 'Sponsorship') + ['employee_code' => 'X-777'])->assertRedirect();
         $this->assertSame('X-777', Employee::where('first_name', 'Manual Code')->value('employee_code'));
 
+        // The next code is now shown on the form itself; see the FR-06 test for the detail.
         $this->actingAs($admin)->get(route('admin.hr.employees.create'))
-            ->assertOk()->assertSee('Employee Code (auto)')->assertSee('data-quick-create="qc-nationality"', false);
+            ->assertOk()->assertSee('Assigned when you save')->assertSee('data-quick-create="qc-nationality"', false);
 
         // Nationality list is extensible, but only by HR users.
         $this->actingAs($admin)->postJson(route('admin.master.lookup-values.store'), ['type' => 'nationality', 'value' => 'Jordanian'])->assertCreated();

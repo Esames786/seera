@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'End of Service')
-@section('breadcrumb', 'HR &amp; Payroll / End of Service Benefits')
+@section('breadcrumb', 'HR & Payroll / End of Service Benefits')
 
 @section('content')
     <x-admin.page-header title="End of Service Benefits" description="Saudi EOSB calculations with immutable approved settlements">

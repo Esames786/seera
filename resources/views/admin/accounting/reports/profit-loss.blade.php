@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
 @section('title', 'Profit & Loss')
-@section('breadcrumb', 'Accounting / Financial Reports / Profit &amp; Loss')
+@section('breadcrumb', 'Accounting / Financial Reports / Profit & Loss')
 
 @section('content')
-    <x-admin.page-header title="Profit &amp; Loss" description="Revenue less expenses for the selected period">
+    <x-admin.page-header title="Profit & Loss" description="Revenue less expenses for the selected period">
         <a class="btn outline" href="{{ route('admin.accounting.reports.index') }}">All Reports</a>
     </x-admin.page-header>
 

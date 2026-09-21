@@ -215,6 +215,82 @@ class Employee extends Model
         return $this->hasOne(SalaryStructure::class)->where('status', 'active')->latestOfMany('effective_from');
     }
 
+    /**
+     * The pay entered on the employee's own Payroll Information section.
+     * This is the single place the client types salary; the salary structure,
+     * the payroll run and this profile must all agree on it (FR-04).
+     *
+     * @return array<string, float>
+     */
+    public function payrollDefaults(): array
+    {
+        return [
+            'basic_salary' => (float) $this->basic_salary,
+            'housing_allowance' => (float) $this->housing_allowance,
+            'transport_allowance' => (float) $this->transport_allowance,
+            'food_allowance' => (float) $this->food_allowance,
+            'fuel_allowance' => (float) $this->fuel_allowance,
+            'other_allowance' => (float) $this->other_allowance,
+        ];
+    }
+
+    /** Allowances entered on the profile, used when no salary structure exists yet. */
+    public function defaultAllowanceTotal(): float
+    {
+        return round(array_sum(array_diff_key($this->payrollDefaults(), ['basic_salary' => null])), 2);
+    }
+
+    /**
+     * The date the first structure takes effect: the contract start if there is
+     * one, otherwise the joining date, otherwise today. Chosen so the structure
+     * is already valid for any payroll period since the person started.
+     */
+    public function salaryEffectiveFrom(): string
+    {
+        return ($this->contract_start_date ?? $this->joining_date ?? now())->toDateString();
+    }
+
+    /**
+     * Create the employee's first salary structure from the pay just entered on
+     * the profile (FR-04). Does nothing when a structure already exists: payroll
+     * history must never be rewritten behind the user's back, so a later salary
+     * change needs a new structure raised deliberately.
+     */
+    public function ensureSalaryStructure(): ?SalaryStructure
+    {
+        if ((float) $this->basic_salary <= 0 || $this->salaryStructures()->exists()) {
+            return null;
+        }
+
+        return $this->salaryStructures()->create($this->payrollDefaults() + [
+            'fixed_deduction' => 0,
+            'effective_from' => $this->salaryEffectiveFrom(),
+            'status' => 'active',
+        ]);
+    }
+
+    /**
+     * True when the active structure no longer matches the profile, for example
+     * after a raise. The employee page shows this as a notice with a prefilled
+     * "new structure" action rather than changing the existing structure.
+     */
+    public function salaryStructureOutOfDate(): bool
+    {
+        $structure = $this->activeSalaryStructure;
+
+        if (! $structure) {
+            return false;
+        }
+
+        foreach ($this->payrollDefaults() as $field => $value) {
+            if (abs((float) $structure->{$field} - $value) >= 0.01) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function payrollItems()
     {
         return $this->hasMany(PayrollRunItem::class);

@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Edit Shift')
-@section('breadcrumb', 'HR &amp; Payroll / Shifts / Edit Shift')
+@section('breadcrumb', 'HR & Payroll / Shifts / Edit Shift')
 
 @section('content')
     <x-admin.page-header :title="'Edit Shift: '.$shift->name" description="Update shift timing and overtime rules"/>

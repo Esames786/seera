@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Employee Details')
-@section('breadcrumb', 'HR &amp; Payroll / Employees / Employee Details')
+@section('breadcrumb', 'HR & Payroll / Employees / Employee Details')
 
 @section('content')
     <x-admin.page-header :title="$employee->name" :description="'Employee profile with HR history and payroll context'">
@@ -54,7 +54,7 @@
         </x-admin.data-table>
 
         <div>
-            <x-admin.data-table title="Personal &amp; Documents" class="detail-table">
+            <x-admin.data-table title="Personal & Documents" class="detail-table">
                 <tbody>
                     <tr><th>Email</th><td>{{ $employee->email ?? '-' }}</td></tr>
                     <tr><th>Phone</th><td>{{ $employee->phone ?? '-' }}</td></tr>
@@ -102,7 +102,15 @@
                     <td>{{ $document->issue_date?->toDateString() ?? '-' }}</td>
                     <td>{{ $document->expiry_date?->toDateString() ?? '-' }}</td>
                     <td><x-admin.status-badge :status="$document->validityStatus()"/></td>
-                    <td>{{ $document->file_path ? 'Uploaded' : 'Not uploaded' }}</td>
+                    <td>
+                        @if ($document->file_path)
+                            <a href="{{ route('admin.hr.documents.view', $document) }}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">View</a>
+                            <span class="small">·</span>
+                            <a href="{{ route('admin.hr.documents.download', $document) }}" style="color:var(--blue);font-weight:700">Download</a>
+                        @else
+                            <span class="small">Not uploaded</span>
+                        @endif
+                    </td>
                 </tr>
             @empty
                 <tr><td colspan="6" class="table-empty">No documents recorded.</td></tr>
@@ -179,9 +187,18 @@
         </x-admin.data-table>
     </div>
 
+    @if ($employee->salaryStructureOutOfDate())
+        <div class="alert flash" id="salary-mismatch">
+            <strong>Payroll information and salary structure differ.</strong>
+            The profile now shows basic SAR {{ number_format($employee->basic_salary, 2) }} and allowances SAR {{ number_format($employee->defaultAllowanceTotal(), 2) }},
+            while the active structure carries basic SAR {{ number_format($employee->activeSalaryStructure->basic_salary, 2) }} and allowances SAR {{ number_format($employee->activeSalaryStructure->totalAllowances(), 2) }}.
+            Payroll uses the structure. Raise a new structure from the new figures rather than editing the old one, so past payroll stays as it was run.
+        </div>
+    @endif
+
     <x-admin.data-table title="Salary Structures" id="salary">
         <x-slot:headerActions>
-            <a class="btn sm primary" href="{{ route('admin.hr.salary-structures.create') }}">+ Add Structure</a>
+            <a class="btn sm primary" href="{{ route('admin.hr.salary-structures.create', ['employee' => $employee->id]) }}">+ New Structure From Profile</a>
         </x-slot:headerActions>
         <thead>
             <tr><th>Effective From</th><th>Effective To</th><th>Basic</th><th>Allowances</th><th>Deductions</th><th>Net</th><th>Status</th></tr>
@@ -198,9 +215,12 @@
                     <td><x-admin.status-badge :status="$structure->status"/></td>
                 </tr>
             @empty
-                <tr><td colspan="7" class="table-empty">No salary structure defined yet.</td></tr>
+                <tr><td colspan="7" class="table-empty">No salary structure yet. "+ New Structure From Profile" opens the form already filled with the pay above.</td></tr>
             @endforelse
         </tbody>
+        <x-slot:footer>
+            <span class="small">Payroll uses the structure that covers the run's period. Without one it falls back to the payroll information on this page.</span>
+        </x-slot:footer>
     </x-admin.data-table>
 
     <x-admin.data-table title="Payroll History" id="payroll">

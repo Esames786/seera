@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Employees')
-@section('breadcrumb', 'HR &amp; Payroll / Employees')
+@section('breadcrumb', 'HR & Payroll / Employees')
 
 @section('content')
     <x-admin.page-header title="Employee Management" description="Central HR employee profiles linked to departments, designations, projects, sites and payroll">

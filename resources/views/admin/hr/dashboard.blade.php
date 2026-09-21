@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'HR Dashboard')
-@section('breadcrumb', 'HR &amp; Payroll / HR Dashboard')
+@section('breadcrumb', 'HR & Payroll / HR Dashboard')
 
 @section('content')
     <x-admin.page-header title="HR Dashboard" description="Employees, attendance, leaves, overtime, documents and payroll at a glance">

@@ -17,7 +17,7 @@
         <x-admin.metric-card color="blue" :value="$rows->count()" label="Projects"/>
     </div>
 
-    <x-admin.data-table title="Project Cost &amp; Revenue">
+    <x-admin.data-table title="Project Cost & Revenue">
         <thead>
             <tr><th>Project</th><th>Client</th><th>Budget</th><th>Posted Cost</th><th>Budget Used</th><th>Posted Revenue</th><th>Supplier Billed</th><th>Customer Invoiced</th><th>Margin</th></tr>
         </thead>

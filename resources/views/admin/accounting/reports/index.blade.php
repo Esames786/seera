@@ -4,7 +4,7 @@
 @section('breadcrumb', 'Accounting / Financial Reports')
 
 @section('content')
-    <x-admin.page-header title="Financial Reports" description="Balance sheet, profit &amp; loss, trial balance, cash flow, VAT and project cost, all built from posted journal entries"/>
+    <x-admin.page-header title="Financial Reports" description="Balance sheet, profit & loss, trial balance, cash flow, VAT and project cost, all built from posted journal entries"/>
 
     <div class="card-grid">
         @foreach ([

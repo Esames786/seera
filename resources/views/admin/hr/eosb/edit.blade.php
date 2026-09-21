@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Edit EOSB Record')
-@section('breadcrumb', 'HR &amp; Payroll / End of Service / Edit Record')
+@section('breadcrumb', 'HR & Payroll / End of Service / Edit Record')
 
 @section('content')
     <x-admin.page-header :title="'Edit EOSB: '.$record->employee->name" :description="'Termination date '.$record->termination_date->toDateString()">

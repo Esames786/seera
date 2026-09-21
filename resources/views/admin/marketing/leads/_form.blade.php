@@ -28,7 +28,7 @@
         <div><label for="estimated_value">Estimated Value (SAR)</label><input id="estimated_value" name="estimated_value" type="number" step="0.01" min="0" class="input" value="{{ old('estimated_value', $lead?->estimated_value) }}"/></div>
     </x-admin.form-section>
 
-    <x-admin.form-section title="B. Assignment &amp; Follow-up" columns="3">
+    <x-admin.form-section title="B. Assignment & Follow-up" columns="3">
         @if ($isManager)
             <div>
                 <label for="assigned_to">Assigned To</label>

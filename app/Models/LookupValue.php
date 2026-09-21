@@ -15,6 +15,7 @@ class LookupValue extends Model
     public const TYPES = [
         'supplier_category' => 'Supplier Category',
         'nationality' => 'Nationality',
+        'document_type' => 'Document Type',
     ];
 
     protected $fillable = ['type', 'value', 'sort_order', 'status'];

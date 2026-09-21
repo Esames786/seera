@@ -56,7 +56,7 @@ class EmployeeController extends Controller
             ->withQueryString();
 
         return view('admin.hr.employees.index', [
-            'documentTypes' => \App\Models\EmployeeDocument::TYPES,
+            'documentTypes' => \App\Models\EmployeeDocument::types(),
             'employees' => $employees,
             'totalEmployees' => Employee::count(),
             'activeEmployees' => Employee::where('status', 'active')->count(),
@@ -84,9 +84,12 @@ class EmployeeController extends Controller
                 $this->syncDocuments($request, $employee, $documents, $storedPaths);
                 $employee->syncDocumentSummary();
                 $this->syncUserClassification($employee);
+                // The pay typed here becomes the employee's first salary structure (FR-04).
+                $structure = $employee->ensureSalaryStructure();
 
-                return $employee;
+                return [$employee, $structure];
             });
+            [$employee, $structure] = $employee;
         } catch (Throwable $exception) {
             Storage::disk('local')->delete($storedPaths);
             throw $exception;
@@ -95,7 +98,8 @@ class EmployeeController extends Controller
         ActivityLog::record($request, 'HR', 'Created employee', $employee->name);
 
         return redirect()->route('admin.hr.employees.index')
-            ->with('status', 'Employee "'.$employee->name.'" created successfully.');
+            ->with('status', 'Employee "'.$employee->name.'" created with code '.$employee->employee_code.'.'
+                .($structure ? ' Their salary structure was created from the payroll information, effective '.$structure->effective_from->toDateString().'.' : ''));
     }
 
     public function show(Employee $employee): View
@@ -139,12 +143,16 @@ class EmployeeController extends Controller
         $replacedPaths = [];
 
         try {
-            DB::transaction(function () use ($request, $employee, $data, $documents, $existing, &$storedPaths, &$replacedPaths) {
+            $structure = DB::transaction(function () use ($request, $employee, $data, $documents, $existing, &$storedPaths, &$replacedPaths) {
                 $employee->update($data);
                 $this->syncDocuments($request, $employee, $documents, $storedPaths);
                 $this->updateExistingDocuments($request, $employee, $existing, $storedPaths, $replacedPaths);
                 $employee->syncDocumentSummary();
                 $this->syncUserClassification($employee);
+
+                // Employees saved before this release get their first structure now.
+                // An existing structure is never rewritten: that would change payroll history.
+                return $employee->ensureSalaryStructure();
             });
         } catch (Throwable $exception) {
             Storage::disk('local')->delete($storedPaths);
@@ -156,8 +164,15 @@ class EmployeeController extends Controller
 
         ActivityLog::record($request, 'HR', 'Updated employee', $employee->name);
 
-        return redirect()->route('admin.hr.employees.index')
-            ->with('status', 'Employee "'.$employee->name.'" updated successfully.');
+        $message = 'Employee "'.$employee->name.'" updated successfully.';
+
+        if ($structure) {
+            $message .= ' Their salary structure was created from the payroll information, effective '.$structure->effective_from->toDateString().'.';
+        } elseif ($employee->load('activeSalaryStructure')->salaryStructureOutOfDate()) {
+            $message .= ' The payroll information no longer matches their active salary structure; open the employee to raise a new structure from the new figures.';
+        }
+
+        return redirect()->route('admin.hr.employees.index')->with('status', $message);
     }
 
     /**
@@ -312,7 +327,9 @@ class EmployeeController extends Controller
             'joining_date' => ['nullable', 'date', 'before_or_equal:today'],
             'contract_type' => ['required', 'string', 'max:50'],
             'employee_classification' => ['required', Rule::in(Employee::CLASSIFICATIONS)],
-            'contract_start_date' => ['nullable', 'date'],
+            // A contract starts today or earlier, exactly like the joining date
+            // (client feedback FR-01). The end date may still be in the future.
+            'contract_start_date' => ['nullable', 'date', 'before_or_equal:today'],
             'contract_end_date' => ['nullable', 'date', 'after_or_equal:contract_start_date'],
             'annual_leave_entitlement' => ['nullable', 'integer', 'min:0', 'max:365'],
             'iqama_number' => ['nullable', 'string', 'max:50'],
@@ -369,6 +386,12 @@ class EmployeeController extends Controller
             'contractTypes' => ['Full Time', 'Part Time', 'Contract', 'Temporary'],
             'classifications' => Employee::CLASSIFICATIONS,
             'codePrefixes' => config('seera.employee_codes'),
+            // Shown on the Add Employee form so the automatic number is visible
+            // before saving (client feedback FR-06). It is a preview: the number
+            // is taken at save, so two people filling the form cannot collide.
+            'nextCodes' => collect(config('seera.employee_codes'))
+                ->map(fn (string $prefix) => CodeGenerator::sequential('employees', 'employee_code', $prefix)),
+            'documentTypes' => \App\Models\EmployeeDocument::types(),
             'documentSubtypes' => \App\Models\EmployeeDocument::whereNotNull('document_subtype')->distinct()->orderBy('document_subtype')->pluck('document_subtype'),
             'paymentMethods' => ['Bank Transfer', 'Cash'],
             'nationalities' => LookupValue::options('nationality', $employee?->nationality),

@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Salary Structure')
-@section('breadcrumb', 'HR &amp; Payroll / Salary Structures / Details')
+@section('breadcrumb', 'HR & Payroll / Salary Structures / Details')
 
 @section('content')
     <x-admin.page-header :title="'Salary Structure: '.$structure->employee->name" :description="'Effective from '.$structure->effective_from->toDateString().' to '.($structure->effective_to?->toDateString() ?? 'open')">

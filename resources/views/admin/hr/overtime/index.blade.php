@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Overtime')
-@section('breadcrumb', 'HR &amp; Payroll / Overtime')
+@section('breadcrumb', 'HR & Payroll / Overtime')
 
 @section('content')
     <x-admin.page-header title="Overtime Management" description="Overtime claims linked to attendance records and the approval workflow">

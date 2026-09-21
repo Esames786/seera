@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Add Attendance')
-@section('breadcrumb', 'HR &amp; Payroll / Attendance / Manual Attendance')
+@section('breadcrumb', 'HR & Payroll / Attendance / Manual Attendance')
 
 @section('content')
     <x-admin.page-header title="Manual Attendance" description="Record a check-in/check-out entry for an employee"/>

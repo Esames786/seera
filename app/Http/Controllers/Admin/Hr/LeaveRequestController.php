@@ -199,6 +199,7 @@ class LeaveRequestController extends Controller
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'total_days' => ['nullable', 'numeric', 'min:0'],
+            'total_days_override' => ['nullable', 'boolean'],
             'reason' => ['nullable', 'string'],
             'attachment' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png,webp', 'max:5120'],
             'status' => ['required', 'in:pending,approved,rejected,cancelled'],
@@ -210,11 +211,32 @@ class LeaveRequestController extends Controller
 
         unset($data['attachment']);
 
-        // Inclusive day count so a one-day leave counts as 1.
-        $data['total_days'] = $data['total_days']
-            ?? Carbon::parse($data['start_date'])->startOfDay()->diffInDays(Carbon::parse($data['end_date'])->startOfDay()) + 1;
+        // The dates decide the number of days (client feedback FR-05). The form
+        // shows the same count live, and recalculating here means a total left
+        // over from earlier dates can never be saved. A half day or another
+        // agreed exception needs the override box, which is validated separately.
+        $counted = self::countDays($data['start_date'], $data['end_date']);
+        $override = (bool) ($data['total_days_override'] ?? false);
+
+        $data['total_days'] = $override && filled($data['total_days'] ?? null)
+            ? (float) $data['total_days']
+            : $counted;
+
+        if ($override && $data['total_days'] > $counted) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'total_days' => 'The chosen dates cover '.$counted.' '.\Illuminate\Support\Str::plural('day', $counted).'; the total cannot be more than that.',
+            ]);
+        }
+
+        unset($data['total_days_override']);
 
         return $data;
+    }
+
+    /** Inclusive calendar-day count, so a one-day leave counts as 1. */
+    public static function countDays(string $start, string $end): int
+    {
+        return (int) Carbon::parse($start)->startOfDay()->diffInDays(Carbon::parse($end)->startOfDay()) + 1;
     }
 
     private function formOptions(): array

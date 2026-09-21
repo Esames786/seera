@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Leave Details')
-@section('breadcrumb', 'HR &amp; Payroll / Leaves / Leave Details')
+@section('breadcrumb', 'HR & Payroll / Leaves / Leave Details')
 
 @section('content')
     <x-admin.page-header :title="'Leave Request: '.$leave->employee->name" :description="$leave->leaveType->name.' — '.$leave->start_date->toDateString().' to '.$leave->end_date->toDateString()">

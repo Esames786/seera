@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Attendance')
-@section('breadcrumb', 'HR &amp; Payroll / Attendance')
+@section('breadcrumb', 'HR & Payroll / Attendance')
 
 @section('content')
     <x-admin.page-header title="Attendance Management" description="Manual, mobile and offline attendance with geo-fence validation">

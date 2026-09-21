@@ -26,7 +26,7 @@
         </tbody>
     </x-admin.data-table>
 
-    <x-admin.data-table title="Recent Cash &amp; Bank Movements">
+    <x-admin.data-table title="Recent Cash & Bank Movements">
         <thead>
             <tr><th>Date</th><th>Journal</th><th>Account</th><th>Description</th><th>Source</th><th>Cash In</th><th>Cash Out</th></tr>
         </thead>

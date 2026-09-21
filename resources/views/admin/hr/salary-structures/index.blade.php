@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Salary Structures')
-@section('breadcrumb', 'HR &amp; Payroll / Salary Structures')
+@section('breadcrumb', 'HR & Payroll / Salary Structures')
 
 @section('content')
     <x-admin.page-header title="Salary Structures" description="Basic salary, allowances, deductions and additional salary items per employee">

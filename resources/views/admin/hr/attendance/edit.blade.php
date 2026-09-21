@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Edit Attendance')
-@section('breadcrumb', 'HR &amp; Payroll / Attendance / Edit Attendance')
+@section('breadcrumb', 'HR & Payroll / Attendance / Edit Attendance')
 
 @section('content')
     <x-admin.page-header

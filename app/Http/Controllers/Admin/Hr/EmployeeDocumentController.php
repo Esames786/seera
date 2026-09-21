@@ -55,23 +55,39 @@ class EmployeeDocumentController extends Controller
 
     public function download(EmployeeDocument $document): StreamedResponse
     {
+        return $this->stream($document, 'attachment');
+    }
+
+    /**
+     * The same file shown in the browser instead of downloaded, so the user can
+     * confirm the right document is attached (client feedback FR-03). Access
+     * still goes through this authenticated route; the files stay private.
+     */
+    public function view(EmployeeDocument $document): StreamedResponse
+    {
+        return $this->stream($document, 'inline');
+    }
+
+    private function stream(EmployeeDocument $document, string $disposition): StreamedResponse
+    {
         abort_unless($document->file_path, 404);
 
-        if (Storage::disk('local')->exists($document->file_path)) {
-            return Storage::disk('local')->download($document->file_path);
-        }
-
         // Existing deployments may still have files written by the former public-disk workflow.
-        abort_unless(Storage::disk('public')->exists($document->file_path), 404);
+        $disk = Storage::disk('local')->exists($document->file_path) ? 'local' : 'public';
+        abort_unless(Storage::disk($disk)->exists($document->file_path), 404);
 
-        return Storage::disk('public')->download($document->file_path);
+        $name = $document->document_type.' - '.basename($document->file_path);
+
+        return $disposition === 'inline'
+            ? Storage::disk($disk)->response($document->file_path, $name, ['Content-Disposition' => 'inline; filename="'.$name.'"'])
+            : Storage::disk($disk)->download($document->file_path, $name);
     }
 
     private function formOptions(): array
     {
         return [
             'employees' => Employee::orderBy('employee_code')->get(),
-            'documentTypes' => EmployeeDocument::TYPES,
+            'documentTypes' => EmployeeDocument::types(),
         ];
     }
 }

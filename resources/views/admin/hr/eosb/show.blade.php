@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'EOSB Details')
-@section('breadcrumb', 'HR &amp; Payroll / End of Service / Details')
+@section('breadcrumb', 'HR & Payroll / End of Service / Details')
 
 @section('content')
     <x-admin.page-header :title="'End of Service: '.$record->employee->name" :description="$record->reasonLabel().' on '.$record->termination_date->toDateString()">

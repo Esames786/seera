@@ -1,6 +1,7 @@
 @props([
     'id',                  // unique modal id, e.g. qc-customer
-    'target',              // id (or comma-separated ids) of the select(s) that receive the new option
+    'target' => '',        // id (or comma-separated ids) of the select(s) that receive the new option
+    'targetSelector' => null, // CSS selector for repeated selects (dynamic rows); also patches their <template>
     'url',                 // POST endpoint answering JSON {id, label, parent?} when Accept: application/json
     'title',
     'permission',          // permission module the user needs "create" on, e.g. Customers
@@ -33,7 +34,7 @@
     </span>
 
     @push('modals')
-        <div class="modal-overlay quick-create-modal" id="{{ $id }}" data-target="{{ $target }}" data-url="{{ $url }}" @if($editUrl) data-edit-url="{{ $editUrl }}" @endif>
+        <div class="modal-overlay quick-create-modal" id="{{ $id }}" data-target="{{ $target }}" @if($targetSelector) data-target-selector="{{ $targetSelector }}" @endif data-url="{{ $url }}" @if($editUrl) data-edit-url="{{ $editUrl }}" @endif>
             <div class="modal-card {{ $wide ? 'wide' : '' }}">
                 <div class="modal-head">
                     <span><span class="qc-mode-label">New</span> {{ $title }}</span>
@@ -63,9 +64,39 @@
                     return input ? input.value : '';
                 }
 
+                function targets(modal) {
+                    var found = [];
+                    (modal.dataset.target || '').split(',').forEach(function (id) {
+                        var select = id.trim() ? document.getElementById(id.trim()) : null;
+                        if (select) found.push(select);
+                    });
+                    // Repeated selects in dynamic rows all receive the new option.
+                    if (modal.dataset.targetSelector) {
+                        document.querySelectorAll(modal.dataset.targetSelector).forEach(function (select) {
+                            if (found.indexOf(select) === -1) found.push(select);
+                        });
+                    }
+                    return found;
+                }
+
                 function firstTarget(modal) {
-                    var id = (modal.dataset.target || '').split(',')[0].trim();
-                    return id ? document.getElementById(id) : null;
+                    return targets(modal)[0] || null;
+                }
+
+                /** Rows added after the value was created must offer it too. */
+                function patchTemplates(modal, record) {
+                    if (!modal.dataset.targetSelector) return;
+                    document.querySelectorAll('template').forEach(function (template) {
+                        template.content.querySelectorAll(modal.dataset.targetSelector).forEach(function (select) {
+                            var value = String(record.id);
+                            var exists = Array.prototype.some.call(select.options, function (o) { return o.value === value; });
+                            if (exists) return;
+                            var option = document.createElement('option');
+                            option.value = value;
+                            option.textContent = record.label;
+                            select.appendChild(option);
+                        });
+                    });
                 }
 
                 function open(modal, mode) {
@@ -129,7 +160,7 @@
                     });
                 }
 
-                function addOption(select, record) {
+                function addOption(select, record, shouldSelect) {
                     var value = String(record.id);
                     var parent = (record.parent === undefined || record.parent === null) ? '' : String(record.parent);
                     var existing = Array.prototype.find.call(select.options, function (o) { return o.value === value; });
@@ -146,6 +177,10 @@
                     select.dispatchEvent(new CustomEvent('seera:option-added', {
                         detail: { value: value, label: record.label, parent: parent }
                     }));
+
+                    // With repeated rows only the first free row is switched to the new
+                    // value; the others just gain the option.
+                    if (shouldSelect === false) return;
 
                     select.value = value;
                     select.dispatchEvent(new Event('change', { bubbles: true }));
@@ -222,11 +257,18 @@
                                 showErrors(modal, { message: payload.message || ('The record could not be saved (' + response.status + ').') });
                                 return;
                             }
-                            modal.dataset.target.split(',').forEach(function (id) {
-                                var select = document.getElementById(id.trim());
-                                if (!select) return;
-                                if (editing) renameOption(select, payload); else addOption(select, payload);
+                            var repeated = !!modal.dataset.targetSelector;
+                            var claimed = false;
+                            targets(modal).forEach(function (select) {
+                                if (editing) {
+                                    renameOption(select, payload);
+                                    return;
+                                }
+                                var take = ! repeated || (! claimed && select.value === '');
+                                addOption(select, payload, take);
+                                if (take) claimed = true;
                             });
+                            if (!editing) patchTemplates(modal, payload);
                             form.reset();
                             close(modal);
                         });

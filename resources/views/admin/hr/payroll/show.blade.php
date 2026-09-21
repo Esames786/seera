@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Payroll Details')
-@section('breadcrumb', 'HR &amp; Payroll / Payroll / Payroll Details')
+@section('breadcrumb', 'HR & Payroll / Payroll / Payroll Details')
 
 @section('content')
     <x-admin.page-header :title="'Payroll Run: '.$run->code" :description="$run->periodLabel().' — '.$run->period_start->toDateString().' to '.$run->period_end->toDateString()">

@@ -24,7 +24,7 @@ class LookupValueController extends Controller
         ]);
 
         // The route is open to any signed-in user; the right to add depends on what the list is for.
-        $module = $data['type'] === 'nationality' ? 'HR' : 'Suppliers';
+        $module = in_array($data['type'], ['nationality', 'document_type'], true) ? 'HR' : 'Suppliers';
         abort_unless($request->user()->hasPermission($module, 'create'), 403, 'You do not have permission to add values to this list.');
 
         $value = trim($data['value']);

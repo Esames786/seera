@@ -36,7 +36,15 @@
         </div>
         <div><label for="start_date">Start Date *</label><input id="start_date" name="start_date" type="date" class="input" value="{{ old('start_date', $leave?->start_date?->toDateString()) }}" required/></div>
         <div><label for="end_date">End Date *</label><input id="end_date" name="end_date" type="date" class="input" value="{{ old('end_date', $leave?->end_date?->toDateString()) }}" required/></div>
-        <div><label for="total_days">Total Days</label><input id="total_days" name="total_days" type="number" step="0.5" min="0" class="input" value="{{ old('total_days', $leave?->total_days) }}" placeholder="Auto from date range"/></div>
+        <div>
+            <label for="total_days">Total Days</label>
+            <input id="total_days" name="total_days" type="number" step="0.5" min="0" class="input" value="{{ old('total_days', $leave?->total_days) }}" placeholder="Pick both dates" readonly/>
+            <label class="small" style="display:flex;align-items:center;gap:6px;margin-top:6px">
+                <input type="checkbox" id="total_days_override" name="total_days_override" value="1" @checked(old('total_days_override'))/>
+                Half day or other agreed exception: let me set the days myself
+            </label>
+            @error('total_days')<div class="field-error">{{ $message }}</div>@enderror
+        </div>
         <div class="full"><label for="reason">Reason</label><textarea id="reason" name="reason" class="textarea">{{ old('reason', $leave?->reason) }}</textarea></div>
         <div class="full">
             <label for="attachment">Supporting Document</label>
@@ -53,7 +61,7 @@
     </x-admin.form-section>
 
     <div class="help-box">
-        Leave the total days blank to calculate it from the date range (inclusive of both start and end date).
+        Total Days fills in as soon as both dates are chosen, counting the start and end date themselves, and is checked again when you save.
         Approved Annual Leave counts against the employee's yearly entitlement shown on their profile.
     </div>
 
@@ -62,3 +70,50 @@
         <button type="submit" class="btn primary">{{ $leave ? 'Update Leave Request' : 'Save Leave Request' }}</button>
     </div>
 </form>
+
+<script>
+    (function () {
+        // Total Days appears the moment both dates are valid, and follows every
+        // change, so it is never a leftover from the previous dates (FR-05).
+        var start = document.getElementById('start_date');
+        var end = document.getElementById('end_date');
+        var total = document.getElementById('total_days');
+        var override = document.getElementById('total_days_override');
+        if (!start || !end || !total) return;
+
+        function recalculate() {
+            if (override && override.checked) return;
+
+            if (!start.value || !end.value) {
+                total.value = '';
+                return;
+            }
+
+            var from = new Date(start.value + 'T00:00:00');
+            var to = new Date(end.value + 'T00:00:00');
+            if (isNaN(from) || isNaN(to) || to < from) {
+                total.value = '';
+                return;
+            }
+
+            total.value = Math.round((to - from) / 86400000) + 1;
+        }
+
+        start.addEventListener('change', recalculate);
+        end.addEventListener('change', recalculate);
+
+        if (override) {
+            override.addEventListener('change', function () {
+                total.readOnly = !override.checked;
+                if (override.checked) {
+                    total.focus();
+                } else {
+                    recalculate();
+                }
+            });
+            total.readOnly = !override.checked;
+        }
+
+        recalculate();
+    })();
+</script>

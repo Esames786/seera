@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Leaves')
-@section('breadcrumb', 'HR &amp; Payroll / Leaves')
+@section('breadcrumb', 'HR & Payroll / Leaves')
 
 @section('content')
     <x-admin.page-header title="Leave Management" description="Annual, sick, emergency and unpaid leave requests with approvals">

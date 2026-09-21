@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Payroll')
-@section('breadcrumb', 'HR &amp; Payroll / Payroll')
+@section('breadcrumb', 'HR & Payroll / Payroll')
 
 @section('content')
     <x-admin.page-header title="Payroll Processing" description="Monthly payroll run creation, processing, review and approval">

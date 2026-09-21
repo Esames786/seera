@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Edit Employee')
-@section('breadcrumb', 'HR &amp; Payroll / Employees / Edit Employee')
+@section('breadcrumb', 'HR & Payroll / Employees / Edit Employee')
 
 @section('content')
     <x-admin.page-header :title="'Edit Employee: '.$employee->name" description="Update employment, document, payroll and access details">

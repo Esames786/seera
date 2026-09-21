@@ -48,7 +48,7 @@
         <div><label for="overtime_minutes">Overtime (minutes) *</label><input id="overtime_minutes" name="overtime_minutes" type="number" min="0" class="input" value="{{ old('overtime_minutes', $record?->overtime_minutes ?? 0) }}" required/></div>
     </x-admin.form-section>
 
-    <x-admin.form-section title="Source &amp; Geo-Fence" columns="3">
+    <x-admin.form-section title="Source & Geo-Fence" columns="3">
         <div>
             <label for="status">Status *</label>
             <select id="status" name="status" class="select" required>

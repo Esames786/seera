@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Employee Documents')
-@section('breadcrumb', 'HR &amp; Payroll / Documents / IQAMA')
+@section('breadcrumb', 'HR & Payroll / Documents / IQAMA')
 
 @section('content')
     <x-admin.page-header title="Employee Documents / IQAMA" description="Read-only register of every employee document on the system. Documents are attached from the employee form.">    </x-admin.page-header>
@@ -53,6 +53,8 @@
                     <td><x-admin.status-badge :status="$document->validityStatus()"/></td>
                     <td>
                         @if ($document->file_path)
+                            <a href="{{ route('admin.hr.documents.view', $document) }}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">View</a>
+                            <span class="small">·</span>
                             <a href="{{ route('admin.hr.documents.download', $document) }}" style="color:var(--blue);font-weight:700">Download</a>
                         @else
                             <span class="small">Not uploaded</span>
