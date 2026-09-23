@@ -37,14 +37,15 @@ use App\Http\Controllers\Admin\Inventory\StockIssueController;
 use App\Http\Controllers\Admin\Inventory\StockLedgerController;
 use App\Http\Controllers\Admin\Inventory\StockTransferController;
 use App\Http\Controllers\Admin\Inventory\UnitController;
+use App\Http\Controllers\Admin\LocaleController;
+use App\Http\Controllers\Admin\Marketing\MarketingLeadController;
+use App\Http\Controllers\Admin\Marketing\MarketingReportController;
 use App\Http\Controllers\Admin\Master\BranchController;
 use App\Http\Controllers\Admin\Master\CompanyProfileController;
 use App\Http\Controllers\Admin\Master\CustomerController;
 use App\Http\Controllers\Admin\Master\DepartmentController;
 use App\Http\Controllers\Admin\Master\DesignationController;
 use App\Http\Controllers\Admin\Master\ExpenseCategoryController;
-use App\Http\Controllers\Admin\Marketing\MarketingLeadController;
-use App\Http\Controllers\Admin\Marketing\MarketingReportController;
 use App\Http\Controllers\Admin\Master\LookupValueController;
 use App\Http\Controllers\Admin\Master\OrganizationStructureController;
 use App\Http\Controllers\Admin\Master\PaymentTermController;
@@ -91,6 +92,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
  * default password would be redirected here and then refused entry.
  */
 Route::middleware(['auth', 'active'])->prefix('admin')->name('admin.')->group(function () {
+    Route::post('locale', [LocaleController::class, 'update'])->name('locale.update');
     Route::get('set-password', [PasswordChangeController::class, 'edit'])->name('password.change');
     Route::post('set-password', [PasswordChangeController::class, 'update'])->name('password.change.update');
 });
@@ -99,6 +101,7 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Users
+    Route::get('users/employee-search', [UserController::class, 'employeeSearch'])->name('users.employee-search');
     Route::resource('users', UserController::class);
 
     // Roles - static routes must be registered before roles/{role}.

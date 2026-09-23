@@ -8,7 +8,7 @@
         <a class="brand" href="{{ route('admin.dashboard') }}">
             <span class="logo-icon">S</span><span>{{ config('app.name') }}</span>
         </a>
-        <div class="small" style="margin-top:5px;color:#94a3b8">Admin Web Portal</div>
+        <div class="small" style="margin-top:5px;color:#94a3b8">{{ __('Admin Web Portal') }}</div>
     </div>
 
     @if ($user)
@@ -30,7 +30,7 @@
 
             <div class="nav-group {{ $hasActive ? 'open' : '' }}" data-group="{{ $group['key'] }}" @if($hasActive) data-has-active="1" @endif>
                 <button type="button" class="nav-group-header" aria-expanded="{{ $hasActive ? 'true' : 'false' }}">
-                    <span>{{ $group['label'] }}</span>
+                    <span>{{ __($group['label']) }}</span>
                     @if ($groupBadge > 0)
                         <span class="nav-badge">{{ $groupBadge }}</span>
                     @endif
@@ -41,11 +41,11 @@
                     @foreach ($group['items'] as $item)
                         <a class="nav-item {{ $item['active'] ? 'active' : '' }} {{ $item['soon'] ? 'is-soon' : '' }}" href="{{ $item['url'] }}">
                             <span>{{ $item['icon'] }}</span>
-                            <span>{{ $item['label'] }}</span>
+                            <span>{{ __($item['label']) }}</span>
                             @if ($item['badge'])
                                 <span class="nav-badge">{{ $item['badge'] }}</span>
                             @elseif ($item['soon'])
-                                <span class="soon">Soon</span>
+                                <span class="soon">{{ __('Soon') }}</span>
                             @endif
                         </a>
                     @endforeach

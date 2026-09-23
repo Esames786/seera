@@ -19,8 +19,9 @@
         <input class="input" style="width:240px" type="search" name="search" value="{{ request('search') }}" placeholder="Search name, code, VAT number..."/>
         <select class="select" style="width:160px" name="type">
             <option value="">All Types</option>
-            <option value="Company" @selected(request('type') === 'Company')>Company</option>
-            <option value="Individual" @selected(request('type') === 'Individual')>Individual</option>
+            @foreach ($customerTypes as $type)
+                <option value="{{ $type }}" @selected(request('type') === $type)>{{ in_array($type, ['Company', 'Individual'], true) ? __($type) : $type }}</option>
+            @endforeach
         </select>
         <select class="select" style="width:140px" name="status">
             <option value="">All Status</option>

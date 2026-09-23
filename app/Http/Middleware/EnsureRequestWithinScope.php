@@ -12,9 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EnsureRequestWithinScope
 {
-    public function __construct(private readonly UserAccessScopeService $scopes)
-    {
-    }
+    public function __construct(private readonly UserAccessScopeService $scopes) {}
 
     public function handle(Request $request, Closure $next): Response
     {
@@ -93,11 +91,14 @@ class EnsureRequestWithinScope
             abort_unless($allowed, 403, 'The destination warehouse is outside your access scope.');
         }
 
-        if ($request->filled('employee_id')) {
-            $employee = Employee::withoutGlobalScopes()->find($request->integer('employee_id'));
+        // Users.employee_id is a human-readable code, not employees.id.
+        // Conversion explicitly supplies the numeric HR key separately.
+        $employeeField = $request->routeIs('admin.users.*') ? 'source_employee_id' : 'employee_id';
+        if ($request->filled($employeeField)) {
+            $employee = Employee::withoutGlobalScopes()->find($request->integer($employeeField));
             $allowed = match ($scope) {
                 'project' => $employee && in_array((int) $employee->project_id, array_map('intval', $allowedProjectIds), true),
-                'site' => $employee && (int) $employee->site_id === (int) $allowedSiteId,
+                'site' => $allowedSiteId !== null && $employee && (int) $employee->site_id === (int) $allowedSiteId,
                 default => false,
             };
             abort_unless($allowed, 403, 'The selected employee is outside your access scope.');

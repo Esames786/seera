@@ -16,6 +16,7 @@ class LookupValue extends Model
         'supplier_category' => 'Supplier Category',
         'nationality' => 'Nationality',
         'document_type' => 'Document Type',
+        'customer_type' => 'Customer Type',
     ];
 
     protected $fillable = ['type', 'value', 'sort_order', 'status'];

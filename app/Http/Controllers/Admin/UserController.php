@@ -18,6 +18,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -58,6 +59,35 @@ class UserController extends Controller
         return view('admin.users.create', $this->formOptions());
     }
 
+    public function employeeSearch(Request $request): JsonResponse
+    {
+        abort_unless($request->user()->hasPermission('HR', 'view') && $request->user()->hasPermission('HR', 'edit'), 403);
+        $request->validate(['q' => ['required', 'string', 'min:2', 'max:100']]);
+        $term = '%'.str_replace(['%', '_'], '', trim($request->string('q'))).'%';
+        $employees = Employee::whereNull('user_id')->where('status', 'active')
+            ->whereNotIn('employee_code', User::whereNotNull('employee_id')->select('employee_id'))
+            ->where(fn ($q) => $q->where('employee_code', 'like', $term)->orWhere('email', 'like', $term)
+                ->orWhere(function ($name) use ($term) {
+                    foreach (preg_split('/\s+/u', trim($term, '% '), -1, PREG_SPLIT_NO_EMPTY) as $word) {
+                        $name->where(fn ($part) => $part->where('first_name', 'like', '%'.$word.'%')->orWhere('last_name', 'like', '%'.$word.'%'));
+                    }
+                }))
+            ->orderBy('employee_code')->limit(15)->get();
+
+        return response()->json(['data' => $employees->map(fn (Employee $employee) => [
+            'id' => $employee->id, 'employee_code' => $employee->employee_code, 'name' => $employee->name,
+            'fields' => [
+                'name' => $employee->name, 'employee_id' => $employee->employee_code,
+                'email' => $employee->email, 'phone' => $employee->phone,
+                'department_id' => $employee->department_id, 'designation_id' => $employee->designation_id,
+                'branch_id' => $employee->branch_id, 'project_id' => $employee->project_id, 'site_id' => $employee->site_id,
+                'employee_classification' => $employee->employee_classification,
+                'joining_date' => $employee->joining_date?->toDateString(), 'contract_type' => $employee->contract_type,
+                'iqama_number' => $employee->iqama_number, 'iqama_expiry_date' => $employee->iqama_expiry_date?->toDateString(),
+            ],
+        ])]);
+    }
+
     /**
      * Also serves the "+ New" dialog on the project form (Project Manager) as
      * JSON. An account created without a password gets the shared default and
@@ -65,6 +95,14 @@ class UserController extends Controller
      */
     public function store(Request $request): RedirectResponse|JsonResponse
     {
+        $request->validate(['source_employee_id' => ['nullable', 'integer']]);
+        $source = null;
+        if ($request->filled('source_employee_id')) {
+            abort_unless($request->user()->hasPermission('HR', 'view') && $request->user()->hasPermission('HR', 'edit'), 403);
+            $source = Employee::findOrFail($request->integer('source_employee_id'));
+            $request->merge(['employee_id' => $source->employee_code, 'employee_classification' => $source->employee_classification]);
+            $request->validate(['password' => ['nullable', 'string', 'min:8']]);
+        }
         $data = $this->validated($request);
         $roleId = $data['role_id'];
         unset($data['role_id']);
@@ -72,9 +110,18 @@ class UserController extends Controller
         $password = $request->filled('password') ? $request->input('password') : self::DEFAULT_PASSWORD;
         $data['must_change_password'] = ! $request->filled('password');
 
-        $user = DB::transaction(function () use ($data, $roleId, $password) {
+        $user = DB::transaction(function () use ($data, $roleId, $password, $source) {
+            if ($source) {
+                $source = Employee::whereKey($source->id)->lockForUpdate()->firstOrFail();
+                if ($source->user_id || $source->status !== 'active' || $source->employee_code !== $data['employee_id']) {
+                    throw ValidationException::withMessages(['source_employee_id' => 'This employee is no longer available. Search again before saving.']);
+                }
+            }
             $user = User::create($data + ['password' => $password]);
             $user->roles()->attach($roleId, ['is_primary' => true]);
+            if ($source) {
+                $source->update(['user_id' => $user->id]);
+            }
             $this->syncEmployeeClassification($user);
 
             return $user;
@@ -91,7 +138,7 @@ class UserController extends Controller
             ], 201);
         }
 
-        return redirect()->route('admin.users.index')->with('status', 'User "'.$user->name.'" created successfully.');
+        return redirect()->route($request->input('_save_action') === 'stay' ? 'admin.users.edit' : 'admin.users.index', $request->input('_save_action') === 'stay' ? [$user] : [])->with('status', 'User "'.$user->name.'" created successfully.');
     }
 
     public function show(User $user): View
@@ -129,7 +176,7 @@ class UserController extends Controller
 
         ActivityLog::record($request, 'Users', 'Updated user', $user->name.' ('.$user->email.')');
 
-        return redirect()->route('admin.users.index')->with('status', 'User "'.$user->name.'" updated successfully.');
+        return redirect()->route($request->input('_save_action') === 'stay' ? 'admin.users.edit' : 'admin.users.index', $request->input('_save_action') === 'stay' ? [$user] : [])->with('status', 'User "'.$user->name.'" updated successfully.');
     }
 
     public function destroy(Request $request, User $user): RedirectResponse

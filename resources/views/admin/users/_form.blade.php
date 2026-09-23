@@ -91,6 +91,20 @@
 
         <div>
             <x-admin.form-section title="Profile Identity" columns="2">
+                @if (!$user && auth()->user()->hasPermission('HR', 'view') && auth()->user()->hasPermission('HR', 'edit'))
+                    <div class="full">
+                        <label for="employee-search">{{ __('ui.employee_search') }}</label>
+                        <p class="small">{{ __('ui.employee_search_help') }}</p>
+                        <input id="employee-search" class="input" autocomplete="off" data-employee-search="{{ route('admin.users.employee-search') }}"
+                            data-empty="{{ __('ui.employee_search_empty') }}" data-error="{{ __('ui.employee_search_error') }}"
+                            data-confirm="{{ __('ui.employee_search_confirm') }}" data-selected="{{ __('ui.employee_selected') }}" data-cleared="{{ __('ui.employee_cleared') }}"/>
+                        <input type="hidden" name="source_employee_id" value="{{ old('source_employee_id') }}"/>
+                        @if(old('source_employee_id')) <p class="small">{{ __('ui.employee_selected') }}</p> @endif
+                        <div id="employee-search-results" aria-live="polite"></div>
+                        <button type="button" class="btn outline" data-clear-employee>{{ __('ui.clear_employee') }}</button>
+                        @error('source_employee_id')<div class="field-error">{{ $message }}</div>@enderror
+                    </div>
+                @endif
                 <div><label for="name">Full Name *</label><input id="name" name="name" class="input" value="{{ old('name', $user?->name) }}" required/></div>
                 <div><label for="employee_id">Employee ID</label><input id="employee_id" name="employee_id" class="input" value="{{ old('employee_id', $user?->employee_id) }}" placeholder="EMP-000"/></div>
                 <div><label for="email">Email Address *</label><input id="email" name="email" type="email" class="input" value="{{ old('email', $user?->email) }}" required/></div>
@@ -247,6 +261,7 @@
 
             <div class="form-actions">
                 <a class="btn outline" href="{{ route('admin.users.index') }}">Cancel</a>
+                <button type="submit" name="_save_action" value="stay" class="btn outline">{{ __('ui.save_stay') }}</button>
                 <button type="submit" class="btn primary">{{ $user ? 'Update User' : 'Save User' }}</button>
             </div>
         </div>

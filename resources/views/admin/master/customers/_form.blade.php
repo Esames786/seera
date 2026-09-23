@@ -8,20 +8,28 @@
         <div><label for="name">Customer Name *</label><input id="name" name="name" class="input" value="{{ old('name', $customer?->name) }}" required/></div>
         <div><label for="code">Customer Code</label><input id="code" name="code" class="input" value="{{ old('code', $customer?->code) }}" placeholder="Auto: CUS-001"/></div>
         <div>
-            <label for="type">Customer Type</label>
+            <div class="label-row">
+                <label for="type">{{ __('ui.customer_type') }}</label>
+                <x-admin.quick-create id="qc-customer-type" target="type" :url="route('admin.master.lookup-values.store')" :title="__('ui.new_type')" permission="Customers">
+                    <input type="hidden" name="type" value="customer_type"/>
+                    <div><label for="qc-customer-type-value">{{ __('ui.type_name') }}</label><input id="qc-customer-type-value" name="value" class="input" maxlength="100" required/></div>
+                </x-admin.quick-create>
+            </div>
             <select id="type" name="type" class="select">
-                <option @selected(old('type', $customer?->type ?? 'Company') === 'Company')>Company</option>
-                <option @selected(old('type', $customer?->type) === 'Individual')>Individual</option>
-            </select>
-        </div>
-        <div>
-            <label for="rating">Customer Rating</label>
-            <select id="rating" name="rating" class="select">
-                <option value="">Not rated</option>
-                @foreach ($ratings as $rating)
-                    <option value="{{ $rating }}" @selected(old('rating', $customer?->rating) === $rating)>{{ $rating }} @if($rating === 'Green')— pays on time @elseif($rating === 'Amber')— follow up @else— payment risk @endif</option>
+                @foreach ($customerTypes as $type)
+                    <option value="{{ $type }}" @selected(old('type', $customer?->type ?? 'Company') === $type)>{{ in_array($type, ['Company', 'Individual'], true) ? __($type) : $type }}</option>
                 @endforeach
             </select>
+        </div>
+        <x-admin.rating-picker label="Customer Rating" :value="$customer?->rating"/>
+        <div>
+            <label for="allowed_payment_types">{{ __('ui.payment_types') }}</label>
+            <select id="allowed_payment_types" name="allowed_payment_types" class="select">
+                @foreach (\App\Models\Customer::PAYMENT_TYPES as $paymentType)
+                    <option value="{{ $paymentType }}" @selected(old('allowed_payment_types', $customer?->allowed_payment_types ?? 'Both') === $paymentType)>{{ __('ui.'.strtolower($paymentType)) }}</option>
+                @endforeach
+            </select>
+            <div class="small">{{ __('ui.payment_help') }}</div>
         </div>
         <div><label for="vat_number">VAT Number</label><input id="vat_number" name="vat_number" class="input" value="{{ old('vat_number', $customer?->vat_number) }}" placeholder="300XXXXXXXXXXXX"/></div>
         <div><label for="cr_number">CR Number</label><input id="cr_number" name="cr_number" class="input" value="{{ old('cr_number', $customer?->cr_number) }}" placeholder="1010XXXXXX"/></div>
@@ -39,11 +47,13 @@
             </select>
         </div>
         <div class="full"><label for="billing_address">Billing Address</label><textarea id="billing_address" name="billing_address" class="textarea" placeholder="Customer billing address for ZATCA invoices...">{{ old('billing_address', $customer?->billing_address) }}</textarea></div>
-        <div class="full small">Office and site contact people, and shared notes, are added on the customer's page after saving.</div>
     </x-admin.form-section>
+
+    @include('admin.master.customers._related-inputs')
 
     <div class="form-actions">
         <a class="btn outline" href="{{ route('admin.master.customers.index') }}">Cancel</a>
+        <button type="submit" name="_save_action" value="stay" class="btn outline">{{ __('ui.save_stay') }}</button>
         <button type="submit" class="btn primary">{{ $customer ? 'Update Customer' : 'Save Customer' }}</button>
     </div>
 </form>

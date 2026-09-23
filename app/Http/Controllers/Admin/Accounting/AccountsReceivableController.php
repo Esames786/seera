@@ -220,9 +220,17 @@ class AccountsReceivableController extends Controller
     {
         $accounts_receivable->load(['customer', 'receipts']);
 
+        $options = $this->formOptions();
+        $options['receiptAccounts'] = $options['receiptAccounts']->whereIn('account_code', $accounts_receivable->customer->allowedPaymentAccountCodes());
+        $options['paymentMethods'] = match ($accounts_receivable->customer->allowed_payment_types) {
+            'Cash' => ['Cash'],
+            'Bank' => ['Bank Transfer', 'Cheque'],
+            default => CustomerReceipt::METHODS,
+        };
+
         return view('admin.accounting.accounts-receivable.receipt', [
             'invoice' => $accounts_receivable,
-        ] + $this->formOptions());
+        ] + $options);
     }
 
     /**
@@ -246,6 +254,14 @@ class AccountsReceivableController extends Controller
 
         $receipt = DB::transaction(function () use ($accounts_receivable, $data, $request) {
             $accounts_receivable = CustomerInvoice::whereKey($accounts_receivable->id)->lockForUpdate()->firstOrFail();
+            $customer = Customer::whereKey($accounts_receivable->customer_id)->lockForUpdate()->firstOrFail();
+            $account = ChartOfAccount::whereKey($data['receipt_account_id'])->where('status', 'active')->first();
+            if (! $account || ! in_array($account->account_code, $customer->allowedPaymentAccountCodes(), true)) {
+                throw ValidationException::withMessages(['receipt_account_id' => 'This customer does not accept the selected payment channel.']);
+            }
+            if (($account->account_code === PostingService::CASH) !== ($data['payment_method'] === 'Cash')) {
+                throw ValidationException::withMessages(['payment_method' => 'The payment method must match the selected cash or bank account.']);
+            }
             if (in_array($accounts_receivable->payment_status, ['draft', 'cancelled', 'paid'], true)) {
                 throw ValidationException::withMessages(['receipt' => 'This invoice is not open for receipt.']);
             }
@@ -259,6 +275,9 @@ class AccountsReceivableController extends Controller
             ]);
 
             $entry = $this->posting->postCustomerReceipt($receipt, $request->user()->id);
+            if (! $entry) {
+                throw ValidationException::withMessages(['receipt' => 'Receipt could not be posted. Check the receivable and payment accounts.']);
+            }
             $receipt->update(['journal_entry_id' => $entry?->id]);
 
             $accounts_receivable->refreshPaymentStatus();

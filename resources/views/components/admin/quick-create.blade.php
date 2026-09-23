@@ -129,13 +129,20 @@
                         });
                     }
 
+                    form.dispatchEvent(new CustomEvent('seera:form-baseline', { bubbles: true }));
                     modal.classList.add('open');
                     var first = modal.querySelector('input:not([type=hidden]), select, textarea');
                     if (first) first.focus();
                 }
 
                 function close(modal) {
-                    if (modal) modal.classList.remove('open');
+                    if (!modal) return;
+                    var form = modal.querySelector('.quick-create-form');
+                    var closeNow = function () { modal.classList.remove('open'); };
+                    if (form && !form.dispatchEvent(new CustomEvent('seera:before-form-close', {
+                        bubbles: true, cancelable: true, detail: { close: closeNow }
+                    }))) return;
+                    closeNow();
                 }
 
                 function clearErrors(modal) {
@@ -270,6 +277,7 @@
                             });
                             if (!editing) patchTemplates(modal, payload);
                             form.reset();
+                            form.dispatchEvent(new CustomEvent('seera:form-saved', { bubbles: true }));
                             close(modal);
                         });
                     }).catch(function () {

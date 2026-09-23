@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -81,6 +82,12 @@ class EnsureUserHasPermission
         $routeName = (string) $request->route()?->getName();
         $name = str($routeName)->after('admin.')->toString();
 
+        // Shared catalogue writes are authorized against the requested list's
+        // module by LookupValueController, not the unrelated Dashboard module.
+        if ($routeName === 'admin.master.lookup-values.store') {
+            return $next($request);
+        }
+
         if (isset(self::ANY_OF[$name])) {
             abort_unless(
                 $request->user() && self::canViewAnyOf($request->user(), self::ANY_OF[$name]),
@@ -101,7 +108,7 @@ class EnsureUserHasPermission
     /**
      * @param  array<int, string>  $modules
      */
-    public static function canViewAnyOf(\App\Models\User $user, array $modules): bool
+    public static function canViewAnyOf(User $user, array $modules): bool
     {
         foreach ($modules as $module) {
             if ($user->hasPermission($module, 'view')) {
@@ -115,6 +122,9 @@ class EnsureUserHasPermission
     /** @return array{0: ?string, 1: string} */
     public static function permissionForRoute(string $routeName, ?string $comingSoonModule = null): array
     {
+        if ($routeName === 'admin.users.employee-search') {
+            return ['Users', 'create'];
+        }
         $name = str($routeName)->after('admin.')->toString();
 
         if ($name === 'coming-soon') {

@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>@yield('title', 'Dashboard') - {{ config('app.name') }}</title>
-    @vite('resources/css/erp.css')
+    @vite(['resources/css/erp.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
 <body>
@@ -28,6 +28,15 @@
 </div>
 
 <x-admin.delete-modal/>
+<dialog id="unsaved-changes" aria-labelledby="unsaved-title" data-validation-errors="{{ $errors->any() ? '1' : '0' }}">
+    <h3 id="unsaved-title">{{ __('ui.unsaved_title') }}</h3>
+    <p>{{ __('ui.unsaved_message') }}</p>
+    <div class="form-actions">
+        <button type="button" class="btn outline" data-unsaved-stay>{{ __('ui.keep_editing') }}</button>
+        <button type="button" class="btn danger" data-unsaved-discard>{{ __('ui.discard_leave') }}</button>
+        <button type="button" class="btn primary" data-unsaved-save>{{ __('ui.save_current') }}</button>
+    </div>
+</dialog>
 @stack('modals')
 
 <script>

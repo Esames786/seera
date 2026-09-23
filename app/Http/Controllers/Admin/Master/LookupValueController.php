@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 /**
  * "+ New" endpoint for extensible dropdown values (NR-02). The value itself is
@@ -24,7 +25,11 @@ class LookupValueController extends Controller
         ]);
 
         // The route is open to any signed-in user; the right to add depends on what the list is for.
-        $module = in_array($data['type'], ['nationality', 'document_type'], true) ? 'HR' : 'Suppliers';
+        $module = match ($data['type']) {
+            'nationality', 'document_type' => 'HR',
+            'customer_type' => 'Customers',
+            default => 'Suppliers',
+        };
         abort_unless($request->user()->hasPermission($module, 'create'), 403, 'You do not have permission to add values to this list.');
 
         $value = trim($data['value']);
@@ -32,7 +37,7 @@ class LookupValueController extends Controller
         $existing = LookupValue::where('type', $data['type'])->where('value', $value)->first();
 
         if ($existing && $existing->status === 'active') {
-            throw \Illuminate\Validation\ValidationException::withMessages([
+            throw ValidationException::withMessages([
                 'value' => 'That value already exists; pick it from the list.',
             ]);
         }

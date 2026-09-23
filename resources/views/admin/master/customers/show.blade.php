@@ -6,12 +6,14 @@
 @section('content')
     @php
         $ratingColor = match ($customer->rating) { 'Green' => 'green', 'Amber' => 'yellow', 'Red' => 'red', default => 'cyan' };
-        $canEdit = auth()->user()->hasPermission('Customers', 'create');
-        $canDelete = auth()->user()->hasPermission('Customers', 'delete');
+        $canEdit = auth()->user()->hasPermission('Customers', 'edit');
+
     @endphp
 
     <x-admin.page-header :title="$customer->name" description="Customer overview with projects, contacts and shared notes">
-        <a class="btn primary" href="{{ route('admin.master.customers.edit', $customer) }}">Edit Customer</a>
+        @if ($canEdit)
+            <a class="btn primary" href="{{ route('admin.master.customers.edit', $customer) }}">Edit Customer</a>
+        @endif
     </x-admin.page-header>
 
     <div class="card-grid">
@@ -37,6 +39,7 @@
                     <tr><th>Customer Code</th><td>{{ $customer->code }}</td></tr>
                     <tr><th>Type</th><td>{{ $customer->type }}</td></tr>
                     <tr><th>Rating</th><td>@if($customer->rating)<span class="badge {{ $ratingColor }}">{{ $customer->rating }}</span>@else - @endif</td></tr>
+                    <tr><th>{{ __('ui.payment_types') }}</th><td>{{ __('ui.'.strtolower($customer->allowed_payment_types ?? 'Both')) }}</td></tr>
                     <tr><th>VAT Number</th><td>{{ $customer->vat_number ?? '-' }}</td></tr>
                     <tr><th>CR Number</th><td>{{ $customer->cr_number ?? '-' }}</td></tr>
                     <tr><th>Contact Person</th><td>{{ $customer->contact_person ?? '-' }}</td></tr>
@@ -72,7 +75,7 @@
         <div>
             <x-admin.data-table title="Office & Site Contacts" subtitle="Who to meet, and where">
                 <thead>
-                    <tr><th>Where</th><th>Name</th><th>Phone</th><th>Email</th><th></th></tr>
+                    <tr><th>Where</th><th>Name</th><th>Phone</th><th>Email</th></tr>
                 </thead>
                 <tbody>
                     @forelse ($customer->contacts as $contact)
@@ -85,47 +88,11 @@
                             <td>{{ $contact->name }}@if($contact->title)<div class="small">{{ $contact->title }}</div>@endif</td>
                             <td>{{ $contact->phone ?? '-' }}</td>
                             <td>{{ $contact->email ?? '-' }}</td>
-                            <td>
-                                @if ($canDelete)
-                                    <button type="button" class="btn sm danger js-delete" data-delete-url="{{ route('admin.master.customers.contacts.destroy', [$customer, $contact]) }}" data-delete-name="{{ $contact->name }}">Remove</button>
-                                @endif
-                            </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="table-empty">No office or site contacts recorded yet.</td></tr>
+                        <tr><td colspan="4" class="table-empty">No office or site contacts recorded yet.</td></tr>
                     @endforelse
                 </tbody>
-                @if ($canEdit)
-                    <x-slot:footer>
-                        <form method="POST" action="{{ route('admin.master.customers.contacts.store', $customer) }}" style="width:100%">
-                            @csrf
-                            <div class="form-grid three">
-                                <div>
-                                    <label for="contact_location_type">Where</label>
-                                    <select id="contact_location_type" name="location_type" class="select">
-                                        <option value="office">Office</option>
-                                        <option value="site">Site</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="contact_site_id">Site (if site contact)</label>
-                                    <select id="contact_site_id" name="site_id" class="select">
-                                        <option value="">Not a specific site</option>
-                                        @foreach ($sites as $site)
-                                            <option value="{{ $site->id }}">{{ $site->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div><label for="contact_name">Name *</label><input id="contact_name" name="name" class="input" required/></div>
-                                <div><label for="contact_title">Title / Role</label><input id="contact_title" name="title" class="input" placeholder="Site engineer, Accounts officer..."/></div>
-                                <div><label for="contact_phone">Phone</label><input id="contact_phone" name="phone" class="input" placeholder="+966..."/></div>
-                                <div><label for="contact_email">Email</label><input id="contact_email" name="email" type="email" class="input"/></div>
-                                <div class="full"><label for="contact_address">Address / Directions</label><input id="contact_address" name="address" class="input" placeholder="Office floor, site gate, landmark..."/></div>
-                            </div>
-                            <div style="margin-top:10px;text-align:right"><button type="submit" class="btn sm primary">Add Contact</button></div>
-                        </form>
-                    </x-slot:footer>
-                @endif
             </x-admin.data-table>
 
             <x-admin.data-table title="Shared Notes" subtitle="Visible to everyone who can open this customer">
@@ -136,25 +103,11 @@
                                 <div style="white-space:pre-line">{{ $note->note }}</div>
                                 <div class="small" style="margin-top:4px">{{ $note->user?->name ?? 'Unknown' }} · {{ $note->created_at->format('d M Y H:i') }}</div>
                             </td>
-                            <td style="width:90px;text-align:right">
-                                @if ($canDelete || $note->user_id === auth()->id())
-                                    <button type="button" class="btn sm danger js-delete" data-delete-url="{{ route('admin.master.customers.notes.destroy', [$customer, $note]) }}" data-delete-name="this note">Remove</button>
-                                @endif
-                            </td>
                         </tr>
                     @empty
-                        <tr><td colspan="2" class="table-empty">No notes yet.</td></tr>
+                        <tr><td class="table-empty">No notes yet.</td></tr>
                     @endforelse
                 </tbody>
-                @if ($canEdit)
-                    <x-slot:footer>
-                        <form method="POST" action="{{ route('admin.master.customers.notes.store', $customer) }}" style="width:100%;display:flex;gap:8px;align-items:flex-start">
-                            @csrf
-                            <textarea name="note" class="textarea" rows="2" style="min-height:60px;flex:1" placeholder="Leave a note for colleagues: gate pass needed, accounts contact changed, payment promised on..." required></textarea>
-                            <button type="submit" class="btn sm primary">Add Note</button>
-                        </form>
-                    </x-slot:footer>
-                @endif
             </x-admin.data-table>
         </div>
     </div>

@@ -28,15 +28,7 @@
             </select>
         </div>
         <div><label for="city">City / Location</label><input id="city" name="city" class="input" value="{{ old('city', $supplier?->city) }}" placeholder="Riyadh, Jeddah, Dammam..."/></div>
-        <div>
-            <label for="rating">Supplier Rating</label>
-            <select id="rating" name="rating" class="select">
-                <option value="">Not rated</option>
-                @foreach ($ratings as $rating)
-                    <option value="{{ $rating }}" @selected(old('rating', $supplier?->rating) === $rating)>{{ $rating }} @if($rating === 'Green')— preferred @elseif($rating === 'Amber')— use with care @else— avoid @endif</option>
-                @endforeach
-            </select>
-        </div>
+        <x-admin.rating-picker label="Supplier Rating" :value="$supplier?->rating"/>
         <div><label for="vat_number">VAT Number</label><input id="vat_number" name="vat_number" class="input" value="{{ old('vat_number', $supplier?->vat_number) }}" placeholder="300XXXXXXXXXXXX"/></div>
         <div><label for="cr_number">CR Number</label><input id="cr_number" name="cr_number" class="input" value="{{ old('cr_number', $supplier?->cr_number) }}" placeholder="1010XXXXXX"/></div>
         <div><label for="opening_balance">Opening Balance (SAR)</label><input id="opening_balance" name="opening_balance" type="number" step="0.01" class="input" value="{{ old('opening_balance', $supplier?->opening_balance ?? 0) }}"/></div>

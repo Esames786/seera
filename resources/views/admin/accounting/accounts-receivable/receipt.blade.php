@@ -17,7 +17,7 @@
 
     @if ($receiptAccounts->isEmpty())
         <div class="alert flash">
-            <strong>No cash or bank account available.</strong> There is no active Cash in Hand (1110) or Bank Account (1120) in the chart of accounts.
+            <strong>No permitted cash or bank account available.</strong> Check this customer's accepted payment types and active Cash in Hand (1110) / Bank Account (1120) accounts.
             Create or activate one under <a href="{{ route('admin.accounting.chart-of-accounts.index') }}" style="font-weight:700">Chart of Accounts</a> before recording receipts.
         </div>
     @endif
@@ -41,7 +41,7 @@
                 <label for="payment_method">Payment Method *</label>
                 <select id="payment_method" name="payment_method" class="select" required>
                     @foreach ($paymentMethods as $method)
-                        <option value="{{ $method }}" @selected(old('payment_method', 'Bank Transfer') === $method)>{{ $method }}</option>
+                        <option value="{{ $method }}" @selected(old('payment_method', in_array('Bank Transfer', $paymentMethods, true) ? 'Bank Transfer' : 'Cash') === $method)>{{ $method }}</option>
                     @endforeach
                 </select>
             </div>

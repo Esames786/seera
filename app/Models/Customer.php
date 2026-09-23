@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use App\Services\Accounting\PostingService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class Customer extends Model
 {
     /** Traffic-light customer rating (client change request NR-06). */
     public const RATINGS = ['Green', 'Amber', 'Red'];
 
+    public const PAYMENT_TYPES = ['Cash', 'Bank', 'Both'];
+
     protected $fillable = [
         'name', 'code', 'type', 'rating', 'vat_number', 'cr_number', 'opening_receivable',
         'credit_limit', 'contact_person', 'phone', 'email', 'linked_account',
-        'billing_address', 'status',
+        'billing_address', 'status', 'allowed_payment_types',
     ];
 
     protected function casts(): array
@@ -26,6 +30,20 @@ class Customer extends Model
     public function projects()
     {
         return $this->hasMany(Project::class);
+    }
+
+    public static function typeOptions(?string $current = null): Collection
+    {
+        return collect(['Company', 'Individual'])->merge(LookupValue::options('customer_type', $current))->unique()->values();
+    }
+
+    public function allowedPaymentAccountCodes(): array
+    {
+        return match ($this->allowed_payment_types) {
+            'Cash' => [PostingService::CASH],
+            'Bank' => [PostingService::BANK],
+            default => [PostingService::CASH, PostingService::BANK],
+        };
     }
 
     public function invoices()

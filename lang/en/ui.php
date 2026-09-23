@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'unsaved_title' => 'Unsaved changes',
+    'unsaved_message' => 'Save the current form, discard changes and leave, or keep editing. Saving uses the form’s normal next step.',
+    'keep_editing' => 'Keep editing', 'discard_leave' => 'Discard & leave', 'save_current' => 'Save current form',
+    'employee_search' => 'Create account from employee',
+    'employee_search_help' => 'Search by employee code, name or email. Review the copied details, then choose the role and access explicitly. Payroll and bank details are not copied.',
+    'employee_search_empty' => 'No eligible employees found.', 'employee_search_error' => 'Employee lookup failed. Please try again.',
+    'employee_search_confirm' => 'Replace identity and employment fields with this employee’s details? Role, password and security settings will not change.',
+    'employee_selected' => 'Employee selected. Linking happens only when you save successfully.',
+    'employee_cleared' => 'Link cleared. Copied fields remain available to review.', 'clear_employee' => 'Clear employee link',
+    'language' => 'Language', 'change_language' => 'Change language',
+    'not_rated' => 'Not rated', 'green' => 'Green', 'amber' => 'Amber', 'red' => 'Red',
+    'rating' => 'Rating', 'save_stay' => 'Save & stay', 'save_close' => 'Save & close',
+    'office_contacts' => 'Office contacts & location', 'site_contacts' => 'Site contacts & location',
+    'contact_help' => 'Optional: add one contact below. A contact name is required when entering contact details. Existing contacts are kept.',
+    'contact_name' => 'Contact name', 'address' => 'Address / directions', 'phone' => 'Phone',
+    'email' => 'Email', 'title' => 'Title / role', 'site' => 'Site', 'no_site' => 'Not a specific site',
+    'notes' => 'Shared notes', 'new_note' => 'Add a note with this save',
+    'empty_notes' => 'No notes yet.', 'empty_contacts' => 'No contacts recorded yet.',
+    'remove' => 'Remove', 'customer_type' => 'Customer Type', 'new_type' => 'New Customer Type',
+    'type_name' => 'Type name', 'payment_types' => 'Accepted payment types',
+    'cash' => 'Cash', 'bank' => 'Bank', 'both' => 'Both',
+    'payment_help' => 'Restricts cash/bank accounts when recording receipts for this customer.',
+];
