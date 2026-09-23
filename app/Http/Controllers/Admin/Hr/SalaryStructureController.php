@@ -49,6 +49,8 @@ class SalaryStructureController extends Controller
 
         return view('admin.hr.salary-structures.create', [
             'prefillEmployee' => $employee,
+            'returnEmployee' => $employee && $request->integer('workspace_employee') === $employee->id
+                && $request->user()->hasPermission('HR', 'edit') ? $employee : null,
         ] + $this->formOptions());
     }
 
@@ -67,7 +69,12 @@ class SalaryStructureController extends Controller
 
         ActivityLog::record($request, 'Payroll', 'Created salary structure', $structure->employee->name);
 
-        return redirect()->route('admin.hr.salary-structures.index')
+        $destination = $request->integer('_return_employee') === (int) $structure->employee_id
+            && $request->user()->hasPermission('HR', 'edit')
+            ? redirect()->to(route('admin.hr.employees.edit', $structure->employee).'#payroll')
+            : redirect()->route('admin.hr.salary-structures.index');
+
+        return $destination
             ->with('status', 'Salary structure saved successfully.');
     }
 

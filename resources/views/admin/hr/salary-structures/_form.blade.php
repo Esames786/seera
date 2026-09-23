@@ -4,6 +4,7 @@
     /** @var \App\Models\Employee|null $prefillEmployee */
     $prefillEmployee = $prefillEmployee ?? null;
     $employeeDefaults = $employeeDefaults ?? collect();
+    $returnEmployee = $returnEmployee ?? null;
     // Opened from an employee: the amounts arrive filled from their profile (FR-04).
     $prefill = $prefillEmployee?->payrollDefaults() ?? [];
     $amount = fn (string $field) => old($field, $structure?->{$field} ?? $prefill[$field] ?? 0);
@@ -18,6 +19,7 @@
 
 <form method="POST" action="{{ $structure ? route('admin.hr.salary-structures.update', $structure) : route('admin.hr.salary-structures.store') }}">
     @csrf
+    @if ($returnEmployee)<input type="hidden" name="_return_employee" value="{{ $returnEmployee->id }}"/>@endif
     @if ($structure) @method('PUT') @endif
 
     @unless ($structure)
@@ -90,7 +92,7 @@
     </x-admin.form-section>
 
     <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.hr.salary-structures.index') }}">Cancel</a>
+        <a class="btn outline" href="{{ $returnEmployee ? route('admin.hr.employees.edit', $returnEmployee).'#payroll' : route('admin.hr.salary-structures.index') }}">Cancel</a>
         <button type="submit" class="btn primary">{{ $structure ? 'Update Salary Structure' : 'Save Salary Structure' }}</button>
     </div>
 </form>

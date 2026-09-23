@@ -8,9 +8,10 @@ use App\Models\Branch;
 use App\Models\Department;
 use App\Models\Designation;
 use App\Models\Employee;
+use App\Models\EmployeeDocument;
+use App\Models\LookupValue;
 use App\Models\Project;
 use App\Models\Site;
-use App\Models\LookupValue;
 use App\Models\User;
 use App\Support\CodeGenerator;
 use Illuminate\Http\RedirectResponse;
@@ -56,7 +57,7 @@ class EmployeeController extends Controller
             ->withQueryString();
 
         return view('admin.hr.employees.index', [
-            'documentTypes' => \App\Models\EmployeeDocument::types(),
+            'documentTypes' => EmployeeDocument::types(),
             'employees' => $employees,
             'totalEmployees' => Employee::count(),
             'activeEmployees' => Employee::where('status', 'active')->count(),
@@ -97,7 +98,7 @@ class EmployeeController extends Controller
 
         ActivityLog::record($request, 'HR', 'Created employee', $employee->name);
 
-        return redirect()->route('admin.hr.employees.index')
+        return $this->savedDestination($request, $employee)
             ->with('status', 'Employee "'.$employee->name.'" created with code '.$employee->employee_code.'.'
                 .($structure ? ' Their salary structure was created from the payroll information, effective '.$structure->effective_from->toDateString().'.' : ''));
     }
@@ -131,6 +132,10 @@ class EmployeeController extends Controller
 
     public function edit(Employee $employee): View
     {
+        if (auth()->user()->hasPermission('Payroll', 'view')) {
+            $employee->load('activeSalaryStructure.items');
+        }
+
         return view('admin.hr.employees.edit', ['employee' => $employee] + $this->formOptions($employee));
     }
 
@@ -172,7 +177,21 @@ class EmployeeController extends Controller
             $message .= ' The payroll information no longer matches their active salary structure; open the employee to raise a new structure from the new figures.';
         }
 
-        return redirect()->route('admin.hr.employees.index')->with('status', $message);
+        return $this->savedDestination($request, $employee)->with('status', $message);
+    }
+
+    private function savedDestination(Request $request, Employee $employee): RedirectResponse
+    {
+        if (! in_array($request->input('_save_action'), ['stay', 'next'], true)) {
+            return redirect()->route('admin.hr.employees.index');
+        }
+        $sections = ['personal', 'employment', 'payroll', 'documents', 'access'];
+        $section = in_array($request->input('_workspace_section'), $sections, true) ? $request->input('_workspace_section') : 'personal';
+        if ($request->input('_save_action') === 'next') {
+            $section = $sections[min(array_search($section, $sections, true) + 1, count($sections) - 1)];
+        }
+
+        return redirect()->to(route('admin.hr.employees.edit', $employee).'#'.$section);
     }
 
     /**
@@ -391,8 +410,8 @@ class EmployeeController extends Controller
             // is taken at save, so two people filling the form cannot collide.
             'nextCodes' => collect(config('seera.employee_codes'))
                 ->map(fn (string $prefix) => CodeGenerator::sequential('employees', 'employee_code', $prefix)),
-            'documentTypes' => \App\Models\EmployeeDocument::types(),
-            'documentSubtypes' => \App\Models\EmployeeDocument::whereNotNull('document_subtype')->distinct()->orderBy('document_subtype')->pluck('document_subtype'),
+            'documentTypes' => EmployeeDocument::types(),
+            'documentSubtypes' => EmployeeDocument::whereNotNull('document_subtype')->distinct()->orderBy('document_subtype')->pluck('document_subtype'),
             'paymentMethods' => ['Bank Transfer', 'Cash'],
             'nationalities' => LookupValue::options('nationality', $employee?->nationality),
         ];

@@ -447,3 +447,5 @@ tr:hover td { background: #fbfdff; }
 #unsaved-changes { border: 1px solid #dce3ee; border-radius: 12px; padding: 24px; max-width: min(560px, 90vw); color: #142136; }
 #unsaved-changes::backdrop { background: rgb(0 0 0 / 45%); }
 #employee-search-results { display: grid; gap: 6px; margin-block: 8px; }
+.employee-workspace-nav { flex-wrap: wrap; gap: 4px; margin-block-end: 16px; }
+.employee-workspace-nav[hidden] { display: none; }

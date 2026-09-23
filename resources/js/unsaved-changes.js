@@ -10,7 +10,7 @@ if (dialog) {
     let submitted = null;
     let discardedForms = [];
     const fields = form => [...form.elements].filter(field =>
-        field.name && !['_token', '_method'].includes(field.name)
+        field.name && !field.hasAttribute('data-dirty-ignore') && !['_token', '_method'].includes(field.name)
         && !['submit', 'button', 'reset'].includes(field.type));
     const snapshot = form => JSON.stringify(fields(form).map(field => [
         field.name, field.disabled, field.type === 'file'

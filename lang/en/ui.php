@@ -1,6 +1,14 @@
 <?php
 
 return [
+    'save_next' => 'Save & next', 'employee_sections' => 'Employee sections', 'show_all_sections' => 'Show all sections',
+    'section_personal' => 'Personal', 'section_employment' => 'Employment', 'section_payroll' => 'Salary & payment',
+    'section_documents' => 'Documents', 'section_access' => 'Access',
+    'current_salary_structure' => 'Current salary structure',
+    'salary_mismatch' => 'Profile pay and the current salary structure differ. Review and create a new effective-dated structure when appropriate.',
+    'salary_created_from_profile' => 'The first salary structure is created from the profile on save when eligible.',
+    'salary_history_preserved' => 'Saving this profile does not rewrite an existing salary structure or past payroll. Save profile changes before creating a new structure from them.',
+    'new_salary_from_profile' => 'New structure from saved profile (returns here)',
     'unsaved_title' => 'Unsaved changes',
     'unsaved_message' => 'Save the current form, discard changes and leave, or keep editing. Saving uses the form’s normal next step.',
     'keep_editing' => 'Keep editing', 'discard_leave' => 'Discard & leave', 'save_current' => 'Save current form',

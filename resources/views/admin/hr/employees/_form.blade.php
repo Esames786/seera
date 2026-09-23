@@ -4,9 +4,16 @@
     $documentRows = max(count(old('documents', [])), 4);
 @endphp
 
-<form method="POST" action="{{ $employee ? route("admin.hr.employees.update", $employee) : route("admin.hr.employees.store") }}" enctype="multipart/form-data">
+<nav class="tabs employee-workspace-nav" aria-label="{{ __('ui.employee_sections') }}" hidden>
+    @foreach (['personal', 'employment', 'payroll', 'documents', 'access'] as $section)
+        <a class="tab" href="#{{ $section }}" data-employee-section="{{ $section }}">{{ __('ui.section_'.$section) }}</a>
+    @endforeach
+    <button type="button" class="btn sm outline" data-employee-all>{{ __('ui.show_all_sections') }}</button>
+</nav>
+<form method="POST" action="{{ $employee ? route("admin.hr.employees.update", $employee) : route("admin.hr.employees.store") }}" enctype="multipart/form-data" data-employee-workspace="{{ $employee ? 'edit' : 'create' }}">
     @csrf
     @if ($employee) @method('PUT') @endif
+    <input type="hidden" name="_workspace_section" value="{{ old('_workspace_section', 'personal') }}" data-dirty-ignore/>
 
     <x-admin.form-section title="A. Personal Information" columns="3">
         <div><label for="first_name">First Name *</label><input id="first_name" name="first_name" class="input" value="{{ old('first_name', $employee?->first_name) }}" required/></div>
@@ -220,6 +227,24 @@
     </x-admin.form-section>
 
     <x-admin.form-section title="C. Payroll Information" columns="3">
+        @if ($employee && auth()->user()->hasPermission('Payroll', 'view'))
+            <div class="full help-box" data-salary-context>
+                @if ($currentStructure = $employee->activeSalaryStructure)
+                    <strong>{{ __('ui.current_salary_structure') }}</strong>:
+                    SAR {{ number_format($currentStructure->grossSalary(), 2) }}
+                    · {{ $currentStructure->effective_from->toDateString() }}
+                    @if ($employee->salaryStructureOutOfDate())
+                        <p>{{ __('ui.salary_mismatch') }}</p>
+                    @endif
+                @else
+                    {{ __('ui.salary_created_from_profile') }}
+                @endif
+                <p>{{ __('ui.salary_history_preserved') }}</p>
+                @if (auth()->user()->hasPermission('Payroll', 'create'))
+                    <a class="btn sm outline" href="{{ route('admin.hr.salary-structures.create', ['employee' => $employee->id, 'workspace_employee' => $employee->id]) }}">{{ __('ui.new_salary_from_profile') }}</a>
+                @endif
+            </div>
+        @endif
         <div><label for="basic_salary">Basic Salary (SAR) *</label><input id="basic_salary" name="basic_salary" type="number" step="0.01" min="0" class="input" value="{{ old('basic_salary', $employee?->basic_salary ?? 0) }}" required/></div>
         <div><label for="housing_allowance">Housing Allowance</label><input id="housing_allowance" name="housing_allowance" type="number" step="0.01" min="0" class="input" value="{{ old('housing_allowance', $employee?->housing_allowance ?? 0) }}"/></div>
         <div><label for="transport_allowance">Transport Allowance</label><input id="transport_allowance" name="transport_allowance" type="number" step="0.01" min="0" class="input" value="{{ old('transport_allowance', $employee?->transport_allowance ?? 0) }}"/></div>
@@ -417,6 +442,8 @@
 
     <div class="form-actions">
         <a class="btn outline" href="{{ route('admin.hr.employees.index') }}">Cancel</a>
+        <button type="submit" name="_save_action" value="stay" class="btn outline" data-save-default>{{ __('ui.save_stay') }}</button>
+        <button type="submit" name="_save_action" value="next" class="btn outline">{{ __('ui.save_next') }}</button>
         <button type="submit" class="btn primary">{{ $employee ? 'Update Employee' : 'Save Employee' }}</button>
     </div>
 </form>

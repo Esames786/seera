@@ -6,6 +6,7 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 const script = fs.readFileSync(path.join(__dirname, '../../resources/js/unsaved-changes.js'), 'utf8');
 const employeeScript = fs.readFileSync(path.join(__dirname, '../../resources/js/employee-user-search.js'), 'utf8');
+const workspaceScript = fs.readFileSync(path.join(__dirname, '../../resources/js/employee-workspace.js'), 'utf8');
 
 (async () => {
     const browser = await chromium.launch({ headless: true, executablePath: process.env.PREVIEW_CHROME || 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
@@ -95,6 +96,31 @@ const employeeScript = fs.readFileSync(path.join(__dirname, '../../resources/js/
         check(await page.locator('[name=role_id]').inputValue() === 'explicit' && await page.locator('[name=password]').inputValue() === 'unchanged', 'lookup does not overwrite role/password');
         await page.locator('[data-clear-employee]').click();
         check(await page.locator('[name=source_employee_id]').inputValue() === '', 'employee link can be cleared');
+        await page.goto('http://seera-fixture.test/workspace');
+        const sections = ['personal', 'employment', 'payroll', 'documents', 'access'];
+        await page.setContent(`<nav class="employee-workspace-nav" hidden>${sections.map(section => `<a href="#${section}" data-employee-section="${section}">${section}</a>`).join('')}<button type="button" data-employee-all>Show all</button></nav>
+            <form method="post" data-employee-workspace="edit"><input type="hidden" name="_workspace_section" value="personal" data-dirty-ignore>
+            ${sections.map(section => `<div class="form-section"><input name="${section}" value="Saved ${section}" required></div>`).join('')}<button type="submit">Save</button></form>
+            <dialog id="unsaved-changes" data-validation-errors="0"><button data-unsaved-stay>Stay</button><button data-unsaved-discard>Discard</button><button data-unsaved-save>Save current</button></dialog>`);
+        await page.addScriptTag({ content: script });
+        await page.addScriptTag({ content: workspaceScript });
+        check(await page.locator('.form-section:visible').count() === 1, 'employee edit opens one section');
+        await page.locator('[data-employee-section=documents]').click();
+        check(await page.locator('#documents').isVisible(), 'employee documents tab opens in place');
+        check(!await unloadBlocked(), 'section navigation alone does not mark data dirty');
+        await page.locator('[data-employee-section=personal]').click();
+        await page.locator('[name=personal]').fill('Unsaved personal');
+        await page.locator('[data-employee-section=payroll]').click();
+        check(await page.locator('[name=personal]').inputValue() === 'Unsaved personal', 'employee section switch preserves unsaved data');
+        check(await unloadBlocked(), 'employee unsaved edits remain guarded across sections');
+        await page.locator('[name=payroll]').fill('');
+        await page.locator('[data-employee-section=access]').click();
+        await page.locator('button[type=submit]').click();
+        check(await page.locator('#payroll').isVisible(), 'validation reveals hidden invalid section');
+        check(await page.locator('.form-section:visible').count() === 5, 'invalid form shows every section for correction');
+        await page.locator('[data-employee-section=personal]').click();
+        await page.locator('[data-employee-all]').click();
+        check(await page.locator('.form-section:visible').count() === 5, 'Show all restores the original full form');
         check(errors.length === 0, 'no browser script errors: ' + errors.join(';'));
         console.log(JSON.stringify({ result: 'passed', checks }));
     } finally { await browser.close(); }
