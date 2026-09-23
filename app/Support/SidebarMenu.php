@@ -5,6 +5,9 @@ namespace App\Support;
 use App\Http\Middleware\EnsureUserHasPermission;
 use App\Models\JournalEntry;
 use App\Models\LeaveRequest;
+use App\Models\MarketingLead;
+use App\Models\PurchaseRequest;
+use App\Models\WarehouseStock;
 use Illuminate\Support\Facades\Schema;
 
 /**
@@ -71,6 +74,14 @@ class SidebarMenu
                 'items' => [
                     static::link('admin.hr.dashboard', 'admin.hr.dashboard', '📋', 'HR Dashboard'),
                     static::link('admin.hr.employees.index', 'admin.hr.employees.*', '👷', 'Employees'),
+                    static::soon('project-dashboard', '📊', 'Projects & Site Expenses'),
+                    static::soon('equipment', '🚜', 'Equipment & Vehicles'),
+                ],
+            ],
+            [
+                'key' => 'hr-registers',
+                'label' => 'HR Registers & Approvals',
+                'items' => [
                     static::link('admin.hr.documents.index', 'admin.hr.documents.*', '🪪', 'Documents / IQAMA'),
                     static::link('admin.hr.shifts.index', 'admin.hr.shifts.*', '🔄', 'Shifts'),
                     static::link('admin.hr.attendance.index', 'admin.hr.attendance.*', '🕒', 'Attendance'),
@@ -79,8 +90,6 @@ class SidebarMenu
                     static::link('admin.hr.salary-structures.index', 'admin.hr.salary-structures.*', '🧮', 'Salary Structures'),
                     static::link('admin.hr.payroll.index', 'admin.hr.payroll.*', '💵', 'Payroll'),
                     static::link('admin.hr.eosb.index', 'admin.hr.eosb.*', '📄', 'End of Service'),
-                    static::soon('project-dashboard', '📊', 'Projects & Site Expenses'),
-                    static::soon('equipment', '🚜', 'Equipment & Vehicles'),
                 ],
             ],
             [
@@ -265,14 +274,14 @@ class SidebarMenu
                 ? JournalEntry::whereIn('status', ['draft', 'approved'])->count()
                 : 0,
             'purchaseRequests' => Schema::hasTable('purchase_requests')
-                ? \App\Models\PurchaseRequest::where('status', 'pending')->count()
+                ? PurchaseRequest::where('status', 'pending')->count()
                 : 0,
             'lowStock' => Schema::hasTable('warehouse_stocks')
-                ? \App\Models\WarehouseStock::lowStockCount()
+                ? WarehouseStock::lowStockCount()
                 : 0,
             'followUps' => Schema::hasTable('marketing_leads') && auth()->check()
-                ? \App\Models\MarketingLead::visibleTo(auth()->user())
-                    ->whereIn('status', \App\Models\MarketingLead::OPEN_STATUSES)
+                ? MarketingLead::visibleTo(auth()->user())
+                    ->whereIn('status', MarketingLead::OPEN_STATUSES)
                     ->whereDate('next_follow_up_date', '<=', today())
                     ->count()
                 : 0,

@@ -82,7 +82,7 @@
             @forelse ($employees as $employee)
                 <tr>
                     <td>{{ $employee->employee_code }}</td>
-                    <td><a href="{{ route('admin.hr.employees.show', $employee) }}" style="color:var(--blue);font-weight:700">{{ $employee->name }}</a></td>
+                    <td><a href="{{ route(auth()->user()->hasPermission('HR', 'edit') ? 'admin.hr.employees.edit' : 'admin.hr.employees.show', $employee) }}" style="color:var(--blue);font-weight:700">{{ $employee->name }}</a></td>
                     <td>{{ $employee->department?->name ?? '-' }}</td>
                     <td>{{ $employee->designation?->name ?? '-' }}</td>
                     <td>{{ $employee->project?->name ?? 'Head Office' }}@if($employee->site) / {{ $employee->site->name }}@endif</td>
@@ -95,11 +95,12 @@
                     <td><x-admin.status-badge :status="$employee->mobile_access ? 'yes' : 'no'"/></td>
                     <td><x-admin.status-badge :status="$employee->status"/></td>
                     <td>
-                        <x-admin.action-buttons
-                            :view="route('admin.hr.employees.show', $employee)"
-                            :edit="route('admin.hr.employees.edit', $employee)"
-                            :delete="route('admin.hr.employees.destroy', $employee)"
-                            :name="$employee->name"/>
+                        <div class="actions">
+                            <a class="btn sm primary" href="{{ route(auth()->user()->hasPermission('HR', 'edit') ? 'admin.hr.employees.edit' : 'admin.hr.employees.show', $employee) }}">{{ __('Open') }}</a>
+                            @if(auth()->user()->hasPermission('HR', 'delete'))
+                                <button type="button" class="btn sm danger js-delete" data-delete-url="{{ route('admin.hr.employees.destroy', $employee) }}" data-delete-name="{{ $employee->name }}">{{ __('Deactivate') }}</button>
+                            @endif
+                        </div>
                     </td>
                 </tr>
             @empty

@@ -122,6 +122,10 @@ class EnsureUserHasPermission
     /** @return array{0: ?string, 1: string} */
     public static function permissionForRoute(string $routeName, ?string $comingSoonModule = null): array
     {
+        if (str_starts_with($routeName, 'admin.hr.employees.workspace.')) {
+            // The workspace controller ALSO enforces each child module/action.
+            return ['HR', 'edit'];
+        }
         if ($routeName === 'admin.users.employee-search') {
             return ['Users', 'create'];
         }

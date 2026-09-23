@@ -8,6 +8,13 @@
     @foreach (['personal', 'employment', 'payroll', 'documents', 'access'] as $section)
         <a class="tab" href="#{{ $section }}" data-employee-section="{{ $section }}">{{ __('ui.section_'.$section) }}</a>
     @endforeach
+    @if($employee)
+        @foreach(\App\Support\EmployeeWorkspacePanels::PANELS as $panel => $definition)
+            @if(auth()->user()->hasPermission($definition[1], 'view'))
+                <a class="tab" href="#{{ $panel }}" data-employee-related="{{ $panel }}" data-related-url="{{ route('admin.hr.employees.workspace.panel', [$employee, $panel]) }}">{{ __($definition[0]) }}</a>
+            @endif
+        @endforeach
+    @endif
     <button type="button" class="btn sm outline" data-employee-all>{{ __('ui.show_all_sections') }}</button>
 </nav>
 <form method="POST" action="{{ $employee ? route("admin.hr.employees.update", $employee) : route("admin.hr.employees.store") }}" enctype="multipart/form-data" data-employee-workspace="{{ $employee ? 'edit' : 'create' }}">
@@ -241,7 +248,7 @@
                 @endif
                 <p>{{ __('ui.salary_history_preserved') }}</p>
                 @if (auth()->user()->hasPermission('Payroll', 'create'))
-                    <a class="btn sm outline" href="{{ route('admin.hr.salary-structures.create', ['employee' => $employee->id, 'workspace_employee' => $employee->id]) }}">{{ __('ui.new_salary_from_profile') }}</a>
+                    <a class="btn sm outline" href="#salary" data-open-related="salary">{{ __('Manage salary here') }}</a>
                 @endif
             </div>
         @endif
@@ -423,6 +430,13 @@
 
     <x-admin.form-section title="E. Access" columns="3">
         <div>
+            @if($employee)
+            <label>{{ __('System Account') }}</label>
+            <p>{{ __('Create or manage the linked login in the System Account tab. Profile saves do not change this link.') }}</p>
+            @if(auth()->user()->hasPermission('Users', 'view'))
+                <a href="#account" class="btn outline" data-open-related="account">{{ __('System Account') }}</a>
+            @endif
+            @else
             <label for="user_id">Link User Account</label>
             <select id="user_id" name="user_id" class="select">
                 <option value="">No linked account</option>
@@ -430,6 +444,7 @@
                     <option value="{{ $user->id }}" @selected(old('user_id', $employee?->user_id) == $user->id)>{{ $user->name }} ({{ $user->email }})</option>
                 @endforeach
             </select>
+            @endif
         </div>
         <div>
             <label for="mobile_access">Mobile App Access</label>
@@ -444,9 +459,21 @@
         <a class="btn outline" href="{{ route('admin.hr.employees.index') }}">Cancel</a>
         <button type="submit" name="_save_action" value="stay" class="btn outline" data-save-default>{{ __('ui.save_stay') }}</button>
         <button type="submit" name="_save_action" value="next" class="btn outline">{{ __('ui.save_next') }}</button>
-        <button type="submit" class="btn primary">{{ $employee ? 'Update Employee' : 'Save Employee' }}</button>
+        <button type="submit" class="btn primary">{{ __('Save & close') }}</button>
     </div>
 </form>
+@if($employee)
+    <div data-employee-related-host
+        data-token="{{ csrf_token() }}"
+        data-loading="{{ __('Loading...') }}"
+        data-error="{{ __('The request failed. Your unsaved input is still here. Try again.') }}"
+        data-refresh-error="{{ __('Saved, but the refreshed list could not be loaded. Retry loading; do not submit again.') }}"
+        data-retry="{{ __('Retry loading') }}"
+        data-confirm="{{ __('Confirm this action? It is separate from saving the profile.') }}"
+        data-reason="{{ __('Reason for rejection') }}"
+        data-discard="{{ __('Discard unsaved changes in this section?') }}"
+        data-saved="{{ __('Saved successfully. This section is up to date.') }}"></div>
+@endif
 
 <x-admin.dependent-select parent="department_id" child="designation_id" placeholder="designations"/>
 <x-admin.dependent-select parent="project_id" child="site_id" placeholder="sites"/>

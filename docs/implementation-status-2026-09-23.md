@@ -28,7 +28,9 @@ Scope: owner UX requests plus the reviewed September 22 client package. English 
 
 First rollback checkpoint: `b6c4d86` (Customer feedback, shared form/locale foundation and employee-account conversion).
 
-## Employee pilot (second batch)
+## Employee pilot (second batch, historical checkpoint `cd6699e`)
+
+The following describes the second checkpoint, not the latest workspace behavior. The third batch below supersedes its separate-form navigation and pending-panels statements.
 
 - Existing employee fields, accepted document uploads and original store/update transaction remain in place.
 - Edit gains Personal / Employment / Salary & payment / Documents / Access navigation. Show all restores the full form. Without JavaScript, the full form remains available.
@@ -40,13 +42,29 @@ First rollback checkpoint: `b6c4d86` (Customer feedback, shared form/locale foun
 
 The employee conversion retains the existing account password policy (including forced change when the existing default is used); changing the entire onboarding policy is not silently bundled into this UX change. Explicit passwords in the new employee-conversion path must be at least eight characters. Search does not create a user, grant permissions, or modify the employee. Linking uses a row lock; SQLite feature tests do not prove MySQL concurrency behavior.
 
+## Employee single workspace (third batch)
+
+Owner clarification and before/after specification: [Employee single-workspace requirement](employee-single-workspace-requirement-2026-09-23.md).
+
+- Employee list has one Open action (workspace for editors, existing read-only view for view-only users). Deactivation remains a separately authorized action. Eight HR registers now sit under the collapsible HR Registers & Approvals sidebar group. Their routes remain intact for team-wide work and old links.
+- Salary, Attendance, Leaves, Overtime, Shift Assignments and EOSB now have same-page forms and paginated employee-specific histories. Payroll History is read-only. System Account supports prefilled account creation and editing; Users -> Add User still has the separately tested employee-search/select/autofill flow.
+- Related forms have independent AJAX saves, inline errors and retained drafts/files across tab switches and failed requests. Saving one panel does not clear another panel's unsaved state. Failed history refresh after a successful save offers a loading retry, not a duplicate submission.
+- Personal/employment/payroll-info/documents/access retain their accepted native multipart transaction, with Save & stay / Save & next returning to this workspace and Save & close explicitly exiting. A profile reload is guarded if another panel has drafts. Native profile validation redirects may require file reselection; the retained-file-on-server-error guarantee is for the new related AJAX forms. No silent Save All operation was introduced.
+- Every new endpoint requires HR edit plus its related module/action permission. Route-bound employee scope and record ownership are rechecked, mutable records are locked during writes, ordinary saves cannot smuggle an approval status, overtime attendance links must belong to the selected employee, and active shift dates cannot overlap. Historical salary structures and approved EOSB/leave/overtime records are not editable through the new panels.
+- Existing validation, calculations, activity logs and attachment controllers are reused. No salary/payroll formula or batch-posting behavior was replaced. Account-link management was separated from the profile selector so a stale profile save cannot unlink a newly created account.
+- New employee-specific code needs no migration or seeder. Arabic keys were added for new workspace controls; the overall full-app Arabic and human-review work remains pending.
+
+Verification recorded September 24: **204/204 PHPUnit tests passed, 1,885 assertions, exit 0**, with application code frozen during the complete run and SQLite `:memory:` as the database. Also passed: 20 related-workspace browser checks plus the existing 33 foundation browser checks (53 total), production Vite asset build, Pint and whitespace checks. The earlier nine-test focused run passed eight tests; its final scope test reused a cached company-scope user after changing its role. It was corrected to authenticate a fresh model, then included in the passing full regression. No failing run is being relabelled as passing. Real authenticated staging UAT remains required.
+
+Previous rollback checkpoint for this increment: `cd6699e`. The new implementation checkpoint is the commit containing this section and `docs/employee-single-workspace-requirement-2026-09-23.md` (commit subject: `Implement employee single-page related workspaces`). No production deployment, database reset, live migration, push or merge was performed.
+
 ### Source and media review
 
 The September 22 package contains 6 audio files and 6 screenshots. All were reviewed and linked to the requirements; 18 local transcription passes and all 12 file hashes are recorded in the private evidence package. Machine transcription is not claimed as verbatim certainty. Do not publish the embedded-media HTML in `public` or upload client recordings without permission.
 
 ## Still pending — not represented as completed
 
-1. Extend the Employee pilot with permission-aware Attendance/Leaves/Overtime/payroll-history panels and consider in-place salary entry only after its specialized form is safely reusable.
+1. Employee single-workspace staging acceptance: real authenticated browser UAT of all related panels, accepted document flows, independent drafts, scoped users, Arabic/RTL and file storage. Automated checks do not replace this sign-off.
 2. R22-01: multiple reporting parents, cycle checks, approver snapshots/decisions and an all-required approval runtime. Preserve existing behavior until the complete path is tested. Approval ordering/configuration and legacy pending-request treatment must be explicit.
 3. R22-02: coordinated VAT default and Super Admin override policy across purchase/sales entry paths. No historical-rate rewrite; the separate 20% comment is not VAT scope.
 4. Complete English/Arabic coverage, human Arabic review, RTL screen/PDF verification.
@@ -66,7 +84,7 @@ The September 22 package contains 6 audio files and 6 screenshots. All were revi
 - An earlier suite overlapped code edits and produced a route-registration mismatch; it is not a clean baseline or a release result.
 - Do not deploy this partial batch as though the whole programme is finished.
 
-### Final combined result (September 23)
+### Previous combined result (September 23, before the third batch)
 
 **PASS: 195/195 PHPUnit tests, 1,772 assertions, exit 0.** This was a fresh complete run after the customer/user foundation, scope correction and Employee pilot, with application code frozen throughout. The test environment was SQLite `:memory:`. Also passed: 33 browser-fixture checks using the actual JavaScript, Vite production build, PHP formatting and whitespace checks.
 

@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Hr\AttendanceController;
 use App\Http\Controllers\Admin\Hr\EmployeeController;
 use App\Http\Controllers\Admin\Hr\EmployeeDocumentController;
+use App\Http\Controllers\Admin\Hr\EmployeeWorkspaceController;
 use App\Http\Controllers\Admin\Hr\EndOfServiceController;
 use App\Http\Controllers\Admin\Hr\HrDashboardController;
 use App\Http\Controllers\Admin\Hr\LeaveRequestController;
@@ -155,6 +156,9 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
     Route::prefix('hr')->name('hr.')->group(function () {
         Route::get('dashboard', [HrDashboardController::class, 'index'])->name('dashboard');
 
+        Route::get('employees/{employee}/workspace/{panel}', [EmployeeWorkspaceController::class, 'panel'])->name('employees.workspace.panel');
+        Route::post('employees/{employee}/workspace/{panel}', [EmployeeWorkspaceController::class, 'save'])->name('employees.workspace.save');
+        Route::post('employees/{employee}/workspace/{panel}/{record}/{action}', [EmployeeWorkspaceController::class, 'action'])->whereNumber('record')->name('employees.workspace.action');
         Route::resource('employees', EmployeeController::class);
         Route::get('documents', [EmployeeDocumentController::class, 'index'])->name('documents.index');
         Route::get('documents/{document}/download', [EmployeeDocumentController::class, 'download'])->name('documents.download');
