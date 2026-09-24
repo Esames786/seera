@@ -25,3 +25,19 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Private client recordings, screenshots and the review packages that embed them.
+# Never publish these; the client-facing walkthrough lives in public/client-review only.
+/public/24_09_2026/
+/public/seera_*/
+/public/new_requirement*/
+/docs/client-requirements-*.html
+/docs/seera-change-walkthrough.html
+/docs/seera-ui-transformation-preview*
+/docs/review-tools/
+/seera-build-*.zip
+/public/*build*.zip
+!/public/build.zip
+# Raw transcript/evidence ledgers from the private media reviews.
+/docs/*-evidence.json
+/docs/*-sources.md

@@ -349,3 +349,34 @@ After deploying, saving an employee creates their first salary structure from th
 pay on the employee form. Employees already in the system get theirs the first time
 they are edited; there is no automatic backfill, because writing salary records for
 every existing employee needs the client's approval.
+
+## 12. September 24 feedback release (feature branch)
+
+This release lives on `feature/seera-connected-workspaces-2026-09-23`, which the
+server already tracks. It adds no migration beyond `2026_09_23_000001_*` (already
+run on the server on 24 September) and no seeder. The asset bundle **did change**
+(new JavaScript for the linked-account search and the sticky permission matrix),
+so `public/build.zip` must be extracted again.
+
+`public/build.zip` unpacks to `assets/` and `manifest.json` at its root, so the
+target folder is `public/build` exactly as below. Do not extract it into `public/`.
+
+```bash
+cd ~/seera
+PHP=/opt/cpanel/ea-php83/root/usr/bin/php
+
+$PHP artisan down
+git fetch origin
+git checkout feature/seera-connected-workspaces-2026-09-23
+git pull --ff-only
+$PHP artisan migrate --force          # reports "Nothing to migrate" if 2026_09_23 already ran
+rm -rf public/build && mkdir -p public/build
+unzip -oq public/build.zip -d public/build
+test -f public/build/manifest.json && echo "assets ok"
+$PHP artisan optimize
+$PHP artisan up
+```
+
+Rollback: `git checkout 2d0f9d5`, extract that commit's `public/build.zip` the same
+way, then `$PHP artisan optimize`. No database rollback is needed; nothing in this
+release changes the schema.
