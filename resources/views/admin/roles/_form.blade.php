@@ -122,14 +122,14 @@
                 <button type="button" class="btn sm outline" data-matrix-select="role-permission-table" data-matrix-value="0">Clear visible</button>
             </div>
         </div>
-        <div class="table-wrap">
+        <div class="table-wrap matrix-wrap">
             <table class="permission-table" id="role-permission-table">
                 <thead>
                     <tr>
                         <th>Module</th>
                         <th class="all-col">All</th>
                         @foreach ($formActions as $action)
-                            <th>{{ $action === 'mobile' ? 'Mobile' : ucfirst($action) }}</th>
+                            <th>{{ \App\Models\Permission::label($action) }}</th>
                         @endforeach
                     </tr>
                 </thead>
@@ -154,9 +154,9 @@
         </div>
         <div class="table-footer">
             <span class="small">
-                Actions such as Post, Process, Receive, Issue, Transfer and Adjust are managed on the
-                <a href="{{ route('admin.roles.permission-matrix', $role ? ['role' => $role->id] : []) }}" style="color:var(--blue);font-weight:700">full Permission Matrix</a>
-                and are kept as they are when this form is saved.
+                Every supported action is listed here, the same set as the
+                <a href="{{ route('admin.roles.permission-matrix', $role ? ['role' => $role->id] : []) }}" style="color:var(--blue);font-weight:700">full Permission Matrix</a>.
+                Modules hidden by the department filter keep their current permissions when this form is saved.
             </span>
         </div>
     </div>

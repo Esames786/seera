@@ -405,6 +405,19 @@ tr:hover td { background: #fbfdff; }
 .permission-table tr.module-hidden { display: none; }
 .matrix-note { font-size: 12px; color: var(--muted); }
 
+/* Wide matrix (R24-07): the module column and the action header stay in view
+   while the rest scrolls, on desktop, narrow screens and RTL alike. */
+.matrix-wrap { max-height: 72vh; overflow: auto; }
+.matrix-wrap .permission-table th { white-space: nowrap; }
+.matrix-wrap .permission-table thead th { position: sticky; top: 0; z-index: 2; background: #f8fafc; box-shadow: 0 1px 0 var(--line); }
+.matrix-wrap .permission-table th:first-child, .matrix-wrap .permission-table td:first-child {
+  position: sticky; inset-inline-start: 0; z-index: 1; background: #fff; min-width: 170px;
+  box-shadow: inset -1px 0 0 var(--line);
+}
+[dir="rtl"] .matrix-wrap .permission-table th:first-child, [dir="rtl"] .matrix-wrap .permission-table td:first-child { box-shadow: inset 1px 0 0 var(--line); }
+.matrix-wrap .permission-table thead th:first-child { z-index: 3; }
+.matrix-wrap .permission-table tbody tr:hover td:first-child { background: #f8fafc; }
+
 /* Organization structure hub (CR-10) ---------------------------------- */
 .hub-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .hub-card { background: #fff; border: 1px solid var(--line); border-radius: 7px; padding: 18px; }

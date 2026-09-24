@@ -19,7 +19,12 @@ use Illuminate\View\View;
 class RoleController extends Controller
 {
     /** Actions shown in the compact matrix embedded in the role form. */
-    public const FORM_ACTIONS = ['view', 'create', 'edit', 'delete', 'approve', 'export', 'mobile'];
+    /**
+     * The role form shows the whole action catalogue, the same set the
+     * Permission Matrix uses (client feedback R24-06). Kept as a constant so
+     * existing references keep working.
+     */
+    public const FORM_ACTIONS = Permission::ACTIONS;
 
     public function index(Request $request): View
     {
@@ -230,7 +235,9 @@ class RoleController extends Controller
         $submitted = collect($request->input('permissions', []))->map(fn ($id) => (int) $id);
 
         if (! $request->has('visible_permission_ids')) {
-            return $submitted->unique()->values()->all();
+            // Nothing was displayed, so nothing can be revoked: a request without the
+            // visible list may only add permissions (client feedback R24-06).
+            return $role->permissions()->pluck('permissions.id')->merge($submitted)->unique()->values()->all();
         }
 
         $visible = collect($request->input('visible_permission_ids', []))->map(fn ($id) => (int) $id);

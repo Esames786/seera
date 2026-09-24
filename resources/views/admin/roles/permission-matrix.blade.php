@@ -56,14 +56,14 @@
                         <button type="button" class="btn sm outline" data-matrix-select="permission-matrix-table" data-matrix-value="0">Clear visible</button>
                     </div>
                 </div>
-                <div class="table-wrap">
+                <div class="table-wrap matrix-wrap">
                     <table class="permission-table" id="permission-matrix-table">
                         <thead>
                             <tr>
                                 <th>Module</th>
                                 <th class="all-col">All</th>
                                 @foreach ($actions as $action)
-                                    <th>{{ $action === 'mobile' ? 'Mobile Access' : ucfirst($action) }}</th>
+                                    <th>{{ \App\Models\Permission::label($action) }}</th>
                                 @endforeach
                             </tr>
                         </thead>

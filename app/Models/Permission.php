@@ -33,6 +33,23 @@ class Permission extends Model
         'receive', 'issue', 'transfer', 'adjust',
     ];
 
+    /**
+     * Human labels for the action catalogue. The role form and the Permission
+     * Matrix both read ACTIONS and these labels, so the two screens can never
+     * offer different sets again (client feedback R24-06).
+     */
+    public const ACTION_LABELS = [
+        'view' => 'View', 'create' => 'Create', 'edit' => 'Edit', 'delete' => 'Delete',
+        'approve' => 'Approve', 'reject' => 'Reject', 'export' => 'Export', 'mobile' => 'Mobile Access',
+        'post' => 'Post', 'process' => 'Process', 'retry' => 'Retry', 'receive' => 'Receive',
+        'issue' => 'Issue', 'transfer' => 'Transfer', 'adjust' => 'Adjust',
+    ];
+
+    public static function label(string $action): string
+    {
+        return self::ACTION_LABELS[$action] ?? ucfirst($action);
+    }
+
     protected $fillable = ['module', 'module_group', 'action'];
 
     public function roles()
