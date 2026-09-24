@@ -12,6 +12,21 @@ Scope: owner UX requests plus the reviewed September 22 client package. English 
 - Customer Cash/Bank/Both is enforced on receipts, not merely a label. Existing customers default to Both.
 - Keep a separate branch for review and easy code rollback.
 
+## September 24 Employee review corrections
+
+The client identified missing Shift/Leave Type creation and inconsistent Save here controls after the third batch. [The follow-up audit](employee-workspace-followup-2026-09-24.md) records the evidence, dropdown inventory, save contract and verification gate.
+
+- Inline Shift and Leave Type creation now returns directly to the initiating field. Shift options also become available to other loaded attendance/assignment selectors without changing their selections. Leave type creation validates its unique code, annual limit and paid/unpaid flag; it does not seed sample data.
+- Related forms now share Save & stay / Save & next / Save & close. Stay displays the actual saved record; next follows permitted section order; close guards other unsaved forms. Access -> Save & next continues into permitted related sections. Ordinary saves still do not approve records or post payroll.
+- Inline basic Project/Site setup uses existing validation. Projects start in planning and sites in draft; complete operational setup remains explicit. Company/project access boundaries are enforced. System Account has explicit role creation/template selection, without silently creating a user or granting privileges.
+- Human labels replace raw foreign-key names; shift history shows the shift name and EOSB identifies the existing input as final wage. Empty master lists explain the creation or permission requirement.
+- Shared quick-create forms now participate in dirty tracking as POST forms, handle Escape safely and preserve input on validation/network failures. Successful master saves reset only their own form state; parent drafts remain protected.
+- No new migration or dependency is introduced. Following the owner's additional request, opt-in `ProductionEmployeeMastersSeeder` fills only missing Shift/Leave Type defaults and preserves existing configuration; review its documented defaults before use. No demo employees or transactions are seeded.
+- Add User lookup now explains in-scope linked/inactive/code-conflict matches instead of silently hiding them. Duplicate-account and scope protections remain intact. The screenshot alone does not prove which exclusion applies to live EMP-002.
+- A fresh production asset build is required. The user-modified existing `public/build.zip` is not overwritten or committed by this work.
+
+This increment is local branch work only; no live code, database, cache, deployment or Git remote has been changed as part of the correction. Final verification is recorded in the follow-up audit before handoff.
+
 ## First implementation batch
 
 | Item | Implemented behavior | Boundary |

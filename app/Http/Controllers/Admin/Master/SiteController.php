@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Project;
 use App\Models\Site;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -40,11 +41,20 @@ class SiteController extends Controller
         return view('admin.master.sites.create', $this->formOptions());
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
+        if ($request->wantsJson()) {
+            // A site/warehouse-scoped operator cannot assign a newly created
+            // site; inline creation must not offer a scope escape.
+            abort_unless(in_array($request->user()->effectiveAccessScope(), ['company', 'project'], true), 403);
+        }
         $site = Site::create($this->validated($request));
 
         ActivityLog::record($request, 'Sites', 'Created site', $site->name);
+
+        if ($request->wantsJson()) {
+            return response()->json(['id' => $site->id, 'label' => $site->name, 'parent' => $site->project_id], 201);
+        }
 
         return redirect()->route('admin.master.sites.index')->with('status', 'Site "'.$site->name.'" created successfully.');
     }

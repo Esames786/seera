@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\Hr\EmployeeWorkspaceController;
 use App\Http\Controllers\Admin\Hr\EndOfServiceController;
 use App\Http\Controllers\Admin\Hr\HrDashboardController;
 use App\Http\Controllers\Admin\Hr\LeaveRequestController;
+use App\Http\Controllers\Admin\Hr\LeaveTypeController;
 use App\Http\Controllers\Admin\Hr\OvertimeController;
 use App\Http\Controllers\Admin\Hr\PayrollRunController;
 use App\Http\Controllers\Admin\Hr\SalaryStructureController;
@@ -160,6 +161,7 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::post('employees/{employee}/workspace/{panel}', [EmployeeWorkspaceController::class, 'save'])->name('employees.workspace.save');
         Route::post('employees/{employee}/workspace/{panel}/{record}/{action}', [EmployeeWorkspaceController::class, 'action'])->whereNumber('record')->name('employees.workspace.action');
         Route::resource('employees', EmployeeController::class);
+        Route::post('leave-types', [LeaveTypeController::class, 'store'])->name('leave-types.store');
         Route::get('documents', [EmployeeDocumentController::class, 'index'])->name('documents.index');
         Route::get('documents/{document}/download', [EmployeeDocumentController::class, 'download'])->name('documents.download');
         Route::get('documents/{document}/view', [EmployeeDocumentController::class, 'view'])->name('documents.view');

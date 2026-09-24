@@ -59,6 +59,11 @@ if (dialog) {
         event.preventDefault();
         prompt(() => { reset(event.target); event.detail.close(); }, [event.target]);
     });
+    document.addEventListener('seera:before-navigation', event => {
+        if (!dirtyForms().length) return;
+        event.preventDefault();
+        prompt(() => { leaving = true; event.detail.navigate(); });
+    });
     dialog.addEventListener('cancel', stay);
     dialog.querySelector('[data-unsaved-stay]').addEventListener('click', stay);
     dialog.querySelector('[data-unsaved-discard]').addEventListener('click', () => {
@@ -73,7 +78,10 @@ if (dialog) {
         const form = saveForm;
         stay();
         const button = form?.querySelector('[data-save-default], button[type="submit"], input[type="submit"]');
-        if (form) form.requestSubmit(button || undefined);
+        if (form) {
+            form.dispatchEvent(new CustomEvent('seera:reveal-form', { bubbles: true }));
+            form.requestSubmit(button || undefined);
+        }
     });
     document.addEventListener('click', event => {
         const link = event.target.closest('a[href]');

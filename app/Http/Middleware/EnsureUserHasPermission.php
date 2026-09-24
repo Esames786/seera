@@ -34,6 +34,7 @@ class EnsureUserHasPermission
         'hr.employees' => 'HR',
         'hr.documents' => 'HR',
         'hr.shifts' => 'HR',
+        'hr.leave-types' => 'HR',
         'hr.attendance' => 'Attendance',
         'hr.leaves' => 'HR',
         'hr.overtime' => 'Payroll',

@@ -77,6 +77,21 @@ class EmployeeUserConversionTest extends TestCase
         $this->assertDatabaseMissing('users', ['email' => 'second@example.test']);
     }
 
+    public function test_unavailable_matches_explain_why_without_exposing_private_fields(): void
+    {
+        $employee = $this->employee(['user_id' => $this->admin()->id]);
+        $url = route('admin.users.employee-search', ['q' => 'SP-SEARCH']);
+        $this->actingAs($this->admin())->getJson($url)->assertOk()->assertJsonCount(0, 'data')
+            ->assertJsonPath('unavailable.0.reason', __('ui.employee_already_linked'))
+            ->assertJsonMissingPath('unavailable.0.user_id')->assertJsonMissingPath('unavailable.0.fields')
+            ->assertDontSee('PRIVATE-IBAN')->assertDontSee('admin@example.com');
+        $employee->update(['user_id' => null, 'status' => 'inactive']);
+        $this->getJson($url)->assertJsonPath('unavailable.0.reason', __('ui.employee_inactive'));
+        $employee->update(['status' => 'active']);
+        User::factory()->create(['employee_id' => $employee->employee_code]);
+        $this->getJson($url)->assertJsonCount(0, 'data')->assertJsonPath('unavailable.0.reason', __('ui.employee_code_used'));
+    }
+
     public function test_inactive_employee_and_invalid_role_do_not_partially_create_or_link(): void
     {
         $employee = $this->employee(['status' => 'inactive']);
@@ -108,7 +123,9 @@ class EmployeeUserConversionTest extends TestCase
         $role = Role::create(['name' => 'Site administrator', 'code' => 'SITE_ADMIN_22', 'level' => 2, 'access_scope' => 'Site Level', 'status' => 'active']);
         $role->permissions()->sync(Permission::whereIn('module', ['Users', 'HR'])->pluck('id'));
         $actor->roles()->attach($role, ['is_primary' => true]);
-        $this->actingAs($actor)->getJson(route('admin.users.employee-search', ['q' => 'Search']))->assertOk()->assertJsonCount(0, 'data');
+        $employee->update(['user_id' => $this->admin()->id]);
+        $this->actingAs($actor)->getJson(route('admin.users.employee-search', ['q' => 'Search']))->assertOk()->assertJsonCount(0, 'data')->assertJsonCount(0, 'unavailable');
+        $employee->update(['user_id' => null]);
         // Existing write-side scope middleware denies the request before the
         // controller lookup; this must remain forbidden, not become a link.
         $this->post(route('admin.users.store'), $this->payload($employee))->assertForbidden();

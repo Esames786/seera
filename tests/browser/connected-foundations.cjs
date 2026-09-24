@@ -97,6 +97,12 @@ const workspaceScript = relatedScript + '\n' + fs.readFileSync(path.join(__dirna
         check(await page.locator('[name=role_id]').inputValue() === 'explicit' && await page.locator('[name=password]').inputValue() === 'unchanged', 'lookup does not overwrite role/password');
         await page.locator('[data-clear-employee]').click();
         check(await page.locator('[name=source_employee_id]').inputValue() === '', 'employee link can be cleared');
+        await page.unroute('**/lookup?*');
+        await page.route('**/lookup?*', route => route.fulfill({ json: { data: [], unavailable: [{ employee_code: 'EMP-002', name: 'Linked Person', reason: 'Already linked to a system user.' }] } }));
+        await page.locator('[data-employee-search]').fill('EMP-002');
+        await page.waitForFunction(() => document.querySelector('#employee-search-results').textContent.includes('Already linked'));
+        check(await page.locator('#employee-search-results button').count() === 0, 'unavailable employee explains reason without a duplicate-account selection');
+        check(await page.locator('[name=source_employee_id]').inputValue() === '' && await page.locator('[name=name]').inputValue() === 'Test Person', 'unavailable search does not mutate copied fields or link');
         await page.goto('http://seera-fixture.test/workspace');
         const sections = ['personal', 'employment', 'payroll', 'documents', 'access'];
         await page.setContent(`<nav class="employee-workspace-nav" hidden>${sections.map(section => `<a href="#${section}" data-employee-section="${section}">${section}</a>`).join('')}<button type="button" data-employee-all>Show all</button></nav>

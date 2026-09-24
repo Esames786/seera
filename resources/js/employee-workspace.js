@@ -49,6 +49,19 @@ if (employeeForm) {
             history.replaceState(null, '', link.hash);
         });
         nav.querySelector('[data-employee-all]').addEventListener('click', () => show(state.value, true));
+        document.addEventListener('seera:workspace-next', event => {
+            const links = [...nav.querySelectorAll('[data-employee-section], [data-employee-related]')];
+            const index = links.findIndex(link => (link.dataset.employeeSection || link.dataset.employeeRelated) === event.detail.panel);
+            const next = links[index + 1];
+            if (index >= 0 && next) {
+                show(next.dataset.employeeSection || next.dataset.employeeRelated);
+                history.replaceState(null, '', next.hash);
+            }
+        });
+        document.addEventListener('seera:reveal-form', event => {
+            const panel = event.target.closest('[data-related-panel]');
+            show(panel ? panel.dataset.relatedPanel : state.value, !panel);
+        });
         window.addEventListener('hashchange', () => show(location.hash.slice(1)));
         // Reveal invalid controls before the browser attempts to focus them.
         employeeForm.addEventListener('invalid', event => {

@@ -173,7 +173,17 @@
             </select>
         </div>
         <div>
+            <div class="label-row">
             <label for="project_id">Project</label>
+            @if(auth()->user()->effectiveAccessScope() === 'company')
+            <x-admin.quick-create id="ews-project" target="project_id,ews-site-project" select-target="project_id" :url="route('admin.master.projects.store')" title="New Project" permission="Projects" :submit="__('Save & select')">
+                <div><label for="ews-project-name">{{ __('Project Name') }} *</label><input id="ews-project-name" name="name" class="input" required maxlength="255"/></div>
+                <div><label for="ews-project-code">{{ __('Code') }} *</label><input id="ews-project-code" name="code" class="input" required maxlength="50"/></div>
+                <input type="hidden" name="status" value="planning"/>
+                <p class="full small">{{ __('Creates a planning project. Complete budgets and project setup separately before operations.') }}</p>
+            </x-admin.quick-create>
+            @endif
+            </div>
             <select id="project_id" name="project_id" class="select">
                 <option value="">Head Office</option>
                 @foreach ($projects as $project)
@@ -182,7 +192,18 @@
             </select>
         </div>
         <div>
+            <div class="label-row">
             <label for="site_id">Site</label>
+            @if(in_array(auth()->user()->effectiveAccessScope(), ['company', 'project'], true))
+            <x-admin.quick-create id="ews-site" target="site_id" parent-target="project_id" :url="route('admin.master.sites.store')" title="New Site" permission="Sites" :submit="__('Save & select')">
+                <div><label for="ews-site-name">{{ __('Site Name') }} *</label><input id="ews-site-name" name="name" class="input" required maxlength="255"/></div>
+                <div><label for="ews-site-code">{{ __('Code') }} *</label><input id="ews-site-code" name="code" class="input" required maxlength="50"/></div>
+                <div class="full"><label for="ews-site-project">{{ __('Project') }} *</label><select id="ews-site-project" name="project_id" class="select" data-prefill-from="project_id" required><option value="">{{ __('Select...') }}</option>@foreach($projects as $project)<option value="{{ $project->id }}">{{ $project->name }}</option>@endforeach</select></div>
+                <input type="hidden" name="status" value="draft"/>
+                <p class="full small">{{ __('Creates a draft site. Configure location and geofence rules separately before attendance use.') }}</p>
+            </x-admin.quick-create>
+            @endif
+            </div>
             <select id="site_id" name="site_id" class="select">
                 <option value="">Select...</option>
                 @foreach ($sites as $site)
@@ -464,6 +485,7 @@
 </form>
 @if($employee)
     <div data-employee-related-host
+        data-close-url="{{ route('admin.hr.employees.index') }}"
         data-token="{{ csrf_token() }}"
         data-loading="{{ __('Loading...') }}"
         data-error="{{ __('The request failed. Your unsaved input is still here. Try again.') }}"
@@ -473,6 +495,7 @@
         data-reason="{{ __('Reason for rejection') }}"
         data-discard="{{ __('Discard unsaved changes in this section?') }}"
         data-saved="{{ __('Saved successfully. This section is up to date.') }}"></div>
+    @include('admin.hr.employees._master-dialogs')
 @endif
 
 <x-admin.dependent-select parent="department_id" child="designation_id" placeholder="designations"/>

@@ -34,6 +34,8 @@ class EmployeeWorkspaceController extends Controller
         $canEdit = $record && Panels::editable($panel, $record) && $request->user()->hasPermission($module, 'edit');
         $canSave = $record ? $canEdit : $canCreate;
         $rows = Panels::query($employee, $panel)->latest('id')->paginate(10);
+        $visible = array_keys(array_filter(Panels::PANELS, fn ($definition) => $request->user()->hasPermission($definition[1], 'view')));
+        $hasNext = array_search($panel, $visible, true) < count($visible) - 1;
 
         return response()->json(['html' => view('admin.hr.employees._workspace-panel', [
             'employee' => $employee, 'panel' => $panel, 'record' => $record,
@@ -41,6 +43,7 @@ class EmployeeWorkspaceController extends Controller
             'fields' => Panels::fields($employee, $panel, $record), 'rows' => $rows,
             'columns' => Panels::columns($panel), 'canCreate' => $canCreate,
             'canSave' => $canSave,
+            'hasNext' => $hasNext,
         ])->render()]);
     }
 
@@ -55,7 +58,7 @@ class EmployeeWorkspaceController extends Controller
 
     private function saveLocked(Request $request, Employee $employee, string $panel): JsonResponse
     {
-        $request->validate(['record_id' => ['nullable', 'integer']]);
+        $request->validate(['record_id' => ['nullable', 'integer'], '_save_action' => ['nullable', 'in:stay,next,close']]);
         $this->authorizePanel($request, $panel, $panel === 'shifts' || $request->filled('record_id') ? 'edit' : 'create');
         abort_if($panel === 'payroll-history', 403);
         abort_if($request->filled('employee_id') && $request->integer('employee_id') !== $employee->id, 403);
@@ -92,7 +95,13 @@ class EmployeeWorkspaceController extends Controller
             $record ? $controller->update($request, $record) : $controller->store($request);
         }
 
-        return response()->json(['message' => __('Saved successfully. This section is up to date.')]);
+        $employee->refresh();
+        $savedId = $record?->id ?? Panels::query($employee, $panel)->latest('id')->value('id');
+
+        return response()->json([
+            'message' => __('Saved successfully. This section is up to date.'),
+            'panel_url' => route('admin.hr.employees.workspace.panel', [$employee, $panel, 'record' => $savedId]),
+        ]);
     }
 
     public function action(Request $request, Employee $employee, string $panel, int $record, string $action): JsonResponse

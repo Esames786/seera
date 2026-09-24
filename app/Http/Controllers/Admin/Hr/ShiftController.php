@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Hr;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Shift;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -35,11 +36,15 @@ class ShiftController extends Controller
         return view('admin.hr.shifts.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $shift = Shift::create($this->validated($request));
 
         ActivityLog::record($request, 'HR', 'Created shift', $shift->name);
+
+        if ($request->wantsJson()) {
+            return response()->json(['id' => $shift->id, 'label' => $shift->name], 201);
+        }
 
         return redirect()->route('admin.hr.shifts.index')
             ->with('status', 'Shift "'.$shift->name.'" created successfully.');

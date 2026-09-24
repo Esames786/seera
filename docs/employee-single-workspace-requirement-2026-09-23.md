@@ -1,5 +1,7 @@
 # Employee first: genuine single-workspace requirement
 
+September 24 follow-up: client review found missing inline masters and inconsistent related-form save buttons. See [the correction audit](employee-workspace-followup-2026-09-24.md). The original automated pass below is a historical checkpoint, not a claim that these later-reported UX gaps were already covered.
+
 Owner clarification, September 23: tabs and return links alone are NOT completion. Employee-related entry, editing and saving must happen in the employee workspace without navigating to another form page. Apply this pattern to other modules only after Employee is verified. Work stays on `feature/seera-connected-workspaces-2026-09-23`; no production deployment is authorized by this document.
 
 ## Required experience

@@ -64,15 +64,22 @@ class UserController extends Controller
         abort_unless($request->user()->hasPermission('HR', 'view') && $request->user()->hasPermission('HR', 'edit'), 403);
         $request->validate(['q' => ['required', 'string', 'min:2', 'max:100']]);
         $term = '%'.str_replace(['%', '_'], '', trim($request->string('q'))).'%';
-        $employees = Employee::whereNull('user_id')->where('status', 'active')
-            ->whereNotIn('employee_code', User::whereNotNull('employee_id')->select('employee_id'))
+        $matches = Employee::query()
             ->where(fn ($q) => $q->where('employee_code', 'like', $term)->orWhere('email', 'like', $term)
                 ->orWhere(function ($name) use ($term) {
                     foreach (preg_split('/\s+/u', trim($term, '% '), -1, PREG_SPLIT_NO_EMPTY) as $word) {
                         $name->where(fn ($part) => $part->where('first_name', 'like', '%'.$word.'%')->orWhere('last_name', 'like', '%'.$word.'%'));
                     }
                 }))
-            ->orderBy('employee_code')->limit(15)->get();
+            ->orderBy('employee_code');
+        $usedCodes = User::whereNotNull('employee_id')->select('employee_id');
+        $employees = (clone $matches)->whereNull('user_id')->where('status', 'active')
+            ->whereNotIn('employee_code', clone $usedCodes)->limit(15)->get();
+        // Same Employee access scope as eligible results. Never expose another
+        // user's identity, permissions or payroll merely to explain a match.
+        $unavailable = (clone $matches)->where(fn ($q) => $q->whereNotNull('user_id')
+            ->orWhere('status', '!=', 'active')->orWhereIn('employee_code', clone $usedCodes))
+            ->limit(15)->get(['id', 'employee_code', 'first_name', 'last_name', 'user_id', 'status']);
 
         return response()->json(['data' => $employees->map(fn (Employee $employee) => [
             'id' => $employee->id, 'employee_code' => $employee->employee_code, 'name' => $employee->name,
@@ -85,6 +92,11 @@ class UserController extends Controller
                 'joining_date' => $employee->joining_date?->toDateString(), 'contract_type' => $employee->contract_type,
                 'iqama_number' => $employee->iqama_number, 'iqama_expiry_date' => $employee->iqama_expiry_date?->toDateString(),
             ],
+        ]), 'unavailable' => $unavailable->map(fn (Employee $employee) => [
+            'employee_code' => $employee->employee_code,
+            'name' => $employee->name,
+            'reason' => $employee->user_id ? __('ui.employee_already_linked')
+                : ($employee->status !== 'active' ? __('ui.employee_inactive') : __('ui.employee_code_used')),
         ])]);
     }
 

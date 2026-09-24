@@ -17,9 +17,17 @@ if (search) {
                     headers: { Accept: 'application/json' }, signal: request.signal,
                 });
                 if (!response.ok) throw new Error('lookup');
-                const employees = (await response.json()).data;
+                const payload = await response.json();
+                const employees = payload.data;
+                const unavailable = payload.unavailable ?? [];
                 results.replaceChildren();
-                if (!employees.length) results.textContent = search.dataset.empty;
+                if (!employees.length && !unavailable.length) results.textContent = search.dataset.empty;
+                unavailable.forEach(employee => {
+                    const note = document.createElement('p');
+                    note.className = 'small';
+                    note.textContent = `${employee.employee_code} — ${employee.name}: ${employee.reason}`;
+                    results.append(note);
+                });
                 employees.forEach(employee => {
                     const button = document.createElement('button');
                     button.type = 'button';

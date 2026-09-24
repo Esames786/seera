@@ -22,14 +22,23 @@
             <div class="form-grid three">
                 @foreach($fields as $field)
                     <div class="{{ in_array($field['type'], ['textarea', 'file']) ? 'full' : '' }}">
-                        <label for="{{ $prefix.$field['name'] }}">{{ __($field['label']) }}{{ $field['required'] ? ' *' : '' }}</label>
+                        @php $master = \App\Support\EmployeeWorkspacePanels::master($field['name']); @endphp
+                        <div class="label-row">
+                            <label for="{{ $prefix.$field['name'] }}">{{ __($field['label']) }}{{ $field['required'] ? ' *' : '' }}</label>
+                            @if($master && auth()->user()->hasPermission($master['permission'], 'create'))
+                                <button type="button" class="quick-create-trigger" data-quick-create="employee-master-{{ $master['key'] }}" data-quick-target="{{ $prefix.$field['name'] }}">{{ __('+ New') }}</button>
+                            @endif
+                        </div>
                         @if($field['type'] === 'select')
-                            <select id="{{ $prefix.$field['name'] }}" name="{{ $field['name'] }}" class="select" @required($field['required'])>
+                            <select id="{{ $prefix.$field['name'] }}" name="{{ $field['name'] }}" class="select" @if($master) data-employee-master="{{ $master['key'] }}" @endif @required($field['required'])>
                                 <option value="">{{ __('Select...') }}</option>
                                 @foreach($field['options'] as $value => $label)
                                     <option value="{{ $value }}" @selected((string)$field['value'] === (string)$value)>{{ __($label) }}</option>
                                 @endforeach
                             </select>
+                            @if($master && count($field['options']) === 0)
+                                <small data-master-empty-for="{{ $prefix.$field['name'] }}">{{ auth()->user()->hasPermission($master['permission'], 'create') ? __('No options yet. Use + New to create one without leaving this page.') : __('No options available. Ask an authorized administrator to create the master record.') }}</small>
+                            @endif
                         @elseif($field['type'] === 'textarea')
                             <textarea id="{{ $prefix.$field['name'] }}" name="{{ $field['name'] }}" class="textarea">{{ $field['value'] }}</textarea>
                         @elseif($field['type'] === 'file')
@@ -57,7 +66,10 @@
                 </template>
             @endif
             <div class="form-actions">
-                <button type="submit" class="btn primary">{{ $record ? __('Save changes here') : __('Save here') }}</button>
+                <a class="btn outline" href="{{ route('admin.hr.employees.index') }}">{{ __('Cancel') }}</a>
+                <button type="submit" name="_save_action" value="stay" class="btn outline" data-save-default>{{ __('ui.save_stay') }}</button>
+                <button type="submit" name="_save_action" value="next" class="btn outline" @disabled(!$hasNext)>{{ __('ui.save_next') }}</button>
+                <button type="submit" name="_save_action" value="close" class="btn primary">{{ __('ui.save_close') }}</button>
                 @if($record && $panel !== 'account')<button type="button" class="btn outline" data-panel-load="{{ $panelUrl }}">{{ __('Cancel editing / new entry') }}</button>@endif
             </div>
         </form>
@@ -67,12 +79,18 @@
     @endif
     <h3>{{ __('Saved records') }}</h3>
     <div class="table-wrap"><table>
-        <thead><tr>@foreach($columns as $column)<th>{{ __(\Illuminate\Support\Str::headline($column)) }}</th>@endforeach<th>{{ __('Actions') }}</th></tr></thead>
+        <thead><tr>@foreach($columns as $column)<th>{{ __(\App\Support\EmployeeWorkspacePanels::label($column)) }}</th>@endforeach<th>{{ __('Actions') }}</th></tr></thead>
         <tbody>
             @forelse($rows as $row)
                 <tr>
                     @foreach($columns as $column)
-                        @php $value = $row->{$column}; @endphp
+                        @php
+                            $value = match ($column) {
+                                'shift_id' => $row->shift?->name,
+                                'payroll_run_id' => $row->payrollRun?->code,
+                                default => $row->{$column},
+                            };
+                        @endphp
                         <td>{{ $value instanceof \Carbon\CarbonInterface ? $value->toDateString() : ($value ?? '-') }}</td>
                     @endforeach
                     <td>
@@ -105,6 +123,7 @@
         </tbody>
     </table></div>
     <div class="form-actions">
+        @if(!$canSave && $hasNext)<button type="button" class="btn outline" data-workspace-next>{{ __('Next section') }}</button>@endif
         @if($rows->currentPage() > 1)<button type="button" class="btn outline" data-panel-load="{{ $panelUrl.'?page='.($rows->currentPage()-1) }}">{{ __('Previous') }}</button>@endif
         <span>{{ $rows->currentPage() }} / {{ $rows->lastPage() }}</span>
         @if($rows->hasMorePages())<button type="button" class="btn outline" data-panel-load="{{ $panelUrl.'?page='.($rows->currentPage()+1) }}">{{ __('Next') }}</button>@endif

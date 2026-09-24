@@ -7,6 +7,11 @@ export function employeeRelatedPanels() {
     const panels = new Map();
     const headers = { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' };
     const signal = (form, name) => form?.dispatchEvent(new CustomEvent(name, { bubbles: true }));
+    const next = panel => document.dispatchEvent(new CustomEvent('seera:workspace-next', { detail: { panel: panel.dataset.relatedPanel } }));
+    const close = () => {
+        const navigate = () => location.assign(host.dataset.closeUrl);
+        if (document.dispatchEvent(new CustomEvent('seera:before-navigation', { cancelable: true, detail: { navigate } }))) navigate();
+    };
     const guarded = (panel, callback) => {
         const form = panel.querySelector('form');
         if (form?.dataset.saving === '1') return;
@@ -61,6 +66,8 @@ export function employeeRelatedPanels() {
             if (form.dataset.saving === '1') return;
             const panel = form.closest('[data-related-panel]');
             const payload = new FormData(form);
+            const intent = event.submitter?.value || 'stay';
+            payload.set('_save_action', intent);
             const controls = [...form.elements].filter(control => !control.disabled);
             const errors = form.querySelector('[data-related-errors]');
             errors.hidden = true;
@@ -68,6 +75,7 @@ export function employeeRelatedPanels() {
             form.dataset.saving = '1';
             controls.forEach(control => { control.disabled = true; });
             let saved = false;
+            let savedUrl = links.get(panel.dataset.relatedPanel);
             try {
                 const response = await fetch(form.action, { method: 'POST', headers, body: payload });
                 const body = await response.json();
@@ -77,7 +85,10 @@ export function employeeRelatedPanels() {
                     form.querySelectorAll('[data-field-error]').forEach(node => {
                         node.textContent = (body.errors?.[node.dataset.fieldError] || []).join(' ');
                     });
-                } else { saved = true; }
+                } else {
+                    saved = true;
+                    if (body.panel_url) savedUrl = body.panel_url;
+                }
             } catch { errors.textContent = host.dataset.error; errors.hidden = false; }
             finally {
                 controls.forEach(control => { control.disabled = false; });
@@ -87,7 +98,9 @@ export function employeeRelatedPanels() {
                 signal(form, 'seera:form-saved');
                 // Prevent resubmission if the subsequent GET fails after a good POST.
                 form.hidden = true;
-                await load(panel, links.get(panel.dataset.relatedPanel), host.dataset.saved);
+                await load(panel, savedUrl, host.dataset.saved);
+                if (intent === 'next') next(panel);
+                if (intent === 'close') close();
             } else { errors.tabIndex = -1; errors.focus(); }
         }, true);
         host.addEventListener('click', event => {
@@ -95,7 +108,9 @@ export function employeeRelatedPanels() {
             if (!panel || panel.dataset.loading === '1' || panel.querySelector('[data-saving="1"]')) return;
             const target = event.target.closest('button');
             if (!target) return;
-            if (target.hasAttribute('data-add-salary-item')) {
+            if (target.hasAttribute('data-workspace-next')) {
+                next(panel);
+            } else if (target.hasAttribute('data-add-salary-item')) {
                 const template = panel.querySelector('[data-salary-item-template]');
                 const index = Number(panel.dataset.itemIndex || 0);
                 panel.dataset.itemIndex = index + 1;

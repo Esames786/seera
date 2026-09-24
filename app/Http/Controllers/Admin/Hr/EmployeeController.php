@@ -14,6 +14,7 @@ use App\Models\Project;
 use App\Models\Site;
 use App\Models\User;
 use App\Support\CodeGenerator;
+use App\Support\EmployeeWorkspacePanels;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -187,6 +188,11 @@ class EmployeeController extends Controller
         }
         $sections = ['personal', 'employment', 'payroll', 'documents', 'access'];
         $section = in_array($request->input('_workspace_section'), $sections, true) ? $request->input('_workspace_section') : 'personal';
+        foreach (EmployeeWorkspacePanels::PANELS as $panel => $definition) {
+            if ($request->user()->hasPermission($definition[1], 'view')) {
+                $sections[] = $panel;
+            }
+        }
         if ($request->input('_save_action') === 'next') {
             $section = $sections[min(array_search($section, $sections, true) + 1, count($sections) - 1)];
         }

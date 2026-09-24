@@ -8,6 +8,9 @@
     'submit' => 'Save',
     'label' => '+ New',
     'wide' => false,
+    'renderTrigger' => true,
+    'parentTarget' => null,
+    'selectTarget' => null,
     'editUrl' => null,     // optional PUT endpoint with __ID__ placeholder; adds an "Edit" trigger for the selected option
     'editLabel' => 'Edit',
 ])
@@ -26,21 +29,23 @@
 @php $allowed = auth()->check() && auth()->user()->hasPermission($permission, 'create'); @endphp
 
 @if ($allowed)
+    @if($renderTrigger)
     <span class="quick-create-triggers">
-        <button type="button" class="quick-create-trigger" data-quick-create="{{ $id }}" title="{{ $title }}">{{ $label }}</button>
+        <button type="button" class="quick-create-trigger" data-quick-create="{{ $id }}" @if($selectTarget) data-quick-target="{{ $selectTarget }}" @endif title="{{ $title }}">{{ $label }}</button>
         @if ($editUrl)
             <button type="button" class="quick-create-trigger" data-quick-edit="{{ $id }}" title="Edit the selected {{ strtolower($title) }}">{{ $editLabel }}</button>
         @endif
     </span>
+    @endif
 
     @push('modals')
-        <div class="modal-overlay quick-create-modal" id="{{ $id }}" data-target="{{ $target }}" @if($targetSelector) data-target-selector="{{ $targetSelector }}" @endif data-url="{{ $url }}" @if($editUrl) data-edit-url="{{ $editUrl }}" @endif>
+        <div class="modal-overlay quick-create-modal" id="{{ $id }}" data-target="{{ $target }}" @if($targetSelector) data-target-selector="{{ $targetSelector }}" @endif @if($parentTarget) data-parent-target="{{ $parentTarget }}" @endif data-url="{{ $url }}" @if($editUrl) data-edit-url="{{ $editUrl }}" @endif>
             <div class="modal-card {{ $wide ? 'wide' : '' }}">
                 <div class="modal-head">
                     <span><span class="qc-mode-label">New</span> {{ $title }}</span>
                     <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
                 </div>
-                <form class="quick-create-form" novalidate>
+                <form class="quick-create-form" method="POST" action="{{ $url }}" novalidate>
                     @csrf
                     <div class="modal-body">
                         <div class="alert qc-error" hidden></div>
@@ -103,6 +108,7 @@
                     if (!modal) return;
                     clearErrors(modal);
                     var form = modal.querySelector('.quick-create-form');
+                    if (form.dataset.saving === '1') return;
                     form.reset();
                     form.dataset.mode = mode;
                     delete form.dataset.editId;
@@ -138,6 +144,7 @@
                 function close(modal) {
                     if (!modal) return;
                     var form = modal.querySelector('.quick-create-form');
+                    if (form.dataset.saving === '1') return;
                     var closeNow = function () { modal.classList.remove('open'); };
                     if (form && !form.dispatchEvent(new CustomEvent('seera:before-form-close', {
                         bubbles: true, cancelable: true, detail: { close: closeNow }
@@ -181,6 +188,9 @@
                     }
 
                     // Dependent selects keep their own option cache; let them add it first.
+                    document.querySelectorAll('[data-master-empty-for]').forEach(function (hint) {
+                        if (hint.dataset.masterEmptyFor === select.id) hint.remove();
+                    });
                     select.dispatchEvent(new CustomEvent('seera:option-added', {
                         detail: { value: value, label: record.label, parent: parent }
                     }));
@@ -206,7 +216,11 @@
                     var trigger = event.target.closest('[data-quick-create]');
                     if (trigger) {
                         event.preventDefault();
-                        open(document.getElementById(trigger.dataset.quickCreate), 'create');
+                        var createModal = document.getElementById(trigger.dataset.quickCreate);
+                        if (createModal && createModal.querySelector('form').dataset.saving !== '1') {
+                            createModal.dataset.activeTarget = trigger.dataset.quickTarget || '';
+                            open(createModal, 'create');
+                        }
                         return;
                     }
                     var editor = event.target.closest('[data-quick-edit]');
@@ -224,6 +238,11 @@
                         close(event.target);
                     }
                 });
+                document.addEventListener('keydown', function (event) {
+                    if (event.key !== 'Escape' || document.getElementById('unsaved-changes')?.open) return;
+                    var modal = document.querySelector('.quick-create-modal.open');
+                    if (modal) { event.preventDefault(); close(modal); }
+                });
 
                 document.addEventListener('submit', function (event) {
                     var form = event.target.closest('.quick-create-form');
@@ -231,6 +250,7 @@
                     event.preventDefault();
 
                     var modal = form.closest('.quick-create-modal');
+                    if (form.dataset.saving === '1') return;
                     var button = form.querySelector('[type=submit]');
                     var editing = form.dataset.mode === 'edit' && form.dataset.editId;
                     if (form.dataset.mode === 'edit' && !form.dataset.editId) return;
@@ -239,6 +259,9 @@
                     button.disabled = true;
 
                     var body = new FormData(form);
+                    var controls = Array.from(form.elements).filter(function (field) { return !field.disabled; });
+                    form.dataset.saving = '1';
+                    controls.forEach(function (field) { field.disabled = true; });
                     var url = modal.dataset.url;
                     if (editing) {
                         url = modal.dataset.editUrl.replace('__ID__', form.dataset.editId);
@@ -266,16 +289,27 @@
                             }
                             var repeated = !!modal.dataset.targetSelector;
                             var claimed = false;
+                            if (modal.dataset.parentTarget && payload.parent != null) {
+                                var parentField = document.getElementById(modal.dataset.parentTarget);
+                                if (parentField && parentField.value !== String(payload.parent)) {
+                                    parentField.value = String(payload.parent);
+                                    parentField.dispatchEvent(new Event('change', { bubbles: true }));
+                                }
+                            }
                             targets(modal).forEach(function (select) {
                                 if (editing) {
                                     renameOption(select, payload);
                                     return;
                                 }
-                                var take = ! repeated || (! claimed && select.value === '');
+                                var take = modal.dataset.activeTarget
+                                    ? select.id === modal.dataset.activeTarget
+                                    : (! repeated || (! claimed && select.value === ''));
                                 addOption(select, payload, take);
                                 if (take) claimed = true;
                             });
                             if (!editing) patchTemplates(modal, payload);
+                            controls.forEach(function (field) { field.disabled = false; });
+                            delete form.dataset.saving;
                             form.reset();
                             form.dispatchEvent(new CustomEvent('seera:form-saved', { bubbles: true }));
                             close(modal);
@@ -283,9 +317,11 @@
                     }).catch(function () {
                         showErrors(modal, { message: 'Network error. Please try again.' });
                     }).finally(function () {
+                        controls.forEach(function (field) { field.disabled = false; });
+                        delete form.dataset.saving;
                         button.disabled = false;
                     });
-                });
+                }, true);
             })();
         </script>
         @endpush

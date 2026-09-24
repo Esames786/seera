@@ -69,7 +69,7 @@ class EmployeeWorkspacePanels
             if ($type === 'time' && $value) {
                 $value = substr($value, 0, 5);
             }
-            $fields[] = compact('name', 'type', 'value', 'options', 'required') + ['label' => Str::headline($name)];
+            $fields[] = compact('name', 'type', 'value', 'options', 'required') + ['label' => self::label($name)];
         };
         $choices = fn (array $values) => array_combine($values, $values);
         $amounts = fn () => $employee->payrollDefaults();
@@ -152,6 +152,27 @@ class EmployeeWorkspacePanels
             'eosb' => ['termination_date', 'service_years', 'eosb_amount', 'final_amount', 'status'],
             'payroll-history' => ['payroll_run_id', 'basic_salary', 'total_allowances', 'overtime_amount', 'total_deductions', 'net_amount'],
             'account' => ['name', 'email', 'username', 'language', 'status'],
+        };
+    }
+
+    public static function label(string $name): string
+    {
+        return match ($name) {
+            'shift_id' => 'Shift', 'leave_type_id' => 'Leave Type', 'role_id' => 'Role',
+            'attendance_record_id' => 'Attendance Record', 'payroll_run_id' => 'Payroll Run',
+            'last_basic_salary' => 'Final Wage (SAR)', 'eosb_amount' => 'EOSB Amount',
+            'total_days_override' => 'Day Calculation', 'is_paid' => 'Paid Leave',
+            default => Str::headline($name),
+        };
+    }
+
+    public static function master(string $name): ?array
+    {
+        return match ($name) {
+            'shift_id' => ['key' => 'shift', 'permission' => 'HR'],
+            'leave_type_id' => ['key' => 'leave-type', 'permission' => 'HR'],
+            'role_id' => ['key' => 'role', 'permission' => 'Roles'],
+            default => null,
         };
     }
 }
