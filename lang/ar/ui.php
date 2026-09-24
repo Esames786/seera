@@ -1,6 +1,15 @@
 <?php
 
 return [
+    'linked_user' => 'مستخدم النظام المرتبط', 'linked_employee' => 'الموظف المرتبط',
+    'view_linked_record' => 'عرض السجل المرتبط', 'edit_linked_record' => 'تعديل السجل المرتبط',
+    'link_unlinked' => 'لا يوجد سجل مرتبط.',
+    'link_unavailable' => 'تفاصيل السجل المرتبط غير متاحة أو خارج صلاحياتك.',
+    'link_inconsistent' => 'توجد عدة روابط موظفين تحتاج إلى مراجعة المسؤول. لم يتم تغيير أي رابط.',
+    'edit_employee' => 'تعديل الموظف', 'edit_user' => 'تعديل المستخدم', 'attach_document' => '+ إرفاق مستند',
+    'confirm_deactivate' => 'تأكيد إلغاء التنشيط',
+    'deactivate_message' => 'إلغاء تنشيط «:name»؟',
+    'deactivate_help' => 'يتم الاحتفاظ بسجل الموظف. لا يتم إلغاء تنشيط حساب مستخدم النظام المرتبط.',
     'save_next' => 'حفظ والتالي', 'employee_sections' => 'أقسام الموظف', 'show_all_sections' => 'عرض جميع الأقسام',
     'section_personal' => 'البيانات الشخصية', 'section_employment' => 'بيانات العمل', 'section_payroll' => 'الراتب والدفع',
     'section_documents' => 'المستندات', 'section_access' => 'الوصول',

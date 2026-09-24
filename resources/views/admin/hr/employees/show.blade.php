@@ -5,10 +5,13 @@
 
 @section('content')
     <x-admin.page-header :title="$employee->name" :description="'Employee profile with HR history and payroll context'">
-        <a class="btn outline" href="{{ route("admin.hr.employees.edit", $employee) }}#documents">+ Attach Document</a>
-        <a class="btn primary" href="{{ route('admin.hr.employees.edit', $employee) }}">Edit Employee</a>
+        @if(auth()->user()->hasPermission('HR', 'edit'))
+            <a class="btn outline" href="{{ route('admin.hr.employees.edit', $employee) }}#documents">{{ __('ui.attach_document') }}</a>
+            <a class="btn primary" href="{{ route('admin.hr.employees.edit', $employee) }}">{{ __('ui.edit_employee') }}</a>
+        @endif
     </x-admin.page-header>
 
+    <x-admin.linked-identity :link="$linkedUser" :title="__('ui.linked_user')"/>
     <div class="card profile-head">
         <div class="avatar lg">{{ $employee->initials() }}</div>
         <div>
@@ -49,7 +52,6 @@
                 <tr><th>Joining Date</th><td>{{ $employee->joining_date?->toDateString() ?? '-' }}</td></tr>
                 <tr><th>Classification</th><td><span class="badge blue">{{ $employee->employee_classification }}</span></td></tr>
                 <tr><th>Contract</th><td>{{ $employee->contract_type }} ({{ $employee->contract_start_date?->toDateString() ?? '-' }} → {{ $employee->contract_end_date?->toDateString() ?? 'Open' }})</td></tr>
-                <tr><th>Linked User Account</th><td>{{ $employee->user?->name ?? 'Not linked' }}</td></tr>
             </tbody>
         </x-admin.data-table>
 
@@ -89,7 +91,7 @@
 
     <x-admin.data-table title="Documents" id="documents">
         <x-slot:headerActions>
-            <a class="btn sm primary" href="{{ route("admin.hr.employees.edit", $employee) }}">+ Attach Document</a>
+            @if(auth()->user()->hasPermission('HR', 'edit'))<a class="btn sm primary" href="{{ route('admin.hr.employees.edit', $employee) }}#documents">{{ __('ui.attach_document') }}</a>@endif
         </x-slot:headerActions>
         <thead>
             <tr><th>Type</th><th>Number</th><th>Issue</th><th>Expiry</th><th>Validity</th><th>File</th></tr>
@@ -198,7 +200,7 @@
 
     <x-admin.data-table title="Salary Structures" id="salary">
         <x-slot:headerActions>
-            <a class="btn sm primary" href="{{ route('admin.hr.salary-structures.create', ['employee' => $employee->id]) }}">+ New Structure From Profile</a>
+            @if(auth()->user()->hasPermission('Payroll', 'create'))<a class="btn sm primary" href="{{ route('admin.hr.salary-structures.create', ['employee' => $employee->id]) }}">+ New Structure From Profile</a>@endif
         </x-slot:headerActions>
         <thead>
             <tr><th>Effective From</th><th>Effective To</th><th>Basic</th><th>Allowances</th><th>Deductions</th><th>Net</th><th>Status</th></tr>

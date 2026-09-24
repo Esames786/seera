@@ -15,6 +15,7 @@ use App\Models\Site;
 use App\Models\User;
 use App\Support\CodeGenerator;
 use App\Support\EmployeeWorkspacePanels;
+use App\Support\LinkedIdentityNavigation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -107,13 +108,14 @@ class EmployeeController extends Controller
     public function show(Employee $employee): View
     {
         $employee->load([
-            'department', 'designation', 'branch', 'project', 'site', 'manager', 'user',
+            'department', 'designation', 'branch', 'project', 'site', 'manager',
             'documents', 'shiftAssignments.shift',
             'salaryStructures.items',
         ]);
 
         return view('admin.hr.employees.show', [
             'employee' => $employee,
+            'linkedUser' => app(LinkedIdentityNavigation::class)->userCard($employee, auth()->user()),
             'attendance' => $employee->attendanceRecords()->with('shift')->latest('attendance_date')->limit(10)->get(),
             'leaves' => $employee->leaveRequests()->with('leaveType')->latest('start_date')->limit(10)->get(),
             'leaveBalance' => $employee->leaveBalance(),
@@ -137,7 +139,9 @@ class EmployeeController extends Controller
             $employee->load('activeSalaryStructure.items');
         }
 
-        return view('admin.hr.employees.edit', ['employee' => $employee] + $this->formOptions($employee));
+        return view('admin.hr.employees.edit', ['employee' => $employee,
+            'linkedUser' => app(LinkedIdentityNavigation::class)->userCard($employee, auth()->user()),
+        ] + $this->formOptions($employee));
     }
 
     public function update(Request $request, Employee $employee): RedirectResponse

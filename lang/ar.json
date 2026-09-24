@@ -18,7 +18,7 @@
     "HR Registers & Approvals": "سجلات الموارد البشرية والموافقات",
     "Shift Assignments": "تعيينات الورديات", "Payroll History": "سجل الرواتب", "System Account": "حساب النظام",
     "Save here": "حفظ هنا", "Save changes here": "حفظ التغييرات هنا", "Save & close": "حفظ وإغلاق",
-    "Open": "فتح", "Deactivate": "تعطيل", "Edit here": "تعديل هنا", "Saved records": "السجلات المحفوظة",
+    "Open": "فتح", "View": "عرض", "Edit": "تعديل", "Deactivate": "تعطيل", "Edit here": "تعديل هنا", "Saved records": "السجلات المحفوظة",
     "Back to Employees": "العودة إلى الموظفين", "Manage salary here": "إدارة الراتب هنا",
     "Loading...": "جارٍ التحميل...", "Retry loading": "إعادة التحميل",
     "Saved successfully. This section is up to date.": "تم الحفظ بنجاح. هذا القسم محدث.",

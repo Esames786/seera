@@ -13,6 +13,7 @@ use App\Models\Role;
 use App\Models\Site;
 use App\Models\User;
 use App\Models\Warehouse;
+use App\Support\LinkedIdentityNavigation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,7 +29,8 @@ class UserController extends Controller
 
     public function index(Request $request): View
     {
-        $users = User::with(['department', 'roles', 'project', 'site', 'branch'])
+        $visibleUsers = app(LinkedIdentityNavigation::class)->users($request->user());
+        $users = (clone $visibleUsers)->with(['department', 'roles', 'project', 'site', 'branch'])
             ->when($request->filled('search'), function ($query) use ($request) {
                 $search = $request->string('search');
                 $query->where(fn ($q) => $q
@@ -47,10 +49,10 @@ class UserController extends Controller
             'users' => $users,
             'departments' => Department::orderBy('name')->get(),
             'roles' => Role::orderBy('name')->get(),
-            'totalUsers' => User::count(),
-            'activeUsers' => User::where('status', 'active')->count(),
-            'mobileUsers' => User::where('mobile_access', true)->count(),
-            'lockedUsers' => User::whereIn('status', ['inactive', 'locked'])->count(),
+            'totalUsers' => (clone $visibleUsers)->count(),
+            'activeUsers' => (clone $visibleUsers)->where('status', 'active')->count(),
+            'mobileUsers' => (clone $visibleUsers)->where('mobile_access', true)->count(),
+            'lockedUsers' => (clone $visibleUsers)->whereIn('status', ['inactive', 'locked'])->count(),
         ]);
     }
 
@@ -92,12 +94,17 @@ class UserController extends Controller
                 'joining_date' => $employee->joining_date?->toDateString(), 'contract_type' => $employee->contract_type,
                 'iqama_number' => $employee->iqama_number, 'iqama_expiry_date' => $employee->iqama_expiry_date?->toDateString(),
             ],
-        ]), 'unavailable' => $unavailable->map(fn (Employee $employee) => [
-            'employee_code' => $employee->employee_code,
-            'name' => $employee->name,
-            'reason' => $employee->user_id ? __('ui.employee_already_linked')
-                : ($employee->status !== 'active' ? __('ui.employee_inactive') : __('ui.employee_code_used')),
-        ])]);
+        ]), 'unavailable' => $unavailable->map(function (Employee $employee) use ($request) {
+            $card = app(LinkedIdentityNavigation::class)->userCard($employee, $request->user());
+
+            return [
+                'employee_code' => $employee->employee_code,
+                'name' => $employee->name,
+                'reason' => $employee->user_id ? __('ui.employee_already_linked')
+                    : ($employee->status !== 'active' ? __('ui.employee_inactive') : __('ui.employee_code_used')),
+                'linked_user' => $card['state'] === 'linked' ? $card : null,
+            ];
+        })]);
     }
 
     /**
@@ -155,23 +162,29 @@ class UserController extends Controller
 
     public function show(User $user): View
     {
+        abort_unless(app(LinkedIdentityNavigation::class)->canUser(auth()->user(), $user, 'view'), 403);
         $user->load(['department', 'designation', 'branch', 'project', 'site', 'warehouse', 'roles.parent', 'roles.permissions', 'employee']);
 
         return view('admin.users.show', [
             'user' => $user,
+            'linkedEmployee' => app(LinkedIdentityNavigation::class)->employeeCard($user, auth()->user()),
             'recentLogs' => $user->activityLogs()->latest('created_at')->limit(6)->get(),
         ]);
     }
 
     public function edit(User $user): View
     {
+        abort_unless(app(LinkedIdentityNavigation::class)->canUser(auth()->user(), $user, 'edit'), 403);
         $user->load(['roles', 'employee']);
 
-        return view('admin.users.edit', ['user' => $user] + $this->formOptions());
+        return view('admin.users.edit', ['user' => $user,
+            'linkedEmployee' => app(LinkedIdentityNavigation::class)->employeeCard($user, auth()->user()),
+        ] + $this->formOptions());
     }
 
     public function update(Request $request, User $user): RedirectResponse
     {
+        abort_unless(app(LinkedIdentityNavigation::class)->canUser($request->user(), $user, 'edit'), 403);
         $data = $this->validated($request, $user);
         $roleId = $data['role_id'];
         unset($data['role_id']);
@@ -193,6 +206,7 @@ class UserController extends Controller
 
     public function destroy(Request $request, User $user): RedirectResponse
     {
+        abort_unless(app(LinkedIdentityNavigation::class)->canUser($request->user(), $user, 'delete'), 403);
         // Deactivate instead of hard delete so history stays intact for audits.
         $user->update(['status' => 'inactive']);
 

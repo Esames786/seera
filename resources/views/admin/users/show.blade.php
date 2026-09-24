@@ -5,9 +5,10 @@
 
 @section('content')
     <x-admin.page-header title="User Details" description="View user profile, access scope, permissions, and activity logs">
-        <a class="btn primary" href="{{ route('admin.users.edit', $user) }}">Edit User</a>
+        @if(auth()->user()->hasPermission('Users', 'edit'))<a class="btn primary" href="{{ route('admin.users.edit', $user) }}">{{ __('ui.edit_user') }}</a>@endif
     </x-admin.page-header>
 
+    <x-admin.linked-identity :link="$linkedEmployee" :title="__('ui.linked_employee')"/>
     @php $primaryRole = $user->primaryRole(); @endphp
 
     <div class="card-grid">

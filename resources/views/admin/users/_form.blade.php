@@ -96,6 +96,7 @@
                         <label for="employee-search">{{ __('ui.employee_search') }}</label>
                         <p class="small">{{ __('ui.employee_search_help') }}</p>
                         <input id="employee-search" class="input" autocomplete="off" data-employee-search="{{ route('admin.users.employee-search') }}"
+                            data-view-linked="{{ __('ui.view_linked_record') }}" data-edit-linked="{{ __('ui.edit_linked_record') }}"
                             data-empty="{{ __('ui.employee_search_empty') }}" data-error="{{ __('ui.employee_search_error') }}"
                             data-confirm="{{ __('ui.employee_search_confirm') }}" data-selected="{{ __('ui.employee_selected') }}" data-cleared="{{ __('ui.employee_cleared') }}"/>
                         <input type="hidden" name="source_employee_id" value="{{ old('source_employee_id') }}"/>

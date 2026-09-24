@@ -8,5 +8,6 @@
         <a class="btn outline" href="{{ route('admin.hr.employees.index') }}">{{ __('Back to Employees') }}</a>
     </x-admin.page-header>
 
+    <x-admin.linked-identity :link="$linkedUser" :title="__('ui.linked_user')"/>
     @include('admin.hr.employees._form', ['employee' => $employee])
 @endsection

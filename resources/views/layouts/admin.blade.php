@@ -46,6 +46,10 @@
 
         const form = overlay.querySelector('form');
         const message = overlay.querySelector('[data-modal-message]');
+        const title = overlay.querySelector('[data-modal-title]');
+        const help = overlay.querySelector('[data-modal-help]');
+        const submit = form.querySelector('[type=submit]');
+        const deleteHelp = help.textContent;
 
         document.addEventListener('click', function (event) {
             const trigger = event.target.closest('.js-delete');
@@ -53,6 +57,10 @@
                 event.preventDefault();
                 form.action = trigger.dataset.deleteUrl;
                 message.textContent = 'Are you sure you want to delete "' + (trigger.dataset.deleteName || 'this record') + '"?';
+                const deactivate = trigger.dataset.deactivate === '1';
+                title.textContent = submit.textContent = deactivate ? overlay.dataset.deactivateTitle : 'Confirm Delete';
+                help.textContent = deactivate ? overlay.dataset.deactivateHelp : deleteHelp;
+                if (deactivate) message.textContent = overlay.dataset.deactivateMessage.replace(':name', trigger.dataset.deleteName || '');
                 overlay.classList.add('open');
                 return;
             }

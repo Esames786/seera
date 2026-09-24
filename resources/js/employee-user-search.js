@@ -27,6 +27,19 @@ if (search) {
                     note.className = 'small';
                     note.textContent = `${employee.employee_code} — ${employee.name}: ${employee.reason}`;
                     results.append(note);
+                    if (employee.linked_user) {
+                        const identity = document.createElement('p');
+                        identity.textContent = employee.linked_user.name;
+                        results.append(identity);
+                        [['view_url', search.dataset.viewLinked], ['edit_url', search.dataset.editLinked]].forEach(([key, label]) => {
+                            if (!employee.linked_user[key]) return;
+                            const link = document.createElement('a');
+                            link.className = 'btn outline';
+                            link.href = employee.linked_user[key];
+                            link.textContent = label;
+                            results.append(link);
+                        });
+                    }
                 });
                 employees.forEach(employee => {
                     const button = document.createElement('button');

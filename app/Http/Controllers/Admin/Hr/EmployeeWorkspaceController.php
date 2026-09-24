@@ -8,6 +8,7 @@ use App\Models\AttendanceRecord;
 use App\Models\Employee;
 use App\Models\EmployeeShiftAssignment;
 use App\Support\EmployeeWorkspacePanels as Panels;
+use App\Support\LinkedIdentityNavigation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +29,7 @@ class EmployeeWorkspaceController extends Controller
         $record = $request->filled('record') ? Panels::query($employee, $panel)->findOrFail($request->integer('record')) : null;
         if ($panel === 'account') {
             $record = Panels::query($employee, $panel)->first();
+            abort_if($employee->user_id && (! $record || ! app(LinkedIdentityNavigation::class)->canUser($request->user(), $record, 'view')), 403);
         }
         $module = Panels::PANELS[$panel][1];
         $canCreate = $panel !== 'payroll-history' && $request->user()->hasPermission($module, $panel === 'shifts' ? 'edit' : 'create');

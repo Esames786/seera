@@ -1,6 +1,15 @@
 <?php
 
 return [
+    'linked_user' => 'Linked system user', 'linked_employee' => 'Linked employee',
+    'view_linked_record' => 'View linked record', 'edit_linked_record' => 'Edit linked record',
+    'link_unlinked' => 'No linked record.',
+    'link_unavailable' => 'Linked record details are unavailable or outside your permissions.',
+    'link_inconsistent' => 'Multiple employee links require administrator review. No links have been changed.',
+    'edit_employee' => 'Edit Employee', 'edit_user' => 'Edit User', 'attach_document' => '+ Attach Document',
+    'confirm_deactivate' => 'Confirm Deactivation',
+    'deactivate_message' => 'Deactivate ":name"?',
+    'deactivate_help' => 'Employee history is retained. The linked system user account is not deactivated.',
     'save_next' => 'Save & next', 'employee_sections' => 'Employee sections', 'show_all_sections' => 'Show all sections',
     'section_personal' => 'Personal', 'section_employment' => 'Employment', 'section_payroll' => 'Salary & payment',
     'section_documents' => 'Documents', 'section_access' => 'Access',

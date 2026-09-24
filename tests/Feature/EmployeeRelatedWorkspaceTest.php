@@ -60,7 +60,7 @@ class EmployeeRelatedWorkspaceTest extends TestCase
                 $this->assertStringNotContainsString('<form', $response->json('html'));
             }
         }
-        $this->get(route('admin.hr.employees.index'))->assertOk()->assertSee('HR Registers &amp; Approvals', false)->assertSee('>Open</a>', false);
+        $this->get(route('admin.hr.employees.index'))->assertOk()->assertSee('HR Registers &amp; Approvals', false)->assertSee('>View</a>', false)->assertSee('>Edit</a>', false)->assertDontSee('>Open</a>', false);
         $this->get(route('admin.hr.employees.edit', $this->employee))->assertOk()->assertSee('data-employee-related="salary"', false);
         $this->getJson($this->url('unknown', 'panel'))->assertNotFound();
     }
