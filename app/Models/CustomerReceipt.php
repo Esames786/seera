@@ -11,7 +11,7 @@ class CustomerReceipt extends Model
 
     protected $fillable = [
         'customer_id', 'customer_invoice_id', 'receipt_date', 'receipt_account_id',
-        'payment_method', 'amount', 'reference_number', 'journal_entry_id', 'notes',
+        'payment_method', 'amount', 'reference_number', 'journal_entry_id', 'idempotency_key', 'notes',
     ];
 
     protected function casts(): array

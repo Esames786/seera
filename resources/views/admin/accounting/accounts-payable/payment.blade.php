@@ -32,6 +32,8 @@
 
     <form method="POST" action="{{ route('admin.accounting.accounts-payable.payment.store', $bill) }}">
         @csrf
+        {{-- One-time key so a double click or a retry cannot record this payment twice (F02). --}}
+        <input type="hidden" name="idempotency_key" value="{{ old('idempotency_key', (string) \Illuminate\Support\Str::uuid()) }}"/>
 
         <x-admin.form-section title="Payment Details" columns="3">
             <div><label for="payment_date">Payment Date *</label><input id="payment_date" name="payment_date" type="date" class="input" max="{{ now()->toDateString() }}" value="{{ old('payment_date', now()->toDateString()) }}" required/></div>

@@ -241,6 +241,7 @@ class AccountsReceivableController extends Controller
             'amount' => ['required', 'numeric', 'min:0.01'],
             'reference_number' => ['nullable', 'string', 'max:100'],
             'notes' => ['nullable', 'string'],
+            'idempotency_key' => ['nullable', 'string', 'max:64'],
         ], [
             'amount.max' => 'The receipt cannot be more than the outstanding balance.',
         ]);
@@ -248,8 +249,17 @@ class AccountsReceivableController extends Controller
         // Method follows the account when not stated (cash account = cash, otherwise bank transfer).
         $data['payment_method'] = $data['payment_method'] ?? (ChartOfAccount::find($data['receipt_account_id'])?->account_code === PostingService::CASH ? 'Cash' : 'Bank Transfer');
 
-        $receipt = DB::transaction(function () use ($accounts_receivable, $data, $request) {
+        [$receipt, $alreadyRecorded] = DB::transaction(function () use ($accounts_receivable, $data, $request) {
             $accounts_receivable = CustomerInvoice::whereKey($accounts_receivable->id)->lockForUpdate()->firstOrFail();
+
+            // Same operation sent again: answer with the receipt already recorded (F02).
+            if (! empty($data['idempotency_key'])) {
+                $existing = CustomerReceipt::withoutGlobalScopes()->where('idempotency_key', $data['idempotency_key'])->first();
+                if ($existing) {
+                    return [$existing, true];
+                }
+            }
+
             $customer = Customer::whereKey($accounts_receivable->customer_id)->lockForUpdate()->firstOrFail();
             $account = ChartOfAccount::whereKey($data['receipt_account_id'])->where('status', 'active')->first();
             if (! $account || ! in_array($account->account_code, $customer->allowedPaymentAccountCodes(), true)) {
@@ -276,8 +286,13 @@ class AccountsReceivableController extends Controller
 
             $accounts_receivable->refreshPaymentStatus();
 
-            return $receipt;
+            return [$receipt, false];
         });
+
+        if ($alreadyRecorded) {
+            return redirect()->route('admin.accounting.accounts-receivable.show', $accounts_receivable)
+                ->with('status', 'This receipt of SAR '.number_format((float) $receipt->amount, 2).' was already recorded on '.$receipt->receipt_date->toDateString().'; nothing was added.');
+        }
 
         ActivityLog::record($request, 'Accounting', 'Recorded customer receipt', $accounts_receivable->invoice_number.' - SAR '.number_format((float) $receipt->amount, 2));
 

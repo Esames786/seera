@@ -24,6 +24,8 @@
 
     <form method="POST" action="{{ route('admin.accounting.accounts-receivable.receipt.store', $invoice) }}">
         @csrf
+        {{-- One-time key so a double click or a retry cannot record this receipt twice (F02). --}}
+        <input type="hidden" name="idempotency_key" value="{{ old('idempotency_key', (string) \Illuminate\Support\Str::uuid()) }}"/>
 
         <x-admin.form-section title="Receipt Details" columns="3">
             <div><label for="receipt_date">Receipt Date *</label><input id="receipt_date" name="receipt_date" type="date" class="input" max="{{ now()->toDateString() }}" value="{{ old('receipt_date', now()->toDateString()) }}" required/></div>

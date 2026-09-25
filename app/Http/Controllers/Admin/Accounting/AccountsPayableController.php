@@ -235,6 +235,7 @@ class AccountsPayableController extends Controller
             'amount' => ['required', 'numeric', 'min:0.01'],
             'reference_number' => ['nullable', 'string', 'max:100'],
             'notes' => ['nullable', 'string'],
+            'idempotency_key' => ['nullable', 'string', 'max:64'],
         ], [
             'amount.max' => 'The payment cannot be more than the outstanding balance.',
             'payment_account_id.exists' => 'This supplier accepts '.strtolower($accounts_payable->supplier->allowed_payment_types ?? 'cash and bank').' payments only; choose a matching active account.',
@@ -244,8 +245,19 @@ class AccountsPayableController extends Controller
         $data['payment_method'] = $data['payment_method'] ?? (ChartOfAccount::find($data['payment_account_id'])?->account_code === PostingService::CASH ? 'Cash' : 'Bank Transfer');
         $data['purpose'] = $data['purpose'] ?? 'Bill payment';
 
-        $payment = DB::transaction(function () use ($accounts_payable, $data, $request) {
+        [$payment, $alreadyRecorded] = DB::transaction(function () use ($accounts_payable, $data, $request) {
             $accounts_payable = SupplierBill::whereKey($accounts_payable->id)->lockForUpdate()->firstOrFail();
+
+            // The same operation sent again (double click, refresh, retry, replay) answers
+            // with the payment already recorded and adds nothing. The bill lock serialises
+            // competing requests; the unique key on the table is the durable guard (F02).
+            if (! empty($data['idempotency_key'])) {
+                $existing = SupplierPayment::withoutGlobalScopes()->where('idempotency_key', $data['idempotency_key'])->first();
+                if ($existing) {
+                    return [$existing, true];
+                }
+            }
+
             if (in_array($accounts_payable->status, ['draft', 'cancelled', 'paid'], true)) {
                 throw ValidationException::withMessages(['payment' => 'This bill is not open for payment.']);
             }
@@ -264,8 +276,13 @@ class AccountsPayableController extends Controller
 
             $accounts_payable->refreshPaymentStatus();
 
-            return $payment;
+            return [$payment, false];
         });
+
+        if ($alreadyRecorded) {
+            return redirect()->route('admin.accounting.accounts-payable.show', $accounts_payable)
+                ->with('status', 'This payment of SAR '.number_format((float) $payment->amount, 2).' was already recorded on '.$payment->payment_date->toDateString().'; nothing was added.');
+        }
 
         ActivityLog::record($request, 'Accounting', 'Recorded supplier payment', $accounts_payable->bill_number.' - SAR '.number_format((float) $payment->amount, 2));
 
