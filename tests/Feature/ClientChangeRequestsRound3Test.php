@@ -535,7 +535,7 @@ class ClientChangeRequestsRound3Test extends TestCase
         $receivable->update(['account_code' => '1299']);
 
         $this->actingAs($admin)->post(route('admin.accounting.accounts-receivable.approve', $invoice))
-            ->assertSessionHasErrors('invoice');
+            ->assertSessionHasErrors('posting');
         $invoice->refresh();
         $this->assertSame('draft', $invoice->payment_status, 'no half-approved invoice without a posting');
         $this->assertNull($invoice->journal_entry_id);

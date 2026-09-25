@@ -210,3 +210,22 @@ Re-checked against source before adopting this audit as the Task B deliverable:
 - `PostingService::createEntry` returns a draft, possibly unbalanced, entry when no auto-post rule matches. F01 stands.
 
 Test evidence for this checkpoint (SQLite in-memory, full suite): 215 tests / 2,030 assertions at `2d0f9d5` with Codex's uncommitted Task A patch; 225 tests / 2,160 assertions after the Task A tests were added. No Finance behaviour was changed in this sprint; the audit's findings remain open items for the 26–30 September correctness sprint once the owner and accountant confirm the FIN scenario list.
+
+## 12. Finance correctness sprint outcome (26 September, implementation engineer)
+
+| Finding | Status after sprint | Commit | Evidence |
+|---------|--------------------|--------|----------|
+| F01 atomic posting | Resolved: posting refuses unbalanced, missing or inactive accounts as a whole; document and journal succeed or fail together; manual journals refuse inactive accounts | `b850190`, `c90391f` | `FinancePostingIntegrityTest` (7), FIN-01/02 |
+| F02 idempotency | Resolved: hidden per-form `idempotency_key`, unique column, lookup under the document lock; replay answers with the existing settlement | `5fb4cae` | `SettlementIdempotencyTest` (4), FIN-03/04 |
+| F03 VAT period lock | Resolved: any VAT-bearing posting, manual VAT-account line, reopen or recalculate into a finalized/submitted period is refused; finalize locks and rechecks | `fd7ea4a` | `VatPeriodLockTest` (7), FIN-06 |
+| F04 GRN vs bill | **Open, decision needed** | — | FIN-08 BLOCKED |
+| F05 PO/GRN input integrity | Open (out of this sprint) | — | — |
+| F06 GL / report balances | Resolved: ledger opening = account opening + prior movement, running balance continues across pages, balance sheet/trial balance cumulative, P&L period-only, project cost net of reversals, CSV = screen | `1b95db7` | `FinanceReportBalancesTest` (3), FIN-05 |
+| F07 scope and export | Resolved: journal headers scoped through lines; company-only openings and VAT screens; CSV export needs the export right; manual journal lines confined to the user's projects/sites | `d1f77b5` | `FinanceScopeAuthorizationTest` (4), FIN-09 (permission half) |
+| F08 approval runtime | **Open, configuration decision needed** | — | FIN-09 BLOCKED |
+| F09 zero-rate / rounding policy | Open (policy) | — | FIN-06 note |
+| F10 mapping / correction lifecycle | Partly: reopen reversal verified; payment reversal still absent | — | FIN-10 |
+| F11 stale edit / delete locks | Resolved: edit, delete and cancel reload under lock and refuse a changed status | `c4fc7e0` | `FinanceStateTransitionTest` (3) |
+| F12 payroll / ZATCA | Open (separate integration scopes) | — | — |
+
+The FIN-01 … FIN-10 execution record is `docs/finance-acceptance-2026-09-26.md`.

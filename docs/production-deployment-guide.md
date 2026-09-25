@@ -380,3 +380,53 @@ $PHP artisan up
 Rollback: `git checkout 2d0f9d5`, extract that commit's `public/build.zip` the same
 way, then `$PHP artisan optimize`. No database rollback is needed; nothing in this
 release changes the schema.
+
+## 13. Finance correctness release (feature branch, 26 September)
+
+This release stays on `feature/seera-connected-workspaces-2026-09-23`. It adds
+**one additive migration**, `2026_09_26_000001_add_idempotency_keys_to_settlements`
+(nullable unique `idempotency_key` on `supplier_payments` and `customer_receipts`;
+no data change, no seeder). The Blade payment and receipt forms gained a hidden
+field; no JavaScript or CSS changed, but `public/build.zip` was rebuilt from the
+same sources so the manifest on the server matches the repository.
+
+Nothing in this release touches the finalized `Q3 2026` VAT period on the server.
+Do not reopen it and do not run any seeder.
+
+```bash
+cd ~/seera
+PHP=/opt/cpanel/ea-php83/root/usr/bin/php
+
+$PHP artisan down
+git fetch origin
+git checkout feature/seera-connected-workspaces-2026-09-23
+git pull --ff-only
+$PHP artisan migrate --force          # runs 2026_09_26_000001 only
+rm -rf public/build && mkdir -p public/build
+unzip -oq public/build.zip -d public/build
+test -f public/build/manifest.json && echo "assets ok"
+$PHP artisan optimize
+$PHP artisan up
+```
+
+Post-release checks (read-only): open Accounting → Accounts Payable → a bill →
+"Record payment" and confirm the page loads; open Financial Reports → Trial
+Balance and confirm debits equal credits; open VAT Management as a company-level
+user and confirm the list loads (project-scoped users now get 403 there by design).
+
+Rollback (code only, keeps the new column, which is harmless when unused):
+
+```bash
+cd ~/seera
+PHP=/opt/cpanel/ea-php83/root/usr/bin/php
+$PHP artisan down
+git checkout 7fc1749                  # last commit before the finance sprint
+rm -rf public/build && mkdir -p public/build
+unzip -oq public/build.zip -d public/build
+$PHP artisan optimize
+$PHP artisan up
+```
+
+To also drop the column: `$PHP artisan migrate:rollback --step=1 --force` **only**
+while `2026_09_26_000001` is the last batch, and only after the code rollback above.
+Never use `migrate:fresh` on the server.
