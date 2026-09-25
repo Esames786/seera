@@ -138,7 +138,7 @@ class FinancialReportController extends Controller
     {
         $cashAccountIds = ChartOfAccount::whereIn('account_code', [PostingService::CASH, PostingService::BANK])->pluck('id');
 
-        $opening = (float) ChartOfAccount::whereIn('id', $cashAccountIds)->sum('opening_balance');
+        $opening = $this->includesOpenings() ? (float) ChartOfAccount::whereIn('id', $cashAccountIds)->sum('opening_balance') : 0.0;
 
         // Cash held before the range belongs to the opening, not to the period's movement (F06).
         if ($from = $this->period($request)->from) {
@@ -192,6 +192,7 @@ class FinancialReportController extends Controller
 
     public function vatReport(Request $request): View|StreamedResponse
     {
+        $this->companyScopeOnly($request);
         $period = $this->period($request);
 
         // A period is included when it overlaps the selected range (NR-21).
@@ -310,10 +311,12 @@ class FinancialReportController extends Controller
                 ->whereHas('journalEntry', fn ($q) => $q->where('status', 'posted')->whereDate('journal_date', '<', $period->from->toDateString()))))
             : collect();
 
-        return ChartOfAccount::orderBy('account_code')->get()->map(function (ChartOfAccount $account) use ($totals, $prior) {
+        $openings = $this->includesOpenings();
+
+        return ChartOfAccount::orderBy('account_code')->get()->map(function (ChartOfAccount $account) use ($totals, $prior, $openings) {
             $movement = $totals->get($account->id);
             $before = $prior->get($account->id);
-            $opening = (float) $account->opening_balance;
+            $opening = $openings ? (float) $account->opening_balance : 0.0;
 
             return [
                 'account_id' => $account->id,
@@ -377,7 +380,30 @@ class FinancialReportController extends Controller
 
     private function wantsCsv(Request $request): bool
     {
-        return $request->query('export') === 'csv';
+        if ($request->query('export') !== 'csv') {
+            return false;
+        }
+
+        // Viewing a report and taking its data away are separate rights (F07).
+        abort_unless($request->user()->hasPermission('Financial Reports', 'export'), 403, 'You do not have permission to export financial reports.');
+
+        return true;
+    }
+
+    /**
+     * Opening balances are company-level figures. A user restricted to a
+     * project, site or warehouse sees the movement of their own scope only,
+     * so the openings are left out of their reports and ledgers (F07).
+     */
+    private function includesOpenings(): bool
+    {
+        return auth()->user()?->effectiveAccessScope() === 'company';
+    }
+
+    /** VAT returns are company-level: only company-scope users may read them (F07). */
+    private function companyScopeOnly(Request $request): void
+    {
+        abort_unless($request->user()->effectiveAccessScope() === 'company', 403, 'VAT returns are company-level figures and are not available to a project, site or warehouse scoped account.');
     }
 
     /**

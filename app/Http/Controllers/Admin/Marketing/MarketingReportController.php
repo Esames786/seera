@@ -33,6 +33,8 @@ class MarketingReportController extends Controller
             ->get();
 
         if ($request->query('export') === 'csv') {
+            abort_unless($user->hasPermission('Marketing', 'export'), 403, 'You do not have permission to export the visit report.');
+
             $rows = $visits->map(fn (MarketingVisit $visit) => [
                 $visit->visit_date->toDateString(), $visit->timeLabel() ?? '', $visit->lead->lead_code, $visit->lead->company_name,
                 $visit->location ?? '', $visit->person_met ?? '', $visit->person_title ?? '', $visit->user?->name ?? '',

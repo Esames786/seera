@@ -10,8 +10,20 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class VatController extends Controller
+class VatController extends Controller implements \Illuminate\Routing\Controllers\HasMiddleware
 {
+    /** VAT returns are company-level figures: no project, site or warehouse scoped view exists (F07). */
+    public static function middleware(): array
+    {
+        return [
+            function (Request $request, \Closure $next) {
+                abort_unless($request->user()?->effectiveAccessScope() === 'company', 403, 'VAT returns are company-level figures and are not available to a project, site or warehouse scoped account.');
+
+                return $next($request);
+            },
+        ];
+    }
+
     public function index(Request $request): View
     {
         $periods = VatPeriod::withCount('transactions')

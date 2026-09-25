@@ -228,9 +228,42 @@ class JournalEntryController extends Controller
         // A manual line on a VAT control account inside a sealed period would change that return (F03).
         $this->assertVatLinesInOpenPeriod($data['journal_date'], array_column($lines, 'chart_of_account_id'));
 
+        // A scoped user may only write lines inside their own projects and sites (F07); the
+        // shared write middleware checks top-level fields, not nested journal lines.
+        $lines = $this->linesWithinScope($request->user(), $lines);
+
         unset($data['lines']);
 
         return [$data, $lines, ['total_debit' => $totalDebit, 'total_credit' => $totalCredit]];
+    }
+
+    /** @return array<int, array<string, mixed>> */
+    private function linesWithinScope(\App\Models\User $user, array $lines): array
+    {
+        $scope = $user->effectiveAccessScope();
+
+        if ($scope === 'company') {
+            return $lines;
+        }
+
+        $scopes = app(\App\Services\UserAccessScopeService::class);
+        $projectIds = $scopes->projectIdsFor($user);
+        abort_if($projectIds === [] || in_array($scope, ['warehouse'], true), 403, 'Your account scope cannot post journal entries.');
+
+        foreach ($lines as &$line) {
+            $line['project_id'] = $line['project_id'] ?: $scopes->defaultProjectIdFor($user);
+            abort_unless(in_array((int) $line['project_id'], $projectIds, true), 403, 'A journal line points to a project outside your access scope.');
+
+            if ($scope === 'site') {
+                $line['site_id'] = $line['site_id'] ?: $user->site_id;
+                abort_unless((int) $line['site_id'] === (int) $user->site_id, 403, 'A journal line points to a site outside your access scope.');
+            } elseif ($line['site_id']) {
+                $site = Site::withoutGlobalScopes()->find($line['site_id']);
+                abort_unless($site && in_array((int) $site->project_id, $projectIds, true), 403, 'A journal line points to a site outside your access scope.');
+            }
+        }
+
+        return $lines;
     }
 
     private function assertVatLinesInOpenPeriod($date, array $accountIds): void

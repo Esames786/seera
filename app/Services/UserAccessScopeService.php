@@ -56,6 +56,13 @@ class UserAccessScopeService
             return;
         }
 
+        // A journal header is visible when at least one of its (scoped) lines is (F07).
+        if ($table === 'journal_entries') {
+            $query->whereHas('lines');
+
+            return;
+        }
+
         match ($scope) {
             'project' => $this->projectScope($query, $table, $user),
             'site' => $this->siteScope($query, $table, $user),

@@ -56,7 +56,8 @@ class GeneralLedgerController extends Controller
 
         // A running balance only means something when the report is scoped to one account.
         $signed = $account && $account->normal_balance === 'credit' ? -1 : 1;
-        $openingBalance = $account ? (float) $account->opening_balance : 0.0;
+        // Opening balances are company-level; a scoped user sees their own movement only (F07).
+        $openingBalance = $account && $request->user()->effectiveAccessScope() === 'company' ? (float) $account->opening_balance : 0.0;
 
         if ($account && $request->filled('from')) {
             // Movement before the range belongs to the opening, not to the page.

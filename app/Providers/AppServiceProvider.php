@@ -10,6 +10,7 @@ use App\Models\EmployeeDocument;
 use App\Models\EndOfServiceRecord;
 use App\Models\GoodsReceipt;
 use App\Models\GoodsReceiptLine;
+use App\Models\JournalEntry;
 use App\Models\JournalEntryLine;
 use App\Models\LeaveRequest;
 use App\Models\OvertimeRecord;
@@ -65,7 +66,7 @@ class AppServiceProvider extends ServiceProvider
             EmployeeDocument::class, LeaveRequest::class,
             OvertimeRecord::class, SalaryStructure::class,
             EndOfServiceRecord::class, PayrollRunItem::class,
-            JournalEntryLine::class, SupplierBill::class,
+            JournalEntry::class, JournalEntryLine::class, SupplierBill::class,
             SupplierPayment::class, CustomerInvoice::class,
             CustomerReceipt::class, ZatcaInvoiceRecord::class,
             PurchaseRequest::class, PurchaseRequestLine::class,
