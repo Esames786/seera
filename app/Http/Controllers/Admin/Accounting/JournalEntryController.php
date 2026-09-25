@@ -98,9 +98,15 @@ class JournalEntryController extends Controller
         [$data, $lines, $totals] = $this->validated($request);
 
         DB::transaction(function () use ($journal_entry, $data, $lines, $totals) {
-            $journal_entry->update($data + $totals);
-            $journal_entry->lines()->delete();
-            $journal_entry->lines()->createMany($lines);
+            // Re-check under lock: a posting that landed since the form was opened wins (F11).
+            $entry = JournalEntry::whereKey($journal_entry->id)->lockForUpdate()->firstOrFail();
+            if (! $entry->isEditable()) {
+                throw ValidationException::withMessages(['journal' => 'This journal entry was posted or cancelled while you were editing it; your changes were not saved.']);
+            }
+
+            $entry->update($data + $totals);
+            $entry->lines()->delete();
+            $entry->lines()->createMany($lines);
         });
 
         ActivityLog::record($request, 'Accounting', 'Updated journal entry', $journal_entry->journal_number);
@@ -116,7 +122,14 @@ class JournalEntryController extends Controller
         }
 
         $number = $journal_entry->journal_number;
-        $journal_entry->delete();
+
+        DB::transaction(function () use ($journal_entry) {
+            $entry = JournalEntry::whereKey($journal_entry->id)->lockForUpdate()->firstOrFail();
+            if ($entry->status === 'posted') {
+                throw ValidationException::withMessages(['journal' => 'This journal entry was posted in the meantime and cannot be deleted.']);
+            }
+            $entry->delete();
+        });
 
         ActivityLog::record($request, 'Accounting', 'Deleted journal entry', $number);
 
@@ -162,7 +175,13 @@ class JournalEntryController extends Controller
             return back()->withErrors(['journal' => 'A posted journal entry cannot be cancelled in this phase.']);
         }
 
-        $journal_entry->update(['status' => 'cancelled']);
+        DB::transaction(function () use ($journal_entry) {
+            $entry = JournalEntry::whereKey($journal_entry->id)->lockForUpdate()->firstOrFail();
+            if ($entry->status === 'posted') {
+                throw ValidationException::withMessages(['journal' => 'This journal entry was posted in the meantime and cannot be cancelled.']);
+            }
+            $entry->update(['status' => 'cancelled']);
+        });
 
         ActivityLog::record($request, 'Accounting', 'Cancelled journal entry', $journal_entry->journal_number);
 

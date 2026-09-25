@@ -104,9 +104,15 @@ class AccountsPayableController extends Controller
         [$data, $lines] = $this->validated($request, $accounts_payable);
 
         DB::transaction(function () use ($accounts_payable, $data, $lines) {
-            $accounts_payable->update($data);
-            $accounts_payable->lines()->delete();
-            $accounts_payable->lines()->createMany($lines);
+            // Re-check under lock: an approval that landed since the form was opened wins (F11).
+            $bill = SupplierBill::whereKey($accounts_payable->id)->lockForUpdate()->firstOrFail();
+            if (! $bill->isEditable()) {
+                throw ValidationException::withMessages(['bill' => 'This bill was approved while you were editing it; your changes were not saved.']);
+            }
+
+            $bill->update($data);
+            $bill->lines()->delete();
+            $bill->lines()->createMany($lines);
         });
 
         ActivityLog::record($request, 'Accounting', 'Updated supplier bill', $accounts_payable->bill_number);
@@ -122,7 +128,14 @@ class AccountsPayableController extends Controller
         }
 
         $number = $accounts_payable->bill_number;
-        $accounts_payable->delete();
+
+        DB::transaction(function () use ($accounts_payable) {
+            $bill = SupplierBill::whereKey($accounts_payable->id)->lockForUpdate()->firstOrFail();
+            if (! $bill->isEditable()) {
+                throw ValidationException::withMessages(['bill' => 'This bill was approved in the meantime and cannot be deleted.']);
+            }
+            $bill->delete();
+        });
 
         ActivityLog::record($request, 'Accounting', 'Deleted supplier bill', $number);
 

@@ -102,9 +102,15 @@ class AccountsReceivableController extends Controller
         [$data, $lines] = $this->validated($request, $accounts_receivable);
 
         DB::transaction(function () use ($accounts_receivable, $data, $lines) {
-            $accounts_receivable->update($data);
-            $accounts_receivable->lines()->delete();
-            $accounts_receivable->lines()->createMany($lines);
+            // Re-check under lock: an approval that landed since the form was opened wins (F11).
+            $invoice = CustomerInvoice::whereKey($accounts_receivable->id)->lockForUpdate()->firstOrFail();
+            if (! $invoice->isEditable()) {
+                throw ValidationException::withMessages(['invoice' => 'This invoice was approved while you were editing it; your changes were not saved.']);
+            }
+
+            $invoice->update($data);
+            $invoice->lines()->delete();
+            $invoice->lines()->createMany($lines);
         });
 
         ActivityLog::record($request, 'Accounting', 'Updated customer invoice', $accounts_receivable->invoice_number);
@@ -120,7 +126,14 @@ class AccountsReceivableController extends Controller
         }
 
         $number = $accounts_receivable->invoice_number;
-        $accounts_receivable->delete();
+
+        DB::transaction(function () use ($accounts_receivable) {
+            $invoice = CustomerInvoice::whereKey($accounts_receivable->id)->lockForUpdate()->firstOrFail();
+            if (! $invoice->isEditable()) {
+                throw ValidationException::withMessages(['invoice' => 'This invoice was approved in the meantime and cannot be deleted.']);
+            }
+            $invoice->delete();
+        });
 
         ActivityLog::record($request, 'Accounting', 'Deleted customer invoice', $number);
 
