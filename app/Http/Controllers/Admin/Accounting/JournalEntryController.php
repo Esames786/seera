@@ -141,6 +141,8 @@ class JournalEntryController extends Controller
                 throw ValidationException::withMessages(['journal' => 'Total debit must equal total credit before posting.']);
             }
 
+            $this->assertVatLinesInOpenPeriod($entry->journal_date, $entry->lines()->pluck('chart_of_account_id')->all());
+
             $entry->update([
                 'status' => 'posted',
                 'posted_by' => $request->user()->id,
@@ -223,9 +225,21 @@ class JournalEntryController extends Controller
             ]);
         }
 
+        // A manual line on a VAT control account inside a sealed period would change that return (F03).
+        $this->assertVatLinesInOpenPeriod($data['journal_date'], array_column($lines, 'chart_of_account_id'));
+
         unset($data['lines']);
 
         return [$data, $lines, ['total_debit' => $totalDebit, 'total_credit' => $totalCredit]];
+    }
+
+    private function assertVatLinesInOpenPeriod($date, array $accountIds): void
+    {
+        $posting = app(\App\Services\Accounting\PostingService::class);
+
+        if (array_intersect(array_map('intval', $accountIds), $posting->vatAccountIds()) !== []) {
+            $posting->assertVatPeriodOpen($date, 'This journal touches a VAT account and');
+        }
     }
 
     private function formOptions(): array

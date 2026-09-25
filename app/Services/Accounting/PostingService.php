@@ -491,6 +491,9 @@ class PostingService
             return null;
         }
 
+        // A finalized or submitted return is sealed: nothing may change its totals (F03).
+        $this->assertVatPeriodOpen($date, $sourceModule.' '.($reference ?? ''));
+
         return VatTransaction::create([
             'transaction_date' => $date,
             'source_module' => $sourceModule,
@@ -513,6 +516,30 @@ class PostingService
         return VatPeriod::whereDate('start_date', '<=', $date)
             ->whereDate('end_date', '>=', $date)
             ->first();
+    }
+
+    /** VAT control accounts: a journal line on one of these changes a VAT return. */
+    public function vatAccountIds(): array
+    {
+        return ChartOfAccount::whereIn('account_code', [self::INPUT_VAT, self::OUTPUT_VAT])->pluck('id')->all();
+    }
+
+    /**
+     * Refuse any VAT-bearing transaction dated inside a finalized or submitted
+     * VAT period (F03). The date decides the period; nothing is reopened
+     * automatically, and correcting a sealed period needs a credit note.
+     */
+    public function assertVatPeriodOpen($date, string $subject): void
+    {
+        $period = $this->periodFor($date);
+
+        if ($period && in_array($period->status, ['finalized', 'submitted'], true)) {
+            throw ValidationException::withMessages([
+                'vat' => trim($subject).' is dated '.\Illuminate\Support\Carbon::parse($date)->toDateString()
+                    .', inside VAT period '.$period->period_name.' which is already '.$period->status
+                    .'. Nothing was recorded. Use a date in an open period, or issue a credit note for a sealed one.',
+            ]);
+        }
     }
 
     /**

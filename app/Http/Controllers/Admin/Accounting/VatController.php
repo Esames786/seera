@@ -64,8 +64,9 @@ class VatController extends Controller
      */
     public function recalculate(Request $request, VatPeriod $vat): RedirectResponse
     {
-        if ($vat->status === 'submitted') {
-            return back()->withErrors(['vat' => 'A submitted VAT period can no longer be recalculated.']);
+        // Once finalized the stored totals are the return; they are not recomputed (F03).
+        if ($vat->status !== 'draft') {
+            return back()->withErrors(['vat' => 'A '.$vat->status.' VAT period can no longer be recalculated.']);
         }
 
         $vat->recalculate();
@@ -77,12 +78,18 @@ class VatController extends Controller
 
     public function finalize(Request $request, VatPeriod $vat): RedirectResponse
     {
-        if ($vat->status !== 'draft') {
-            return back()->withErrors(['vat' => 'Only a draft VAT period can be finalized.']);
-        }
+        // Lock the period row and re-check its status inside the transaction so two
+        // finalize clicks, or a finalize racing a posting, cannot both succeed (F03/F11).
+        \Illuminate\Support\Facades\DB::transaction(function () use ($vat) {
+            $period = VatPeriod::whereKey($vat->id)->lockForUpdate()->firstOrFail();
 
-        $vat->recalculate();
-        $vat->update(['status' => 'finalized']);
+            if ($period->status !== 'draft') {
+                throw \Illuminate\Validation\ValidationException::withMessages(['vat' => 'Only a draft VAT period can be finalized; this one is already '.$period->status.'.']);
+            }
+
+            $period->recalculate();
+            $period->update(['status' => 'finalized']);
+        });
 
         ActivityLog::record($request, 'Accounting', 'Finalized VAT period', $vat->period_name);
 
