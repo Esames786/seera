@@ -154,7 +154,9 @@ class JournalEntryController extends Controller
                 throw ValidationException::withMessages(['journal' => 'Total debit must equal total credit before posting.']);
             }
 
-            $this->assertVatLinesInOpenPeriod($entry->journal_date, $entry->lines()->pluck('chart_of_account_id')->all());
+            $accountIds = $entry->lines()->pluck('chart_of_account_id')->all();
+            $this->assertLineAccountsActive($accountIds, 'journal');
+            $this->assertVatLinesInOpenPeriod($entry->journal_date, $accountIds);
 
             $entry->update([
                 'status' => 'posted',
@@ -244,6 +246,9 @@ class JournalEntryController extends Controller
             ]);
         }
 
+        // Every line must sit on an account that can still take postings (F01).
+        $this->assertLineAccountsActive(array_column($lines, 'chart_of_account_id'), 'lines');
+
         // A manual line on a VAT control account inside a sealed period would change that return (F03).
         $this->assertVatLinesInOpenPeriod($data['journal_date'], array_column($lines, 'chart_of_account_id'));
 
@@ -283,6 +288,26 @@ class JournalEntryController extends Controller
         }
 
         return $lines;
+    }
+
+    /**
+     * Refuse a journal that touches a missing or inactive account (F01).
+     */
+    private function assertLineAccountsActive(array $accountIds, string $errorKey): void
+    {
+        $accountIds = array_values(array_unique(array_filter(array_map('intval', $accountIds))));
+        $inactive = \App\Models\ChartOfAccount::withoutGlobalScopes()
+            ->whereIn('id', $accountIds)
+            ->where('status', '!=', 'active')
+            ->get(['account_code', 'account_name']);
+        $missing = count($accountIds) - \App\Models\ChartOfAccount::withoutGlobalScopes()->whereIn('id', $accountIds)->count();
+
+        if ($inactive->isNotEmpty() || $missing > 0) {
+            $names = $inactive->map(fn ($a) => $a->account_code.' '.$a->account_name)->implode(', ');
+            throw ValidationException::withMessages([
+                $errorKey => 'Nothing was recorded: '.($names !== '' ? 'account '.$names.' is inactive' : 'a line account no longer exists').'. Choose an active account.',
+            ]);
+        }
     }
 
     private function assertVatLinesInOpenPeriod($date, array $accountIds): void
