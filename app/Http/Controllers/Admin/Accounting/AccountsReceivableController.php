@@ -140,13 +140,9 @@ class AccountsReceivableController extends Controller
                 throw ValidationException::withMessages(['invoice' => 'Only a draft invoice can be approved.']);
             }
 
+            // Posting refuses (and rolls this transaction back) when an account is missing,
+            // inactive or the entry would not balance (NR-30, F01): no half-approved invoice.
             $entry = $this->posting->postCustomerInvoice($accounts_receivable, $request->user()->id);
-
-            // Never approve without a ledger entry (client change request NR-30): the invoice
-            // would count as unpaid while missing from VAT and the dashboard.
-            if (! $entry) {
-                throw ValidationException::withMessages(['invoice' => 'The invoice could not be posted: the chart of accounts has no Accounts Receivable (1200) or revenue account. Set up the chart of accounts and approve again.']);
-            }
 
             $accounts_receivable->update([
                 'payment_status' => 'unpaid',
@@ -161,7 +157,7 @@ class AccountsReceivableController extends Controller
         ActivityLog::record($request, 'Accounting', 'Approved customer invoice', $accounts_receivable->invoice_number);
 
         return redirect()->route('admin.accounting.accounts-receivable.show', $accounts_receivable)
-            ->with('status', 'Invoice approved, ZATCA record '.$record->uuid.' created and journal entry '.$entry->journal_number.' posted.');
+            ->with('status', 'Invoice approved, ZATCA record '.$record->uuid.' created; '.$this->posting->describe($entry).'.');
     }
 
     /**
@@ -274,11 +270,9 @@ class AccountsReceivableController extends Controller
                 'customer_invoice_id' => $accounts_receivable->id,
             ]);
 
+            // A receipt without its journal is refused and rolled back together (F01).
             $entry = $this->posting->postCustomerReceipt($receipt, $request->user()->id);
-            if (! $entry) {
-                throw ValidationException::withMessages(['receipt' => 'Receipt could not be posted. Check the receivable and payment accounts.']);
-            }
-            $receipt->update(['journal_entry_id' => $entry?->id]);
+            $receipt->update(['journal_entry_id' => $entry->id]);
 
             $accounts_receivable->refreshPaymentStatus();
 

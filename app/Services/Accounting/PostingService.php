@@ -14,10 +14,17 @@ use App\Models\VatTransaction;
 use App\Models\ZatcaInvoiceRecord;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Turns approved finance documents into balanced journal entries, VAT
  * transactions and ZATCA records, following the Phase 4 posting rules.
+ *
+ * Finance correctness sprint F01: a posting that cannot be recorded correctly
+ * is refused with a ValidationException instead of returning null or a
+ * one-sided entry. Every caller runs inside a database transaction, so the
+ * refusal rolls the whole business event back (no half-approved bill, no
+ * payment without its journal, no stock movement without its accounting).
  */
 class PostingService
 {
@@ -66,27 +73,18 @@ class PostingService
     /**
      * Debit expense/inventory accounts and input VAT, credit accounts payable.
      */
-    public function postSupplierBill(SupplierBill $bill, ?int $userId = null): ?JournalEntry
+    public function postSupplierBill(SupplierBill $bill, ?int $userId = null): JournalEntry
     {
         $bill->loadMissing('lines', 'supplier');
 
-        $payable = $this->payableAccountFor($bill->supplier);
-        $inputVat = $this->account(self::INPUT_VAT);
-        $fallbackExpense = $this->account(self::MATERIAL_EXPENSE);
-
-        if (! $payable) {
-            return null;
-        }
+        $payable = $this->activeOrRefuse($this->payableAccountFor($bill->supplier), 'Accounts Payable ('.self::PAYABLE.')');
+        $inputVat = (float) $bill->vat_amount > 0 ? $this->requireAccount(self::INPUT_VAT, 'Input VAT') : null;
+        $dimensions = ['project_id' => $bill->project_id, 'site_id' => $bill->site_id];
 
         $lines = [];
 
         foreach ($bill->lines as $line) {
-            $account = $line->chart_of_account_id ? ChartOfAccount::find($line->chart_of_account_id) : null;
-            $account ??= $fallbackExpense;
-
-            if (! $account) {
-                continue;
-            }
+            $account = $this->lineAccount($line->chart_of_account_id, self::MATERIAL_EXPENSE, 'expense account on bill line "'.$line->description.'"');
 
             $lines[] = [
                 'chart_of_account_id' => $account->id,
@@ -94,31 +92,27 @@ class PostingService
                 'debit' => (float) $line->taxable_amount,
                 'credit' => 0,
                 'cost_center_id' => $line->cost_center_id ?? $bill->cost_center_id,
-                'project_id' => $bill->project_id,
-                'site_id' => $bill->site_id,
-            ];
+            ] + $dimensions;
         }
 
-        if ($lines === [] && $fallbackExpense) {
+        if ($lines === []) {
             $lines[] = [
-                'chart_of_account_id' => $fallbackExpense->id,
+                'chart_of_account_id' => $this->requireAccount(self::MATERIAL_EXPENSE, 'Material Expense')->id,
                 'description' => 'Supplier bill '.$bill->bill_number,
                 'debit' => (float) $bill->taxable_amount,
                 'credit' => 0,
                 'cost_center_id' => $bill->cost_center_id,
-                'project_id' => $bill->project_id,
-                'site_id' => $bill->site_id,
-            ];
+            ] + $dimensions;
         }
 
-        if ($inputVat && (float) $bill->vat_amount > 0) {
+        if ($inputVat) {
             $lines[] = [
                 'chart_of_account_id' => $inputVat->id,
                 'description' => 'Input VAT on '.$bill->bill_number,
                 'debit' => (float) $bill->vat_amount,
                 'credit' => 0,
                 'cost_center_id' => $bill->cost_center_id,
-            ];
+            ] + $dimensions;
         }
 
         $lines[] = [
@@ -127,7 +121,7 @@ class PostingService
             'debit' => 0,
             'credit' => (float) $bill->total_amount,
             'cost_center_id' => $bill->cost_center_id,
-        ];
+        ] + $dimensions;
 
         $entry = $this->createEntry([
             'journal_date' => $bill->bill_date,
@@ -150,18 +144,15 @@ class PostingService
     /**
      * Debit accounts payable, credit the cash/bank account used.
      */
-    public function postSupplierPayment(SupplierPayment $payment, ?int $userId = null): ?JournalEntry
+    public function postSupplierPayment(SupplierPayment $payment, ?int $userId = null): JournalEntry
     {
-        $payment->loadMissing('supplier');
+        $payment->loadMissing('supplier', 'bill');
 
-        $payable = $this->payableAccountFor($payment->supplier);
+        $payable = $this->activeOrRefuse($this->payableAccountFor($payment->supplier), 'Accounts Payable ('.self::PAYABLE.')');
         $paymentAccount = $payment->payment_account_id
-            ? ChartOfAccount::find($payment->payment_account_id)
-            : $this->account(self::BANK);
-
-        if (! $payable || ! $paymentAccount) {
-            return null;
-        }
+            ? $this->activeOrRefuse(ChartOfAccount::find($payment->payment_account_id), 'payment account')
+            : $this->requireAccount(self::BANK, 'Bank');
+        $dimensions = ['project_id' => $payment->bill?->project_id, 'site_id' => $payment->bill?->site_id];
 
         return $this->createEntry([
             'journal_date' => $payment->payment_date,
@@ -175,30 +166,26 @@ class PostingService
                 'description' => 'Payment to '.$payment->supplier->name,
                 'debit' => (float) $payment->amount,
                 'credit' => 0,
-            ],
+            ] + $dimensions,
             [
                 'chart_of_account_id' => $paymentAccount->id,
                 'description' => 'Payment to '.$payment->supplier->name,
                 'debit' => 0,
                 'credit' => (float) $payment->amount,
-            ],
+            ] + $dimensions,
         ], 'Supplier Payment', 'Payment Recorded', $userId);
     }
 
     /**
      * Debit accounts receivable, credit revenue and output VAT.
      */
-    public function postCustomerInvoice(CustomerInvoice $invoice, ?int $userId = null): ?JournalEntry
+    public function postCustomerInvoice(CustomerInvoice $invoice, ?int $userId = null): JournalEntry
     {
         $invoice->loadMissing('lines', 'customer');
 
-        $receivable = $this->account(self::RECEIVABLE);
-        $outputVat = $this->account(self::OUTPUT_VAT);
-        $fallbackRevenue = $this->account(self::REVENUE);
-
-        if (! $receivable) {
-            return null;
-        }
+        $receivable = $this->requireAccount(self::RECEIVABLE, 'Accounts Receivable');
+        $outputVat = (float) $invoice->vat_amount > 0 ? $this->requireAccount(self::OUTPUT_VAT, 'Output VAT') : null;
+        $dimensions = ['project_id' => $invoice->project_id];
 
         $lines = [[
             'chart_of_account_id' => $receivable->id,
@@ -206,16 +193,10 @@ class PostingService
             'debit' => (float) $invoice->total_amount,
             'credit' => 0,
             'cost_center_id' => $invoice->cost_center_id,
-            'project_id' => $invoice->project_id,
-        ]];
+        ] + $dimensions];
 
         foreach ($invoice->lines as $line) {
-            $account = $line->revenue_account_id ? ChartOfAccount::find($line->revenue_account_id) : null;
-            $account ??= $fallbackRevenue;
-
-            if (! $account) {
-                continue;
-            }
+            $account = $this->lineAccount($line->revenue_account_id, self::REVENUE, 'revenue account on invoice line "'.$line->description.'"');
 
             $lines[] = [
                 'chart_of_account_id' => $account->id,
@@ -223,29 +204,27 @@ class PostingService
                 'debit' => 0,
                 'credit' => (float) $line->taxable_amount,
                 'cost_center_id' => $line->cost_center_id ?? $invoice->cost_center_id,
-                'project_id' => $invoice->project_id,
-            ];
+            ] + $dimensions;
         }
 
-        if ($invoice->lines->isEmpty() && $fallbackRevenue) {
+        if ($invoice->lines->isEmpty()) {
             $lines[] = [
-                'chart_of_account_id' => $fallbackRevenue->id,
+                'chart_of_account_id' => $this->requireAccount(self::REVENUE, 'Project Revenue')->id,
                 'description' => 'Invoice '.$invoice->invoice_number,
                 'debit' => 0,
                 'credit' => (float) $invoice->taxable_amount,
                 'cost_center_id' => $invoice->cost_center_id,
-                'project_id' => $invoice->project_id,
-            ];
+            ] + $dimensions;
         }
 
-        if ($outputVat && (float) $invoice->vat_amount > 0) {
+        if ($outputVat) {
             $lines[] = [
                 'chart_of_account_id' => $outputVat->id,
                 'description' => 'Output VAT on '.$invoice->invoice_number,
                 'debit' => 0,
                 'credit' => (float) $invoice->vat_amount,
                 'cost_center_id' => $invoice->cost_center_id,
-            ];
+            ] + $dimensions;
         }
 
         $entry = $this->createEntry([
@@ -269,18 +248,15 @@ class PostingService
     /**
      * Debit cash/bank, credit accounts receivable.
      */
-    public function postCustomerReceipt(CustomerReceipt $receipt, ?int $userId = null): ?JournalEntry
+    public function postCustomerReceipt(CustomerReceipt $receipt, ?int $userId = null): JournalEntry
     {
-        $receipt->loadMissing('customer');
+        $receipt->loadMissing('customer', 'invoice');
 
-        $receivable = $this->account(self::RECEIVABLE);
+        $receivable = $this->requireAccount(self::RECEIVABLE, 'Accounts Receivable');
         $receiptAccount = $receipt->receipt_account_id
-            ? ChartOfAccount::find($receipt->receipt_account_id)
-            : $this->account(self::BANK);
-
-        if (! $receivable || ! $receiptAccount) {
-            return null;
-        }
+            ? $this->activeOrRefuse(ChartOfAccount::find($receipt->receipt_account_id), 'receipt account')
+            : $this->requireAccount(self::BANK, 'Bank');
+        $dimensions = ['project_id' => $receipt->invoice?->project_id];
 
         return $this->createEntry([
             'journal_date' => $receipt->receipt_date,
@@ -294,60 +270,56 @@ class PostingService
                 'description' => 'Receipt from '.$receipt->customer->name,
                 'debit' => (float) $receipt->amount,
                 'credit' => 0,
-            ],
+            ] + $dimensions,
             [
                 'chart_of_account_id' => $receivable->id,
                 'description' => 'Receipt from '.$receipt->customer->name,
                 'debit' => 0,
                 'credit' => (float) $receipt->amount,
-            ],
+            ] + $dimensions,
         ], 'Customer Receipt', 'Receipt Recorded', $userId);
     }
 
     /**
      * Goods receipt: debit inventory asset and input VAT, credit accounts payable.
+     * Returns null only when the receipt carries no value at all.
      */
     public function postGoodsReceipt(\App\Models\GoodsReceipt $grn, ?int $userId = null): ?JournalEntry
     {
         $grn->loadMissing('lines.item', 'supplier', 'warehouse');
 
-        $payable = $this->payableAccountFor($grn->supplier);
-        $inputVat = $this->account(self::INPUT_VAT);
-        $defaultInventory = $this->account(self::INVENTORY_ASSET);
-
-        if (! $payable) {
+        if ((float) $grn->total_amount <= 0) {
             return null;
         }
+
+        $payable = $this->activeOrRefuse($this->payableAccountFor($grn->supplier), 'Accounts Payable ('.self::PAYABLE.')');
+        $inputVat = (float) $grn->vat_amount > 0 ? $this->requireAccount(self::INPUT_VAT, 'Input VAT') : null;
+        $dimensions = ['project_id' => $grn->warehouse?->project_id, 'site_id' => $grn->warehouse?->site_id];
 
         $lines = [];
 
         foreach ($grn->lines as $line) {
-            $account = $line->item?->inventory_account_id
-                ? ChartOfAccount::find($line->item->inventory_account_id)
-                : null;
-            $account ??= $defaultInventory;
-
-            if (! $account || (float) $line->total_cost <= 0) {
+            if ((float) $line->total_cost <= 0) {
                 continue;
             }
+
+            $account = $this->lineAccount($line->item?->inventory_account_id, self::INVENTORY_ASSET, 'inventory account for '.($line->item?->label() ?? 'item'));
 
             $lines[] = [
                 'chart_of_account_id' => $account->id,
                 'description' => $line->item?->label(),
                 'debit' => (float) $line->total_cost,
                 'credit' => 0,
-                'project_id' => $grn->warehouse?->project_id,
-                'site_id' => $grn->warehouse?->site_id,
-            ];
+            ] + $dimensions;
         }
 
-        if ($inputVat && (float) $grn->vat_amount > 0) {
+        if ($inputVat) {
             $lines[] = [
                 'chart_of_account_id' => $inputVat->id,
                 'description' => 'Input VAT on '.$grn->grn_number,
                 'debit' => (float) $grn->vat_amount,
                 'credit' => 0,
-            ];
+            ] + $dimensions;
         }
 
         $lines[] = [
@@ -355,7 +327,7 @@ class PostingService
             'description' => $grn->supplier->name.' - '.$grn->grn_number,
             'debit' => 0,
             'credit' => (float) $grn->total_amount,
-        ];
+        ] + $dimensions;
 
         $entry = $this->createEntry([
             'journal_date' => $grn->received_date,
@@ -376,18 +348,17 @@ class PostingService
 
     /**
      * Stock issue: debit project material expense, credit inventory asset.
+     * Returns null only when the issue carries no value.
      */
     public function postStockIssue(\App\Models\StockIssue $issue, ?int $userId = null): ?JournalEntry
     {
         $issue->loadMissing('lines.item', 'warehouse');
 
-        $defaultInventory = $this->account(self::INVENTORY_ASSET);
-        $defaultExpense = $this->account(self::MATERIAL_EXPENSE);
-
-        if (! $defaultInventory || ! $defaultExpense || (float) $issue->total_cost <= 0) {
+        if ((float) $issue->total_cost <= 0) {
             return null;
         }
 
+        $dimensions = ['project_id' => $issue->project_id, 'site_id' => $issue->site_id];
         $lines = [];
 
         foreach ($issue->lines as $line) {
@@ -395,31 +366,23 @@ class PostingService
                 continue;
             }
 
-            $expense = $line->item?->expense_account_id
-                ? ChartOfAccount::find($line->item->expense_account_id)
-                : null;
-            $expense ??= $defaultExpense;
-
-            $inventory = $line->item?->inventory_account_id
-                ? ChartOfAccount::find($line->item->inventory_account_id)
-                : null;
-            $inventory ??= $defaultInventory;
+            $label = $line->item?->label() ?? 'item';
+            $expense = $this->lineAccount($line->item?->expense_account_id, self::MATERIAL_EXPENSE, 'expense account for '.$label);
+            $inventory = $this->lineAccount($line->item?->inventory_account_id, self::INVENTORY_ASSET, 'inventory account for '.$label);
 
             $lines[] = [
                 'chart_of_account_id' => $expense->id,
-                'description' => $line->item?->label(),
+                'description' => $label,
                 'debit' => (float) $line->total_cost,
                 'credit' => 0,
-                'project_id' => $issue->project_id,
-                'site_id' => $issue->site_id,
-            ];
+            ] + $dimensions;
 
             $lines[] = [
                 'chart_of_account_id' => $inventory->id,
-                'description' => $line->item?->label(),
+                'description' => $label,
                 'debit' => 0,
                 'credit' => (float) $line->total_cost,
-            ];
+            ] + $dimensions;
         }
 
         return $this->createEntry([
@@ -433,23 +396,22 @@ class PostingService
 
     /**
      * Stock adjustment loss: debit inventory adjustment expense, credit
-     * inventory asset. A gain reverses those two sides.
+     * inventory asset. A gain reverses those two sides. Returns null only
+     * when the adjustment has no value.
      */
     public function postStockAdjustment(\App\Models\StockAdjustment $adjustment, ?int $userId = null): ?JournalEntry
     {
-        $adjustment->loadMissing('item');
-
-        $inventory = $adjustment->item?->inventory_account_id
-            ? ChartOfAccount::find($adjustment->item->inventory_account_id)
-            : null;
-        $inventory ??= $this->account(self::INVENTORY_ASSET);
-        $adjustmentExpense = $this->account(self::INVENTORY_ADJUSTMENT_EXPENSE);
+        $adjustment->loadMissing('item', 'warehouse');
 
         $value = abs((float) $adjustment->adjustment_value);
 
-        if (! $inventory || ! $adjustmentExpense || $value <= 0) {
+        if ($value <= 0) {
             return null;
         }
+
+        $inventory = $this->lineAccount($adjustment->item?->inventory_account_id, self::INVENTORY_ASSET, 'inventory account for '.($adjustment->item?->label() ?? 'item'));
+        $adjustmentExpense = $this->requireAccount(self::INVENTORY_ADJUSTMENT_EXPENSE, 'Inventory Adjustment Expense');
+        $dimensions = ['project_id' => $adjustment->warehouse?->project_id, 'site_id' => $adjustment->warehouse?->site_id];
 
         $isLoss = $adjustment->isLoss();
 
@@ -459,13 +421,13 @@ class PostingService
                 'description' => 'Stock adjustment '.$adjustment->adjustment_number,
                 'debit' => $value,
                 'credit' => 0,
-            ],
+            ] + $dimensions,
             [
                 'chart_of_account_id' => $isLoss ? $inventory->id : $adjustmentExpense->id,
                 'description' => 'Stock adjustment '.$adjustment->adjustment_number,
                 'debit' => 0,
                 'credit' => $value,
-            ],
+            ] + $dimensions,
         ];
 
         return $this->createEntry([
@@ -595,7 +557,7 @@ class PostingService
             $period = $row->vat_period_id ? VatPeriod::find($row->vat_period_id) : null;
 
             if ($period && in_array($period->status, ['finalized', 'submitted'], true)) {
-                throw \Illuminate\Validation\ValidationException::withMessages([
+                throw ValidationException::withMessages([
                     'vat' => 'The VAT of this document belongs to '.$period->period_name.', which is already '.$period->status.'. It cannot be corrected; issue a credit note instead.',
                 ]);
             }
@@ -604,9 +566,19 @@ class PostingService
         VatTransaction::whereIn('id', $rows->pluck('id'))->delete();
     }
 
+    /** Human wording for the flash message after a document was posted. */
+    public function describe(JournalEntry $entry): string
+    {
+        return $entry->status === 'posted'
+            ? 'journal entry '.$entry->journal_number.' posted'
+            : 'journal entry '.$entry->journal_number.' created as a draft awaiting posting (review mode for this posting rule)';
+    }
+
     /**
      * Build a balanced journal entry. The matching posting rule decides whether
-     * it lands as a draft for review or is posted straight to the ledger.
+     * it lands as a draft for review or is posted straight to the ledger. An
+     * entry that is one-sided, unbalanced or uses a missing or inactive account
+     * is refused; nothing is written.
      */
     private function createEntry(array $header, array $lines, string $module, string $event, ?int $userId, ?bool $forcePost = null): JournalEntry
     {
@@ -615,15 +587,37 @@ class PostingService
             fn (array $line) => (float) ($line['debit'] ?? 0) > 0 || (float) ($line['credit'] ?? 0) > 0
         ));
 
+        if (count($lines) < 2) {
+            $this->refuse('Nothing to post: the accounting entry for '.($header['reference_number'] ?? $module).' would have fewer than two lines.');
+        }
+
+        $accounts = ChartOfAccount::whereKey(array_unique(array_column($lines, 'chart_of_account_id')))->get()->keyBy('id');
+
+        foreach ($lines as $line) {
+            $account = $accounts->get($line['chart_of_account_id']);
+
+            if (! $account) {
+                $this->refuse('An account used by this entry no longer exists in the chart of accounts.');
+            }
+
+            if ($account->status !== 'active') {
+                $this->refuse('Account '.$account->label().' is inactive. Activate it or map another account before posting.');
+            }
+        }
+
         $totalDebit = round(array_sum(array_column($lines, 'debit')), 2);
         $totalCredit = round(array_sum(array_column($lines, 'credit')), 2);
+
+        if (abs($totalDebit - $totalCredit) >= 0.01) {
+            $this->refuse('The accounting entry would not balance (debit '.number_format($totalDebit, 2).', credit '.number_format($totalCredit, 2).'). Nothing was posted.');
+        }
 
         $rule = AutomaticPostingRule::where('source_module', $module)
             ->where('trigger_event', $event)
             ->where('status', 'active')
             ->first();
 
-        $autoPost = ($forcePost ?? (bool) ($rule?->auto_post)) && abs($totalDebit - $totalCredit) < 0.01;
+        $autoPost = $forcePost ?? (bool) ($rule?->auto_post);
 
         return DB::transaction(function () use ($header, $lines, $totalDebit, $totalCredit, $autoPost, $userId) {
             $entry = JournalEntry::create($header + [
@@ -640,5 +634,48 @@ class PostingService
 
             return $entry;
         });
+    }
+
+    /** The account chosen on a document line, or the standard fallback; both must be active. */
+    private function lineAccount(?int $chosenId, string $fallbackCode, string $purpose): ChartOfAccount
+    {
+        if ($chosenId) {
+            return $this->activeOrRefuse(ChartOfAccount::find($chosenId), $purpose);
+        }
+
+        return $this->requireAccount($fallbackCode, $purpose);
+    }
+
+    private function requireAccount(string $code, string $purpose): ChartOfAccount
+    {
+        $account = $this->account($code);
+
+        if (! $account) {
+            $this->refuse('The chart of accounts has no '.$purpose.' account ('.$code.'). Set it up before posting.');
+        }
+
+        return $this->activeOrRefuse($account, $purpose);
+    }
+
+    private function activeOrRefuse(?ChartOfAccount $account, string $purpose): ChartOfAccount
+    {
+        if (! $account) {
+            $this->refuse('The '.$purpose.' is missing from the chart of accounts. Set it up before posting.');
+        }
+
+        if ($account->status !== 'active') {
+            $this->refuse('The '.$purpose.' '.$account->label().' is inactive. Activate it or map another account before posting.');
+        }
+
+        return $account;
+    }
+
+    /**
+     * Stop the business transaction. Callers run inside DB::transaction, so the
+     * document, its settlement rows and any stock movement roll back together.
+     */
+    private function refuse(string $message): never
+    {
+        throw ValidationException::withMessages(['posting' => $message]);
     }
 }

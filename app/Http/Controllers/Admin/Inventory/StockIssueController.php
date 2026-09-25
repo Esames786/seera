@@ -183,10 +183,11 @@ class StockIssueController extends Controller
                     'approved_by' => $request->user()->id,
                 ]);
 
+                // Refused postings roll the stock movement back too (F01).
                 $entry = $this->posting->postStockIssue($stock_issue->fresh('lines.item'), $request->user()->id);
 
                 $stock_issue->update([
-                    'accounting_posted' => (bool) $entry,
+                    'accounting_posted' => $entry?->status === 'posted',
                     'journal_entry_id' => $entry?->id,
                 ]);
             });

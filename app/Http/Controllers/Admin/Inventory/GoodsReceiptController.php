@@ -179,12 +179,14 @@ class GoodsReceiptController extends Controller
                 }
             }
 
+            // Refused postings roll the stock movement back too; a draft (review-mode)
+            // journal is reported truthfully as not yet posted (F01).
             $entry = $this->posting->postGoodsReceipt($goods_receipt, $request->user()->id);
 
             $goods_receipt->update([
                 'status' => 'posted',
                 'stock_updated' => true,
-                'accounting_posted' => (bool) $entry,
+                'accounting_posted' => $entry?->status === 'posted',
                 'journal_entry_id' => $entry?->id,
             ]);
 

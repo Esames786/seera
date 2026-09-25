@@ -171,10 +171,11 @@ class StockAdjustmentController extends Controller
                     'status' => 'posted',
                 ]);
 
+                // Refused postings roll the stock movement back too (F01).
                 $journal = $this->posting->postStockAdjustment($stock_adjustment->fresh('item'), $request->user()->id);
 
                 $stock_adjustment->update([
-                    'accounting_posted' => (bool) $journal,
+                    'accounting_posted' => $journal?->status === 'posted',
                     'journal_entry_id' => $journal?->id,
                 ]);
             });

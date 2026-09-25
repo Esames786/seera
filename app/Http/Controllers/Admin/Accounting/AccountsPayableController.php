@@ -141,13 +141,9 @@ class AccountsPayableController extends Controller
                 throw ValidationException::withMessages(['bill' => 'Only a draft supplier bill can be approved.']);
             }
 
+            // Posting refuses (and rolls this transaction back) when an account is missing,
+            // inactive or the entry would not balance (NR-30, F01): no half-approved bill.
             $entry = $this->posting->postSupplierBill($accounts_payable, $request->user()->id);
-
-            // Never approve without a ledger entry (client change request NR-30): a silent
-            // half-state would leave the bill unpaid but invisible to VAT and the dashboard.
-            if (! $entry) {
-                throw ValidationException::withMessages(['bill' => 'The bill could not be posted: the chart of accounts has no Accounts Payable (2100) or expense account. Set up the chart of accounts and approve again.']);
-            }
 
             $accounts_payable->update([
                 'status' => 'unpaid',
@@ -162,7 +158,7 @@ class AccountsPayableController extends Controller
         ActivityLog::record($request, 'Accounting', 'Approved supplier bill', $accounts_payable->bill_number);
 
         return redirect()->route('admin.accounting.accounts-payable.show', $accounts_payable)
-            ->with('status', 'Supplier bill approved and journal entry '.$entry->journal_number.' created.');
+            ->with('status', 'Supplier bill approved; '.$this->posting->describe($entry).'.');
     }
 
     /**
@@ -262,8 +258,9 @@ class AccountsPayableController extends Controller
                 'supplier_bill_id' => $accounts_payable->id,
             ]);
 
+            // A payment without its journal is refused and rolled back together (F01).
             $entry = $this->posting->postSupplierPayment($payment, $request->user()->id);
-            $payment->update(['journal_entry_id' => $entry?->id]);
+            $payment->update(['journal_entry_id' => $entry->id]);
 
             $accounts_payable->refreshPaymentStatus();
 
