@@ -35,7 +35,8 @@ class FinancialReportController extends Controller
 
     public function balanceSheet(Request $request): View|StreamedResponse
     {
-        $balances = $this->balances($request);
+        // A balance sheet is as-of the range end: openings plus everything posted before the range.
+        $balances = $this->balances($request, true);
 
         $assets = $this->section($balances, 'asset');
         $liabilities = $this->section($balances, 'liability');
@@ -103,7 +104,8 @@ class FinancialReportController extends Controller
 
     public function trialBalance(Request $request): View|StreamedResponse
     {
-        $rows = $this->movements($request)
+        // The trial balance is as-of too: prior posted movement counts (F06).
+        $rows = $this->movements($request, true)
             ->map(function ($row) {
                 $net = (float) $row['debit'] - (float) $row['credit'];
 
@@ -136,7 +138,16 @@ class FinancialReportController extends Controller
     {
         $cashAccountIds = ChartOfAccount::whereIn('account_code', [PostingService::CASH, PostingService::BANK])->pluck('id');
 
-        $opening = ChartOfAccount::whereIn('id', $cashAccountIds)->sum('opening_balance');
+        $opening = (float) ChartOfAccount::whereIn('id', $cashAccountIds)->sum('opening_balance');
+
+        // Cash held before the range belongs to the opening, not to the period's movement (F06).
+        if ($from = $this->period($request)->from) {
+            $prior = JournalEntryLine::whereIn('chart_of_account_id', $cashAccountIds)
+                ->whereHas('journalEntry', fn ($q) => $q->where('status', 'posted')->whereDate('journal_date', '<', $from->toDateString()))
+                ->selectRaw('COALESCE(SUM(debit), 0) as debit, COALESCE(SUM(credit), 0) as credit')
+                ->first();
+            $opening += (float) $prior->debit - (float) $prior->credit;
+        }
 
         $totals = JournalEntryLine::whereIn('chart_of_account_id', $cashAccountIds)
             ->whereHas('journalEntry', fn ($q) => $this->applyEntryFilters($q, $request))
@@ -219,15 +230,22 @@ class FinancialReportController extends Controller
         $projects = Project::with('customer')->orderBy('name')->get();
         $expenseIds = ChartOfAccount::where('account_type', 'expense')->pluck('id');
         $revenueIds = ChartOfAccount::where('account_type', 'revenue')->pluck('id');
+        $period = $this->period($request);
+        $inRange = fn ($query, string $column) => $query
+            ->when($period->from, fn ($q) => $q->whereDate($column, '>=', $period->from->toDateString()))
+            ->when($period->to, fn ($q) => $q->whereDate($column, '<=', $period->to->toDateString()));
+
+        // Net of reversals (F06): a reversed cost or revenue no longer counts, and the
+        // document totals follow the same date range as the ledger figures.
         $costs = JournalEntryLine::whereIn('chart_of_account_id', $expenseIds)
             ->whereHas('journalEntry', fn ($q) => $this->applyEntryFilters($q, $request))
-            ->groupBy('project_id')->selectRaw('project_id, COALESCE(SUM(debit), 0) as total')->pluck('total', 'project_id');
+            ->groupBy('project_id')->selectRaw('project_id, COALESCE(SUM(debit - credit), 0) as total')->pluck('total', 'project_id');
         $revenues = JournalEntryLine::whereIn('chart_of_account_id', $revenueIds)
             ->whereHas('journalEntry', fn ($q) => $this->applyEntryFilters($q, $request))
-            ->groupBy('project_id')->selectRaw('project_id, COALESCE(SUM(credit), 0) as total')->pluck('total', 'project_id');
-        $bills = SupplierBill::where('status', '!=', 'draft')
+            ->groupBy('project_id')->selectRaw('project_id, COALESCE(SUM(credit - debit), 0) as total')->pluck('total', 'project_id');
+        $bills = $inRange(SupplierBill::where('status', '!=', 'draft'), 'bill_date')
             ->groupBy('project_id')->selectRaw('project_id, COALESCE(SUM(total_amount), 0) as total')->pluck('total', 'project_id');
-        $invoices = CustomerInvoice::where('payment_status', '!=', 'draft')
+        $invoices = $inRange(CustomerInvoice::where('payment_status', '!=', 'draft'), 'invoice_date')
             ->groupBy('project_id')->selectRaw('project_id, COALESCE(SUM(total_amount), 0) as total')->pluck('total', 'project_id');
 
         $rows = $projects->map(function (Project $project) use ($costs, $revenues, $bills, $invoices) {
@@ -268,20 +286,33 @@ class FinancialReportController extends Controller
     /**
      * Posted debit/credit movement per account, honouring the report filters.
      */
-    private function movements(Request $request): Collection
+    private function movements(Request $request, bool $cumulative = false): Collection
     {
-        $totals = JournalEntryLine::query()
-            ->whereHas('journalEntry', fn ($q) => $this->applyEntryFilters($q, $request))
+        $dimensions = fn ($query) => $query
             ->when($request->filled('cost_center'), fn ($q) => $q->where('journal_entry_lines.cost_center_id', $request->integer('cost_center')))
             ->when($request->filled('project'), fn ($q) => $q->where('journal_entry_lines.project_id', $request->integer('project')))
-            ->when($request->filled('site'), fn ($q) => $q->where('journal_entry_lines.site_id', $request->integer('site')))
+            ->when($request->filled('site'), fn ($q) => $q->where('journal_entry_lines.site_id', $request->integer('site')));
+
+        $perAccount = fn ($query) => $query
             ->groupBy('chart_of_account_id')
             ->selectRaw('chart_of_account_id, COALESCE(SUM(debit), 0) as debit, COALESCE(SUM(credit), 0) as credit')
             ->get()
             ->keyBy('chart_of_account_id');
 
-        return ChartOfAccount::orderBy('account_code')->get()->map(function (ChartOfAccount $account) use ($totals) {
+        $totals = $perAccount($dimensions(JournalEntryLine::query()
+            ->whereHas('journalEntry', fn ($q) => $this->applyEntryFilters($q, $request))));
+
+        // As-of reports (balance sheet, trial balance) carry every posted movement
+        // before the range as part of the opening (F06). Period reports do not.
+        $period = $this->period($request);
+        $prior = $cumulative && $period->from
+            ? $perAccount($dimensions(JournalEntryLine::query()
+                ->whereHas('journalEntry', fn ($q) => $q->where('status', 'posted')->whereDate('journal_date', '<', $period->from->toDateString()))))
+            : collect();
+
+        return ChartOfAccount::orderBy('account_code')->get()->map(function (ChartOfAccount $account) use ($totals, $prior) {
             $movement = $totals->get($account->id);
+            $before = $prior->get($account->id);
             $opening = (float) $account->opening_balance;
 
             return [
@@ -289,8 +320,8 @@ class FinancialReportController extends Controller
                 'account_code' => $account->account_code,
                 'account_name' => $account->account_name,
                 'account_type' => $account->account_type,
-                'debit' => round((float) ($movement?->debit ?? 0) + ($account->normal_balance === 'debit' ? $opening : 0), 2),
-                'credit' => round((float) ($movement?->credit ?? 0) + ($account->normal_balance === 'credit' ? $opening : 0), 2),
+                'debit' => round((float) ($movement?->debit ?? 0) + (float) ($before?->debit ?? 0) + ($account->normal_balance === 'debit' ? $opening : 0), 2),
+                'credit' => round((float) ($movement?->credit ?? 0) + (float) ($before?->credit ?? 0) + ($account->normal_balance === 'credit' ? $opening : 0), 2),
             ];
         });
     }
@@ -298,9 +329,9 @@ class FinancialReportController extends Controller
     /**
      * Account balances signed toward each account type's normal side.
      */
-    private function balances(Request $request): Collection
+    private function balances(Request $request, bool $cumulative = false): Collection
     {
-        return $this->movements($request)->map(function ($row) {
+        return $this->movements($request, $cumulative)->map(function ($row) {
             $net = $row['debit'] - $row['credit'];
 
             return $row + [
