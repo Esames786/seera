@@ -8,8 +8,8 @@ Paste this into the existing GPT planning conversation. It updates the 24 Septem
 |---|---|
 | `origin/feature/seera-connected-workspaces-2026-09-23` | `8bb9065` — four new commits on top of `2d0f9d5` (below). Full suite 230 tests / 2,236 assertions passing. |
 | `main` | `9e295b7` (21 September release). Nothing from the feature branch is merged. |
-| Production server (`~/seera`, owner's terminal 25 Sep) | Code at **`2d0f9d5`** on the feature branch; the four new commits are **not pulled yet**. Migrations through `2026_09_23_000001` ran on 24 September. The live asset manifest serves `app-D3f81AIn.js`, a bundle built at 02:11 on 24 September that is **older than the branch's JavaScript** (it lacks the unsaved-navigation guard and the linked-account rendering); the new `public/build.zip` in `8bb9065` replaces it. |
-| Production database | Not queried from the development machine (no remote DB access is used from there). The owner runs the three read-only commands at the end of this note to report row counts and recent activity. |
+| Production server (`~/seera`, owner's terminal 25 Sep) | **Deployed at `7b4c7f7`** on the feature branch on 25 September: fast-forward from `2d0f9d5`, `migrate --force` reported nothing to migrate, `public/build.zip` re-extracted, `optimize`, `up`. Verified from outside afterwards: the live manifest serves `app-B6M69JbN.js`, `app-BS5RzxR6.css` and `erp-Bd96n4JM.css` (the new bundle) and the login page renders. The server keeps a local modification to `public/.htaccess` that must not be overwritten. |
+| Production database (owner's terminal, 25 Sep, read-only) | All migrations ran, latest batch 4 = `2026_09_23_000001`. Row counts: users 14, employees 1 (linked to a user 1, all have a salary structure), suppliers 1, customers 1, supplier bills 1, customer invoices 1, journal entries 2, chart of accounts 25, marketing leads 0, activity logs 84. Last data activity was 21 September by user 2 (Omar): supplier payment of SAR 30,000 on `Bill-001-2026` and **VAT period Q3 2026 finalized**; 22–24 September show logins only. This is a lightly used test dataset, not live books. |
 
 ## What changed on 24–25 September (all on the feature branch)
 
@@ -44,32 +44,14 @@ AP, AR, manual journals, VAT rows, cash/bank postings, stock-to-accounting hooks
 2. 1–9 October: Supplier/AP connected workspace, after the F04 decision; Approve, Pay and Reopen stay explicit.
 3. 10–16 October: Customer/AR workspace, then the all-required approval runtime as its own schema/runtime patch. 17–31 October: remaining Finance gaps, payroll-to-GL if commissioned, Arabic/RTL pass, freeze for the 31 October development target.
 
-## Deployment of the four commits (owner decides; from the guide §12)
+## Deployment record
 
-```bash
-cd ~/seera
-PHP=/opt/cpanel/ea-php83/root/usr/bin/php
-$PHP artisan down
-git fetch origin
-git checkout feature/seera-connected-workspaces-2026-09-23
-git pull --ff-only          # 2d0f9d5 -> 8bb9065
-$PHP artisan migrate --force  # expected: Nothing to migrate
-rm -rf public/build && mkdir -p public/build
-unzip -oq public/build.zip -d public/build
-$PHP artisan optimize
-$PHP artisan up
-```
+Deployed on 25 September with the guide's §12 steps (`down`, fetch, pull `2d0f9d5 → 7b4c7f7`, `migrate --force` = nothing to migrate, re-extract `public/build.zip` into `public/build`, `optimize`, `up`). Rollback if ever needed: `git checkout 2d0f9d5`, extract that commit's bundle the same way, `optimize`. No schema change was involved.
 
-Rollback: `git checkout 2d0f9d5`, extract that commit's `public/build.zip` the same way, `optimize`. No schema change.
+## Two observations from the database that affect the Finance plan
 
-## Database facts: run these on the server and paste the output
-
-```bash
-cd ~/seera; PHP=/opt/cpanel/ea-php83/root/usr/bin/php
-$PHP artisan migrate:status | tail -n 6
-$PHP artisan tinker --execute="echo 'users=',App\Models\User::count(),' employees=',App\Models\Employee::count(),' linked=',App\Models\Employee::whereNotNull('user_id')->count(),' no_structure=',App\Models\Employee::whereDoesntHave('salaryStructures')->count(),' suppliers=',App\Models\Supplier::count(),' customers=',App\Models\Customer::count(),' bills=',App\Models\SupplierBill::count(),' invoices=',App\Models\CustomerInvoice::count(),' journals=',App\Models\JournalEntry::count(),' coa=',App\Models\ChartOfAccount::count(),' leads=',App\Models\MarketingLead::count(),' logs=',App\Models\ActivityLog::count(),PHP_EOL;"
-$PHP artisan tinker --execute="App\Models\ActivityLog::latest('id')->limit(10)->get(['created_at','user_id','module','action','description'])->each(fn(\$l)=>print(\$l->created_at.' u'.\$l->user_id.' '.\$l->module.' '.\$l->action.' '.\$l->description.PHP_EOL));"
-```
+1. **VAT period Q3 2026 is already finalized** in the test data (21 September). With finding F03 a finalized period does not stop new postings, and the reopen-for-correction path refuses to withdraw VAT from a finalized period, so further September test transactions will behave oddly. Either treat everything entered so far as disposable test data to be cleared before UAT, or add a Super Admin "reopen period" action in the Finance correctness sprint. There is no such action today.
+2. The dataset is one employee, one supplier, one customer, one bill (paid 30,000), one invoice and two journals. The FIN-01…10 acceptance run needs a synthetic staging company with a documented chart of accounts and zero openings; it should not be run on top of this data.
 
 ## Security note for the owner (not for GPT)
 
