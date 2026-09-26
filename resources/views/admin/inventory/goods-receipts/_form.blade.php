@@ -100,8 +100,5 @@
         </div>
     </x-admin.form-section>
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.inventory.goods-receipts.index') }}">Cancel</a>
-        <button type="submit" class="btn primary">{{ $grn ? 'Update Goods Receipt' : 'Save Goods Receipt' }}</button>
-    </div>
+    <x-admin.form-actions :cancel="route('admin.inventory.goods-receipts.index')"/>
 </form>

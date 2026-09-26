@@ -9,9 +9,13 @@ use App\Models\Item;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderLine;
 use App\Models\Supplier;
+use App\Models\SupplierBill;
+use App\Models\SupplierBillGrnMatch;
 use App\Models\Warehouse;
 use App\Services\Accounting\PostingService;
 use App\Services\Inventory\StockService;
+use App\Support\SaveAction;
+use App\Support\Workspace\DocumentActivity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -75,15 +79,38 @@ class GoodsReceiptController extends Controller
 
         ActivityLog::record($request, 'Inventory', 'Created goods receipt', $grn->grn_number);
 
-        return redirect()->route('admin.inventory.goods-receipts.show', $grn)
-            ->with('status', 'Goods receipt "'.$grn->grn_number.'" saved. Post it to update warehouse stock and accounting.');
+        // Save stays on the receipt (where Post Stock lives) and remembers the origin; Save & Close returns to it.
+        return SaveAction::redirect($request, [
+            'stay' => route('admin.inventory.goods-receipts.show', [$grn, 'return_to' => SaveAction::returnTo($request)]),
+            'close' => route('admin.inventory.goods-receipts.index'),
+        ])->with('status', 'Goods receipt "'.$grn->grn_number.'" saved. Post it to update warehouse stock and accounting.');
     }
 
-    public function show(GoodsReceipt $goods_receipt): View
+    /**
+     * Light document workspace: identity header, source order, received lines
+     * with their F04 invoicing state, bill matches, journal and activity.
+     */
+    public function show(Request $request, GoodsReceipt $goods_receipt): View
     {
-        $goods_receipt->load(['lines.item.unit', 'supplier', 'warehouse', 'purchaseOrder', 'receiver', 'journalEntry.lines.account']);
+        $goods_receipt->load([
+            'lines.item.unit', 'lines.billMatches.bill', 'supplier', 'warehouse.project', 'warehouse.site',
+            'purchaseOrder.project', 'purchaseOrder.site', 'receiver', 'journalEntry.lines.account',
+        ]);
+        $user = $request->user();
 
-        return view('admin.inventory.goods-receipts.show', ['grn' => $goods_receipt]);
+        // Bills matched to this receipt, from the scoped bill query (a bill outside the viewer's scope is not listed).
+        $matches = $user->hasPermission('Accounts Payable', 'view')
+            ? SupplierBillGrnMatch::query()->where('goods_receipt_id', $goods_receipt->id)
+                ->whereIn('supplier_bill_id', SupplierBill::query()->select('id'))
+                ->with(['bill', 'goodsReceiptLine.item'])->orderBy('id')->get()
+            : null;
+
+        return view('admin.inventory.goods-receipts.show', [
+            'grn' => $goods_receipt,
+            'matches' => $matches,
+            'activity' => DocumentActivity::latest($user, [$goods_receipt->grn_number], ['Inventory', 'Accounting']),
+            'returnTo' => SaveAction::returnTo($request),
+        ]);
     }
 
     public function edit(GoodsReceipt $goods_receipt): View
@@ -113,8 +140,10 @@ class GoodsReceiptController extends Controller
 
         ActivityLog::record($request, 'Inventory', 'Updated goods receipt', $goods_receipt->grn_number);
 
-        return redirect()->route('admin.inventory.goods-receipts.show', $goods_receipt)
-            ->with('status', 'Goods receipt updated successfully.');
+        return SaveAction::redirect($request, [
+            'stay' => route('admin.inventory.goods-receipts.show', [$goods_receipt, 'return_to' => SaveAction::returnTo($request)]),
+            'close' => route('admin.inventory.goods-receipts.index'),
+        ])->with('status', 'Goods receipt updated successfully.');
     }
 
     public function destroy(Request $request, GoodsReceipt $goods_receipt): RedirectResponse
@@ -223,7 +252,7 @@ class GoodsReceiptController extends Controller
 
         ActivityLog::record($request, 'Inventory', 'Posted goods receipt', $goods_receipt->grn_number);
 
-        return redirect()->route('admin.inventory.goods-receipts.show', $goods_receipt)
+        return redirect()->route('admin.inventory.goods-receipts.show', [$goods_receipt, 'return_to' => SaveAction::returnTo($request)])
             ->with('status', 'Goods receipt posted. Warehouse stock and the stock ledger have been updated.');
     }
 

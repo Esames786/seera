@@ -10,6 +10,7 @@ use App\Models\PurchaseRequest;
 use App\Models\Site;
 use App\Models\Unit;
 use App\Models\Warehouse;
+use App\Support\Workspace\DocumentActivity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -66,11 +67,31 @@ class PurchaseRequestController extends Controller
             ->with('status', 'Purchase request "'.$pr->pr_number.'" created successfully.');
     }
 
-    public function show(PurchaseRequest $purchase_request): View
+    /**
+     * Light connected view: identity header, requested lines with what has been
+     * ordered so far, the orders raised from this request and its activity.
+     */
+    public function show(Request $request, PurchaseRequest $purchase_request): View
     {
-        $purchase_request->load(['lines.item', 'lines.unit', 'requester', 'approver', 'project', 'site', 'warehouse', 'purchaseOrders.supplier']);
+        $purchase_request->load([
+            'lines.item', 'lines.unit', 'requester', 'approver', 'project', 'site', 'warehouse',
+            'purchaseOrders.supplier', 'purchaseOrders.lines',
+        ]);
+        $user = $request->user();
 
-        return view('admin.inventory.purchase-requests.show', ['pr' => $purchase_request]);
+        // Ordered so far per item, from the (scoped) orders raised from this request.
+        $orderedByItem = $purchase_request->purchaseOrders
+            ->reject(fn ($order) => $order->status === 'cancelled')
+            ->flatMap(fn ($order) => $order->lines)
+            ->groupBy('item_id')
+            ->map(fn ($lines) => round((float) $lines->sum('quantity'), 3));
+
+        return view('admin.inventory.purchase-requests.show', [
+            'pr' => $purchase_request,
+            'orderedByItem' => $orderedByItem,
+            'canViewOrders' => $user->hasPermission('Purchase Orders', 'view'),
+            'activity' => DocumentActivity::latest($user, [$purchase_request->pr_number], ['Inventory']),
+        ]);
     }
 
     public function edit(PurchaseRequest $purchase_request): View
