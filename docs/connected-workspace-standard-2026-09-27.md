@@ -64,3 +64,23 @@ recommended conversion order. No conversion is started by this document.
 8. **Marketing Lead** light workspace; **Equipment** when the module is built.
 
 Batches 2 to 8 each ship with: List → View → Edit workspace navigation, per-panel permission checks, server-side parent verification, paged panels, Save-layer buttons on every editor, and tests mirroring the Employee workspace test set.
+
+## 5. Status log
+
+### Batch 2 — generic kit + Supplier pilot (27 September 2026)
+
+**Kit extracted from Employee (Employee unchanged in behaviour):**
+- `app/Support/Workspace/PanelDefinition.php` (key, title, permission module, view/write action), `WorkspacePanels` interface, `PanelSet` trait (visible panels, next panel).
+- `app/Http/Controllers/Concerns/ServesWorkspacePanels.php` (per-panel authorization, HTML-fragment JSON response). `EmployeeWorkspaceController` and `EmployeeWorkspacePanels` now use them.
+- `resources/js/workspace-related-panels.js` (generic panel loader/saver/actions, extracted from `employee-related-panels.js`, which is now a thin wrapper) and `resources/js/workspace.js` (generic tab navigation for `[data-workspace]`).
+- `x-admin.workspace-host` (related-panel host with its messages) and `x-admin.action-buttons` labels (`edit-label`, `delete-label`, `deactivate`).
+
+**Supplier workspace:**
+- List → View (read-only, no forms, panels rendered server-side with the latest 5 rows and "View all") → Edit / Manage (persistent header, Profile form with Save / Save & New / Save & Close / Cancel, lazily loaded panels: Projects, Purchase Orders, Goods Receipts, Supplier Bills, Payments & Balance, Accounting, Activity).
+- Panels and their permission: Projects (Suppliers view; link/unlink needs Suppliers edit + Projects view), Purchase Orders (Purchase Orders view), Goods Receipts (Goods Receipts view; "Create Supplier Bill" needs Accounts Payable create and reuses the F04 pre-filled bill form, returning to the supplier's receipts tab), Supplier Bills (Accounts Payable view; Edit draft needs edit, Record payment needs process; approve/pay/reopen stay on the bill page), Payments & Balance (Accounts Payable view), Accounting (Journal Entries view), Activity (Activity Logs view).
+- Scope: every panel query starts from a globally scoped model; header and payment totals come from the same scoped bill query, so hidden bills are neither listed nor counted. The header shows no money without Accounts Payable view.
+- Parent/child: the supplier in the URL is authoritative; a forged `supplier_id` in the body is refused; linking checks the project is visible; unlinking checks the project is linked to this supplier; only the Projects panel accepts writes.
+- Deactivate replaces delete for suppliers (documents and history are kept). The profile form inside the workspace no longer carries the project checklist (the panel manages links); the create form still does, and an update that does not submit the list keeps the existing links.
+- Tests: `tests/Feature/SupplierWorkspaceTest.php` (10 tests). Employee, F04, UX and supplier regression classes green.
+
+**Not done in this batch (by instruction):** Customer, Project, Item, Warehouse, Site, Equipment workspaces; approval runtime.

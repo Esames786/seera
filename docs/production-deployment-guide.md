@@ -497,3 +497,33 @@ $PHP artisan up
 To also drop the matching table and columns: `$PHP artisan migrate:rollback --step=1 --force`
 **only** while `2026_09_27_000001` is the last batch and no bill has been matched
 (the `supplier_bill_grn_matches` table is empty). Never use `migrate:fresh`.
+
+## 15. Accounting UX Batch 1 + Supplier workspace release (feature branch, 27 September)
+
+No migration, no seeder. The asset bundle **did change** (new workspace JavaScript
+and CSS), so `public/build.zip` must be extracted again.
+
+```bash
+cd ~/seera
+PHP=/opt/cpanel/ea-php83/root/usr/bin/php
+
+$PHP artisan down
+git fetch origin
+git checkout feature/seera-connected-workspaces-2026-09-23
+git pull --ff-only
+$PHP artisan migrate --force          # "Nothing to migrate" is expected
+rm -rf public/build && mkdir -p public/build
+unzip -oq public/build.zip -d public/build
+test -f public/build/manifest.json && echo "assets ok"
+$PHP artisan optimize
+$PHP artisan up
+```
+
+Post-release checks (read-only): Suppliers list shows View / Edit / Manage /
+Deactivate; a supplier's View page is read-only with the related sections; Edit /
+Manage shows the tabs and loads a panel on click; Employee edit workspace still
+switches sections and saves a related panel; Accounting forms show Save / Save &
+new / Save & close.
+
+Rollback: `git checkout ef5cc5b`, extract that commit's `public/build.zip` the same
+way, then `$PHP artisan optimize`. No database rollback is needed.
