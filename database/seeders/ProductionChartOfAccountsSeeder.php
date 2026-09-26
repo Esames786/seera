@@ -34,6 +34,7 @@ class ProductionChartOfAccountsSeeder extends Seeder
         ]],
         ['2000', 'Liabilities', 'liability', 'credit', [
             ['2100', 'Accounts Payable', 'liability', 'credit', []],
+            ['2150', 'Goods Received Not Invoiced', 'liability', 'credit', []],
             ['2200', 'VAT Payable', 'liability', 'credit', [
                 ['2210', 'Output VAT', 'liability', 'credit', []],
             ]],
@@ -64,7 +65,7 @@ class ProductionChartOfAccountsSeeder extends Seeder
     public const POSTING_RULES = [
         ['Payroll', 'Payroll Approved', '5100', '2300', 'Employee Project / Department', true, true, 'Salary expense against salary payable when a payroll run is approved.'],
         ['Site Expense', 'Site Expense Approved', '5200', '1110', 'Selected Project / Site', false, true, 'Expense category linked account against cash when a site expense is approved.'],
-        ['Inventory', 'Inventory Purchase', '1400', '2100', 'Warehouse / Project', true, false, 'Inventory asset and input VAT against accounts payable when a goods receipt is posted.'],
+        ['Inventory', 'Inventory Purchase', '1400', '2150', 'Warehouse / Project', true, false, 'Inventory asset against Goods Received Not Invoiced when a goods receipt is posted; the matched supplier bill clears GRNI and records input VAT against accounts payable.'],
         ['Inventory', 'Stock Issued', '5200', '1400', 'Selected Project / Site', true, false, 'Project material expense against inventory asset when stock is issued.'],
         ['Inventory', 'Stock Adjusted', '5600', '1400', 'Warehouse / Project', true, false, 'Inventory adjustment expense against inventory asset on a stock loss. A gain reverses the sides.'],
         ['Customer Invoice', 'Invoice Approved', '1200', '4100', 'Invoice Project', true, false, 'Accounts receivable against revenue and output VAT when an invoice is approved.'],

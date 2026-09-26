@@ -99,12 +99,21 @@
 
     <x-admin.data-table title="Bill Lines">
         <thead>
-            <tr><th>Description</th><th>Category</th><th>Account</th><th>Qty</th><th>Unit Price</th><th>Taxable</th><th>VAT</th><th>Total</th></tr>
+            <tr><th>Description</th><th>Received Goods</th><th>Category</th><th>Account</th><th>Qty</th><th>Unit Price</th><th>Taxable</th><th>VAT</th><th>Total</th></tr>
         </thead>
         <tbody>
             @forelse ($bill->lines as $line)
                 <tr>
                     <td>{{ $line->description }}</td>
+                    <td>
+                        @if ($line->grnMatch)
+                            <a href="{{ route('admin.inventory.goods-receipts.show', $line->grnMatch->goods_receipt_id) }}">{{ $line->grnMatch->goodsReceipt?->grn_number }}</a>
+                            × {{ rtrim(rtrim(number_format($line->grnMatch->matched_quantity, 3), '0'), '.') }}
+                            (accrued SAR {{ number_format($line->grnMatch->matched_taxable_amount, 2) }})
+                        @else
+                            <span class="small">Direct / service</span>
+                        @endif
+                    </td>
                     <td>{{ $line->expenseCategory?->name ?? '-' }}</td>
                     <td>{{ $line->account?->label() ?? '-' }}</td>
                     <td>{{ number_format($line->quantity, 2) }}</td>
@@ -114,7 +123,7 @@
                     <td><strong>{{ number_format($line->total_amount, 2) }}</strong></td>
                 </tr>
             @empty
-                <tr><td colspan="8" class="table-empty">No lines on this bill.</td></tr>
+                <tr><td colspan="9" class="table-empty">No lines on this bill.</td></tr>
             @endforelse
         </tbody>
     </x-admin.data-table>

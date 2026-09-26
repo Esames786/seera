@@ -43,4 +43,10 @@ class SupplierBillLine extends Model
     {
         return $this->belongsTo(CostCenter::class);
     }
+
+    /** The received goods this line invoices, when it is not a direct/service line. */
+    public function grnMatch()
+    {
+        return $this->hasOne(SupplierBillGrnMatch::class);
+    }
 }

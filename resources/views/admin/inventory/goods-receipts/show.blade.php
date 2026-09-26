@@ -11,6 +11,8 @@
                 @csrf
                 <button type="submit" class="btn primary">Post Stock</button>
             </form>
+        @elseif ($grn->status === 'posted' && $grn->lines->contains(fn ($line) => $line->uninvoicedQuantity() > 0) && auth()->user()?->hasPermission('Accounts Payable', 'create'))
+            <a class="btn primary" href="{{ route('admin.accounting.accounts-payable.create', ['goods_receipt' => $grn->id]) }}">Create Supplier Bill</a>
         @endif
     </x-admin.page-header>
 
@@ -20,7 +22,7 @@
 
     <div class="card-grid">
         <x-admin.metric-card color="blue" :value="'SAR '.number_format($grn->taxable_amount, 2)" label="Taxable Amount"/>
-        <x-admin.metric-card color="yellow" :value="'SAR '.number_format($grn->vat_amount, 2)" label="Input VAT"/>
+        <x-admin.metric-card color="yellow" :value="'SAR '.number_format($grn->vat_amount, 2)" label="Expected VAT (recorded on the supplier bill)"/>
         <x-admin.metric-card color="cyan" :value="'SAR '.number_format($grn->total_amount, 2)" label="Total Amount"/>
         <x-admin.metric-card :color="$grn->stock_updated ? 'green' : 'yellow'" :value="$grn->stock_updated ? 'Updated' : 'Pending'" label="Stock Status"/>
     </div>
@@ -72,7 +74,7 @@
 
     <x-admin.data-table title="Received Lines">
         <thead>
-            <tr><th>Item</th><th>Unit</th><th>Ordered</th><th>Received</th><th>Accepted</th><th>Rejected</th><th>Unit Cost</th><th>Total Cost</th></tr>
+            <tr><th>Item</th><th>Unit</th><th>Ordered</th><th>Received</th><th>Accepted</th><th>Rejected</th><th>Invoiced</th><th>Unit Cost</th><th>Total Cost</th></tr>
         </thead>
         <tbody>
             @forelse ($grn->lines as $line)
@@ -83,11 +85,12 @@
                     <td>{{ rtrim(rtrim(number_format($line->received_quantity, 3), '0'), '.') }}</td>
                     <td><strong>{{ rtrim(rtrim(number_format($line->accepted_quantity, 3), '0'), '.') }}</strong></td>
                     <td>{{ rtrim(rtrim(number_format($line->rejected_quantity, 3), '0'), '.') }}</td>
+                    <td title="Accepted quantity already covered by an approved supplier bill">{{ rtrim(rtrim(number_format($line->invoiced_quantity, 3), '0'), '.') }}</td>
                     <td>SAR {{ number_format($line->unit_cost, 2) }}</td>
                     <td><strong>SAR {{ number_format($line->total_cost, 2) }}</strong></td>
                 </tr>
             @empty
-                <tr><td colspan="8" class="table-empty">No lines on this goods receipt.</td></tr>
+                <tr><td colspan="9" class="table-empty">No lines on this goods receipt.</td></tr>
             @endforelse
         </tbody>
     </x-admin.data-table>

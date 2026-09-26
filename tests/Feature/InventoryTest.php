@@ -333,7 +333,15 @@ class InventoryTest extends TestCase
         $this->assertNotNull($entry);
         $this->assertSame('Inventory', $entry->source_module);
         $this->assertTrue($entry->isBalanced());
-        $this->assertEqualsWithDelta((float) $grn->total_amount, (float) $entry->total_credit, 0.02);
+
+        // F04: the receipt accrues its goods value to GRNI; VAT and the supplier payable
+        // are recorded once, on the matched supplier bill.
+        $this->assertEqualsWithDelta((float) $grn->taxable_amount, (float) $entry->total_credit, 0.02);
+        $codes = $entry->lines()->with('account')->get()->mapWithKeys(fn ($l) => [$l->account->account_code => [(float) $l->debit, (float) $l->credit]]);
+        $this->assertEqualsWithDelta((float) $grn->taxable_amount, $codes['2150'][1] ?? 0, 0.02, 'credit to Goods Received Not Invoiced');
+        $this->assertArrayNotHasKey('2100', $codes->all(), 'no accounts payable on a receipt');
+        $this->assertArrayNotHasKey('1300', $codes->all(), 'no input VAT on a receipt');
+        $this->assertSame(0, \App\Models\VatTransaction::where('source_module', 'Goods Receipt')->where('source_id', $grn->id)->count());
     }
 
     public function test_stock_issue_decreases_warehouse_stock(): void

@@ -4,6 +4,7 @@
     $order = $order ?? null;
     $prefill = $order?->lines->map(fn ($line) => [
         'item_id' => $line->item_id,
+        'purchase_order_line_id' => $line->id,
         'ordered_quantity' => (float) $line->quantity,
         'received_quantity' => $line->outstandingQuantity(),
         'accepted_quantity' => $line->outstandingQuantity(),
@@ -11,6 +12,7 @@
     ])->all() ?? [];
     $lineData = old('lines', $grn?->lines->map(fn ($line) => [
         'item_id' => $line->item_id,
+        'purchase_order_line_id' => $line->purchase_order_line_id,
         'ordered_quantity' => (float) $line->ordered_quantity,
         'received_quantity' => (float) $line->received_quantity,
         'accepted_quantity' => (float) $line->accepted_quantity,
@@ -75,6 +77,7 @@
                         @php $line = $lineData[$i] ?? []; @endphp
                         <tr>
                             <td>
+                                <input type="hidden" name="lines[{{ $i }}][purchase_order_line_id]" value="{{ $line['purchase_order_line_id'] ?? '' }}"/>
                                 <select name="lines[{{ $i }}][item_id]" class="select">
                                     <option value="">Select item...</option>
                                     @foreach ($items as $item)
@@ -93,6 +96,7 @@
         </div>
         <div class="small" style="margin-top:10px">
             Accepted quantity is what enters stock. Anything received but not accepted is recorded as rejected. Leave accepted blank to accept the full received quantity.
+            When a purchase order is selected, every line must be on that order and cannot exceed the quantity still outstanding.
         </div>
     </x-admin.form-section>
 

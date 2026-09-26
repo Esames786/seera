@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\GoodsReceipt;
 use App\Models\Item;
 use App\Models\PurchaseOrder;
+use App\Models\PurchaseOrderLine;
 use App\Models\Supplier;
 use App\Models\Warehouse;
 use App\Services\Accounting\PostingService;
@@ -152,7 +153,33 @@ class GoodsReceiptController extends Controller
             if ($goods_receipt->status !== 'draft') {
                 throw ValidationException::withMessages(['grn' => 'This goods receipt is already posted.']);
             }
-            $goods_receipt->load('lines.item', 'warehouse', 'purchaseOrder.lines');
+            $goods_receipt->load('lines.item', 'warehouse');
+
+            // Receiving against an order: lock the order lines and re-check the outstanding
+            // quantity now, so two receipts posted at once cannot both over-deliver (F04).
+            $order = $goods_receipt->purchase_order_id
+                ? PurchaseOrder::whereKey($goods_receipt->purchase_order_id)->lockForUpdate()->first()
+                : null;
+            $orderLineFor = [];
+
+            if ($order) {
+                $this->assertOrderReceivable($order, (int) $goods_receipt->supplier_id, 'grn');
+                $orderLines = $order->lines()->lockForUpdate()->get();
+                $acceptedPerLine = [];
+
+                foreach ($goods_receipt->lines as $line) {
+                    $orderLine = $this->orderLineFor($order, $orderLines, $line->toArray(), 'grn');
+                    $orderLineFor[$line->id] = $orderLine;
+                    $acceptedPerLine[$orderLine->id] = round(($acceptedPerLine[$orderLine->id] ?? 0) + (float) $line->accepted_quantity, 3);
+
+                    if ($acceptedPerLine[$orderLine->id] > $orderLine->outstandingQuantity() + 0.0005) {
+                        throw ValidationException::withMessages(['grn' => sprintf(
+                            'Purchase order %s has only %s of %s outstanding (another receipt was posted first); this receipt accepts %s. Nothing was posted.',
+                            $order->po_number, $this->qty($orderLine->outstandingQuantity()), $line->item?->label() ?? 'item', $this->qty($acceptedPerLine[$orderLine->id])
+                        )]);
+                    }
+                }
+            }
 
             foreach ($goods_receipt->lines as $line) {
                 $accepted = (float) $line->accepted_quantity;
@@ -172,10 +199,11 @@ class GoodsReceiptController extends Controller
                     'created_by' => $request->user()->id,
                 ]);
 
-                if ($goods_receipt->purchase_order_id) {
-                    $goods_receipt->purchaseOrder?->lines()
-                        ->where('item_id', $line->item_id)
-                        ->first()?->increment('received_quantity', $accepted);
+                if ($orderLine = $orderLineFor[$line->id] ?? null) {
+                    $orderLine->increment('received_quantity', $accepted);
+                    if ((int) $line->purchase_order_line_id !== (int) $orderLine->id) {
+                        $line->update(['purchase_order_line_id' => $orderLine->id]);
+                    }
                 }
             }
 
@@ -190,7 +218,7 @@ class GoodsReceiptController extends Controller
                 'journal_entry_id' => $entry?->id,
             ]);
 
-            $goods_receipt->purchaseOrder?->refreshReceiptStatus();
+            $order?->refreshReceiptStatus();
         });
 
         ActivityLog::record($request, 'Inventory', 'Posted goods receipt', $goods_receipt->grn_number);
@@ -215,6 +243,7 @@ class GoodsReceiptController extends Controller
             'notes' => ['nullable', 'string'],
             'lines' => ['required', 'array', 'min:1'],
             'lines.*.item_id' => ['nullable', 'exists:items,id'],
+            'lines.*.purchase_order_line_id' => ['nullable', 'integer'],
             'lines.*.ordered_quantity' => ['nullable', 'numeric', 'min:0'],
             'lines.*.received_quantity' => ['nullable', 'numeric', 'min:0'],
             'lines.*.accepted_quantity' => ['nullable', 'numeric', 'min:0'],
@@ -233,6 +262,7 @@ class GoodsReceiptController extends Controller
 
                 return [
                     'item_id' => $line['item_id'],
+                    'purchase_order_line_id' => filled($line['purchase_order_line_id'] ?? null) ? (int) $line['purchase_order_line_id'] : null,
                     'ordered_quantity' => (float) ($line['ordered_quantity'] ?? 0),
                     'received_quantity' => $received,
                     'accepted_quantity' => $accepted,
@@ -244,6 +274,12 @@ class GoodsReceiptController extends Controller
 
         if ($lines === []) {
             throw ValidationException::withMessages(['lines' => 'Add at least one line with an item and a received quantity.']);
+        }
+
+        if (! empty($data['purchase_order_id'])) {
+            $lines = $this->linesAgainstOrder((int) $data['purchase_order_id'], (int) $data['supplier_id'], $lines);
+        } else {
+            $lines = array_map(fn ($line) => ['purchase_order_line_id' => null] + $line, $lines);
         }
 
         $taxable = round(array_sum(array_column($lines, 'total_cost')), 2);
@@ -259,6 +295,84 @@ class GoodsReceiptController extends Controller
         ];
 
         return [$data, $lines];
+    }
+
+    /**
+     * A receipt against a purchase order may only deliver items on that order, from that
+     * supplier, while the order is open, and never more than is still outstanding (F04).
+     *
+     * @param  array<int, array<string, mixed>>  $lines
+     * @return array<int, array<string, mixed>>
+     */
+    private function linesAgainstOrder(int $orderId, int $supplierId, array $lines): array
+    {
+        $order = PurchaseOrder::with('lines')->find($orderId);
+        if (! $order) {
+            throw ValidationException::withMessages(['purchase_order_id' => 'The selected purchase order is not available to your account.']);
+        }
+
+        $this->assertOrderReceivable($order, $supplierId, 'lines');
+        $receivedPerLine = [];
+
+        foreach ($lines as &$line) {
+            $orderLine = $this->orderLineFor($order, $order->lines, $line, 'lines');
+            $line['purchase_order_line_id'] = $orderLine->id;
+            if ((float) $line['ordered_quantity'] <= 0) {
+                $line['ordered_quantity'] = (float) $orderLine->quantity;
+            }
+
+            $receivedPerLine[$orderLine->id] = round(($receivedPerLine[$orderLine->id] ?? 0) + (float) $line['received_quantity'], 3);
+            if ($receivedPerLine[$orderLine->id] > $orderLine->outstandingQuantity() + 0.0005) {
+                throw ValidationException::withMessages(['lines' => sprintf(
+                    'Purchase order %s has only %s of %s outstanding; this receipt records %s. Reduce the received quantity or raise the order.',
+                    $order->po_number, $this->qty($orderLine->outstandingQuantity()), $orderLine->item?->label() ?? 'item', $this->qty($receivedPerLine[$orderLine->id])
+                )]);
+            }
+        }
+        unset($line);
+
+        return $lines;
+    }
+
+    private function assertOrderReceivable(PurchaseOrder $order, int $supplierId, string $errorKey): void
+    {
+        if (! $order->canReceive()) {
+            throw ValidationException::withMessages([$errorKey => 'Purchase order '.$order->po_number.' is '.str_replace('_', ' ', $order->status).' and cannot receive goods.']);
+        }
+        if ((int) $order->supplier_id !== $supplierId) {
+            throw ValidationException::withMessages([$errorKey => 'Purchase order '.$order->po_number.' belongs to '.($order->supplier?->name ?? 'another supplier').', not to the supplier on this receipt.']);
+        }
+    }
+
+    /** Resolve the order line a receipt line delivers: by line id, or by item when unambiguous. */
+    private function orderLineFor(PurchaseOrder $order, \Illuminate\Support\Collection $orderLines, array $line, string $errorKey): PurchaseOrderLine
+    {
+        $item = Item::find($line['item_id'] ?? null);
+        $label = $item?->label() ?? 'item';
+
+        if (! empty($line['purchase_order_line_id'])) {
+            $orderLine = $orderLines->firstWhere('id', (int) $line['purchase_order_line_id']);
+            if (! $orderLine || (int) $orderLine->item_id !== (int) ($line['item_id'] ?? 0)) {
+                throw ValidationException::withMessages([$errorKey => 'The line for '.$label.' does not belong to purchase order '.$order->po_number.'.']);
+            }
+
+            return $orderLine;
+        }
+
+        $candidates = $orderLines->where('item_id', (int) ($line['item_id'] ?? 0));
+        if ($candidates->count() === 1) {
+            return $candidates->first();
+        }
+        if ($candidates->isEmpty()) {
+            throw ValidationException::withMessages([$errorKey => $label.' is not on purchase order '.$order->po_number.'.']);
+        }
+
+        throw ValidationException::withMessages([$errorKey => $label.' appears on more than one line of purchase order '.$order->po_number.'; create the receipt from the order so each line is matched.']);
+    }
+
+    private function qty(float $value): string
+    {
+        return rtrim(rtrim(number_format($value, 3, '.', ''), '0'), '.');
     }
 
     private function formOptions(): array

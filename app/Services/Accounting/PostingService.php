@@ -46,6 +46,9 @@ class PostingService
 
     public const PAYABLE = '2100';
 
+    /** Goods Received Not Invoiced: the accrual a posted GRN carries until its supplier bill is matched (F04). */
+    public const GRNI = '2150';
+
     public const OUTPUT_VAT = '2210';
 
     public const SALARY_PAYABLE = '2300';
@@ -80,23 +83,55 @@ class PostingService
      */
     public function postSupplierBill(SupplierBill $bill, ?int $userId = null): JournalEntry
     {
-        $bill->loadMissing('lines', 'supplier');
+        $bill->loadMissing('lines.grnMatch', 'supplier');
 
         $payable = $this->activeOrRefuse($this->payableAccountFor($bill->supplier), 'Accounts Payable ('.self::PAYABLE.')');
         $inputVat = (float) $bill->vat_amount > 0 ? $this->requireAccount(self::INPUT_VAT, 'Input VAT') : null;
+        $grni = $bill->lines->contains(fn ($line) => $line->grnMatch !== null)
+            ? $this->requireAccount(self::GRNI, 'Goods Received Not Invoiced')
+            : null;
         $dimensions = ['project_id' => $bill->project_id, 'site_id' => $bill->site_id];
 
         $lines = [];
 
         foreach ($bill->lines as $line) {
             $account = $this->lineAccount($line->chart_of_account_id, self::MATERIAL_EXPENSE, 'expense account on bill line "'.$line->description.'"');
+            $costCenter = $line->cost_center_id ?? $bill->cost_center_id;
+
+            // A line invoicing received goods clears the GRNI accrual at the receipt's cost (F04).
+            // Any difference between the invoiced price and the receipt cost is a price
+            // variance on the line's expense account; the inventory value is not restated.
+            if ($match = $line->grnMatch) {
+                $accrued = (float) $match->matched_taxable_amount;
+                $variance = round((float) $line->taxable_amount - $accrued, 2);
+
+                $lines[] = [
+                    'chart_of_account_id' => $grni->id,
+                    'description' => 'GRNI cleared: '.$line->description,
+                    'debit' => $accrued,
+                    'credit' => 0,
+                    'cost_center_id' => $costCenter,
+                ] + $dimensions;
+
+                if (abs($variance) >= 0.01) {
+                    $lines[] = [
+                        'chart_of_account_id' => $account->id,
+                        'description' => 'Price variance: '.$line->description,
+                        'debit' => $variance > 0 ? $variance : 0,
+                        'credit' => $variance < 0 ? -$variance : 0,
+                        'cost_center_id' => $costCenter,
+                    ] + $dimensions;
+                }
+
+                continue;
+            }
 
             $lines[] = [
                 'chart_of_account_id' => $account->id,
                 'description' => $line->description,
                 'debit' => (float) $line->taxable_amount,
                 'credit' => 0,
-                'cost_center_id' => $line->cost_center_id ?? $bill->cost_center_id,
+                'cost_center_id' => $costCenter,
             ] + $dimensions;
         }
 
@@ -293,15 +328,10 @@ class PostingService
     {
         $grn->loadMissing('lines.item', 'supplier', 'warehouse');
 
-        if ((float) $grn->total_amount <= 0) {
-            return null;
-        }
-
-        $payable = $this->activeOrRefuse($this->payableAccountFor($grn->supplier), 'Accounts Payable ('.self::PAYABLE.')');
-        $inputVat = (float) $grn->vat_amount > 0 ? $this->requireAccount(self::INPUT_VAT, 'Input VAT') : null;
         $dimensions = ['project_id' => $grn->warehouse?->project_id, 'site_id' => $grn->warehouse?->site_id];
 
         $lines = [];
+        $accrued = 0.0;
 
         foreach ($grn->lines as $line) {
             if ((float) $line->total_cost <= 0) {
@@ -316,39 +346,31 @@ class PostingService
                 'debit' => (float) $line->total_cost,
                 'credit' => 0,
             ] + $dimensions;
+            $accrued = round($accrued + (float) $line->total_cost, 2);
         }
 
-        if ($inputVat) {
-            $lines[] = [
-                'chart_of_account_id' => $inputVat->id,
-                'description' => 'Input VAT on '.$grn->grn_number,
-                'debit' => (float) $grn->vat_amount,
-                'credit' => 0,
-            ] + $dimensions;
+        if ($accrued <= 0) {
+            return null;
         }
+
+        // The receipt accrues to Goods Received Not Invoiced. Supplier accounts payable and
+        // input VAT are recognised once, on the matched supplier bill (F04).
+        $grni = $this->requireAccount(self::GRNI, 'Goods Received Not Invoiced');
 
         $lines[] = [
-            'chart_of_account_id' => $payable->id,
-            'description' => $grn->supplier->name.' - '.$grn->grn_number,
+            'chart_of_account_id' => $grni->id,
+            'description' => 'GRNI accrual: '.$grn->supplier->name.' - '.$grn->grn_number,
             'debit' => 0,
-            'credit' => (float) $grn->total_amount,
+            'credit' => $accrued,
         ] + $dimensions;
 
-        $entry = $this->createEntry([
+        return $this->createEntry([
             'journal_date' => $grn->received_date,
             'reference_number' => $grn->grn_number,
             'source_module' => 'Inventory',
             'source_id' => $grn->id,
             'description' => 'Goods receipt '.$grn->grn_number.' - '.$grn->supplier->name,
         ], $lines, 'Inventory', 'Inventory Purchase', $userId);
-
-        $this->recordVat(
-            'input', $grn->vat_amount, $grn->taxable_amount, $grn->vat_rate,
-            $grn->received_date, 'Goods Receipt', $grn->id, $grn->grn_number,
-            'supplier', $grn->supplier_id, $grn->supplier->name
-        );
-
-        return $entry;
     }
 
     /**

@@ -33,9 +33,10 @@ use Tests\TestCase;
  * the action taken, the expected status, debit/credit lines, VAT impact, ledger
  * and report impact and the audit log entry, and asserts each of them.
  *
- * FIN-08 covers the inventory half only: the reconciliation of a supplier bill to
- * a posted GRN is BLOCKED by the F04 model decision. FIN-09 covers permission
- * and scope only: a multi-approver runtime does not exist yet (BLOCKED).
+ * FIN-08 follows the F04 GRNI model: the receipt accrues to Goods Received Not
+ * Invoiced and the matched supplier bill clears it with one payable and one VAT
+ * event. FIN-09 covers permission and scope only: a multi-approver runtime does
+ * not exist yet (BLOCKED).
  * These tests prove system behaviour on synthetic data; they are not a client
  * acceptance.
  */
@@ -513,7 +514,7 @@ class FinanceAcceptanceScenariosTest extends TestCase
 
     // ------------------------------------------------------------------ FIN-08
 
-    public function test_fin08_goods_receipt_and_issue_move_inventory_and_vat_once_but_bill_reconciliation_is_blocked(): void
+    public function test_fin08_goods_receipt_issue_and_matched_bill_carry_one_liability_and_one_vat(): void
     {
         $inventoryBefore = $this->movementToday(PostingService::INVENTORY_ASSET);
         $payableBefore = $this->movementToday(PostingService::PAYABLE);
@@ -536,14 +537,17 @@ class FinanceAcceptanceScenariosTest extends TestCase
         $grn = GoodsReceipt::where('delivery_note_number', 'DN-FIN08')->firstOrFail();
         $this->actingAs($this->admin())->post(route('admin.inventory.goods-receipts.post-stock', $grn))->assertSessionHasNoErrors();
 
-        // Expected: stock 10 / 1,000; Dr Inventory 1,000 / Dr Input VAT 150 / Cr AP 1,150; one VAT row.
+        // Expected (F04 GRNI model): stock 10 / 1,000; Dr Inventory 1,000 / Cr GRNI 1,000;
+        // no supplier payable and no VAT row at receipt stage.
+        $grniBefore = $this->movementToday(PostingService::GRNI);
         $stock = WarehouseStock::where('item_id', $item->id)->where('warehouse_id', $warehouse->id)->firstOrFail();
         $this->assertSame(10.0, (float) $stock->quantity);
         $this->assertSame(1000.0, (float) $stock->total_value);
         $this->assertSame(round($inventoryBefore + 1000, 2), $this->movementToday(PostingService::INVENTORY_ASSET));
-        $this->assertSame(round($payableBefore - 1150, 2), $this->movementToday(PostingService::PAYABLE));
-        $this->assertSame(round($inputVatBefore + 150, 2), $this->movementToday(PostingService::INPUT_VAT));
-        $this->assertCount(1, $this->vatRows('Goods Receipt', $grn->id));
+        $this->assertSame(['1400' => [1000.0, 0.0], '2150' => [0.0, 1000.0]], $this->linesOf($grn->fresh()->journalEntry));
+        $this->assertSame($payableBefore, $this->movementToday(PostingService::PAYABLE), 'no payable on a receipt');
+        $this->assertSame($inputVatBefore, $this->movementToday(PostingService::INPUT_VAT), 'no input VAT on a receipt');
+        $this->assertCount(0, $this->vatRows('Goods Receipt', $grn->id));
         $vatCount = VatTransaction::count();
 
         // Action: issue 3 units to a project.
@@ -562,10 +566,37 @@ class FinanceAcceptanceScenariosTest extends TestCase
         $this->assertSame(round($expenseBefore + 300, 2), $this->movementToday(PostingService::MATERIAL_EXPENSE));
         $this->assertSame($vatCount, VatTransaction::count(), 'no VAT on an issue');
 
-        // BLOCKED (F04): a supplier bill for the same delivery would post a second AP liability and a
-        // second input VAT row today. That reconciliation is not asserted here; it needs the
-        // GRN-vs-bill model decision first (see docs/finance-acceptance-2026-09-26.md, FIN-08).
+        // Action: the supplier's invoice for the same delivery, matched to the receipt line (F04).
+        $grnLine = $grn->lines()->firstOrFail();
+        $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.store'), [
+            'supplier_id' => Supplier::firstOrFail()->id, 'bill_number' => 'BILL-FIN08', 'bill_date' => $this->today(),
+            'due_date' => now()->addDays(30)->toDateString(), 'vat_rate' => 15,
+            'lines' => [['description' => 'Cement bags', 'goods_receipt_line_id' => $grnLine->id, 'matched_quantity' => 10, 'quantity' => 10, 'unit_price' => 100]],
+        ])->assertSessionHasNoErrors();
+        $bill = SupplierBill::where('bill_number', 'BILL-FIN08')->firstOrFail();
+        $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.approve', $bill))->assertSessionHasNoErrors();
+
+        // Expected: Dr GRNI 1,000 / Dr Input VAT 150 / Cr AP 1,150; GRNI nets to zero; the
+        // liability and the VAT exist exactly once; inventory value is untouched by the bill.
+        $this->assertSame(['1300' => [150.0, 0.0], '2100' => [0.0, 1150.0], '2150' => [1000.0, 0.0]], $this->linesOf($bill->fresh()->journalEntry));
+        $this->assertSame(round($grniBefore + 1000, 2), $this->movementToday(PostingService::GRNI), 'the accrual is cleared: GRNI is back where it stood before the receipt');
+        $this->assertSame(round($payableBefore - 1150, 2), $this->movementToday(PostingService::PAYABLE), 'one payable for the purchase');
+        $this->assertSame(round($inputVatBefore + 150, 2), $this->movementToday(PostingService::INPUT_VAT), 'one input VAT for the purchase');
+        $this->assertCount(1, $this->vatRows('Supplier Bill', $bill->id));
+        $this->assertSame($vatCount + 1, VatTransaction::count());
+        $this->assertSame(round($inventoryBefore + 700, 2), $this->movementToday(PostingService::INVENTORY_ASSET));
+        $this->assertSame(10.0, (float) $grnLine->fresh()->invoiced_quantity);
+        $this->assertSame(1150.0, (float) $bill->fresh()->balance_amount);
+
+        // The same received quantity cannot be invoiced twice.
+        $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.store'), [
+            'supplier_id' => Supplier::firstOrFail()->id, 'bill_number' => 'BILL-FIN08-DUP', 'bill_date' => $this->today(), 'vat_rate' => 15,
+            'lines' => [['description' => 'Cement bags again', 'goods_receipt_line_id' => $grnLine->id, 'matched_quantity' => 1, 'quantity' => 1, 'unit_price' => 100]],
+        ])->assertSessionHasErrors('matching');
+
+        // Audit log.
         $this->assertTrue(ActivityLog::where('module', 'Inventory')->where('action', 'Posted goods receipt')->where('description', $grn->grn_number)->exists());
+        $this->logged('Approved supplier bill', 'BILL-FIN08');
     }
 
     // ------------------------------------------------------------------ FIN-09

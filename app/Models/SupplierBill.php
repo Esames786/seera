@@ -69,6 +69,12 @@ class SupplierBill extends Model
         return $this->hasMany(SupplierPayment::class);
     }
 
+    /** Goods receipt lines this bill invoices (F04). */
+    public function grnMatches()
+    {
+        return $this->hasMany(SupplierBillGrnMatch::class);
+    }
+
     /**
      * Recalculate paid/balance and move the status along the unpaid → paid track.
      */

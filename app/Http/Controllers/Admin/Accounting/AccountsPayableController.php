@@ -7,11 +7,13 @@ use App\Models\ActivityLog;
 use App\Models\ChartOfAccount;
 use App\Models\CostCenter;
 use App\Models\ExpenseCategory;
+use App\Models\GoodsReceipt;
 use App\Models\Project;
 use App\Models\Site;
 use App\Models\Supplier;
 use App\Models\SupplierBill;
 use App\Models\SupplierPayment;
+use App\Services\Accounting\GrnMatchingService;
 use App\Services\Accounting\PostingService;
 use App\Support\SettlementReplay;
 use Illuminate\Http\RedirectResponse;
@@ -24,7 +26,10 @@ use Illuminate\View\View;
 
 class AccountsPayableController extends Controller
 {
-    public function __construct(private readonly PostingService $posting) {}
+    public function __construct(
+        private readonly PostingService $posting,
+        private readonly GrnMatchingService $matching
+    ) {}
 
     public function index(Request $request): View
     {
@@ -53,9 +58,17 @@ class AccountsPayableController extends Controller
         ] + $this->formOptions());
     }
 
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('admin.accounting.accounts-payable.create', $this->formOptions());
+        // "Create Supplier Bill" from a posted goods receipt pre-fills its uninvoiced lines (F04).
+        $grn = $request->filled('goods_receipt')
+            ? GoodsReceipt::with('warehouse')->where('status', 'posted')->find($request->integer('goods_receipt'))
+            : null;
+
+        return view('admin.accounting.accounts-payable.create', [
+            'sourceReceipt' => $grn,
+            'grnPrefill' => $grn ? $this->matching->prefillFromReceipt($grn) : [],
+        ] + $this->formOptions());
     }
 
     public function store(Request $request): RedirectResponse
@@ -64,7 +77,7 @@ class AccountsPayableController extends Controller
 
         $bill = DB::transaction(function () use ($data, $lines) {
             $bill = SupplierBill::create($data);
-            $bill->lines()->createMany($lines);
+            $this->writeLines($bill, $lines);
 
             return $bill;
         });
@@ -79,7 +92,7 @@ class AccountsPayableController extends Controller
     {
         $accounts_payable->load([
             'supplier', 'project', 'site', 'costCenter',
-            'lines.expenseCategory', 'lines.account',
+            'lines.expenseCategory', 'lines.account', 'lines.grnMatch.goodsReceipt',
             'payments.paymentAccount', 'journalEntry.lines.account',
         ]);
 
@@ -113,8 +126,8 @@ class AccountsPayableController extends Controller
             }
 
             $bill->update($data);
-            $bill->lines()->delete();
-            $bill->lines()->createMany($lines);
+            $bill->lines()->delete();   // draft matches go with their lines (cascade)
+            $this->writeLines($bill, $lines);
         });
 
         ActivityLog::record($request, 'Accounting', 'Updated supplier bill', $accounts_payable->bill_number);
@@ -155,6 +168,10 @@ class AccountsPayableController extends Controller
             if ($accounts_payable->status !== 'draft') {
                 throw ValidationException::withMessages(['bill' => 'Only a draft supplier bill can be approved.']);
             }
+
+            // Lines invoicing received goods consume the receipt quantities under lock first (F04);
+            // a stale or duplicate match refuses the whole approval.
+            $this->matching->commit($accounts_payable);
 
             // Posting refuses (and rolls this transaction back) when an account is missing,
             // inactive or the entry would not balance (NR-30, F01): no half-approved bill.
@@ -200,6 +217,9 @@ class AccountsPayableController extends Controller
             $reversal = $bill->journal_entry_id
                 ? $this->posting->reverseEntry($bill->journalEntry, 'Reopened bill '.$bill->bill_number.': '.$data['reason'], $request->user()->id)
                 : null;
+
+            // The received quantities this bill had invoiced become available again (F04).
+            $this->matching->release($bill);
 
             $bill->update([
                 'status' => 'draft',
@@ -340,6 +360,8 @@ class AccountsPayableController extends Controller
             'lines.*.quantity' => ['nullable', 'numeric', 'min:0'],
             'lines.*.unit_price' => ['nullable', 'numeric', 'min:0'],
             'lines.*.cost_center_id' => ['nullable', 'exists:cost_centers,id'],
+            'lines.*.goods_receipt_line_id' => ['nullable', 'integer'],
+            'lines.*.matched_quantity' => ['nullable', 'numeric', 'min:0'],
         ], [
             'bill_number.unique' => 'This supplier already has a bill with that number.',
             'lines.required' => 'Add at least one bill line.',
@@ -356,7 +378,24 @@ class AccountsPayableController extends Controller
 
         $vatRate = (float) $data['vat_rate'];
 
+        // Lines invoicing received goods are checked against the posted receipt lines the
+        // user can see: supplier, posted status and uninvoiced quantity (F04).
+        $matches = $this->matching->resolve((int) $supplierId, collect($data['lines'])
+            ->filter(fn ($line) => filled($line['goods_receipt_line_id'] ?? null))
+            ->map(fn ($line) => ['goods_receipt_line_id' => $line['goods_receipt_line_id'], 'matched_quantity' => $line['matched_quantity'] ?? null])
+            ->all());
+
         $lines = collect($data['lines'])
+            ->map(function ($line, $index) use ($matches) {
+                if ($match = $matches[$index] ?? null) {
+                    $line['description'] = filled($line['description'] ?? null) ? $line['description'] : $match['item_label'].' ('.$match['grn_number'].')';
+                    $line['quantity'] = (float) ($line['quantity'] ?? 0) > 0 ? $line['quantity'] : $match['matched_quantity'];
+                    $line['unit_price'] = (float) ($line['unit_price'] ?? 0) > 0 ? $line['unit_price'] : $match['unit_cost'];
+                    $line['_match'] = $match;
+                }
+
+                return $line;
+            })
             ->filter(fn ($line) => filled($line['description'] ?? null) && (float) ($line['unit_price'] ?? 0) > 0)
             ->map(function ($line) use ($vatRate) {
                 $taxable = round((float) ($line['quantity'] ?? 1) * (float) ($line['unit_price'] ?? 0), 2);
@@ -373,6 +412,7 @@ class AccountsPayableController extends Controller
                     'vat_amount' => $vat,
                     'total_amount' => round($taxable + $vat, 2),
                     'cost_center_id' => $line['cost_center_id'] ?? null,
+                    '_match' => $line['_match'] ?? null,
                 ];
             })
             ->values()
@@ -400,9 +440,31 @@ class AccountsPayableController extends Controller
         return [$data, $lines];
     }
 
+    /** Create the bill lines and, for lines invoicing received goods, their receipt matches (F04). */
+    private function writeLines(SupplierBill $bill, array $lines): void
+    {
+        foreach ($lines as $line) {
+            $match = $line['_match'] ?? null;
+            unset($line['_match']);
+
+            $model = $bill->lines()->create($line);
+
+            if ($match) {
+                $bill->grnMatches()->create([
+                    'supplier_bill_line_id' => $model->id,
+                    'goods_receipt_id' => $match['goods_receipt_id'],
+                    'goods_receipt_line_id' => $match['goods_receipt_line_id'],
+                    'matched_quantity' => $match['matched_quantity'],
+                    'matched_taxable_amount' => $match['matched_taxable_amount'],
+                ]);
+            }
+        }
+    }
+
     private function formOptions(): array
     {
         return [
+            'grnLines' => $this->matching->openLines(),
             'suppliers' => Supplier::orderBy('name')->get(),
             'projects' => Project::orderBy('name')->get(),
             'sites' => Site::orderBy('name')->get(),

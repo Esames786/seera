@@ -126,8 +126,10 @@ class VatPeriodLockTest extends TestCase
         $this->assertNull($invoice->zatcaRecord);
     }
 
-    public function test_a_goods_receipt_dated_in_a_sealed_period_cannot_be_posted(): void
+    public function test_a_goods_receipt_dated_in_a_sealed_period_is_not_a_vat_event_since_f04(): void
     {
+        // Since F04 a goods receipt accrues to GRNI only; VAT is recorded on the matched
+        // supplier bill, which is what the period lock protects (see GrnBillMatchingTest).
         $this->actingAs($this->admin())->post(route('admin.inventory.goods-receipts.store'), [
             'supplier_id' => Supplier::firstOrFail()->id, 'warehouse_id' => Warehouse::firstOrFail()->id,
             'received_date' => $this->sealedDate(), 'delivery_note_number' => 'DN-F03', 'vat_rate' => 15,
@@ -136,11 +138,12 @@ class VatPeriodLockTest extends TestCase
         $grn = GoodsReceipt::where('delivery_note_number', 'DN-F03')->firstOrFail();
 
         $this->actingAs($this->admin())->post(route('admin.inventory.goods-receipts.post-stock', $grn))
-            ->assertSessionHasErrors('vat');
+            ->assertSessionHasNoErrors();
 
         $grn->refresh();
-        $this->assertSame('draft', $grn->status);
-        $this->assertSame(0, StockLedgerEntry::where('reference_number', $grn->grn_number)->count(), 'stock did not move either');
+        $this->assertSame('posted', $grn->status);
+        $this->assertSame(1, StockLedgerEntry::where('reference_number', $grn->grn_number)->count());
+        $this->assertSame(0, VatTransaction::where('source_module', 'Goods Receipt')->where('source_id', $grn->id)->count(), 'no VAT row on a receipt');
     }
 
     public function test_a_manual_journal_on_a_vat_account_cannot_be_dated_into_a_sealed_period(): void
