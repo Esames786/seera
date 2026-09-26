@@ -53,10 +53,15 @@
                     <td>SAR {{ number_format($customer->opening_receivable / 1000, 1) }}K</td>
                     <td><x-admin.status-badge :status="$customer->status"/></td>
                     <td>
+                        @php
+                            $editUrl = auth()->user()->hasPermission('Customers', 'edit') ? route('admin.master.customers.edit', $customer) : null;
+                            $deleteUrl = auth()->user()->hasPermission('Customers', 'delete') ? route('admin.master.customers.destroy', $customer) : null;
+                        @endphp
                         <x-admin.action-buttons
                             :view="route('admin.master.customers.show', $customer)"
-                            :edit="route('admin.master.customers.edit', $customer)"
-                            :delete="route('admin.master.customers.destroy', $customer)"
+                            :edit="$editUrl"
+                            edit-label="Edit / Manage"
+                            :delete="$deleteUrl"
                             :name="$customer->name"/>
                     </td>
                 </tr>

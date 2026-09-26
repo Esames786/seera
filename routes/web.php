@@ -150,6 +150,10 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::post('suppliers/{supplier}/workspace/{panel}', [\App\Http\Controllers\Admin\Master\SupplierWorkspaceController::class, 'save'])->name('suppliers.workspace.save');
         Route::post('suppliers/{supplier}/workspace/{panel}/{record}/{action}', [\App\Http\Controllers\Admin\Master\SupplierWorkspaceController::class, 'action'])->whereNumber('record')->name('suppliers.workspace.action');
         Route::resource('suppliers', SupplierController::class);
+        // Customer connected workspace: related panels load and save inside the customer context.
+        Route::get('customers/{customer}/workspace/{panel}', [\App\Http\Controllers\Admin\Master\CustomerWorkspaceController::class, 'panel'])->name('customers.workspace.panel');
+        Route::post('customers/{customer}/workspace/{panel}', [\App\Http\Controllers\Admin\Master\CustomerWorkspaceController::class, 'save'])->name('customers.workspace.save');
+        Route::post('customers/{customer}/workspace/{panel}/{record}/{action}', [\App\Http\Controllers\Admin\Master\CustomerWorkspaceController::class, 'action'])->whereNumber('record')->name('customers.workspace.action');
         Route::post('customers/{customer}/contacts', [CustomerController::class, 'storeContact'])->name('customers.contacts.store');
         Route::delete('customers/{customer}/contacts/{contact}', [CustomerController::class, 'destroyContact'])->name('customers.contacts.destroy');
         Route::post('customers/{customer}/notes', [CustomerController::class, 'storeNote'])->name('customers.notes.store');

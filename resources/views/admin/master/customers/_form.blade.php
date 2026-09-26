@@ -49,11 +49,10 @@
         <div class="full"><label for="billing_address">Billing Address</label><textarea id="billing_address" name="billing_address" class="textarea" placeholder="Customer billing address for ZATCA invoices...">{{ old('billing_address', $customer?->billing_address) }}</textarea></div>
     </x-admin.form-section>
 
-    @include('admin.master.customers._related-inputs')
+    @unless ($workspace ?? false)
+        {{-- Inside the workspace, contacts and notes have their own panels. --}}
+        @include('admin.master.customers._related-inputs')
+    @endunless
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.master.customers.index') }}">Cancel</a>
-        <button type="submit" name="_save_action" value="stay" class="btn outline">{{ __('ui.save_stay') }}</button>
-        <button type="submit" class="btn primary">{{ $customer ? 'Update Customer' : 'Save Customer' }}</button>
-    </div>
+    <x-admin.form-actions :cancel="route('admin.master.customers.index')" :save-new="true"/>
 </form>

@@ -9,6 +9,8 @@ use App\Models\CustomerContact;
 use App\Models\CustomerNote;
 use App\Models\Site;
 use App\Support\CodeGenerator;
+use App\Support\SaveAction;
+use App\Support\Workspace\CustomerWorkspacePanels as Panels;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -72,22 +74,33 @@ class CustomerController extends Controller
         return $this->savedResponse($request, $customer, 'Customer "'.$customer->name.'" created successfully.');
     }
 
-    public function show(Customer $customer): View
+    /** Read-only connected view: identity, authorized figures and the related panels, no forms. */
+    public function show(Request $request, Customer $customer): View
     {
-        $customer->load(['projects.manager', 'contacts.site', 'notes.user']);
+        $user = $request->user();
+
+        $panels = [];
+        foreach (Panels::visibleDefinitions($user) as $key => $definition) {
+            $panels[$key] = Panels::data($customer, $key, $user, true, 5);
+        }
 
         return view('admin.master.customers.show', [
             'customer' => $customer,
-            'overdue' => $customer->overdueSummary(),
-            'sites' => Site::whereIn('project_id', $customer->projects->pluck('id'))->orderBy('name')->get(),
+            'summary' => Panels::summary($customer, $user),
+            'panels' => $panels,
         ]);
     }
 
-    public function edit(Customer $customer): View
+    /** Edit workspace: the profile form plus lazily loaded related panels. */
+    public function edit(Request $request, Customer $customer): View
     {
         $customer->load(['contacts.site', 'notes.user']);
 
-        return view('admin.master.customers.edit', ['customer' => $customer] + $this->formOptions($customer));
+        return view('admin.master.customers.edit', [
+            'customer' => $customer,
+            'summary' => Panels::summary($customer, $request->user()),
+            'panels' => Panels::visibleDefinitions($request->user()),
+        ] + $this->formOptions($customer));
     }
 
     public function update(Request $request, Customer $customer): RedirectResponse
@@ -272,9 +285,10 @@ class CustomerController extends Controller
 
     private function savedResponse(Request $request, Customer $customer, string $message): RedirectResponse
     {
-        return ($request->input('_save_action') === 'stay'
-            ? redirect()->route('admin.master.customers.edit', $customer)
-            : redirect()->route('admin.master.customers.index'))
-            ->with('status', $message);
+        return SaveAction::redirect($request, [
+            'stay' => route('admin.master.customers.edit', $customer),
+            'close' => route('admin.master.customers.index'),
+            'new' => route('admin.master.customers.create'),
+        ])->with('status', $message);
     }
 }

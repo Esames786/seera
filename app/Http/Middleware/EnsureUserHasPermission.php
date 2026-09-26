@@ -127,10 +127,10 @@ class EnsureUserHasPermission
             // The workspace controller ALSO enforces each child module/action.
             return ['HR', 'edit'];
         }
-        if (preg_match('/^admin\.master\.suppliers\.workspace\.(panel|save|action)$/', $routeName, $matches)) {
-            // Reading a panel needs the supplier; writing through one needs supplier edit.
+        if (preg_match('/^admin\.master\.(suppliers|customers)\.workspace\.(panel|save|action)$/', $routeName, $matches)) {
+            // Reading a panel needs the parent's view right; writing through one needs its edit right.
             // The workspace controller ALSO enforces each panel's own module/action.
-            return ['Suppliers', $matches[1] === 'panel' ? 'view' : 'edit'];
+            return [$matches[1] === 'suppliers' ? 'Suppliers' : 'Customers', $matches[2] === 'panel' ? 'view' : 'edit'];
         }
         if ($routeName === 'admin.users.employee-search') {
             return ['Users', 'create'];
