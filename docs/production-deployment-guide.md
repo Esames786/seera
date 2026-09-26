@@ -536,3 +536,49 @@ same as section 15. Post-release checks (read-only): Customers list shows View /
 Manage; a customer's View page is read-only with the related sections and the overdue
 line; Edit / Manage shows the tabs and the Contacts tab adds a contact without leaving
 the page. The user guide lives in `docs/user-guide/`.
+
+## 17. Release of 27 September (UX Batch 1, Supplier + Customer workspaces, user guide)
+
+The server is at `ef5cc5b`; this release brings it to the current HEAD of the feature
+branch. **No migration** (the last one, `2026_09_27_000001`, already ran on the server).
+**The asset bundle changed** (workspace JavaScript and CSS), so `public/build.zip` must be
+extracted again. The user guide is served to signed-in users at
+`https://seera.tech-brit.co.uk/user-guide/`.
+
+```bash
+cd ~/seera
+PHP=/opt/cpanel/ea-php83/root/usr/bin/php
+
+$PHP artisan down
+git fetch origin
+git checkout feature/seera-connected-workspaces-2026-09-23
+git pull --ff-only
+$PHP artisan migrate --force          # "Nothing to migrate" is expected
+rm -rf public/build && mkdir -p public/build
+unzip -oq public/build.zip -d public/build
+test -f public/build/manifest.json && echo "assets ok"
+test -f docs/user-guide/index.html && echo "user guide ok"
+$PHP artisan optimize
+$PHP artisan up
+```
+
+Post-release checks (read-only, signed in):
+
+1. `https://seera.tech-brit.co.uk/user-guide/` opens the documentation home; the three
+   documents open from it. The top bar of every screen shows a **User Guide** button.
+2. Suppliers and Customers lists show View / Edit / Manage; View pages are read-only;
+   Edit / Manage shows the tabs and loads a panel on click.
+3. Accounting forms show Save / Save & new / Save & close.
+4. Employee edit still switches sections and saves a related panel.
+
+Sharing the guide with people who have no Seera login: the route requires sign-in by
+design. Give them a Seera account, or send the `docs/user-guide/*.html` files, or use the
+hosted copy the owner published. To make the URL public instead, move the two
+`user-guide` routes in `routes/web.php` out of the `auth` middleware group.
+
+Optional clean-up of files that do not belong in the web root (they are untracked and
+harmless to the release): `public/error_log`, `public/buildddd/`, `error_log`,
+`composer.phar`, `.env.backup.20260818_053800`. Back them up before deleting.
+
+Rollback: `git checkout ef5cc5b`, extract that commit's `public/build.zip` the same way,
+then `$PHP artisan optimize`. No database rollback is needed.

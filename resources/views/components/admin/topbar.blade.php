@@ -7,6 +7,7 @@
         <span title="Notifications">🔔</span>
         <span title="Settings">⚙️</span>
         @auth
+            <a class="btn sm outline" href="{{ route('user-guide') }}" target="_blank" rel="noopener" title="Current System User Guide">{{ __('User Guide') }}</a>
             <form method="POST" action="{{ route('admin.locale.update') }}" class="locale-switch" data-no-dirty-guard>
                 @csrf
                 <label for="interface-locale" class="sr-only">{{ __('ui.language') }}</label>

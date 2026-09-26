@@ -99,6 +99,16 @@ Route::middleware(['auth', 'active'])->prefix('admin')->name('admin.')->group(fu
     Route::post('set-password', [PasswordChangeController::class, 'update'])->name('password.change.update');
 });
 
+/*
+ * The current-system user guide (docs/user-guide, HTML edition) is served to every
+ * signed-in user at /user-guide/. It is documentation, not a permissioned screen.
+ */
+Route::middleware(['auth', 'active'])->group(function () {
+    Route::get('user-guide', fn () => redirect()->route('user-guide.page', 'index.html'))->name('user-guide');
+    Route::get('user-guide/{page}', [\App\Http\Controllers\UserGuideController::class, 'show'])
+        ->where('page', '[A-Za-z0-9-]+(\.html)?')->name('user-guide.page');
+});
+
 Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
