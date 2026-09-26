@@ -101,9 +101,12 @@ class ClientFeedbackSeptember22Test extends TestCase
             ->assertDontSee('Add Contact')->assertDontSee('Add Note')
             ->assertDontSee(route('admin.master.customers.contacts.store', $customer), false)
             ->assertDontSee(route('admin.master.customers.notes.store', $customer), false);
-        $this->get(route('admin.master.customers.edit', $customer))->assertOk()
+        // The create form still takes contacts and a note inline; the edit workspace manages them in their own panels.
+        $this->get(route('admin.master.customers.create'))->assertOk()
             ->assertSee('name="new_contacts[office][name]"', false)
             ->assertSee('name="new_contacts[site][name]"', false)->assertSee('name="new_note"', false);
+        $this->get(route('admin.master.customers.edit', $customer))->assertOk()
+            ->assertSee('data-workspace-related="contacts"', false)->assertSee('data-workspace-related="notes"', false);
         $this->put(route('admin.master.customers.update', $customer), $this->payload(['_save_action' => 'stay']))
             ->assertRedirect(route('admin.master.customers.edit', $customer));
         $this->assertSame(2, $customer->contacts()->count());
