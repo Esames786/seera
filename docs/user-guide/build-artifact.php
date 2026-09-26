@@ -59,6 +59,9 @@ foreach ($docs as $prefix => $doc) {
 
         return '<h'.$level.' id="'.$prefix.'-'.$id.'">'.$m[2].'</h'.$level.'>';
     }, $html);
+    // Site addresses become clickable links (addresses with a {placeholder} stay as plain text).
+    $html = preg_replace('/<code>(https:\/\/[^<{]+)<\/code>/', '<a class="url" href="$1" target="_blank" rel="noopener"><code>$1</code></a>', $html);
+
     // Same-document anchors and cross-document links become in-page anchors.
     $html = preg_replace_callback('/href="(?:([A-Z0-9-]+)\.md)?#([^"]+)"/', function ($m) use ($prefix, $prefixByFile) {
         $target = $m[1] !== '' ? ($prefixByFile[$m[1]] ?? $prefix) : $prefix;
@@ -118,6 +121,7 @@ main table { display: block; overflow-x: auto; border-collapse: collapse; margin
 main th, main td { border: 1px solid var(--line); padding: 6px 9px; text-align: start; vertical-align: top; }
 main th { background: var(--soft); font-weight: 700; }
 main code { background: var(--soft); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+main a.url code { color: var(--link); text-decoration: underline; text-underline-offset: 2px; }
 main pre { background: var(--code-bg); color: var(--code-ink); padding: 14px 16px; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.45; max-width: 100%; }
 main pre code { background: transparent; color: inherit; padding: 0; }
 main hr { border: 0; border-top: 1px solid var(--line); margin: 30px 0; }
