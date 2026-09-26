@@ -442,6 +442,14 @@ Same branch. Adds **one additive migration**,
   credit) under 2000 only if it does not already exist, and repoints the
   "Inventory / Inventory Purchase" posting rule's credit side to it.
 
+**27 September, first server run:** the migration stopped on an auto-generated index
+name longer than MariaDB's 64-character limit, after adding the two columns and the
+table but before creating account 2150. Commit `HEAD` makes every step guarded and
+names the index `sbgm_grn_line_committed_idx`, so re-running `migrate --force` on the
+partially migrated database completes it (verified locally on MySQL 8.0 from the same
+partial state). Until it has run, posting a goods receipt is refused with "Goods
+Received Not Invoiced" missing; nothing else is affected.
+
 No seeder is needed. No posted journal is changed. Receipts posted **before** this
 release keep their old Dr Inventory / Dr Input VAT / Cr AP journals; run the
 read-only report below after migrating and hand the list to the accountant:
