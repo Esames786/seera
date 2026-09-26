@@ -93,6 +93,23 @@ class FinanceReportBalancesTest extends TestCase
         $this->fail("account $code missing from the report");
     }
 
+    public function test_profit_loss_excludes_nonzero_openings_but_as_of_reports_keep_them(): void
+    {
+        $this->expense->update(['opening_balance' => 123]);
+        $this->revenue->update(['opening_balance' => 456]);
+        $range = ['from' => '2040-01-01', 'to' => '2040-01-31'];
+        $pl = $this->actingAs($this->admin())->get(route('admin.accounting.reports.profit-loss', $range))->assertOk();
+        $this->assertSame(0.0, $this->row($pl->viewData('expenses')->all(), '5999')['balance']);
+        $this->assertSame(0.0, $this->row($pl->viewData('revenue')->all(), '4999')['balance']);
+        $csv = $this->get(route('admin.accounting.reports.profit-loss', $range + ['export' => 'csv']))->assertOk()->streamedContent();
+        $this->assertStringContainsString('5999,"Test Expense",0', $csv);
+        $this->assertMatchesRegularExpression('/4999,"Test Revenue",-?0\r?\n/', $csv);
+
+        $trial = $this->get(route('admin.accounting.reports.trial-balance', $range))->assertOk();
+        $this->assertSame(123.0, $this->row($trial->viewData('rows')->all(), '5999')['debit_balance']);
+        $this->assertSame(456.0, $this->row($trial->viewData('rows')->all(), '4999')['credit_balance']);
+    }
+
     public function test_balance_sheet_and_trial_balance_are_as_of_the_range_while_profit_and_loss_is_period_only(): void
     {
         $this->movements();

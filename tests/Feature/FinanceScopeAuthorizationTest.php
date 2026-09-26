@@ -133,6 +133,52 @@ class FinanceScopeAuthorizationTest extends TestCase
         $this->actingAs($this->admin())->get(route('admin.accounting.vat.index'))->assertOk();
     }
 
+    public function test_mixed_project_journals_require_whole_entry_access_without_hiding_own_ledger_lines(): void
+    {
+        $entry = $this->postedJournal(100, $this->mine->id);
+        $entry->lines()->where('credit', 100)->update(['project_id' => $this->other->id]);
+
+        $this->actingAs($this->scoped)->get(route('admin.accounting.journal-entries.index'))
+            ->assertOk()->assertDontSee($entry->journal_number);
+        $ledger = $this->get(route('admin.accounting.general-ledger', ['account' => $this->expense->id]))->assertOk();
+        $this->assertSame(100.0, $ledger->viewData('totalDebit'), 'own posted lines remain in the scoped ledger');
+
+        $entry->update(['status' => 'draft']);
+        foreach (['show', 'edit'] as $action) {
+            $this->get(route('admin.accounting.journal-entries.'.$action, $entry))->assertForbidden();
+        }
+        $this->put(route('admin.accounting.journal-entries.update', $entry), [])->assertForbidden();
+        foreach (['post', 'cancel'] as $action) {
+            $this->post(route('admin.accounting.journal-entries.'.$action, $entry))->assertForbidden();
+        }
+        $this->delete(route('admin.accounting.journal-entries.destroy', $entry))->assertForbidden();
+        $this->assertSame('draft', $entry->fresh()->status);
+        $this->assertSame(2, $entry->lines()->withoutGlobalScopes()->count());
+        $this->assertSame(100.0, (float) $entry->lines()->withoutGlobalScopes()->sum('credit'));
+
+        $this->actingAs($this->admin())->get(route('admin.accounting.journal-entries.show', $entry))->assertOk();
+        $this->post(route('admin.accounting.journal-entries.post', $entry))->assertSessionHasNoErrors();
+        $this->assertSame('posted', $entry->fresh()->status, 'a company accountant may post a balanced cross-project entry');
+    }
+
+    public function test_post_checks_actual_lines_and_header_agreement_even_for_company_admin(): void
+    {
+        $entry = $this->postedJournal(100, $this->mine->id);
+        $entry->update(['status' => 'draft']);
+        $entry->lines()->where('debit', 100)->update(['debit' => 40]);
+        $this->actingAs($this->admin())->post(route('admin.accounting.journal-entries.post', $entry))
+            ->assertSessionHasErrors('journal');
+        $this->assertSame('draft', $entry->fresh()->status);
+
+        $entry->lines()->where('credit', 100)->update(['credit' => 40]);
+        $this->post(route('admin.accounting.journal-entries.post', $entry))->assertSessionHasErrors('journal');
+        $this->assertSame('draft', $entry->fresh()->status, 'balanced lines with stale header totals are refused too');
+
+        $entry->update(['total_debit' => 40, 'total_credit' => 40]);
+        $this->post(route('admin.accounting.journal-entries.post', $entry))->assertSessionHasNoErrors();
+        $this->assertSame('posted', $entry->fresh()->status);
+    }
+
     public function test_a_scoped_user_cannot_write_journal_lines_into_another_project(): void
     {
         $payload = fn (int $projectId) => [

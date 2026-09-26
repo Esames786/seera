@@ -13,8 +13,10 @@ use App\Models\Supplier;
 use App\Models\SupplierBill;
 use App\Models\SupplierPayment;
 use App\Services\Accounting\PostingService;
+use App\Support\SettlementReplay;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -267,6 +269,13 @@ class AccountsPayableController extends Controller
             if (! empty($data['idempotency_key'])) {
                 $existing = SupplierPayment::withoutGlobalScopes()->where('idempotency_key', $data['idempotency_key'])->first();
                 if ($existing) {
+                    SettlementReplay::assertMatches($existing, $data + [
+                        'supplier_bill_id' => $accounts_payable->id,
+                        'supplier_id' => $accounts_payable->supplier_id,
+                        'reference_number' => null,
+                        'notes' => null,
+                    ], 'payment_date');
+
                     return [$existing, true];
                 }
             }
@@ -341,7 +350,7 @@ class AccountsPayableController extends Controller
             $term = Supplier::with('paymentTerm')->find($supplierId)?->paymentTerm;
 
             if ($term) {
-                $data['due_date'] = \Illuminate\Support\Carbon::parse($data['bill_date'])->addDays($term->days)->toDateString();
+                $data['due_date'] = Carbon::parse($data['bill_date'])->addDays($term->days)->toDateString();
             }
         }
 

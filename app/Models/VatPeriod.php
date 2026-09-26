@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class VatPeriod extends Model
 {
@@ -38,18 +40,31 @@ class VatPeriod extends Model
      */
     public function recalculate(): void
     {
-        $output = $this->transactions()->where('vat_type', 'output');
-        $input = $this->transactions()->where('vat_type', 'input');
+        DB::transaction(function () {
+            $period = static::whereKey($this->id)->lockForUpdate()->firstOrFail();
+            if ($period->status !== 'draft') {
+                throw ValidationException::withMessages([
+                    'vat' => 'A '.$period->status.' VAT period can no longer be recalculated.',
+                ]);
+            }
 
-        $outputVat = (float) (clone $output)->sum('vat_amount');
-        $inputVat = (float) (clone $input)->sum('vat_amount');
+            // Locking reads see committed rows after waiting, even under MySQL
+            // REPEATABLE READ. The period lock serializes all application VAT writers.
+            $rows = $period->transactions()->lockForUpdate()->get();
+            $output = $rows->where('vat_type', 'output');
+            $input = $rows->where('vat_type', 'input');
 
-        $this->update([
-            'sales_taxable_amount' => round((float) (clone $output)->sum('taxable_amount'), 2),
-            'output_vat' => round($outputVat, 2),
-            'purchase_taxable_amount' => round((float) (clone $input)->sum('taxable_amount'), 2),
-            'input_vat' => round($inputVat, 2),
-            'vat_payable' => round($outputVat - $inputVat, 2),
-        ]);
+            $outputVat = (float) (clone $output)->sum('vat_amount');
+            $inputVat = (float) (clone $input)->sum('vat_amount');
+
+            $period->update([
+                'sales_taxable_amount' => round((float) (clone $output)->sum('taxable_amount'), 2),
+                'output_vat' => round($outputVat, 2),
+                'purchase_taxable_amount' => round((float) (clone $input)->sum('taxable_amount'), 2),
+                'input_vat' => round($inputVat, 2),
+                'vat_payable' => round($outputVat - $inputVat, 2),
+            ]);
+            $this->setRawAttributes($period->getAttributes(), true);
+        });
     }
 }

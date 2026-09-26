@@ -11,6 +11,7 @@ use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
 use App\Models\Project;
 use App\Services\Accounting\PostingService;
+use App\Support\SettlementReplay;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -269,6 +270,13 @@ class AccountsReceivableController extends Controller
             if (! empty($data['idempotency_key'])) {
                 $existing = CustomerReceipt::withoutGlobalScopes()->where('idempotency_key', $data['idempotency_key'])->first();
                 if ($existing) {
+                    SettlementReplay::assertMatches($existing, $data + [
+                        'customer_invoice_id' => $accounts_receivable->id,
+                        'customer_id' => $accounts_receivable->customer_id,
+                        'reference_number' => null,
+                        'notes' => null,
+                    ], 'receipt_date');
+
                     return [$existing, true];
                 }
             }

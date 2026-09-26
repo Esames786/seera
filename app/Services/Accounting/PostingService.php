@@ -6,12 +6,17 @@ use App\Models\AutomaticPostingRule;
 use App\Models\ChartOfAccount;
 use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
+use App\Models\GoodsReceipt;
 use App\Models\JournalEntry;
+use App\Models\StockAdjustment;
+use App\Models\StockIssue;
+use App\Models\Supplier;
 use App\Models\SupplierBill;
 use App\Models\SupplierPayment;
 use App\Models\VatPeriod;
 use App\Models\VatTransaction;
 use App\Models\ZatcaInvoiceRecord;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -63,7 +68,7 @@ class PostingService
      * change request CR-18). Suppliers without a link, or linked to an inactive
      * account, post to the control account exactly as before.
      */
-    public function payableAccountFor(?\App\Models\Supplier $supplier): ?ChartOfAccount
+    public function payableAccountFor(?Supplier $supplier): ?ChartOfAccount
     {
         $linked = $supplier?->linked_account_id ? ChartOfAccount::find($supplier->linked_account_id) : null;
 
@@ -284,7 +289,7 @@ class PostingService
      * Goods receipt: debit inventory asset and input VAT, credit accounts payable.
      * Returns null only when the receipt carries no value at all.
      */
-    public function postGoodsReceipt(\App\Models\GoodsReceipt $grn, ?int $userId = null): ?JournalEntry
+    public function postGoodsReceipt(GoodsReceipt $grn, ?int $userId = null): ?JournalEntry
     {
         $grn->loadMissing('lines.item', 'supplier', 'warehouse');
 
@@ -350,7 +355,7 @@ class PostingService
      * Stock issue: debit project material expense, credit inventory asset.
      * Returns null only when the issue carries no value.
      */
-    public function postStockIssue(\App\Models\StockIssue $issue, ?int $userId = null): ?JournalEntry
+    public function postStockIssue(StockIssue $issue, ?int $userId = null): ?JournalEntry
     {
         $issue->loadMissing('lines.item', 'warehouse');
 
@@ -399,7 +404,7 @@ class PostingService
      * inventory asset. A gain reverses those two sides. Returns null only
      * when the adjustment has no value.
      */
-    public function postStockAdjustment(\App\Models\StockAdjustment $adjustment, ?int $userId = null): ?JournalEntry
+    public function postStockAdjustment(StockAdjustment $adjustment, ?int $userId = null): ?JournalEntry
     {
         $adjustment->loadMissing('item', 'warehouse');
 
@@ -491,30 +496,34 @@ class PostingService
             return null;
         }
 
-        // A finalized or submitted return is sealed: nothing may change its totals (F03).
-        $this->assertVatPeriodOpen($date, $sourceModule.' '.($reference ?? ''));
+        // Keep the period lock until insertion commits, including direct service calls.
+        return DB::transaction(function () use ($type, $vatAmount, $taxableAmount, $vatRate, $date, $sourceModule, $sourceId, $reference, $partyType, $partyId, $partyName) {
+            $period = $this->assertVatPeriodOpen($date, $sourceModule.' '.($reference ?? ''));
 
-        return VatTransaction::create([
-            'transaction_date' => $date,
-            'source_module' => $sourceModule,
-            'source_id' => $sourceId,
-            'source_reference' => $reference,
-            'party_type' => $partyType,
-            'party_id' => $partyId,
-            'party_name' => $partyName,
-            'taxable_amount' => $taxableAmount,
-            'vat_rate' => $vatRate,
-            'vat_amount' => $vatAmount,
-            'vat_type' => $type,
-            'vat_period_id' => $this->periodFor($date)?->id,
-            'status' => 'active',
-        ]);
+            return VatTransaction::create([
+                'transaction_date' => $date,
+                'source_module' => $sourceModule,
+                'source_id' => $sourceId,
+                'source_reference' => $reference,
+                'party_type' => $partyType,
+                'party_id' => $partyId,
+                'party_name' => $partyName,
+                'taxable_amount' => $taxableAmount,
+                'vat_rate' => $vatRate,
+                'vat_amount' => $vatAmount,
+                'vat_type' => $type,
+                'vat_period_id' => $period?->id,
+                'status' => 'active',
+            ]);
+        });
     }
 
-    public function periodFor($date): ?VatPeriod
+    public function periodFor($date, bool $lock = false): ?VatPeriod
     {
         return VatPeriod::whereDate('start_date', '<=', $date)
             ->whereDate('end_date', '>=', $date)
+            ->orderBy('id')
+            ->when($lock, fn ($query) => $query->lockForUpdate())
             ->first();
     }
 
@@ -529,17 +538,21 @@ class PostingService
      * VAT period (F03). The date decides the period; nothing is reopened
      * automatically, and correcting a sealed period needs a credit note.
      */
-    public function assertVatPeriodOpen($date, string $subject): void
+    public function assertVatPeriodOpen($date, string $subject): ?VatPeriod
     {
-        $period = $this->periodFor($date);
+        // Outside a transaction this is only a form preflight. Every writer must
+        // recheck inside its transaction, where this is a current, locking read.
+        $period = $this->periodFor($date, DB::transactionLevel() > 0);
 
         if ($period && in_array($period->status, ['finalized', 'submitted'], true)) {
             throw ValidationException::withMessages([
-                'vat' => trim($subject).' is dated '.\Illuminate\Support\Carbon::parse($date)->toDateString()
+                'vat' => trim($subject).' is dated '.Carbon::parse($date)->toDateString()
                     .', inside VAT period '.$period->period_name.' which is already '.$period->status
                     .'. Nothing was recorded. Use a date in an open period, or issue a credit note for a sealed one.',
             ]);
         }
+
+        return $period;
     }
 
     /**
@@ -578,19 +591,32 @@ class PostingService
      */
     public function withdrawVat(string $sourceModule, int $sourceId): void
     {
-        $rows = VatTransaction::where('source_module', $sourceModule)->where('source_id', $sourceId)->get();
-
-        foreach ($rows as $row) {
-            $period = $row->vat_period_id ? VatPeriod::find($row->vat_period_id) : null;
-
-            if ($period && in_array($period->status, ['finalized', 'submitted'], true)) {
-                throw ValidationException::withMessages([
-                    'vat' => 'The VAT of this document belongs to '.$period->period_name.', which is already '.$period->status.'. It cannot be corrected; issue a credit note instead.',
-                ]);
+        DB::transaction(function () use ($sourceModule, $sourceId) {
+            $rows = VatTransaction::where('source_module', $sourceModule)->where('source_id', $sourceId)->get();
+            if ($rows->isEmpty()) {
+                return;
             }
-        }
 
-        VatTransaction::whereIn('id', $rows->pluck('id'))->delete();
+            // Lock periods before changing their rows, in the same order as finalization.
+            // Date matching also protects legacy VAT rows with a missing period link.
+            $periods = VatPeriod::where(function ($query) use ($rows) {
+                $query->whereIn('id', $rows->pluck('vat_period_id')->filter());
+                foreach ($rows as $row) {
+                    $query->orWhere(fn ($dates) => $dates->whereDate('start_date', '<=', $row->transaction_date)
+                        ->whereDate('end_date', '>=', $row->transaction_date));
+                }
+            })->orderBy('id')->lockForUpdate()->get();
+
+            foreach ($periods as $period) {
+                if (in_array($period->status, ['finalized', 'submitted'], true)) {
+                    throw ValidationException::withMessages([
+                        'vat' => 'The VAT of this document belongs to '.$period->period_name.', which is already '.$period->status.'. It cannot be corrected; issue a credit note instead.',
+                    ]);
+                }
+            }
+
+            VatTransaction::whereIn('id', $rows->pluck('id'))->delete();
+        });
     }
 
     /** Human wording for the flash message after a document was posted. */
@@ -647,6 +673,12 @@ class PostingService
         $autoPost = $forcePost ?? (bool) ($rule?->auto_post);
 
         return DB::transaction(function () use ($header, $lines, $totalDebit, $totalCredit, $autoPost, $userId) {
+            // Includes automatic/reversal journals and custom lines mapped to a VAT
+            // control account, even when no separate VAT transaction is generated.
+            if (array_intersect(array_column($lines, 'chart_of_account_id'), $this->vatAccountIds()) !== []) {
+                $this->assertVatPeriodOpen($header['journal_date'], 'This journal touches a VAT account and');
+            }
+
             $entry = JournalEntry::create($header + [
                 'journal_number' => JournalEntry::nextNumber((int) now()->year),
                 'total_debit' => $totalDebit,

@@ -311,7 +311,8 @@ class FinancialReportController extends Controller
                 ->whereHas('journalEntry', fn ($q) => $q->where('status', 'posted')->whereDate('journal_date', '<', $period->from->toDateString()))))
             : collect();
 
-        $openings = $this->includesOpenings();
+        // Openings belong to as-of reports, never to period-only profit/loss.
+        $openings = $cumulative && $this->includesOpenings();
 
         return ChartOfAccount::orderBy('account_code')->get()->map(function (ChartOfAccount $account) use ($totals, $prior, $openings) {
             $movement = $totals->get($account->id);

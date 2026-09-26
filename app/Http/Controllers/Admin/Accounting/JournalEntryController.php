@@ -7,8 +7,13 @@ use App\Models\ActivityLog;
 use App\Models\ChartOfAccount;
 use App\Models\CostCenter;
 use App\Models\JournalEntry;
+use App\Models\JournalEntryLine;
 use App\Models\Project;
 use App\Models\Site;
+use App\Models\User;
+use App\Services\Accounting\PostingService;
+use App\Services\UserAccessScopeService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +24,7 @@ class JournalEntryController extends Controller
 {
     public function index(Request $request): View
     {
-        $entries = JournalEntry::with(['costCenter', 'creator'])
+        $entries = $this->accessibleEntries()->with(['costCenter', 'creator'])
             ->withCount('lines')
             ->when($request->filled('search'), function ($query) use ($request) {
                 $search = $request->string('search');
@@ -38,10 +43,10 @@ class JournalEntryController extends Controller
 
         return view('admin.accounting.journal-entries.index', [
             'entries' => $entries,
-            'draftCount' => JournalEntry::where('status', 'draft')->count(),
-            'postedCount' => JournalEntry::where('status', 'posted')->count(),
-            'cancelledCount' => JournalEntry::where('status', 'cancelled')->count(),
-            'postedTotal' => (float) JournalEntry::where('status', 'posted')->sum('total_debit'),
+            'draftCount' => $this->accessibleEntries()->where('status', 'draft')->count(),
+            'postedCount' => $this->accessibleEntries()->where('status', 'posted')->count(),
+            'cancelledCount' => $this->accessibleEntries()->where('status', 'cancelled')->count(),
+            'postedTotal' => (float) $this->accessibleEntries()->where('status', 'posted')->sum('total_debit'),
         ] + $this->formOptions());
     }
 
@@ -55,6 +60,7 @@ class JournalEntryController extends Controller
         [$data, $lines, $totals] = $this->validated($request);
 
         $entry = DB::transaction(function () use ($data, $lines, $totals, $request) {
+            $this->assertVatLinesInOpenPeriod($data['journal_date'], array_column($lines, 'chart_of_account_id'));
             $entry = JournalEntry::create($data + $totals + [
                 'journal_number' => JournalEntry::nextNumber((int) date('Y', strtotime($data['journal_date']))),
                 'created_by' => $request->user()->id,
@@ -73,6 +79,7 @@ class JournalEntryController extends Controller
 
     public function show(JournalEntry $journal_entry): View
     {
+        $this->assertWholeEntryAccess($journal_entry);
         $journal_entry->load(['lines.account', 'lines.costCenter', 'lines.project', 'lines.site', 'costCenter', 'creator', 'poster']);
 
         return view('admin.accounting.journal-entries.show', ['entry' => $journal_entry]);
@@ -80,6 +87,7 @@ class JournalEntryController extends Controller
 
     public function edit(JournalEntry $journal_entry): View
     {
+        $this->assertWholeEntryAccess($journal_entry);
         if (! $journal_entry->isEditable()) {
             abort(403, 'A posted or cancelled journal entry cannot be edited.');
         }
@@ -91,6 +99,7 @@ class JournalEntryController extends Controller
 
     public function update(Request $request, JournalEntry $journal_entry): RedirectResponse
     {
+        $this->assertWholeEntryAccess($journal_entry);
         if (! $journal_entry->isEditable()) {
             return back()->withErrors(['journal' => 'A posted or cancelled journal entry cannot be edited.']);
         }
@@ -100,10 +109,12 @@ class JournalEntryController extends Controller
         DB::transaction(function () use ($journal_entry, $data, $lines, $totals) {
             // Re-check under lock: a posting that landed since the form was opened wins (F11).
             $entry = JournalEntry::whereKey($journal_entry->id)->lockForUpdate()->firstOrFail();
+            $this->assertWholeEntryAccess($entry);
             if (! $entry->isEditable()) {
                 throw ValidationException::withMessages(['journal' => 'This journal entry was posted or cancelled while you were editing it; your changes were not saved.']);
             }
 
+            $this->assertVatLinesInOpenPeriod($data['journal_date'], array_column($lines, 'chart_of_account_id'));
             $entry->update($data + $totals);
             $entry->lines()->delete();
             $entry->lines()->createMany($lines);
@@ -117,6 +128,7 @@ class JournalEntryController extends Controller
 
     public function destroy(Request $request, JournalEntry $journal_entry): RedirectResponse
     {
+        $this->assertWholeEntryAccess($journal_entry);
         if ($journal_entry->status === 'posted') {
             return back()->withErrors(['journal' => 'A posted journal entry cannot be deleted. Cancel it instead.']);
         }
@@ -125,6 +137,7 @@ class JournalEntryController extends Controller
 
         DB::transaction(function () use ($journal_entry) {
             $entry = JournalEntry::whereKey($journal_entry->id)->lockForUpdate()->firstOrFail();
+            $this->assertWholeEntryAccess($entry);
             if ($entry->status === 'posted') {
                 throw ValidationException::withMessages(['journal' => 'This journal entry was posted in the meantime and cannot be deleted.']);
             }
@@ -144,17 +157,27 @@ class JournalEntryController extends Controller
     {
         DB::transaction(function () use ($journal_entry, $request) {
             $entry = JournalEntry::whereKey($journal_entry->id)->lockForUpdate()->firstOrFail();
+            $this->assertWholeEntryAccess($entry);
             if ($entry->status === 'posted') {
                 throw ValidationException::withMessages(['journal' => 'This journal entry is already posted.']);
             }
             if ($entry->status === 'cancelled') {
                 throw ValidationException::withMessages(['journal' => 'A cancelled journal entry cannot be posted.']);
             }
-            if (! $entry->isBalanced()) {
-                throw ValidationException::withMessages(['journal' => 'Total debit must equal total credit before posting.']);
+            // Check ALL persisted lines only after authorizing the entire entry.
+            $lines = $entry->lines()->withoutGlobalScopes()->lockForUpdate()->get();
+            $debit = (int) round($lines->sum('debit') * 100);
+            $credit = (int) round($lines->sum('credit') * 100);
+            if ($lines->count() < 2 || $debit <= 0 || $debit !== $credit
+                || $debit !== (int) round((float) $entry->total_debit * 100)
+                || $credit !== (int) round((float) $entry->total_credit * 100)
+                || $lines->contains(fn ($line) => ! $line->chart_of_account_id
+                    || (float) $line->debit < 0 || (float) $line->credit < 0
+                    || ((float) $line->debit > 0 && (float) $line->credit > 0))) {
+                throw ValidationException::withMessages(['journal' => 'Saved journal lines must balance and match the header totals before posting. Review and save the complete journal.']);
             }
 
-            $accountIds = $entry->lines()->pluck('chart_of_account_id')->all();
+            $accountIds = $lines->pluck('chart_of_account_id')->all();
             $this->assertLineAccountsActive($accountIds, 'journal');
             $this->assertVatLinesInOpenPeriod($entry->journal_date, $accountIds);
 
@@ -173,12 +196,14 @@ class JournalEntryController extends Controller
 
     public function cancel(Request $request, JournalEntry $journal_entry): RedirectResponse
     {
+        $this->assertWholeEntryAccess($journal_entry);
         if ($journal_entry->status === 'posted') {
             return back()->withErrors(['journal' => 'A posted journal entry cannot be cancelled in this phase.']);
         }
 
         DB::transaction(function () use ($journal_entry) {
             $entry = JournalEntry::whereKey($journal_entry->id)->lockForUpdate()->firstOrFail();
+            $this->assertWholeEntryAccess($entry);
             if ($entry->status === 'posted') {
                 throw ValidationException::withMessages(['journal' => 'This journal entry was posted in the meantime and cannot be cancelled.']);
             }
@@ -190,9 +215,22 @@ class JournalEntryController extends Controller
         return back()->with('status', 'Journal entry "'.$journal_entry->journal_number.'" cancelled. It stays in the audit history.');
     }
 
-    /**
-     * @return array{0: array, 1: array, 2: array} Header data, line rows and debit/credit totals.
-     */
+    /** Journal screens/actions require every line; line-scoped ledger reports remain unchanged. */
+    private function accessibleEntries(): Builder
+    {
+        return JournalEntry::query()->whereDoesntHave('lines', function ($lines) {
+            $lines->withoutGlobalScopes()->whereNotIn('journal_entry_lines.id',
+                JournalEntryLine::query()->select('journal_entry_lines.id'));
+        });
+    }
+
+    private function assertWholeEntryAccess(JournalEntry $entry): void
+    {
+        abort_unless($this->accessibleEntries()->whereKey($entry->id)->exists(), 403,
+            'You must have access to every line of this journal. Ask a company-level accountant to review it.');
+    }
+
+    /** @return array{0: array, 1: array, 2: array} */
     private function validated(Request $request): array
     {
         $data = $request->validate([
@@ -262,7 +300,7 @@ class JournalEntryController extends Controller
     }
 
     /** @return array<int, array<string, mixed>> */
-    private function linesWithinScope(\App\Models\User $user, array $lines): array
+    private function linesWithinScope(User $user, array $lines): array
     {
         $scope = $user->effectiveAccessScope();
 
@@ -270,7 +308,7 @@ class JournalEntryController extends Controller
             return $lines;
         }
 
-        $scopes = app(\App\Services\UserAccessScopeService::class);
+        $scopes = app(UserAccessScopeService::class);
         $projectIds = $scopes->projectIdsFor($user);
         abort_if($projectIds === [] || in_array($scope, ['warehouse'], true), 403, 'Your account scope cannot post journal entries.');
 
@@ -296,11 +334,11 @@ class JournalEntryController extends Controller
     private function assertLineAccountsActive(array $accountIds, string $errorKey): void
     {
         $accountIds = array_values(array_unique(array_filter(array_map('intval', $accountIds))));
-        $inactive = \App\Models\ChartOfAccount::withoutGlobalScopes()
+        $inactive = ChartOfAccount::withoutGlobalScopes()
             ->whereIn('id', $accountIds)
             ->where('status', '!=', 'active')
             ->get(['account_code', 'account_name']);
-        $missing = count($accountIds) - \App\Models\ChartOfAccount::withoutGlobalScopes()->whereIn('id', $accountIds)->count();
+        $missing = count($accountIds) - ChartOfAccount::withoutGlobalScopes()->whereIn('id', $accountIds)->count();
 
         if ($inactive->isNotEmpty() || $missing > 0) {
             $names = $inactive->map(fn ($a) => $a->account_code.' '.$a->account_name)->implode(', ');
@@ -312,7 +350,7 @@ class JournalEntryController extends Controller
 
     private function assertVatLinesInOpenPeriod($date, array $accountIds): void
     {
-        $posting = app(\App\Services\Accounting\PostingService::class);
+        $posting = app(PostingService::class);
 
         if (array_intersect(array_map('intval', $accountIds), $posting->vatAccountIds()) !== []) {
             $posting->assertVatPeriodOpen($date, 'This journal touches a VAT account and');

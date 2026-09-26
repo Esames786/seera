@@ -18,6 +18,7 @@ use App\Models\Warehouse;
 use App\Services\Accounting\PostingService;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 /**
@@ -185,6 +186,34 @@ class VatPeriodLockTest extends TestCase
         $this->assertSame('unpaid', $invoice->payment_status, 'the invoice stays approved');
         $this->assertNotNull($invoice->journal_entry_id);
         $this->assertSame(1, VatTransaction::where('source_module', 'Customer Invoice')->where('source_id', $invoice->id)->count());
+    }
+
+    public function test_stale_draft_model_cannot_recalculate_a_period_finalized_since_it_was_loaded(): void
+    {
+        $stale = $this->open->fresh();
+        $this->actingAs($this->admin())->post(route('admin.accounting.vat.finalize', $this->open))->assertSessionHasNoErrors();
+        $before = $this->open->fresh()->getAttributes();
+        try {
+            $stale->recalculate();
+            $this->fail('A stale draft instance must not bypass the period lock.');
+        } catch (ValidationException $exception) {
+            $this->assertArrayHasKey('vat', $exception->errors());
+        }
+        $this->assertSame($before, $this->open->fresh()->getAttributes());
+    }
+
+    public function test_withdrawal_checks_sealed_dates_even_if_a_legacy_vat_row_has_no_period_link(): void
+    {
+        $row = VatTransaction::create(['transaction_date' => $this->sealedDate(), 'source_module' => 'Review',
+            'source_id' => 991, 'taxable_amount' => 100, 'vat_amount' => 15, 'vat_rate' => 15,
+            'vat_type' => 'input', 'status' => 'active', 'party_type' => 'supplier']);
+        try {
+            app(PostingService::class)->withdrawVat('Review', 991);
+            $this->fail('Legacy rows in sealed dates must not be withdrawn.');
+        } catch (ValidationException $exception) {
+            $this->assertArrayHasKey('vat', $exception->errors());
+        }
+        $this->assertDatabaseHas('vat_transactions', ['id' => $row->id]);
     }
 
     public function test_a_period_cannot_be_recalculated_or_finalized_twice_once_sealed(): void

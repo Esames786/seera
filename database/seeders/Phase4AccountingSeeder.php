@@ -30,6 +30,9 @@ class Phase4AccountingSeeder extends Seeder
 
     private ?int $financeUserId = null;
 
+    /** Newly created demo periods only; never reopen an existing sealed return. */
+    private array $demoVatPeriods = [];
+
     public function run(): void
     {
         $this->posting = app(PostingService::class);
@@ -139,14 +142,15 @@ class Phase4AccountingSeeder extends Seeder
             $start = $quarterStart->copy()->addQuarters($offset);
             $end = $start->copy()->endOfQuarter();
 
-            VatPeriod::create([
+            $period = VatPeriod::create([
                 'period_name' => 'Q'.$start->quarter.' '.$start->year,
                 'start_date' => $start->toDateString(),
                 'end_date' => $end->toDateString(),
-                'status' => $offset < 0 ? 'finalized' : 'draft',
+                'status' => 'draft',
                 'submitted_at' => $offset < 0 ? $end->copy()->addDays(15) : null,
                 'notes' => $offset < 0 ? 'Filed with ZATCA.' : 'Open quarter, still collecting transactions.',
             ]);
+            $this->demoVatPeriods[$period->id] = $offset < 0;
         }
     }
 
@@ -487,6 +491,11 @@ class Phase4AccountingSeeder extends Seeder
 
     private function recalculateVatPeriods(): void
     {
-        VatPeriod::each(fn (VatPeriod $period) => $period->recalculate());
+        foreach (VatPeriod::whereKey(array_keys($this->demoVatPeriods))->get() as $period) {
+            $period->recalculate();
+            if ($this->demoVatPeriods[$period->id]) {
+                $period->update(['status' => 'finalized']);
+            }
+        }
     }
 }

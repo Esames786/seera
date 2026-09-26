@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\ActivityLog;
 use App\Models\ChartOfAccount;
 use App\Models\Customer;
 use App\Models\CustomerInvoice;
@@ -102,7 +103,7 @@ class SettlementIdempotencyTest extends TestCase
         $this->assertSame($journals + 1, JournalEntry::count(), 'exactly one payment journal');
         $this->assertSame(750.0, (float) $bill->balance_amount);
         $this->assertSame('partially_paid', $bill->status);
-        $this->assertSame(1, \App\Models\ActivityLog::where('action', 'Recorded supplier payment')->where('description', 'like', 'BILL-F02%')->count());
+        $this->assertSame(1, ActivityLog::where('action', 'Recorded supplier payment')->where('description', 'like', 'BILL-F02%')->count());
 
         // A genuinely new operation with the same amount is a second partial payment.
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.payment.store', $bill), $this->paymentPayload('pay-'.str_repeat('b', 30)))
@@ -114,6 +115,58 @@ class SettlementIdempotencyTest extends TestCase
         // The database refuses a duplicate key even if the application check were bypassed.
         $this->expectException(QueryException::class);
         SupplierPayment::create($this->paymentPayload($key) + ['supplier_id' => $bill->supplier_id, 'supplier_bill_id' => $bill->id]);
+    }
+
+    public function test_payment_replay_rejects_a_different_bill_or_changed_details(): void
+    {
+        $bill = $this->approvedBill();
+        $other = $bill->replicate();
+        $other->bill_number = 'BILL-REPLAY-OTHER';
+        $other->save();
+        $payload = $this->paymentPayload('bound-payment-key');
+        $route = route('admin.accounting.accounts-payable.payment.store', $bill);
+        $this->actingAs($this->admin())->post($route, $payload)->assertSessionHasNoErrors();
+        $journals = JournalEntry::count();
+        $this->post(route('admin.accounting.accounts-payable.payment.store', $other), $payload)
+            ->assertSessionHasErrors('idempotency_key');
+        foreach ([['amount' => 401], ['payment_date' => now()->subDay()->toDateString()],
+            ['payment_account_id' => ChartOfAccount::where('account_code', PostingService::BANK)->firstOrFail()->id],
+            ['payment_method' => 'Cheque'], ['purpose' => 'Other adjustment'],
+            ['reference_number' => 'changed'], ['notes' => 'changed']] as $change) {
+            $this->post($route, $change + $payload)->assertSessionHasErrors('idempotency_key');
+        }
+        $this->assertSame(1, $bill->payments()->count());
+        $this->assertSame(0, $other->payments()->count());
+        $this->assertSame($journals, JournalEntry::count());
+        $this->assertSame(0.0, (float) $other->fresh()->paid_amount);
+        $this->post($route, ['amount' => '400.00'] + $payload)->assertSessionHasNoErrors();
+        $this->assertStringContainsString('already recorded', session('status'));
+    }
+
+    public function test_receipt_replay_rejects_a_different_invoice_or_changed_details(): void
+    {
+        $invoice = $this->approvedInvoice();
+        $other = $invoice->replicate();
+        $other->invoice_number = 'INV-REPLAY-OTHER';
+        $other->save();
+        $payload = ['receipt_date' => now()->toDateString(), 'amount' => 500, 'payment_method' => 'Bank Transfer',
+            'receipt_account_id' => ChartOfAccount::where('account_code', PostingService::BANK)->firstOrFail()->id,
+            'idempotency_key' => 'bound-receipt-key'];
+        $route = route('admin.accounting.accounts-receivable.receipt.store', $invoice);
+        $this->actingAs($this->admin())->post($route, $payload)->assertSessionHasNoErrors();
+        $journals = JournalEntry::count();
+        $this->post(route('admin.accounting.accounts-receivable.receipt.store', $other), $payload)
+            ->assertSessionHasErrors('idempotency_key');
+        foreach ([['amount' => 501], ['receipt_date' => now()->subDay()->toDateString()],
+            ['receipt_account_id' => ChartOfAccount::where('account_code', PostingService::CASH)->firstOrFail()->id],
+            ['payment_method' => 'Cheque'], ['reference_number' => 'changed'], ['notes' => 'changed']] as $change) {
+            $this->post($route, $change + $payload)->assertSessionHasErrors('idempotency_key');
+        }
+        $this->assertSame(1, $invoice->receipts()->count());
+        $this->assertSame(0, $other->receipts()->count());
+        $this->assertSame($journals, JournalEntry::count());
+        $this->post($route, ['amount' => '500.00'] + $payload)->assertSessionHasNoErrors();
+        $this->assertStringContainsString('already recorded', session('status'));
     }
 
     public function test_a_payment_without_a_key_still_works_for_older_clients(): void
