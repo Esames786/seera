@@ -16,10 +16,13 @@ use Illuminate\Validation\ValidationException;
 
 class EmployeeWorkspaceController extends Controller
 {
+    use \App\Http\Controllers\Concerns\ServesWorkspacePanels {
+        authorizePanel as authorizeWorkspacePanel;
+    }
+
     private function authorizePanel(Request $request, string $panel, string $action): void
     {
-        abort_unless(isset(Panels::PANELS[$panel]), 404);
-        abort_unless($request->user()->hasPermission(Panels::PANELS[$panel][1], $action), 403);
+        $this->authorizeWorkspacePanel($request, Panels::class, $panel, $action);
     }
 
     public function panel(Request $request, Employee $employee, string $panel): JsonResponse

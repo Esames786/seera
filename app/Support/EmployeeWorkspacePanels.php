@@ -25,8 +25,11 @@ use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class EmployeeWorkspacePanels
+class EmployeeWorkspacePanels implements \App\Support\Workspace\WorkspacePanels
 {
+    use \App\Support\Workspace\PanelSet;
+
+    /** [title, permission module, model, delegate controller] */
     public const PANELS = [
         'salary' => ['Salary Structures', 'Payroll', SalaryStructure::class, SalaryStructureController::class],
         'attendance' => ['Attendance', 'Attendance', AttendanceRecord::class, AttendanceController::class],
@@ -37,6 +40,17 @@ class EmployeeWorkspacePanels
         'payroll-history' => ['Payroll History', 'Payroll', PayrollRunItem::class, null],
         'account' => ['System Account', 'Users', User::class, UserController::class],
     ];
+
+    /** The same panels as PanelDefinitions, for the shared workspace kit. */
+    public static function panels(): array
+    {
+        $panels = [];
+        foreach (self::PANELS as $key => [$title, $module]) {
+            $panels[$key] = new \App\Support\Workspace\PanelDefinition($key, $title, $module);
+        }
+
+        return $panels;
+    }
 
     public static function query(Employee $employee, string $panel)
     {

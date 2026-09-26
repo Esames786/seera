@@ -4,7 +4,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const read = name => fs.readFileSync(path.join(__dirname, '../../resources/js/', name), 'utf8');
-const source = read('employee-related-panels.js').replace('export function', 'function') + '\n'
+const source = read('workspace-related-panels.js').replace('export function', 'function') + '\n'
+    + read('employee-related-panels.js').replace(/^import .*;\r?\n/m, '').replace('export function', 'function') + '\n'
     + read('employee-workspace.js').replace(/^import .*;\r?\n/m, '');
 (async () => {
     const browser = await chromium.launch({ headless: true, executablePath: process.env.PREVIEW_CHROME || 'C:/Program Files/Google/Chrome/Application/chrome.exe' });

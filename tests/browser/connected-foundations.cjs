@@ -6,7 +6,8 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 const script = fs.readFileSync(path.join(__dirname, '../../resources/js/unsaved-changes.js'), 'utf8');
 const employeeScript = fs.readFileSync(path.join(__dirname, '../../resources/js/employee-user-search.js'), 'utf8');
-const relatedScript = fs.readFileSync(path.join(__dirname, '../../resources/js/employee-related-panels.js'), 'utf8').replace('export function', 'function');
+const relatedScript = fs.readFileSync(path.join(__dirname, '../../resources/js/workspace-related-panels.js'), 'utf8').replace('export function', 'function')
+    + '\n' + fs.readFileSync(path.join(__dirname, '../../resources/js/employee-related-panels.js'), 'utf8').replace(/^import .*;\r?\n/m, '').replace('export function', 'function');
 const workspaceScript = relatedScript + '\n' + fs.readFileSync(path.join(__dirname, '../../resources/js/employee-workspace.js'), 'utf8').replace(/^import .*;\r?\n/m, '');
 
 (async () => {

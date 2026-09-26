@@ -462,3 +462,11 @@ tr:hover td { background: #fbfdff; }
 #employee-search-results { display: grid; gap: 6px; margin-block: 8px; }
 .employee-workspace-nav { flex-wrap: wrap; gap: 4px; margin-block-end: 16px; }
 .employee-workspace-nav[hidden] { display: none; }
+.workspace-nav { flex-wrap: wrap; gap: 4px; margin-block-end: 16px; }
+.workspace-nav[hidden] { display: none; }
+.workspace-header { display: flex; flex-wrap: wrap; gap: 18px 28px; align-items: flex-start; padding: 16px 18px; margin-block-end: 16px; }
+.workspace-header .identity { min-width: 220px; }
+.workspace-header .identity h2 { margin: 0 0 4px; font-size: 18px; }
+.workspace-header dl { display: grid; grid-template-columns: auto auto; gap: 2px 12px; margin: 0; font-size: 13px; }
+.workspace-header dt { color: #64748b; }
+.workspace-header dd { margin: 0; font-weight: 700; }

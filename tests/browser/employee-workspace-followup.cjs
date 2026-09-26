@@ -4,7 +4,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const read = file => fs.readFileSync(path.join(__dirname, '../../', file), 'utf8');
-const workspace = read('resources/js/employee-related-panels.js').replace('export function', 'function') + '\n'
+const workspace = read('resources/js/workspace-related-panels.js').replace('export function', 'function') + '\n'
+    + read('resources/js/employee-related-panels.js').replace(/^import .*;\r?\n/m, '').replace('export function', 'function') + '\n'
     + read('resources/js/employee-workspace.js').replace(/^import .*;\r?\n/m, '');
 const quickCreate = read('resources/views/components/admin/quick-create.blade.php').match(/<script>([\s\S]*?)<\/script>/)[1];
 const dependentSelect = read('resources/views/components/admin/dependent-select.blade.php').match(/<script>([\s\S]*?)<\/script>/)[1];
