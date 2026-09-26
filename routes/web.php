@@ -289,6 +289,8 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::post('purchase-orders/{purchase_order}/attachments', [PurchaseOrderController::class, 'storeAttachment'])->name('purchase-orders.attachments.store');
         Route::get('purchase-orders/{purchase_order}/attachments/{attachment}', [PurchaseOrderController::class, 'downloadAttachment'])->name('purchase-orders.attachments.download');
         Route::delete('purchase-orders/{purchase_order}/attachments/{attachment}', [PurchaseOrderController::class, 'destroyAttachment'])->name('purchase-orders.attachments.destroy');
+        // Purchase Order document workspace: paged read-only sections (receipts, billing, accounting, activity).
+        Route::get('purchase-orders/{purchase_order}/workspace/{panel}', [\App\Http\Controllers\Admin\Inventory\PurchaseOrderWorkspaceController::class, 'panel'])->name('purchase-orders.workspace.panel');
         Route::resource('purchase-orders', PurchaseOrderController::class);
 
         Route::post('goods-receipts/{goods_receipt}/post-stock', [GoodsReceiptController::class, 'postStock'])->name('goods-receipts.post-stock');

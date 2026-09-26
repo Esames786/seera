@@ -13,6 +13,7 @@ use App\Models\PurchaseRequest;
 use App\Models\Site;
 use App\Models\Supplier;
 use App\Models\Warehouse;
+use App\Support\Workspace\PurchaseOrderWorkspacePanels as Panels;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -90,14 +91,37 @@ class PurchaseOrderController extends Controller
             ->with('status', 'Purchase order "'.$order->po_number.'" created successfully.');
     }
 
-    public function show(PurchaseOrder $purchase_order): View
+    /**
+     * Connected document workspace: identity header, per-line received/invoiced
+     * state and every related document, each section behind its own permission.
+     */
+    public function show(Request $request, PurchaseOrder $purchase_order): View
     {
         $purchase_order->load([
-            'lines.item.unit', 'supplier', 'project', 'site', 'warehouse', 'approver',
-            'purchaseRequest', 'goodsReceipts', 'attachments.uploader',
+            'lines.item.unit', 'supplier.paymentTerm', 'supplier.linkedAccount', 'project', 'site', 'warehouse', 'approver',
+            'purchaseRequest.requester', 'purchaseRequest.approver', 'purchaseRequest.lines', 'attachments.uploader',
         ]);
+        $user = $request->user();
 
-        return view('admin.inventory.purchase-orders.show', ['order' => $purchase_order]);
+        $sections = [];
+        foreach (Panels::visibleDefinitions($user) as $key => $definition) {
+            $sections[$key] = $definition->title;
+        }
+
+        $panels = [];
+        foreach (Panels::PAGED as $key) {
+            if (isset($sections[$key])) {
+                $panels[$key] = Panels::data($purchase_order, $key, $user, 5, $request->integer('page_'.$key) ?: null, true);
+            }
+        }
+
+        return view('admin.inventory.purchase-orders.show', [
+            'order' => $purchase_order,
+            'summary' => Panels::summary($purchase_order, $user),
+            'matrix' => Panels::lineMatrix($purchase_order),
+            'sections' => $sections,
+            'panels' => $panels,
+        ]);
     }
 
     public function edit(PurchaseOrder $purchase_order): View

@@ -132,6 +132,11 @@ class EnsureUserHasPermission
             // The workspace controller ALSO enforces each panel's own module/action.
             return [$matches[1] === 'suppliers' ? 'Suppliers' : 'Customers', $matches[2] === 'panel' ? 'view' : 'edit'];
         }
+        if ($routeName === 'admin.inventory.purchase-orders.workspace.panel') {
+            // Reading a section of the PO document workspace needs the order's view right;
+            // the workspace controller ALSO enforces each section's own module.
+            return ['Purchase Orders', 'view'];
+        }
         if ($routeName === 'admin.users.employee-search') {
             return ['Users', 'create'];
         }
