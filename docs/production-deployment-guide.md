@@ -430,3 +430,62 @@ $PHP artisan up
 To also drop the column: `$PHP artisan migrate:rollback --step=1 --force` **only**
 while `2026_09_26_000001` is the last batch, and only after the code rollback above.
 Never use `migrate:fresh` on the server.
+
+## 14. F04 GRNI release (feature branch, 27 September)
+
+Same branch. Adds **one additive migration**,
+`2026_09_27_000001_add_grni_and_supplier_bill_grn_matching`, which:
+
+- adds `purchase_order_line_id` and `invoiced_quantity` to `goods_receipt_lines`;
+- creates `supplier_bill_grn_matches`;
+- creates chart-of-accounts code **2150 "Goods Received Not Invoiced"** (liability,
+  credit) under 2000 only if it does not already exist, and repoints the
+  "Inventory / Inventory Purchase" posting rule's credit side to it.
+
+No seeder is needed. No posted journal is changed. Receipts posted **before** this
+release keep their old Dr Inventory / Dr Input VAT / Cr AP journals; run the
+read-only report below after migrating and hand the list to the accountant:
+
+```bash
+cd ~/seera
+PHP=/opt/cpanel/ea-php83/root/usr/bin/php
+$PHP artisan finance:grn-bill-overlap        # read-only; lists legacy receipts and possible duplicate bills
+```
+
+No JavaScript or CSS changed (the bill form's new script is inline in the Blade
+view), so `public/build.zip` is unchanged and does not need re-extracting.
+
+```bash
+cd ~/seera
+PHP=/opt/cpanel/ea-php83/root/usr/bin/php
+
+$PHP artisan down
+git fetch origin
+git checkout feature/seera-connected-workspaces-2026-09-23
+git pull --ff-only
+$PHP artisan migrate --force          # runs 2026_09_26_000001 (if not yet) and 2026_09_27_000001
+$PHP artisan optimize
+$PHP artisan up
+$PHP artisan finance:grn-bill-overlap
+```
+
+Post-release checks (read-only): Chart of Accounts shows 2150 under Liabilities;
+open a posted goods receipt and confirm the "Create Supplier Bill" button and the
+"Invoiced" column; open Accounts Payable → Add Supplier Bill and confirm the
+"Received Goods (GRN)" column lists that supplier's uninvoiced receipt lines.
+
+Rollback (code only; the new table and columns are harmless when unused, and
+account 2150 stays because it may already carry postings):
+
+```bash
+cd ~/seera
+PHP=/opt/cpanel/ea-php83/root/usr/bin/php
+$PHP artisan down
+git checkout d81948c                  # last commit before F04
+$PHP artisan optimize
+$PHP artisan up
+```
+
+To also drop the matching table and columns: `$PHP artisan migrate:rollback --step=1 --force`
+**only** while `2026_09_27_000001` is the last batch and no bill has been matched
+(the `supplier_bill_grn_matches` table is empty). Never use `migrate:fresh`.

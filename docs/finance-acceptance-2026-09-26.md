@@ -22,7 +22,7 @@ posted movement of the account on the document date. "Audit log" is the
 | FIN-05 | Cash / trial balance / report tie-out | PASS |
 | FIN-06 | VAT open / finalized / correction | PASS |
 | FIN-07 | Receivable ageing buckets | PASS (bucket boundaries need accountant sign-off) |
-| FIN-08 | Procurement reconciliation | BLOCKED (F04) — inventory half PASS |
+| FIN-08 | Procurement reconciliation | PASS (27 Sep, F04 GRNI model; was BLOCKED on 26 Sep) |
 | FIN-09 | Approval and permission | BLOCKED (F08) — permission half PASS |
 | FIN-10 | Recovery / correction | PASS (payment reversal is a known gap) |
 
@@ -94,10 +94,10 @@ posted movement of the account on the document date. "Audit log" is the
 
 ## FIN-08 — Procurement reconciliation
 
-- **Input:** fresh item, GRN 10 units at 100, VAT 15 %, posted to stock; stock issue of 3 units, posted.
-- **Expected (inventory half):** stock 10 / 1,000 then 7 / 700; GRN journal 1400 Dr 1,000 / 1300 Dr 150 / 2100 Cr 1,150 with one `input` VAT row (source "Goods Receipt"); issue journal 5200 Dr 300 / 1400 Cr 300 with no VAT row.
-- **Audit log:** `Posted goods receipt <GRN number>` (Inventory module).
-- **Result:** inventory half PASS. **BLOCKED** for the reconciliation half: a supplier bill entered for the same delivery posts a second AP liability and a second input VAT row today (audit F04). No assertion is made about that until the GRN-vs-bill model is decided.
+- **Input:** fresh item, GRN 10 units at 100, posted to stock; stock issue of 3 units, posted; then the supplier's bill for the same delivery, matched line-by-line to the receipt (10 units at 100, VAT 15 %).
+- **Expected (27 Sep, F04 GRNI model):** stock 10 / 1,000 then 7 / 700. GRN journal 1400 Dr 1,000 / 2150 Cr 1,000 (Goods Received Not Invoiced); no VAT row and no supplier payable at receipt stage. Issue journal 5200 Dr 300 / 1400 Cr 300, no VAT. Matched bill journal 2150 Dr 1,000 / 1300 Dr 150 / 2100 Cr 1,150 with one `input` VAT row; GRNI back to its pre-receipt balance; the payable and the VAT exist exactly once; inventory value untouched by the bill; the receipt line shows 10 invoiced. A second bill for the same received quantity is refused.
+- **Audit log:** `Posted goods receipt <GRN number>` (Inventory module), `Approved supplier bill BILL-FIN08`.
+- **Result:** PASS. Detailed matching rules (partial receipts, partial invoices, several receipts on one bill, over-receipt, supplier mismatch, stale duplicate, scope, reopen) are covered by `tests/Feature/GrnBillMatchingTest.php` (14 tests). Historical receipts posted under the old model are listed by `php artisan finance:grn-bill-overlap` and are not corrected automatically.
 
 ## FIN-09 — Approval and permission
 
@@ -115,6 +115,6 @@ posted movement of the account on the document date. "Audit log" is the
 ## What the client accountant still has to do
 
 1. Run FIN-01 … FIN-07 and FIN-10 on staging with the production chart codes and sign each line.
-2. Decide F04 (GRN vs supplier bill) so FIN-08 can be completed.
+2. ~~Decide F04 (GRN vs supplier bill) so FIN-08 can be completed.~~ Done 27 Sep (GRNI model); the accountant should confirm the GRNI account code 2150 and the price-variance treatment (variance to the line's expense account).
 3. Decide the approval configuration (F08) so FIN-09 can be completed.
 4. Confirm the ageing boundaries and the zero-rate / rounding policy (FIN-07, FIN-06).
