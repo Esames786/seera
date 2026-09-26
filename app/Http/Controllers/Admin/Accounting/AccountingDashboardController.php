@@ -102,27 +102,10 @@ class AccountingDashboardController extends Controller
      */
     private function aging(string $model, string $dateColumn, array $statuses, string $statusColumn = 'status'): array
     {
-        $today = Carbon::today();
-
-        $rows = $model::whereIn($statusColumn, $statuses)
-            ->get(['id', $dateColumn, 'balance_amount']);
-
-        $buckets = ['Current' => 0.0, '1-30 days' => 0.0, '31-60 days' => 0.0, '60+ days' => 0.0];
-
-        foreach ($rows as $row) {
-            $due = $row->{$dateColumn};
-            $daysLate = $due ? $due->diffInDays($today, false) : 0;
-
-            $bucket = match (true) {
-                $daysLate <= 0 => 'Current',
-                $daysLate <= 30 => '1-30 days',
-                $daysLate <= 60 => '31-60 days',
-                default => '60+ days',
-            };
-
-            $buckets[$bucket] += (float) $row->balance_amount;
-        }
-
-        return array_map(fn ($value) => round($value, 2), $buckets);
+        // One ageing rule for the whole application (App\Support\AgeingBuckets).
+        return \App\Support\AgeingBuckets::fromRows(
+            $model::whereIn($statusColumn, $statuses)->get(['id', $dateColumn, 'balance_amount']),
+            $dateColumn
+        );
     }
 }
