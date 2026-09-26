@@ -1,11 +1,12 @@
 @php
     /** @var \App\Models\Supplier|null $supplier */
     $supplier = $supplier ?? null;
+    $workspace = $workspace ?? false;   // inside the workspace, projects are managed in their own panel
     $defaultTerm = $paymentTerms->firstWhere('name', $supplier?->payment_terms ?? 'Cash') ?? $paymentTerms->first();
     $selectedProjects = collect(old('project_ids', $supplier?->projects->pluck('id')->all() ?? []))->map(fn ($id) => (int) $id);
 @endphp
 
-<form method="POST" action="{{ $supplier ? route('admin.master.suppliers.update', $supplier) : route('admin.master.suppliers.store') }}">
+<form method="POST" action="{{ $supplier ? route('admin.master.suppliers.update', $supplier) : route('admin.master.suppliers.store') }}" id="profile">
     @csrf
     @if ($supplier) @method('PUT') @endif
 
@@ -102,24 +103,24 @@
         <div><label for="iban">IBAN</label><input id="iban" name="iban" class="input" value="{{ old('iban', $supplier?->iban) }}" placeholder="SA00 0000 0000 0000 0000 0000"/></div>
     </x-admin.form-section>
 
-    <x-admin.form-section title="Projects this Supplier Works For">
-        @if ($projects->isEmpty())
-            <div class="small">No projects yet. Suppliers can be linked once projects exist.</div>
-        @else
-            <div class="form-grid three">
-                @foreach ($projects as $project)
-                    <label class="check-line" style="margin:0">
-                        <input class="checkbox" type="checkbox" name="project_ids[]" value="{{ $project->id }}" @checked($selectedProjects->contains($project->id))/>
-                        {{ $project->code }} — {{ $project->name }}
-                    </label>
-                @endforeach
-            </div>
-            <div class="small" style="margin-top:10px">Linked suppliers are listed on each project's page.</div>
-        @endif
-    </x-admin.form-section>
+    @unless ($workspace)
+        <x-admin.form-section title="Projects this Supplier Works For">
+            <input type="hidden" name="project_ids_submitted" value="1"/>
+            @if ($projects->isEmpty())
+                <div class="small">No projects yet. Suppliers can be linked once projects exist.</div>
+            @else
+                <div class="form-grid three">
+                    @foreach ($projects as $project)
+                        <label class="check-line" style="margin:0">
+                            <input class="checkbox" type="checkbox" name="project_ids[]" value="{{ $project->id }}" @checked($selectedProjects->contains($project->id))/>
+                            {{ $project->code }} — {{ $project->name }}
+                        </label>
+                    @endforeach
+                </div>
+                <div class="small" style="margin-top:10px">Linked suppliers are listed on each project's page.</div>
+            @endif
+        </x-admin.form-section>
+    @endunless
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.master.suppliers.index') }}">Cancel</a>
-        <button type="submit" class="btn primary">{{ $supplier ? 'Update Supplier' : 'Save Supplier' }}</button>
-    </div>
+    <x-admin.form-actions :cancel="route('admin.master.suppliers.index')" :save-new="true"/>
 </form>

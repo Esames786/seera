@@ -145,6 +145,10 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
             ->only(['index', 'store', 'update', 'destroy'])
             ->parameters(['payment-terms' => 'payment_term']);
         Route::post('lookup-values', [LookupValueController::class, 'store'])->name('lookup-values.store');
+        // Supplier connected workspace: related panels load and save inside the supplier context.
+        Route::get('suppliers/{supplier}/workspace/{panel}', [\App\Http\Controllers\Admin\Master\SupplierWorkspaceController::class, 'panel'])->name('suppliers.workspace.panel');
+        Route::post('suppliers/{supplier}/workspace/{panel}', [\App\Http\Controllers\Admin\Master\SupplierWorkspaceController::class, 'save'])->name('suppliers.workspace.save');
+        Route::post('suppliers/{supplier}/workspace/{panel}/{record}/{action}', [\App\Http\Controllers\Admin\Master\SupplierWorkspaceController::class, 'action'])->whereNumber('record')->name('suppliers.workspace.action');
         Route::resource('suppliers', SupplierController::class);
         Route::post('customers/{customer}/contacts', [CustomerController::class, 'storeContact'])->name('customers.contacts.store');
         Route::delete('customers/{customer}/contacts/{contact}', [CustomerController::class, 'destroyContact'])->name('customers.contacts.destroy');

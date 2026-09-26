@@ -10,6 +10,8 @@ use App\Models\PaymentTerm;
 use App\Models\Project;
 use App\Models\Supplier;
 use App\Support\CodeGenerator;
+use App\Support\SaveAction;
+use App\Support\Workspace\SupplierWorkspacePanels as Panels;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -59,7 +61,9 @@ class SupplierController extends Controller
 
         $supplier = DB::transaction(function () use ($data, $projectIds) {
             $supplier = Supplier::create($data);
-            $supplier->projects()->sync($projectIds);
+            if ($projectIds !== null) {
+                $supplier->projects()->sync($projectIds);
+            }
 
             return $supplier;
         });
@@ -70,21 +74,41 @@ class SupplierController extends Controller
             return response()->json(['id' => $supplier->id, 'label' => $supplier->name, 'code' => $supplier->code], 201);
         }
 
-        return redirect()->route('admin.master.suppliers.index')->with('status', 'Supplier "'.$supplier->name.'" created successfully.');
+        return SaveAction::redirect($request, [
+            'stay' => route('admin.master.suppliers.edit', $supplier),
+            'close' => route('admin.master.suppliers.index'),
+            'new' => route('admin.master.suppliers.create'),
+        ])->with('status', 'Supplier "'.$supplier->name.'" created successfully.');
     }
 
-    public function show(Supplier $supplier): View
+    /** Read-only connected view: identity, header figures and the related panels, no forms. */
+    public function show(Request $request, Supplier $supplier): View
     {
-        $supplier->load(['paymentTerm', 'linkedAccount', 'projects.customer']);
+        $supplier->load(['paymentTerm', 'linkedAccount']);
+        $user = $request->user();
 
-        return view('admin.master.suppliers.show', ['supplier' => $supplier]);
+        $panels = [];
+        foreach (Panels::visibleDefinitions($user) as $key => $definition) {
+            $panels[$key] = Panels::data($supplier, $key, $user, true, 5);
+        }
+
+        return view('admin.master.suppliers.show', [
+            'supplier' => $supplier,
+            'summary' => Panels::summary($supplier, $user),
+            'panels' => $panels,
+        ]);
     }
 
-    public function edit(Supplier $supplier): View
+    /** Edit workspace: the profile form plus lazily loaded related panels. */
+    public function edit(Request $request, Supplier $supplier): View
     {
-        $supplier->load('projects');
+        $supplier->load(['projects', 'linkedAccount', 'paymentTerm']);
 
-        return view('admin.master.suppliers.edit', ['supplier' => $supplier] + $this->formOptions($supplier));
+        return view('admin.master.suppliers.edit', [
+            'supplier' => $supplier,
+            'summary' => Panels::summary($supplier, $request->user()),
+            'panels' => Panels::visibleDefinitions($request->user()),
+        ] + $this->formOptions($supplier));
     }
 
     public function update(Request $request, Supplier $supplier): RedirectResponse
@@ -93,26 +117,37 @@ class SupplierController extends Controller
 
         DB::transaction(function () use ($supplier, $data, $projectIds) {
             $supplier->update($data);
-            $supplier->projects()->sync($projectIds);
+            // The workspace manages project links in its own panel; only a form that
+            // submitted the project list changes it.
+            if ($projectIds !== null) {
+                $supplier->projects()->sync($projectIds);
+            }
         });
 
         ActivityLog::record($request, 'Suppliers', 'Updated supplier', $supplier->name);
 
-        return redirect()->route('admin.master.suppliers.index')->with('status', 'Supplier "'.$supplier->name.'" updated successfully.');
-    }
-
-    public function destroy(Request $request, Supplier $supplier): RedirectResponse
-    {
-        $name = $supplier->name;
-        $supplier->delete();
-
-        ActivityLog::record($request, 'Suppliers', 'Deleted supplier', $name);
-
-        return redirect()->route('admin.master.suppliers.index')->with('status', 'Supplier "'.$name.'" deleted successfully.');
+        return SaveAction::redirect($request, [
+            'stay' => route('admin.master.suppliers.edit', $supplier),
+            'close' => route('admin.master.suppliers.index'),
+            'new' => route('admin.master.suppliers.create'),
+        ])->with('status', 'Supplier "'.$supplier->name.'" updated successfully.');
     }
 
     /**
-     * @return array{0: array, 1: array<int, int>} Supplier attributes and linked project ids.
+     * Suppliers are deactivated, never hard-deleted: bills, payments, orders and
+     * receipts reference them and must stay for audit and VAT.
+     */
+    public function destroy(Request $request, Supplier $supplier): RedirectResponse
+    {
+        $supplier->update(['status' => 'inactive']);
+
+        ActivityLog::record($request, 'Suppliers', 'Deactivated supplier', $supplier->name);
+
+        return redirect()->route('admin.master.suppliers.index')->with('status', 'Supplier "'.$supplier->name.'" deactivated. Its documents and history are kept.');
+    }
+
+    /**
+     * @return array{0: array, 1: array<int, int>|null} Supplier attributes and linked project ids (null when the form did not submit the list).
      */
     private function validated(Request $request, ?Supplier $supplier = null): array
     {
@@ -141,6 +176,7 @@ class SupplierController extends Controller
             'status' => ['required', 'in:active,inactive'],
             'project_ids' => ['nullable', 'array'],
             'project_ids.*' => ['integer', 'exists:projects,id'],
+            'project_ids_submitted' => ['nullable', 'boolean'],
         ]);
 
         if (blank($data['code'] ?? null)) {
@@ -149,8 +185,10 @@ class SupplierController extends Controller
 
         $data['allowed_payment_types'] = $data['allowed_payment_types'] ?? 'Both';
 
-        $projectIds = array_map('intval', $data['project_ids'] ?? []);
-        unset($data['project_ids']);
+        $projectIds = $request->has('project_ids') || $request->boolean('project_ids_submitted')
+            ? array_map('intval', $data['project_ids'] ?? [])
+            : null;
+        unset($data['project_ids'], $data['project_ids_submitted']);
 
         return [$data, $projectIds];
     }

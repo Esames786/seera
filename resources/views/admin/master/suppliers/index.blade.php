@@ -58,10 +58,17 @@
                     <td>SAR {{ number_format($supplier->opening_balance / 1000, 1) }}K</td>
                     <td><x-admin.status-badge :status="$supplier->status"/></td>
                     <td>
+                        @php
+                            $editUrl = auth()->user()->hasPermission('Suppliers', 'edit') ? route('admin.master.suppliers.edit', $supplier) : null;
+                            $deactivateUrl = ($supplier->status === 'active' and auth()->user()->hasPermission('Suppliers', 'delete')) ? route('admin.master.suppliers.destroy', $supplier) : null;
+                        @endphp
                         <x-admin.action-buttons
                             :view="route('admin.master.suppliers.show', $supplier)"
-                            :edit="route('admin.master.suppliers.edit', $supplier)"
-                            :delete="route('admin.master.suppliers.destroy', $supplier)"
+                            :edit="$editUrl"
+                            edit-label="Edit / Manage"
+                            :delete="$deactivateUrl"
+                            delete-label="Deactivate"
+                            :deactivate="true"
                             :name="$supplier->name"/>
                     </td>
                 </tr>
