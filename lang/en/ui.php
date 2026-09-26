@@ -33,6 +33,7 @@ return [
     'language' => 'Language', 'change_language' => 'Change language',
     'not_rated' => 'Not rated', 'green' => 'Green', 'amber' => 'Amber', 'red' => 'Red',
     'rating' => 'Rating', 'save_stay' => 'Save & stay', 'save_close' => 'Save & close',
+    'save' => 'Save', 'save_new' => 'Save & new', 'cancel' => 'Cancel',
     'office_contacts' => 'Office contacts & location', 'site_contacts' => 'Site contacts & location',
     'contact_help' => 'Optional: add one contact below. A contact name is required when entering contact details. Existing contacts are kept.',
     'contact_name' => 'Contact name', 'address' => 'Address / directions', 'phone' => 'Phone',

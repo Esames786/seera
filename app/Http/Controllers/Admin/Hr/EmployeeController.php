@@ -187,8 +187,12 @@ class EmployeeController extends Controller
 
     private function savedDestination(Request $request, Employee $employee): RedirectResponse
     {
+        // Save & New: straight to a fresh employee form (same shared workflow as the other CRUD forms).
+        if ($request->input('_save_action') === \App\Support\SaveAction::NEW) {
+            return redirect()->route('admin.hr.employees.create');
+        }
         if (! in_array($request->input('_save_action'), ['stay', 'next'], true)) {
-            return redirect()->route('admin.hr.employees.index');
+            return redirect()->to(\App\Support\SaveAction::returnTo($request) ?? route('admin.hr.employees.index'));
         }
         $sections = ['personal', 'employment', 'payroll', 'documents', 'access'];
         $section = in_array($request->input('_workspace_section'), $sections, true) ? $request->input('_workspace_section') : 'personal';

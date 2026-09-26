@@ -480,7 +480,8 @@
         <a class="btn outline" href="{{ route('admin.hr.employees.index') }}">Cancel</a>
         <button type="submit" name="_save_action" value="stay" class="btn outline" data-save-default>{{ __('ui.save_stay') }}</button>
         <button type="submit" name="_save_action" value="next" class="btn outline">{{ __('ui.save_next') }}</button>
-        <button type="submit" class="btn primary">{{ __('Save & close') }}</button>
+        <button type="submit" name="_save_action" value="new" class="btn outline">{{ __('ui.save_new') }}</button>
+        <button type="submit" name="_save_action" value="close" class="btn primary">{{ __('Save & close') }}</button>
     </div>
 </form>
 @if($employee)
