@@ -95,8 +95,6 @@
         </div>
     </x-admin.form-section>
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.accounting.accounts-receivable.index') }}">Cancel</a>
-        <button type="submit" class="btn primary">{{ $invoice ? 'Update Invoice' : 'Save Invoice' }}</button>
-    </div>
+    {{-- Save keeps the draft open on its detail page (Approve is a separate business action there). --}}
+    <x-admin.form-actions :cancel="route('admin.accounting.accounts-receivable.index')" :save-new="true"/>
 </form>

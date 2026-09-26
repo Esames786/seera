@@ -73,8 +73,12 @@ class JournalEntryController extends Controller
 
         ActivityLog::record($request, 'Accounting', 'Created journal entry', $entry->journal_number);
 
-        return redirect()->route('admin.accounting.journal-entries.show', $entry)
-            ->with('status', 'Journal entry "'.$entry->journal_number.'" created successfully.');
+        // Save keeps the user on the journal's detail page, where Post lives; Save & Close returns to the origin or list.
+        return \App\Support\SaveAction::redirect($request, [
+            'stay' => route('admin.accounting.journal-entries.show', $entry),
+            'close' => route('admin.accounting.journal-entries.index'),
+            'new' => route('admin.accounting.journal-entries.create'),
+        ])->with('status', 'Journal entry "'.$entry->journal_number.'" created successfully.');
     }
 
     public function show(JournalEntry $journal_entry): View
@@ -122,8 +126,11 @@ class JournalEntryController extends Controller
 
         ActivityLog::record($request, 'Accounting', 'Updated journal entry', $journal_entry->journal_number);
 
-        return redirect()->route('admin.accounting.journal-entries.show', $journal_entry)
-            ->with('status', 'Journal entry "'.$journal_entry->journal_number.'" updated successfully.');
+        return \App\Support\SaveAction::redirect($request, [
+            'stay' => route('admin.accounting.journal-entries.show', $journal_entry),
+            'close' => route('admin.accounting.journal-entries.index'),
+            'new' => route('admin.accounting.journal-entries.create'),
+        ])->with('status', 'Journal entry "'.$journal_entry->journal_number.'" updated successfully.');
     }
 
     public function destroy(Request $request, JournalEntry $journal_entry): RedirectResponse

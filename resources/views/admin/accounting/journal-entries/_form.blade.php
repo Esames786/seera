@@ -49,8 +49,6 @@
 
     @include('admin.accounting.journal-entries._lines', ['lineData' => $lineData])
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.accounting.journal-entries.index') }}">Cancel</a>
-        <button type="submit" class="btn primary">{{ $entry ? 'Update Journal Entry' : 'Save Journal Entry' }}</button>
-    </div>
+    {{-- Save keeps the draft open on its detail page (Post is a separate business action there). --}}
+    <x-admin.form-actions :cancel="route('admin.accounting.journal-entries.index')" :save-new="true"/>
 </form>

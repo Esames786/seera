@@ -12,7 +12,7 @@
                 <button type="submit" class="btn primary">Post Stock</button>
             </form>
         @elseif ($grn->status === 'posted' && $grn->lines->contains(fn ($line) => $line->uninvoicedQuantity() > 0) && auth()->user()?->hasPermission('Accounts Payable', 'create'))
-            <a class="btn primary" href="{{ route('admin.accounting.accounts-payable.create', ['goods_receipt' => $grn->id]) }}">Create Supplier Bill</a>
+            <a class="btn primary" href="{{ route('admin.accounting.accounts-payable.create', ['goods_receipt' => $grn->id, 'return_to' => route('admin.inventory.goods-receipts.show', $grn, false)]) }}">Create Supplier Bill</a>
         @endif
     </x-admin.page-header>
 

@@ -141,10 +141,8 @@
         </div>
     </x-admin.form-section>
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.accounting.accounts-payable.index') }}">Cancel</a>
-        <button type="submit" class="btn primary">{{ $bill ? 'Update Bill' : 'Save Bill' }}</button>
-    </div>
+    {{-- Save keeps the draft open on its detail page (Approve is a separate business action there). --}}
+    <x-admin.form-actions :cancel="route('admin.accounting.accounts-payable.index')" :save-new="true"/>
 </form>
 
 <x-admin.dependent-select parent="project_id" child="site_id" placeholder="sites"/>

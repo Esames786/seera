@@ -69,8 +69,12 @@ class AccountsReceivableController extends Controller
 
         ActivityLog::record($request, 'Accounting', 'Created customer invoice', $invoice->invoice_number);
 
-        return redirect()->route('admin.accounting.accounts-receivable.show', $invoice)
-            ->with('status', 'Invoice "'.$invoice->invoice_number.'" saved. Approve it to post the accounting entry and create the ZATCA record.');
+        // Save keeps the user on the invoice's detail page, where Approve lives; Save & Close returns to the origin or list.
+        return \App\Support\SaveAction::redirect($request, [
+            'stay' => route('admin.accounting.accounts-receivable.show', $invoice),
+            'close' => route('admin.accounting.accounts-receivable.index'),
+            'new' => route('admin.accounting.accounts-receivable.create'),
+        ])->with('status', 'Invoice "'.$invoice->invoice_number.'" saved. Approve it to post the accounting entry and create the ZATCA record.');
     }
 
     public function show(CustomerInvoice $accounts_receivable): View
@@ -116,8 +120,11 @@ class AccountsReceivableController extends Controller
 
         ActivityLog::record($request, 'Accounting', 'Updated customer invoice', $accounts_receivable->invoice_number);
 
-        return redirect()->route('admin.accounting.accounts-receivable.show', $accounts_receivable)
-            ->with('status', 'Invoice "'.$accounts_receivable->invoice_number.'" updated successfully.');
+        return \App\Support\SaveAction::redirect($request, [
+            'stay' => route('admin.accounting.accounts-receivable.show', $accounts_receivable),
+            'close' => route('admin.accounting.accounts-receivable.index'),
+            'new' => route('admin.accounting.accounts-receivable.create'),
+        ])->with('status', 'Invoice "'.$accounts_receivable->invoice_number.'" updated successfully.');
     }
 
     public function destroy(Request $request, CustomerInvoice $accounts_receivable): RedirectResponse

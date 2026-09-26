@@ -84,8 +84,12 @@ class AccountsPayableController extends Controller
 
         ActivityLog::record($request, 'Accounting', 'Created supplier bill', $bill->bill_number);
 
-        return redirect()->route('admin.accounting.accounts-payable.show', $bill)
-            ->with('status', 'Supplier bill "'.$bill->bill_number.'" saved. Approve it to post the accounting entry.');
+        // Save keeps the user on the bill's detail page, where Approve lives; Save & Close returns to the origin or list.
+        return \App\Support\SaveAction::redirect($request, [
+            'stay' => route('admin.accounting.accounts-payable.show', $bill),
+            'close' => route('admin.accounting.accounts-payable.index'),
+            'new' => route('admin.accounting.accounts-payable.create'),
+        ])->with('status', 'Supplier bill "'.$bill->bill_number.'" saved. Approve it to post the accounting entry.');
     }
 
     public function show(SupplierBill $accounts_payable): View
@@ -132,8 +136,11 @@ class AccountsPayableController extends Controller
 
         ActivityLog::record($request, 'Accounting', 'Updated supplier bill', $accounts_payable->bill_number);
 
-        return redirect()->route('admin.accounting.accounts-payable.show', $accounts_payable)
-            ->with('status', 'Supplier bill "'.$accounts_payable->bill_number.'" updated successfully.');
+        return \App\Support\SaveAction::redirect($request, [
+            'stay' => route('admin.accounting.accounts-payable.show', $accounts_payable),
+            'close' => route('admin.accounting.accounts-payable.index'),
+            'new' => route('admin.accounting.accounts-payable.create'),
+        ])->with('status', 'Supplier bill "'.$accounts_payable->bill_number.'" updated successfully.');
     }
 
     public function destroy(Request $request, SupplierBill $accounts_payable): RedirectResponse
