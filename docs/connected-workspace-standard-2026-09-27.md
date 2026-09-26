@@ -84,3 +84,15 @@ Batches 2 to 8 each ship with: List → View → Edit workspace navigation, per-
 - Tests: `tests/Feature/SupplierWorkspaceTest.php` (10 tests). Employee, F04, UX and supplier regression classes green.
 
 **Not done in this batch (by instruction):** Customer, Project, Item, Warehouse, Site, Equipment workspaces; approval runtime.
+
+### Batch 3 — Customer workspace + current-system user guide (27 September 2026)
+
+- Customer: List → View (read-only; header with identity, payment channel, receivable account, projects count, outstanding/received/overdue for Accounts Receivable viewers; server-rendered sections with the latest 5 rows) → Edit / Manage (Profile with Save / Save & New / Save & Close / Cancel; panels Contacts (add / edit in place / remove within Customers create / edit / delete), Notes (add / remove), Projects (Projects view), Invoices, Receipts & Balance, Ageing (Accounts Receivable view), Accounting (Journal Entries view), Local ZATCA Records (ZATCA Invoicing view), Activity (Activity Logs view)).
+- Ageing reuses the dashboard rule, now shared in `App\Support\AgeingBuckets` (days late from due date; Current / 1–30 / 31–60 / 60+), labelled as current-state ageing.
+- Scope: every panel and figure comes from the scoped invoice / receipt / journal / ZATCA queries; the header shows no money without Accounts Receivable view.
+- Parent/child: contacts and notes are read and written only through the customer's own relations (foreign ids → 404); a site contact must sit on a site of one of the customer's visible projects; forged `customer_id` in the body is refused; only Contacts and Notes accept writes.
+- The create form keeps inline contacts and a note; the workspace profile form no longer carries them (panels instead). Existing contact and note routes remain for compatibility.
+- Tests: `tests/Feature/CustomerWorkspaceTest.php` (8 tests covering the 21 required points together with the Supplier, Employee and finance classes).
+- Documentation: `docs/user-guide/SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md`, `SCREEN-INDEX.md`, `WORKFLOW-INDEX.md` (current system only, fictional training data).
+
+**Next candidates (not started):** Purchase Order document workspace, Project workspace phase A, Item / Warehouse, User (after the role-sync fix), Site, Lead.

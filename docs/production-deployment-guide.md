@@ -527,3 +527,12 @@ new / Save & close.
 
 Rollback: `git checkout ef5cc5b`, extract that commit's `public/build.zip` the same
 way, then `$PHP artisan optimize`. No database rollback is needed.
+
+## 16. Customer workspace + user guide release (feature branch, 27 September)
+
+No migration, no seeder. The asset bundle is unchanged from section 15 (no JavaScript or
+CSS changed), so re-extracting `public/build.zip` is optional but harmless. Steps are the
+same as section 15. Post-release checks (read-only): Customers list shows View / Edit /
+Manage; a customer's View page is read-only with the related sections and the overdue
+line; Edit / Manage shows the tabs and the Contacts tab adds a contact without leaving
+the page. The user guide lives in `docs/user-guide/`.
