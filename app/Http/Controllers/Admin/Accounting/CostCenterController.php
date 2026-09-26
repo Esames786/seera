@@ -52,8 +52,11 @@ class CostCenterController extends Controller
 
         ActivityLog::record($request, 'Accounting', 'Created cost center', $costCenter->code.' - '.$costCenter->name);
 
-        return redirect()->route('admin.accounting.cost-centers.index')
-            ->with('status', 'Cost center "'.$costCenter->name.'" created successfully.');
+        return \App\Support\SaveAction::redirect($request, [
+            'stay' => route('admin.accounting.cost-centers.edit', $costCenter),
+            'close' => route('admin.accounting.cost-centers.index'),
+            'new' => route('admin.accounting.cost-centers.create'),
+        ])->with('status', 'Cost center "'.$costCenter->name.'" created successfully.');
     }
 
     public function show(CostCenter $cost_center): View
@@ -85,8 +88,11 @@ class CostCenterController extends Controller
 
         ActivityLog::record($request, 'Accounting', 'Updated cost center', $cost_center->code.' - '.$cost_center->name);
 
-        return redirect()->route('admin.accounting.cost-centers.index')
-            ->with('status', 'Cost center "'.$cost_center->name.'" updated successfully.');
+        return \App\Support\SaveAction::redirect($request, [
+            'stay' => route('admin.accounting.cost-centers.edit', $cost_center),
+            'close' => route('admin.accounting.cost-centers.index'),
+            'new' => route('admin.accounting.cost-centers.create'),
+        ])->with('status', 'Cost center "'.$cost_center->name.'" updated successfully.');
     }
 
     public function destroy(Request $request, CostCenter $cost_center): RedirectResponse

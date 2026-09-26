@@ -51,10 +51,7 @@
         The linked record ties this cost center back to the Phase 2 master data, so project and site reporting can roll up automatically.
     </div>
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.accounting.cost-centers.index') }}">Cancel</a>
-        <button type="submit" class="btn primary">{{ $costCenter ? 'Update Cost Center' : 'Save Cost Center' }}</button>
-    </div>
+    <x-admin.form-actions :cancel="route('admin.accounting.cost-centers.index')" :save-new="true"/>
 </form>
 
 @push('scripts')

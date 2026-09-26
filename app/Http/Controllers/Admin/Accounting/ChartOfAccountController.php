@@ -56,8 +56,11 @@ class ChartOfAccountController extends Controller
             return response()->json(['id' => $account->id, 'label' => $account->label(), 'code' => $account->account_code], 201);
         }
 
-        return redirect()->route('admin.accounting.chart-of-accounts.index')
-            ->with('status', 'Account "'.$account->label().'" created successfully.');
+        return \App\Support\SaveAction::redirect($request, [
+            'stay' => route('admin.accounting.chart-of-accounts.edit', $account),
+            'close' => route('admin.accounting.chart-of-accounts.index'),
+            'new' => route('admin.accounting.chart-of-accounts.create'),
+        ])->with('status', 'Account "'.$account->label().'" created successfully.');
     }
 
     public function show(ChartOfAccount $chart_of_account): View
@@ -87,8 +90,11 @@ class ChartOfAccountController extends Controller
 
         ActivityLog::record($request, 'Accounting', 'Updated account', $chart_of_account->label());
 
-        return redirect()->route('admin.accounting.chart-of-accounts.index')
-            ->with('status', 'Account "'.$chart_of_account->label().'" updated successfully.');
+        return \App\Support\SaveAction::redirect($request, [
+            'stay' => route('admin.accounting.chart-of-accounts.edit', $chart_of_account),
+            'close' => route('admin.accounting.chart-of-accounts.index'),
+            'new' => route('admin.accounting.chart-of-accounts.create'),
+        ])->with('status', 'Account "'.$chart_of_account->label().'" updated successfully.');
     }
 
     /**

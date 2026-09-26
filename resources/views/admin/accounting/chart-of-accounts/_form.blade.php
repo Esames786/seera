@@ -61,8 +61,5 @@
         Assets and expenses normally carry a debit balance. Liabilities, equity and revenue normally carry a credit balance.
     </div>
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.accounting.chart-of-accounts.index') }}">Cancel</a>
-        <button type="submit" class="btn primary">{{ $account ? 'Update Account' : 'Save Account' }}</button>
-    </div>
+    <x-admin.form-actions :cancel="route('admin.accounting.chart-of-accounts.index')" :save-new="true"/>
 </form>

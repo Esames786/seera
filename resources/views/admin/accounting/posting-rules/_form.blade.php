@@ -76,8 +76,5 @@
         Leave an account blank when the posting engine already resolves it from the document — for example a supplier bill uses each line's own expense account.
     </div>
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.accounting.posting-rules.index') }}">Cancel</a>
-        <button type="submit" class="btn primary">{{ $rule ? 'Update Posting Rule' : 'Save Posting Rule' }}</button>
-    </div>
+    <x-admin.form-actions :cancel="route('admin.accounting.posting-rules.index')" :save-new="true"/>
 </form>

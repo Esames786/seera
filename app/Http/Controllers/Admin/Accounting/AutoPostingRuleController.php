@@ -47,8 +47,11 @@ class AutoPostingRuleController extends Controller
 
         ActivityLog::record($request, 'Accounting', 'Created posting rule', $rule->source_module.' - '.$rule->trigger_event);
 
-        return redirect()->route('admin.accounting.posting-rules.index')
-            ->with('status', 'Posting rule for "'.$rule->source_module.'" created successfully.');
+        return \App\Support\SaveAction::redirect($request, [
+            'stay' => route('admin.accounting.posting-rules.edit', $rule),
+            'close' => route('admin.accounting.posting-rules.index'),
+            'new' => route('admin.accounting.posting-rules.create'),
+        ])->with('status', 'Posting rule for "'.$rule->source_module.'" created successfully.');
     }
 
     public function show(AutomaticPostingRule $posting_rule): View
@@ -69,8 +72,11 @@ class AutoPostingRuleController extends Controller
 
         ActivityLog::record($request, 'Accounting', 'Updated posting rule', $posting_rule->source_module.' - '.$posting_rule->trigger_event);
 
-        return redirect()->route('admin.accounting.posting-rules.index')
-            ->with('status', 'Posting rule updated successfully.');
+        return \App\Support\SaveAction::redirect($request, [
+            'stay' => route('admin.accounting.posting-rules.edit', $posting_rule),
+            'close' => route('admin.accounting.posting-rules.index'),
+            'new' => route('admin.accounting.posting-rules.create'),
+        ])->with('status', 'Posting rule updated successfully.');
     }
 
     public function destroy(Request $request, AutomaticPostingRule $posting_rule): RedirectResponse
