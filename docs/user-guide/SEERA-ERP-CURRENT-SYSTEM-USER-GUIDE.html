@@ -1,0 +1,3784 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Current System User Guide · Seera ERP</title><style>:root { --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb; --blue:#1d4ed8; --bg:#f8fafc; --card:#ffffff; --accent:#0f766e; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: "Segoe UI", Tahoma, Arial, sans-serif; color:var(--ink); background:var(--bg); line-height:1.55; }
+header.top { background:#0f172a; color:#fff; padding:18px 28px; display:flex; flex-wrap:wrap; gap:8px 24px; align-items:baseline; }
+header.top .brand { font-size:22px; font-weight:800; letter-spacing:.3px; }
+header.top .meta { color:#cbd5e1; font-size:13px; }
+header.top nav a { color:#93c5fd; margin-inline-end:16px; font-size:14px; text-decoration:none; }
+header.top nav a:hover { text-decoration:underline; }
+.layout { display:grid; grid-template-columns: 300px 1fr; gap:0; min-height:calc(100vh - 64px); }
+aside.toc { border-inline-end:1px solid var(--line); background:var(--card); padding:18px 14px; position:sticky; top:0; height:100vh; overflow:auto; font-size:13px; }
+aside.toc h2 { font-size:13px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); margin:0 0 10px; }
+aside.toc a { display:block; color:var(--ink); text-decoration:none; padding:3px 6px; border-radius:4px; }
+aside.toc a:hover { background:#eef2ff; color:var(--blue); }
+aside.toc a.l3 { padding-inline-start:18px; color:#374151; font-size:12.5px; }
+main { padding:28px 36px 60px; max-width: 1180px; }
+main h1 { font-size:30px; margin:0 0 4px; }
+main h1 + h1 { font-size:22px; color:var(--accent); font-weight:600; margin-bottom:18px; }
+main h2 { font-size:22px; margin:40px 0 12px; padding-block-end:6px; border-block-end:2px solid var(--line); }
+main h3 { font-size:17px; margin:28px 0 8px; color:#111827; }
+main h3::before { content:""; display:inline-block; width:6px; height:18px; background:var(--accent); margin-inline-end:8px; vertical-align:-3px; border-radius:2px; }
+main p { margin:8px 0; }
+main table { border-collapse:collapse; width:100%; margin:10px 0 16px; font-size:13.5px; background:var(--card); }
+main th, main td { border:1px solid var(--line); padding:6px 9px; text-align:start; vertical-align:top; }
+main th { background:#f1f5f9; font-weight:700; }
+main tr:nth-child(even) td { background:#fbfdff; }
+main code { background:#eef2ff; padding:1px 5px; border-radius:4px; font-size:13px; }
+main pre { background:#0f172a; color:#e2e8f0; padding:14px 16px; border-radius:8px; overflow:auto; font-size:13px; line-height:1.45; }
+main pre code { background:transparent; color:inherit; padding:0; }
+main blockquote { border-inline-start:4px solid var(--accent); margin:10px 0; padding:6px 14px; background:#f0fdfa; }
+main hr { border:0; border-top:1px solid var(--line); margin:32px 0; }
+main a { color:var(--blue); }
+.badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:700; }
+footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px solid var(--line); }
+@media (max-width: 900px) { .layout { grid-template-columns:1fr; } aside.toc { position:static; height:auto; max-height:40vh; } main { padding:18px 16px; } }
+@media print { header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Current System User Guide · Version 1.0 · 27 September 2026 · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a class="l2" href="#training-dataset-used-in-the-examples">Training dataset used in the examples</a><a class="l2" href="#table-of-contents">Table of contents</a><a class="l2" href="#1-about-seera-erp">1. About Seera ERP</a><a class="l3" href="#the-three-ways-you-work-with-a-record">The three ways you work with a record</a><a class="l3" href="#the-save-buttons">The Save buttons</a><a class="l3" href="#unsaved-changes-protection">Unsaved changes protection</a><a class="l2" href="#2-login-and-navigation">2. Login and Navigation</a><a class="l3" href="#adm-001-login">[ADM-001] Login</a><a class="l3" href="#adm-002-forgot-password-and-adm-003-reset-password">[ADM-002] Forgot Password and [ADM-003] Reset Password</a><a class="l3" href="#adm-004-set-your-password-first-sign-in">[ADM-004] Set Your Password (first sign-in)</a><a class="l3" href="#navigation-basics">Navigation basics</a><a class="l2" href="#3-dashboard">3. Dashboard</a><a class="l3" href="#adm-010-dashboard">[ADM-010] Dashboard</a><a class="l2" href="#4-users-roles-and-permissions">4. Users, Roles and Permissions</a><a class="l3" href="#usr-001-users-list">[USR-001] Users List</a><a class="l3" href="#usr-002-add-user">[USR-002] Add User</a><a class="l3" href="#usr-003-user-details-and-usr-004-edit-user">[USR-003] User Details and [USR-004] Edit User</a><a class="l3" href="#rol-001-roles-list-rol-002-create-role-rol-003-role-details-rol-004-edit-role">[ROL-001] Roles List, [ROL-002] Create Role, [ROL-003] Role Details, [ROL-004] Edit Role</a><a class="l3" href="#rol-005-permission-matrix">[ROL-005] Permission Matrix</a><a class="l3" href="#rol-006-role-hierarchy">[ROL-006] Role Hierarchy</a><a class="l3" href="#rol-007-assign-users-to-role">[ROL-007] Assign Users to Role</a><a class="l3" href="#rol-008-approval-workflows-rol-009-create-rol-010-edit">[ROL-008] Approval Workflows, [ROL-009] Create, [ROL-010] Edit</a><a class="l2" href="#5-master-setup">5. Master Setup</a><a class="l3" href="#mst-com-001-company-profile">[MST-COM-001] Company Profile</a><a class="l3" href="#mst-org-001-organization-structure">[MST-ORG-001] Organization Structure</a><a class="l3" href="#branches-mst-br-001--004-departments-mst-dep-001--004-designations-mst-des-001--004">Branches [MST-BR-001 … 004], Departments [MST-DEP-001 … 004], Designations [MST-DES-001 … 004]</a><a class="l3" href="#projects-mst-prj-001--005-and-locations-mst-site-001--004">Projects [MST-PRJ-001 … 005] and Locations [MST-SITE-001 … 004]</a><a class="l3" href="#warehouses-mst-wh-001--004">Warehouses [MST-WH-001 … 004]</a><a class="l3" href="#expense-categories-mst-exp-001--004">Expense Categories [MST-EXP-001 … 004]</a><a class="l3" href="#payment-terms-sup-005-and-project-classifications-mst-prj-005">Payment Terms [SUP-005] and Project Classifications [MST-PRJ-005]</a><a class="l2" href="#6-hr--payroll">6. HR &amp;amp; Payroll</a><a class="l3" href="#hr-dash-001-hr-dashboard">[HR-DASH-001] HR Dashboard</a><a class="l3" href="#hr-emp-001-employees-list">[HR-EMP-001] Employees List</a><a class="l3" href="#hr-emp-002-add-employee">[HR-EMP-002] Add Employee</a><a class="l3" href="#hr-emp-003-employee-view-read-only">[HR-EMP-003] Employee View (read-only)</a><a class="l3" href="#hr-emp-004-employee-workspace-edit">[HR-EMP-004] Employee Workspace (Edit)</a><a class="l3" href="#hr-doc-001-employee-documents--iqama">[HR-DOC-001] Employee Documents / IQAMA</a><a class="l3" href="#hr-shf-001--003-shifts">[HR-SHF-001 … 003] Shifts</a><a class="l3" href="#hr-att-001--003-attendance">[HR-ATT-001 … 003] Attendance</a><a class="l3" href="#hr-lv-001--004-leaves">[HR-LV-001 … 004] Leaves</a><a class="l3" href="#hr-ot-001--003-overtime">[HR-OT-001 … 003] Overtime</a><a class="l3" href="#hr-sal-001--004-salary-structures">[HR-SAL-001 … 004] Salary Structures</a><a class="l3" href="#hr-pay-001--004-payroll">[HR-PAY-001 … 004] Payroll</a><a class="l3" href="#hr-eos-001--004-end-of-service">[HR-EOS-001 … 004] End of Service</a><a class="l2" href="#7-customers">7. Customers</a><a class="l3" href="#cus-001-customers-list">[CUS-001] Customers List</a><a class="l3" href="#cus-002-add-customer">[CUS-002] Add Customer</a><a class="l3" href="#cus-003-customer-view-read-only">[CUS-003] Customer View (read-only)</a><a class="l3" href="#cus-004-customer-workspace-edit--manage">[CUS-004] Customer Workspace (Edit / Manage)</a><a class="l2" href="#8-suppliers">8. Suppliers</a><a class="l3" href="#sup-001-suppliers-list">[SUP-001] Suppliers List</a><a class="l3" href="#sup-002-add-supplier">[SUP-002] Add Supplier</a><a class="l3" href="#sup-003-supplier-view-read-only">[SUP-003] Supplier View (read-only)</a><a class="l3" href="#sup-004-supplier-workspace-edit--manage">[SUP-004] Supplier Workspace (Edit / Manage)</a><a class="l2" href="#9-accounting--finance">9. Accounting &amp;amp; Finance</a><a class="l3" href="#how-accounting-works-in-seera-read-this-first">How accounting works in Seera (read this first)</a><a class="l3" href="#fin-dash-001-accounting-dashboard">[FIN-DASH-001] Accounting Dashboard</a><a class="l3" href="#fin-coa-001--004-chart-of-accounts">[FIN-COA-001 … 004] Chart of Accounts</a><a class="l3" href="#fin-je-001--004-journal-entries">[FIN-JE-001 … 004] Journal Entries</a><a class="l3" href="#fin-gl-001-general-ledger">[FIN-GL-001] General Ledger</a><a class="l3" href="#fin-ap-001-accounts-payable-supplier-bills">[FIN-AP-001] Accounts Payable (Supplier Bills)</a><a class="l3" href="#fin-ap-002-add-supplier-bill-and-fin-ap-004-edit-supplier-bill">[FIN-AP-002] Add Supplier Bill and [FIN-AP-004] Edit Supplier Bill</a><a class="l3" href="#fin-ap-003-supplier-bill-details">[FIN-AP-003] Supplier Bill Details</a><a class="l3" href="#fin-ap-005-record-supplier-payment">[FIN-AP-005] Record Supplier Payment</a><a class="l3" href="#fin-ar-001--005-accounts-receivable-customer-invoices-and-receipts">[FIN-AR-001 … 005] Accounts Receivable (Customer Invoices and Receipts)</a><a class="l3" href="#fin-vat-001-vat-management-and-fin-vat-002-vat-period">[FIN-VAT-001] VAT Management and [FIN-VAT-002] VAT Period</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-and-fin-zat-002-zatca-record">[FIN-ZAT-001] ZATCA E-Invoicing and [FIN-ZAT-002] ZATCA Record</a><a class="l3" href="#fin-cc-001--004-cost-centers">[FIN-CC-001 … 004] Cost Centers</a><a class="l3" href="#fin-pr-001--004-automatic-posting-rules">[FIN-PR-001 … 004] Automatic Posting Rules</a><a class="l2" href="#10-inventory--purchasing">10. Inventory &amp;amp; Purchasing</a><a class="l3" href="#how-stock-works-in-seera">How stock works in Seera</a><a class="l3" href="#inv-dash-001-inventory-dashboard">[INV-DASH-001] Inventory Dashboard</a><a class="l3" href="#inv-item-001--004-materials--items">[INV-ITEM-001 … 004] Materials / Items</a><a class="l3" href="#inv-cat-001--003-item-categories-and-inv-unit-001--003-units">[INV-CAT-001 … 003] Item Categories and [INV-UNIT-001 … 003] Units</a><a class="l3" href="#inv-stk-001-stock-on-hand-and-inv-led-001-stock-ledger">[INV-STK-001] Stock On Hand and [INV-LED-001] Stock Ledger</a><a class="l3" href="#inv-pr-001--004-purchase-requests">[INV-PR-001 … 004] Purchase Requests</a><a class="l3" href="#inv-po-001--004-purchase-orders">[INV-PO-001 … 004] Purchase Orders</a><a class="l3" href="#inv-grn-001--004-goods-receipt-notes">[INV-GRN-001 … 004] Goods Receipt Notes</a><a class="l3" href="#inv-iss-001--004-stock-issues">[INV-ISS-001 … 004] Stock Issues</a><a class="l3" href="#inv-trf-001--004-stock-transfers">[INV-TRF-001 … 004] Stock Transfers</a><a class="l3" href="#inv-adj-001--004-stock-adjustments">[INV-ADJ-001 … 004] Stock Adjustments</a><a class="l3" href="#inv-rep-001--005-inventory-reports">[INV-REP-001 … 005] Inventory Reports</a><a class="l2" href="#11-projects">11. Projects</a><a class="l3" href="#mst-prj-001--004-projects">[MST-PRJ-001 … 004] Projects</a><a class="l3" href="#mst-site-001--004-locations-sites">[MST-SITE-001 … 004] Locations (Sites)</a><a class="l3" href="#where-project-figures-are-today">Where project figures are today</a><a class="l2" href="#12-marketing">12. Marketing</a><a class="l3" href="#mkt-001-leads--visits-mkt-002-new-lead-mkt-004-edit-lead">[MKT-001] Leads &amp;amp; Visits, [MKT-002] New Lead, [MKT-004] Edit Lead</a><a class="l3" href="#mkt-003-lead-details-visits-convert">[MKT-003] Lead (details, visits, convert)</a><a class="l3" href="#mkt-005-visit-report">[MKT-005] Visit Report</a><a class="l2" href="#13-activity-logs--audit">13. Activity Logs / Audit</a><a class="l3" href="#adm-020-activity-logs">[ADM-020] Activity Logs</a><a class="l2" href="#14-current-zatca-foundation">14. Current ZATCA Foundation</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-local-records">[FIN-ZAT-001] ZATCA E-Invoicing (local records)</a><a class="l3" href="#fin-zat-002-zatca-record">[FIN-ZAT-002] ZATCA Record</a><a class="l2" href="#15-reports">15. Reports</a><a class="l2" href="#16-common-tasks">16. Common Tasks</a><a class="l3" href="#create-a-supplier">Create a supplier</a><a class="l3" href="#enter-and-approve-a-supplier-bill-for-goods-you-received">Enter and approve a supplier bill for goods you received</a><a class="l3" href="#record-a-customer-receipt">Record a customer receipt</a><a class="l3" href="#add-an-employee-and-give-them-a-login">Add an employee and give them a login</a><a class="l3" href="#find-everything-about-one-customer">Find everything about one customer</a><a class="l3" href="#post-a-manual-journal">Post a manual journal</a><a class="l3" href="#close-a-vat-quarter">Close a VAT quarter</a><a class="l3" href="#switch-language">Switch language</a><a class="l2" href="#17-end-to-end-workflows">17. End-to-End Workflows</a><a class="l3" href="#wf-001-create-employee-and-user-access">WF-001 Create Employee and User Access</a><a class="l3" href="#wf-002-supplier--purchase-order--goods-receipt--supplier-bill--payment">WF-002 Supplier → Purchase Order → Goods Receipt → Supplier Bill → Payment</a><a class="l3" href="#wf-003-customer--invoice--receipt">WF-003 Customer → Invoice → Receipt</a><a class="l3" href="#wf-004-manual-journal--general-ledger">WF-004 Manual Journal → General Ledger</a><a class="l3" href="#wf-005-vat-period-review-and-finalize">WF-005 VAT Period Review and Finalize</a><a class="l3" href="#wf-006-inventory-transfer-between-warehouses">WF-006 Inventory Transfer between Warehouses</a><a class="l3" href="#wf-007-stock-issue-to-a-project">WF-007 Stock Issue to a Project</a><a class="l3" href="#wf-008-payroll-run">WF-008 Payroll Run</a><a class="l3" href="#wf-009-leave-request-lifecycle">WF-009 Leave Request lifecycle</a><a class="l3" href="#wf-010-supplier-f04-grni-accounting-flow">WF-010 Supplier F04 GRNI accounting flow</a><a class="l3" href="#wf-011-purchase-request--purchase-order">WF-011 Purchase Request → Purchase Order</a><a class="l3" href="#wf-012-correct-an-approved-bill-or-invoice-reopen">WF-012 Correct an approved bill or invoice (Reopen)</a><a class="l3" href="#wf-013-stock-adjustment-after-a-physical-count">WF-013 Stock Adjustment after a physical count</a><a class="l3" href="#wf-014-marketing-lead--visit--customer">WF-014 Marketing Lead → Visit → Customer</a><a class="l3" href="#wf-015-end-of-service-settlement">WF-015 End of Service settlement</a><a class="l2" href="#18-troubleshooting">18. Troubleshooting</a><a class="l2" href="#19-glossary">19. Glossary</a><a class="l2" href="#20-current-limitations--not-yet-operational">20. Current Limitations / Not Yet Operational</a><a class="l2" href="#21-quick-start-by-role">21. Quick Start by Role</a><a class="l3" href="#super-admin">Super Admin</a><a class="l3" href="#finance-manager">Finance Manager</a><a class="l3" href="#hr-manager">HR Manager</a><a class="l3" href="#project-manager">Project Manager</a><a class="l3" href="#site-in-charge--site-supervisor">Site In-Charge / Site Supervisor</a><a class="l3" href="#warehouse-incharge">Warehouse Incharge</a><a class="l3" href="#purchase-manager--assistant">Purchase Manager / Assistant</a><a class="l3" href="#marketing-manager">Marketing Manager</a></aside><main><h1 id="seera-erp">SEERA ERP</h1>
+<h1 id="current-system-user-guide">Current System User Guide</h1>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Version</strong></td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><strong>System state</strong></td>
+<td>Current feature branch <code>feature/seera-connected-workspaces-2026-09-23</code> at the final HEAD of the 27 September 2026 sprint (Connected Workspace Standard; Accounting UX Batch 1; Supplier and Customer workspaces; F04 GRNI accounting)</td>
+</tr>
+<tr>
+<td><strong>Prepared</strong></td>
+<td>27 September 2026</td>
+</tr>
+<tr>
+<td><strong>Status</strong></td>
+<td>Current implemented system only. Planned features are not described as available.</td>
+</tr>
+<tr>
+<td><strong>Companion files</strong></td>
+<td><a href="SCREEN-INDEX.html">Screen Index</a> · <a href="WORKFLOW-INDEX.html">Workflow Index</a></td>
+</tr>
+</tbody>
+</table>
+<p>This guide is written for the people who use Seera every day: the Super Admin, the Finance Manager, the HR Manager, Project Managers, Site In-Charges, purchasing and warehouse staff, trainers and new employees. It uses simple English and fictional example data. Every screen has a permanent Screen ID (for example <strong>FIN-AP-002</strong>) so that training material, support requests and later PDF versions can refer to the same page.</p>
+<p>Status labels used in this guide:</p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AVAILABLE</td>
+<td>Built and usable today.</td>
+</tr>
+<tr>
+<td>PARTIAL</td>
+<td>Usable, but part of the expected function is missing. The text says what is missing.</td>
+</tr>
+<tr>
+<td>FOUNDATION ONLY</td>
+<td>Data or configuration exists, but the process that uses it is not built.</td>
+</tr>
+<tr>
+<td>NOT YET OPERATIONAL</td>
+<td>A menu item or plan exists; nothing usable exists.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="training-dataset-used-in-the-examples">Training dataset used in the examples</h2>
+<p>All examples in this guide use the same fictional data. None of it is real.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Example value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Company</td>
+<td>Seera Construction Company</td>
+</tr>
+<tr>
+<td>Customer</td>
+<td>Al Noor Development Co. (code CUS-021)</td>
+</tr>
+<tr>
+<td>Supplier</td>
+<td>Gulf Steel Trading (code SUP-014)</td>
+</tr>
+<tr>
+<td>Project</td>
+<td>Riyadh Commercial Tower (code PRJ-RCT-01)</td>
+</tr>
+<tr>
+<td>Site / Location</td>
+<td>Riyadh Tower - Main Site</td>
+</tr>
+<tr>
+<td>Warehouse</td>
+<td>Riyadh Site Warehouse</td>
+</tr>
+<tr>
+<td>Employee</td>
+<td>Ahmed Hassan (code EMP-0042)</td>
+</tr>
+<tr>
+<td>Material</td>
+<td>Reinforcement Steel 16mm (code ITM-0031)</td>
+</tr>
+<tr>
+<td>Purchase Order</td>
+<td>PO-2026-0012</td>
+</tr>
+<tr>
+<td>Goods Receipt</td>
+<td>GRN-2026-0008</td>
+</tr>
+<tr>
+<td>Supplier Bill</td>
+<td>GST-INV-1045</td>
+</tr>
+<tr>
+<td>Customer Invoice</td>
+<td>INV-2026-0031</td>
+</tr>
+<tr>
+<td>VAT rate</td>
+<td>15%</td>
+</tr>
+</tbody>
+</table>
+<h2 id="table-of-contents">Table of contents</h2>
+<ol>
+<li><a href="#1-about-seera-erp">About Seera ERP</a></li>
+<li><a href="#2-login-and-navigation">Login and Navigation</a></li>
+<li><a href="#3-dashboard">Dashboard</a></li>
+<li><a href="#4-users-roles-and-permissions">Users, Roles and Permissions</a></li>
+<li><a href="#5-master-setup">Master Setup</a></li>
+<li><a href="#6-hr--payroll">HR &amp; Payroll</a></li>
+<li><a href="#7-customers">Customers</a></li>
+<li><a href="#8-suppliers">Suppliers</a></li>
+<li><a href="#9-accounting--finance">Accounting &amp; Finance</a></li>
+<li><a href="#10-inventory--purchasing">Inventory &amp; Purchasing</a></li>
+<li><a href="#11-projects">Projects</a></li>
+<li><a href="#12-marketing">Marketing</a></li>
+<li><a href="#13-activity-logs--audit">Activity Logs / Audit</a></li>
+<li><a href="#14-current-zatca-foundation">Current ZATCA Foundation</a></li>
+<li><a href="#15-reports">Reports</a></li>
+<li><a href="#16-common-tasks">Common Tasks</a></li>
+<li><a href="#17-end-to-end-workflows">End-to-End Workflows</a></li>
+<li><a href="#18-troubleshooting">Troubleshooting</a></li>
+<li><a href="#19-glossary">Glossary</a></li>
+<li><a href="#20-current-limitations--not-yet-operational">Current Limitations / Not Yet Operational</a></li>
+<li><a href="#21-quick-start-by-role">Quick Start by Role</a></li>
+</ol>
+<hr />
+<h2 id="1-about-seera-erp">1. About Seera ERP</h2>
+<p>Seera is the construction ERP of Seera Construction Company. It runs in the web browser. Everyone signs in with their own account, and every account has a role that decides which screens and buttons the person can use.</p>
+<p>What Seera covers today:</p>
+<ul>
+<li><strong>Administration</strong>: users, roles, permission matrix, role hierarchy, approval workflow configuration, activity logs.</li>
+<li><strong>Master Setup</strong>: company profile, branches, departments, designations, projects, locations (sites), warehouses, expense categories, suppliers, customers.</li>
+<li><strong>HR &amp; Payroll</strong>: employees with a connected workspace, documents and IQAMA register, shifts, attendance (manual entry), leaves, overtime, salary structures, payroll runs, end of service.</li>
+<li><strong>Accounting &amp; Finance</strong>: chart of accounts, journal entries, general ledger, accounts payable, accounts receivable, VAT periods, local ZATCA records, cost centers, posting rules, financial reports.</li>
+<li><strong>Inventory &amp; Purchasing</strong>: items, categories, units, stock on hand, purchase requests, purchase orders, goods receipts, stock issues, transfers, adjustments, stock ledger, inventory reports.</li>
+<li><strong>Marketing</strong>: leads, visits, visit report, conversion to customer.</li>
+</ul>
+<p>What Seera does not cover yet is listed honestly in chapter 20.</p>
+<h3 id="the-three-ways-you-work-with-a-record">The three ways you work with a record</h3>
+<p>Seera follows one standard for the main business records (Employee, Supplier, Customer):</p>
+<pre><code>List  →  View (read-only)  →  Edit / Manage (connected workspace)
+</code></pre>
+<ul>
+<li><strong>List</strong>: search, filter and choose a record.</li>
+<li><strong>View</strong>: read everything about the record and its related information. Nothing on a View page changes data.</li>
+<li><strong>Edit / Manage</strong>: the <em>connected workspace</em>. The record's identity stays at the top of the page. Tabs show the profile and the related information (for a supplier: projects, purchase orders, goods receipts, bills, payments, accounting, activity). Each tab saves on its own. There is no &quot;Save All&quot;.</li>
+</ul>
+<p>Business actions such as <strong>Approve</strong>, <strong>Post</strong>, <strong>Pay</strong>, <strong>Receive</strong>, <strong>Finalize</strong>, <strong>Process</strong> and <strong>Dispatch</strong> are always separate buttons on the document itself. Saving a profile never approves or posts anything.</p>
+<h3 id="the-save-buttons">The Save buttons</h3>
+<p>Every form that has been moved to the new standard shows the same buttons:</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Save</td>
+<td>Saves and keeps the record open. On a document (bill, invoice, journal) you land on its details page, where Approve or Post is.</td>
+</tr>
+<tr>
+<td>Save &amp; new</td>
+<td>Saves and opens an empty form for the next record.</td>
+</tr>
+<tr>
+<td>Save &amp; close</td>
+<td>Saves and returns to the list, or to the page you came from.</td>
+</tr>
+<tr>
+<td>Cancel</td>
+<td>Leaves without saving.</td>
+</tr>
+</tbody>
+</table>
+<p>Forms that still use the older layout show <strong>Save</strong> or <strong>Update</strong> plus <strong>Cancel</strong> (chapter 20 lists them).</p>
+<h3 id="unsaved-changes-protection">Unsaved changes protection</h3>
+<p>If you change something and then try to leave the page, Seera shows a dialog with <strong>Keep editing</strong>, <strong>Discard &amp; leave</strong> and <strong>Save current form</strong>. This works on every form in the system.</p>
+<hr />
+<h2 id="2-login-and-navigation">2. Login and Navigation</h2>
+<h3 id="adm-001-login">[ADM-001] Login</h3>
+<p>Purpose:
+Sign in to Seera with your email address and password.</p>
+<p>Who uses it:
+All users.</p>
+<p>Navigation:
+Open the Seera address in your browser. The login page appears.</p>
+<p>Permission required:
+None. The account must be active.</p>
+<p>What you see:
+The Seera logo, the email and password fields, a &quot;remember me&quot; box, a <strong>Sign In</strong> button and a <strong>Forgot password</strong> link.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Email Address</td>
+<td>Your work email</td>
+<td><a href="mailto:ahmed.hassan@example.sa">ahmed.hassan@example.sa</a></td>
+<td>Yes</td>
+<td>Given to you by the administrator</td>
+</tr>
+<tr>
+<td>Password</td>
+<td>Your password</td>
+<td>(hidden)</td>
+<td>Yes</td>
+<td>After five wrong attempts in one minute you must wait</td>
+</tr>
+</tbody>
+</table>
+<p>Buttons:</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sign In</td>
+<td>Checks the details and opens the Dashboard</td>
+</tr>
+<tr>
+<td>Forgot password</td>
+<td>Opens ADM-002</td>
+</tr>
+</tbody>
+</table>
+<p>Important:
+A new account created without a password uses a temporary default password that the administrator gives you. Seera then forces you to set your own password before you can do anything else (ADM-004).</p>
+<p>What happens after Sign In:
+The Dashboard (ADM-010) opens. If your account is new, the &quot;Set Your Password&quot; page opens first.</p>
+<p>Common mistakes:</p>
+<ul>
+<li>Typing the username instead of the email address.</li>
+<li>Trying to sign in with an inactive account. Ask the administrator to activate it.</li>
+<li>Leaving &quot;remember me&quot; ticked on a shared computer.</li>
+</ul>
+<p>Related screens:
+ADM-002 Forgot Password, ADM-004 Set Your Password, ADM-010 Dashboard.</p>
+<h3 id="adm-002-forgot-password-and-adm-003-reset-password">[ADM-002] Forgot Password and [ADM-003] Reset Password</h3>
+<p>Purpose:
+Get a link by email to choose a new password.</p>
+<p>Who uses it:
+All users.</p>
+<p>Navigation:
+Login → Forgot password.</p>
+<p>Permission required:
+None.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Email Address</td>
+<td>Your work email</td>
+<td><a href="mailto:ahmed.hassan@example.sa">ahmed.hassan@example.sa</a></td>
+<td>Yes</td>
+<td>The same message is shown whether or not the address exists</td>
+</tr>
+<tr>
+<td>New Password / Confirm New Password (ADM-003)</td>
+<td>A new password, twice</td>
+<td>(hidden)</td>
+<td>Yes</td>
+<td>At least 8 characters</td>
+</tr>
+</tbody>
+</table>
+<p>Buttons:</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Send Reset Link</td>
+<td>Sends the email</td>
+</tr>
+<tr>
+<td>Reset Password</td>
+<td>Saves the new password and signs you in</td>
+</tr>
+</tbody>
+</table>
+<p>Important:
+Status: <strong>PARTIAL</strong>. The email is only delivered when the server's mail settings have been configured. If you do not receive the email, ask the Super Admin to set your password from the Users screen (USR-004) instead.</p>
+<p>Related screens:
+ADM-001 Login.</p>
+<h3 id="adm-004-set-your-password-first-sign-in">[ADM-004] Set Your Password (first sign-in)</h3>
+<p>Purpose:
+Replace the temporary password with your own the first time you sign in.</p>
+<p>Who uses it:
+Every new user.</p>
+<p>Navigation:
+Shown automatically after the first sign-in. You cannot open other pages until you finish it.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Current Password</td>
+<td>The temporary password you were given</td>
+<td>(hidden)</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>New Password</td>
+<td>Your own password</td>
+<td>(hidden)</td>
+<td>Yes</td>
+<td>At least 8 characters, different from the current one</td>
+</tr>
+<tr>
+<td>Confirm New Password</td>
+<td>The same password again</td>
+<td>(hidden)</td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Buttons:</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Save Password and Continue</td>
+<td>Saves and opens the Dashboard</td>
+</tr>
+<tr>
+<td>Sign out instead</td>
+<td>Signs out without changing anything</td>
+</tr>
+</tbody>
+</table>
+<h3 id="navigation-basics">Navigation basics</h3>
+<ul>
+<li>The <strong>left menu</strong> is grouped: Main, Administration, Master Setup, Operations, HR Registers &amp; Approvals, Finance, Inventory, Marketing, Reports, Settings. You only see the groups and items your role allows.</li>
+<li>The <strong>top bar</strong> shows the language switch (English / Arabic, the whole screen turns right-to-left in Arabic) and your name with <strong>Sign out</strong>.</li>
+<li>Numbers next to menu items are queues: pending leaves, unposted journals, follow-ups due, purchase requests waiting, low-stock rows.</li>
+<li>Lists have a <strong>filter bar</strong> (search box and drop-downs) and a <strong>Reset</strong> button. Lists show 10 rows per page.</li>
+<li><strong>View</strong> opens a read-only page. <strong>Edit</strong> or <strong>Edit / Manage</strong> opens the form or the workspace. <strong>Delete</strong> or <strong>Deactivate</strong> asks for confirmation first.</li>
+<li>Menu items marked &quot;Coming Soon&quot; open an information page only (chapter 20).</li>
+</ul>
+<hr />
+<h2 id="3-dashboard">3. Dashboard</h2>
+<h3 id="adm-010-dashboard">[ADM-010] Dashboard</h3>
+<p>Purpose:
+A quick picture of the company: staff, roles, projects, sites, recent activity.</p>
+<p>Who uses it:
+All users (the cards depend on your permissions).</p>
+<p>Navigation:
+Main → Dashboard.</p>
+<p>Permission required:
+Dashboard — view.</p>
+<p>What you see:
+Cards for Total Staff, Active Roles, Pending Approvals, Inactive Users, Total Projects, Active Sites and Geo-Fenced Sites; a table of Active Projects (code, project, client, manager, budget, status) and Recent Activity with a link to the Activity Logs.</p>
+<p>Important:
+&quot;Pending Approvals&quot; counts approval workflow definitions plus users waiting for activation; it is not a queue of documents waiting for approval. Use the Accounting Dashboard (FIN-DASH-001), HR Dashboard (HR-DASH-001) and Inventory Dashboard (INV-DASH-001) for real work queues.</p>
+<p>Related screens:
+FIN-DASH-001, HR-DASH-001, INV-DASH-001, ADM-020.</p>
+<hr />
+<h2 id="4-users-roles-and-permissions">4. Users, Roles and Permissions</h2>
+<p>How access works in Seera:</p>
+<ol>
+<li>A <strong>Role</strong> is a named set of permissions (for example Accounts Manager). Each permission is a module plus an action: view, create, edit, delete, approve, reject, export, mobile access, post, process, retry, receive, issue, transfer, adjust.</li>
+<li>A <strong>User</strong> has one primary role. The role also carries an <strong>access scope</strong>: All Company / Company Level (sees everything), Project Level (sees only the project set on the user), Site Level or Warehouse Level.</li>
+<li>Every screen and button checks the module and action. A user without &quot;Accounts Payable — approve&quot; does not see the Approve button and cannot approve by any other route.</li>
+</ol>
+<h3 id="usr-001-users-list">[USR-001] Users List</h3>
+<p>Purpose:
+Find, open, edit and deactivate user accounts.</p>
+<p>Who uses it:
+Super Admin.</p>
+<p>Navigation:
+Administration → Users.</p>
+<p>Permission required:
+Users — view.</p>
+<p>What you see:
+Cards (Total Users, Active Users, Mobile App Users, Locked / Inactive), filters (search, department, role, status) and the list: Employee ID, Name, Email / Phone, Department, Primary Role, Assigned Project/Site, Mobile Access, Last Login, Status, Actions (View, Edit, Deactivate).</p>
+<p>Related screens:
+USR-002, USR-003, USR-004.</p>
+<h3 id="usr-002-add-user">[USR-002] Add User</h3>
+<p>Purpose:
+Create a sign-in account, optionally from an existing employee.</p>
+<p>Who uses it:
+Super Admin.</p>
+<p>Navigation:
+Administration → Users → + Add New User.</p>
+<p>Permission required:
+Users — create.</p>
+<p>What you see:
+Sections: Role &amp; Quick Capabilities, Profile Identity, Employment Information, Access &amp; Security, Project / Site / Warehouse Scope. At the top you can search an existing employee and copy their details.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary Role</td>
+<td>The role for this account</td>
+<td>Site In-Charge</td>
+<td>Yes</td>
+<td>&quot;+ New&quot; creates a role without leaving the form</td>
+</tr>
+<tr>
+<td>Full Name</td>
+<td>The person's name</td>
+<td>Ahmed Hassan</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Employee ID</td>
+<td>The employee code</td>
+<td>EMP-0042</td>
+<td>No</td>
+<td>Filled automatically when you pick an employee</td>
+</tr>
+<tr>
+<td>Email Address</td>
+<td>Work email, used to sign in</td>
+<td><a href="mailto:ahmed.hassan@example.sa">ahmed.hassan@example.sa</a></td>
+<td>Yes</td>
+<td>Must be unique</td>
+</tr>
+<tr>
+<td>Phone Number</td>
+<td>Mobile number</td>
+<td>+966 50 123 4567</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Language</td>
+<td>English or Arabic</td>
+<td>English</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Username</td>
+<td>Short login name</td>
+<td>ahmed.hassan</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Department, Designation</td>
+<td>Organisation position</td>
+<td>Site Operations / Site In-Charge</td>
+<td>No</td>
+<td>&quot;+ New&quot; dialogs available</td>
+</tr>
+<tr>
+<td>Employee Classification, Joining Date, Contract Type, Iqama Number, Iqama Expiry Date</td>
+<td>Employment details</td>
+<td>Sponsorship / 01-Mar-2024 / Full Time</td>
+<td>No</td>
+<td>Copied from the employee when linked</td>
+</tr>
+<tr>
+<td>Account Status</td>
+<td>active, inactive, locked, pending</td>
+<td>active</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Mobile App Access</td>
+<td>Yes / No</td>
+<td>Yes</td>
+<td>No</td>
+<td>Stored on the account; the mobile app itself is not built yet</td>
+</tr>
+<tr>
+<td>Access Start Date / Access End Date</td>
+<td>Temporary access window</td>
+<td>01-Oct-2026 to 31-Dec-2026</td>
+<td>No</td>
+<td>Informational on the user; enforced dates are set on ROL-007</td>
+</tr>
+<tr>
+<td>Assigned Branch / Project / Site / Warehouse</td>
+<td>What the account may see when the role is scoped</td>
+<td>Riyadh Commercial Tower</td>
+<td>No</td>
+<td>Required in practice for Project, Site or Warehouse scoped roles</td>
+</tr>
+<tr>
+<td>Upload Profile Photo</td>
+<td>Picture</td>
+<td>photo.jpg</td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Buttons:</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Save &amp; stay</td>
+<td>Saves and stays on the user's edit page</td>
+</tr>
+<tr>
+<td>Save User</td>
+<td>Saves and returns to the list</td>
+</tr>
+<tr>
+<td>Cancel</td>
+<td>Leaves without saving</td>
+</tr>
+</tbody>
+</table>
+<p>Important:
+If you save without a password, the account gets the temporary default password and the user must change it at first sign-in.</p>
+<p>What happens after Save:
+The user appears in the list. If you linked an employee, the employee's record shows the linked account (HR-EMP-004, tab System Account).</p>
+<p>Common mistakes:</p>
+<ul>
+<li>Giving a Project Level role without choosing the Assigned Project: the user will see empty lists.</li>
+<li>Creating a user for an employee who already has an account: link instead, from the employee workspace.</li>
+<li>Forgetting to tell the user their temporary password.</li>
+</ul>
+<p>Related screens:
+USR-001, USR-004, HR-EMP-004, ROL-002.</p>
+<h3 id="usr-003-user-details-and-usr-004-edit-user">[USR-003] User Details and [USR-004] Edit User</h3>
+<p>USR-003 is read-only: an Access Summary (Employee ID, Primary Role, Parent Role, Access Scope, Department, Designation, Branch, Contract Type, Classification, Iqama Number, Mobile App Access, Two Factor Auth, Last Login) and the user's Recent Activity. USR-004 is the same form as USR-002 with the same buttons.</p>
+<p>Important:
+Saving the Edit User form sets the user's primary role. Extra roles given on Assign Users (ROL-007) are replaced by that primary role when the user form is saved. Reassign them afterwards on ROL-007 if needed.</p>
+<h3 id="rol-001-roles-list-rol-002-create-role-rol-003-role-details-rol-004-edit-role">[ROL-001] Roles List, [ROL-002] Create Role, [ROL-003] Role Details, [ROL-004] Edit Role</h3>
+<p>Purpose:
+Define what each job may do.</p>
+<p>Who uses it:
+Super Admin.</p>
+<p>Navigation:
+Administration → Roles → + Add New Role (or View / Edit / Assign on a row).</p>
+<p>Permission required:
+Roles — view / create / edit.</p>
+<p>What you see (Create / Edit):
+Sections Basic Role Information and Access Scope, then the permission grid (one row per module, one column per action, with &quot;All&quot;, &quot;Select all visible&quot; and &quot;Clear visible&quot;).</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Role Name</td>
+<td>Job name</td>
+<td>Site Accountant</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Role Code</td>
+<td>Short code</td>
+<td>SITE_ACCOUNTANT</td>
+<td>No</td>
+<td>Generated when left blank; cannot be changed later</td>
+</tr>
+<tr>
+<td>Department</td>
+<td>Owning department</td>
+<td>Accounts</td>
+<td>No</td>
+<td>&quot;+ New&quot; available</td>
+</tr>
+<tr>
+<td>Role Type</td>
+<td>Type list</td>
+<td>Operational</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Parent Role</td>
+<td>Role above this one in the hierarchy</td>
+<td>Accounts Manager</td>
+<td>No</td>
+<td>Used for display and for who can see whose activity; permissions are not inherited</td>
+</tr>
+<tr>
+<td>Role Level</td>
+<td>1 (highest) to 5</td>
+<td>3</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Status</td>
+<td>active / inactive</td>
+<td>active</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Default Dashboard</td>
+<td>Landing page label</td>
+<td>Accounting Dashboard</td>
+<td>No</td>
+<td>Label only</td>
+</tr>
+<tr>
+<td>Access Scope</td>
+<td>All Company, Company Level, Project Level, Site Level, Warehouse Level</td>
+<td>Project Level</td>
+<td>Yes</td>
+<td>Decides what data the role's users see</td>
+</tr>
+<tr>
+<td>Mobile App Access</td>
+<td>Yes / No</td>
+<td>No</td>
+<td>No</td>
+<td>Stored only</td>
+</tr>
+<tr>
+<td>Can Approve Child Requests?</td>
+<td>Yes / No</td>
+<td>No</td>
+<td>No</td>
+<td>Stored only; approvals are not routed by this</td>
+</tr>
+<tr>
+<td>Start with permissions of</td>
+<td>Copy another role's grid</td>
+<td>Account Assistant</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Permission grid</td>
+<td>Tick module × action</td>
+<td>Accounts Payable: view, create, edit</td>
+<td>No</td>
+<td>Only the visible rows are changed when you save</td>
+</tr>
+</tbody>
+</table>
+<p>Buttons:</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Save Role / Update Role</td>
+<td>Saves the role and its permissions</td>
+</tr>
+<tr>
+<td>Cancel</td>
+<td>Leaves without saving</td>
+</tr>
+</tbody>
+</table>
+<p>Important:
+A system role, a role that still has users, or a role with child roles cannot be deleted.</p>
+<p>Related screens:
+ROL-005 Permission Matrix, ROL-007 Assign Users.</p>
+<h3 id="rol-005-permission-matrix">[ROL-005] Permission Matrix</h3>
+<p>Purpose:
+Edit the permissions of one role across all modules on one page.</p>
+<p>Navigation:
+Administration → Permission Matrix → choose the role and, optionally, a module group → Apply.</p>
+<p>Permission required:
+Roles — edit to save.</p>
+<p>Buttons: Apply (load the role), Select all visible, Clear visible, Save Permissions, Reset. Only the rows shown on screen are changed by Save; hidden rows keep their current permissions.</p>
+<h3 id="rol-006-role-hierarchy">[ROL-006] Role Hierarchy</h3>
+<p>Purpose:
+See the tree of roles and the selected role's details.</p>
+<p>Status: <strong>PARTIAL</strong>. The tree and the details card are real; the &quot;Hierarchy Rules&quot; table is fixed text. Permissions are not inherited from a parent role.</p>
+<p>Buttons: Add Child Role (opens ROL-002 with the parent preset), Edit Selected Role.</p>
+<h3 id="rol-007-assign-users-to-role">[ROL-007] Assign Users to Role</h3>
+<p>Purpose:
+Move users into or out of a role, with an optional temporary access window.</p>
+<p>Navigation:
+Administration → Assign Users → choose the role → Apply Filter.</p>
+<p>Permission required:
+Roles — edit to save.</p>
+<p>What you see:
+Two lists (available users, assigned users) with arrow buttons, Add All and Remove All, and a Temporary Access Option section (Temporary Access, Access Start Date, Access End Date, Applies To, Reason).</p>
+<p>Important:
+Temporary dates are applied to every user you submit in that save, and the role is only active inside the dates. The user's own Edit form resets extra roles to the primary role (see USR-004).</p>
+<h3 id="rol-008-approval-workflows-rol-009-create-rol-010-edit">[ROL-008] Approval Workflows, [ROL-009] Create, [ROL-010] Edit</h3>
+<p>Purpose:
+Record who should approve what, step by step.</p>
+<p>Status: <strong>FOUNDATION ONLY</strong>. The workflow (name, module, trigger action, department, scope, auto posting, notify requester, lock after approval, and steps with approver role, specific user, required, amount limit, SLA hours, escalation role, can reject, can send back) is saved and shown. <strong>Approvals in the system do not follow these steps yet.</strong> Today every Approve button is a single action by any user who has the approve permission for that module.</p>
+<p>Buttons: + New Workflow, Preview, Edit, Delete, + Add Step, Save Workflow, Cancel.</p>
+<hr />
+<h2 id="5-master-setup">5. Master Setup</h2>
+<p>Master Setup holds the records every other module refers to. Set these up first, in this order: Company Profile → Organization Structure (branches, departments, designations) → Projects and Locations → Warehouses → Expense Categories → Suppliers and Customers.</p>
+<p>Most master forms still use the older button set (<strong>Save</strong> / <strong>Update</strong> and <strong>Cancel</strong>). Suppliers and Customers use the full standard (chapters 7 and 8).</p>
+<h3 id="mst-com-001-company-profile">[MST-COM-001] Company Profile</h3>
+<p>Purpose:
+Company identity used on screens and, later, on invoices.</p>
+<p>Who uses it:
+Super Admin.</p>
+<p>Navigation:
+Master Setup → Company Profile.</p>
+<p>Permission required:
+Company Profile — edit to save.</p>
+<p>What you see:
+Sections Basic Company Information, Saudi Compliance &amp; ZATCA, Address &amp; Fiscal Settings.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Company Name / Arabic Company Name</td>
+<td>Legal names</td>
+<td>Seera Construction Company</td>
+<td>Yes / No</td>
+<td></td>
+</tr>
+<tr>
+<td>Company Logo</td>
+<td>Image file</td>
+<td>logo.png</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Email, Phone, Website</td>
+<td>Contact details</td>
+<td><a href="mailto:info@example.sa">info@example.sa</a></td>
+<td>Email and Phone yes</td>
+<td></td>
+</tr>
+<tr>
+<td>CR Number, VAT Number</td>
+<td>Registration numbers</td>
+<td>1010123456 / 300123456700003</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>ZATCA Registration Number, Invoice Mode, Digital Certificate Status</td>
+<td>Compliance labels</td>
+<td>—</td>
+<td>No</td>
+<td>Labels only; no live ZATCA connection (chapter 14)</td>
+</tr>
+<tr>
+<td>Default VAT Rate (%)</td>
+<td>Standard rate</td>
+<td>15</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Country, City, Default Currency, Fiscal Year Start / End, Full Address</td>
+<td>Location and fiscal settings</td>
+<td>Saudi Arabia / Riyadh / SAR / 01-Jan / 31-Dec</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Status</td>
+<td>active / inactive</td>
+<td>active</td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Save Company Profile, Cancel.</p>
+<h3 id="mst-org-001-organization-structure">[MST-ORG-001] Organization Structure</h3>
+<p>Purpose:
+One hub for Branches, Departments and Designations. Each card shows the recent records, an <strong>+ Add</strong> dialog and an <strong>Open full list</strong> link.</p>
+<p>Who uses it:
+Super Admin, HR Manager.</p>
+<p>Navigation:
+Master Setup → Organization Structure.</p>
+<p>Permission required:
+View on any of Branches, Departments or Designations.</p>
+<h3 id="branches-mst-br-001--004-departments-mst-dep-001--004-designations-mst-des-001--004">Branches [MST-BR-001 … 004], Departments [MST-DEP-001 … 004], Designations [MST-DES-001 … 004]</h3>
+<p>Each has a List (search, cards, table with View / Edit / Delete), an Add form, a Details page and an Edit form.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Record</th>
+<th>Fields (required marked *)</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Branch</td>
+<td>Branch Name *, Branch Code *, City *, Branch Manager, Phone, Email, Address, Status *</td>
+<td>Riyadh Head Office, BR-RYD, Riyadh</td>
+</tr>
+<tr>
+<td>Department</td>
+<td>Department Name *, Department Code *, Department Head, Description, Status *</td>
+<td>Site Operations, SITE</td>
+</tr>
+<tr>
+<td>Designation</td>
+<td>Designation Name *, Department *, Grade / Level, Default Role, Mobile App Access Default, Status *, Description</td>
+<td>Site In-Charge, Site Operations, L3</td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Save / Update, Cancel. Details pages show the related projects, warehouses, designations, users or employees.</p>
+<p>Important:
+Branches, departments and designations can also be created without leaving the User and Employee forms through the &quot;+ New&quot; dialogs.</p>
+<h3 id="projects-mst-prj-001--005-and-locations-mst-site-001--004">Projects [MST-PRJ-001 … 005] and Locations [MST-SITE-001 … 004]</h3>
+<p>Described in chapter 11.</p>
+<h3 id="warehouses-mst-wh-001--004">Warehouses [MST-WH-001 … 004]</h3>
+<p>Purpose:
+Physical stores that hold stock. Stock always belongs to a warehouse.</p>
+<p>Who uses it:
+Inventory Manager, Super Admin.</p>
+<p>Navigation:
+Master Setup → Warehouses → + Add Warehouse.</p>
+<p>Permission required:
+Warehouses — create / view / edit.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Warehouse Name</td>
+<td>Store name</td>
+<td>Riyadh Site Warehouse</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Warehouse Code</td>
+<td>Short code</td>
+<td>WH-RCT-01</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Branch</td>
+<td>Owning branch</td>
+<td>Riyadh Head Office</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Project (optional) / Site (optional)</td>
+<td>Where the store is</td>
+<td>Riyadh Commercial Tower / Riyadh Tower - Main Site</td>
+<td>No</td>
+<td>Project and site users see only their own warehouses' stock</td>
+</tr>
+<tr>
+<td>Warehouse Incharge</td>
+<td>Responsible user</td>
+<td>Ahmed Hassan</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Inventory Valuation Method</td>
+<td>Choice</td>
+<td>Average</td>
+<td>Yes</td>
+<td>Stock is valued by weighted average in the current system, whatever is chosen here</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>active / inactive</td>
+<td>active</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Location / Address</td>
+<td>Free text</td>
+<td>Gate 2, Riyadh Tower</td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Save / Update, Cancel.</p>
+<h3 id="expense-categories-mst-exp-001--004">Expense Categories [MST-EXP-001 … 004]</h3>
+<p>Purpose:
+Categories used on supplier bill lines (and reserved for the future site expense screen).</p>
+<p>Who uses it:
+Finance Manager, Super Admin.</p>
+<p>Navigation:
+Master Setup → Expense Categories → + Add Expense Category.</p>
+<p>Permission required:
+Expense Categories — create / view / edit.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Category Name / Category Code</td>
+<td>Name and code</td>
+<td>Fuel, EXP-FUEL</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Linked Chart of Account</td>
+<td>Expense account</td>
+<td>5300 - Fuel Expense</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Approval Required, Mobile App Visible, Allowed Payment Type, Invoice Photo Required, Default VAT Treatment</td>
+<td>Settings for a future site expense entry</td>
+<td>Yes / Yes / Cash / Yes / Standard 15%</td>
+<td>No</td>
+<td>Stored only today; the site expense screen is NOT YET OPERATIONAL</td>
+</tr>
+<tr>
+<td>Status, Description</td>
+<td></td>
+<td>active</td>
+<td>Status yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Save / Update, Cancel.</p>
+<h3 id="payment-terms-sup-005-and-project-classifications-mst-prj-005">Payment Terms [SUP-005] and Project Classifications [MST-PRJ-005]</h3>
+<p>Small lists with an inline &quot;Add&quot; section and inline Save / Delete per row. Payment terms (name and days from bill date) decide the due date of supplier bills saved without one. Project classifications label projects.</p>
+<hr />
+<h2 id="6-hr--payroll">6. HR &amp; Payroll</h2>
+<h3 id="hr-dash-001-hr-dashboard">[HR-DASH-001] HR Dashboard</h3>
+<p>Purpose:
+Today's HR picture and the queues that need action.</p>
+<p>Who uses it:
+HR Manager.</p>
+<p>Navigation:
+Operations → HR Dashboard.</p>
+<p>Permission required:
+HR — view.</p>
+<p>What you see:
+Cards (Total Employees, Active Employees, Present Today, Late Today, Absent Today, On Leave Today, Pending Leaves, Pending Overtime, Expiring IQAMAs (60 days), Expiring Documents (60 days), Pending EOSB); tables Today's Attendance Summary, Pending HR Approvals, IQAMA Expiring Soon, Latest Leave Requests; buttons + Manual Attendance, + Add Employee, Open Attendance, Open (per queue), View All.</p>
+<p>Important:
+The attendance summary is for today only. There is no monthly attendance report yet (chapter 20).</p>
+<h3 id="hr-emp-001-employees-list">[HR-EMP-001] Employees List</h3>
+<p>Purpose:
+Find employees and open View or the Employee Workspace.</p>
+<p>Who uses it:
+HR Manager.</p>
+<p>Navigation:
+Operations → Employees.</p>
+<p>Permission required:
+HR — view.</p>
+<p>What you see:
+Cards (Total Employees, Active Employees, Mobile App Access, Expiring IQAMAs), filters (search, department, project, classification, document status, status), the table (Code, Name, Department, Designation, Project / Site, Classification, IQAMA Expiry, Basic Salary, Mobile, Status) and per row <strong>View</strong>, <strong>Edit</strong>, <strong>Deactivate</strong>.</p>
+<p>Important:
+Employees are deactivated, never deleted, so payroll history stays intact.</p>
+<h3 id="hr-emp-002-add-employee">[HR-EMP-002] Add Employee</h3>
+<p>Purpose:
+Create an employee record with personal, employment, payroll, document and access details in one form.</p>
+<p>Who uses it:
+HR Manager.</p>
+<p>Navigation:
+Operations → Employees → + Add Employee.</p>
+<p>Permission required:
+HR — create.</p>
+<p>What you see:
+Five sections shown as tabs: A. Personal Information, B. Employment Information, C. Payroll Information, D. Documents &amp; Attachments, E. Access. A &quot;Show all sections&quot; button shows them on one page.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First Name / Last Name</td>
+<td>Names</td>
+<td>Ahmed / Hassan</td>
+<td>First name yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Nationality</td>
+<td>From the list, &quot;+ New&quot; to add</td>
+<td>Egyptian</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Email, Phone, Emergency Contact</td>
+<td>Contacts</td>
+<td><a href="mailto:ahmed.hassan@example.sa">ahmed.hassan@example.sa</a></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Employee Code</td>
+<td>Shown automatically (next number); tick &quot;Enter my own code&quot; to type one</td>
+<td>EMP-0042</td>
+<td>Yes on edit</td>
+<td>The number series depends on the classification</td>
+</tr>
+<tr>
+<td>Department, Designation, Branch</td>
+<td>Position (&quot;+ New&quot; dialogs)</td>
+<td>Site Operations / Site In-Charge / Riyadh Head Office</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Project / Site</td>
+<td>Where the person works</td>
+<td>Riyadh Commercial Tower / Riyadh Tower - Main Site</td>
+<td>No</td>
+<td>Decides which project or site data the person's account can see</td>
+</tr>
+<tr>
+<td>Manager, Joining Date</td>
+<td></td>
+<td>Fatimah Al-Zahrani / 01-Mar-2024</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Contract Type, Employee Classification</td>
+<td>Lists</td>
+<td>Full Time / Sponsorship</td>
+<td>Yes</td>
+<td>Classification changes the code series</td>
+</tr>
+<tr>
+<td>Contract Start / Contract End</td>
+<td>Dates</td>
+<td>01-Mar-2024 / 28-Feb-2026</td>
+<td>No</td>
+<td>Start date cannot be in the future</td>
+</tr>
+<tr>
+<td>Annual Leave Entitlement (days / year)</td>
+<td>Number</td>
+<td>21</td>
+<td>No</td>
+<td>Used for the leave balance</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>active / inactive</td>
+<td>active</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Basic Salary (SAR)</td>
+<td>Monthly basic</td>
+<td>6,500</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Housing, Transport, Food, Fuel, Other Allowance</td>
+<td>Monthly amounts</td>
+<td>1,500 / 500 / 300 / 0 / 0</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Payment Method, Bank Name, IBAN</td>
+<td>How salary is paid</td>
+<td>Bank Transfer / Al Rajhi / SA00...</td>
+<td>Payment method yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Documents &amp; Attachments</td>
+<td>Rows of Document Type *, profession / class, Number, Issue Date, Expiry Date, File</td>
+<td>IQAMA, 2412345678, expiry 15-Jun-2027, PDF</td>
+<td>No</td>
+<td>PDF or image up to 5 MB; stored privately</td>
+</tr>
+<tr>
+<td>Link User Account, Mobile App Access</td>
+<td>Access section</td>
+<td>— / No</td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Buttons:</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Save &amp; stay</td>
+<td>Saves and stays on this employee (Edit workspace)</td>
+</tr>
+<tr>
+<td>Save &amp; next</td>
+<td>Saves and opens the next section</td>
+</tr>
+<tr>
+<td>Save &amp; new</td>
+<td>Saves and opens an empty employee form</td>
+</tr>
+<tr>
+<td>Save &amp; close</td>
+<td>Saves and returns to the list</td>
+</tr>
+<tr>
+<td>Cancel</td>
+<td>Leaves without saving</td>
+</tr>
+</tbody>
+</table>
+<p>What happens after Save:
+The employee is created. When payroll information is complete, the first salary structure is created automatically from it, effective from the joining date. The status message tells you.</p>
+<p>Common mistakes:</p>
+<ul>
+<li>Contract start date in the future (refused).</li>
+<li>Uploading a document larger than 5 MB.</li>
+<li>Forgetting the Project / Site for a site employee, so their account sees nothing.</li>
+</ul>
+<p>Related screens:
+HR-EMP-004 Employee Workspace, HR-SAL-001, USR-002.</p>
+<h3 id="hr-emp-003-employee-view-read-only">[HR-EMP-003] Employee View (read-only)</h3>
+<p>Purpose:
+Read everything about one employee without changing anything.</p>
+<p>Navigation:
+Employees → View.</p>
+<p>Permission required:
+HR — view.</p>
+<p>What you see:
+Employment Information, Personal &amp; Documents, Payroll Information, Documents, Recent Attendance, Leave Data with the annual balance, Overtime, Salary Structures, Payroll History, and cards for Attendance This Month and Pending Leave / Overtime. A &quot;+ New Structure From Profile&quot; link opens the salary structure form when the profile amounts no longer match the active structure.</p>
+<h3 id="hr-emp-004-employee-workspace-edit">[HR-EMP-004] Employee Workspace (Edit)</h3>
+<p>Purpose:
+Manage the employee and all related records from one page.</p>
+<p>Who uses it:
+HR Manager (each tab checks its own permission).</p>
+<p>Navigation:
+Employees → Edit.</p>
+<p>Permission required:
+HR — edit to open; tabs need Payroll, Attendance, HR or Users permissions.</p>
+<p>What you see:
+The five profile sections plus related tabs:</p>
+<pre><code>Employee
+ ├─ A. Personal · B. Employment · C. Payroll · D. Documents · E. Access   (the profile form)
+ ├─ Salary Structures     (Payroll)
+ ├─ Attendance            (Attendance)
+ ├─ Leaves                (HR)
+ ├─ Overtime              (Payroll)
+ ├─ Shift Assignments     (HR)
+ ├─ End of Service        (Payroll)
+ ├─ Payroll History       (Payroll, read-only)
+ └─ System Account        (Users)
+</code></pre>
+<p>Each related tab has its own small form and its own saved-records table with Edit here, Approve, Reject or Delete where allowed. Saving a tab keeps you on the employee and on that tab. A linked user card at the top links to the user account (USR-003 / USR-004) when you may open it.</p>
+<p>Important:</p>
+<ul>
+<li>Leave and Overtime saved here are always <em>pending</em>; approval is a separate button.</li>
+<li>Salary Structures here create a new effective-dated structure; old structures and past payroll are never overwritten.</li>
+<li>System Account creates or edits the login for this employee; identity fields come from the employee.</li>
+</ul>
+<h3 id="hr-doc-001-employee-documents--iqama">[HR-DOC-001] Employee Documents / IQAMA</h3>
+<p>Purpose:
+Register of all employee documents with expiry status.</p>
+<p>Navigation:
+HR Registers &amp; Approvals → Documents / IQAMA.</p>
+<p>Permission required:
+HR — view.</p>
+<p>What you see:
+Cards (Total Documents, Valid, Expiring Soon (60 days), Expired), filters (employee, type, status), table (Employee, Type, Number, Issue, Expiry, Validity, File, Status). Files open or download through Seera; they are not public links.</p>
+<p>Important:
+Documents are added and renewed on the Employee form (section D). This register has no add form of its own.</p>
+<h3 id="hr-shf-001--003-shifts">[HR-SHF-001 … 003] Shifts</h3>
+<p>Fields: Shift Name *, Shift Code *, Status *, Start Time *, End Time *, Break (minutes) *, Grace (minutes) *, Overtime After (minutes) *. Example: Day Shift, DAY, 07:00–16:00, break 60, grace 15, overtime after 540.</p>
+<p>Important:
+Grace and overtime-after minutes are stored but are not yet used to calculate late minutes or overtime automatically; those are typed on the attendance record.</p>
+<h3 id="hr-att-001--003-attendance">[HR-ATT-001 … 003] Attendance</h3>
+<p>Purpose:
+Record who was present, late or absent.</p>
+<p>Status: <strong>PARTIAL</strong> — manual entry only. There is no employee check-in / check-out, no GPS capture and no automatic geofence check yet.</p>
+<p>Navigation:
+HR Registers &amp; Approvals → Attendance → + Manual Attendance.</p>
+<p>Permission required:
+Attendance — create / view / edit.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Employee, Date</td>
+<td></td>
+<td>Ahmed Hassan, 27-Sep-2026</td>
+<td>Yes</td>
+<td>One record per employee per day</td>
+</tr>
+<tr>
+<td>Shift, Project, Site</td>
+<td>Context</td>
+<td>Day Shift, Riyadh Commercial Tower, Riyadh Tower - Main Site</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Check In / Check Out</td>
+<td>Times</td>
+<td>07:05 / 16:10</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Late (minutes), Overtime (minutes)</td>
+<td>Typed by hand</td>
+<td>5 / 0</td>
+<td>Yes</td>
+<td>Not calculated automatically</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>present, late, absent, leave, half day</td>
+<td>present</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Source</td>
+<td>manual / mobile / offline</td>
+<td>manual</td>
+<td>Yes</td>
+<td>Only &quot;manual&quot; is produced by the system today</td>
+</tr>
+<tr>
+<td>Geo-Fence Status</td>
+<td>inside / outside / unknown</td>
+<td>inside</td>
+<td>Yes</td>
+<td>Chosen by the user; not verified by location</td>
+</tr>
+<tr>
+<td>Remarks</td>
+<td>Free text</td>
+<td>—</td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Save / Update, Cancel. The list offers Edit and Delete per row.</p>
+<h3 id="hr-lv-001--004-leaves">[HR-LV-001 … 004] Leaves</h3>
+<p>Purpose:
+Request, approve or reject leave and keep the balance.</p>
+<p>Navigation:
+HR Registers &amp; Approvals → Leaves → + Add Leave.</p>
+<p>Permission required:
+HR — create / view / edit; HR — approve / reject for the decisions.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Employee, Leave Type</td>
+<td></td>
+<td>Ahmed Hassan, Annual Leave</td>
+<td>Yes</td>
+<td>Leave types are managed by HR (&quot;+ New&quot;)</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>pending / approved / rejected</td>
+<td>pending</td>
+<td>Yes</td>
+<td>New requests are pending; approve from the details page</td>
+</tr>
+<tr>
+<td>Start Date, End Date</td>
+<td></td>
+<td>05-Oct-2026 to 09-Oct-2026</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Total Days</td>
+<td>Calculated from the dates, or an agreed exception</td>
+<td>5</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Reason, Supporting Document</td>
+<td></td>
+<td>Family visit, PDF</td>
+<td>No</td>
+<td>Document stored privately</td>
+</tr>
+<tr>
+<td>Rejection Reason</td>
+<td>Only when rejecting</td>
+<td>—</td>
+<td>Yes when rejecting</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Save / Update, Cancel; on details: <strong>Approve</strong>, <strong>Reject Request</strong> (asks for a reason), Edit, Attachment.</p>
+<p>What happens after Approve:
+Status becomes approved and the days count against the annual entitlement shown on the employee.</p>
+<h3 id="hr-ot-001--003-overtime">[HR-OT-001 … 003] Overtime</h3>
+<p>Fields: Employee *, Date *, Attendance Record (optional link), Hours *, Hourly Rate (SAR) *, Status *, Reason. Amount = hours × rate. <strong>Approve</strong> is a separate button; only approved overtime enters payroll.</p>
+<h3 id="hr-sal-001--004-salary-structures">[HR-SAL-001 … 004] Salary Structures</h3>
+<p>Purpose:
+Effective-dated salary definition used by payroll.</p>
+<p>Fields: Employee *, Effective From *, Effective To, Basic Salary *, Housing / Transport / Food / Fuel / Other Allowance *, Fixed Deduction *, Status *, and Additional Salary Items (Type allowance/deduction, Name, Amount, Taxable).</p>
+<p>Important:
+Create a new structure for a change; do not edit history. The employee profile amounts and the active structure are compared and Seera warns when they differ.</p>
+<h3 id="hr-pay-001--004-payroll">[HR-PAY-001 … 004] Payroll</h3>
+<p>Purpose:
+Calculate a month's pay for a set of employees.</p>
+<p>Status: <strong>PARTIAL</strong> — the run calculates basic, allowances, approved overtime, fixed deductions and net. There is no payslip, no bank or WPS file, and <strong>no accounting posting</strong> when a run is approved.</p>
+<p>Navigation:
+HR Registers &amp; Approvals → Payroll → + Create Payroll Run.</p>
+<p>Permission required:
+Payroll — create / view / edit; Payroll — process and approve for the actions.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Payroll Month, Payroll Year</td>
+<td>Period</td>
+<td>September, 2026</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Period Start, Period End</td>
+<td>Dates</td>
+<td>01-Sep-2026 to 30-Sep-2026</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Branch, Project</td>
+<td>Limit the run</td>
+<td>Riyadh Head Office / Riyadh Commercial Tower</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Notes</td>
+<td></td>
+<td>—</td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Save (draft), then on the details page <strong>Process Payroll</strong> (builds the employee rows) and <strong>Approve Payroll</strong> (only a processed run), Edit.</p>
+<p>Statuses: draft → processed → approved. Present and leave days are counted from attendance but do not change pay in the current system.</p>
+<h3 id="hr-eos-001--004-end-of-service">[HR-EOS-001 … 004] End of Service</h3>
+<p>Purpose:
+Calculate the end-of-service benefit (Saudi Labour Law bands) and approve the settlement.</p>
+<p>Fields: Employee *, Termination Date *, Reason For Leaving *, Service Years *, Final Wage (SAR) *, Status, Gratuity Calculation (automatic or manual override), Gratuity Amount, Leave Salary, Other Dues, Deductions, Notes. The details page shows the calculation (first 5 years, after 5 years, entitlement percentage). <strong>Approve</strong> is a separate button. No accounting entry is created.</p>
+<hr />
+<h2 id="7-customers">7. Customers</h2>
+<p>Customers follow the Connected Workspace Standard:</p>
+<pre><code>Customers List  →  View Customer (read-only)  →  Edit / Manage Customer Workspace
+</code></pre>
+<pre><code>Customer
+ ├─ Profile
+ ├─ Contacts
+ ├─ Notes
+ ├─ Projects
+ ├─ Invoices
+ ├─ Receipts &amp; Balance
+ ├─ Ageing
+ ├─ Accounting
+ ├─ Local ZATCA Records
+ └─ Activity
+</code></pre>
+<h3 id="cus-001-customers-list">[CUS-001] Customers List</h3>
+<p>Purpose:
+Find customers and open View or the workspace.</p>
+<p>Who uses it:
+Marketing Manager, Finance Manager, Account Assistant.</p>
+<p>Navigation:
+Master Setup → Customers.</p>
+<p>Permission required:
+Customers — view.</p>
+<p>What you see:
+Cards (Total Customers, Active Customers, Receivable Balance, Linked Projects), filters (search by name, code or VAT number; type; status), the table (Customer Code, Customer Name, Rating, Overdue, Contact Person, Total Projects, Receivable, Status) and per row <strong>View</strong>, <strong>Edit / Manage</strong> (only with Customers — edit) and <strong>Delete</strong> (only with Customers — delete; refused while the customer has projects).</p>
+<h3 id="cus-002-add-customer">[CUS-002] Add Customer</h3>
+<p>Purpose:
+Create a customer with its first contacts and a note in one go.</p>
+<p>Who uses it:
+Marketing Manager, Account Assistant.</p>
+<p>Navigation:
+Master Setup → Customers → + Add Customer.</p>
+<p>Permission required:
+Customers — create.</p>
+<p>What you see:
+Customer Information, then Office contacts, Site contacts and Shared notes sections.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customer Name</td>
+<td>Legal name</td>
+<td>Al Noor Development Co.</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Customer Code</td>
+<td>Code</td>
+<td>CUS-021</td>
+<td>No</td>
+<td>Generated (CUS-…) when left blank</td>
+</tr>
+<tr>
+<td>Customer Type</td>
+<td>Company, Individual or a type you add</td>
+<td>Company</td>
+<td>Yes</td>
+<td>&quot;+ New&quot; adds a type</td>
+</tr>
+<tr>
+<td>Accepted Payment Types</td>
+<td>Cash, Bank or Both</td>
+<td>Both</td>
+<td>No</td>
+<td>Limits which cash or bank account a receipt may use</td>
+</tr>
+<tr>
+<td>Rating</td>
+<td>Green / Amber / Red</td>
+<td>Green</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>VAT Number, CR Number</td>
+<td>Registration numbers</td>
+<td>300987654300003 / 1010987654</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Opening Receivable (SAR)</td>
+<td>Balance brought forward as a note</td>
+<td>0</td>
+<td>No</td>
+<td>Master data only; it is not posted to accounting</td>
+</tr>
+<tr>
+<td>Contact Person, Phone, Email</td>
+<td>Main contact</td>
+<td>Khalid Al-Otaibi, +966 55 222 3333</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Credit Limit (SAR)</td>
+<td>Agreed limit</td>
+<td>500,000</td>
+<td>No</td>
+<td>Informational</td>
+</tr>
+<tr>
+<td>Linked Receivable Account</td>
+<td>Text label</td>
+<td>Accounts Receivable - Customers</td>
+<td>No</td>
+<td>Invoices post to the receivable control account 1200</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>active / inactive</td>
+<td>active</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Billing Address</td>
+<td>Address for invoices</td>
+<td>King Fahd Road, Riyadh</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Office contact / Site contact</td>
+<td>Contact name, title, phone, email, address (site contact also picks a site of this customer's projects)</td>
+<td>Office: Khalid Al-Otaibi</td>
+<td>No</td>
+<td>A name is required when any contact detail is entered</td>
+</tr>
+<tr>
+<td>Add a note with this save</td>
+<td>Shared note</td>
+<td>Gate opens at 7:00</td>
+<td>No</td>
+<td>Needs Customers — create</td>
+</tr>
+</tbody>
+</table>
+<p>Buttons:</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Save</td>
+<td>Saves and opens the Customer Workspace</td>
+</tr>
+<tr>
+<td>Save &amp; new</td>
+<td>Saves and opens an empty customer form</td>
+</tr>
+<tr>
+<td>Save &amp; close</td>
+<td>Saves and returns to the list</td>
+</tr>
+<tr>
+<td>Cancel</td>
+<td>Leaves without saving</td>
+</tr>
+</tbody>
+</table>
+<p>What happens after Save:
+The customer, its contacts and the note are saved together. If a contact is invalid, nothing is saved.</p>
+<p>Common mistakes:</p>
+<ul>
+<li>Choosing a site that belongs to another customer's project for a site contact (refused).</li>
+<li>Typing an opening receivable and expecting it in the ledger; it is a note only.</li>
+</ul>
+<p>Related screens:
+CUS-003, CUS-004, FIN-AR-002.</p>
+<h3 id="cus-003-customer-view-read-only">[CUS-003] Customer View (read-only)</h3>
+<p>Purpose:
+Read the customer and all its related information without any risk of changing data.</p>
+<p>Who uses it:
+Anyone with Customers — view; each section appears only if you also have that section's permission.</p>
+<p>Navigation:
+Customers → View.</p>
+<p>Permission required:
+Customers — view (sections: Projects — view, Accounts Receivable — view, Journal Entries — view, ZATCA Invoicing — view, Activity Logs — view).</p>
+<p>What you see:
+The persistent header (code, name, status, type, rating, VAT and CR numbers, contact, payment channel and credit limit, receivable account, projects count, and, for finance users, outstanding receivable, open invoices and received to date). A tab strip for jumping to sections. The Customer Information table, then each permitted section with its latest 5 rows and a <strong>View all</strong> link. There are no forms and no save buttons.</p>
+<h3 id="cus-004-customer-workspace-edit--manage">[CUS-004] Customer Workspace (Edit / Manage)</h3>
+<p>Purpose:
+Manage the customer and everything related to it from one page.</p>
+<p>Who uses it:
+Marketing Manager, Finance Manager.</p>
+<p>Navigation:
+Customers → Edit / Manage.</p>
+<p>Permission required:
+Customers — edit. Each tab: Contacts and Notes (Customers), Projects (Projects — view), Invoices, Receipts &amp; Balance, Ageing (Accounts Receivable — view), Accounting (Journal Entries — view), Local ZATCA Records (ZATCA Invoicing — view), Activity (Activity Logs — view). Tabs you may not view are not shown.</p>
+<p>What you see:
+The same header, then tabs. <strong>Profile</strong> is the customer form with Save, Save &amp; new, Save &amp; close and Cancel. The other tabs load when you click them.</p>
+<table>
+<thead>
+<tr>
+<th>Tab</th>
+<th>What you can do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Contacts</td>
+<td>Add contact (Customers — create), Edit here (Customers — edit), Remove (Customers — delete). Site contacts pick a site of this customer's projects.</td>
+</tr>
+<tr>
+<td>Notes</td>
+<td>Add note (Customers — create) with author and date; Remove (Customers — delete).</td>
+</tr>
+<tr>
+<td>Projects</td>
+<td>See this customer's projects (code, name, manager, budget, status) and open them. Only projects in your scope are listed.</td>
+</tr>
+<tr>
+<td>Invoices</td>
+<td>Invoice number, date, project, taxable, VAT, total, received, balance, status, local ZATCA status; View, Edit draft, Record receipt (links to the invoice pages).</td>
+</tr>
+<tr>
+<td>Receipts &amp; Balance</td>
+<td>Approved invoices, Received, Outstanding, Last receipt cards and the receipt list with journal links. Figures use only the invoices you may see.</td>
+</tr>
+<tr>
+<td>Ageing</td>
+<td>Current-state ageing as of today (Current, 1–30, 31–60, 60+ days) of the open invoices you may see, plus the invoice rows with days late. Not a historical as-of report.</td>
+</tr>
+<tr>
+<td>Accounting</td>
+<td>Linked receivable account and the journals created by this customer's invoices and receipts, with drill-through.</td>
+</tr>
+<tr>
+<td>Local ZATCA Records</td>
+<td>UUID, QR, XML and local status per approved invoice. Clearance is not verified live.</td>
+</tr>
+<tr>
+<td>Activity</td>
+<td>Recent activity entries for this customer, paged.</td>
+</tr>
+</tbody>
+</table>
+<p>Buttons on the page: View (read-only), Back to Customers.</p>
+<p>Important:</p>
+<ul>
+<li>Approving or reopening an invoice and recording a receipt are done on the invoice (FIN-AR-003, FIN-AR-005), never from the customer profile.</li>
+<li>Saving the Profile tab does not touch contacts, notes, invoices or projects.</li>
+</ul>
+<p>What happens after Save (Profile):
+Save keeps you in the workspace; Save &amp; close returns to the list or the page you came from.</p>
+<p>Common mistakes:</p>
+<ul>
+<li>Looking for the Add Contact form on the View page: it is only in the workspace.</li>
+<li>Expecting the header outstanding figure to include invoices from projects outside your scope: it never does.</li>
+</ul>
+<p>Related screens:
+CUS-003, FIN-AR-001, FIN-AR-003, FIN-ZAT-001.</p>
+<hr />
+<h2 id="8-suppliers">8. Suppliers</h2>
+<p>Suppliers follow the Connected Workspace Standard:</p>
+<pre><code>Suppliers List  →  View Supplier (read-only)  →  Edit / Manage Supplier Workspace
+</code></pre>
+<pre><code>Supplier
+ ├─ Profile
+ ├─ Projects
+ ├─ Purchase Orders
+ ├─ Goods Receipts
+ ├─ Supplier Bills
+ ├─ Payments &amp; Balance
+ ├─ Accounting
+ └─ Activity
+</code></pre>
+<h3 id="sup-001-suppliers-list">[SUP-001] Suppliers List</h3>
+<p>Purpose:
+Find suppliers and open View or the workspace.</p>
+<p>Who uses it:
+Purchase Manager, Finance Manager.</p>
+<p>Navigation:
+Master Setup → Suppliers.</p>
+<p>Permission required:
+Suppliers — view.</p>
+<p>What you see:
+Cards (Total Suppliers, Active Suppliers, Payable Balance from opening balances, Categories), filters (search by name, code, VAT number or city; category; rating; status), the table (Supplier Code, Supplier Name, City, Rating, Phone, Category, Payable Balance, Status) and per row <strong>View</strong>, <strong>Edit / Manage</strong> (Suppliers — edit) and <strong>Deactivate</strong> (Suppliers — delete).</p>
+<p>Important:
+Suppliers are deactivated, never deleted: bills, payments, orders and receipts must stay for audit and VAT.</p>
+<h3 id="sup-002-add-supplier">[SUP-002] Add Supplier</h3>
+<p>Purpose:
+Create a supplier with its commercial, banking and project links.</p>
+<p>Who uses it:
+Purchase Manager.</p>
+<p>Navigation:
+Master Setup → Suppliers → + Add Supplier.</p>
+<p>Permission required:
+Suppliers — create.</p>
+<p>What you see:
+Sections Supplier Information, Payment &amp; Banking, Projects this Supplier Works For.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Supplier Name</td>
+<td>Legal name</td>
+<td>Gulf Steel Trading</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Supplier Code</td>
+<td>Code</td>
+<td>SUP-014</td>
+<td>No</td>
+<td>Generated (SUP-…) when blank</td>
+</tr>
+<tr>
+<td>Supplier Category</td>
+<td>From the list (&quot;+ New&quot;)</td>
+<td>Materials</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>City / Location</td>
+<td></td>
+<td>Dammam</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Supplier Rating</td>
+<td>Green / Amber / Red</td>
+<td>Green</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>VAT Number, CR Number</td>
+<td></td>
+<td>300112233400003 / 2050112233</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Opening Balance (SAR)</td>
+<td>Balance brought forward as a note</td>
+<td>0</td>
+<td>No</td>
+<td>Not posted to accounting</td>
+</tr>
+<tr>
+<td>Contact Person, Phone, Email, Address</td>
+<td></td>
+<td>Saleh Al-Amri</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Status</td>
+<td>active / inactive</td>
+<td>active</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Payment Terms</td>
+<td>From the list (&quot;+ New&quot;)</td>
+<td>30 Days</td>
+<td>No</td>
+<td>Bills saved without a due date fall due after these days</td>
+</tr>
+<tr>
+<td>Accepted Payment Types</td>
+<td>Cash, Bank, Both</td>
+<td>Bank</td>
+<td>No</td>
+<td>Limits the accounts offered when paying this supplier</td>
+</tr>
+<tr>
+<td>Linked Payable Account</td>
+<td>Payables control account or a sub-account under it (&quot;+ New&quot;)</td>
+<td>2100 - Accounts Payable</td>
+<td>No</td>
+<td>Bills and payments post to this account</td>
+</tr>
+<tr>
+<td>Bank Name, Account Holder Name, IBAN</td>
+<td></td>
+<td>Al Rajhi Bank / Gulf Steel Trading / SA03…</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Projects this Supplier Works For</td>
+<td>Tick the projects</td>
+<td>Riyadh Commercial Tower</td>
+<td>No</td>
+<td>Managed from the Projects tab once the supplier exists</td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Save (opens the Supplier Workspace), Save &amp; new, Save &amp; close, Cancel.</p>
+<p>Common mistakes:</p>
+<ul>
+<li>Choosing an account outside the payables group as the linked account (refused).</li>
+<li>Setting &quot;Cash&quot; as the accepted payment type for a supplier you pay by bank transfer: the payment form will not offer the bank account.</li>
+</ul>
+<h3 id="sup-003-supplier-view-read-only">[SUP-003] Supplier View (read-only)</h3>
+<p>Purpose:
+Read the supplier and its related records safely.</p>
+<p>Navigation:
+Suppliers → View.</p>
+<p>Permission required:
+Suppliers — view; sections need Purchase Orders, Goods Receipts, Accounts Payable, Journal Entries or Activity Logs view.</p>
+<p>What you see:
+The header (code, name, status, category, city, VAT and CR numbers, contact, payment terms and channel, payable account, projects count, and for finance users the outstanding payable and paid to date), a tab strip, the Supplier Information table, and each permitted section with the latest 5 rows and <strong>View all</strong>. No forms.</p>
+<h3 id="sup-004-supplier-workspace-edit--manage">[SUP-004] Supplier Workspace (Edit / Manage)</h3>
+<p>Purpose:
+Manage the supplier and work with its orders, receipts, bills and payments from one page.</p>
+<p>Who uses it:
+Purchase Manager, Finance Manager.</p>
+<p>Navigation:
+Suppliers → Edit / Manage.</p>
+<p>Permission required:
+Suppliers — edit. Tabs: Projects (Suppliers; linking needs Suppliers — edit and Projects — view), Purchase Orders (Purchase Orders — view), Goods Receipts (Goods Receipts — view), Supplier Bills and Payments &amp; Balance (Accounts Payable — view), Accounting (Journal Entries — view), Activity (Activity Logs — view).</p>
+<table>
+<thead>
+<tr>
+<th>Tab</th>
+<th>What you can do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Profile</td>
+<td>The supplier form with Save, Save &amp; new, Save &amp; close, Cancel. The project checklist is not on this tab; use Projects.</td>
+</tr>
+<tr>
+<td>Projects</td>
+<td>Link a project (drop-down of projects you can see) or Unlink.</td>
+</tr>
+<tr>
+<td>Purchase Orders</td>
+<td>PO number, date, project/site, amount, received / ordered with the outstanding quantity, status; View PO.</td>
+</tr>
+<tr>
+<td>Goods Receipts</td>
+<td>GRN number, PO, project/site, date, value, status, invoiced state (Invoiced / n uninvoiced); View GRN; <strong>Create Supplier Bill</strong> on a posted receipt with uninvoiced quantity (needs Accounts Payable — create). The bill form opens pre-filled and returns to this tab when closed.</td>
+</tr>
+<tr>
+<td>Supplier Bills</td>
+<td>Bill number, date, project/site, total, paid, balance, status, matched GRN lines; View, Edit draft, Record payment (links to the bill pages).</td>
+</tr>
+<tr>
+<td>Payments &amp; Balance</td>
+<td>Approved bills, Paid, Outstanding, Last payment cards and the payment list with journal links. Only bills you may see are counted.</td>
+</tr>
+<tr>
+<td>Accounting</td>
+<td>Linked payable account and the journals created by this supplier's bills and payments.</td>
+</tr>
+<tr>
+<td>Activity</td>
+<td>Recent activity for this supplier, paged.</td>
+</tr>
+</tbody>
+</table>
+<p>Important:
+Approve, Pay and Reopen a bill only on the bill itself (FIN-AP-003, FIN-AP-005). Post a goods receipt only on the receipt (INV-GRN-003).</p>
+<p>Related screens:
+INV-PO-001, INV-GRN-001, FIN-AP-001, WF-002, WF-010.</p>
+<hr />
+<h2 id="9-accounting--finance">9. Accounting &amp; Finance</h2>
+<h3 id="how-accounting-works-in-seera-read-this-first">How accounting works in Seera (read this first)</h3>
+<ul>
+<li>Every financial document (supplier bill, customer invoice, payment, receipt, goods receipt, stock issue, stock adjustment) creates its <strong>journal entry automatically</strong> when you approve or post it. You do not type these journals.</li>
+<li><strong>Save</strong> keeps a document as a <em>draft</em>. A draft has no accounting effect and no VAT effect.</li>
+<li><strong>Approve &amp; Post</strong> (bills, invoices) and <strong>Post</strong> (journals, stock documents) are the moments accounting happens. If anything is wrong (inactive account, unbalanced entry, sealed VAT period), nothing is saved and a message tells you why.</li>
+<li><strong>Pay</strong> and <strong>Record Receipt</strong> create their own journals when you record them.</li>
+<li>A <strong>finalized VAT period</strong> is sealed: no document with VAT dated inside it can be approved, corrected or recalculated.</li>
+<li>Posted journals are never edited. Corrections are made by <strong>Reopen</strong> (which posts a reversing entry) or by a new manual journal.</li>
+</ul>
+<p>Accounting entries created by the normal workflow (all amounts from the training dataset):</p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Debit</th>
+<th>Credit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Goods receipt posted (10 × Reinforcement Steel 16mm at 100)</td>
+<td>1400 Inventory Asset 1,000</td>
+<td>2150 Goods Received Not Invoiced 1,000</td>
+</tr>
+<tr>
+<td>Supplier bill approved, matched to that receipt (15% VAT)</td>
+<td>2150 GRNI 1,000 · 1300 Input VAT 150</td>
+<td>2100 Accounts Payable 1,150</td>
+</tr>
+<tr>
+<td>Supplier bill approved, direct service line 500</td>
+<td>5200 Material Expense (or chosen account) 500 · 1300 Input VAT 75</td>
+<td>2100 Accounts Payable 575</td>
+</tr>
+<tr>
+<td>Supplier payment 1,150 by bank</td>
+<td>2100 Accounts Payable 1,150</td>
+<td>1120 Bank Account 1,150</td>
+</tr>
+<tr>
+<td>Customer invoice approved, 2,000 + VAT</td>
+<td>1200 Accounts Receivable 2,300</td>
+<td>4100 Project Revenue 2,000 · 2210 Output VAT 300</td>
+</tr>
+<tr>
+<td>Customer receipt 2,300 by bank</td>
+<td>1120 Bank Account 2,300</td>
+<td>1200 Accounts Receivable 2,300</td>
+</tr>
+<tr>
+<td>Stock issue of 3 units to a project</td>
+<td>5200 Material Expense 300</td>
+<td>1400 Inventory Asset 300</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fin-dash-001-accounting-dashboard">[FIN-DASH-001] Accounting Dashboard</h3>
+<p>Purpose:
+The finance picture and the action queue.</p>
+<p>Who uses it:
+Finance Manager.</p>
+<p>Navigation:
+Finance → Accounting Dashboard.</p>
+<p>Permission required:
+Accounting Dashboard — view.</p>
+<p>What you see:
+Cards Cash in Hand, Bank Balance, Accounts Payable, Accounts Receivable, VAT Payable (all-time output minus input), Unposted Journals, ZATCA Failed Invoices, Monthly Revenue; tables Current month (revenue and expenses), Finance Action Queue (draft bills, draft invoices, unposted journals, failed ZATCA), supplier and customer balances by days overdue, VAT Summary, ZATCA Status Summary, Recent Journal Entries; buttons + Journal Entry, Financial Reports, Open (per queue), Open VAT, Open ZATCA, View All.</p>
+<h3 id="fin-coa-001--004-chart-of-accounts">[FIN-COA-001 … 004] Chart of Accounts</h3>
+<p>Purpose:
+The list of ledger accounts, as a tree.</p>
+<p>Who uses it:
+Finance Manager.</p>
+<p>Navigation:
+Finance → Chart of Accounts → + Add Account.</p>
+<p>Permission required:
+Chart of Accounts — create / view / edit.</p>
+<p>Fields (Add / Edit Account):</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Account Code</td>
+<td>Number</td>
+<td>5310</td>
+<td>Add: no (next free code under the parent); Edit: yes</td>
+<td>Must be unique</td>
+</tr>
+<tr>
+<td>Account Name</td>
+<td>Name</td>
+<td>Diesel Expense</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Account Type</td>
+<td>asset, liability, equity, revenue, expense</td>
+<td>expense</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Parent Account</td>
+<td>The account above it</td>
+<td>5300 - Fuel Expense</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Opening Balance (SAR)</td>
+<td>Balance brought forward</td>
+<td>0</td>
+<td>Yes</td>
+<td>Shown in the balance sheet, trial balance and ledger for company-level users</td>
+</tr>
+<tr>
+<td>Normal Balance</td>
+<td>debit / credit</td>
+<td>debit</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>VAT Applicable, Cost Center Required</td>
+<td>Flags</td>
+<td>No / Yes</td>
+<td>No</td>
+<td>Stored; not enforced today</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>active / inactive</td>
+<td>active</td>
+<td>Yes</td>
+<td>An inactive account refuses new postings</td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Cancel, Save, Save &amp; new, Save &amp; close. Delete on the list deactivates an account that has transactions or sub-accounts instead of deleting it.</p>
+<p>Standard accounts used by the workflow: 1110 Cash in Hand, 1120 Bank Account, 1200 Accounts Receivable, 1300 Input VAT Receivable, 1400 Inventory Asset, 2100 Accounts Payable, 2150 Goods Received Not Invoiced, 2210 Output VAT, 2300 Salary Payable, 3100 Owner Equity, 4100 Project Revenue, 5200 Material Expense, 5600 Inventory Adjustment Expense.</p>
+<h3 id="fin-je-001--004-journal-entries">[FIN-JE-001 … 004] Journal Entries</h3>
+<p>Purpose:
+Record a manual, balanced accounting entry and post it to the ledger.</p>
+<p>Who uses it:
+Finance Manager.</p>
+<p>Navigation:
+Finance → Journal Entries → + Add Journal Entry.</p>
+<p>Permission required:
+Journal Entries — create / view / edit; Journal Entries — post to post.</p>
+<p>What you see (Add / Edit):
+Journal Header and Journal Lines (Account, Description, Debit, Credit, Cost Center, Project, Site, running Totals).</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Journal Date</td>
+<td>Date of the entry</td>
+<td>27-Sep-2026</td>
+<td>Yes</td>
+<td>A VAT account line inside a finalized VAT period is refused</td>
+</tr>
+<tr>
+<td>Reference Number</td>
+<td>Your reference</td>
+<td>ADJ-09-2026</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Source Module</td>
+<td>Manual, or the module it relates to</td>
+<td>Manual</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Cost Center</td>
+<td>Default cost center</td>
+<td>CC-RCT-01</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Status</td>
+<td>draft / approved / cancelled</td>
+<td>draft</td>
+<td>Yes</td>
+<td>Posting is a separate action</td>
+</tr>
+<tr>
+<td>Description</td>
+<td>What the entry is for</td>
+<td>Bank charges September</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Lines</td>
+<td>At least two lines; each line one account with a debit or a credit; optional cost center, project, site</td>
+<td>5200 Material Expense Dr 100 / 1120 Bank Cr 100</td>
+<td>Yes</td>
+<td>Debits must equal credits; accounts must be active; a project-scoped user may only use their own projects and sites</td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Cancel, Save (opens the journal's details), Save &amp; new, Save &amp; close; on details: <strong>Post to Ledger</strong>, <strong>Cancel Entry</strong> (unposted only), Edit.</p>
+<p>What happens after Post:
+The journal is posted with your name and time, appears in the General Ledger and the reports, and can no longer be edited, deleted or cancelled.</p>
+<p>Common mistakes:</p>
+<ul>
+<li>Unequal totals (refused).</li>
+<li>Using an inactive account (refused with the account name).</li>
+<li>Expecting to reverse a posted manual journal with a button: post a new opposite journal instead.</li>
+</ul>
+<h3 id="fin-gl-001-general-ledger">[FIN-GL-001] General Ledger</h3>
+<p>Purpose:
+See every posted line, with an opening and a running balance.</p>
+<p>Navigation:
+Finance → General Ledger.</p>
+<p>Permission required:
+General Ledger — view.</p>
+<p>What you see:
+Filters (account, cost center, project, site, source, from / to, posted only), cards Total Debit, Total Credit, Opening Balance, and the lines (Date, Voucher, Account, Description, Source, Cost Center, Debit, Credit, Balance). The Voucher opens the journal. Opening balance = the account's opening balance (company-level users only) plus all posted movement before the &quot;from&quot; date; the running balance continues across pages.</p>
+<h3 id="fin-ap-001-accounts-payable-supplier-bills">[FIN-AP-001] Accounts Payable (Supplier Bills)</h3>
+<p>Purpose:
+Register of supplier bills and the recent payments.</p>
+<p>Who uses it:
+Finance Manager, Account Assistant.</p>
+<p>Navigation:
+Finance → Accounts Payable.</p>
+<p>Permission required:
+Accounts Payable — view.</p>
+<p>What you see:
+Cards Outstanding Payable, Overdue Bills, Draft Bills, Paid This Month; filters (search, supplier, status, dates); the bills table (Bill Number, Supplier, Bill Date, Due Date, Taxable, VAT, Total, Paid, Balance, Status) with <strong>View</strong>, <strong>Approve</strong> (drafts) and <strong>Pay</strong> (open bills) per row; Recent Supplier Payments.</p>
+<h3 id="fin-ap-002-add-supplier-bill-and-fin-ap-004-edit-supplier-bill">[FIN-AP-002] Add Supplier Bill and [FIN-AP-004] Edit Supplier Bill</h3>
+<p>Purpose:
+Enter a supplier's invoice, either against goods already received or as a direct service bill.</p>
+<p>Who uses it:
+Account Assistant, Finance Manager.</p>
+<p>Navigation:
+Finance → Accounts Payable → + Add Supplier Bill. Or from a posted goods receipt (INV-GRN-003) or the supplier workspace: <strong>Create Supplier Bill</strong> (pre-filled).</p>
+<p>Permission required:
+Accounts Payable — create (edit for FIN-AP-004; drafts only).</p>
+<p>What you see:
+Bill Information and Bill Lines. Each line has Description, <strong>Received Goods (GRN)</strong>, <strong>Invoiced Qty</strong>, Expense Category, Expense Account, Qty, Unit Price, Cost Center.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Supplier</td>
+<td>Select the supplier</td>
+<td>Gulf Steel Trading</td>
+<td>Yes</td>
+<td>Supplier must already exist</td>
+</tr>
+<tr>
+<td>Bill Number</td>
+<td>The supplier's invoice number</td>
+<td>GST-INV-1045</td>
+<td>Yes</td>
+<td>The same number cannot be entered twice for one supplier</td>
+</tr>
+<tr>
+<td>Reference Number</td>
+<td>PO or delivery reference</td>
+<td>PO-2026-0012</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Bill Date</td>
+<td>Invoice date</td>
+<td>27-Sep-2026</td>
+<td>Yes</td>
+<td>Not in the future; decides the VAT period</td>
+</tr>
+<tr>
+<td>Due Date</td>
+<td>Payment due</td>
+<td>27-Oct-2026</td>
+<td>No</td>
+<td>Filled from the supplier's payment terms when blank</td>
+</tr>
+<tr>
+<td>VAT Rate (%)</td>
+<td>VAT percentage</td>
+<td>15</td>
+<td>Yes</td>
+<td>Applied to every line</td>
+</tr>
+<tr>
+<td>Project, Site, Cost Center</td>
+<td>Dimensions</td>
+<td>Riyadh Commercial Tower / Riyadh Tower - Main Site / CC-RCT-01</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Notes</td>
+<td></td>
+<td>—</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Line: Description</td>
+<td>What was billed</td>
+<td>Reinforcement Steel 16mm</td>
+<td>Yes (or filled from the receipt)</td>
+<td></td>
+</tr>
+<tr>
+<td>Line: Received Goods (GRN)</td>
+<td>The posted receipt line this bill line invoices</td>
+<td>GRN-2026-0008 · Reinforcement Steel 16mm · 10 left @ 100.00</td>
+<td>No</td>
+<td>Only this supplier's uninvoiced receipt lines are offered. Leave &quot;Direct / service line&quot; for services</td>
+</tr>
+<tr>
+<td>Line: Invoiced Qty</td>
+<td>Quantity of the receipt line invoiced now</td>
+<td>10</td>
+<td>Yes when a GRN line is chosen</td>
+<td>Cannot exceed what is still uninvoiced</td>
+</tr>
+<tr>
+<td>Line: Expense Category, Expense Account</td>
+<td>Where a direct line is charged</td>
+<td>Materials / 5200 - Material Expense</td>
+<td>No</td>
+<td>For a matched line the account only receives a price difference</td>
+</tr>
+<tr>
+<td>Line: Qty, Unit Price</td>
+<td>Invoice quantity and price</td>
+<td>10 × 100.00</td>
+<td>Unit price yes</td>
+<td>Defaults from the receipt when a GRN line is chosen</td>
+</tr>
+<tr>
+<td>Line: Cost Center</td>
+<td></td>
+<td>CC-RCT-01</td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Cancel, Save (opens the bill details), Save &amp; new, Save &amp; close.</p>
+<p>Important:
+Saving a bill never posts accounting. Rows without a description or unit price are ignored.</p>
+<p>What happens after Save:
+The bill is a draft with status <em>draft</em>. It appears in the supplier's workspace and in this register.</p>
+<p>Common mistakes:</p>
+<ul>
+<li>Entering a bill for received goods without choosing the GRN line: the goods would be expensed a second time. Always match received goods.</li>
+<li>Asking for more Invoiced Qty than the receipt has left (refused with the remaining quantity).</li>
+<li>Choosing a receipt of another supplier (refused).</li>
+</ul>
+<p>Related screens:
+FIN-AP-003, INV-GRN-003, SUP-004, WF-010.</p>
+<h3 id="fin-ap-003-supplier-bill-details">[FIN-AP-003] Supplier Bill Details</h3>
+<p>Purpose:
+Approve, pay, reopen or read a bill.</p>
+<p>Who uses it:
+Finance Manager.</p>
+<p>Navigation:
+Accounts Payable → View.</p>
+<p>Permission required:
+Accounts Payable — view; approve for Approve &amp; Post and Reopen; process for Record Payment; edit for Edit.</p>
+<p>What you see:
+Cards (taxable, VAT, total, balance), Bill Information, Accounting Entry (the posted journal lines with a link), Payments, Bill Lines with the Received Goods column (receipt number × quantity, accrued amount, or &quot;Direct / service&quot;).</p>
+<p>Buttons:</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Approve &amp; Post</td>
+<td>Posts the bill's journal and its input VAT row, consumes the matched receipt quantities and sets the bill to <em>unpaid</em>. Refused when the VAT period is finalized, an account is inactive, or a matched receipt quantity was invoiced by another bill first</td>
+</tr>
+<tr>
+<td>Record Payment</td>
+<td>Opens FIN-AP-005 (open bills only)</td>
+</tr>
+<tr>
+<td>Reopen for Correction</td>
+<td>Super Admin only, unpaid bills with no payments: posts a reversing journal, withdraws the VAT row, releases the receipt quantities and returns the bill to <em>draft</em> with your reason</td>
+</tr>
+<tr>
+<td>Edit</td>
+<td>Drafts only</td>
+</tr>
+</tbody>
+</table>
+<p>Statuses: draft → unpaid → partially_paid → paid. A second Approve on the same bill is refused; an edit of an approved bill is refused.</p>
+<h3 id="fin-ap-005-record-supplier-payment">[FIN-AP-005] Record Supplier Payment</h3>
+<p>Purpose:
+Pay all or part of an open bill.</p>
+<p>Navigation:
+Supplier Bill Details → Record Payment.</p>
+<p>Permission required:
+Accounts Payable — process.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Payment Date</td>
+<td>Date paid</td>
+<td>30-Sep-2026</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Paid From (Cash / Bank Account)</td>
+<td>The account money left</td>
+<td>1120 - Bank Account</td>
+<td>Yes</td>
+<td>Only the channels the supplier accepts are offered</td>
+</tr>
+<tr>
+<td>Payment Method</td>
+<td>Cash, Bank Transfer, Cheque</td>
+<td>Bank Transfer</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Purpose</td>
+<td>Bill payment, advance, etc.</td>
+<td>Bill payment</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Payment Amount (SAR)</td>
+<td>Amount</td>
+<td>1,150.00</td>
+<td>Yes</td>
+<td>Cannot exceed the outstanding balance</td>
+</tr>
+<tr>
+<td>Reference Number, Notes</td>
+<td></td>
+<td>TRF-88123</td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Record Payment, Back to Bill, Cancel.</p>
+<p>What happens after Record Payment:
+A journal Dr Accounts Payable / Cr Cash or Bank is posted, the bill's paid and balance amounts update and the status moves to partially_paid or paid. If the same payment is submitted twice (double click, browser retry) the second one is recognised and nothing is added.</p>
+<h3 id="fin-ar-001--005-accounts-receivable-customer-invoices-and-receipts">[FIN-AR-001 … 005] Accounts Receivable (Customer Invoices and Receipts)</h3>
+<p>These screens mirror Accounts Payable.</p>
+<p>Add Customer Invoice (FIN-AR-002) fields: Customer *, Invoice Number (generated when blank), Invoice Date * (not in the future), Due Date, VAT Rate (%) *, Project, Cost Center, Notes, and lines with Item / Description *, Qty, Unit Price, Revenue Account, Cost Center. Buttons: Cancel, Save, Save &amp; new, Save &amp; close.</p>
+<p>Customer Invoice Details (FIN-AR-003): Invoice Information, ZATCA Record (UUID, QR Code, XML, Digital Signature, Clearance, Retry Count, Open Record), Accounting Entry, Invoice Lines, Receipts. Buttons <strong>Approve &amp; Post</strong> (posts Dr Receivable / Cr Revenue / Cr Output VAT, records the output VAT row and creates the local ZATCA record), <strong>Record Receipt</strong>, <strong>Reopen for Correction</strong> (Super Admin; unpaid, no receipts; refused when the local ZATCA record is cleared), Edit (draft only).</p>
+<p>Record Customer Receipt (FIN-AR-005) fields: Receipt Date *, Received Into (Bank / Cash Account) * (only the channels the customer accepts), Payment Method * (must match the account: Cash for the cash account, Bank Transfer or Cheque for the bank), Received Amount (SAR) * (not more than the balance), Reference Number, Notes. Buttons: Record Receipt, Back to Invoice, Cancel. Repeated submissions are recognised and not added twice.</p>
+<p>Statuses: draft → unpaid → partially_paid → paid.</p>
+<h3 id="fin-vat-001-vat-management-and-fin-vat-002-vat-period">[FIN-VAT-001] VAT Management and [FIN-VAT-002] VAT Period</h3>
+<p>Purpose:
+Review the VAT return figures per quarter and finalize the period.</p>
+<p>Who uses it:
+Finance Manager with a company-level role (project, site and warehouse scoped users cannot open VAT screens).</p>
+<p>Navigation:
+Finance → VAT Management → View (period).</p>
+<p>Permission required:
+VAT Management — view; process for Recalculate; approve for Finalize.</p>
+<p>What you see:
+Cards Output VAT (Sales), Input VAT (Purchases), VAT Payable, VAT Exceptions (rows without a period), Draft Output VAT and Draft Input VAT (unapproved documents, shown separately so the return and the invoice list never look out of step); the VAT Periods table (Period, Start, End, Sales Taxable, Output VAT, Purchase Taxable, Input VAT, VAT Payable, Transactions, Status) with <strong>Recalculate</strong>, <strong>Finalize</strong> and <strong>View</strong>; Recent VAT Transactions.</p>
+<p>Buttons:</p>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Recalculate</td>
+<td>Re-adds the period's VAT transactions (draft periods only)</td>
+</tr>
+<tr>
+<td>Finalize / Finalize Period</td>
+<td>Recalculates and seals the period. From then on no VAT-bearing document dated inside it can be approved, reopened or recalculated</td>
+</tr>
+<tr>
+<td>VAT Report</td>
+<td>Opens FIN-REP-006</td>
+</tr>
+</tbody>
+</table>
+<p>Important:</p>
+<ul>
+<li>Periods are created by the system setup (one per quarter); there is no screen to add a period.</li>
+<li>Finalize cannot be undone from a screen. Check the draft figures first.</li>
+<li>A zero-VAT document does not create a VAT row.</li>
+</ul>
+<h3 id="fin-zat-001-zatca-e-invoicing-and-fin-zat-002-zatca-record">[FIN-ZAT-001] ZATCA E-Invoicing and [FIN-ZAT-002] ZATCA Record</h3>
+<p>Status: <strong>FOUNDATION ONLY</strong>. See chapter 14.</p>
+<h3 id="fin-cc-001--004-cost-centers">[FIN-CC-001 … 004] Cost Centers</h3>
+<p>Purpose:
+Codes that tag journal lines, bills and invoices for cost reporting.</p>
+<p>Fields: Cost Center Code *, Cost Center Name *, Type * (branch, department, project, site, warehouse), Linked Record, Manager, Status *. Buttons: Cancel, Save, Save &amp; new, Save &amp; close. Details show the posted lines and a ledger link. A cost center with journal lines is deactivated instead of deleted.</p>
+<p>Important:
+Project cost reporting uses the project set on each line, not the cost center.</p>
+<h3 id="fin-pr-001--004-automatic-posting-rules">[FIN-PR-001 … 004] Automatic Posting Rules</h3>
+<p>Purpose:
+One row per automatic journal event (Inventory Purchase, Stock Issued, Stock Adjusted, Bill Approved, Invoice Approved, Payment Recorded, Receipt Recorded, Payroll Approved, Site Expense Approved).</p>
+<p>Status: <strong>PARTIAL</strong>. Only the <strong>Auto Post</strong> switch changes behaviour: when it is off, the event creates a <em>draft</em> journal that a finance user must post by hand (review mode). The debit and credit accounts, cost center rule and approval flag on the rule are informational; the real accounts come from the documents. &quot;Payroll Approved&quot; and &quot;Site Expense Approved&quot; have no event that fires them yet.</p>
+<p>Fields: Source Module *, Trigger Event *, Cost Center Rule *, Debit Account, Credit Account, Auto Post, Approval Required, Status *, Notes. Buttons: Cancel, Save, Save &amp; new, Save &amp; close.</p>
+<hr />
+<h2 id="10-inventory--purchasing">10. Inventory &amp; Purchasing</h2>
+<h3 id="how-stock-works-in-seera">How stock works in Seera</h3>
+<ul>
+<li>Stock always sits in a <strong>warehouse</strong>. On-hand quantity changes only through documents: goods receipt (in), stock issue (out), transfer (out of one warehouse, into another), adjustment (count correction). Nobody edits the on-hand number directly.</li>
+<li>Stock is valued at <strong>weighted average cost per warehouse</strong>.</li>
+<li>Posting a document moves stock and creates the accounting entry in one step. If accounting is refused, stock does not move either.</li>
+<li>Purchasing runs Purchase Request → Purchase Order → Goods Receipt → Supplier Bill (chapter 9).</li>
+</ul>
+<h3 id="inv-dash-001-inventory-dashboard">[INV-DASH-001] Inventory Dashboard</h3>
+<p>Cards Total Items, Stock Value, Low Stock, Pending PRs, Open POs, Pending GRNs, Open Transfers, Unposted Stock Documents; tables Low Stock Alerts, Warehouse Stock Summary, Recent Stock Movement; buttons + Purchase Request, + Goods Receipt, Full Report, Stock On Hand, Open Stock Ledger. Permission: Inventory Dashboard — view.</p>
+<h3 id="inv-item-001--004-materials--items">[INV-ITEM-001 … 004] Materials / Items</h3>
+<p>Purpose:
+The material master.</p>
+<p>Navigation:
+Inventory → Materials / Items → + Add Item.</p>
+<p>Permission required:
+Items — create / view / edit.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Item Code, Item Name</td>
+<td></td>
+<td>ITM-0031, Reinforcement Steel 16mm</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Category, Unit</td>
+<td>Lists</td>
+<td>Steel, TON</td>
+<td>Unit yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Valuation Method</td>
+<td>average / fifo</td>
+<td>average</td>
+<td>Yes</td>
+<td>Only weighted average is applied today</td>
+</tr>
+<tr>
+<td>Status, Description</td>
+<td></td>
+<td>active</td>
+<td>Status yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Reorder Level, Minimum Stock, Maximum Stock</td>
+<td>Quantities</td>
+<td>5 / 2 / 50</td>
+<td>Yes</td>
+<td>Reorder level drives the low-stock report; minimum and maximum are stored only</td>
+</tr>
+<tr>
+<td>Preferred Supplier</td>
+<td></td>
+<td>Gulf Steel Trading</td>
+<td>No</td>
+<td>Display only</td>
+</tr>
+<tr>
+<td>Linked Inventory Account, Linked Expense Account</td>
+<td>Accounts used when posting receipts and issues</td>
+<td>1400 Inventory Asset / 5200 Material Expense</td>
+<td>No</td>
+<td>Standard accounts are used when blank</td>
+</tr>
+<tr>
+<td>VAT Applicable</td>
+<td>Flag</td>
+<td>Yes</td>
+<td>No</td>
+<td>Stored only; VAT comes from the document rate</td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Save / Update, Cancel. Delete deactivates an item that has stock or history. Details show Stock By Warehouse (on hand, reserved, available, average cost, value) and Recent Stock Movement.</p>
+<h3 id="inv-cat-001--003-item-categories-and-inv-unit-001--003-units">[INV-CAT-001 … 003] Item Categories and [INV-UNIT-001 … 003] Units</h3>
+<p>Categories: Category Code *, Category Name *, Parent Category, Linked Inventory Account, Linked Expense Account, Status *. Units: Unit Code *, Unit Name *, Allows Decimal, Status *. Buttons: Save / Update, Cancel.</p>
+<h3 id="inv-stk-001-stock-on-hand-and-inv-led-001-stock-ledger">[INV-STK-001] Stock On Hand and [INV-LED-001] Stock Ledger</h3>
+<p>Stock On Hand: cards (Total Stock Value, Total Quantity, Stocked Items, Low Stock Rows), Warehouse Stock Summary, and the rows (Item, Project / Site, On Hand, Reserved, Available, Reorder, Avg Cost, Status) with a low-stock filter. Stock Ledger: every movement (Date, Reference, Movement, Item, Warehouse, In Qty, Out Qty, Balance, Unit Cost, Value, Project / Site) with filters. Permissions: Warehouse Stock — view; Stock Ledger — view.</p>
+<h3 id="inv-pr-001--004-purchase-requests">[INV-PR-001 … 004] Purchase Requests</h3>
+<p>Purpose:
+Ask for materials to be bought.</p>
+<p>Navigation:
+Inventory → Purchase Requests → + Add Purchase Request.</p>
+<p>Permission required:
+Purchase Requests — create / view / edit; approve / reject for the decision.</p>
+<p>Fields: Request Date *, Required Date, Priority *, Project, Site, Deliver To Warehouse, Status *, Reason, and lines Item *, Description, Quantity *, Unit, Est. Unit Cost, Budget Line (free text). Buttons: Save / Update, Cancel; on details <strong>Approve</strong>, <strong>Reject Request</strong> (with reason), Edit, <strong>Create Purchase Order</strong> (approved requests).</p>
+<p>Statuses: draft → pending → approved / rejected → converted (when a PO is created from it).</p>
+<h3 id="inv-po-001--004-purchase-orders">[INV-PO-001 … 004] Purchase Orders</h3>
+<p>Purpose:
+Order materials from a supplier.</p>
+<p>Navigation:
+Inventory → Purchase Orders → + Add Purchase Order (or Purchase Request → Create Purchase Order).</p>
+<p>Permission required:
+Purchase Orders — create / view / edit; approve for Approve Order.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Supplier</td>
+<td></td>
+<td>Gulf Steel Trading (&quot;+ New&quot; available)</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>PO Date, Expected Delivery</td>
+<td></td>
+<td>20-Sep-2026 / 30-Sep-2026</td>
+<td>PO date yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Source Purchase Request</td>
+<td>The PR it fulfils</td>
+<td>PR-2026-0009</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Deliver To Warehouse</td>
+<td></td>
+<td>Riyadh Site Warehouse</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Default VAT Rate (%)</td>
+<td></td>
+<td>15</td>
+<td>Yes</td>
+<td>Lines may override</td>
+</tr>
+<tr>
+<td>Project, Site, Notes</td>
+<td></td>
+<td>Riyadh Commercial Tower</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Lines</td>
+<td>Item *, Description, Qty *, Unit Price, Disc %, VAT %, Line Total</td>
+<td>10 × Reinforcement Steel 16mm at 100.00</td>
+<td>Yes</td>
+<td>+ Add Line</td>
+</tr>
+<tr>
+<td>Attach quotation files</td>
+<td>Supplier quotations</td>
+<td>quote.pdf</td>
+<td>No</td>
+<td>Upload / Remove on the details page while the order is open</td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Save / Update, Cancel; on details <strong>Approve Order</strong>, Upload, Remove (quotation), Edit, <strong>Create Goods Receipt</strong> (approved or partially received orders).</p>
+<p>Statuses: draft → approved → partially_received → received. Received quantity per line is updated by posted goods receipts.</p>
+<h3 id="inv-grn-001--004-goods-receipt-notes">[INV-GRN-001 … 004] Goods Receipt Notes</h3>
+<p>Purpose:
+Confirm that goods arrived and put them into stock.</p>
+<p>Who uses it:
+Warehouse Incharge.</p>
+<p>Navigation:
+Inventory → Goods Receipt Notes → + Add Goods Receipt, or Purchase Order → Create Goods Receipt (lines pre-filled with the outstanding quantities and the order prices after discount).</p>
+<p>Permission required:
+Goods Receipts — create / view / edit; post for Post Stock.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Supplier, Receiving Warehouse</td>
+<td></td>
+<td>Gulf Steel Trading / Riyadh Site Warehouse</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Purchase Order</td>
+<td>The order being delivered</td>
+<td>PO-2026-0012</td>
+<td>No</td>
+<td>When set, every line must be on the order, the supplier must match, the order must be open, and the received quantity cannot exceed what is outstanding</td>
+</tr>
+<tr>
+<td>Received Date</td>
+<td></td>
+<td>26-Sep-2026</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Delivery Note Number, Supplier Invoice Number</td>
+<td>Supplier papers</td>
+<td>DN-7741 / GST-INV-1045</td>
+<td>No</td>
+<td>Information only; the bill is entered in Accounts Payable</td>
+</tr>
+<tr>
+<td>VAT Rate (%)</td>
+<td>Expected VAT</td>
+<td>15</td>
+<td>Yes</td>
+<td>Shown for information; VAT is recorded on the supplier bill, not on the receipt</td>
+</tr>
+<tr>
+<td>Lines</td>
+<td>Item *, Ordered, Received *, Accepted, Unit Cost</td>
+<td>10 / 10 / 10 / 100.00</td>
+<td>Yes</td>
+<td>Accepted is what enters stock; the rest is recorded as rejected</td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Save / Update, Cancel; on details <strong>Post Stock</strong>, Edit (draft), and, once posted with uninvoiced quantity, <strong>Create Supplier Bill</strong>.</p>
+<p>What happens after Post Stock:
+Stock and the stock ledger increase by the accepted quantity at the unit cost; the purchase order's received quantity and status update; the accounting entry <strong>Dr Inventory Asset / Cr Goods Received Not Invoiced</strong> is posted. No supplier payable and no VAT are recorded at this stage. The receipt becomes read-only.</p>
+<p>Common mistakes:</p>
+<ul>
+<li>Receiving more than the order's outstanding quantity (refused, with the remaining figure).</li>
+<li>Posting a receipt into the wrong warehouse; it cannot be edited afterwards. Use a transfer to move the stock.</li>
+<li>Expecting the supplier's balance to change at receipt time: it changes when the bill is approved.</li>
+</ul>
+<h3 id="inv-iss-001--004-stock-issues">[INV-ISS-001 … 004] Stock Issues</h3>
+<p>Purpose:
+Take materials out of a warehouse for a project or site.</p>
+<p>Fields: Issue From Warehouse *, Issue Date *, Issue To Project, Issue To Site, Purpose, lines Item *, Quantity *. Buttons: Save / Update, Cancel; on details <strong>Post Issue</strong>, Edit (draft).</p>
+<p>What happens after Post Issue:
+Stock decreases at the current average cost; the entry Dr Material Expense (or the item's expense account) / Cr Inventory Asset is posted with the project and site; the project cost report and the material consumption report include it. If any line has insufficient stock the whole issue is refused.</p>
+<h3 id="inv-trf-001--004-stock-transfers">[INV-TRF-001 … 004] Stock Transfers</h3>
+<p>Fields: Transfer Date *, From Warehouse *, To Warehouse *, Notes, lines Item *, Quantity *. Buttons: Save / Update, Cancel; <strong>Dispatch Transfer</strong> (stock leaves the source), <strong>Receive Transfer</strong> (stock enters the destination at the dispatched cost), Edit (draft), Open Stock Ledger.</p>
+<p>Statuses: draft → dispatched → received. No accounting entry is created (stock moves inside the company).</p>
+<p>Important:
+Receive needs the Stock Transfers — receive right. The standard roles delivered with the system do not hold it yet, so a Super Admin receives transfers until the roles are updated.</p>
+<h3 id="inv-adj-001--004-stock-adjustments">[INV-ADJ-001 … 004] Stock Adjustments</h3>
+<p>Fields: Warehouse *, Item *, Adjustment Date *, Counted Quantity *, Reason. Buttons: Save / Update, Cancel; <strong>Approve</strong> then <strong>Post Adjustment</strong>, Edit (draft).</p>
+<p>What happens after Post Adjustment:
+The on-hand quantity becomes the counted quantity (re-read at posting time); a loss posts Dr Inventory Adjustment Expense / Cr Inventory Asset, a gain the opposite.</p>
+<h3 id="inv-rep-001--005-inventory-reports">[INV-REP-001 … 005] Inventory Reports</h3>
+<p>Stock Valuation, Low Stock, Project Material Consumption and Stock Movement, each with filters and an <strong>Export PDF</strong> button that uses the browser's print function. There is no CSV export for inventory reports yet. Permission: Inventory Reports — view.</p>
+<hr />
+<h2 id="11-projects">11. Projects</h2>
+<p>What exists today is the <strong>project master</strong> and the related masters. There is no project dashboard, budget lines, milestone or site-expense screen yet (chapter 20).</p>
+<h3 id="mst-prj-001--004-projects">[MST-PRJ-001 … 004] Projects</h3>
+<p>Purpose:
+Define a project: client, manager, dates, budget amount, branch, classification.</p>
+<p>Who uses it:
+Project Manager, Super Admin.</p>
+<p>Navigation:
+Master Setup → Projects → + Create Project.</p>
+<p>Permission required:
+Projects — create / view / edit.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Project Name, Project Code</td>
+<td></td>
+<td>Riyadh Commercial Tower, PRJ-RCT-01</td>
+<td>Yes</td>
+<td>Code must be unique</td>
+</tr>
+<tr>
+<td>Client Name</td>
+<td>The customer (&quot;+ New Client&quot; dialog)</td>
+<td>Al Noor Development Co.</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>List (&quot;+ New&quot;)</td>
+<td>Commercial</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Branch</td>
+<td></td>
+<td>Riyadh Head Office</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Project Manager</td>
+<td>A user (&quot;+ New Project Manager Account&quot;)</td>
+<td>Fatimah Al-Zahrani</td>
+<td>Yes</td>
+<td>The manager sees this project even with a project-scoped role</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>active, planning, on hold, completed, inactive</td>
+<td>active</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Start Date, End Date</td>
+<td></td>
+<td>01-Feb-2026 / 31-Dec-2027</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Budget Amount (SAR)</td>
+<td>Total budget</td>
+<td>12,500,000</td>
+<td>Yes</td>
+<td>A single figure; the project cost report shows &quot;budget used %&quot; against it</td>
+</tr>
+<tr>
+<td>Project Location, Description</td>
+<td></td>
+<td>Riyadh</td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Save / Update, Cancel. The list also offers <strong>Sites</strong> per project and <strong>Classifications</strong>.</p>
+<p>Project Details (MST-PRJ-003) shows Project Information, the sites with geo-fence, employees whose project is this one, suppliers for this project and warehouses in this project, with <strong>+ Add Location</strong> and Edit Project. A project with sites or warehouses cannot be deleted.</p>
+<h3 id="mst-site-001--004-locations-sites">[MST-SITE-001 … 004] Locations (Sites)</h3>
+<p>Purpose:
+A physical site of a project, with its geo-fence for future attendance checks.</p>
+<p>Navigation:
+Master Setup → Locations → + Add Location (or Project Details → + Add Location).</p>
+<p>Permission required:
+Sites — create / view / edit.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Site Name, Site Code</td>
+<td></td>
+<td>Riyadh Tower - Main Site, SITE-RCT-01</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Project</td>
+<td>Owning project</td>
+<td>Riyadh Commercial Tower</td>
+<td>Yes</td>
+<td>Fixed when opened from the project</td>
+</tr>
+<tr>
+<td>Site Supervisor</td>
+<td>A user</td>
+<td>Ahmed Hassan</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Address, Status</td>
+<td></td>
+<td>Olaya, Riyadh / active</td>
+<td>Status yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Latitude, Longitude</td>
+<td>Pick on the map or type</td>
+<td>24.7136 / 46.6753</td>
+<td>Yes</td>
+<td>Map with a pin and radius circle</td>
+</tr>
+<tr>
+<td>Geo-Fence Radius (meters)</td>
+<td></td>
+<td>300</td>
+<td>Yes</td>
+<td>10 to 100,000</td>
+</tr>
+<tr>
+<td>Geo-Fence Enabled, Attendance Allowed Inside Boundary, Offline Attendance Allowed</td>
+<td>Flags</td>
+<td>Yes / Yes / No</td>
+<td>No</td>
+<td>Stored for the future attendance check; not enforced today</td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Save / Update, Cancel.</p>
+<h3 id="where-project-figures-are-today">Where project figures are today</h3>
+<ul>
+<li>Material cost: stock issues to the project (chapter 10) and the Project Material Consumption report.</li>
+<li>Posted cost, revenue, supplier billed, customer invoiced, margin and budget used: the Project Cost Report (FIN-REP-007).</li>
+<li>Supplier and customer links: the Supplier and Customer workspaces.</li>
+<li>Labour cost, equipment cost and site expenses: NOT YET OPERATIONAL.</li>
+</ul>
+<hr />
+<h2 id="12-marketing">12. Marketing</h2>
+<h3 id="mkt-001-leads--visits-mkt-002-new-lead-mkt-004-edit-lead">[MKT-001] Leads &amp; Visits, [MKT-002] New Lead, [MKT-004] Edit Lead</h3>
+<p>Purpose:
+Track prospects and the visits made to them.</p>
+<p>Who uses it:
+Marketing Manager.</p>
+<p>Navigation:
+Marketing → Leads &amp; Visits → + New Lead.</p>
+<p>Permission required:
+Marketing — create / view / edit.</p>
+<p>Fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+<th>Example</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Company / Client</td>
+<td>Prospect name</td>
+<td>Al Noor Development Co.</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Contact Person, Contact Title, Phone, Email</td>
+<td></td>
+<td>Khalid Al-Otaibi, Procurement Manager</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>City, Location / Address</td>
+<td></td>
+<td>Riyadh</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Source, Requirement, Estimated Value (SAR)</td>
+<td></td>
+<td>Referral / Tower fit-out / 2,000,000</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Assigned To</td>
+<td>Sales person (a user)</td>
+<td>Noura Al-Harbi</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Status</td>
+<td>new, contacted, quotation requested, won, lost …</td>
+<td>contacted</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>Next Follow-up, Notes</td>
+<td></td>
+<td>05-Oct-2026</td>
+<td>No</td>
+<td>The Leads menu shows the number of follow-ups due</td>
+</tr>
+</tbody>
+</table>
+<p>Buttons: Save / Update, Cancel, Back to Leads.</p>
+<h3 id="mkt-003-lead-details-visits-convert">[MKT-003] Lead (details, visits, convert)</h3>
+<p>What you see:
+Lead Information, the visits list, and a <strong>Record Visit</strong> form (Visit Date *, Visit Time, Location, Person Met *, Their Title, Outcome *, Next Follow-up, Next Action, Remarks) with <strong>Save Visit</strong>. <strong>Convert to Customer</strong> creates the customer record from the lead once and links it; a converted lead shows the customer.</p>
+<h3 id="mkt-005-visit-report">[MKT-005] Visit Report</h3>
+<p>Filters by period, sales person and outcome; cards Clients Visited, Follow-ups Scheduled, Deals Won; rows Date / Time, Client, Location, Person Met, Visited By, Outcome, Next Follow-up, Remarks; <strong>Export Excel (CSV)</strong> needs Marketing — export.</p>
+<hr />
+<h2 id="13-activity-logs--audit">13. Activity Logs / Audit</h2>
+<h3 id="adm-020-activity-logs">[ADM-020] Activity Logs</h3>
+<p>Purpose:
+Who did what, when. Every create, update, approve, post, pay, receive, reopen and deactivate writes a line.</p>
+<p>Who uses it:
+Super Admin; managers see the entries of the users below them in the role hierarchy.</p>
+<p>Navigation:
+Administration → Activity Logs.</p>
+<p>Permission required:
+Activity Logs — view.</p>
+<p>What you see:
+Filters (search, user, module, dates) and the table Date &amp; Time, User, Module, Action, Old Value, New Value, IP Address, Status.</p>
+<p>Important:
+The Old Value and New Value columns are filled only for a few administrative entries; for business documents the log records the action and the document number, not the field-level change. Activity for one supplier or customer is also shown inside its workspace (Activity tab).</p>
+<hr />
+<h2 id="14-current-zatca-foundation">14. Current ZATCA Foundation</h2>
+<p>Status: <strong>FOUNDATION ONLY</strong>. Read this chapter before promising anything about e-invoicing to a customer or an auditor.</p>
+<p>What Seera does today when a customer invoice is approved:</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>What exists</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local ZATCA record</td>
+<td>One record per approved invoice, linked to the invoice</td>
+<td>FOUNDATION ONLY</td>
+</tr>
+<tr>
+<td>UUID</td>
+<td>A unique identifier generated locally</td>
+<td>FOUNDATION ONLY</td>
+</tr>
+<tr>
+<td>QR code</td>
+<td>A locally built payload (customer, invoice number, date, total, VAT). It is not the ZATCA TLV format and carries no signature</td>
+<td>FOUNDATION ONLY</td>
+</tr>
+<tr>
+<td>XML</td>
+<td>A file reference is stored; the XML file itself is not generated</td>
+<td>FOUNDATION ONLY</td>
+</tr>
+<tr>
+<td>Digital signature</td>
+<td>Shown as &quot;signed&quot;; no certificate or real signing exists</td>
+<td>FOUNDATION ONLY</td>
+</tr>
+<tr>
+<td>Tamper-proof hash</td>
+<td>A local hash of the record; it is not chained to the previous invoice</td>
+<td>FOUNDATION ONLY</td>
+</tr>
+<tr>
+<td>Clearance status</td>
+<td>Local statuses draft, generated, pending, cleared, failed, cancelled. The system never sets &quot;cleared&quot; itself</td>
+<td>FOUNDATION ONLY</td>
+</tr>
+<tr>
+<td>Retry</td>
+<td>Changes a failed record back to pending and counts the retry. No message is sent anywhere</td>
+<td>FOUNDATION ONLY</td>
+</tr>
+<tr>
+<td>Live Phase-2 clearance, ZATCA responses, production certificates</td>
+<td>Do not exist</td>
+<td>NOT YET OPERATIONAL</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fin-zat-001-zatca-e-invoicing-local-records">[FIN-ZAT-001] ZATCA E-Invoicing (local records)</h3>
+<p>Cards Cleared, Pending Clearance, Failed, Draft (local statuses); filters; table Invoice, UUID, Customer, Issue Date, QR, XML, Signature, Clearance, ZATCA Response, Retries; <strong>View</strong> and <strong>Retry</strong> (failed records; ZATCA Invoicing — retry). Permission: ZATCA Invoicing — view.</p>
+<h3 id="fin-zat-002-zatca-record">[FIN-ZAT-002] ZATCA Record</h3>
+<p>The record's fields, the QR payload and the local hash, with <strong>Retry Clearance</strong> and <strong>Open Invoice</strong>. Reopening an invoice cancels its local record.</p>
+<p>In the Customer workspace the tab is called <strong>Local ZATCA Records</strong> and every status is marked &quot;local, not verified live&quot;.</p>
+<hr />
+<h2 id="15-reports">15. Reports</h2>
+<p>All accounting reports have a period filter (presets or from / to), a Reset button, <strong>Export Excel (CSV)</strong> (needs Financial Reports — export) and <strong>Export PDF</strong> (browser print). Project, site and warehouse scoped users see only their own lines, and opening balances are shown to company-level users only.</p>
+<table>
+<thead>
+<tr>
+<th>Screen ID</th>
+<th>Report</th>
+<th>What it shows</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FIN-REP-002</td>
+<td>Balance Sheet</td>
+<td>Assets, liabilities and equity as of the &quot;to&quot; date, plus the result to date</td>
+<td>Assets = liabilities + equity + result</td>
+</tr>
+<tr>
+<td>FIN-REP-003</td>
+<td>Profit &amp; Loss</td>
+<td>Revenue and expenses inside the period only</td>
+<td>Opening balances are never included</td>
+</tr>
+<tr>
+<td>FIN-REP-004</td>
+<td>Trial Balance</td>
+<td>Debit and credit balance per account as of the &quot;to&quot; date; totals must match</td>
+<td></td>
+</tr>
+<tr>
+<td>FIN-REP-005</td>
+<td>Cash Flow</td>
+<td>Opening cash and bank, cash in, cash out, closing</td>
+<td>Direct cash and bank movement only; no operating / investing / financing split</td>
+</tr>
+<tr>
+<td>FIN-REP-006</td>
+<td>VAT Report</td>
+<td>Sales taxable, output VAT, purchase taxable, input VAT and VAT payable per period</td>
+<td>Company-level users only</td>
+</tr>
+<tr>
+<td>FIN-REP-007</td>
+<td>Project Cost Report</td>
+<td>Per project: budget, posted cost, budget used %, posted revenue, supplier billed, customer invoiced, margin</td>
+<td>Net of reversals</td>
+</tr>
+<tr>
+<td>INV-REP-002</td>
+<td>Stock Valuation</td>
+<td>Quantity, average cost and value per item and warehouse</td>
+<td>Print only</td>
+</tr>
+<tr>
+<td>INV-REP-003</td>
+<td>Low Stock</td>
+<td>Items at or below the reorder level, with shortfall</td>
+<td>Print only; + Purchase Request shortcut</td>
+</tr>
+<tr>
+<td>INV-REP-004</td>
+<td>Project Material Consumption</td>
+<td>Quantity and value issued per project</td>
+<td>Print only</td>
+</tr>
+<tr>
+<td>INV-REP-005</td>
+<td>Stock Movement</td>
+<td>Total in, total out, net movement per item</td>
+<td>Print only</td>
+</tr>
+<tr>
+<td>MKT-005</td>
+<td>Visit Report</td>
+<td>Marketing visits by period, sales person and outcome</td>
+<td>CSV export</td>
+</tr>
+</tbody>
+</table>
+<p>Not available yet: HR reports (attendance register, payroll register), project dashboard and project reports as a menu (use FIN-REP-007 and INV-REP-004).</p>
+<hr />
+<h2 id="16-common-tasks">16. Common Tasks</h2>
+<h3 id="create-a-supplier">Create a supplier</h3>
+<ol>
+<li>Sign in.</li>
+<li>From the left menu, open Master Setup.</li>
+<li>Select Suppliers.</li>
+<li>Click + Add Supplier.</li>
+<li>Enter the Supplier Name (Gulf Steel Trading).</li>
+<li>Select Payment Terms (30 Days) and Accepted Payment Types (Bank).</li>
+<li>Select the Linked Payable Account (2100 - Accounts Payable).</li>
+<li>Tick the projects the supplier works for.</li>
+<li>Click Save &amp; close.</li>
+</ol>
+<p>Expected result: the supplier appears in the Suppliers list.
+Next common action: create a Purchase Order, or open the supplier's workspace with Edit / Manage.</p>
+<h3 id="enter-and-approve-a-supplier-bill-for-goods-you-received">Enter and approve a supplier bill for goods you received</h3>
+<ol>
+<li>Open Inventory → Goods Receipt Notes and click View on the posted receipt (GRN-2026-0008).</li>
+<li>Click Create Supplier Bill. The bill form opens with the receipt lines filled in.</li>
+<li>Enter the supplier's Bill Number (GST-INV-1045) and check the Bill Date and VAT Rate.</li>
+<li>Adjust Invoiced Qty or Unit Price only if the supplier's invoice differs.</li>
+<li>Click Save. The bill details page opens.</li>
+<li>Click Approve &amp; Post.</li>
+</ol>
+<p>Expected result: status <em>unpaid</em>, an accounting entry Dr GRNI / Dr Input VAT / Cr Accounts Payable, one VAT row, and the receipt shows the quantity as invoiced.
+Next common action: Record Payment when the bill is paid.</p>
+<h3 id="record-a-customer-receipt">Record a customer receipt</h3>
+<ol>
+<li>Open Finance → Accounts Receivable.</li>
+<li>Click Receipt on the invoice row (or View → Record Receipt).</li>
+<li>Enter Receipt Date, choose the bank or cash account, the Payment Method and the amount.</li>
+<li>Click Record Receipt.</li>
+</ol>
+<p>Expected result: the invoice balance reduces; status becomes partially_paid or paid; a journal Dr Bank / Cr Accounts Receivable is posted.</p>
+<h3 id="add-an-employee-and-give-them-a-login">Add an employee and give them a login</h3>
+<p>See WF-001.</p>
+<h3 id="find-everything-about-one-customer">Find everything about one customer</h3>
+<ol>
+<li>Open Master Setup → Customers.</li>
+<li>Click View for a read-only page, or Edit / Manage to work in the workspace.</li>
+<li>Use the tabs: Contacts, Notes, Projects, Invoices, Receipts &amp; Balance, Ageing, Accounting, Local ZATCA Records, Activity.</li>
+</ol>
+<h3 id="post-a-manual-journal">Post a manual journal</h3>
+<p>See WF-004.</p>
+<h3 id="close-a-vat-quarter">Close a VAT quarter</h3>
+<p>See WF-005.</p>
+<h3 id="switch-language">Switch language</h3>
+<p>Use the language switch in the top bar. The screen turns to Arabic (right-to-left) or back to English immediately; your data is unchanged.</p>
+<hr />
+<h2 id="17-end-to-end-workflows">17. End-to-End Workflows</h2>
+<p>Each workflow lists purpose, roles, prerequisites, navigation, steps, example input, the system result, statuses before and after, the audit trail, common errors and the related Screen IDs. The Workflow Index is in <a href="WORKFLOW-INDEX.html">WORKFLOW-INDEX.md</a>.</p>
+<h3 id="wf-001-create-employee-and-user-access">WF-001 Create Employee and User Access</h3>
+<p>Purpose: register a new employee and give them a Seera login.
+Roles involved: HR Manager (employee), Super Admin (login).
+Prerequisites: department, designation, branch, project and site exist (they can also be added with &quot;+ New&quot; inside the form).
+Navigation: Operations → Employees → + Add Employee; then Employee Workspace → System Account tab (or Administration → Users → + Add New User).
+Steps:</p>
+<ol>
+<li>Fill A. Personal (Ahmed Hassan, Egyptian), B. Employment (Site Operations, Site In-Charge, Riyadh Commercial Tower, Riyadh Tower - Main Site, joined 01-Mar-2024, Full Time, Sponsorship), C. Payroll (basic 6,500, housing 1,500, transport 500, Bank Transfer), D. Documents (IQAMA 2412345678, expiry 15-Jun-2027, PDF).</li>
+<li>Click Save &amp; stay. The Employee Workspace opens.</li>
+<li>Open the System Account tab. Choose the role (Site In-Charge), status active, leave the password blank, click Save.</li>
+<li>Give the employee the temporary password. They set their own password at first sign-in (ADM-004).
+Expected system result: employee EMP-0042 with an automatic salary structure; a user linked to the employee; the user sees only Riyadh Commercial Tower data because the role is project-scoped.
+Statuses: employee active; user active with &quot;must change password&quot;.
+Audit trail: &quot;Created employee&quot;, &quot;Created user&quot; (Users module) entries with your name.
+Common errors: contract start in the future; a user already linked to the employee; missing project on a project-scoped role.
+Related screens: HR-EMP-002, HR-EMP-004, USR-002, USR-003.</li>
+</ol>
+<h3 id="wf-002-supplier--purchase-order--goods-receipt--supplier-bill--payment">WF-002 Supplier → Purchase Order → Goods Receipt → Supplier Bill → Payment</h3>
+<p>Purpose: buy materials, receive them, record the supplier's invoice and pay it, with correct accounting at every step.
+Roles involved: Purchase Manager (order), Warehouse Incharge (receipt), Account Assistant (bill), Finance Manager (approve, pay).
+Prerequisites: supplier SUP-014 with payment terms and payable account; item ITM-0031; warehouse Riyadh Site Warehouse; an open VAT period.
+Navigation: Inventory → Purchase Orders → + Add Purchase Order; Purchase Order → Create Goods Receipt; Goods Receipt → Post Stock; Goods Receipt → Create Supplier Bill; Bill → Approve &amp; Post; Bill → Record Payment.
+Steps and example input:</p>
+<ol>
+<li>Purchase order PO-2026-0012: supplier Gulf Steel Trading, deliver to Riyadh Site Warehouse, project Riyadh Commercial Tower, line 10 × Reinforcement Steel 16mm at 100.00, VAT 15%. Save, then Approve Order.</li>
+<li>Goods receipt GRN-2026-0008 from the order: received 10, accepted 10, unit cost 100.00. Save, then Post Stock.</li>
+<li>Supplier bill GST-INV-1045 from the receipt: line matched to GRN-2026-0008, invoiced qty 10 at 100.00. Save, then Approve &amp; Post.</li>
+<li>Payment: 1,150.00 from 1120 Bank Account, Bank Transfer, purpose Bill payment. Record Payment.
+Expected accounting result:</li>
+</ol>
+<ul>
+<li>Step 2: Dr 1400 Inventory Asset 1,000 / Cr 2150 Goods Received Not Invoiced 1,000. Stock 10 units at 100.</li>
+<li>Step 3: Dr 2150 GRNI 1,000 / Dr 1300 Input VAT 150 / Cr 2100 Accounts Payable 1,150. One input VAT row of 150.</li>
+<li>Step 4: Dr 2100 Accounts Payable 1,150 / Cr 1120 Bank 1,150.
+Statuses: PO draft → approved → received; GRN draft → posted; bill draft → unpaid → paid.
+Audit trail: Created purchase order, Approved purchase order, Created goods receipt, Posted goods receipt, Created supplier bill, Approved supplier bill, Recorded supplier payment.
+Common errors: receiving more than ordered; bill for received goods entered as a direct line (goods expensed twice); bill dated in a finalized VAT period; payment larger than the balance; cash account chosen for a bank-only supplier.
+Related screens: SUP-002, INV-PO-002, INV-PO-003, INV-GRN-002, INV-GRN-003, FIN-AP-002, FIN-AP-003, FIN-AP-005, SUP-004.</li>
+</ul>
+<h3 id="wf-003-customer--invoice--receipt">WF-003 Customer → Invoice → Receipt</h3>
+<p>Purpose: invoice a customer and record the money received.
+Roles involved: Account Assistant (invoice), Finance Manager (approve, receipt).
+Prerequisites: customer CUS-021 with accepted payment types; project; open VAT period.
+Navigation: Finance → Accounts Receivable → + Add Customer Invoice; Invoice → Approve &amp; Post; Invoice → Record Receipt.
+Steps and example input:</p>
+<ol>
+<li>Invoice INV-2026-0031: customer Al Noor Development Co., project Riyadh Commercial Tower, date 27-Sep-2026, VAT 15%, line &quot;Progress claim 3&quot;, 1 × 2,000.00. Save.</li>
+<li>Approve &amp; Post.</li>
+<li>Record Receipt: 2,300.00 into 1120 Bank Account, Bank Transfer.
+Expected result: step 2 posts Dr 1200 Accounts Receivable 2,300 / Cr 4100 Project Revenue 2,000 / Cr 2210 Output VAT 300, one output VAT row and a local ZATCA record (pending, not verified live); step 3 posts Dr 1120 Bank 2,300 / Cr 1200 Accounts Receivable 2,300.
+Statuses: draft → unpaid → paid.
+Audit trail: Created customer invoice, Approved customer invoice, Recorded customer receipt.
+Common errors: bank receipt for a cash-only customer; receipt larger than the balance; invoice dated in a finalized period.
+Related screens: CUS-002, FIN-AR-002, FIN-AR-003, FIN-AR-005, CUS-004.</li>
+</ol>
+<h3 id="wf-004-manual-journal--general-ledger">WF-004 Manual Journal → General Ledger</h3>
+<p>Purpose: record an entry that no document creates (bank charges, accruals).
+Roles involved: Finance Manager.
+Prerequisites: active accounts; open VAT period if a VAT account is used.
+Navigation: Finance → Journal Entries → + Add Journal Entry; Journal → Post to Ledger; Finance → General Ledger.
+Steps: date 27-Sep-2026, source Manual, description &quot;Bank charges September&quot;, lines 5200 Material Expense Dr 100.00 and 1120 Bank Account Cr 100.00. Save. Post to Ledger. Open the General Ledger filtered on 1120.
+Expected result: the journal is posted, the ledger shows the line with the running balance, the P&amp;L for September shows the 100.
+Statuses: draft → posted.
+Audit trail: Created journal entry, Posted journal entry.
+Common errors: unbalanced lines; inactive account; posting twice (refused); trying to edit after posting (refused).
+Related screens: FIN-JE-002, FIN-JE-003, FIN-GL-001.</p>
+<h3 id="wf-005-vat-period-review-and-finalize">WF-005 VAT Period Review and Finalize</h3>
+<p>Purpose: check the quarter's VAT figures and seal the period before filing.
+Roles involved: Finance Manager (company-level role).
+Prerequisites: all bills and invoices of the quarter approved; draft documents reviewed.
+Navigation: Finance → VAT Management → View (period) → Recalculate → Finalize Period; Reports → Accounting Reports → VAT Report.
+Steps: open the quarter; compare the Draft Output VAT and Draft Input VAT cards with the unapproved documents; approve or delete the drafts; click Recalculate; check the VAT Report; click Finalize Period.
+Expected result: the period status becomes finalized; its totals are frozen; any later VAT-bearing document dated inside it is refused with the period name.
+Statuses: draft → finalized.
+Audit trail: Recalculated VAT period, Finalized VAT period.
+Common errors: finalizing while drafts are still open; trying to reopen a bill dated in the sealed period (refused; use a new document in the open period).
+Related screens: FIN-VAT-001, FIN-VAT-002, FIN-REP-006.</p>
+<h3 id="wf-006-inventory-transfer-between-warehouses">WF-006 Inventory Transfer between Warehouses</h3>
+<p>Purpose: move stock from one warehouse to another.
+Roles involved: Warehouse Incharge (dispatch), a user with Stock Transfers — receive (receive; today the Super Admin).
+Navigation: Inventory → Stock Transfers → + Add Stock Transfer; Transfer → Dispatch Transfer; Transfer → Receive Transfer.
+Steps: from Riyadh Site Warehouse to Jeddah Site Warehouse, 2 × Reinforcement Steel 16mm. Save. Dispatch. Receive.
+Expected result: stock leaves the source at its average cost, then enters the destination at that cost; the ledger shows transfer_out and transfer_in rows; no accounting entry.
+Statuses: draft → dispatched → received.
+Audit trail: Created stock transfer, Dispatched stock transfer, Received stock transfer.
+Common errors: insufficient stock at dispatch; receiving without the receive right.
+Related screens: INV-TRF-002, INV-TRF-003, INV-LED-001.</p>
+<h3 id="wf-007-stock-issue-to-a-project">WF-007 Stock Issue to a Project</h3>
+<p>Purpose: charge materials to a project.
+Roles involved: Warehouse Incharge.
+Navigation: Inventory → Stock Issues → + Add Stock Issue; Issue → Post Issue.
+Steps: from Riyadh Site Warehouse, issue to Riyadh Commercial Tower / Riyadh Tower - Main Site, 3 × Reinforcement Steel 16mm. Save. Post Issue.
+Expected result: stock 10 → 7; Dr 5200 Material Expense 300 / Cr 1400 Inventory Asset 300 tagged with the project and site; the Project Cost Report and Project Material Consumption show 300.
+Statuses: draft → posted.
+Audit trail: Created stock issue, Posted stock issue.
+Common errors: quantity above stock (whole issue refused); issue posted from the wrong warehouse.
+Related screens: INV-ISS-002, INV-ISS-003, FIN-REP-007, INV-REP-004.</p>
+<h3 id="wf-008-payroll-run">WF-008 Payroll Run</h3>
+<p>Purpose: calculate a month's salaries.
+Status: PARTIAL.
+Roles involved: HR Manager (create, process), Finance Manager (approve).
+Prerequisites: active salary structures; approved overtime for the month.
+Navigation: HR Registers &amp; Approvals → Payroll → + Create Payroll Run; Run → Process Payroll; Run → Approve Payroll.
+Steps: September 2026, period 01-Sep to 30-Sep, all branches. Save. Process Payroll. Review the employee rows (basic, allowances, overtime, deductions, net). Approve Payroll.
+Expected result: the run holds one row per employee with the net amount; the employee's Payroll History tab shows it.
+Statuses: draft → processed → approved.
+Audit trail: Created payroll run, Processed payroll run, Approved payroll run.
+Not done by the system: payslips, bank / WPS file, accounting posting, GOSI or unpaid-leave deductions.
+Related screens: HR-PAY-002, HR-PAY-003, HR-SAL-001, HR-EMP-004.</p>
+<h3 id="wf-009-leave-request-lifecycle">WF-009 Leave Request lifecycle</h3>
+<p>Purpose: request, approve or reject leave.
+Roles involved: HR Manager.
+Navigation: HR Registers &amp; Approvals → Leaves → + Add Leave (or Employee Workspace → Leaves tab); Leave → Approve / Reject Request.
+Steps: Ahmed Hassan, Annual Leave, 05-Oct-2026 to 09-Oct-2026 (5 days), reason &quot;Family visit&quot;. Save (pending). Approve.
+Expected result: approved leave; the employee's annual balance shows 5 used.
+Statuses: pending → approved or rejected (with reason).
+Audit trail: Created leave request, Approved leave request / Rejected leave request.
+Common errors: end date before start date; approving without the approve right.
+Related screens: HR-LV-002, HR-LV-003, HR-EMP-004.</p>
+<h3 id="wf-010-supplier-f04-grni-accounting-flow">WF-010 Supplier F04 GRNI accounting flow</h3>
+<p>Purpose: understand the accounting behind receiving goods and matching the supplier's invoice, so that a purchase is never counted twice.
+Roles involved: Warehouse Incharge, Finance Manager.
+The flow in user language:</p>
+<ol>
+<li><strong>Goods receipt confirms goods were received.</strong> Posting it puts the goods into stock and records that the company owes for them, but not yet to a specific invoice: Dr Inventory / Cr Goods Received Not Invoiced (GRNI). No VAT, no supplier balance yet.</li>
+<li><strong>The supplier bill matched to the receipt</strong> turns that into a real payable: Dr GRNI / Dr Input VAT / Cr Accounts Payable. The supplier's balance and the VAT return change now, once.</li>
+<li><strong>Payment</strong> clears the payable: Dr Accounts Payable / Cr Cash or Bank.</li>
+<li>A <strong>direct or service bill</strong> with no receipt posts Dr Expense / Dr Input VAT / Cr Accounts Payable.
+Rules the system enforces: a receipt line can be invoiced only up to its accepted quantity, across one or many bills; two bills cannot invoice the same quantity; a price difference between the invoice and the receipt goes to the line's expense account, never into inventory; reopening a bill gives the quantity back to the receipt.
+You never type these journals yourself. Do not edit posted journals; correct with Reopen or a new document.
+Related screens: INV-GRN-003, FIN-AP-002, FIN-AP-003, FIN-AP-005, SUP-004.</li>
+</ol>
+<h3 id="wf-011-purchase-request--purchase-order">WF-011 Purchase Request → Purchase Order</h3>
+<p>Purpose: let a site ask for materials and let purchasing turn the request into an order.
+Roles involved: Site In-Charge (request), Purchase Manager (approve, order).
+Navigation: Inventory → Purchase Requests → + Add Purchase Request; Request → Approve; Request → Create Purchase Order.
+Steps: request PR-2026-0009 for Riyadh Commercial Tower, priority high, 10 × Reinforcement Steel 16mm, estimated 100.00. Save. Approve. Create Purchase Order (lines copied), choose Gulf Steel Trading, Save, Approve Order.
+Statuses: request draft → pending → approved → converted; order draft → approved.
+Audit trail: Created purchase request, Approved purchase request, Created purchase order.
+Related screens: INV-PR-002, INV-PR-003, INV-PO-002.</p>
+<h3 id="wf-012-correct-an-approved-bill-or-invoice-reopen">WF-012 Correct an approved bill or invoice (Reopen)</h3>
+<p>Purpose: fix a wrong approved document without editing posted accounting.
+Roles involved: Super Admin.
+Prerequisites: the bill or invoice is unpaid with no payments or receipts; its VAT period is still open; for an invoice, the local ZATCA record is not cleared.
+Navigation: Bill or Invoice Details → Reopen for Correction → enter the reason.
+Expected result: a reversing journal is posted (the original stays), the VAT row is withdrawn, matched receipt quantities are released, the document returns to draft with the reason in its notes. Correct it and Approve &amp; Post again.
+Audit trail: Reopened supplier bill / Reopened customer invoice with the reason.
+Common errors: reopening a paid bill (refused: reverse the payment first, which is not yet possible in a screen); reopening inside a finalized period (refused).
+Related screens: FIN-AP-003, FIN-AR-003.</p>
+<h3 id="wf-013-stock-adjustment-after-a-physical-count">WF-013 Stock Adjustment after a physical count</h3>
+<p>Purpose: correct the on-hand quantity after counting.
+Roles involved: Warehouse Incharge (create), Inventory Manager (approve, post).
+Navigation: Inventory → Stock Adjustments → + Add Stock Adjustment; Adjustment → Approve → Post Adjustment.
+Steps: Riyadh Site Warehouse, Reinforcement Steel 16mm, counted 6 (system 7), reason &quot;Damaged bar scrapped&quot;. Save. Approve. Post Adjustment.
+Expected result: on hand 7 → 6; Dr 5600 Inventory Adjustment Expense 100 / Cr 1400 Inventory Asset 100.
+Statuses: draft → approved → posted.
+Related screens: INV-ADJ-002, INV-ADJ-003.</p>
+<h3 id="wf-014-marketing-lead--visit--customer">WF-014 Marketing Lead → Visit → Customer</h3>
+<p>Purpose: follow a prospect until it becomes a customer.
+Roles involved: Marketing Manager.
+Navigation: Marketing → Leads &amp; Visits → + New Lead; Lead → Record Visit; Lead → Convert to Customer.
+Steps: lead &quot;Al Noor Development Co.&quot;, assigned to Noura Al-Harbi, next follow-up 05-Oct-2026. Record a visit (person met Khalid Al-Otaibi, outcome &quot;Quotation requested&quot;). When won, click Convert to Customer.
+Expected result: the customer record is created once and linked to the lead; the Customer Workspace opens for contacts and notes.
+Related screens: MKT-002, MKT-003, CUS-004.</p>
+<h3 id="wf-015-end-of-service-settlement">WF-015 End of Service settlement</h3>
+<p>Purpose: calculate and approve an employee's end-of-service benefit.
+Roles involved: HR Manager.
+Navigation: HR Registers &amp; Approvals → End of Service → + Add EOSB Record; Record → Approve.
+Steps: Ahmed Hassan, termination 30-Sep-2026, reason resignation, service years calculated, final wage 8,500. Save (the gratuity is calculated by the labour-law bands; manual override possible). Review the calculation table. Approve.
+Expected result: an approved settlement figure. No accounting entry is created; Finance records the payment outside the system for now.
+Statuses: draft → approved.
+Related screens: HR-EOS-002, HR-EOS-003.</p>
+<hr />
+<h2 id="18-troubleshooting">18. Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>What you see</th>
+<th>Why</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;You do not have permission to perform this action.&quot;</td>
+<td>Your role lacks the module and action</td>
+<td>Ask the Super Admin to grant it (ROL-005)</td>
+</tr>
+<tr>
+<td>A list is empty although records exist</td>
+<td>Your role is project, site or warehouse scoped and your account has no project, site or warehouse</td>
+<td>Set the Assigned Project / Site / Warehouse on your user (USR-004)</td>
+</tr>
+<tr>
+<td>&quot;…is dated …, inside VAT period Q3 2026 which is already finalized. Nothing was recorded.&quot;</td>
+<td>The document's VAT belongs to a sealed period</td>
+<td>Use a date in the open period or a new document</td>
+</tr>
+<tr>
+<td>&quot;Nothing was recorded: account 5310 Diesel Expense is inactive.&quot;</td>
+<td>An account on the document is inactive</td>
+<td>Reactivate the account or choose another</td>
+</tr>
+<tr>
+<td>&quot;Total debit must equal total credit&quot;</td>
+<td>Journal lines are unbalanced</td>
+<td>Correct the amounts</td>
+</tr>
+<tr>
+<td>&quot;This bill was approved while you were editing it; your changes were not saved.&quot;</td>
+<td>Someone approved the document after you opened the form</td>
+<td>Reopen the document if a correction is still needed</td>
+</tr>
+<tr>
+<td>&quot;This payment … was already recorded …; nothing was added.&quot;</td>
+<td>The same payment was submitted twice</td>
+<td>Nothing to do; the first payment stands</td>
+</tr>
+<tr>
+<td>&quot;… has only 6 uninvoiced; this bill asks for 10.&quot;</td>
+<td>The receipt quantity is already invoiced</td>
+<td>Reduce the invoiced quantity or check the earlier bill</td>
+</tr>
+<tr>
+<td>&quot;Purchase order … has only 4 outstanding&quot;</td>
+<td>Receiving more than ordered</td>
+<td>Reduce the received quantity or raise the order</td>
+</tr>
+<tr>
+<td>&quot;This customer does not accept the selected payment channel.&quot;</td>
+<td>Cash / bank rule on the customer or supplier</td>
+<td>Choose the allowed account, or change the rule on the profile</td>
+</tr>
+<tr>
+<td>Unsaved changes dialog appears when leaving</td>
+<td>You changed a form</td>
+<td>Keep editing, Discard &amp; leave, or Save current form</td>
+</tr>
+<tr>
+<td>The reset-password email never arrives</td>
+<td>Mail is not configured on the server</td>
+<td>Ask the Super Admin to set a temporary password</td>
+</tr>
+<tr>
+<td>A &quot;Coming Soon&quot; page opens</td>
+<td>The menu item is a placeholder</td>
+<td>See chapter 20</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="19-glossary">19. Glossary</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Access scope</td>
+<td>The part of the company a role may see: All Company, Company Level, Project Level, Site Level, Warehouse Level</td>
+</tr>
+<tr>
+<td>Approve &amp; Post</td>
+<td>The button that makes a bill or invoice final and creates its accounting entry</td>
+</tr>
+<tr>
+<td>Connected workspace</td>
+<td>The Edit / Manage page of a record where its profile and related records are managed in tabs</td>
+</tr>
+<tr>
+<td>Draft</td>
+<td>A saved document with no accounting or VAT effect yet</td>
+</tr>
+<tr>
+<td>GRN</td>
+<td>Goods Receipt Note: the document that confirms goods arrived</td>
+</tr>
+<tr>
+<td>GRNI</td>
+<td>Goods Received Not Invoiced, account 2150: the value of received goods whose supplier bill is not yet approved</td>
+</tr>
+<tr>
+<td>Input VAT / Output VAT</td>
+<td>VAT paid on purchases (1300) / VAT charged on sales (2210)</td>
+</tr>
+<tr>
+<td>Journal entry</td>
+<td>A balanced accounting entry; automatic ones come from documents, manual ones from FIN-JE-002</td>
+</tr>
+<tr>
+<td>Local ZATCA record</td>
+<td>Seera's own record of an approved invoice (UUID, QR payload, status); not a live ZATCA clearance</td>
+</tr>
+<tr>
+<td>Matched line</td>
+<td>A supplier bill line linked to a goods receipt line</td>
+</tr>
+<tr>
+<td>Posted</td>
+<td>Written to the general ledger; cannot be edited</td>
+</tr>
+<tr>
+<td>Reopen</td>
+<td>Return an unpaid approved document to draft with a reversing entry</td>
+</tr>
+<tr>
+<td>Save &amp; close / Save &amp; new / Save</td>
+<td>The standard form buttons (chapter 1)</td>
+</tr>
+<tr>
+<td>VAT period</td>
+<td>A quarter whose VAT figures are collected and, once finalized, sealed</td>
+</tr>
+<tr>
+<td>Weighted average cost</td>
+<td>The stock valuation method: total value ÷ total quantity per warehouse</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="20-current-limitations--not-yet-operational">20. Current Limitations / Not Yet Operational</h2>
+<p>Areas that exist as menus, settings or plans but are not usable business functions today. Do not train users on them as working features.</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Status</th>
+<th>What exists</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Site Expenses (daily site purchases with photo, approval, posting)</td>
+<td>NOT YET OPERATIONAL</td>
+<td>Expense Categories master, a posting rule row and a seeded approval workflow only</td>
+</tr>
+<tr>
+<td>Projects &amp; Site Expenses menu, project dashboard, budget lines, milestones</td>
+<td>NOT YET OPERATIONAL</td>
+<td>Project master with one budget amount; Project Cost Report</td>
+</tr>
+<tr>
+<td>Equipment &amp; Vehicles</td>
+<td>NOT YET OPERATIONAL</td>
+<td>Menu placeholder and permission names only</td>
+</tr>
+<tr>
+<td>Mobile app, check-in / check-out, GPS geofence attendance</td>
+<td>NOT YET OPERATIONAL</td>
+<td>Mobile access flags on users and roles; site coordinates and radius; manual attendance with a typed geo-fence status</td>
+</tr>
+<tr>
+<td>Offline entry and sync</td>
+<td>NOT YET OPERATIONAL</td>
+<td>Nothing</td>
+</tr>
+<tr>
+<td>Live ZATCA Phase-2 clearance, real QR, XML, signing</td>
+<td>NOT YET OPERATIONAL (local records: FOUNDATION ONLY)</td>
+<td>Chapter 14</td>
+</tr>
+<tr>
+<td>Approval workflow execution (multi-step, all-required)</td>
+<td>FOUNDATION ONLY</td>
+<td>Builder and seeded workflows; every Approve is a single action</td>
+</tr>
+<tr>
+<td>Payroll → accounting posting, payslips, bank / WPS file, GOSI</td>
+<td>NOT YET OPERATIONAL</td>
+<td>Payroll run calculation and approval</td>
+</tr>
+<tr>
+<td>HR Reports menu (attendance register, payroll register)</td>
+<td>NOT YET OPERATIONAL</td>
+<td>HR Dashboard for today's figures</td>
+</tr>
+<tr>
+<td>Project Reports menu</td>
+<td>Placeholder</td>
+<td>Project Cost Report and Project Material Consumption exist</td>
+</tr>
+<tr>
+<td>System Settings menu</td>
+<td>NOT YET OPERATIONAL</td>
+<td>Company Profile</td>
+</tr>
+<tr>
+<td>Credit notes, payment / receipt reversal</td>
+<td>NOT YET OPERATIONAL</td>
+<td>Reopen for unpaid documents only</td>
+</tr>
+<tr>
+<td>VAT period creation screen, zero-rated category</td>
+<td>NOT YET OPERATIONAL</td>
+<td>Periods created at setup; 0% documents create no VAT row</td>
+</tr>
+<tr>
+<td>Year-end close / retained earnings</td>
+<td>NOT YET OPERATIONAL</td>
+<td>Balance sheet result is cumulative</td>
+</tr>
+<tr>
+<td>Inventory report CSV export</td>
+<td>NOT YET OPERATIONAL</td>
+<td>Print only</td>
+</tr>
+<tr>
+<td>Stock Transfers — receive right on standard roles</td>
+<td>PARTIAL</td>
+<td>Super Admin receives transfers</td>
+</tr>
+<tr>
+<td>Password reset by email</td>
+<td>PARTIAL</td>
+<td>Needs mail configuration on the server</td>
+</tr>
+<tr>
+<td>Forms still on the older Save / Cancel layout</td>
+<td>PARTIAL</td>
+<td>Master Setup (except Suppliers and Customers), HR registers, Inventory, Marketing, Roles, Users (Save &amp; stay only)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="21-quick-start-by-role">21. Quick Start by Role</h2>
+<h3 id="super-admin">Super Admin</h3>
+<p>Daily: Dashboard (ADM-010), Users (USR-001), Roles and Permission Matrix (ROL-001, ROL-005), Activity Logs (ADM-020). Setup: Company Profile (MST-COM-001), Organization Structure (MST-ORG-001), Projects and Locations (MST-PRJ-001, MST-SITE-001), Warehouses (MST-WH-001). Corrections: Reopen on bills and invoices (WF-012), receiving stock transfers (WF-006).</p>
+<h3 id="finance-manager">Finance Manager</h3>
+<ol>
+<li>Accounting Dashboard (FIN-DASH-001): check the action queue.</li>
+<li>Accounts Payable (FIN-AP-001): approve draft bills, record payments (WF-002).</li>
+<li>Accounts Receivable (FIN-AR-001): approve invoices, record receipts (WF-003).</li>
+<li>Journal Entries (FIN-JE-001): post manual journals (WF-004).</li>
+<li>Supplier and Customer workspaces (SUP-004, CUS-004) for balances, ageing and history.</li>
+<li>Month end: General Ledger (FIN-GL-001), Trial Balance, Profit &amp; Loss, Balance Sheet (chapter 15); quarter end: VAT (WF-005).</li>
+</ol>
+<h3 id="hr-manager">HR Manager</h3>
+<ol>
+<li>HR Dashboard (HR-DASH-001): today's attendance, pending leaves and overtime, expiring IQAMAs.</li>
+<li>Employees (HR-EMP-001) and the Employee Workspace (HR-EMP-004) for everything about one person (WF-001).</li>
+<li>Attendance (HR-ATT-001), Leaves (WF-009), Overtime (HR-OT-001).</li>
+<li>Salary Structures (HR-SAL-001) and the monthly Payroll Run (WF-008).</li>
+<li>End of Service (WF-015).</li>
+</ol>
+<h3 id="project-manager">Project Manager</h3>
+<ol>
+<li>Projects (MST-PRJ-001): your projects, sites, staff, suppliers and warehouses.</li>
+<li>Locations (MST-SITE-001) with geo-fence data.</li>
+<li>Purchase Requests (INV-PR-001): approve site requests (WF-011).</li>
+<li>Project Cost Report (FIN-REP-007) and Project Material Consumption (INV-REP-004).</li>
+<li>Customer workspace (CUS-004) for the client's invoices and contacts.
+Not available yet: project dashboard, budget lines, site expenses, equipment.</li>
+</ol>
+<h3 id="site-in-charge--site-supervisor">Site In-Charge / Site Supervisor</h3>
+<p>Current usable screens: Purchase Requests (INV-PR-002) to ask for materials; Manual Attendance (HR-ATT-002) for the site's staff; Stock On Hand (INV-STK-001) for the site store; Locations (MST-SITE-003) to read the site details.
+Not available yet: mobile check-in, site expense entry, equipment.</p>
+<h3 id="warehouse-incharge">Warehouse Incharge</h3>
+<p>Goods Receipt Notes (WF-002 steps 2), Stock Issues (WF-007), Stock Transfers (WF-006), Stock Adjustments (WF-013), Stock On Hand and Stock Ledger.</p>
+<h3 id="purchase-manager--assistant">Purchase Manager / Assistant</h3>
+<p>Suppliers (SUP-001, SUP-004), Purchase Requests (INV-PR-003), Purchase Orders (INV-PO-002, INV-PO-003), Goods Receipts for viewing.</p>
+<h3 id="marketing-manager">Marketing Manager</h3>
+<p>Leads &amp; Visits (WF-014), Visit Report (MKT-005), Customers (CUS-004).</p>
+<hr />
+<p>End of guide. Screen IDs are indexed in <a href="SCREEN-INDEX.html">SCREEN-INDEX.md</a>; workflows in <a href="WORKFLOW-INDEX.html">WORKFLOW-INDEX.md</a>.</p>
+</main></div><footer>Seera ERP — Current System User Guide, version 1.0, prepared 27 September 2026. Examples use fictional training data.</footer></body></html>
