@@ -32,7 +32,7 @@ main a { color:var(--blue); }
 .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:700; }
 footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px solid var(--line); }
 @media (max-width: 900px) { .layout { grid-template-columns:1fr; } aside.toc { position:static; height:auto; max-height:40vh; } main { padding:18px 16px; } }
-@media print { header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Current System User Guide · Version 1.0 · 27 September 2026 · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a class="l2" href="#training-dataset-used-in-the-examples">Training dataset used in the examples</a><a class="l2" href="#table-of-contents">Table of contents</a><a class="l2" href="#1-about-seera-erp">1. About Seera ERP</a><a class="l3" href="#the-three-ways-you-work-with-a-record">The three ways you work with a record</a><a class="l3" href="#the-save-buttons">The Save buttons</a><a class="l3" href="#unsaved-changes-protection">Unsaved changes protection</a><a class="l2" href="#2-login-and-navigation">2. Login and Navigation</a><a class="l3" href="#adm-001-login">[ADM-001] Login</a><a class="l3" href="#adm-002-forgot-password-and-adm-003-reset-password">[ADM-002] Forgot Password and [ADM-003] Reset Password</a><a class="l3" href="#adm-004-set-your-password-first-sign-in">[ADM-004] Set Your Password (first sign-in)</a><a class="l3" href="#navigation-basics">Navigation basics</a><a class="l2" href="#3-dashboard">3. Dashboard</a><a class="l3" href="#adm-010-dashboard">[ADM-010] Dashboard</a><a class="l2" href="#4-users-roles-and-permissions">4. Users, Roles and Permissions</a><a class="l3" href="#usr-001-users-list">[USR-001] Users List</a><a class="l3" href="#usr-002-add-user">[USR-002] Add User</a><a class="l3" href="#usr-003-user-details-and-usr-004-edit-user">[USR-003] User Details and [USR-004] Edit User</a><a class="l3" href="#rol-001-roles-list-rol-002-create-role-rol-003-role-details-rol-004-edit-role">[ROL-001] Roles List, [ROL-002] Create Role, [ROL-003] Role Details, [ROL-004] Edit Role</a><a class="l3" href="#rol-005-permission-matrix">[ROL-005] Permission Matrix</a><a class="l3" href="#rol-006-role-hierarchy">[ROL-006] Role Hierarchy</a><a class="l3" href="#rol-007-assign-users-to-role">[ROL-007] Assign Users to Role</a><a class="l3" href="#rol-008-approval-workflows-rol-009-create-rol-010-edit">[ROL-008] Approval Workflows, [ROL-009] Create, [ROL-010] Edit</a><a class="l2" href="#5-master-setup">5. Master Setup</a><a class="l3" href="#mst-com-001-company-profile">[MST-COM-001] Company Profile</a><a class="l3" href="#mst-org-001-organization-structure">[MST-ORG-001] Organization Structure</a><a class="l3" href="#branches-mst-br-001--004-departments-mst-dep-001--004-designations-mst-des-001--004">Branches [MST-BR-001 … 004], Departments [MST-DEP-001 … 004], Designations [MST-DES-001 … 004]</a><a class="l3" href="#projects-mst-prj-001--005-and-locations-mst-site-001--004">Projects [MST-PRJ-001 … 005] and Locations [MST-SITE-001 … 004]</a><a class="l3" href="#warehouses-mst-wh-001--004">Warehouses [MST-WH-001 … 004]</a><a class="l3" href="#expense-categories-mst-exp-001--004">Expense Categories [MST-EXP-001 … 004]</a><a class="l3" href="#payment-terms-sup-005-and-project-classifications-mst-prj-005">Payment Terms [SUP-005] and Project Classifications [MST-PRJ-005]</a><a class="l2" href="#6-hr--payroll">6. HR &amp;amp; Payroll</a><a class="l3" href="#hr-dash-001-hr-dashboard">[HR-DASH-001] HR Dashboard</a><a class="l3" href="#hr-emp-001-employees-list">[HR-EMP-001] Employees List</a><a class="l3" href="#hr-emp-002-add-employee">[HR-EMP-002] Add Employee</a><a class="l3" href="#hr-emp-003-employee-view-read-only">[HR-EMP-003] Employee View (read-only)</a><a class="l3" href="#hr-emp-004-employee-workspace-edit">[HR-EMP-004] Employee Workspace (Edit)</a><a class="l3" href="#hr-doc-001-employee-documents--iqama">[HR-DOC-001] Employee Documents / IQAMA</a><a class="l3" href="#hr-shf-001--003-shifts">[HR-SHF-001 … 003] Shifts</a><a class="l3" href="#hr-att-001--003-attendance">[HR-ATT-001 … 003] Attendance</a><a class="l3" href="#hr-lv-001--004-leaves">[HR-LV-001 … 004] Leaves</a><a class="l3" href="#hr-ot-001--003-overtime">[HR-OT-001 … 003] Overtime</a><a class="l3" href="#hr-sal-001--004-salary-structures">[HR-SAL-001 … 004] Salary Structures</a><a class="l3" href="#hr-pay-001--004-payroll">[HR-PAY-001 … 004] Payroll</a><a class="l3" href="#hr-eos-001--004-end-of-service">[HR-EOS-001 … 004] End of Service</a><a class="l2" href="#7-customers">7. Customers</a><a class="l3" href="#cus-001-customers-list">[CUS-001] Customers List</a><a class="l3" href="#cus-002-add-customer">[CUS-002] Add Customer</a><a class="l3" href="#cus-003-customer-view-read-only">[CUS-003] Customer View (read-only)</a><a class="l3" href="#cus-004-customer-workspace-edit--manage">[CUS-004] Customer Workspace (Edit / Manage)</a><a class="l2" href="#8-suppliers">8. Suppliers</a><a class="l3" href="#sup-001-suppliers-list">[SUP-001] Suppliers List</a><a class="l3" href="#sup-002-add-supplier">[SUP-002] Add Supplier</a><a class="l3" href="#sup-003-supplier-view-read-only">[SUP-003] Supplier View (read-only)</a><a class="l3" href="#sup-004-supplier-workspace-edit--manage">[SUP-004] Supplier Workspace (Edit / Manage)</a><a class="l2" href="#9-accounting--finance">9. Accounting &amp;amp; Finance</a><a class="l3" href="#how-accounting-works-in-seera-read-this-first">How accounting works in Seera (read this first)</a><a class="l3" href="#fin-dash-001-accounting-dashboard">[FIN-DASH-001] Accounting Dashboard</a><a class="l3" href="#fin-coa-001--004-chart-of-accounts">[FIN-COA-001 … 004] Chart of Accounts</a><a class="l3" href="#fin-je-001--004-journal-entries">[FIN-JE-001 … 004] Journal Entries</a><a class="l3" href="#fin-gl-001-general-ledger">[FIN-GL-001] General Ledger</a><a class="l3" href="#fin-ap-001-accounts-payable-supplier-bills">[FIN-AP-001] Accounts Payable (Supplier Bills)</a><a class="l3" href="#fin-ap-002-add-supplier-bill-and-fin-ap-004-edit-supplier-bill">[FIN-AP-002] Add Supplier Bill and [FIN-AP-004] Edit Supplier Bill</a><a class="l3" href="#fin-ap-003-supplier-bill-details">[FIN-AP-003] Supplier Bill Details</a><a class="l3" href="#fin-ap-005-record-supplier-payment">[FIN-AP-005] Record Supplier Payment</a><a class="l3" href="#fin-ar-001--005-accounts-receivable-customer-invoices-and-receipts">[FIN-AR-001 … 005] Accounts Receivable (Customer Invoices and Receipts)</a><a class="l3" href="#fin-vat-001-vat-management-and-fin-vat-002-vat-period">[FIN-VAT-001] VAT Management and [FIN-VAT-002] VAT Period</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-and-fin-zat-002-zatca-record">[FIN-ZAT-001] ZATCA E-Invoicing and [FIN-ZAT-002] ZATCA Record</a><a class="l3" href="#fin-cc-001--004-cost-centers">[FIN-CC-001 … 004] Cost Centers</a><a class="l3" href="#fin-pr-001--004-automatic-posting-rules">[FIN-PR-001 … 004] Automatic Posting Rules</a><a class="l2" href="#10-inventory--purchasing">10. Inventory &amp;amp; Purchasing</a><a class="l3" href="#how-stock-works-in-seera">How stock works in Seera</a><a class="l3" href="#inv-dash-001-inventory-dashboard">[INV-DASH-001] Inventory Dashboard</a><a class="l3" href="#inv-item-001--004-materials--items">[INV-ITEM-001 … 004] Materials / Items</a><a class="l3" href="#inv-cat-001--003-item-categories-and-inv-unit-001--003-units">[INV-CAT-001 … 003] Item Categories and [INV-UNIT-001 … 003] Units</a><a class="l3" href="#inv-stk-001-stock-on-hand-and-inv-led-001-stock-ledger">[INV-STK-001] Stock On Hand and [INV-LED-001] Stock Ledger</a><a class="l3" href="#inv-pr-001--004-purchase-requests">[INV-PR-001 … 004] Purchase Requests</a><a class="l3" href="#inv-po-001--004-purchase-orders">[INV-PO-001 … 004] Purchase Orders</a><a class="l3" href="#inv-grn-001--004-goods-receipt-notes">[INV-GRN-001 … 004] Goods Receipt Notes</a><a class="l3" href="#inv-iss-001--004-stock-issues">[INV-ISS-001 … 004] Stock Issues</a><a class="l3" href="#inv-trf-001--004-stock-transfers">[INV-TRF-001 … 004] Stock Transfers</a><a class="l3" href="#inv-adj-001--004-stock-adjustments">[INV-ADJ-001 … 004] Stock Adjustments</a><a class="l3" href="#inv-rep-001--005-inventory-reports">[INV-REP-001 … 005] Inventory Reports</a><a class="l2" href="#11-projects">11. Projects</a><a class="l3" href="#mst-prj-001--004-projects">[MST-PRJ-001 … 004] Projects</a><a class="l3" href="#mst-site-001--004-locations-sites">[MST-SITE-001 … 004] Locations (Sites)</a><a class="l3" href="#where-project-figures-are-today">Where project figures are today</a><a class="l2" href="#12-marketing">12. Marketing</a><a class="l3" href="#mkt-001-leads--visits-mkt-002-new-lead-mkt-004-edit-lead">[MKT-001] Leads &amp;amp; Visits, [MKT-002] New Lead, [MKT-004] Edit Lead</a><a class="l3" href="#mkt-003-lead-details-visits-convert">[MKT-003] Lead (details, visits, convert)</a><a class="l3" href="#mkt-005-visit-report">[MKT-005] Visit Report</a><a class="l2" href="#13-activity-logs--audit">13. Activity Logs / Audit</a><a class="l3" href="#adm-020-activity-logs">[ADM-020] Activity Logs</a><a class="l2" href="#14-current-zatca-foundation">14. Current ZATCA Foundation</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-local-records">[FIN-ZAT-001] ZATCA E-Invoicing (local records)</a><a class="l3" href="#fin-zat-002-zatca-record">[FIN-ZAT-002] ZATCA Record</a><a class="l2" href="#15-reports">15. Reports</a><a class="l2" href="#16-common-tasks">16. Common Tasks</a><a class="l3" href="#create-a-supplier">Create a supplier</a><a class="l3" href="#enter-and-approve-a-supplier-bill-for-goods-you-received">Enter and approve a supplier bill for goods you received</a><a class="l3" href="#record-a-customer-receipt">Record a customer receipt</a><a class="l3" href="#add-an-employee-and-give-them-a-login">Add an employee and give them a login</a><a class="l3" href="#find-everything-about-one-customer">Find everything about one customer</a><a class="l3" href="#post-a-manual-journal">Post a manual journal</a><a class="l3" href="#close-a-vat-quarter">Close a VAT quarter</a><a class="l3" href="#switch-language">Switch language</a><a class="l2" href="#17-end-to-end-workflows">17. End-to-End Workflows</a><a class="l3" href="#wf-001-create-employee-and-user-access">WF-001 Create Employee and User Access</a><a class="l3" href="#wf-002-supplier--purchase-order--goods-receipt--supplier-bill--payment">WF-002 Supplier → Purchase Order → Goods Receipt → Supplier Bill → Payment</a><a class="l3" href="#wf-003-customer--invoice--receipt">WF-003 Customer → Invoice → Receipt</a><a class="l3" href="#wf-004-manual-journal--general-ledger">WF-004 Manual Journal → General Ledger</a><a class="l3" href="#wf-005-vat-period-review-and-finalize">WF-005 VAT Period Review and Finalize</a><a class="l3" href="#wf-006-inventory-transfer-between-warehouses">WF-006 Inventory Transfer between Warehouses</a><a class="l3" href="#wf-007-stock-issue-to-a-project">WF-007 Stock Issue to a Project</a><a class="l3" href="#wf-008-payroll-run">WF-008 Payroll Run</a><a class="l3" href="#wf-009-leave-request-lifecycle">WF-009 Leave Request lifecycle</a><a class="l3" href="#wf-010-supplier-f04-grni-accounting-flow">WF-010 Supplier F04 GRNI accounting flow</a><a class="l3" href="#wf-011-purchase-request--purchase-order">WF-011 Purchase Request → Purchase Order</a><a class="l3" href="#wf-012-correct-an-approved-bill-or-invoice-reopen">WF-012 Correct an approved bill or invoice (Reopen)</a><a class="l3" href="#wf-013-stock-adjustment-after-a-physical-count">WF-013 Stock Adjustment after a physical count</a><a class="l3" href="#wf-014-marketing-lead--visit--customer">WF-014 Marketing Lead → Visit → Customer</a><a class="l3" href="#wf-015-end-of-service-settlement">WF-015 End of Service settlement</a><a class="l2" href="#18-troubleshooting">18. Troubleshooting</a><a class="l2" href="#19-glossary">19. Glossary</a><a class="l2" href="#20-current-limitations--not-yet-operational">20. Current Limitations / Not Yet Operational</a><a class="l2" href="#21-quick-start-by-role">21. Quick Start by Role</a><a class="l3" href="#super-admin">Super Admin</a><a class="l3" href="#finance-manager">Finance Manager</a><a class="l3" href="#hr-manager">HR Manager</a><a class="l3" href="#project-manager">Project Manager</a><a class="l3" href="#site-in-charge--site-supervisor">Site In-Charge / Site Supervisor</a><a class="l3" href="#warehouse-incharge">Warehouse Incharge</a><a class="l3" href="#purchase-manager--assistant">Purchase Manager / Assistant</a><a class="l3" href="#marketing-manager">Marketing Manager</a></aside><main><h1 id="seera-erp">SEERA ERP</h1>
+@media print { header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Current System User Guide · Version 1.0 · 27 September 2026 · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a class="l2" href="#training-dataset-used-in-the-examples">Training dataset used in the examples</a><a class="l2" href="#table-of-contents">Table of contents</a><a class="l2" href="#1-about-seera-erp">1. About Seera ERP</a><a class="l3" href="#the-three-ways-you-work-with-a-record">The three ways you work with a record</a><a class="l3" href="#the-save-buttons">The Save buttons</a><a class="l3" href="#unsaved-changes-protection">Unsaved changes protection</a><a class="l2" href="#2-login-and-navigation">2. Login and Navigation</a><a class="l3" href="#adm-001-login">[ADM-001] Login</a><a class="l3" href="#adm-002-forgot-password-and-adm-003-reset-password">[ADM-002] Forgot Password and [ADM-003] Reset Password</a><a class="l3" href="#adm-004-set-your-password-first-sign-in">[ADM-004] Set Your Password (first sign-in)</a><a class="l3" href="#navigation-basics">Navigation basics</a><a class="l2" href="#3-dashboard">3. Dashboard</a><a class="l3" href="#adm-010-dashboard">[ADM-010] Dashboard</a><a class="l2" href="#4-users-roles-and-permissions">4. Users, Roles and Permissions</a><a class="l3" href="#usr-001-users-list">[USR-001] Users List</a><a class="l3" href="#usr-002-add-user">[USR-002] Add User</a><a class="l3" href="#usr-003-user-details-and-usr-004-edit-user">[USR-003] User Details and [USR-004] Edit User</a><a class="l3" href="#rol-001-roles-list-rol-002-create-role-rol-003-role-details-rol-004-edit-role">[ROL-001] Roles List, [ROL-002] Create Role, [ROL-003] Role Details, [ROL-004] Edit Role</a><a class="l3" href="#rol-005-permission-matrix">[ROL-005] Permission Matrix</a><a class="l3" href="#rol-006-role-hierarchy">[ROL-006] Role Hierarchy</a><a class="l3" href="#rol-007-assign-users-to-role">[ROL-007] Assign Users to Role</a><a class="l3" href="#rol-008-approval-workflows-rol-009-create-rol-010-edit">[ROL-008] Approval Workflows, [ROL-009] Create, [ROL-010] Edit</a><a class="l2" href="#5-master-setup">5. Master Setup</a><a class="l3" href="#mst-com-001-company-profile">[MST-COM-001] Company Profile</a><a class="l3" href="#mst-org-001-organization-structure">[MST-ORG-001] Organization Structure</a><a class="l3" href="#branches-mst-br-001--004-departments-mst-dep-001--004-designations-mst-des-001--004">Branches [MST-BR-001 … 004], Departments [MST-DEP-001 … 004], Designations [MST-DES-001 … 004]</a><a class="l3" href="#projects-mst-prj-001--005-and-locations-mst-site-001--004">Projects [MST-PRJ-001 … 005] and Locations [MST-SITE-001 … 004]</a><a class="l3" href="#warehouses-mst-wh-001--004">Warehouses [MST-WH-001 … 004]</a><a class="l3" href="#expense-categories-mst-exp-001--004">Expense Categories [MST-EXP-001 … 004]</a><a class="l3" href="#payment-terms-sup-005-and-project-classifications-mst-prj-005">Payment Terms [SUP-005] and Project Classifications [MST-PRJ-005]</a><a class="l2" href="#6-hr--payroll">6. HR &amp; Payroll</a><a class="l3" href="#hr-dash-001-hr-dashboard">[HR-DASH-001] HR Dashboard</a><a class="l3" href="#hr-emp-001-employees-list">[HR-EMP-001] Employees List</a><a class="l3" href="#hr-emp-002-add-employee">[HR-EMP-002] Add Employee</a><a class="l3" href="#hr-emp-003-employee-view-read-only">[HR-EMP-003] Employee View (read-only)</a><a class="l3" href="#hr-emp-004-employee-workspace-edit">[HR-EMP-004] Employee Workspace (Edit)</a><a class="l3" href="#hr-doc-001-employee-documents--iqama">[HR-DOC-001] Employee Documents / IQAMA</a><a class="l3" href="#hr-shf-001--003-shifts">[HR-SHF-001 … 003] Shifts</a><a class="l3" href="#hr-att-001--003-attendance">[HR-ATT-001 … 003] Attendance</a><a class="l3" href="#hr-lv-001--004-leaves">[HR-LV-001 … 004] Leaves</a><a class="l3" href="#hr-ot-001--003-overtime">[HR-OT-001 … 003] Overtime</a><a class="l3" href="#hr-sal-001--004-salary-structures">[HR-SAL-001 … 004] Salary Structures</a><a class="l3" href="#hr-pay-001--004-payroll">[HR-PAY-001 … 004] Payroll</a><a class="l3" href="#hr-eos-001--004-end-of-service">[HR-EOS-001 … 004] End of Service</a><a class="l2" href="#7-customers">7. Customers</a><a class="l3" href="#cus-001-customers-list">[CUS-001] Customers List</a><a class="l3" href="#cus-002-add-customer">[CUS-002] Add Customer</a><a class="l3" href="#cus-003-customer-view-read-only">[CUS-003] Customer View (read-only)</a><a class="l3" href="#cus-004-customer-workspace-edit--manage">[CUS-004] Customer Workspace (Edit / Manage)</a><a class="l2" href="#8-suppliers">8. Suppliers</a><a class="l3" href="#sup-001-suppliers-list">[SUP-001] Suppliers List</a><a class="l3" href="#sup-002-add-supplier">[SUP-002] Add Supplier</a><a class="l3" href="#sup-003-supplier-view-read-only">[SUP-003] Supplier View (read-only)</a><a class="l3" href="#sup-004-supplier-workspace-edit--manage">[SUP-004] Supplier Workspace (Edit / Manage)</a><a class="l2" href="#9-accounting--finance">9. Accounting &amp; Finance</a><a class="l3" href="#how-accounting-works-in-seera-read-this-first">How accounting works in Seera (read this first)</a><a class="l3" href="#fin-dash-001-accounting-dashboard">[FIN-DASH-001] Accounting Dashboard</a><a class="l3" href="#fin-coa-001--004-chart-of-accounts">[FIN-COA-001 … 004] Chart of Accounts</a><a class="l3" href="#fin-je-001--004-journal-entries">[FIN-JE-001 … 004] Journal Entries</a><a class="l3" href="#fin-gl-001-general-ledger">[FIN-GL-001] General Ledger</a><a class="l3" href="#fin-ap-001-accounts-payable-supplier-bills">[FIN-AP-001] Accounts Payable (Supplier Bills)</a><a class="l3" href="#fin-ap-002-add-supplier-bill-and-fin-ap-004-edit-supplier-bill">[FIN-AP-002] Add Supplier Bill and [FIN-AP-004] Edit Supplier Bill</a><a class="l3" href="#fin-ap-003-supplier-bill-details">[FIN-AP-003] Supplier Bill Details</a><a class="l3" href="#fin-ap-005-record-supplier-payment">[FIN-AP-005] Record Supplier Payment</a><a class="l3" href="#fin-ar-001--005-accounts-receivable-customer-invoices-and-receipts">[FIN-AR-001 … 005] Accounts Receivable (Customer Invoices and Receipts)</a><a class="l3" href="#fin-vat-001-vat-management-and-fin-vat-002-vat-period">[FIN-VAT-001] VAT Management and [FIN-VAT-002] VAT Period</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-and-fin-zat-002-zatca-record">[FIN-ZAT-001] ZATCA E-Invoicing and [FIN-ZAT-002] ZATCA Record</a><a class="l3" href="#fin-cc-001--004-cost-centers">[FIN-CC-001 … 004] Cost Centers</a><a class="l3" href="#fin-pr-001--004-automatic-posting-rules">[FIN-PR-001 … 004] Automatic Posting Rules</a><a class="l2" href="#10-inventory--purchasing">10. Inventory &amp; Purchasing</a><a class="l3" href="#how-stock-works-in-seera">How stock works in Seera</a><a class="l3" href="#inv-dash-001-inventory-dashboard">[INV-DASH-001] Inventory Dashboard</a><a class="l3" href="#inv-item-001--004-materials--items">[INV-ITEM-001 … 004] Materials / Items</a><a class="l3" href="#inv-cat-001--003-item-categories-and-inv-unit-001--003-units">[INV-CAT-001 … 003] Item Categories and [INV-UNIT-001 … 003] Units</a><a class="l3" href="#inv-stk-001-stock-on-hand-and-inv-led-001-stock-ledger">[INV-STK-001] Stock On Hand and [INV-LED-001] Stock Ledger</a><a class="l3" href="#inv-pr-001--004-purchase-requests">[INV-PR-001 … 004] Purchase Requests</a><a class="l3" href="#inv-po-001--004-purchase-orders">[INV-PO-001 … 004] Purchase Orders</a><a class="l3" href="#inv-grn-001--004-goods-receipt-notes">[INV-GRN-001 … 004] Goods Receipt Notes</a><a class="l3" href="#inv-iss-001--004-stock-issues">[INV-ISS-001 … 004] Stock Issues</a><a class="l3" href="#inv-trf-001--004-stock-transfers">[INV-TRF-001 … 004] Stock Transfers</a><a class="l3" href="#inv-adj-001--004-stock-adjustments">[INV-ADJ-001 … 004] Stock Adjustments</a><a class="l3" href="#inv-rep-001--005-inventory-reports">[INV-REP-001 … 005] Inventory Reports</a><a class="l2" href="#11-projects">11. Projects</a><a class="l3" href="#mst-prj-001--004-projects">[MST-PRJ-001 … 004] Projects</a><a class="l3" href="#mst-site-001--004-locations-sites">[MST-SITE-001 … 004] Locations (Sites)</a><a class="l3" href="#where-project-figures-are-today">Where project figures are today</a><a class="l2" href="#12-marketing">12. Marketing</a><a class="l3" href="#mkt-001-leads--visits-mkt-002-new-lead-mkt-004-edit-lead">[MKT-001] Leads &amp; Visits, [MKT-002] New Lead, [MKT-004] Edit Lead</a><a class="l3" href="#mkt-003-lead-details-visits-convert">[MKT-003] Lead (details, visits, convert)</a><a class="l3" href="#mkt-005-visit-report">[MKT-005] Visit Report</a><a class="l2" href="#13-activity-logs--audit">13. Activity Logs / Audit</a><a class="l3" href="#adm-020-activity-logs">[ADM-020] Activity Logs</a><a class="l2" href="#14-current-zatca-foundation">14. Current ZATCA Foundation</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-local-records">[FIN-ZAT-001] ZATCA E-Invoicing (local records)</a><a class="l3" href="#fin-zat-002-zatca-record">[FIN-ZAT-002] ZATCA Record</a><a class="l2" href="#15-reports">15. Reports</a><a class="l2" href="#16-common-tasks">16. Common Tasks</a><a class="l3" href="#create-a-supplier">Create a supplier</a><a class="l3" href="#enter-and-approve-a-supplier-bill-for-goods-you-received">Enter and approve a supplier bill for goods you received</a><a class="l3" href="#record-a-customer-receipt">Record a customer receipt</a><a class="l3" href="#add-an-employee-and-give-them-a-login">Add an employee and give them a login</a><a class="l3" href="#find-everything-about-one-customer">Find everything about one customer</a><a class="l3" href="#post-a-manual-journal">Post a manual journal</a><a class="l3" href="#close-a-vat-quarter">Close a VAT quarter</a><a class="l3" href="#switch-language">Switch language</a><a class="l2" href="#17-end-to-end-workflows">17. End-to-End Workflows</a><a class="l3" href="#wf-001-create-employee-and-user-access">WF-001 Create Employee and User Access</a><a class="l3" href="#wf-002-supplier--purchase-order--goods-receipt--supplier-bill--payment">WF-002 Supplier → Purchase Order → Goods Receipt → Supplier Bill → Payment</a><a class="l3" href="#wf-003-customer--invoice--receipt">WF-003 Customer → Invoice → Receipt</a><a class="l3" href="#wf-004-manual-journal--general-ledger">WF-004 Manual Journal → General Ledger</a><a class="l3" href="#wf-005-vat-period-review-and-finalize">WF-005 VAT Period Review and Finalize</a><a class="l3" href="#wf-006-inventory-transfer-between-warehouses">WF-006 Inventory Transfer between Warehouses</a><a class="l3" href="#wf-007-stock-issue-to-a-project">WF-007 Stock Issue to a Project</a><a class="l3" href="#wf-008-payroll-run">WF-008 Payroll Run</a><a class="l3" href="#wf-009-leave-request-lifecycle">WF-009 Leave Request lifecycle</a><a class="l3" href="#wf-010-supplier-f04-grni-accounting-flow">WF-010 Supplier F04 GRNI accounting flow</a><a class="l3" href="#wf-011-purchase-request--purchase-order">WF-011 Purchase Request → Purchase Order</a><a class="l3" href="#wf-012-correct-an-approved-bill-or-invoice-reopen">WF-012 Correct an approved bill or invoice (Reopen)</a><a class="l3" href="#wf-013-stock-adjustment-after-a-physical-count">WF-013 Stock Adjustment after a physical count</a><a class="l3" href="#wf-014-marketing-lead--visit--customer">WF-014 Marketing Lead → Visit → Customer</a><a class="l3" href="#wf-015-end-of-service-settlement">WF-015 End of Service settlement</a><a class="l2" href="#18-troubleshooting">18. Troubleshooting</a><a class="l2" href="#19-glossary">19. Glossary</a><a class="l2" href="#20-current-limitations--not-yet-operational">20. Current Limitations / Not Yet Operational</a><a class="l2" href="#21-quick-start-by-role">21. Quick Start by Role</a><a class="l3" href="#super-admin">Super Admin</a><a class="l3" href="#finance-manager">Finance Manager</a><a class="l3" href="#hr-manager">HR Manager</a><a class="l3" href="#project-manager">Project Manager</a><a class="l3" href="#site-in-charge--site-supervisor">Site In-Charge / Site Supervisor</a><a class="l3" href="#warehouse-incharge">Warehouse Incharge</a><a class="l3" href="#purchase-manager--assistant">Purchase Manager / Assistant</a><a class="l3" href="#marketing-manager">Marketing Manager</a></aside><main><h1 id="seera-erp">SEERA ERP</h1>
 <h1 id="current-system-user-guide">Current System User Guide</h1>
 <table>
 <thead>
@@ -237,6 +237,7 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 <hr />
 <h2 id="2-login-and-navigation">2. Login and Navigation</h2>
 <h3 id="adm-001-login">[ADM-001] Login</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/login</code></p>
 <p>Purpose:
 Sign in to Seera with your email address and password.</p>
 <p>Who uses it:
@@ -307,6 +308,7 @@ The Dashboard (ADM-010) opens. If your account is new, the &quot;Set Your Passwo
 <p>Related screens:
 ADM-002 Forgot Password, ADM-004 Set Your Password, ADM-010 Dashboard.</p>
 <h3 id="adm-002-forgot-password-and-adm-003-reset-password">[ADM-002] Forgot Password and [ADM-003] Reset Password</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/forgot-password</code> (ADM-002) · <code>https://seera.tech-brit.co.uk/reset-password/{token}</code> (ADM-003)</p>
 <p>Purpose:
 Get a link by email to choose a new password.</p>
 <p>Who uses it:
@@ -367,6 +369,7 @@ Status: <strong>PARTIAL</strong>. The email is only delivered when the server's 
 <p>Related screens:
 ADM-001 Login.</p>
 <h3 id="adm-004-set-your-password-first-sign-in">[ADM-004] Set Your Password (first sign-in)</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/set-password</code></p>
 <p>Purpose:
 Replace the temporary password with your own the first time you sign in.</p>
 <p>Who uses it:
@@ -435,10 +438,12 @@ Shown automatically after the first sign-in. You cannot open other pages until y
 <li>Lists have a <strong>filter bar</strong> (search box and drop-downs) and a <strong>Reset</strong> button. Lists show 10 rows per page.</li>
 <li><strong>View</strong> opens a read-only page. <strong>Edit</strong> or <strong>Edit / Manage</strong> opens the form or the workspace. <strong>Delete</strong> or <strong>Deactivate</strong> asks for confirmation first.</li>
 <li>Menu items marked &quot;Coming Soon&quot; open an information page only (chapter 20).</li>
+<li>Every screen in this guide shows its <strong>Web address</strong> under the heading. <code>{id}</code> stands for the record number you see in the browser's address bar after opening a record from its list (for example <code>/admin/master/suppliers/14/edit</code>). The Screen Index lists all addresses in one table.</li>
 </ul>
 <hr />
 <h2 id="3-dashboard">3. Dashboard</h2>
 <h3 id="adm-010-dashboard">[ADM-010] Dashboard</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/dashboard</code></p>
 <p>Purpose:
 A quick picture of the company: staff, roles, projects, sites, recent activity.</p>
 <p>Who uses it:
@@ -462,6 +467,7 @@ FIN-DASH-001, HR-DASH-001, INV-DASH-001, ADM-020.</p>
 <li>Every screen and button checks the module and action. A user without &quot;Accounts Payable — approve&quot; does not see the Approve button and cannot approve by any other route.</li>
 </ol>
 <h3 id="usr-001-users-list">[USR-001] Users List</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/users</code></p>
 <p>Purpose:
 Find, open, edit and deactivate user accounts.</p>
 <p>Who uses it:
@@ -475,6 +481,7 @@ Cards (Total Users, Active Users, Mobile App Users, Locked / Inactive), filters 
 <p>Related screens:
 USR-002, USR-003, USR-004.</p>
 <h3 id="usr-002-add-user">[USR-002] Add User</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/users/create</code></p>
 <p>Purpose:
 Create a sign-in account, optionally from an existing employee.</p>
 <p>Who uses it:
@@ -633,10 +640,12 @@ The user appears in the list. If you linked an employee, the employee's record s
 <p>Related screens:
 USR-001, USR-004, HR-EMP-004, ROL-002.</p>
 <h3 id="usr-003-user-details-and-usr-004-edit-user">[USR-003] User Details and [USR-004] Edit User</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/users/{id}</code> (USR-003) · <code>https://seera.tech-brit.co.uk/admin/users/{id}/edit</code> (USR-004)</p>
 <p>USR-003 is read-only: an Access Summary (Employee ID, Primary Role, Parent Role, Access Scope, Department, Designation, Branch, Contract Type, Classification, Iqama Number, Mobile App Access, Two Factor Auth, Last Login) and the user's Recent Activity. USR-004 is the same form as USR-002 with the same buttons.</p>
 <p>Important:
 Saving the Edit User form sets the user's primary role. Extra roles given on Assign Users (ROL-007) are replaced by that primary role when the user form is saved. Reassign them afterwards on ROL-007 if needed.</p>
 <h3 id="rol-001-roles-list-rol-002-create-role-rol-003-role-details-rol-004-edit-role">[ROL-001] Roles List, [ROL-002] Create Role, [ROL-003] Role Details, [ROL-004] Edit Role</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/roles</code> (ROL-001) · <code>https://seera.tech-brit.co.uk/admin/roles/create</code> (ROL-002) · <code>https://seera.tech-brit.co.uk/admin/roles/{id}</code> (ROL-003) · <code>https://seera.tech-brit.co.uk/admin/roles/{id}/edit</code> (ROL-004)</p>
 <p>Purpose:
 Define what each job may do.</p>
 <p>Who uses it:
@@ -776,6 +785,7 @@ A system role, a role that still has users, or a role with child roles cannot be
 <p>Related screens:
 ROL-005 Permission Matrix, ROL-007 Assign Users.</p>
 <h3 id="rol-005-permission-matrix">[ROL-005] Permission Matrix</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/roles/permission-matrix</code></p>
 <p>Purpose:
 Edit the permissions of one role across all modules on one page.</p>
 <p>Navigation:
@@ -784,11 +794,13 @@ Administration → Permission Matrix → choose the role and, optionally, a modu
 Roles — edit to save.</p>
 <p>Buttons: Apply (load the role), Select all visible, Clear visible, Save Permissions, Reset. Only the rows shown on screen are changed by Save; hidden rows keep their current permissions.</p>
 <h3 id="rol-006-role-hierarchy">[ROL-006] Role Hierarchy</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/roles/hierarchy</code></p>
 <p>Purpose:
 See the tree of roles and the selected role's details.</p>
 <p>Status: <strong>PARTIAL</strong>. The tree and the details card are real; the &quot;Hierarchy Rules&quot; table is fixed text. Permissions are not inherited from a parent role.</p>
 <p>Buttons: Add Child Role (opens ROL-002 with the parent preset), Edit Selected Role.</p>
 <h3 id="rol-007-assign-users-to-role">[ROL-007] Assign Users to Role</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/roles/assign-users</code></p>
 <p>Purpose:
 Move users into or out of a role, with an optional temporary access window.</p>
 <p>Navigation:
@@ -800,6 +812,7 @@ Two lists (available users, assigned users) with arrow buttons, Add All and Remo
 <p>Important:
 Temporary dates are applied to every user you submit in that save, and the role is only active inside the dates. The user's own Edit form resets extra roles to the primary role (see USR-004).</p>
 <h3 id="rol-008-approval-workflows-rol-009-create-rol-010-edit">[ROL-008] Approval Workflows, [ROL-009] Create, [ROL-010] Edit</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/roles/approval-workflows</code> (ROL-008) · <code>https://seera.tech-brit.co.uk/admin/roles/approval-workflows/create</code> (ROL-009) · <code>https://seera.tech-brit.co.uk/admin/roles/approval-workflows/{id}/edit</code> (ROL-010)</p>
 <p>Purpose:
 Record who should approve what, step by step.</p>
 <p>Status: <strong>FOUNDATION ONLY</strong>. The workflow (name, module, trigger action, department, scope, auto posting, notify requester, lock after approval, and steps with approver role, specific user, required, amount limit, SLA hours, escalation role, can reject, can send back) is saved and shown. <strong>Approvals in the system do not follow these steps yet.</strong> Today every Approve button is a single action by any user who has the approve permission for that module.</p>
@@ -809,6 +822,7 @@ Record who should approve what, step by step.</p>
 <p>Master Setup holds the records every other module refers to. Set these up first, in this order: Company Profile → Organization Structure (branches, departments, designations) → Projects and Locations → Warehouses → Expense Categories → Suppliers and Customers.</p>
 <p>Most master forms still use the older button set (<strong>Save</strong> / <strong>Update</strong> and <strong>Cancel</strong>). Suppliers and Customers use the full standard (chapters 7 and 8).</p>
 <h3 id="mst-com-001-company-profile">[MST-COM-001] Company Profile</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/company-profile</code></p>
 <p>Purpose:
 Company identity used on screens and, later, on invoices.</p>
 <p>Who uses it:
@@ -891,6 +905,7 @@ Sections Basic Company Information, Saudi Compliance &amp; ZATCA, Address &amp; 
 </table>
 <p>Buttons: Save Company Profile, Cancel.</p>
 <h3 id="mst-org-001-organization-structure">[MST-ORG-001] Organization Structure</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/organization</code></p>
 <p>Purpose:
 One hub for Branches, Departments and Designations. Each card shows the recent records, an <strong>+ Add</strong> dialog and an <strong>Open full list</strong> link.</p>
 <p>Who uses it:
@@ -900,6 +915,7 @@ Master Setup → Organization Structure.</p>
 <p>Permission required:
 View on any of Branches, Departments or Designations.</p>
 <h3 id="branches-mst-br-001--004-departments-mst-dep-001--004-designations-mst-des-001--004">Branches [MST-BR-001 … 004], Departments [MST-DEP-001 … 004], Designations [MST-DES-001 … 004]</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/branches</code> (MST-BR-001) · <code>https://seera.tech-brit.co.uk/admin/master/branches/create</code> (MST-BR-002) · <code>https://seera.tech-brit.co.uk/admin/master/branches/{id}</code> (MST-BR-003) · <code>https://seera.tech-brit.co.uk/admin/master/branches/{id}/edit</code> (MST-BR-004) · <code>https://seera.tech-brit.co.uk/admin/master/departments</code> (MST-DEP-001) · <code>https://seera.tech-brit.co.uk/admin/master/departments/create</code> (MST-DEP-002) · <code>https://seera.tech-brit.co.uk/admin/master/departments/{id}</code> (MST-DEP-003) · <code>https://seera.tech-brit.co.uk/admin/master/departments/{id}/edit</code> (MST-DEP-004) · <code>https://seera.tech-brit.co.uk/admin/master/designations</code> (MST-DES-001) · <code>https://seera.tech-brit.co.uk/admin/master/designations/create</code> (MST-DES-002) · <code>https://seera.tech-brit.co.uk/admin/master/designations/{id}</code> (MST-DES-003) · <code>https://seera.tech-brit.co.uk/admin/master/designations/{id}/edit</code> (MST-DES-004)</p>
 <p>Each has a List (search, cards, table with View / Edit / Delete), an Add form, a Details page and an Edit form.</p>
 <p>Fields:</p>
 <table>
@@ -932,8 +948,10 @@ View on any of Branches, Departments or Designations.</p>
 <p>Important:
 Branches, departments and designations can also be created without leaving the User and Employee forms through the &quot;+ New&quot; dialogs.</p>
 <h3 id="projects-mst-prj-001--005-and-locations-mst-site-001--004">Projects [MST-PRJ-001 … 005] and Locations [MST-SITE-001 … 004]</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/projects</code> (MST-PRJ-001) · <code>https://seera.tech-brit.co.uk/admin/master/projects/create</code> (MST-PRJ-002) · <code>https://seera.tech-brit.co.uk/admin/master/projects/{id}</code> (MST-PRJ-003) · <code>https://seera.tech-brit.co.uk/admin/master/projects/{id}/edit</code> (MST-PRJ-004) · <code>https://seera.tech-brit.co.uk/admin/master/project-classifications</code> (MST-PRJ-005) · <code>https://seera.tech-brit.co.uk/admin/master/sites</code> (MST-SITE-001) · <code>https://seera.tech-brit.co.uk/admin/master/sites/create</code> (MST-SITE-002) · <code>https://seera.tech-brit.co.uk/admin/master/sites/{id}</code> (MST-SITE-003) · <code>https://seera.tech-brit.co.uk/admin/master/sites/{id}/edit</code> (MST-SITE-004)</p>
 <p>Described in chapter 11.</p>
 <h3 id="warehouses-mst-wh-001--004">Warehouses [MST-WH-001 … 004]</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/warehouses</code> (MST-WH-001) · <code>https://seera.tech-brit.co.uk/admin/master/warehouses/create</code> (MST-WH-002) · <code>https://seera.tech-brit.co.uk/admin/master/warehouses/{id}</code> (MST-WH-003) · <code>https://seera.tech-brit.co.uk/admin/master/warehouses/{id}/edit</code> (MST-WH-004)</p>
 <p>Purpose:
 Physical stores that hold stock. Stock always belongs to a warehouse.</p>
 <p>Who uses it:
@@ -1014,6 +1032,7 @@ Warehouses — create / view / edit.</p>
 </table>
 <p>Buttons: Save / Update, Cancel.</p>
 <h3 id="expense-categories-mst-exp-001--004">Expense Categories [MST-EXP-001 … 004]</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/expense-categories</code> (MST-EXP-001) · <code>https://seera.tech-brit.co.uk/admin/master/expense-categories/create</code> (MST-EXP-002) · <code>https://seera.tech-brit.co.uk/admin/master/expense-categories/{id}</code> (MST-EXP-003) · <code>https://seera.tech-brit.co.uk/admin/master/expense-categories/{id}/edit</code> (MST-EXP-004)</p>
 <p>Purpose:
 Categories used on supplier bill lines (and reserved for the future site expense screen).</p>
 <p>Who uses it:
@@ -1066,10 +1085,12 @@ Expense Categories — create / view / edit.</p>
 </table>
 <p>Buttons: Save / Update, Cancel.</p>
 <h3 id="payment-terms-sup-005-and-project-classifications-mst-prj-005">Payment Terms [SUP-005] and Project Classifications [MST-PRJ-005]</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/payment-terms</code> (SUP-005) · <code>https://seera.tech-brit.co.uk/admin/master/project-classifications</code> (MST-PRJ-005)</p>
 <p>Small lists with an inline &quot;Add&quot; section and inline Save / Delete per row. Payment terms (name and days from bill date) decide the due date of supplier bills saved without one. Project classifications label projects.</p>
 <hr />
 <h2 id="6-hr--payroll">6. HR &amp; Payroll</h2>
 <h3 id="hr-dash-001-hr-dashboard">[HR-DASH-001] HR Dashboard</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/hr/dashboard</code></p>
 <p>Purpose:
 Today's HR picture and the queues that need action.</p>
 <p>Who uses it:
@@ -1083,6 +1104,7 @@ Cards (Total Employees, Active Employees, Present Today, Late Today, Absent Toda
 <p>Important:
 The attendance summary is for today only. There is no monthly attendance report yet (chapter 20).</p>
 <h3 id="hr-emp-001-employees-list">[HR-EMP-001] Employees List</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/hr/employees</code></p>
 <p>Purpose:
 Find employees and open View or the Employee Workspace.</p>
 <p>Who uses it:
@@ -1096,6 +1118,7 @@ Cards (Total Employees, Active Employees, Mobile App Access, Expiring IQAMAs), f
 <p>Important:
 Employees are deactivated, never deleted, so payroll history stays intact.</p>
 <h3 id="hr-emp-002-add-employee">[HR-EMP-002] Add Employee</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/hr/employees/create</code></p>
 <p>Purpose:
 Create an employee record with personal, employment, payroll, document and access details in one form.</p>
 <p>Who uses it:
@@ -1274,6 +1297,7 @@ The employee is created. When payroll information is complete, the first salary 
 <p>Related screens:
 HR-EMP-004 Employee Workspace, HR-SAL-001, USR-002.</p>
 <h3 id="hr-emp-003-employee-view-read-only">[HR-EMP-003] Employee View (read-only)</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/hr/employees/{id}</code></p>
 <p>Purpose:
 Read everything about one employee without changing anything.</p>
 <p>Navigation:
@@ -1283,6 +1307,7 @@ HR — view.</p>
 <p>What you see:
 Employment Information, Personal &amp; Documents, Payroll Information, Documents, Recent Attendance, Leave Data with the annual balance, Overtime, Salary Structures, Payroll History, and cards for Attendance This Month and Pending Leave / Overtime. A &quot;+ New Structure From Profile&quot; link opens the salary structure form when the profile amounts no longer match the active structure.</p>
 <h3 id="hr-emp-004-employee-workspace-edit">[HR-EMP-004] Employee Workspace (Edit)</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/hr/employees/{id}/edit</code></p>
 <p>Purpose:
 Manage the employee and all related records from one page.</p>
 <p>Who uses it:
@@ -1312,6 +1337,7 @@ The five profile sections plus related tabs:</p>
 <li>System Account creates or edits the login for this employee; identity fields come from the employee.</li>
 </ul>
 <h3 id="hr-doc-001-employee-documents--iqama">[HR-DOC-001] Employee Documents / IQAMA</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/hr/documents</code></p>
 <p>Purpose:
 Register of all employee documents with expiry status.</p>
 <p>Navigation:
@@ -1323,10 +1349,12 @@ Cards (Total Documents, Valid, Expiring Soon (60 days), Expired), filters (emplo
 <p>Important:
 Documents are added and renewed on the Employee form (section D). This register has no add form of its own.</p>
 <h3 id="hr-shf-001--003-shifts">[HR-SHF-001 … 003] Shifts</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/hr/shifts</code> (HR-SHF-001) · <code>https://seera.tech-brit.co.uk/admin/hr/shifts/create</code> (HR-SHF-002) · <code>https://seera.tech-brit.co.uk/admin/hr/shifts/{id}/edit</code> (HR-SHF-003)</p>
 <p>Fields: Shift Name *, Shift Code *, Status *, Start Time *, End Time *, Break (minutes) *, Grace (minutes) *, Overtime After (minutes) *. Example: Day Shift, DAY, 07:00–16:00, break 60, grace 15, overtime after 540.</p>
 <p>Important:
 Grace and overtime-after minutes are stored but are not yet used to calculate late minutes or overtime automatically; those are typed on the attendance record.</p>
 <h3 id="hr-att-001--003-attendance">[HR-ATT-001 … 003] Attendance</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/hr/attendance</code> (HR-ATT-001) · <code>https://seera.tech-brit.co.uk/admin/hr/attendance/create</code> (HR-ATT-002) · <code>https://seera.tech-brit.co.uk/admin/hr/attendance/{id}/edit</code> (HR-ATT-003)</p>
 <p>Purpose:
 Record who was present, late or absent.</p>
 <p>Status: <strong>PARTIAL</strong> — manual entry only. There is no employee check-in / check-out, no GPS capture and no automatic geofence check yet.</p>
@@ -1406,6 +1434,7 @@ Attendance — create / view / edit.</p>
 </table>
 <p>Buttons: Save / Update, Cancel. The list offers Edit and Delete per row.</p>
 <h3 id="hr-lv-001--004-leaves">[HR-LV-001 … 004] Leaves</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/hr/leaves</code> (HR-LV-001) · <code>https://seera.tech-brit.co.uk/admin/hr/leaves/create</code> (HR-LV-002) · <code>https://seera.tech-brit.co.uk/admin/hr/leaves/{id}</code> (HR-LV-003) · <code>https://seera.tech-brit.co.uk/admin/hr/leaves/{id}/edit</code> (HR-LV-004)</p>
 <p>Purpose:
 Request, approve or reject leave and keep the balance.</p>
 <p>Navigation:
@@ -1472,14 +1501,17 @@ HR — create / view / edit; HR — approve / reject for the decisions.</p>
 <p>What happens after Approve:
 Status becomes approved and the days count against the annual entitlement shown on the employee.</p>
 <h3 id="hr-ot-001--003-overtime">[HR-OT-001 … 003] Overtime</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/hr/overtime</code> (HR-OT-001) · <code>https://seera.tech-brit.co.uk/admin/hr/overtime/create</code> (HR-OT-002) · <code>https://seera.tech-brit.co.uk/admin/hr/overtime/{id}/edit</code> (HR-OT-003)</p>
 <p>Fields: Employee *, Date *, Attendance Record (optional link), Hours *, Hourly Rate (SAR) *, Status *, Reason. Amount = hours × rate. <strong>Approve</strong> is a separate button; only approved overtime enters payroll.</p>
 <h3 id="hr-sal-001--004-salary-structures">[HR-SAL-001 … 004] Salary Structures</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/hr/salary-structures</code> (HR-SAL-001) · <code>https://seera.tech-brit.co.uk/admin/hr/salary-structures/create</code> (HR-SAL-002) · <code>https://seera.tech-brit.co.uk/admin/hr/salary-structures/{id}</code> (HR-SAL-003) · <code>https://seera.tech-brit.co.uk/admin/hr/salary-structures/{id}/edit</code> (HR-SAL-004)</p>
 <p>Purpose:
 Effective-dated salary definition used by payroll.</p>
 <p>Fields: Employee *, Effective From *, Effective To, Basic Salary *, Housing / Transport / Food / Fuel / Other Allowance *, Fixed Deduction *, Status *, and Additional Salary Items (Type allowance/deduction, Name, Amount, Taxable).</p>
 <p>Important:
 Create a new structure for a change; do not edit history. The employee profile amounts and the active structure are compared and Seera warns when they differ.</p>
 <h3 id="hr-pay-001--004-payroll">[HR-PAY-001 … 004] Payroll</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/hr/payroll</code> (HR-PAY-001) · <code>https://seera.tech-brit.co.uk/admin/hr/payroll/create</code> (HR-PAY-002) · <code>https://seera.tech-brit.co.uk/admin/hr/payroll/{id}</code> (HR-PAY-003) · <code>https://seera.tech-brit.co.uk/admin/hr/payroll/{id}/edit</code> (HR-PAY-004)</p>
 <p>Purpose:
 Calculate a month's pay for a set of employees.</p>
 <p>Status: <strong>PARTIAL</strong> — the run calculates basic, allowances, approved overtime, fixed deductions and net. There is no payslip, no bank or WPS file, and <strong>no accounting posting</strong> when a run is approved.</p>
@@ -1532,6 +1564,7 @@ Payroll — create / view / edit; Payroll — process and approve for the action
 <p>Buttons: Save (draft), then on the details page <strong>Process Payroll</strong> (builds the employee rows) and <strong>Approve Payroll</strong> (only a processed run), Edit.</p>
 <p>Statuses: draft → processed → approved. Present and leave days are counted from attendance but do not change pay in the current system.</p>
 <h3 id="hr-eos-001--004-end-of-service">[HR-EOS-001 … 004] End of Service</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/hr/eosb</code> (HR-EOS-001) · <code>https://seera.tech-brit.co.uk/admin/hr/eosb/create</code> (HR-EOS-002) · <code>https://seera.tech-brit.co.uk/admin/hr/eosb/{id}</code> (HR-EOS-003) · <code>https://seera.tech-brit.co.uk/admin/hr/eosb/{id}/edit</code> (HR-EOS-004)</p>
 <p>Purpose:
 Calculate the end-of-service benefit (Saudi Labour Law bands) and approve the settlement.</p>
 <p>Fields: Employee *, Termination Date *, Reason For Leaving *, Service Years *, Final Wage (SAR) *, Status, Gratuity Calculation (automatic or manual override), Gratuity Amount, Leave Salary, Other Dues, Deductions, Notes. The details page shows the calculation (first 5 years, after 5 years, entitlement percentage). <strong>Approve</strong> is a separate button. No accounting entry is created.</p>
@@ -1553,6 +1586,7 @@ Calculate the end-of-service benefit (Saudi Labour Law bands) and approve the se
  └─ Activity
 </code></pre>
 <h3 id="cus-001-customers-list">[CUS-001] Customers List</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/customers</code></p>
 <p>Purpose:
 Find customers and open View or the workspace.</p>
 <p>Who uses it:
@@ -1564,6 +1598,7 @@ Customers — view.</p>
 <p>What you see:
 Cards (Total Customers, Active Customers, Receivable Balance, Linked Projects), filters (search by name, code or VAT number; type; status), the table (Customer Code, Customer Name, Rating, Overdue, Contact Person, Total Projects, Receivable, Status) and per row <strong>View</strong>, <strong>Edit / Manage</strong> (only with Customers — edit) and <strong>Delete</strong> (only with Customers — delete; refused while the customer has projects).</p>
 <h3 id="cus-002-add-customer">[CUS-002] Add Customer</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/customers/create</code></p>
 <p>Purpose:
 Create a customer with its first contacts and a note in one go.</p>
 <p>Who uses it:
@@ -1723,6 +1758,7 @@ The customer, its contacts and the note are saved together. If a contact is inva
 <p>Related screens:
 CUS-003, CUS-004, FIN-AR-002.</p>
 <h3 id="cus-003-customer-view-read-only">[CUS-003] Customer View (read-only)</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/customers/{id}</code></p>
 <p>Purpose:
 Read the customer and all its related information without any risk of changing data.</p>
 <p>Who uses it:
@@ -1734,6 +1770,7 @@ Customers — view (sections: Projects — view, Accounts Receivable — view, J
 <p>What you see:
 The persistent header (code, name, status, type, rating, VAT and CR numbers, contact, payment channel and credit limit, receivable account, projects count, and, for finance users, outstanding receivable, open invoices and received to date). A tab strip for jumping to sections. The Customer Information table, then each permitted section with its latest 5 rows and a <strong>View all</strong> link. There are no forms and no save buttons.</p>
 <h3 id="cus-004-customer-workspace-edit--manage">[CUS-004] Customer Workspace (Edit / Manage)</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/customers/{id}/edit</code></p>
 <p>Purpose:
 Manage the customer and everything related to it from one page.</p>
 <p>Who uses it:
@@ -1821,6 +1858,7 @@ CUS-003, FIN-AR-001, FIN-AR-003, FIN-ZAT-001.</p>
  └─ Activity
 </code></pre>
 <h3 id="sup-001-suppliers-list">[SUP-001] Suppliers List</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/suppliers</code></p>
 <p>Purpose:
 Find suppliers and open View or the workspace.</p>
 <p>Who uses it:
@@ -1834,6 +1872,7 @@ Cards (Total Suppliers, Active Suppliers, Payable Balance from opening balances,
 <p>Important:
 Suppliers are deactivated, never deleted: bills, payments, orders and receipts must stay for audit and VAT.</p>
 <h3 id="sup-002-add-supplier">[SUP-002] Add Supplier</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/suppliers/create</code></p>
 <p>Purpose:
 Create a supplier with its commercial, banking and project links.</p>
 <p>Who uses it:
@@ -1963,6 +2002,7 @@ Sections Supplier Information, Payment &amp; Banking, Projects this Supplier Wor
 <li>Setting &quot;Cash&quot; as the accepted payment type for a supplier you pay by bank transfer: the payment form will not offer the bank account.</li>
 </ul>
 <h3 id="sup-003-supplier-view-read-only">[SUP-003] Supplier View (read-only)</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/suppliers/{id}</code></p>
 <p>Purpose:
 Read the supplier and its related records safely.</p>
 <p>Navigation:
@@ -1972,6 +2012,7 @@ Suppliers — view; sections need Purchase Orders, Goods Receipts, Accounts Paya
 <p>What you see:
 The header (code, name, status, category, city, VAT and CR numbers, contact, payment terms and channel, payable account, projects count, and for finance users the outstanding payable and paid to date), a tab strip, the Supplier Information table, and each permitted section with the latest 5 rows and <strong>View all</strong>. No forms.</p>
 <h3 id="sup-004-supplier-workspace-edit--manage">[SUP-004] Supplier Workspace (Edit / Manage)</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/suppliers/{id}/edit</code></p>
 <p>Purpose:
 Manage the supplier and work with its orders, receipts, bills and payments from one page.</p>
 <p>Who uses it:
@@ -2085,6 +2126,7 @@ INV-PO-001, INV-GRN-001, FIN-AP-001, WF-002, WF-010.</p>
 </tbody>
 </table>
 <h3 id="fin-dash-001-accounting-dashboard">[FIN-DASH-001] Accounting Dashboard</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/dashboard</code></p>
 <p>Purpose:
 The finance picture and the action queue.</p>
 <p>Who uses it:
@@ -2096,6 +2138,7 @@ Accounting Dashboard — view.</p>
 <p>What you see:
 Cards Cash in Hand, Bank Balance, Accounts Payable, Accounts Receivable, VAT Payable (all-time output minus input), Unposted Journals, ZATCA Failed Invoices, Monthly Revenue; tables Current month (revenue and expenses), Finance Action Queue (draft bills, draft invoices, unposted journals, failed ZATCA), supplier and customer balances by days overdue, VAT Summary, ZATCA Status Summary, Recent Journal Entries; buttons + Journal Entry, Financial Reports, Open (per queue), Open VAT, Open ZATCA, View All.</p>
 <h3 id="fin-coa-001--004-chart-of-accounts">[FIN-COA-001 … 004] Chart of Accounts</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/chart-of-accounts</code> (FIN-COA-001) · <code>https://seera.tech-brit.co.uk/admin/accounting/chart-of-accounts/create</code> (FIN-COA-002) · <code>https://seera.tech-brit.co.uk/admin/accounting/chart-of-accounts/{id}</code> (FIN-COA-003) · <code>https://seera.tech-brit.co.uk/admin/accounting/chart-of-accounts/{id}/edit</code> (FIN-COA-004)</p>
 <p>Purpose:
 The list of ledger accounts, as a tree.</p>
 <p>Who uses it:
@@ -2177,6 +2220,7 @@ Chart of Accounts — create / view / edit.</p>
 <p>Buttons: Cancel, Save, Save &amp; new, Save &amp; close. Delete on the list deactivates an account that has transactions or sub-accounts instead of deleting it.</p>
 <p>Standard accounts used by the workflow: 1110 Cash in Hand, 1120 Bank Account, 1200 Accounts Receivable, 1300 Input VAT Receivable, 1400 Inventory Asset, 2100 Accounts Payable, 2150 Goods Received Not Invoiced, 2210 Output VAT, 2300 Salary Payable, 3100 Owner Equity, 4100 Project Revenue, 5200 Material Expense, 5600 Inventory Adjustment Expense.</p>
 <h3 id="fin-je-001--004-journal-entries">[FIN-JE-001 … 004] Journal Entries</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/journal-entries</code> (FIN-JE-001) · <code>https://seera.tech-brit.co.uk/admin/accounting/journal-entries/create</code> (FIN-JE-002) · <code>https://seera.tech-brit.co.uk/admin/accounting/journal-entries/{id}</code> (FIN-JE-003) · <code>https://seera.tech-brit.co.uk/admin/accounting/journal-entries/{id}/edit</code> (FIN-JE-004)</p>
 <p>Purpose:
 Record a manual, balanced accounting entry and post it to the ledger.</p>
 <p>Who uses it:
@@ -2260,6 +2304,7 @@ The journal is posted with your name and time, appears in the General Ledger and
 <li>Expecting to reverse a posted manual journal with a button: post a new opposite journal instead.</li>
 </ul>
 <h3 id="fin-gl-001-general-ledger">[FIN-GL-001] General Ledger</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/general-ledger</code></p>
 <p>Purpose:
 See every posted line, with an opening and a running balance.</p>
 <p>Navigation:
@@ -2269,6 +2314,7 @@ General Ledger — view.</p>
 <p>What you see:
 Filters (account, cost center, project, site, source, from / to, posted only), cards Total Debit, Total Credit, Opening Balance, and the lines (Date, Voucher, Account, Description, Source, Cost Center, Debit, Credit, Balance). The Voucher opens the journal. Opening balance = the account's opening balance (company-level users only) plus all posted movement before the &quot;from&quot; date; the running balance continues across pages.</p>
 <h3 id="fin-ap-001-accounts-payable-supplier-bills">[FIN-AP-001] Accounts Payable (Supplier Bills)</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/accounts-payable</code></p>
 <p>Purpose:
 Register of supplier bills and the recent payments.</p>
 <p>Who uses it:
@@ -2280,6 +2326,7 @@ Accounts Payable — view.</p>
 <p>What you see:
 Cards Outstanding Payable, Overdue Bills, Draft Bills, Paid This Month; filters (search, supplier, status, dates); the bills table (Bill Number, Supplier, Bill Date, Due Date, Taxable, VAT, Total, Paid, Balance, Status) with <strong>View</strong>, <strong>Approve</strong> (drafts) and <strong>Pay</strong> (open bills) per row; Recent Supplier Payments.</p>
 <h3 id="fin-ap-002-add-supplier-bill-and-fin-ap-004-edit-supplier-bill">[FIN-AP-002] Add Supplier Bill and [FIN-AP-004] Edit Supplier Bill</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/accounts-payable/create</code> (FIN-AP-002) · <code>https://seera.tech-brit.co.uk/admin/accounting/accounts-payable/{id}/edit</code> (FIN-AP-004)</p>
 <p>Purpose:
 Enter a supplier's invoice, either against goods already received or as a direct service bill.</p>
 <p>Who uses it:
@@ -2416,6 +2463,7 @@ The bill is a draft with status <em>draft</em>. It appears in the supplier's wor
 <p>Related screens:
 FIN-AP-003, INV-GRN-003, SUP-004, WF-010.</p>
 <h3 id="fin-ap-003-supplier-bill-details">[FIN-AP-003] Supplier Bill Details</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/accounts-payable/{id}</code></p>
 <p>Purpose:
 Approve, pay, reopen or read a bill.</p>
 <p>Who uses it:
@@ -2455,6 +2503,7 @@ Cards (taxable, VAT, total, balance), Bill Information, Accounting Entry (the po
 </table>
 <p>Statuses: draft → unpaid → partially_paid → paid. A second Approve on the same bill is refused; an edit of an approved bill is refused.</p>
 <h3 id="fin-ap-005-record-supplier-payment">[FIN-AP-005] Record Supplier Payment</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/accounts-payable/{id}/payment</code></p>
 <p>Purpose:
 Pay all or part of an open bill.</p>
 <p>Navigation:
@@ -2521,12 +2570,14 @@ Accounts Payable — process.</p>
 <p>What happens after Record Payment:
 A journal Dr Accounts Payable / Cr Cash or Bank is posted, the bill's paid and balance amounts update and the status moves to partially_paid or paid. If the same payment is submitted twice (double click, browser retry) the second one is recognised and nothing is added.</p>
 <h3 id="fin-ar-001--005-accounts-receivable-customer-invoices-and-receipts">[FIN-AR-001 … 005] Accounts Receivable (Customer Invoices and Receipts)</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable</code> (FIN-AR-001) · <code>https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/create</code> (FIN-AR-002) · <code>https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/{id}</code> (FIN-AR-003) · <code>https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/{id}/edit</code> (FIN-AR-004) · <code>https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/{id}/receipt</code> (FIN-AR-005)</p>
 <p>These screens mirror Accounts Payable.</p>
 <p>Add Customer Invoice (FIN-AR-002) fields: Customer *, Invoice Number (generated when blank), Invoice Date * (not in the future), Due Date, VAT Rate (%) *, Project, Cost Center, Notes, and lines with Item / Description *, Qty, Unit Price, Revenue Account, Cost Center. Buttons: Cancel, Save, Save &amp; new, Save &amp; close.</p>
 <p>Customer Invoice Details (FIN-AR-003): Invoice Information, ZATCA Record (UUID, QR Code, XML, Digital Signature, Clearance, Retry Count, Open Record), Accounting Entry, Invoice Lines, Receipts. Buttons <strong>Approve &amp; Post</strong> (posts Dr Receivable / Cr Revenue / Cr Output VAT, records the output VAT row and creates the local ZATCA record), <strong>Record Receipt</strong>, <strong>Reopen for Correction</strong> (Super Admin; unpaid, no receipts; refused when the local ZATCA record is cleared), Edit (draft only).</p>
 <p>Record Customer Receipt (FIN-AR-005) fields: Receipt Date *, Received Into (Bank / Cash Account) * (only the channels the customer accepts), Payment Method * (must match the account: Cash for the cash account, Bank Transfer or Cheque for the bank), Received Amount (SAR) * (not more than the balance), Reference Number, Notes. Buttons: Record Receipt, Back to Invoice, Cancel. Repeated submissions are recognised and not added twice.</p>
 <p>Statuses: draft → unpaid → partially_paid → paid.</p>
 <h3 id="fin-vat-001-vat-management-and-fin-vat-002-vat-period">[FIN-VAT-001] VAT Management and [FIN-VAT-002] VAT Period</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/vat</code> (FIN-VAT-001) · <code>https://seera.tech-brit.co.uk/admin/accounting/vat/{id}</code> (FIN-VAT-002)</p>
 <p>Purpose:
 Review the VAT return figures per quarter and finalize the period.</p>
 <p>Who uses it:
@@ -2567,14 +2618,17 @@ Cards Output VAT (Sales), Input VAT (Purchases), VAT Payable, VAT Exceptions (ro
 <li>A zero-VAT document does not create a VAT row.</li>
 </ul>
 <h3 id="fin-zat-001-zatca-e-invoicing-and-fin-zat-002-zatca-record">[FIN-ZAT-001] ZATCA E-Invoicing and [FIN-ZAT-002] ZATCA Record</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/zatca</code> (FIN-ZAT-001) · <code>https://seera.tech-brit.co.uk/admin/accounting/zatca/{id}</code> (FIN-ZAT-002)</p>
 <p>Status: <strong>FOUNDATION ONLY</strong>. See chapter 14.</p>
 <h3 id="fin-cc-001--004-cost-centers">[FIN-CC-001 … 004] Cost Centers</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/cost-centers</code> (FIN-CC-001) · <code>https://seera.tech-brit.co.uk/admin/accounting/cost-centers/create</code> (FIN-CC-002) · <code>https://seera.tech-brit.co.uk/admin/accounting/cost-centers/{id}</code> (FIN-CC-003) · <code>https://seera.tech-brit.co.uk/admin/accounting/cost-centers/{id}/edit</code> (FIN-CC-004)</p>
 <p>Purpose:
 Codes that tag journal lines, bills and invoices for cost reporting.</p>
 <p>Fields: Cost Center Code *, Cost Center Name *, Type * (branch, department, project, site, warehouse), Linked Record, Manager, Status *. Buttons: Cancel, Save, Save &amp; new, Save &amp; close. Details show the posted lines and a ledger link. A cost center with journal lines is deactivated instead of deleted.</p>
 <p>Important:
 Project cost reporting uses the project set on each line, not the cost center.</p>
 <h3 id="fin-pr-001--004-automatic-posting-rules">[FIN-PR-001 … 004] Automatic Posting Rules</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/posting-rules</code> (FIN-PR-001) · <code>https://seera.tech-brit.co.uk/admin/accounting/posting-rules/create</code> (FIN-PR-002) · <code>https://seera.tech-brit.co.uk/admin/accounting/posting-rules/{id}</code> (FIN-PR-003) · <code>https://seera.tech-brit.co.uk/admin/accounting/posting-rules/{id}/edit</code> (FIN-PR-004)</p>
 <p>Purpose:
 One row per automatic journal event (Inventory Purchase, Stock Issued, Stock Adjusted, Bill Approved, Invoice Approved, Payment Recorded, Receipt Recorded, Payroll Approved, Site Expense Approved).</p>
 <p>Status: <strong>PARTIAL</strong>. Only the <strong>Auto Post</strong> switch changes behaviour: when it is off, the event creates a <em>draft</em> journal that a finance user must post by hand (review mode). The debit and credit accounts, cost center rule and approval flag on the rule are informational; the real accounts come from the documents. &quot;Payroll Approved&quot; and &quot;Site Expense Approved&quot; have no event that fires them yet.</p>
@@ -2589,8 +2643,10 @@ One row per automatic journal event (Inventory Purchase, Stock Issued, Stock Adj
 <li>Purchasing runs Purchase Request → Purchase Order → Goods Receipt → Supplier Bill (chapter 9).</li>
 </ul>
 <h3 id="inv-dash-001-inventory-dashboard">[INV-DASH-001] Inventory Dashboard</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/inventory/dashboard</code></p>
 <p>Cards Total Items, Stock Value, Low Stock, Pending PRs, Open POs, Pending GRNs, Open Transfers, Unposted Stock Documents; tables Low Stock Alerts, Warehouse Stock Summary, Recent Stock Movement; buttons + Purchase Request, + Goods Receipt, Full Report, Stock On Hand, Open Stock Ledger. Permission: Inventory Dashboard — view.</p>
 <h3 id="inv-item-001--004-materials--items">[INV-ITEM-001 … 004] Materials / Items</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/inventory/items</code> (INV-ITEM-001) · <code>https://seera.tech-brit.co.uk/admin/inventory/items/create</code> (INV-ITEM-002) · <code>https://seera.tech-brit.co.uk/admin/inventory/items/{id}</code> (INV-ITEM-003) · <code>https://seera.tech-brit.co.uk/admin/inventory/items/{id}/edit</code> (INV-ITEM-004)</p>
 <p>Purpose:
 The material master.</p>
 <p>Navigation:
@@ -2669,10 +2725,13 @@ Items — create / view / edit.</p>
 </table>
 <p>Buttons: Save / Update, Cancel. Delete deactivates an item that has stock or history. Details show Stock By Warehouse (on hand, reserved, available, average cost, value) and Recent Stock Movement.</p>
 <h3 id="inv-cat-001--003-item-categories-and-inv-unit-001--003-units">[INV-CAT-001 … 003] Item Categories and [INV-UNIT-001 … 003] Units</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/inventory/categories</code> (INV-CAT-001) · <code>https://seera.tech-brit.co.uk/admin/inventory/categories/create</code> (INV-CAT-002) · <code>https://seera.tech-brit.co.uk/admin/inventory/categories/{id}/edit</code> (INV-CAT-003) · <code>https://seera.tech-brit.co.uk/admin/inventory/units</code> (INV-UNIT-001) · <code>https://seera.tech-brit.co.uk/admin/inventory/units/create</code> (INV-UNIT-002) · <code>https://seera.tech-brit.co.uk/admin/inventory/units/{id}/edit</code> (INV-UNIT-003)</p>
 <p>Categories: Category Code *, Category Name *, Parent Category, Linked Inventory Account, Linked Expense Account, Status *. Units: Unit Code *, Unit Name *, Allows Decimal, Status *. Buttons: Save / Update, Cancel.</p>
 <h3 id="inv-stk-001-stock-on-hand-and-inv-led-001-stock-ledger">[INV-STK-001] Stock On Hand and [INV-LED-001] Stock Ledger</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/inventory/stock</code> (INV-STK-001) · <code>https://seera.tech-brit.co.uk/admin/inventory/stock-ledger</code> (INV-LED-001)</p>
 <p>Stock On Hand: cards (Total Stock Value, Total Quantity, Stocked Items, Low Stock Rows), Warehouse Stock Summary, and the rows (Item, Project / Site, On Hand, Reserved, Available, Reorder, Avg Cost, Status) with a low-stock filter. Stock Ledger: every movement (Date, Reference, Movement, Item, Warehouse, In Qty, Out Qty, Balance, Unit Cost, Value, Project / Site) with filters. Permissions: Warehouse Stock — view; Stock Ledger — view.</p>
 <h3 id="inv-pr-001--004-purchase-requests">[INV-PR-001 … 004] Purchase Requests</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/inventory/purchase-requests</code> (INV-PR-001) · <code>https://seera.tech-brit.co.uk/admin/inventory/purchase-requests/create</code> (INV-PR-002) · <code>https://seera.tech-brit.co.uk/admin/inventory/purchase-requests/{id}</code> (INV-PR-003) · <code>https://seera.tech-brit.co.uk/admin/inventory/purchase-requests/{id}/edit</code> (INV-PR-004)</p>
 <p>Purpose:
 Ask for materials to be bought.</p>
 <p>Navigation:
@@ -2682,6 +2741,7 @@ Purchase Requests — create / view / edit; approve / reject for the decision.</
 <p>Fields: Request Date *, Required Date, Priority *, Project, Site, Deliver To Warehouse, Status *, Reason, and lines Item *, Description, Quantity *, Unit, Est. Unit Cost, Budget Line (free text). Buttons: Save / Update, Cancel; on details <strong>Approve</strong>, <strong>Reject Request</strong> (with reason), Edit, <strong>Create Purchase Order</strong> (approved requests).</p>
 <p>Statuses: draft → pending → approved / rejected → converted (when a PO is created from it).</p>
 <h3 id="inv-po-001--004-purchase-orders">[INV-PO-001 … 004] Purchase Orders</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/inventory/purchase-orders</code> (INV-PO-001) · <code>https://seera.tech-brit.co.uk/admin/inventory/purchase-orders/create</code> (INV-PO-002) · <code>https://seera.tech-brit.co.uk/admin/inventory/purchase-orders/{id}</code> (INV-PO-003) · <code>https://seera.tech-brit.co.uk/admin/inventory/purchase-orders/{id}/edit</code> (INV-PO-004)</p>
 <p>Purpose:
 Order materials from a supplier.</p>
 <p>Navigation:
@@ -2761,6 +2821,7 @@ Purchase Orders — create / view / edit; approve for Approve Order.</p>
 <p>Buttons: Save / Update, Cancel; on details <strong>Approve Order</strong>, Upload, Remove (quotation), Edit, <strong>Create Goods Receipt</strong> (approved or partially received orders).</p>
 <p>Statuses: draft → approved → partially_received → received. Received quantity per line is updated by posted goods receipts.</p>
 <h3 id="inv-grn-001--004-goods-receipt-notes">[INV-GRN-001 … 004] Goods Receipt Notes</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/inventory/goods-receipts</code> (INV-GRN-001) · <code>https://seera.tech-brit.co.uk/admin/inventory/goods-receipts/create</code> (INV-GRN-002) · <code>https://seera.tech-brit.co.uk/admin/inventory/goods-receipts/{id}</code> (INV-GRN-003) · <code>https://seera.tech-brit.co.uk/admin/inventory/goods-receipts/{id}/edit</code> (INV-GRN-004)</p>
 <p>Purpose:
 Confirm that goods arrived and put them into stock.</p>
 <p>Who uses it:
@@ -2835,26 +2896,31 @@ Stock and the stock ledger increase by the accepted quantity at the unit cost; t
 <li>Expecting the supplier's balance to change at receipt time: it changes when the bill is approved.</li>
 </ul>
 <h3 id="inv-iss-001--004-stock-issues">[INV-ISS-001 … 004] Stock Issues</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/inventory/stock-issues</code> (INV-ISS-001) · <code>https://seera.tech-brit.co.uk/admin/inventory/stock-issues/create</code> (INV-ISS-002) · <code>https://seera.tech-brit.co.uk/admin/inventory/stock-issues/{id}</code> (INV-ISS-003) · <code>https://seera.tech-brit.co.uk/admin/inventory/stock-issues/{id}/edit</code> (INV-ISS-004)</p>
 <p>Purpose:
 Take materials out of a warehouse for a project or site.</p>
 <p>Fields: Issue From Warehouse *, Issue Date *, Issue To Project, Issue To Site, Purpose, lines Item *, Quantity *. Buttons: Save / Update, Cancel; on details <strong>Post Issue</strong>, Edit (draft).</p>
 <p>What happens after Post Issue:
 Stock decreases at the current average cost; the entry Dr Material Expense (or the item's expense account) / Cr Inventory Asset is posted with the project and site; the project cost report and the material consumption report include it. If any line has insufficient stock the whole issue is refused.</p>
 <h3 id="inv-trf-001--004-stock-transfers">[INV-TRF-001 … 004] Stock Transfers</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/inventory/stock-transfers</code> (INV-TRF-001) · <code>https://seera.tech-brit.co.uk/admin/inventory/stock-transfers/create</code> (INV-TRF-002) · <code>https://seera.tech-brit.co.uk/admin/inventory/stock-transfers/{id}</code> (INV-TRF-003) · <code>https://seera.tech-brit.co.uk/admin/inventory/stock-transfers/{id}/edit</code> (INV-TRF-004)</p>
 <p>Fields: Transfer Date *, From Warehouse *, To Warehouse *, Notes, lines Item *, Quantity *. Buttons: Save / Update, Cancel; <strong>Dispatch Transfer</strong> (stock leaves the source), <strong>Receive Transfer</strong> (stock enters the destination at the dispatched cost), Edit (draft), Open Stock Ledger.</p>
 <p>Statuses: draft → dispatched → received. No accounting entry is created (stock moves inside the company).</p>
 <p>Important:
 Receive needs the Stock Transfers — receive right. The standard roles delivered with the system do not hold it yet, so a Super Admin receives transfers until the roles are updated.</p>
 <h3 id="inv-adj-001--004-stock-adjustments">[INV-ADJ-001 … 004] Stock Adjustments</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/inventory/stock-adjustments</code> (INV-ADJ-001) · <code>https://seera.tech-brit.co.uk/admin/inventory/stock-adjustments/create</code> (INV-ADJ-002) · <code>https://seera.tech-brit.co.uk/admin/inventory/stock-adjustments/{id}</code> (INV-ADJ-003) · <code>https://seera.tech-brit.co.uk/admin/inventory/stock-adjustments/{id}/edit</code> (INV-ADJ-004)</p>
 <p>Fields: Warehouse *, Item *, Adjustment Date *, Counted Quantity *, Reason. Buttons: Save / Update, Cancel; <strong>Approve</strong> then <strong>Post Adjustment</strong>, Edit (draft).</p>
 <p>What happens after Post Adjustment:
 The on-hand quantity becomes the counted quantity (re-read at posting time); a loss posts Dr Inventory Adjustment Expense / Cr Inventory Asset, a gain the opposite.</p>
 <h3 id="inv-rep-001--005-inventory-reports">[INV-REP-001 … 005] Inventory Reports</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/inventory/reports</code> (INV-REP-001) · <code>https://seera.tech-brit.co.uk/admin/inventory/reports/stock-valuation</code> (INV-REP-002) · <code>https://seera.tech-brit.co.uk/admin/inventory/reports/low-stock</code> (INV-REP-003) · <code>https://seera.tech-brit.co.uk/admin/inventory/reports/project-consumption</code> (INV-REP-004) · <code>https://seera.tech-brit.co.uk/admin/inventory/reports/movement</code> (INV-REP-005)</p>
 <p>Stock Valuation, Low Stock, Project Material Consumption and Stock Movement, each with filters and an <strong>Export PDF</strong> button that uses the browser's print function. There is no CSV export for inventory reports yet. Permission: Inventory Reports — view.</p>
 <hr />
 <h2 id="11-projects">11. Projects</h2>
 <p>What exists today is the <strong>project master</strong> and the related masters. There is no project dashboard, budget lines, milestone or site-expense screen yet (chapter 20).</p>
 <h3 id="mst-prj-001--004-projects">[MST-PRJ-001 … 004] Projects</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/projects</code> (MST-PRJ-001) · <code>https://seera.tech-brit.co.uk/admin/master/projects/create</code> (MST-PRJ-002) · <code>https://seera.tech-brit.co.uk/admin/master/projects/{id}</code> (MST-PRJ-003) · <code>https://seera.tech-brit.co.uk/admin/master/projects/{id}/edit</code> (MST-PRJ-004)</p>
 <p>Purpose:
 Define a project: client, manager, dates, budget amount, branch, classification.</p>
 <p>Who uses it:
@@ -2943,6 +3009,7 @@ Projects — create / view / edit.</p>
 <p>Buttons: Save / Update, Cancel. The list also offers <strong>Sites</strong> per project and <strong>Classifications</strong>.</p>
 <p>Project Details (MST-PRJ-003) shows Project Information, the sites with geo-fence, employees whose project is this one, suppliers for this project and warehouses in this project, with <strong>+ Add Location</strong> and Edit Project. A project with sites or warehouses cannot be deleted.</p>
 <h3 id="mst-site-001--004-locations-sites">[MST-SITE-001 … 004] Locations (Sites)</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/master/sites</code> (MST-SITE-001) · <code>https://seera.tech-brit.co.uk/admin/master/sites/create</code> (MST-SITE-002) · <code>https://seera.tech-brit.co.uk/admin/master/sites/{id}</code> (MST-SITE-003) · <code>https://seera.tech-brit.co.uk/admin/master/sites/{id}/edit</code> (MST-SITE-004)</p>
 <p>Purpose:
 A physical site of a project, with its geo-fence for future attendance checks.</p>
 <p>Navigation:
@@ -3023,6 +3090,7 @@ Sites — create / view / edit.</p>
 <hr />
 <h2 id="12-marketing">12. Marketing</h2>
 <h3 id="mkt-001-leads--visits-mkt-002-new-lead-mkt-004-edit-lead">[MKT-001] Leads &amp; Visits, [MKT-002] New Lead, [MKT-004] Edit Lead</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/marketing/leads</code> (MKT-001) · <code>https://seera.tech-brit.co.uk/admin/marketing/leads/create</code> (MKT-002) · <code>https://seera.tech-brit.co.uk/admin/marketing/leads/{id}/edit</code> (MKT-004)</p>
 <p>Purpose:
 Track prospects and the visits made to them.</p>
 <p>Who uses it:
@@ -3096,13 +3164,16 @@ Marketing — create / view / edit.</p>
 </table>
 <p>Buttons: Save / Update, Cancel, Back to Leads.</p>
 <h3 id="mkt-003-lead-details-visits-convert">[MKT-003] Lead (details, visits, convert)</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/marketing/leads/{id}</code></p>
 <p>What you see:
 Lead Information, the visits list, and a <strong>Record Visit</strong> form (Visit Date *, Visit Time, Location, Person Met *, Their Title, Outcome *, Next Follow-up, Next Action, Remarks) with <strong>Save Visit</strong>. <strong>Convert to Customer</strong> creates the customer record from the lead once and links it; a converted lead shows the customer.</p>
 <h3 id="mkt-005-visit-report">[MKT-005] Visit Report</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/marketing/report</code></p>
 <p>Filters by period, sales person and outcome; cards Clients Visited, Follow-ups Scheduled, Deals Won; rows Date / Time, Client, Location, Person Met, Visited By, Outcome, Next Follow-up, Remarks; <strong>Export Excel (CSV)</strong> needs Marketing — export.</p>
 <hr />
 <h2 id="13-activity-logs--audit">13. Activity Logs / Audit</h2>
 <h3 id="adm-020-activity-logs">[ADM-020] Activity Logs</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/activity-logs</code></p>
 <p>Purpose:
 Who did what, when. Every create, update, approve, post, pay, receive, reopen and deactivate writes a line.</p>
 <p>Who uses it:
@@ -3176,8 +3247,10 @@ The Old Value and New Value columns are filled only for a few administrative ent
 </tbody>
 </table>
 <h3 id="fin-zat-001-zatca-e-invoicing-local-records">[FIN-ZAT-001] ZATCA E-Invoicing (local records)</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/zatca</code></p>
 <p>Cards Cleared, Pending Clearance, Failed, Draft (local statuses); filters; table Invoice, UUID, Customer, Issue Date, QR, XML, Signature, Clearance, ZATCA Response, Retries; <strong>View</strong> and <strong>Retry</strong> (failed records; ZATCA Invoicing — retry). Permission: ZATCA Invoicing — view.</p>
 <h3 id="fin-zat-002-zatca-record">[FIN-ZAT-002] ZATCA Record</h3>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/zatca/{id}</code></p>
 <p>The record's fields, the QR payload and the local hash, with <strong>Retry Clearance</strong> and <strong>Open Invoice</strong>. Reopening an invoice cancels its local record.</p>
 <p>In the Customer workspace the tab is called <strong>Local ZATCA Records</strong> and every status is marked &quot;local, not verified live&quot;.</p>
 <hr />

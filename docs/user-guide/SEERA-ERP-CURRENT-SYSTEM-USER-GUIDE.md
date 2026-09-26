@@ -118,6 +118,8 @@ If you change something and then try to leave the page, Seera shows a dialog wit
 
 ### [ADM-001] Login
 
+Web address: `https://seera.tech-brit.co.uk/login`
+
 Purpose:
 Sign in to Seera with your email address and password.
 
@@ -163,6 +165,8 @@ ADM-002 Forgot Password, ADM-004 Set Your Password, ADM-010 Dashboard.
 
 ### [ADM-002] Forgot Password and [ADM-003] Reset Password
 
+Web address: `https://seera.tech-brit.co.uk/forgot-password` (ADM-002) · `https://seera.tech-brit.co.uk/reset-password/{token}` (ADM-003)
+
 Purpose:
 Get a link by email to choose a new password.
 
@@ -197,6 +201,8 @@ ADM-001 Login.
 
 ### [ADM-004] Set Your Password (first sign-in)
 
+Web address: `https://seera.tech-brit.co.uk/admin/set-password`
+
 Purpose:
 Replace the temporary password with your own the first time you sign in.
 
@@ -229,12 +235,15 @@ Buttons:
 - Lists have a **filter bar** (search box and drop-downs) and a **Reset** button. Lists show 10 rows per page.
 - **View** opens a read-only page. **Edit** or **Edit / Manage** opens the form or the workspace. **Delete** or **Deactivate** asks for confirmation first.
 - Menu items marked "Coming Soon" open an information page only (chapter 20).
+- Every screen in this guide shows its **Web address** under the heading. `{id}` stands for the record number you see in the browser's address bar after opening a record from its list (for example `/admin/master/suppliers/14/edit`). The Screen Index lists all addresses in one table.
 
 ---
 
 ## 3. Dashboard
 
 ### [ADM-010] Dashboard
+
+Web address: `https://seera.tech-brit.co.uk/admin/dashboard`
 
 Purpose:
 A quick picture of the company: staff, roles, projects, sites, recent activity.
@@ -269,6 +278,8 @@ How access works in Seera:
 
 ### [USR-001] Users List
 
+Web address: `https://seera.tech-brit.co.uk/admin/users`
+
 Purpose:
 Find, open, edit and deactivate user accounts.
 
@@ -288,6 +299,8 @@ Related screens:
 USR-002, USR-003, USR-004.
 
 ### [USR-002] Add User
+
+Web address: `https://seera.tech-brit.co.uk/admin/users/create`
 
 Purpose:
 Create a sign-in account, optionally from an existing employee.
@@ -347,12 +360,16 @@ USR-001, USR-004, HR-EMP-004, ROL-002.
 
 ### [USR-003] User Details and [USR-004] Edit User
 
+Web address: `https://seera.tech-brit.co.uk/admin/users/{id}` (USR-003) · `https://seera.tech-brit.co.uk/admin/users/{id}/edit` (USR-004)
+
 USR-003 is read-only: an Access Summary (Employee ID, Primary Role, Parent Role, Access Scope, Department, Designation, Branch, Contract Type, Classification, Iqama Number, Mobile App Access, Two Factor Auth, Last Login) and the user's Recent Activity. USR-004 is the same form as USR-002 with the same buttons.
 
 Important:
 Saving the Edit User form sets the user's primary role. Extra roles given on Assign Users (ROL-007) are replaced by that primary role when the user form is saved. Reassign them afterwards on ROL-007 if needed.
 
 ### [ROL-001] Roles List, [ROL-002] Create Role, [ROL-003] Role Details, [ROL-004] Edit Role
+
+Web address: `https://seera.tech-brit.co.uk/admin/roles` (ROL-001) · `https://seera.tech-brit.co.uk/admin/roles/create` (ROL-002) · `https://seera.tech-brit.co.uk/admin/roles/{id}` (ROL-003) · `https://seera.tech-brit.co.uk/admin/roles/{id}/edit` (ROL-004)
 
 Purpose:
 Define what each job may do.
@@ -402,6 +419,8 @@ ROL-005 Permission Matrix, ROL-007 Assign Users.
 
 ### [ROL-005] Permission Matrix
 
+Web address: `https://seera.tech-brit.co.uk/admin/roles/permission-matrix`
+
 Purpose:
 Edit the permissions of one role across all modules on one page.
 
@@ -415,6 +434,8 @@ Buttons: Apply (load the role), Select all visible, Clear visible, Save Permissi
 
 ### [ROL-006] Role Hierarchy
 
+Web address: `https://seera.tech-brit.co.uk/admin/roles/hierarchy`
+
 Purpose:
 See the tree of roles and the selected role's details.
 
@@ -423,6 +444,8 @@ Status: **PARTIAL**. The tree and the details card are real; the "Hierarchy Rule
 Buttons: Add Child Role (opens ROL-002 with the parent preset), Edit Selected Role.
 
 ### [ROL-007] Assign Users to Role
+
+Web address: `https://seera.tech-brit.co.uk/admin/roles/assign-users`
 
 Purpose:
 Move users into or out of a role, with an optional temporary access window.
@@ -441,6 +464,8 @@ Temporary dates are applied to every user you submit in that save, and the role 
 
 ### [ROL-008] Approval Workflows, [ROL-009] Create, [ROL-010] Edit
 
+Web address: `https://seera.tech-brit.co.uk/admin/roles/approval-workflows` (ROL-008) · `https://seera.tech-brit.co.uk/admin/roles/approval-workflows/create` (ROL-009) · `https://seera.tech-brit.co.uk/admin/roles/approval-workflows/{id}/edit` (ROL-010)
+
 Purpose:
 Record who should approve what, step by step.
 
@@ -457,6 +482,8 @@ Master Setup holds the records every other module refers to. Set these up first,
 Most master forms still use the older button set (**Save** / **Update** and **Cancel**). Suppliers and Customers use the full standard (chapters 7 and 8).
 
 ### [MST-COM-001] Company Profile
+
+Web address: `https://seera.tech-brit.co.uk/admin/master/company-profile`
 
 Purpose:
 Company identity used on screens and, later, on invoices.
@@ -490,6 +517,8 @@ Buttons: Save Company Profile, Cancel.
 
 ### [MST-ORG-001] Organization Structure
 
+Web address: `https://seera.tech-brit.co.uk/admin/master/organization`
+
 Purpose:
 One hub for Branches, Departments and Designations. Each card shows the recent records, an **+ Add** dialog and an **Open full list** link.
 
@@ -503,6 +532,8 @@ Permission required:
 View on any of Branches, Departments or Designations.
 
 ### Branches [MST-BR-001 … 004], Departments [MST-DEP-001 … 004], Designations [MST-DES-001 … 004]
+
+Web address: `https://seera.tech-brit.co.uk/admin/master/branches` (MST-BR-001) · `https://seera.tech-brit.co.uk/admin/master/branches/create` (MST-BR-002) · `https://seera.tech-brit.co.uk/admin/master/branches/{id}` (MST-BR-003) · `https://seera.tech-brit.co.uk/admin/master/branches/{id}/edit` (MST-BR-004) · `https://seera.tech-brit.co.uk/admin/master/departments` (MST-DEP-001) · `https://seera.tech-brit.co.uk/admin/master/departments/create` (MST-DEP-002) · `https://seera.tech-brit.co.uk/admin/master/departments/{id}` (MST-DEP-003) · `https://seera.tech-brit.co.uk/admin/master/departments/{id}/edit` (MST-DEP-004) · `https://seera.tech-brit.co.uk/admin/master/designations` (MST-DES-001) · `https://seera.tech-brit.co.uk/admin/master/designations/create` (MST-DES-002) · `https://seera.tech-brit.co.uk/admin/master/designations/{id}` (MST-DES-003) · `https://seera.tech-brit.co.uk/admin/master/designations/{id}/edit` (MST-DES-004)
 
 Each has a List (search, cards, table with View / Edit / Delete), an Add form, a Details page and an Edit form.
 
@@ -521,9 +552,13 @@ Branches, departments and designations can also be created without leaving the U
 
 ### Projects [MST-PRJ-001 … 005] and Locations [MST-SITE-001 … 004]
 
+Web address: `https://seera.tech-brit.co.uk/admin/master/projects` (MST-PRJ-001) · `https://seera.tech-brit.co.uk/admin/master/projects/create` (MST-PRJ-002) · `https://seera.tech-brit.co.uk/admin/master/projects/{id}` (MST-PRJ-003) · `https://seera.tech-brit.co.uk/admin/master/projects/{id}/edit` (MST-PRJ-004) · `https://seera.tech-brit.co.uk/admin/master/project-classifications` (MST-PRJ-005) · `https://seera.tech-brit.co.uk/admin/master/sites` (MST-SITE-001) · `https://seera.tech-brit.co.uk/admin/master/sites/create` (MST-SITE-002) · `https://seera.tech-brit.co.uk/admin/master/sites/{id}` (MST-SITE-003) · `https://seera.tech-brit.co.uk/admin/master/sites/{id}/edit` (MST-SITE-004)
+
 Described in chapter 11.
 
 ### Warehouses [MST-WH-001 … 004]
+
+Web address: `https://seera.tech-brit.co.uk/admin/master/warehouses` (MST-WH-001) · `https://seera.tech-brit.co.uk/admin/master/warehouses/create` (MST-WH-002) · `https://seera.tech-brit.co.uk/admin/master/warehouses/{id}` (MST-WH-003) · `https://seera.tech-brit.co.uk/admin/master/warehouses/{id}/edit` (MST-WH-004)
 
 Purpose:
 Physical stores that hold stock. Stock always belongs to a warehouse.
@@ -554,6 +589,8 @@ Buttons: Save / Update, Cancel.
 
 ### Expense Categories [MST-EXP-001 … 004]
 
+Web address: `https://seera.tech-brit.co.uk/admin/master/expense-categories` (MST-EXP-001) · `https://seera.tech-brit.co.uk/admin/master/expense-categories/create` (MST-EXP-002) · `https://seera.tech-brit.co.uk/admin/master/expense-categories/{id}` (MST-EXP-003) · `https://seera.tech-brit.co.uk/admin/master/expense-categories/{id}/edit` (MST-EXP-004)
+
 Purpose:
 Categories used on supplier bill lines (and reserved for the future site expense screen).
 
@@ -579,6 +616,8 @@ Buttons: Save / Update, Cancel.
 
 ### Payment Terms [SUP-005] and Project Classifications [MST-PRJ-005]
 
+Web address: `https://seera.tech-brit.co.uk/admin/master/payment-terms` (SUP-005) · `https://seera.tech-brit.co.uk/admin/master/project-classifications` (MST-PRJ-005)
+
 Small lists with an inline "Add" section and inline Save / Delete per row. Payment terms (name and days from bill date) decide the due date of supplier bills saved without one. Project classifications label projects.
 
 ---
@@ -586,6 +625,8 @@ Small lists with an inline "Add" section and inline Save / Delete per row. Payme
 ## 6. HR & Payroll
 
 ### [HR-DASH-001] HR Dashboard
+
+Web address: `https://seera.tech-brit.co.uk/admin/hr/dashboard`
 
 Purpose:
 Today's HR picture and the queues that need action.
@@ -607,6 +648,8 @@ The attendance summary is for today only. There is no monthly attendance report 
 
 ### [HR-EMP-001] Employees List
 
+Web address: `https://seera.tech-brit.co.uk/admin/hr/employees`
+
 Purpose:
 Find employees and open View or the Employee Workspace.
 
@@ -626,6 +669,8 @@ Important:
 Employees are deactivated, never deleted, so payroll history stays intact.
 
 ### [HR-EMP-002] Add Employee
+
+Web address: `https://seera.tech-brit.co.uk/admin/hr/employees/create`
 
 Purpose:
 Create an employee record with personal, employment, payroll, document and access details in one form.
@@ -686,6 +731,8 @@ HR-EMP-004 Employee Workspace, HR-SAL-001, USR-002.
 
 ### [HR-EMP-003] Employee View (read-only)
 
+Web address: `https://seera.tech-brit.co.uk/admin/hr/employees/{id}`
+
 Purpose:
 Read everything about one employee without changing anything.
 
@@ -699,6 +746,8 @@ What you see:
 Employment Information, Personal & Documents, Payroll Information, Documents, Recent Attendance, Leave Data with the annual balance, Overtime, Salary Structures, Payroll History, and cards for Attendance This Month and Pending Leave / Overtime. A "+ New Structure From Profile" link opens the salary structure form when the profile amounts no longer match the active structure.
 
 ### [HR-EMP-004] Employee Workspace (Edit)
+
+Web address: `https://seera.tech-brit.co.uk/admin/hr/employees/{id}/edit`
 
 Purpose:
 Manage the employee and all related records from one page.
@@ -737,6 +786,8 @@ Important:
 
 ### [HR-DOC-001] Employee Documents / IQAMA
 
+Web address: `https://seera.tech-brit.co.uk/admin/hr/documents`
+
 Purpose:
 Register of all employee documents with expiry status.
 
@@ -754,12 +805,16 @@ Documents are added and renewed on the Employee form (section D). This register 
 
 ### [HR-SHF-001 … 003] Shifts
 
+Web address: `https://seera.tech-brit.co.uk/admin/hr/shifts` (HR-SHF-001) · `https://seera.tech-brit.co.uk/admin/hr/shifts/create` (HR-SHF-002) · `https://seera.tech-brit.co.uk/admin/hr/shifts/{id}/edit` (HR-SHF-003)
+
 Fields: Shift Name *, Shift Code *, Status *, Start Time *, End Time *, Break (minutes) *, Grace (minutes) *, Overtime After (minutes) *. Example: Day Shift, DAY, 07:00–16:00, break 60, grace 15, overtime after 540.
 
 Important:
 Grace and overtime-after minutes are stored but are not yet used to calculate late minutes or overtime automatically; those are typed on the attendance record.
 
 ### [HR-ATT-001 … 003] Attendance
+
+Web address: `https://seera.tech-brit.co.uk/admin/hr/attendance` (HR-ATT-001) · `https://seera.tech-brit.co.uk/admin/hr/attendance/create` (HR-ATT-002) · `https://seera.tech-brit.co.uk/admin/hr/attendance/{id}/edit` (HR-ATT-003)
 
 Purpose:
 Record who was present, late or absent.
@@ -789,6 +844,8 @@ Buttons: Save / Update, Cancel. The list offers Edit and Delete per row.
 
 ### [HR-LV-001 … 004] Leaves
 
+Web address: `https://seera.tech-brit.co.uk/admin/hr/leaves` (HR-LV-001) · `https://seera.tech-brit.co.uk/admin/hr/leaves/create` (HR-LV-002) · `https://seera.tech-brit.co.uk/admin/hr/leaves/{id}` (HR-LV-003) · `https://seera.tech-brit.co.uk/admin/hr/leaves/{id}/edit` (HR-LV-004)
+
 Purpose:
 Request, approve or reject leave and keep the balance.
 
@@ -816,9 +873,13 @@ Status becomes approved and the days count against the annual entitlement shown 
 
 ### [HR-OT-001 … 003] Overtime
 
+Web address: `https://seera.tech-brit.co.uk/admin/hr/overtime` (HR-OT-001) · `https://seera.tech-brit.co.uk/admin/hr/overtime/create` (HR-OT-002) · `https://seera.tech-brit.co.uk/admin/hr/overtime/{id}/edit` (HR-OT-003)
+
 Fields: Employee *, Date *, Attendance Record (optional link), Hours *, Hourly Rate (SAR) *, Status *, Reason. Amount = hours × rate. **Approve** is a separate button; only approved overtime enters payroll.
 
 ### [HR-SAL-001 … 004] Salary Structures
+
+Web address: `https://seera.tech-brit.co.uk/admin/hr/salary-structures` (HR-SAL-001) · `https://seera.tech-brit.co.uk/admin/hr/salary-structures/create` (HR-SAL-002) · `https://seera.tech-brit.co.uk/admin/hr/salary-structures/{id}` (HR-SAL-003) · `https://seera.tech-brit.co.uk/admin/hr/salary-structures/{id}/edit` (HR-SAL-004)
 
 Purpose:
 Effective-dated salary definition used by payroll.
@@ -829,6 +890,8 @@ Important:
 Create a new structure for a change; do not edit history. The employee profile amounts and the active structure are compared and Seera warns when they differ.
 
 ### [HR-PAY-001 … 004] Payroll
+
+Web address: `https://seera.tech-brit.co.uk/admin/hr/payroll` (HR-PAY-001) · `https://seera.tech-brit.co.uk/admin/hr/payroll/create` (HR-PAY-002) · `https://seera.tech-brit.co.uk/admin/hr/payroll/{id}` (HR-PAY-003) · `https://seera.tech-brit.co.uk/admin/hr/payroll/{id}/edit` (HR-PAY-004)
 
 Purpose:
 Calculate a month's pay for a set of employees.
@@ -855,6 +918,8 @@ Buttons: Save (draft), then on the details page **Process Payroll** (builds the 
 Statuses: draft → processed → approved. Present and leave days are counted from attendance but do not change pay in the current system.
 
 ### [HR-EOS-001 … 004] End of Service
+
+Web address: `https://seera.tech-brit.co.uk/admin/hr/eosb` (HR-EOS-001) · `https://seera.tech-brit.co.uk/admin/hr/eosb/create` (HR-EOS-002) · `https://seera.tech-brit.co.uk/admin/hr/eosb/{id}` (HR-EOS-003) · `https://seera.tech-brit.co.uk/admin/hr/eosb/{id}/edit` (HR-EOS-004)
 
 Purpose:
 Calculate the end-of-service benefit (Saudi Labour Law bands) and approve the settlement.
@@ -887,6 +952,8 @@ Customer
 
 ### [CUS-001] Customers List
 
+Web address: `https://seera.tech-brit.co.uk/admin/master/customers`
+
 Purpose:
 Find customers and open View or the workspace.
 
@@ -903,6 +970,8 @@ What you see:
 Cards (Total Customers, Active Customers, Receivable Balance, Linked Projects), filters (search by name, code or VAT number; type; status), the table (Customer Code, Customer Name, Rating, Overdue, Contact Person, Total Projects, Receivable, Status) and per row **View**, **Edit / Manage** (only with Customers — edit) and **Delete** (only with Customers — delete; refused while the customer has projects).
 
 ### [CUS-002] Add Customer
+
+Web address: `https://seera.tech-brit.co.uk/admin/master/customers/create`
 
 Purpose:
 Create a customer with its first contacts and a note in one go.
@@ -959,6 +1028,8 @@ CUS-003, CUS-004, FIN-AR-002.
 
 ### [CUS-003] Customer View (read-only)
 
+Web address: `https://seera.tech-brit.co.uk/admin/master/customers/{id}`
+
 Purpose:
 Read the customer and all its related information without any risk of changing data.
 
@@ -975,6 +1046,8 @@ What you see:
 The persistent header (code, name, status, type, rating, VAT and CR numbers, contact, payment channel and credit limit, receivable account, projects count, and, for finance users, outstanding receivable, open invoices and received to date). A tab strip for jumping to sections. The Customer Information table, then each permitted section with its latest 5 rows and a **View all** link. There are no forms and no save buttons.
 
 ### [CUS-004] Customer Workspace (Edit / Manage)
+
+Web address: `https://seera.tech-brit.co.uk/admin/master/customers/{id}/edit`
 
 Purpose:
 Manage the customer and everything related to it from one page.
@@ -1043,6 +1116,8 @@ Supplier
 
 ### [SUP-001] Suppliers List
 
+Web address: `https://seera.tech-brit.co.uk/admin/master/suppliers`
+
 Purpose:
 Find suppliers and open View or the workspace.
 
@@ -1062,6 +1137,8 @@ Important:
 Suppliers are deactivated, never deleted: bills, payments, orders and receipts must stay for audit and VAT.
 
 ### [SUP-002] Add Supplier
+
+Web address: `https://seera.tech-brit.co.uk/admin/master/suppliers/create`
 
 Purpose:
 Create a supplier with its commercial, banking and project links.
@@ -1105,6 +1182,8 @@ Common mistakes:
 
 ### [SUP-003] Supplier View (read-only)
 
+Web address: `https://seera.tech-brit.co.uk/admin/master/suppliers/{id}`
+
 Purpose:
 Read the supplier and its related records safely.
 
@@ -1118,6 +1197,8 @@ What you see:
 The header (code, name, status, category, city, VAT and CR numbers, contact, payment terms and channel, payable account, projects count, and for finance users the outstanding payable and paid to date), a tab strip, the Supplier Information table, and each permitted section with the latest 5 rows and **View all**. No forms.
 
 ### [SUP-004] Supplier Workspace (Edit / Manage)
+
+Web address: `https://seera.tech-brit.co.uk/admin/master/suppliers/{id}/edit`
 
 Purpose:
 Manage the supplier and work with its orders, receipts, bills and payments from one page.
@@ -1175,6 +1256,8 @@ Accounting entries created by the normal workflow (all amounts from the training
 
 ### [FIN-DASH-001] Accounting Dashboard
 
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/dashboard`
+
 Purpose:
 The finance picture and the action queue.
 
@@ -1191,6 +1274,8 @@ What you see:
 Cards Cash in Hand, Bank Balance, Accounts Payable, Accounts Receivable, VAT Payable (all-time output minus input), Unposted Journals, ZATCA Failed Invoices, Monthly Revenue; tables Current month (revenue and expenses), Finance Action Queue (draft bills, draft invoices, unposted journals, failed ZATCA), supplier and customer balances by days overdue, VAT Summary, ZATCA Status Summary, Recent Journal Entries; buttons + Journal Entry, Financial Reports, Open (per queue), Open VAT, Open ZATCA, View All.
 
 ### [FIN-COA-001 … 004] Chart of Accounts
+
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/chart-of-accounts` (FIN-COA-001) · `https://seera.tech-brit.co.uk/admin/accounting/chart-of-accounts/create` (FIN-COA-002) · `https://seera.tech-brit.co.uk/admin/accounting/chart-of-accounts/{id}` (FIN-COA-003) · `https://seera.tech-brit.co.uk/admin/accounting/chart-of-accounts/{id}/edit` (FIN-COA-004)
 
 Purpose:
 The list of ledger accounts, as a tree.
@@ -1222,6 +1307,8 @@ Buttons: Cancel, Save, Save & new, Save & close. Delete on the list deactivates 
 Standard accounts used by the workflow: 1110 Cash in Hand, 1120 Bank Account, 1200 Accounts Receivable, 1300 Input VAT Receivable, 1400 Inventory Asset, 2100 Accounts Payable, 2150 Goods Received Not Invoiced, 2210 Output VAT, 2300 Salary Payable, 3100 Owner Equity, 4100 Project Revenue, 5200 Material Expense, 5600 Inventory Adjustment Expense.
 
 ### [FIN-JE-001 … 004] Journal Entries
+
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/journal-entries` (FIN-JE-001) · `https://seera.tech-brit.co.uk/admin/accounting/journal-entries/create` (FIN-JE-002) · `https://seera.tech-brit.co.uk/admin/accounting/journal-entries/{id}` (FIN-JE-003) · `https://seera.tech-brit.co.uk/admin/accounting/journal-entries/{id}/edit` (FIN-JE-004)
 
 Purpose:
 Record a manual, balanced accounting entry and post it to the ledger.
@@ -1262,6 +1349,8 @@ Common mistakes:
 
 ### [FIN-GL-001] General Ledger
 
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/general-ledger`
+
 Purpose:
 See every posted line, with an opening and a running balance.
 
@@ -1275,6 +1364,8 @@ What you see:
 Filters (account, cost center, project, site, source, from / to, posted only), cards Total Debit, Total Credit, Opening Balance, and the lines (Date, Voucher, Account, Description, Source, Cost Center, Debit, Credit, Balance). The Voucher opens the journal. Opening balance = the account's opening balance (company-level users only) plus all posted movement before the "from" date; the running balance continues across pages.
 
 ### [FIN-AP-001] Accounts Payable (Supplier Bills)
+
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/accounts-payable`
 
 Purpose:
 Register of supplier bills and the recent payments.
@@ -1292,6 +1383,8 @@ What you see:
 Cards Outstanding Payable, Overdue Bills, Draft Bills, Paid This Month; filters (search, supplier, status, dates); the bills table (Bill Number, Supplier, Bill Date, Due Date, Taxable, VAT, Total, Paid, Balance, Status) with **View**, **Approve** (drafts) and **Pay** (open bills) per row; Recent Supplier Payments.
 
 ### [FIN-AP-002] Add Supplier Bill and [FIN-AP-004] Edit Supplier Bill
+
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/accounts-payable/create` (FIN-AP-002) · `https://seera.tech-brit.co.uk/admin/accounting/accounts-payable/{id}/edit` (FIN-AP-004)
 
 Purpose:
 Enter a supplier's invoice, either against goods already received or as a direct service bill.
@@ -1345,6 +1438,8 @@ FIN-AP-003, INV-GRN-003, SUP-004, WF-010.
 
 ### [FIN-AP-003] Supplier Bill Details
 
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/accounts-payable/{id}`
+
 Purpose:
 Approve, pay, reopen or read a bill.
 
@@ -1373,6 +1468,8 @@ Statuses: draft → unpaid → partially_paid → paid. A second Approve on the 
 
 ### [FIN-AP-005] Record Supplier Payment
 
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/accounts-payable/{id}/payment`
+
 Purpose:
 Pay all or part of an open bill.
 
@@ -1400,6 +1497,8 @@ A journal Dr Accounts Payable / Cr Cash or Bank is posted, the bill's paid and b
 
 ### [FIN-AR-001 … 005] Accounts Receivable (Customer Invoices and Receipts)
 
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable` (FIN-AR-001) · `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/create` (FIN-AR-002) · `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/{id}` (FIN-AR-003) · `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/{id}/edit` (FIN-AR-004) · `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/{id}/receipt` (FIN-AR-005)
+
 These screens mirror Accounts Payable.
 
 Add Customer Invoice (FIN-AR-002) fields: Customer *, Invoice Number (generated when blank), Invoice Date * (not in the future), Due Date, VAT Rate (%) *, Project, Cost Center, Notes, and lines with Item / Description *, Qty, Unit Price, Revenue Account, Cost Center. Buttons: Cancel, Save, Save & new, Save & close.
@@ -1411,6 +1510,8 @@ Record Customer Receipt (FIN-AR-005) fields: Receipt Date *, Received Into (Bank
 Statuses: draft → unpaid → partially_paid → paid.
 
 ### [FIN-VAT-001] VAT Management and [FIN-VAT-002] VAT Period
+
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/vat` (FIN-VAT-001) · `https://seera.tech-brit.co.uk/admin/accounting/vat/{id}` (FIN-VAT-002)
 
 Purpose:
 Review the VAT return figures per quarter and finalize the period.
@@ -1442,9 +1543,13 @@ Important:
 
 ### [FIN-ZAT-001] ZATCA E-Invoicing and [FIN-ZAT-002] ZATCA Record
 
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/zatca` (FIN-ZAT-001) · `https://seera.tech-brit.co.uk/admin/accounting/zatca/{id}` (FIN-ZAT-002)
+
 Status: **FOUNDATION ONLY**. See chapter 14.
 
 ### [FIN-CC-001 … 004] Cost Centers
+
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/cost-centers` (FIN-CC-001) · `https://seera.tech-brit.co.uk/admin/accounting/cost-centers/create` (FIN-CC-002) · `https://seera.tech-brit.co.uk/admin/accounting/cost-centers/{id}` (FIN-CC-003) · `https://seera.tech-brit.co.uk/admin/accounting/cost-centers/{id}/edit` (FIN-CC-004)
 
 Purpose:
 Codes that tag journal lines, bills and invoices for cost reporting.
@@ -1455,6 +1560,8 @@ Important:
 Project cost reporting uses the project set on each line, not the cost center.
 
 ### [FIN-PR-001 … 004] Automatic Posting Rules
+
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/posting-rules` (FIN-PR-001) · `https://seera.tech-brit.co.uk/admin/accounting/posting-rules/create` (FIN-PR-002) · `https://seera.tech-brit.co.uk/admin/accounting/posting-rules/{id}` (FIN-PR-003) · `https://seera.tech-brit.co.uk/admin/accounting/posting-rules/{id}/edit` (FIN-PR-004)
 
 Purpose:
 One row per automatic journal event (Inventory Purchase, Stock Issued, Stock Adjusted, Bill Approved, Invoice Approved, Payment Recorded, Receipt Recorded, Payroll Approved, Site Expense Approved).
@@ -1476,9 +1583,13 @@ Fields: Source Module *, Trigger Event *, Cost Center Rule *, Debit Account, Cre
 
 ### [INV-DASH-001] Inventory Dashboard
 
+Web address: `https://seera.tech-brit.co.uk/admin/inventory/dashboard`
+
 Cards Total Items, Stock Value, Low Stock, Pending PRs, Open POs, Pending GRNs, Open Transfers, Unposted Stock Documents; tables Low Stock Alerts, Warehouse Stock Summary, Recent Stock Movement; buttons + Purchase Request, + Goods Receipt, Full Report, Stock On Hand, Open Stock Ledger. Permission: Inventory Dashboard — view.
 
 ### [INV-ITEM-001 … 004] Materials / Items
+
+Web address: `https://seera.tech-brit.co.uk/admin/inventory/items` (INV-ITEM-001) · `https://seera.tech-brit.co.uk/admin/inventory/items/create` (INV-ITEM-002) · `https://seera.tech-brit.co.uk/admin/inventory/items/{id}` (INV-ITEM-003) · `https://seera.tech-brit.co.uk/admin/inventory/items/{id}/edit` (INV-ITEM-004)
 
 Purpose:
 The material master.
@@ -1506,13 +1617,19 @@ Buttons: Save / Update, Cancel. Delete deactivates an item that has stock or his
 
 ### [INV-CAT-001 … 003] Item Categories and [INV-UNIT-001 … 003] Units
 
+Web address: `https://seera.tech-brit.co.uk/admin/inventory/categories` (INV-CAT-001) · `https://seera.tech-brit.co.uk/admin/inventory/categories/create` (INV-CAT-002) · `https://seera.tech-brit.co.uk/admin/inventory/categories/{id}/edit` (INV-CAT-003) · `https://seera.tech-brit.co.uk/admin/inventory/units` (INV-UNIT-001) · `https://seera.tech-brit.co.uk/admin/inventory/units/create` (INV-UNIT-002) · `https://seera.tech-brit.co.uk/admin/inventory/units/{id}/edit` (INV-UNIT-003)
+
 Categories: Category Code *, Category Name *, Parent Category, Linked Inventory Account, Linked Expense Account, Status *. Units: Unit Code *, Unit Name *, Allows Decimal, Status *. Buttons: Save / Update, Cancel.
 
 ### [INV-STK-001] Stock On Hand and [INV-LED-001] Stock Ledger
 
+Web address: `https://seera.tech-brit.co.uk/admin/inventory/stock` (INV-STK-001) · `https://seera.tech-brit.co.uk/admin/inventory/stock-ledger` (INV-LED-001)
+
 Stock On Hand: cards (Total Stock Value, Total Quantity, Stocked Items, Low Stock Rows), Warehouse Stock Summary, and the rows (Item, Project / Site, On Hand, Reserved, Available, Reorder, Avg Cost, Status) with a low-stock filter. Stock Ledger: every movement (Date, Reference, Movement, Item, Warehouse, In Qty, Out Qty, Balance, Unit Cost, Value, Project / Site) with filters. Permissions: Warehouse Stock — view; Stock Ledger — view.
 
 ### [INV-PR-001 … 004] Purchase Requests
+
+Web address: `https://seera.tech-brit.co.uk/admin/inventory/purchase-requests` (INV-PR-001) · `https://seera.tech-brit.co.uk/admin/inventory/purchase-requests/create` (INV-PR-002) · `https://seera.tech-brit.co.uk/admin/inventory/purchase-requests/{id}` (INV-PR-003) · `https://seera.tech-brit.co.uk/admin/inventory/purchase-requests/{id}/edit` (INV-PR-004)
 
 Purpose:
 Ask for materials to be bought.
@@ -1528,6 +1645,8 @@ Fields: Request Date *, Required Date, Priority *, Project, Site, Deliver To War
 Statuses: draft → pending → approved / rejected → converted (when a PO is created from it).
 
 ### [INV-PO-001 … 004] Purchase Orders
+
+Web address: `https://seera.tech-brit.co.uk/admin/inventory/purchase-orders` (INV-PO-001) · `https://seera.tech-brit.co.uk/admin/inventory/purchase-orders/create` (INV-PO-002) · `https://seera.tech-brit.co.uk/admin/inventory/purchase-orders/{id}` (INV-PO-003) · `https://seera.tech-brit.co.uk/admin/inventory/purchase-orders/{id}/edit` (INV-PO-004)
 
 Purpose:
 Order materials from a supplier.
@@ -1556,6 +1675,8 @@ Buttons: Save / Update, Cancel; on details **Approve Order**, Upload, Remove (qu
 Statuses: draft → approved → partially_received → received. Received quantity per line is updated by posted goods receipts.
 
 ### [INV-GRN-001 … 004] Goods Receipt Notes
+
+Web address: `https://seera.tech-brit.co.uk/admin/inventory/goods-receipts` (INV-GRN-001) · `https://seera.tech-brit.co.uk/admin/inventory/goods-receipts/create` (INV-GRN-002) · `https://seera.tech-brit.co.uk/admin/inventory/goods-receipts/{id}` (INV-GRN-003) · `https://seera.tech-brit.co.uk/admin/inventory/goods-receipts/{id}/edit` (INV-GRN-004)
 
 Purpose:
 Confirm that goods arrived and put them into stock.
@@ -1592,6 +1713,8 @@ Common mistakes:
 
 ### [INV-ISS-001 … 004] Stock Issues
 
+Web address: `https://seera.tech-brit.co.uk/admin/inventory/stock-issues` (INV-ISS-001) · `https://seera.tech-brit.co.uk/admin/inventory/stock-issues/create` (INV-ISS-002) · `https://seera.tech-brit.co.uk/admin/inventory/stock-issues/{id}` (INV-ISS-003) · `https://seera.tech-brit.co.uk/admin/inventory/stock-issues/{id}/edit` (INV-ISS-004)
+
 Purpose:
 Take materials out of a warehouse for a project or site.
 
@@ -1602,6 +1725,8 @@ Stock decreases at the current average cost; the entry Dr Material Expense (or t
 
 ### [INV-TRF-001 … 004] Stock Transfers
 
+Web address: `https://seera.tech-brit.co.uk/admin/inventory/stock-transfers` (INV-TRF-001) · `https://seera.tech-brit.co.uk/admin/inventory/stock-transfers/create` (INV-TRF-002) · `https://seera.tech-brit.co.uk/admin/inventory/stock-transfers/{id}` (INV-TRF-003) · `https://seera.tech-brit.co.uk/admin/inventory/stock-transfers/{id}/edit` (INV-TRF-004)
+
 Fields: Transfer Date *, From Warehouse *, To Warehouse *, Notes, lines Item *, Quantity *. Buttons: Save / Update, Cancel; **Dispatch Transfer** (stock leaves the source), **Receive Transfer** (stock enters the destination at the dispatched cost), Edit (draft), Open Stock Ledger.
 
 Statuses: draft → dispatched → received. No accounting entry is created (stock moves inside the company).
@@ -1611,12 +1736,16 @@ Receive needs the Stock Transfers — receive right. The standard roles delivere
 
 ### [INV-ADJ-001 … 004] Stock Adjustments
 
+Web address: `https://seera.tech-brit.co.uk/admin/inventory/stock-adjustments` (INV-ADJ-001) · `https://seera.tech-brit.co.uk/admin/inventory/stock-adjustments/create` (INV-ADJ-002) · `https://seera.tech-brit.co.uk/admin/inventory/stock-adjustments/{id}` (INV-ADJ-003) · `https://seera.tech-brit.co.uk/admin/inventory/stock-adjustments/{id}/edit` (INV-ADJ-004)
+
 Fields: Warehouse *, Item *, Adjustment Date *, Counted Quantity *, Reason. Buttons: Save / Update, Cancel; **Approve** then **Post Adjustment**, Edit (draft).
 
 What happens after Post Adjustment:
 The on-hand quantity becomes the counted quantity (re-read at posting time); a loss posts Dr Inventory Adjustment Expense / Cr Inventory Asset, a gain the opposite.
 
 ### [INV-REP-001 … 005] Inventory Reports
+
+Web address: `https://seera.tech-brit.co.uk/admin/inventory/reports` (INV-REP-001) · `https://seera.tech-brit.co.uk/admin/inventory/reports/stock-valuation` (INV-REP-002) · `https://seera.tech-brit.co.uk/admin/inventory/reports/low-stock` (INV-REP-003) · `https://seera.tech-brit.co.uk/admin/inventory/reports/project-consumption` (INV-REP-004) · `https://seera.tech-brit.co.uk/admin/inventory/reports/movement` (INV-REP-005)
 
 Stock Valuation, Low Stock, Project Material Consumption and Stock Movement, each with filters and an **Export PDF** button that uses the browser's print function. There is no CSV export for inventory reports yet. Permission: Inventory Reports — view.
 
@@ -1627,6 +1756,8 @@ Stock Valuation, Low Stock, Project Material Consumption and Stock Movement, eac
 What exists today is the **project master** and the related masters. There is no project dashboard, budget lines, milestone or site-expense screen yet (chapter 20).
 
 ### [MST-PRJ-001 … 004] Projects
+
+Web address: `https://seera.tech-brit.co.uk/admin/master/projects` (MST-PRJ-001) · `https://seera.tech-brit.co.uk/admin/master/projects/create` (MST-PRJ-002) · `https://seera.tech-brit.co.uk/admin/master/projects/{id}` (MST-PRJ-003) · `https://seera.tech-brit.co.uk/admin/master/projects/{id}/edit` (MST-PRJ-004)
 
 Purpose:
 Define a project: client, manager, dates, budget amount, branch, classification.
@@ -1659,6 +1790,8 @@ Buttons: Save / Update, Cancel. The list also offers **Sites** per project and *
 Project Details (MST-PRJ-003) shows Project Information, the sites with geo-fence, employees whose project is this one, suppliers for this project and warehouses in this project, with **+ Add Location** and Edit Project. A project with sites or warehouses cannot be deleted.
 
 ### [MST-SITE-001 … 004] Locations (Sites)
+
+Web address: `https://seera.tech-brit.co.uk/admin/master/sites` (MST-SITE-001) · `https://seera.tech-brit.co.uk/admin/master/sites/create` (MST-SITE-002) · `https://seera.tech-brit.co.uk/admin/master/sites/{id}` (MST-SITE-003) · `https://seera.tech-brit.co.uk/admin/master/sites/{id}/edit` (MST-SITE-004)
 
 Purpose:
 A physical site of a project, with its geo-fence for future attendance checks.
@@ -1696,6 +1829,8 @@ Buttons: Save / Update, Cancel.
 
 ### [MKT-001] Leads & Visits, [MKT-002] New Lead, [MKT-004] Edit Lead
 
+Web address: `https://seera.tech-brit.co.uk/admin/marketing/leads` (MKT-001) · `https://seera.tech-brit.co.uk/admin/marketing/leads/create` (MKT-002) · `https://seera.tech-brit.co.uk/admin/marketing/leads/{id}/edit` (MKT-004)
+
 Purpose:
 Track prospects and the visits made to them.
 
@@ -1724,10 +1859,14 @@ Buttons: Save / Update, Cancel, Back to Leads.
 
 ### [MKT-003] Lead (details, visits, convert)
 
+Web address: `https://seera.tech-brit.co.uk/admin/marketing/leads/{id}`
+
 What you see:
 Lead Information, the visits list, and a **Record Visit** form (Visit Date *, Visit Time, Location, Person Met *, Their Title, Outcome *, Next Follow-up, Next Action, Remarks) with **Save Visit**. **Convert to Customer** creates the customer record from the lead once and links it; a converted lead shows the customer.
 
 ### [MKT-005] Visit Report
+
+Web address: `https://seera.tech-brit.co.uk/admin/marketing/report`
 
 Filters by period, sales person and outcome; cards Clients Visited, Follow-ups Scheduled, Deals Won; rows Date / Time, Client, Location, Person Met, Visited By, Outcome, Next Follow-up, Remarks; **Export Excel (CSV)** needs Marketing — export.
 
@@ -1736,6 +1875,8 @@ Filters by period, sales person and outcome; cards Clients Visited, Follow-ups S
 ## 13. Activity Logs / Audit
 
 ### [ADM-020] Activity Logs
+
+Web address: `https://seera.tech-brit.co.uk/admin/activity-logs`
 
 Purpose:
 Who did what, when. Every create, update, approve, post, pay, receive, reopen and deactivate writes a line.
@@ -1777,9 +1918,13 @@ What Seera does today when a customer invoice is approved:
 
 ### [FIN-ZAT-001] ZATCA E-Invoicing (local records)
 
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/zatca`
+
 Cards Cleared, Pending Clearance, Failed, Draft (local statuses); filters; table Invoice, UUID, Customer, Issue Date, QR, XML, Signature, Clearance, ZATCA Response, Retries; **View** and **Retry** (failed records; ZATCA Invoicing — retry). Permission: ZATCA Invoicing — view.
 
 ### [FIN-ZAT-002] ZATCA Record
+
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/zatca/{id}`
 
 The record's fields, the QR payload and the local hash, with **Retry Clearance** and **Open Invoice**. Reopening an invoice cancels its local record.
 

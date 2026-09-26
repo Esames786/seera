@@ -113,7 +113,8 @@ foreach ($sources as $name => $meta) {
     $body = render($markdown, $meta['toc'], $toc);
     $tocHtml = '';
     foreach ($toc as $entry) {
-        $tocHtml .= '<a class="l'.$entry['level'].'" href="#'.$entry['id'].'">'.htmlspecialchars($entry['text']).'</a>';
+        // Heading text is already HTML-escaped by the converter; decode before escaping so "&amp;" does not double up.
+        $tocHtml .= '<a class="l'.$entry['level'].'" href="#'.$entry['id'].'">'.htmlspecialchars(html_entity_decode($entry['text'], ENT_QUOTES | ENT_HTML5)).'</a>';
     }
     file_put_contents($dir.'/'.$name.'.html', $page($meta['title'], $tocHtml, $body));
     echo $name.'.html: '.number_format(strlen($body)).' bytes, '.count($toc)." contents entries\n";

@@ -70,7 +70,7 @@ foreach ($docs as $prefix => $doc) {
     $sections .= '<section class="doc" id="'.$prefix.'-top"><div class="doc-label">'.$doc['label'].'</div>'.$html.'</section>';
     $rail .= '<div class="rail-group"><a class="rail-doc" href="#'.$prefix.'-top">'.$doc['label'].'</a>';
     foreach ($toc as [$level, $id, $text]) {
-        $rail .= '<a class="rail-item" href="#'.$id.'">'.htmlspecialchars($text).'</a>';
+        $rail .= '<a class="rail-item" href="#'.$id.'">'.htmlspecialchars(html_entity_decode($text, ENT_QUOTES | ENT_HTML5)).'</a>';
     }
     $rail .= '</div>';
 }
