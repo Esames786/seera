@@ -582,3 +582,51 @@ harmless to the release): `public/error_log`, `public/buildddd/`, `error_log`,
 
 Rollback: `git checkout ef5cc5b`, extract that commit's `public/build.zip` the same way,
 then `$PHP artisan optimize`. No database rollback is needed.
+
+## 18. Procure-to-Pay document workspace release (feature branch, 27 September)
+
+The server is at `7d6e1e2` or later on the feature branch; this release brings it to the
+current HEAD. **No migration** and **no asset bundle change** (the bundle hashes are the
+same as section 17: `app-BSoXDCW4.js`, `app-mz9GAwMC.css`, `erp-BneCgvYl.css`), so the
+release is a code pull plus cache refresh. The user guide HTML edition was rebuilt
+(version 1.1) and is served from the same `/user-guide/` route.
+
+What changes on screen: the Purchase Order View is the connected document workspace
+(header, Overview, Order Lines, Source Purchase Request, Supplier & Commercial,
+Quotations, Goods Receipts, Billing & GRN Matching, Accounting, Activity); Purchase
+Request, Goods Receipt and Supplier Bill View pages get a persistent header and related
+sections; Create Goods Receipt, Create Supplier Bill and Record Payment return to the
+page they were started from; the goods receipt form uses Save / Save & close.
+
+```bash
+cd ~/seera
+PHP=/opt/cpanel/ea-php83/root/usr/bin/php
+
+$PHP artisan down
+git fetch origin
+git checkout feature/seera-connected-workspaces-2026-09-23
+git pull --ff-only
+$PHP artisan migrate --force          # "Nothing to migrate" is expected
+test -f public/build/manifest.json && echo "assets ok"   # unchanged; re-extract only if missing
+test -f docs/user-guide/index.html && echo "user guide ok"
+$PHP artisan optimize
+$PHP artisan up
+```
+
+If `public/build/manifest.json` is missing, extract the bundle as in section 17
+(`rm -rf public/build && mkdir -p public/build && unzip -oq public/build.zip -d public/build`).
+
+Post-release checks (read-only, signed in as a user with Purchase Orders view):
+
+1. Open Inventory → Purchase Orders → View on any approved order: the header shows
+   Received x of y and the billing state; the section bar lists only the sections your
+   role may read; Goods Receipts and Billing show the latest 5 rows with View all.
+2. Open a posted goods receipt: the header shows the source order link and the invoicing
+   state; Bill Matches lists the matched bill lines (Accounts Payable view).
+3. Open an approved supplier bill: the header shows Total, Paid and Outstanding payment;
+   GRN Matches and Balance sections are present; Back returns to where you came from.
+4. Open a purchase request: Requested Items show Ordered so far and Still to order.
+5. `https://seera.tech-brit.co.uk/user-guide/` shows version 1.1 in the top bar.
+
+Rollback: `git checkout 83d596e` (the docs-only HEAD before this release), then
+`$PHP artisan optimize`. No database or asset rollback is needed.
