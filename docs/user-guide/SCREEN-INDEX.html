@@ -34,9 +34,9 @@ main a { color:var(--link); }
 main strong { color:#ffffff; }
 footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px solid var(--line); background:var(--panel); }
 @media (max-width: 900px) { .layout { grid-template-columns:1fr; } aside.toc { position:static; height:auto; max-height:40vh; } main { padding:18px 16px; } }
-@media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Screen Index · Version 1.0 · 27 September 2026 · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a class="l2" href="#sign-in-and-shell">Sign-in and shell</a><a class="l2" href="#users-roles-and-permissions">Users, roles and permissions</a><a class="l2" href="#master-setup">Master Setup</a><a class="l2" href="#suppliers">Suppliers</a><a class="l2" href="#customers">Customers</a><a class="l2" href="#hr--payroll">HR &amp; Payroll</a><a class="l2" href="#accounting--finance">Accounting &amp; Finance</a><a class="l2" href="#inventory--purchasing">Inventory &amp; Purchasing</a><a class="l2" href="#marketing">Marketing</a><a class="l2" href="#menu-items-that-are-placeholders">Menu items that are placeholders</a></aside><main><h1 id="seera-erp--screen-index-current-system">SEERA ERP — Screen Index (Current System)</h1>
+@media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Screen Index · Version 1.1 · 27 September 2026 · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a class="l2" href="#sign-in-and-shell">Sign-in and shell</a><a class="l2" href="#users-roles-and-permissions">Users, roles and permissions</a><a class="l2" href="#master-setup">Master Setup</a><a class="l2" href="#suppliers">Suppliers</a><a class="l2" href="#customers">Customers</a><a class="l2" href="#hr--payroll">HR &amp; Payroll</a><a class="l2" href="#accounting--finance">Accounting &amp; Finance</a><a class="l2" href="#inventory--purchasing">Inventory &amp; Purchasing</a><a class="l2" href="#marketing">Marketing</a><a class="l2" href="#menu-items-that-are-placeholders">Menu items that are placeholders</a></aside><main><h1 id="seera-erp--screen-index-current-system">SEERA ERP — Screen Index (Current System)</h1>
 <p>Master index of every screen in the current system. Screen IDs are permanent; use them when you refer to a page in training, support tickets or the <a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a>. Workflows are indexed in <a href="WORKFLOW-INDEX.html">WORKFLOW-INDEX.md</a>.</p>
-<p>Version 1.0 · Prepared 27 September 2026 · System state: current feature branch (Connected Workspace Standard, Accounting UX Batch 1, Supplier and Customer workspaces, F04 GRNI model) · Status: current implemented system only.</p>
+<p>Version 1.1 · Prepared 27 September 2026 · System state: current feature branch (Connected Workspace Standard, Accounting UX Batch 1, Supplier and Customer workspaces, F04 GRNI model, Procure-to-Pay document workspace) · Status: current implemented system only.</p>
 <p>How to read the columns:</p>
 <ul>
 <li><strong>Web address</strong> is the exact page address on the site. <code>{id}</code> is the number of the record shown in the browser's address bar when you open it from its list.</li>
@@ -1634,13 +1634,13 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 </tr>
 <tr>
 <td>FIN-AP-003</td>
-<td>Supplier Bill Details</td>
+<td>Supplier Bill Details (light document workspace: header with total / paid / outstanding payment, lines, GRN matches, VAT, accounting entry, payments, balance, activity)</td>
 <td><code>https://seera.tech-brit.co.uk/admin/accounting/accounts-payable/{id}</code></td>
 <td>Finance</td>
-<td>Accounts Payable → View</td>
+<td>Accounts Payable → View, or Purchase Order → Billing &amp; GRN Matching → View bill</td>
 <td>Finance Manager</td>
 <td>—</td>
-<td>Accounts Payable — view</td>
+<td>Accounts Payable — view; per section Goods Receipts / Purchase Orders / Journal Entries / Activity Logs — view</td>
 <td>Accounts Payable — edit</td>
 <td>Accounts Payable — approve (Approve &amp; Post, Reopen), process (Record Payment)</td>
 <td>AVAILABLE</td>
@@ -1665,7 +1665,7 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 <td>Record Supplier Payment</td>
 <td><code>https://seera.tech-brit.co.uk/admin/accounting/accounts-payable/{id}/payment</code></td>
 <td>Finance</td>
-<td>Supplier Bill Details → Record Payment</td>
+<td>Supplier Bill Details → Record Payment, or Purchase Order → Billing &amp; GRN Matching → Record Payment (returns there)</td>
 <td>Finance Manager</td>
 <td>—</td>
 <td>—</td>
@@ -2229,15 +2229,15 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 </tr>
 <tr>
 <td>INV-PR-003</td>
-<td>Purchase Request Details</td>
+<td>Purchase Request Details (light connected view: header, requested items with Ordered so far / Still to order, purchase orders, activity)</td>
 <td><code>https://seera.tech-brit.co.uk/admin/inventory/purchase-requests/{id}</code></td>
 <td>Inventory</td>
 <td>Purchase Requests → View</td>
 <td>Purchase Manager</td>
 <td>—</td>
-<td>Purchase Requests — view</td>
+<td>Purchase Requests — view; Purchase Orders — view (order links); Activity Logs — view (Activity)</td>
 <td>—</td>
-<td>Purchase Requests — approve / reject</td>
+<td>Purchase Requests — approve / reject; Purchase Orders — create (Create Purchase Order)</td>
 <td>AVAILABLE</td>
 <td><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html#10-inventory--purchasing">10</a></td>
 </tr>
@@ -2285,15 +2285,15 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 </tr>
 <tr>
 <td>INV-PO-003</td>
-<td>Purchase Order Details</td>
+<td>Purchase Order Details — procure-to-pay document workspace (Overview, Order Lines, Source Purchase Request, Supplier &amp; Commercial, Quotations, Goods Receipts, Billing &amp; GRN Matching, Accounting, Activity)</td>
 <td><code>https://seera.tech-brit.co.uk/admin/inventory/purchase-orders/{id}</code></td>
 <td>Inventory</td>
 <td>Purchase Orders → View</td>
-<td>Purchase Manager</td>
-<td>—</td>
-<td>Purchase Orders — view</td>
-<td>Purchase Orders — edit (quotation files)</td>
-<td>Purchase Orders — approve</td>
+<td>Purchase Manager, Warehouse Incharge, Finance Manager</td>
+<td>Purchase Orders — create (Upload quotation)</td>
+<td>Purchase Orders — view; per section Purchase Requests / Suppliers / Goods Receipts / Accounts Payable / Journal Entries / Activity Logs — view</td>
+<td>Purchase Orders — edit (draft)</td>
+<td>Purchase Orders — approve; Goods Receipts — create or receive (Create Goods Receipt); Accounts Payable — create / edit / process (Create Supplier Bill, Edit draft, Record Payment)</td>
 <td>AVAILABLE</td>
 <td><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html#10-inventory--purchasing">10</a></td>
 </tr>
@@ -2330,7 +2330,7 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 <td>Add Goods Receipt</td>
 <td><a class="url" href="https://seera.tech-brit.co.uk/admin/inventory/goods-receipts/create" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/inventory/goods-receipts/create</code></a></td>
 <td>Inventory</td>
-<td>Goods Receipt Notes → + Add Goods Receipt, or Purchase Order → Create Goods Receipt</td>
+<td>Goods Receipt Notes → + Add Goods Receipt, or Purchase Order → Create Goods Receipt (Save &amp; close returns to the order)</td>
 <td>Warehouse Incharge</td>
 <td>Goods Receipts — create</td>
 <td>—</td>
@@ -2341,13 +2341,13 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 </tr>
 <tr>
 <td>INV-GRN-003</td>
-<td>Goods Receipt Details</td>
+<td>Goods Receipt Details (light document workspace: header, received lines with invoicing state, bill matches, accounting entry, activity)</td>
 <td><code>https://seera.tech-brit.co.uk/admin/inventory/goods-receipts/{id}</code></td>
 <td>Inventory</td>
-<td>Goods Receipt Notes → View</td>
+<td>Goods Receipt Notes → View, or Purchase Order → Goods Receipts → View GRN</td>
 <td>Warehouse Incharge, Finance Manager</td>
 <td>—</td>
-<td>Goods Receipts — view</td>
+<td>Goods Receipts — view; per section Accounts Payable / Journal Entries / Activity Logs — view</td>
 <td>Goods Receipts — edit (draft)</td>
 <td>Goods Receipts — post; Accounts Payable — create (Create Supplier Bill)</td>
 <td>AVAILABLE</td>
@@ -2774,4 +2774,4 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 </tbody>
 </table>
 <p>Totals: 132 screens indexed (127 operational or partial screens plus 5 placeholders).</p>
-</main></div><footer>Seera ERP — Current System User Guide, version 1.0, prepared 27 September 2026. Examples use fictional training data.</footer></body></html>
+</main></div><footer>Seera ERP — Current System User Guide, version 1.1, prepared 27 September 2026. Examples use fictional training data.</footer></body></html>

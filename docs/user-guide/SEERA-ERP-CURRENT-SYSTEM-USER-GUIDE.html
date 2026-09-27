@@ -34,7 +34,7 @@ main a { color:var(--link); }
 main strong { color:#ffffff; }
 footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px solid var(--line); background:var(--panel); }
 @media (max-width: 900px) { .layout { grid-template-columns:1fr; } aside.toc { position:static; height:auto; max-height:40vh; } main { padding:18px 16px; } }
-@media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Current System User Guide · Version 1.0 · 27 September 2026 · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a class="l2" href="#training-dataset-used-in-the-examples">Training dataset used in the examples</a><a class="l2" href="#table-of-contents">Table of contents</a><a class="l2" href="#1-about-seera-erp">1. About Seera ERP</a><a class="l3" href="#the-three-ways-you-work-with-a-record">The three ways you work with a record</a><a class="l3" href="#the-save-buttons">The Save buttons</a><a class="l3" href="#unsaved-changes-protection">Unsaved changes protection</a><a class="l2" href="#2-login-and-navigation">2. Login and Navigation</a><a class="l3" href="#adm-001-login">[ADM-001] Login</a><a class="l3" href="#adm-002-forgot-password-and-adm-003-reset-password">[ADM-002] Forgot Password and [ADM-003] Reset Password</a><a class="l3" href="#adm-004-set-your-password-first-sign-in">[ADM-004] Set Your Password (first sign-in)</a><a class="l3" href="#navigation-basics">Navigation basics</a><a class="l2" href="#3-dashboard">3. Dashboard</a><a class="l3" href="#adm-010-dashboard">[ADM-010] Dashboard</a><a class="l2" href="#4-users-roles-and-permissions">4. Users, Roles and Permissions</a><a class="l3" href="#usr-001-users-list">[USR-001] Users List</a><a class="l3" href="#usr-002-add-user">[USR-002] Add User</a><a class="l3" href="#usr-003-user-details-and-usr-004-edit-user">[USR-003] User Details and [USR-004] Edit User</a><a class="l3" href="#rol-001-roles-list-rol-002-create-role-rol-003-role-details-rol-004-edit-role">[ROL-001] Roles List, [ROL-002] Create Role, [ROL-003] Role Details, [ROL-004] Edit Role</a><a class="l3" href="#rol-005-permission-matrix">[ROL-005] Permission Matrix</a><a class="l3" href="#rol-006-role-hierarchy">[ROL-006] Role Hierarchy</a><a class="l3" href="#rol-007-assign-users-to-role">[ROL-007] Assign Users to Role</a><a class="l3" href="#rol-008-approval-workflows-rol-009-create-rol-010-edit">[ROL-008] Approval Workflows, [ROL-009] Create, [ROL-010] Edit</a><a class="l2" href="#5-master-setup">5. Master Setup</a><a class="l3" href="#mst-com-001-company-profile">[MST-COM-001] Company Profile</a><a class="l3" href="#mst-org-001-organization-structure">[MST-ORG-001] Organization Structure</a><a class="l3" href="#branches-mst-br-001--004-departments-mst-dep-001--004-designations-mst-des-001--004">Branches [MST-BR-001 … 004], Departments [MST-DEP-001 … 004], Designations [MST-DES-001 … 004]</a><a class="l3" href="#projects-mst-prj-001--005-and-locations-mst-site-001--004">Projects [MST-PRJ-001 … 005] and Locations [MST-SITE-001 … 004]</a><a class="l3" href="#warehouses-mst-wh-001--004">Warehouses [MST-WH-001 … 004]</a><a class="l3" href="#expense-categories-mst-exp-001--004">Expense Categories [MST-EXP-001 … 004]</a><a class="l3" href="#payment-terms-sup-005-and-project-classifications-mst-prj-005">Payment Terms [SUP-005] and Project Classifications [MST-PRJ-005]</a><a class="l2" href="#6-hr--payroll">6. HR &amp; Payroll</a><a class="l3" href="#hr-dash-001-hr-dashboard">[HR-DASH-001] HR Dashboard</a><a class="l3" href="#hr-emp-001-employees-list">[HR-EMP-001] Employees List</a><a class="l3" href="#hr-emp-002-add-employee">[HR-EMP-002] Add Employee</a><a class="l3" href="#hr-emp-003-employee-view-read-only">[HR-EMP-003] Employee View (read-only)</a><a class="l3" href="#hr-emp-004-employee-workspace-edit">[HR-EMP-004] Employee Workspace (Edit)</a><a class="l3" href="#hr-doc-001-employee-documents--iqama">[HR-DOC-001] Employee Documents / IQAMA</a><a class="l3" href="#hr-shf-001--003-shifts">[HR-SHF-001 … 003] Shifts</a><a class="l3" href="#hr-att-001--003-attendance">[HR-ATT-001 … 003] Attendance</a><a class="l3" href="#hr-lv-001--004-leaves">[HR-LV-001 … 004] Leaves</a><a class="l3" href="#hr-ot-001--003-overtime">[HR-OT-001 … 003] Overtime</a><a class="l3" href="#hr-sal-001--004-salary-structures">[HR-SAL-001 … 004] Salary Structures</a><a class="l3" href="#hr-pay-001--004-payroll">[HR-PAY-001 … 004] Payroll</a><a class="l3" href="#hr-eos-001--004-end-of-service">[HR-EOS-001 … 004] End of Service</a><a class="l2" href="#7-customers">7. Customers</a><a class="l3" href="#cus-001-customers-list">[CUS-001] Customers List</a><a class="l3" href="#cus-002-add-customer">[CUS-002] Add Customer</a><a class="l3" href="#cus-003-customer-view-read-only">[CUS-003] Customer View (read-only)</a><a class="l3" href="#cus-004-customer-workspace-edit--manage">[CUS-004] Customer Workspace (Edit / Manage)</a><a class="l2" href="#8-suppliers">8. Suppliers</a><a class="l3" href="#sup-001-suppliers-list">[SUP-001] Suppliers List</a><a class="l3" href="#sup-002-add-supplier">[SUP-002] Add Supplier</a><a class="l3" href="#sup-003-supplier-view-read-only">[SUP-003] Supplier View (read-only)</a><a class="l3" href="#sup-004-supplier-workspace-edit--manage">[SUP-004] Supplier Workspace (Edit / Manage)</a><a class="l2" href="#9-accounting--finance">9. Accounting &amp; Finance</a><a class="l3" href="#how-accounting-works-in-seera-read-this-first">How accounting works in Seera (read this first)</a><a class="l3" href="#fin-dash-001-accounting-dashboard">[FIN-DASH-001] Accounting Dashboard</a><a class="l3" href="#fin-coa-001--004-chart-of-accounts">[FIN-COA-001 … 004] Chart of Accounts</a><a class="l3" href="#fin-je-001--004-journal-entries">[FIN-JE-001 … 004] Journal Entries</a><a class="l3" href="#fin-gl-001-general-ledger">[FIN-GL-001] General Ledger</a><a class="l3" href="#fin-ap-001-accounts-payable-supplier-bills">[FIN-AP-001] Accounts Payable (Supplier Bills)</a><a class="l3" href="#fin-ap-002-add-supplier-bill-and-fin-ap-004-edit-supplier-bill">[FIN-AP-002] Add Supplier Bill and [FIN-AP-004] Edit Supplier Bill</a><a class="l3" href="#fin-ap-003-supplier-bill-details">[FIN-AP-003] Supplier Bill Details</a><a class="l3" href="#fin-ap-005-record-supplier-payment">[FIN-AP-005] Record Supplier Payment</a><a class="l3" href="#fin-ar-001--005-accounts-receivable-customer-invoices-and-receipts">[FIN-AR-001 … 005] Accounts Receivable (Customer Invoices and Receipts)</a><a class="l3" href="#fin-vat-001-vat-management-and-fin-vat-002-vat-period">[FIN-VAT-001] VAT Management and [FIN-VAT-002] VAT Period</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-and-fin-zat-002-zatca-record">[FIN-ZAT-001] ZATCA E-Invoicing and [FIN-ZAT-002] ZATCA Record</a><a class="l3" href="#fin-cc-001--004-cost-centers">[FIN-CC-001 … 004] Cost Centers</a><a class="l3" href="#fin-pr-001--004-automatic-posting-rules">[FIN-PR-001 … 004] Automatic Posting Rules</a><a class="l2" href="#10-inventory--purchasing">10. Inventory &amp; Purchasing</a><a class="l3" href="#how-stock-works-in-seera">How stock works in Seera</a><a class="l3" href="#inv-dash-001-inventory-dashboard">[INV-DASH-001] Inventory Dashboard</a><a class="l3" href="#inv-item-001--004-materials--items">[INV-ITEM-001 … 004] Materials / Items</a><a class="l3" href="#inv-cat-001--003-item-categories-and-inv-unit-001--003-units">[INV-CAT-001 … 003] Item Categories and [INV-UNIT-001 … 003] Units</a><a class="l3" href="#inv-stk-001-stock-on-hand-and-inv-led-001-stock-ledger">[INV-STK-001] Stock On Hand and [INV-LED-001] Stock Ledger</a><a class="l3" href="#inv-pr-001--004-purchase-requests">[INV-PR-001 … 004] Purchase Requests</a><a class="l3" href="#inv-po-001--004-purchase-orders">[INV-PO-001 … 004] Purchase Orders</a><a class="l3" href="#inv-grn-001--004-goods-receipt-notes">[INV-GRN-001 … 004] Goods Receipt Notes</a><a class="l3" href="#inv-iss-001--004-stock-issues">[INV-ISS-001 … 004] Stock Issues</a><a class="l3" href="#inv-trf-001--004-stock-transfers">[INV-TRF-001 … 004] Stock Transfers</a><a class="l3" href="#inv-adj-001--004-stock-adjustments">[INV-ADJ-001 … 004] Stock Adjustments</a><a class="l3" href="#inv-rep-001--005-inventory-reports">[INV-REP-001 … 005] Inventory Reports</a><a class="l2" href="#11-projects">11. Projects</a><a class="l3" href="#mst-prj-001--004-projects">[MST-PRJ-001 … 004] Projects</a><a class="l3" href="#mst-site-001--004-locations-sites">[MST-SITE-001 … 004] Locations (Sites)</a><a class="l3" href="#where-project-figures-are-today">Where project figures are today</a><a class="l2" href="#12-marketing">12. Marketing</a><a class="l3" href="#mkt-001-leads--visits-mkt-002-new-lead-mkt-004-edit-lead">[MKT-001] Leads &amp; Visits, [MKT-002] New Lead, [MKT-004] Edit Lead</a><a class="l3" href="#mkt-003-lead-details-visits-convert">[MKT-003] Lead (details, visits, convert)</a><a class="l3" href="#mkt-005-visit-report">[MKT-005] Visit Report</a><a class="l2" href="#13-activity-logs--audit">13. Activity Logs / Audit</a><a class="l3" href="#adm-020-activity-logs">[ADM-020] Activity Logs</a><a class="l2" href="#14-current-zatca-foundation">14. Current ZATCA Foundation</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-local-records">[FIN-ZAT-001] ZATCA E-Invoicing (local records)</a><a class="l3" href="#fin-zat-002-zatca-record">[FIN-ZAT-002] ZATCA Record</a><a class="l2" href="#15-reports">15. Reports</a><a class="l2" href="#16-common-tasks">16. Common Tasks</a><a class="l3" href="#create-a-supplier">Create a supplier</a><a class="l3" href="#enter-and-approve-a-supplier-bill-for-goods-you-received">Enter and approve a supplier bill for goods you received</a><a class="l3" href="#record-a-customer-receipt">Record a customer receipt</a><a class="l3" href="#add-an-employee-and-give-them-a-login">Add an employee and give them a login</a><a class="l3" href="#find-everything-about-one-customer">Find everything about one customer</a><a class="l3" href="#post-a-manual-journal">Post a manual journal</a><a class="l3" href="#close-a-vat-quarter">Close a VAT quarter</a><a class="l3" href="#switch-language">Switch language</a><a class="l2" href="#17-end-to-end-workflows">17. End-to-End Workflows</a><a class="l3" href="#wf-001-create-employee-and-user-access">WF-001 Create Employee and User Access</a><a class="l3" href="#wf-002-supplier--purchase-order--goods-receipt--supplier-bill--payment">WF-002 Supplier → Purchase Order → Goods Receipt → Supplier Bill → Payment</a><a class="l3" href="#wf-003-customer--invoice--receipt">WF-003 Customer → Invoice → Receipt</a><a class="l3" href="#wf-004-manual-journal--general-ledger">WF-004 Manual Journal → General Ledger</a><a class="l3" href="#wf-005-vat-period-review-and-finalize">WF-005 VAT Period Review and Finalize</a><a class="l3" href="#wf-006-inventory-transfer-between-warehouses">WF-006 Inventory Transfer between Warehouses</a><a class="l3" href="#wf-007-stock-issue-to-a-project">WF-007 Stock Issue to a Project</a><a class="l3" href="#wf-008-payroll-run">WF-008 Payroll Run</a><a class="l3" href="#wf-009-leave-request-lifecycle">WF-009 Leave Request lifecycle</a><a class="l3" href="#wf-010-supplier-f04-grni-accounting-flow">WF-010 Supplier F04 GRNI accounting flow</a><a class="l3" href="#wf-011-purchase-request--purchase-order">WF-011 Purchase Request → Purchase Order</a><a class="l3" href="#wf-012-correct-an-approved-bill-or-invoice-reopen">WF-012 Correct an approved bill or invoice (Reopen)</a><a class="l3" href="#wf-013-stock-adjustment-after-a-physical-count">WF-013 Stock Adjustment after a physical count</a><a class="l3" href="#wf-014-marketing-lead--visit--customer">WF-014 Marketing Lead → Visit → Customer</a><a class="l3" href="#wf-015-end-of-service-settlement">WF-015 End of Service settlement</a><a class="l2" href="#18-troubleshooting">18. Troubleshooting</a><a class="l2" href="#19-glossary">19. Glossary</a><a class="l2" href="#20-current-limitations--not-yet-operational">20. Current Limitations / Not Yet Operational</a><a class="l2" href="#21-quick-start-by-role">21. Quick Start by Role</a><a class="l3" href="#super-admin">Super Admin</a><a class="l3" href="#finance-manager">Finance Manager</a><a class="l3" href="#hr-manager">HR Manager</a><a class="l3" href="#project-manager">Project Manager</a><a class="l3" href="#site-in-charge--site-supervisor">Site In-Charge / Site Supervisor</a><a class="l3" href="#warehouse-incharge">Warehouse Incharge</a><a class="l3" href="#purchase-manager--assistant">Purchase Manager / Assistant</a><a class="l3" href="#marketing-manager">Marketing Manager</a></aside><main><h1 id="seera-erp">SEERA ERP</h1>
+@media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Current System User Guide · Version 1.1 · 27 September 2026 · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a class="l2" href="#training-dataset-used-in-the-examples">Training dataset used in the examples</a><a class="l2" href="#table-of-contents">Table of contents</a><a class="l2" href="#1-about-seera-erp">1. About Seera ERP</a><a class="l3" href="#the-three-ways-you-work-with-a-record">The three ways you work with a record</a><a class="l3" href="#the-save-buttons">The Save buttons</a><a class="l3" href="#unsaved-changes-protection">Unsaved changes protection</a><a class="l2" href="#2-login-and-navigation">2. Login and Navigation</a><a class="l3" href="#adm-001-login">[ADM-001] Login</a><a class="l3" href="#adm-002-forgot-password-and-adm-003-reset-password">[ADM-002] Forgot Password and [ADM-003] Reset Password</a><a class="l3" href="#adm-004-set-your-password-first-sign-in">[ADM-004] Set Your Password (first sign-in)</a><a class="l3" href="#navigation-basics">Navigation basics</a><a class="l2" href="#3-dashboard">3. Dashboard</a><a class="l3" href="#adm-010-dashboard">[ADM-010] Dashboard</a><a class="l2" href="#4-users-roles-and-permissions">4. Users, Roles and Permissions</a><a class="l3" href="#usr-001-users-list">[USR-001] Users List</a><a class="l3" href="#usr-002-add-user">[USR-002] Add User</a><a class="l3" href="#usr-003-user-details-and-usr-004-edit-user">[USR-003] User Details and [USR-004] Edit User</a><a class="l3" href="#rol-001-roles-list-rol-002-create-role-rol-003-role-details-rol-004-edit-role">[ROL-001] Roles List, [ROL-002] Create Role, [ROL-003] Role Details, [ROL-004] Edit Role</a><a class="l3" href="#rol-005-permission-matrix">[ROL-005] Permission Matrix</a><a class="l3" href="#rol-006-role-hierarchy">[ROL-006] Role Hierarchy</a><a class="l3" href="#rol-007-assign-users-to-role">[ROL-007] Assign Users to Role</a><a class="l3" href="#rol-008-approval-workflows-rol-009-create-rol-010-edit">[ROL-008] Approval Workflows, [ROL-009] Create, [ROL-010] Edit</a><a class="l2" href="#5-master-setup">5. Master Setup</a><a class="l3" href="#mst-com-001-company-profile">[MST-COM-001] Company Profile</a><a class="l3" href="#mst-org-001-organization-structure">[MST-ORG-001] Organization Structure</a><a class="l3" href="#branches-mst-br-001--004-departments-mst-dep-001--004-designations-mst-des-001--004">Branches [MST-BR-001 … 004], Departments [MST-DEP-001 … 004], Designations [MST-DES-001 … 004]</a><a class="l3" href="#projects-mst-prj-001--005-and-locations-mst-site-001--004">Projects [MST-PRJ-001 … 005] and Locations [MST-SITE-001 … 004]</a><a class="l3" href="#warehouses-mst-wh-001--004">Warehouses [MST-WH-001 … 004]</a><a class="l3" href="#expense-categories-mst-exp-001--004">Expense Categories [MST-EXP-001 … 004]</a><a class="l3" href="#payment-terms-sup-005-and-project-classifications-mst-prj-005">Payment Terms [SUP-005] and Project Classifications [MST-PRJ-005]</a><a class="l2" href="#6-hr--payroll">6. HR &amp; Payroll</a><a class="l3" href="#hr-dash-001-hr-dashboard">[HR-DASH-001] HR Dashboard</a><a class="l3" href="#hr-emp-001-employees-list">[HR-EMP-001] Employees List</a><a class="l3" href="#hr-emp-002-add-employee">[HR-EMP-002] Add Employee</a><a class="l3" href="#hr-emp-003-employee-view-read-only">[HR-EMP-003] Employee View (read-only)</a><a class="l3" href="#hr-emp-004-employee-workspace-edit">[HR-EMP-004] Employee Workspace (Edit)</a><a class="l3" href="#hr-doc-001-employee-documents--iqama">[HR-DOC-001] Employee Documents / IQAMA</a><a class="l3" href="#hr-shf-001--003-shifts">[HR-SHF-001 … 003] Shifts</a><a class="l3" href="#hr-att-001--003-attendance">[HR-ATT-001 … 003] Attendance</a><a class="l3" href="#hr-lv-001--004-leaves">[HR-LV-001 … 004] Leaves</a><a class="l3" href="#hr-ot-001--003-overtime">[HR-OT-001 … 003] Overtime</a><a class="l3" href="#hr-sal-001--004-salary-structures">[HR-SAL-001 … 004] Salary Structures</a><a class="l3" href="#hr-pay-001--004-payroll">[HR-PAY-001 … 004] Payroll</a><a class="l3" href="#hr-eos-001--004-end-of-service">[HR-EOS-001 … 004] End of Service</a><a class="l2" href="#7-customers">7. Customers</a><a class="l3" href="#cus-001-customers-list">[CUS-001] Customers List</a><a class="l3" href="#cus-002-add-customer">[CUS-002] Add Customer</a><a class="l3" href="#cus-003-customer-view-read-only">[CUS-003] Customer View (read-only)</a><a class="l3" href="#cus-004-customer-workspace-edit--manage">[CUS-004] Customer Workspace (Edit / Manage)</a><a class="l2" href="#8-suppliers">8. Suppliers</a><a class="l3" href="#sup-001-suppliers-list">[SUP-001] Suppliers List</a><a class="l3" href="#sup-002-add-supplier">[SUP-002] Add Supplier</a><a class="l3" href="#sup-003-supplier-view-read-only">[SUP-003] Supplier View (read-only)</a><a class="l3" href="#sup-004-supplier-workspace-edit--manage">[SUP-004] Supplier Workspace (Edit / Manage)</a><a class="l2" href="#9-accounting--finance">9. Accounting &amp; Finance</a><a class="l3" href="#how-accounting-works-in-seera-read-this-first">How accounting works in Seera (read this first)</a><a class="l3" href="#fin-dash-001-accounting-dashboard">[FIN-DASH-001] Accounting Dashboard</a><a class="l3" href="#fin-coa-001--004-chart-of-accounts">[FIN-COA-001 … 004] Chart of Accounts</a><a class="l3" href="#fin-je-001--004-journal-entries">[FIN-JE-001 … 004] Journal Entries</a><a class="l3" href="#fin-gl-001-general-ledger">[FIN-GL-001] General Ledger</a><a class="l3" href="#fin-ap-001-accounts-payable-supplier-bills">[FIN-AP-001] Accounts Payable (Supplier Bills)</a><a class="l3" href="#fin-ap-002-add-supplier-bill-and-fin-ap-004-edit-supplier-bill">[FIN-AP-002] Add Supplier Bill and [FIN-AP-004] Edit Supplier Bill</a><a class="l3" href="#fin-ap-003-supplier-bill-details">[FIN-AP-003] Supplier Bill Details</a><a class="l3" href="#fin-ap-005-record-supplier-payment">[FIN-AP-005] Record Supplier Payment</a><a class="l3" href="#fin-ar-001--005-accounts-receivable-customer-invoices-and-receipts">[FIN-AR-001 … 005] Accounts Receivable (Customer Invoices and Receipts)</a><a class="l3" href="#fin-vat-001-vat-management-and-fin-vat-002-vat-period">[FIN-VAT-001] VAT Management and [FIN-VAT-002] VAT Period</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-and-fin-zat-002-zatca-record">[FIN-ZAT-001] ZATCA E-Invoicing and [FIN-ZAT-002] ZATCA Record</a><a class="l3" href="#fin-cc-001--004-cost-centers">[FIN-CC-001 … 004] Cost Centers</a><a class="l3" href="#fin-pr-001--004-automatic-posting-rules">[FIN-PR-001 … 004] Automatic Posting Rules</a><a class="l2" href="#10-inventory--purchasing">10. Inventory &amp; Purchasing</a><a class="l3" href="#how-stock-works-in-seera">How stock works in Seera</a><a class="l3" href="#inv-dash-001-inventory-dashboard">[INV-DASH-001] Inventory Dashboard</a><a class="l3" href="#inv-item-001--004-materials--items">[INV-ITEM-001 … 004] Materials / Items</a><a class="l3" href="#inv-cat-001--003-item-categories-and-inv-unit-001--003-units">[INV-CAT-001 … 003] Item Categories and [INV-UNIT-001 … 003] Units</a><a class="l3" href="#inv-stk-001-stock-on-hand-and-inv-led-001-stock-ledger">[INV-STK-001] Stock On Hand and [INV-LED-001] Stock Ledger</a><a class="l3" href="#inv-pr-001--004-purchase-requests">[INV-PR-001 … 004] Purchase Requests</a><a class="l3" href="#inv-po-001--004-purchase-orders">[INV-PO-001 … 004] Purchase Orders</a><a class="l3" href="#inv-grn-001--004-goods-receipt-notes">[INV-GRN-001 … 004] Goods Receipt Notes</a><a class="l3" href="#inv-iss-001--004-stock-issues">[INV-ISS-001 … 004] Stock Issues</a><a class="l3" href="#inv-trf-001--004-stock-transfers">[INV-TRF-001 … 004] Stock Transfers</a><a class="l3" href="#inv-adj-001--004-stock-adjustments">[INV-ADJ-001 … 004] Stock Adjustments</a><a class="l3" href="#inv-rep-001--005-inventory-reports">[INV-REP-001 … 005] Inventory Reports</a><a class="l2" href="#11-projects">11. Projects</a><a class="l3" href="#mst-prj-001--004-projects">[MST-PRJ-001 … 004] Projects</a><a class="l3" href="#mst-site-001--004-locations-sites">[MST-SITE-001 … 004] Locations (Sites)</a><a class="l3" href="#where-project-figures-are-today">Where project figures are today</a><a class="l2" href="#12-marketing">12. Marketing</a><a class="l3" href="#mkt-001-leads--visits-mkt-002-new-lead-mkt-004-edit-lead">[MKT-001] Leads &amp; Visits, [MKT-002] New Lead, [MKT-004] Edit Lead</a><a class="l3" href="#mkt-003-lead-details-visits-convert">[MKT-003] Lead (details, visits, convert)</a><a class="l3" href="#mkt-005-visit-report">[MKT-005] Visit Report</a><a class="l2" href="#13-activity-logs--audit">13. Activity Logs / Audit</a><a class="l3" href="#adm-020-activity-logs">[ADM-020] Activity Logs</a><a class="l2" href="#14-current-zatca-foundation">14. Current ZATCA Foundation</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-local-records">[FIN-ZAT-001] ZATCA E-Invoicing (local records)</a><a class="l3" href="#fin-zat-002-zatca-record">[FIN-ZAT-002] ZATCA Record</a><a class="l2" href="#15-reports">15. Reports</a><a class="l2" href="#16-common-tasks">16. Common Tasks</a><a class="l3" href="#create-a-supplier">Create a supplier</a><a class="l3" href="#enter-and-approve-a-supplier-bill-for-goods-you-received">Enter and approve a supplier bill for goods you received</a><a class="l3" href="#record-a-customer-receipt">Record a customer receipt</a><a class="l3" href="#add-an-employee-and-give-them-a-login">Add an employee and give them a login</a><a class="l3" href="#find-everything-about-one-customer">Find everything about one customer</a><a class="l3" href="#post-a-manual-journal">Post a manual journal</a><a class="l3" href="#close-a-vat-quarter">Close a VAT quarter</a><a class="l3" href="#switch-language">Switch language</a><a class="l2" href="#17-end-to-end-workflows">17. End-to-End Workflows</a><a class="l3" href="#wf-001-create-employee-and-user-access">WF-001 Create Employee and User Access</a><a class="l3" href="#wf-002-supplier--purchase-order--goods-receipt--supplier-bill--payment">WF-002 Supplier → Purchase Order → Goods Receipt → Supplier Bill → Payment</a><a class="l3" href="#wf-003-customer--invoice--receipt">WF-003 Customer → Invoice → Receipt</a><a class="l3" href="#wf-004-manual-journal--general-ledger">WF-004 Manual Journal → General Ledger</a><a class="l3" href="#wf-005-vat-period-review-and-finalize">WF-005 VAT Period Review and Finalize</a><a class="l3" href="#wf-006-inventory-transfer-between-warehouses">WF-006 Inventory Transfer between Warehouses</a><a class="l3" href="#wf-007-stock-issue-to-a-project">WF-007 Stock Issue to a Project</a><a class="l3" href="#wf-008-payroll-run">WF-008 Payroll Run</a><a class="l3" href="#wf-009-leave-request-lifecycle">WF-009 Leave Request lifecycle</a><a class="l3" href="#wf-010-supplier-f04-grni-accounting-flow">WF-010 Supplier F04 GRNI accounting flow</a><a class="l3" href="#wf-011-purchase-request--purchase-order">WF-011 Purchase Request → Purchase Order</a><a class="l3" href="#wf-012-correct-an-approved-bill-or-invoice-reopen">WF-012 Correct an approved bill or invoice (Reopen)</a><a class="l3" href="#wf-013-stock-adjustment-after-a-physical-count">WF-013 Stock Adjustment after a physical count</a><a class="l3" href="#wf-014-marketing-lead--visit--customer">WF-014 Marketing Lead → Visit → Customer</a><a class="l3" href="#wf-015-end-of-service-settlement">WF-015 End of Service settlement</a><a class="l2" href="#18-troubleshooting">18. Troubleshooting</a><a class="l2" href="#19-glossary">19. Glossary</a><a class="l2" href="#20-current-limitations--not-yet-operational">20. Current Limitations / Not Yet Operational</a><a class="l2" href="#21-quick-start-by-role">21. Quick Start by Role</a><a class="l3" href="#super-admin">Super Admin</a><a class="l3" href="#finance-manager">Finance Manager</a><a class="l3" href="#hr-manager">HR Manager</a><a class="l3" href="#project-manager">Project Manager</a><a class="l3" href="#site-in-charge--site-supervisor">Site In-Charge / Site Supervisor</a><a class="l3" href="#warehouse-incharge">Warehouse Incharge</a><a class="l3" href="#purchase-manager--assistant">Purchase Manager / Assistant</a><a class="l3" href="#marketing-manager">Marketing Manager</a></aside><main><h1 id="seera-erp">SEERA ERP</h1>
 <h1 id="current-system-user-guide">Current System User Guide</h1>
 <table>
 <thead>
@@ -46,11 +46,11 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 <tbody>
 <tr>
 <td><strong>Version</strong></td>
-<td>1.0</td>
+<td>1.1</td>
 </tr>
 <tr>
 <td><strong>System state</strong></td>
-<td>Current feature branch <code>feature/seera-connected-workspaces-2026-09-23</code> at the final HEAD of the 27 September 2026 sprint (Connected Workspace Standard; Accounting UX Batch 1; Supplier and Customer workspaces; F04 GRNI accounting)</td>
+<td>Current feature branch <code>feature/seera-connected-workspaces-2026-09-23</code> at the final HEAD of the 27 September 2026 sprints (Connected Workspace Standard; Accounting UX Batch 1; Supplier and Customer workspaces; F04 GRNI accounting; Procure-to-Pay document workspace for Purchase Order, Purchase Request, Goods Receipt and Supplier Bill)</td>
 </tr>
 <tr>
 <td><strong>Prepared</strong></td>
@@ -137,16 +137,20 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 <td>Reinforcement Steel 16mm (code ITM-0031)</td>
 </tr>
 <tr>
-<td>Purchase Order</td>
-<td>PO-2026-0012</td>
+<td>Purchase Request</td>
+<td>PR-2026-0010</td>
 </tr>
 <tr>
-<td>Goods Receipt</td>
-<td>GRN-2026-0008</td>
+<td>Purchase Order</td>
+<td>PO-2026-0012 — 10,000 kg of Reinforcement Steel 16mm at SAR 3.00 per kg (SAR 30,000 + VAT 4,500 = 34,500)</td>
+</tr>
+<tr>
+<td>Goods Receipts</td>
+<td>GRN-2026-0008 (6,000 kg) and GRN-2026-0009 (4,000 kg)</td>
 </tr>
 <tr>
 <td>Supplier Bill</td>
-<td>GST-INV-1045</td>
+<td>GST-INV-1045 (invoices GRN-2026-0008: SAR 18,000 + VAT 2,700 = 20,700)</td>
 </tr>
 <tr>
 <td>Customer Invoice</td>
@@ -184,6 +188,36 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 </ol>
 <hr />
 <h2 id="1-about-seera-erp">1. About Seera ERP</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>About Seera ERP</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>What Seera is, how this guide is organised, the Connected Workspace Standard and the standard form buttons.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>All users</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>— (no screens; reference chapter)</td>
+</tr>
+</tbody>
+</table>
 <p>Seera is the construction ERP of Seera Construction Company. It runs in the web browser. Everyone signs in with their own account, and every account has a role that decides which screens and buttons the person can use.</p>
 <p>What Seera covers today:</p>
 <ul>
@@ -238,6 +272,36 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 <p>If you change something and then try to leave the page, Seera shows a dialog with <strong>Keep editing</strong>, <strong>Discard &amp; leave</strong> and <strong>Save current form</strong>. This works on every form in the system.</p>
 <hr />
 <h2 id="2-login-and-navigation">2. Login and Navigation</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Login and Navigation</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Sign in, change your password and find your way around the menu.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>All users, All new users</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>ADM-001, ADM-002, ADM-003, ADM-004</td>
+</tr>
+</tbody>
+</table>
 <h3 id="adm-001-login">[ADM-001] Login</h3>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/login" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/login</code></a></p>
 <p>Purpose:
@@ -444,6 +508,36 @@ Shown automatically after the first sign-in. You cannot open other pages until y
 </ul>
 <hr />
 <h2 id="3-dashboard">3. Dashboard</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>3</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Dashboard</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Read the company figures on the home page.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>All users</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>ADM-010</td>
+</tr>
+</tbody>
+</table>
 <h3 id="adm-010-dashboard">[ADM-010] Dashboard</h3>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/dashboard" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/dashboard</code></a></p>
 <p>Purpose:
@@ -462,6 +556,36 @@ Cards for Total Staff, Active Roles, Pending Approvals, Inactive Users, Total Pr
 FIN-DASH-001, HR-DASH-001, INV-DASH-001, ADM-020.</p>
 <hr />
 <h2 id="4-users-roles-and-permissions">4. Users, Roles and Permissions</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>4</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Users, Roles and Permissions</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Create logins, roles, the permission matrix and access scope.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>Super Admin</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>USR-001, USR-002, USR-003, USR-004, ROL-001, ROL-002, ROL-003, ROL-004, ROL-005, ROL-006, ROL-007, ROL-008, ROL-009, ROL-010</td>
+</tr>
+</tbody>
+</table>
 <p>How access works in Seera:</p>
 <ol>
 <li>A <strong>Role</strong> is a named set of permissions (for example Accounts Manager). Each permission is a module plus an action: view, create, edit, delete, approve, reject, export, mobile access, post, process, retry, receive, issue, transfer, adjust.</li>
@@ -821,6 +945,36 @@ Record who should approve what, step by step.</p>
 <p>Buttons: + New Workflow, Preview, Edit, Delete, + Add Step, Save Workflow, Cancel.</p>
 <hr />
 <h2 id="5-master-setup">5. Master Setup</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>5</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Master Setup</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Company, organisation, projects, sites, warehouses and expense categories that every document refers to.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>Super Admin, HR Manager, Inventory Manager, Finance Manager</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>MST-COM-001, MST-ORG-001, MST-BR-001, MST-BR-002, MST-BR-003, MST-BR-004, MST-DEP-001, MST-DEP-002, MST-DEP-003, MST-DEP-004, MST-DES-001, MST-DES-002, MST-DES-003, MST-DES-004, MST-WH-001, MST-WH-002, MST-WH-003, MST-WH-004, MST-EXP-001, MST-EXP-002, MST-EXP-003, MST-EXP-004</td>
+</tr>
+</tbody>
+</table>
 <p>Master Setup holds the records every other module refers to. Set these up first, in this order: Company Profile → Organization Structure (branches, departments, designations) → Projects and Locations → Warehouses → Expense Categories → Suppliers and Customers.</p>
 <p>Most master forms still use the older button set (<strong>Save</strong> / <strong>Update</strong> and <strong>Cancel</strong>). Suppliers and Customers use the full standard (chapters 7 and 8).</p>
 <h3 id="mst-com-001-company-profile">[MST-COM-001] Company Profile</h3>
@@ -1091,6 +1245,36 @@ Expense Categories — create / view / edit.</p>
 <p>Small lists with an inline &quot;Add&quot; section and inline Save / Delete per row. Payment terms (name and days from bill date) decide the due date of supplier bills saved without one. Project classifications label projects.</p>
 <hr />
 <h2 id="6-hr--payroll">6. HR &amp; Payroll</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>6</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>HR &amp; Payroll</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Employees, documents, shifts, attendance, leave, overtime, salary structures, payroll runs and end of service.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>HR Manager, Site In-Charge, Finance Manager</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>HR-DASH-001, HR-EMP-001, HR-EMP-002, HR-EMP-003, HR-EMP-004, HR-DOC-001, HR-SHF-001, HR-SHF-002, HR-SHF-003, HR-ATT-001, HR-ATT-002, HR-ATT-003, HR-LV-001, HR-LV-002, HR-LV-003, HR-LV-004, HR-OT-001, HR-OT-002, HR-OT-003, HR-SAL-001, HR-SAL-002, HR-SAL-003, HR-SAL-004, HR-PAY-001, HR-PAY-002, HR-PAY-003, HR-PAY-004, HR-EOS-001, HR-EOS-002, HR-EOS-003, HR-EOS-004</td>
+</tr>
+</tbody>
+</table>
 <h3 id="hr-dash-001-hr-dashboard">[HR-DASH-001] HR Dashboard</h3>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/hr/dashboard" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/hr/dashboard</code></a></p>
 <p>Purpose:
@@ -1572,6 +1756,36 @@ Calculate the end-of-service benefit (Saudi Labour Law bands) and approve the se
 <p>Fields: Employee *, Termination Date *, Reason For Leaving *, Service Years *, Final Wage (SAR) *, Status, Gratuity Calculation (automatic or manual override), Gratuity Amount, Leave Salary, Other Dues, Deductions, Notes. The details page shows the calculation (first 5 years, after 5 years, entitlement percentage). <strong>Approve</strong> is a separate button. No accounting entry is created.</p>
 <hr />
 <h2 id="7-customers">7. Customers</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>7</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Customers</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Customer master with contacts, notes, projects, invoices, receipts and ageing in one workspace.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>Marketing Manager, Finance Manager, Any user with Customers — view</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>CUS-001, CUS-002, CUS-003, CUS-004</td>
+</tr>
+</tbody>
+</table>
 <p>Customers follow the Connected Workspace Standard:</p>
 <pre><code>Customers List  →  View Customer (read-only)  →  Edit / Manage Customer Workspace
 </code></pre>
@@ -1846,6 +2060,36 @@ Save keeps you in the workspace; Save &amp; close returns to the list or the pag
 CUS-003, FIN-AR-001, FIN-AR-003, FIN-ZAT-001.</p>
 <hr />
 <h2 id="8-suppliers">8. Suppliers</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>8</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Suppliers</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Supplier master with projects, orders, receipts, bills and payments in one workspace.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>Purchase Manager, Finance Manager, Any user with Suppliers — view, Super Admin</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>SUP-001, SUP-002, SUP-003, SUP-004, SUP-005</td>
+</tr>
+</tbody>
+</table>
 <p>Suppliers follow the Connected Workspace Standard:</p>
 <pre><code>Suppliers List  →  View Supplier (read-only)  →  Edit / Manage Supplier Workspace
 </code></pre>
@@ -2071,6 +2315,36 @@ Approve, Pay and Reopen a bill only on the bill itself (FIN-AP-003, FIN-AP-005).
 INV-PO-001, INV-GRN-001, FIN-AP-001, WF-002, WF-010.</p>
 <hr />
 <h2 id="9-accounting--finance">9. Accounting &amp; Finance</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>9</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Accounting &amp; Finance</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Chart of accounts, journals, ledger, supplier bills, customer invoices, VAT, cost centers and financial reports.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>Finance Manager, Account Assistant, Finance Manager (company-level users only)</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>FIN-DASH-001, FIN-COA-001, FIN-COA-002, FIN-COA-003, FIN-COA-004, FIN-JE-001, FIN-JE-002, FIN-JE-003, FIN-JE-004, FIN-GL-001, FIN-AP-001, FIN-AP-002, FIN-AP-003, FIN-AP-004, FIN-AP-005, FIN-AR-001, FIN-AR-002, FIN-AR-003, FIN-AR-004, FIN-AR-005, FIN-VAT-001, FIN-VAT-002, FIN-CC-001, FIN-CC-002, FIN-CC-003, FIN-CC-004, FIN-PR-001, FIN-PR-002, FIN-PR-003, FIN-PR-004</td>
+</tr>
+</tbody>
+</table>
 <h3 id="how-accounting-works-in-seera-read-this-first">How accounting works in Seera (read this first)</h3>
 <ul>
 <li>Every financial document (supplier bill, customer invoice, payment, receipt, goods receipt, stock issue, stock adjustment) creates its <strong>journal entry automatically</strong> when you approve or post it. You do not type these journals.</li>
@@ -2091,14 +2365,14 @@ INV-PO-001, INV-GRN-001, FIN-AP-001, WF-002, WF-010.</p>
 </thead>
 <tbody>
 <tr>
-<td>Goods receipt posted (10 × Reinforcement Steel 16mm at 100)</td>
-<td>1400 Inventory Asset 1,000</td>
-<td>2150 Goods Received Not Invoiced 1,000</td>
+<td>Goods receipt GRN-2026-0008 posted (6,000 kg Reinforcement Steel 16mm at 3.00)</td>
+<td>1400 Inventory Asset 18,000</td>
+<td>2150 Goods Received Not Invoiced 18,000</td>
 </tr>
 <tr>
-<td>Supplier bill approved, matched to that receipt (15% VAT)</td>
-<td>2150 GRNI 1,000 · 1300 Input VAT 150</td>
-<td>2100 Accounts Payable 1,150</td>
+<td>Supplier bill GST-INV-1045 approved, matched to that receipt (15% VAT)</td>
+<td>2150 GRNI 18,000 · 1300 Input VAT 2,700</td>
+<td>2100 Accounts Payable 20,700</td>
 </tr>
 <tr>
 <td>Supplier bill approved, direct service line 500</td>
@@ -2106,9 +2380,9 @@ INV-PO-001, INV-GRN-001, FIN-AP-001, WF-002, WF-010.</p>
 <td>2100 Accounts Payable 575</td>
 </tr>
 <tr>
-<td>Supplier payment 1,150 by bank</td>
-<td>2100 Accounts Payable 1,150</td>
-<td>1120 Bank Account 1,150</td>
+<td>Supplier payment 20,700 by bank</td>
+<td>2100 Accounts Payable 20,700</td>
+<td>1120 Bank Account 20,700</td>
 </tr>
 <tr>
 <td>Customer invoice approved, 2,000 + VAT</td>
@@ -2417,14 +2691,14 @@ Bill Information and Bill Lines. Each line has Description, <strong>Received Goo
 <tr>
 <td>Line: Received Goods (GRN)</td>
 <td>The posted receipt line this bill line invoices</td>
-<td>GRN-2026-0008 · Reinforcement Steel 16mm · 10 left @ 100.00</td>
+<td>GRN-2026-0008 · Reinforcement Steel 16mm · 6,000 left @ 3.00</td>
 <td>No</td>
 <td>Only this supplier's uninvoiced receipt lines are offered. Leave &quot;Direct / service line&quot; for services</td>
 </tr>
 <tr>
 <td>Line: Invoiced Qty</td>
 <td>Quantity of the receipt line invoiced now</td>
-<td>10</td>
+<td>6,000</td>
 <td>Yes when a GRN line is chosen</td>
 <td>Cannot exceed what is still uninvoiced</td>
 </tr>
@@ -2438,7 +2712,7 @@ Bill Information and Bill Lines. Each line has Description, <strong>Received Goo
 <tr>
 <td>Line: Qty, Unit Price</td>
 <td>Invoice quantity and price</td>
-<td>10 × 100.00</td>
+<td>6,000 × 3.00</td>
 <td>Unit price yes</td>
 <td>Defaults from the receipt when a GRN line is chosen</td>
 </tr>
@@ -2451,7 +2725,7 @@ Bill Information and Bill Lines. Each line has Description, <strong>Received Goo
 </tr>
 </tbody>
 </table>
-<p>Buttons: Cancel, Save (opens the bill details), Save &amp; new, Save &amp; close.</p>
+<p>Buttons: Cancel, Save (opens the bill details), Save &amp; new, Save &amp; close. When the form was opened from a goods receipt, the supplier workspace or a purchase order's Goods Receipts section, Cancel and Save &amp; close return there.</p>
 <p>Important:
 Saving a bill never posts accounting. Rows without a description or unit price are ignored.</p>
 <p>What happens after Save:
@@ -2475,7 +2749,49 @@ Accounts Payable → View.</p>
 <p>Permission required:
 Accounts Payable — view; approve for Approve &amp; Post and Reopen; process for Record Payment; edit for Edit.</p>
 <p>What you see:
-Cards (taxable, VAT, total, balance), Bill Information, Accounting Entry (the posted journal lines with a link), Payments, Bill Lines with the Received Goods column (receipt number × quantity, accrued amount, or &quot;Direct / service&quot;).</p>
+The bill is a <strong>light document workspace</strong>. A header stays at the top: Bill Number, Supplier (with a View link for Suppliers — view), status and payment state (Draft, not posted / Awaiting payment / Overdue / Partly paid / Paid in full), bill and due dates, Project / Site, the matched goods receipts and their purchase orders (links need Goods Receipts — view and Purchase Orders — view), <strong>Total</strong>, <strong>Paid</strong>, <strong>Outstanding payment</strong>, and the accounting journal (link needs Journal Entries — view). A section bar links to Bill Info · Lines · GRN Matches · VAT · Accounting Entry · Payments · Balance · Activity; a section is present only when your role may read it.</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bill Info</td>
+<td>Cards (taxable, VAT, total, balance) and Bill Information</td>
+</tr>
+<tr>
+<td>Lines</td>
+<td>Bill Lines with the Received Goods column (receipt number × quantity, accrued amount, or &quot;Direct / service&quot;)</td>
+</tr>
+<tr>
+<td>GRN Matches</td>
+<td>One row per matched receipt line: goods receipt, purchase order, item, matched quantity, accrued amount (what the receipt posted to GRNI), billed amount, variance and the match state — <em>Provisional (bill still draft)</em> or <em>Invoiced (bill approved)</em></td>
+</tr>
+<tr>
+<td>VAT</td>
+<td>VAT rate, taxable amount, input VAT, total and whether the VAT ledger row exists yet</td>
+</tr>
+<tr>
+<td>Accounting Entry</td>
+<td>The posted journal lines with a link (Journal Entries — view)</td>
+</tr>
+<tr>
+<td>Payments</td>
+<td>Every payment with account, method, purpose, reference and journal; Record Payment for open bills</td>
+</tr>
+<tr>
+<td>Balance</td>
+<td>Bill total, paid to date, outstanding payment, due date with the overdue days, payment state</td>
+</tr>
+<tr>
+<td>Activity</td>
+<td>The latest entries that name this bill (Activity Logs — view), with View all</td>
+</tr>
+</tbody>
+</table>
 <p>Buttons:</p>
 <table>
 <thead>
@@ -2486,12 +2802,16 @@ Cards (taxable, VAT, total, balance), Bill Information, Accounting Entry (the po
 </thead>
 <tbody>
 <tr>
+<td>Back</td>
+<td>Returns to where you opened the bill from — the purchase order's Billing section, the goods receipt or the supplier workspace — otherwise to Accounts Payable</td>
+</tr>
+<tr>
 <td>Approve &amp; Post</td>
 <td>Posts the bill's journal and its input VAT row, consumes the matched receipt quantities and sets the bill to <em>unpaid</em>. Refused when the VAT period is finalized, an account is inactive, or a matched receipt quantity was invoiced by another bill first</td>
 </tr>
 <tr>
 <td>Record Payment</td>
-<td>Opens FIN-AP-005 (open bills only)</td>
+<td>Opens FIN-AP-005 (open bills only); afterwards you return to the page you opened the bill from</td>
 </tr>
 <tr>
 <td>Reopen for Correction</td>
@@ -2509,7 +2829,7 @@ Cards (taxable, VAT, total, balance), Bill Information, Accounting Entry (the po
 <p>Purpose:
 Pay all or part of an open bill.</p>
 <p>Navigation:
-Supplier Bill Details → Record Payment.</p>
+Supplier Bill Details → Record Payment, or Purchase Order → Billing &amp; GRN Matching → Record Payment.</p>
 <p>Permission required:
 Accounts Payable — process.</p>
 <p>Fields:</p>
@@ -2555,7 +2875,7 @@ Accounts Payable — process.</p>
 <tr>
 <td>Payment Amount (SAR)</td>
 <td>Amount</td>
-<td>1,150.00</td>
+<td>20,700.00</td>
 <td>Yes</td>
 <td>Cannot exceed the outstanding balance</td>
 </tr>
@@ -2568,7 +2888,7 @@ Accounts Payable — process.</p>
 </tr>
 </tbody>
 </table>
-<p>Buttons: Record Payment, Back to Bill, Cancel.</p>
+<p>Buttons: Record Payment, Back (Back to Bill), Cancel. Back and Cancel return to the page you came from: the bill, or the purchase order's Billing section. After Record Payment you return there as well.</p>
 <p>What happens after Record Payment:
 A journal Dr Accounts Payable / Cr Cash or Bank is posted, the bill's paid and balance amounts update and the status moves to partially_paid or paid. If the same payment is submitted twice (double click, browser retry) the second one is recognised and nothing is added.</p>
 <h3 id="fin-ar-001--005-accounts-receivable-customer-invoices-and-receipts">[FIN-AR-001 … 005] Accounts Receivable (Customer Invoices and Receipts)</h3>
@@ -2637,6 +2957,36 @@ One row per automatic journal event (Inventory Purchase, Stock Issued, Stock Adj
 <p>Fields: Source Module *, Trigger Event *, Cost Center Rule *, Debit Account, Credit Account, Auto Post, Approval Required, Status *, Notes. Buttons: Cancel, Save, Save &amp; new, Save &amp; close.</p>
 <hr />
 <h2 id="10-inventory--purchasing">10. Inventory &amp; Purchasing</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>10</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Inventory &amp; Purchasing</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Items, stock, purchase requests, purchase orders (the procure-to-pay document workspace), goods receipts, issues, transfers, adjustments and inventory reports.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>Inventory Manager, Warehouse Incharge, Purchase Manager, Site In-Charge, Purchase Assistant, Finance Manager</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>INV-DASH-001, INV-ITEM-001, INV-ITEM-002, INV-ITEM-003, INV-ITEM-004, INV-CAT-001, INV-CAT-002, INV-CAT-003, INV-UNIT-001, INV-UNIT-002, INV-UNIT-003, INV-STK-001, INV-PR-001, INV-PR-002, INV-PR-003, INV-PR-004, INV-PO-001, INV-PO-002, INV-PO-003, INV-PO-004, INV-GRN-001, INV-GRN-002, INV-GRN-003, INV-GRN-004, INV-ISS-001, INV-ISS-002, INV-ISS-003, INV-ISS-004, INV-TRF-001, INV-TRF-002, INV-TRF-003, INV-TRF-004, INV-ADJ-001, INV-ADJ-002, INV-ADJ-003, INV-ADJ-004, INV-LED-001</td>
+</tr>
+</tbody>
+</table>
 <h3 id="how-stock-works-in-seera">How stock works in Seera</h3>
 <ul>
 <li>Stock always sits in a <strong>warehouse</strong>. On-hand quantity changes only through documents: goods receipt (in), stock issue (out), transfer (out of one warehouse, into another), adjustment (count correction). Nobody edits the on-hand number directly.</li>
@@ -2740,7 +3090,30 @@ Ask for materials to be bought.</p>
 Inventory → Purchase Requests → + Add Purchase Request.</p>
 <p>Permission required:
 Purchase Requests — create / view / edit; approve / reject for the decision.</p>
-<p>Fields: Request Date *, Required Date, Priority *, Project, Site, Deliver To Warehouse, Status *, Reason, and lines Item *, Description, Quantity *, Unit, Est. Unit Cost, Budget Line (free text). Buttons: Save / Update, Cancel; on details <strong>Approve</strong>, <strong>Reject Request</strong> (with reason), Edit, <strong>Create Purchase Order</strong> (approved requests).</p>
+<p>Fields: Request Date *, Required Date, Priority *, Project, Site, Deliver To Warehouse, Status *, Reason, and lines Item *, Description, Quantity *, Unit, Est. Unit Cost, Budget Line (free text). Example: PR-2026-0010 for Riyadh Commercial Tower, priority high, 10,000 kg of Reinforcement Steel 16mm, estimated 3.00 per kg. Buttons: Save / Update, Cancel; on details <strong>Approve</strong> (Purchase Requests — approve), <strong>Reject Request</strong> with reason (Purchase Requests — reject), Edit (draft or pending), <strong>Create Purchase Order</strong> (approved requests; Purchase Orders — create).</p>
+<p>Purchase Request Details (INV-PR-003) is a <strong>light connected view</strong>. A header stays at the top: PR number, status and ordering state (No purchase order yet / Partly ordered / Fully ordered), requested by and date, Project / Site and Warehouse (links need Projects — view and Warehouses — view), required date and priority, estimated total, the approval (who and when, or the rejection reason) and how much of the requested quantity has been ordered. A section bar links to Request Information · Requested Items · Purchase Orders · Activity.</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Requested Items</td>
+<td>Each line with Quantity, <strong>Ordered so far</strong> (the lines of the purchase orders raised from this request, cancelled orders excluded) and <strong>Still to order</strong></td>
+</tr>
+<tr>
+<td>Purchase Orders From This Request</td>
+<td>PO number, supplier, total, Received (for example 6,000 of 10,000), status and View PO (Purchase Orders — view)</td>
+</tr>
+<tr>
+<td>Activity</td>
+<td>The latest entries that name this request (Activity Logs — view), with View all</td>
+</tr>
+</tbody>
+</table>
 <p>Statuses: draft → pending → approved / rejected → converted (when a PO is created from it).</p>
 <h3 id="inv-po-001--004-purchase-orders">[INV-PO-001 … 004] Purchase Orders</h3>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/inventory/purchase-orders" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/inventory/purchase-orders</code></a> (INV-PO-001) · <a class="url" href="https://seera.tech-brit.co.uk/admin/inventory/purchase-orders/create" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/inventory/purchase-orders/create</code></a> (INV-PO-002) · <code>https://seera.tech-brit.co.uk/admin/inventory/purchase-orders/{id}</code> (INV-PO-003) · <code>https://seera.tech-brit.co.uk/admin/inventory/purchase-orders/{id}/edit</code> (INV-PO-004)</p>
@@ -2779,7 +3152,7 @@ Purchase Orders — create / view / edit; approve for Approve Order.</p>
 <tr>
 <td>Source Purchase Request</td>
 <td>The PR it fulfils</td>
-<td>PR-2026-0009</td>
+<td>PR-2026-0010</td>
 <td>No</td>
 <td></td>
 </tr>
@@ -2807,7 +3180,7 @@ Purchase Orders — create / view / edit; approve for Approve Order.</p>
 <tr>
 <td>Lines</td>
 <td>Item *, Description, Qty *, Unit Price, Disc %, VAT %, Line Total</td>
-<td>10 × Reinforcement Steel 16mm at 100.00</td>
+<td>10,000 kg × Reinforcement Steel 16mm at 3.00</td>
 <td>Yes</td>
 <td>+ Add Line</td>
 </tr>
@@ -2820,8 +3193,74 @@ Purchase Orders — create / view / edit; approve for Approve Order.</p>
 </tr>
 </tbody>
 </table>
-<p>Buttons: Save / Update, Cancel; on details <strong>Approve Order</strong>, Upload, Remove (quotation), Edit, <strong>Create Goods Receipt</strong> (approved or partially received orders).</p>
-<p>Statuses: draft → approved → partially_received → received. Received quantity per line is updated by posted goods receipts.</p>
+<p>Buttons: Save / Update, Cancel; on details <strong>Approve Order</strong> (draft; Purchase Orders — approve), Upload, Remove (quotation), Edit (draft), <strong>Create Goods Receipt</strong>, Back to Purchase Orders.</p>
+<h4 id="purchase-order-details-inv-po-003--the-procure-to-pay-document-workspace">Purchase Order Details (INV-PO-003) — the procure-to-pay document workspace</h4>
+<p>Web address: <code>https://seera.tech-brit.co.uk/admin/inventory/purchase-orders/{id}</code></p>
+<p>The order page is the <strong>connected document workspace</strong> of the whole procure-to-pay chain: everything that happened to the order is read here, while receiving, billing and payment stay explicit actions on their own pages. The page is read-only.</p>
+<p>Header (always visible): PO number, status and receiving state, approval (who and when), Supplier with <strong>View</strong> (Suppliers — view) and <strong>Manage</strong> (Suppliers — edit) links, PO date, expected delivery, Project / Site (link needs Projects — view), Deliver to warehouse (link needs Warehouses — view), order total and VAT, <strong>Received x of y · still to receive</strong>, <strong>Invoiced · received but not invoiced</strong>, billing state (Nothing to invoice yet / Received but not invoiced / Partly invoiced / Fully invoiced) with the number of bills and the outstanding payment (Accounts Payable — view), and the number of goods receipts (with how many are still draft).</p>
+<p>Section bar: Overview · Order Lines · Source Purchase Request · Supplier &amp; Commercial · Quotations · Goods Receipts · Billing &amp; GRN Matching · Accounting · Activity. A section is present only when your role may read it; the page never shows more than your permissions allow.</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>What it shows</th>
+<th>Needs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Overview</td>
+<td>Cards (taxable, VAT, total, receiving state) and Order Information</td>
+<td>Purchase Orders — view</td>
+</tr>
+<tr>
+<td>Order Lines</td>
+<td>Per line: Ordered, <strong>Received</strong> (posted receipts), <strong>Still to receive</strong>, <strong>Invoiced</strong> (approved bills matched to the receipts), <strong>Received but not invoiced</strong>, unit price, discount, taxable, VAT, total</td>
+<td>Purchase Orders — view</td>
+</tr>
+<tr>
+<td>Source Purchase Request</td>
+<td>PR number (link), requested by, required date, priority, request status, requested lines and reason; or &quot;raised directly, without a purchase request&quot;</td>
+<td>Purchase Requests — view</td>
+</tr>
+<tr>
+<td>Supplier &amp; Commercial</td>
+<td>Supplier code and name, contact, VAT / CR numbers, payment terms and accepted payment types, rating, supplier status, View Supplier / Manage Supplier; the payable account only with Accounts Payable — view</td>
+<td>Suppliers — view</td>
+</tr>
+<tr>
+<td>Quotations</td>
+<td>Supplier quotation files: download, Upload (Purchase Orders — create, while the order is open), Remove (draft only, Purchase Orders — delete)</td>
+<td>Purchase Orders — view</td>
+</tr>
+<tr>
+<td>Goods Receipts</td>
+<td>Every receipt against this order: GRN, date, warehouse, received by, accepted quantity, value, stock and status, invoicing state (Not posted yet / Received but not invoiced / n received but not invoiced / Invoiced), View GRN, the receipt's journal (Journal Entries — view), Create Supplier Bill (Accounts Payable — create, posted receipts with uninvoiced quantity)</td>
+<td>Goods Receipts — view</td>
+</tr>
+<tr>
+<td>Billing &amp; GRN Matching</td>
+<td>The per-line table Ordered / Received / Still to receive / Invoiced / Received but not invoiced, then the supplier bills matched to this order's receipts: bill, dates, matched GRNs, total, paid, outstanding payment, status, View bill, Edit draft (Accounts Payable — edit), Record Payment (Accounts Payable — process)</td>
+<td>Accounts Payable — view</td>
+</tr>
+<tr>
+<td>Accounting</td>
+<td>The journals posted by this order's receipts, the bills matched to them and their payments, with a plain explanation of GRNI; view only</td>
+<td>Journal Entries — view</td>
+</tr>
+<tr>
+<td>Activity</td>
+<td>Entries that name the order, its receipts or its bills</td>
+<td>Activity Logs — view</td>
+</tr>
+</tbody>
+</table>
+<p>Goods Receipts, Billing, Accounting and Activity show the latest 5 rows with paging and a <strong>View all</strong> link to the full register.</p>
+<p><strong>Create Goods Receipt</strong> appears in the page header and above the Goods Receipts section only when the order is approved or partially received, something is still to receive, and your role holds Goods Receipts — create (or receive). The receipt form opens with the outstanding quantities filled in; <strong>Save &amp; close</strong> brings you back to this order's Goods Receipts section, <strong>Save</strong> stays on the receipt so you can Post Stock, and the receipt page keeps a Back link to the order.</p>
+<p><strong>Create Supplier Bill</strong> from the Goods Receipts section and <strong>Record Payment</strong> / <strong>Edit draft</strong> from the Billing section return to this order's Billing section when you finish or cancel.</p>
+<p>How a bill is linked to an order: through its goods receipt matches (F04). A bill entered without a receipt match — a direct or service bill — does not appear on the order; find it under Accounts Payable.</p>
+<p>Example: PO-2026-0012 orders 10,000 kg. After GRN-2026-0008 (6,000 kg) is posted the header reads <em>Partially received · 6000 of 10000 kg · still to receive 4000 kg</em>. After GST-INV-1045 is approved for those 6,000 kg the billing state reads <em>Fully invoiced</em> for the received part, and once GRN-2026-0009 (4,000 kg) is posted it reads <em>Partly invoiced · received but not invoiced 4000 kg</em> until the second bill is approved.</p>
+<p>Statuses: draft → approved → partially_received → received. Received quantity per line is updated by posted goods receipts; invoiced quantity by approved supplier bills.</p>
 <h3 id="inv-grn-001--004-goods-receipt-notes">[INV-GRN-001 … 004] Goods Receipt Notes</h3>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/inventory/goods-receipts" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/inventory/goods-receipts</code></a> (INV-GRN-001) · <a class="url" href="https://seera.tech-brit.co.uk/admin/inventory/goods-receipts/create" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/inventory/goods-receipts/create</code></a> (INV-GRN-002) · <code>https://seera.tech-brit.co.uk/admin/inventory/goods-receipts/{id}</code> (INV-GRN-003) · <code>https://seera.tech-brit.co.uk/admin/inventory/goods-receipts/{id}/edit</code> (INV-GRN-004)</p>
 <p>Purpose:
@@ -2829,7 +3268,7 @@ Confirm that goods arrived and put them into stock.</p>
 <p>Who uses it:
 Warehouse Incharge.</p>
 <p>Navigation:
-Inventory → Goods Receipt Notes → + Add Goods Receipt, or Purchase Order → Create Goods Receipt (lines pre-filled with the outstanding quantities and the order prices after discount).</p>
+Inventory → Goods Receipt Notes → + Add Goods Receipt, or Purchase Order → Create Goods Receipt (lines pre-filled with the outstanding quantities and the order prices after discount; Save &amp; close returns to the order's Goods Receipts section).</p>
 <p>Permission required:
 Goods Receipts — create / view / edit; post for Post Stock.</p>
 <p>Fields:</p>
@@ -2882,13 +3321,40 @@ Goods Receipts — create / view / edit; post for Post Stock.</p>
 <tr>
 <td>Lines</td>
 <td>Item *, Ordered, Received *, Accepted, Unit Cost</td>
-<td>10 / 10 / 10 / 100.00</td>
+<td>10,000 / 6,000 / 6,000 / 3.00</td>
 <td>Yes</td>
 <td>Accepted is what enters stock; the rest is recorded as rejected</td>
 </tr>
 </tbody>
 </table>
-<p>Buttons: Save / Update, Cancel; on details <strong>Post Stock</strong>, Edit (draft), and, once posted with uninvoiced quantity, <strong>Create Supplier Bill</strong>.</p>
+<p>Buttons: Cancel, <strong>Save</strong> (stays on the receipt, where Post Stock is), <strong>Save &amp; close</strong> (returns to where you came from, otherwise the list); on details <strong>Post Stock</strong> (Goods Receipts — post), Edit (draft; Goods Receipts — edit), <strong>Create Supplier Bill</strong> (posted, uninvoiced quantity; Accounts Payable — create), <strong>Back</strong> / <strong>Back to Purchase Order</strong>.</p>
+<p>Goods Receipt Details (INV-GRN-003) is a <strong>light document workspace</strong>. A header stays at the top: GRN number, status, received date and by whom, the source purchase order (link needs Purchase Orders — view), supplier (View needs Suppliers — view), warehouse (link needs Warehouses — view), Project / Site, value, Stock (Posted to stock / Not posted yet), Accounting (Posted with the journal link for Journal Entries — view / Not posted yet) and the invoicing state (Not posted yet / Received but not invoiced / Partly invoiced / Invoiced, with the invoiced and received-but-not-invoiced quantities). A section bar links to Receipt Information · Received Lines · Bill Matches · Accounting Entry · Activity.</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>What it shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Received Lines</td>
+<td>Ordered, Received, Accepted, Rejected, <strong>Invoiced</strong>, <strong>Received but not invoiced</strong>, unit cost, total cost</td>
+</tr>
+<tr>
+<td>Bill Matches</td>
+<td>Each supplier bill line matched to this receipt: bill, date, bill status, item, matched quantity, accrued amount, match state (Provisional while the bill is draft, Invoiced once approved), View bill (Accounts Payable — view)</td>
+</tr>
+<tr>
+<td>Accounting Entry</td>
+<td>The posted journal lines with a link (Journal Entries — view)</td>
+</tr>
+<tr>
+<td>Activity</td>
+<td>The latest entries that name this receipt (Activity Logs — view), with View all</td>
+</tr>
+</tbody>
+</table>
 <p>What happens after Post Stock:
 Stock and the stock ledger increase by the accepted quantity at the unit cost; the purchase order's received quantity and status update; the accounting entry <strong>Dr Inventory Asset / Cr Goods Received Not Invoiced</strong> is posted. No supplier payable and no VAT are recorded at this stage. The receipt becomes read-only.</p>
 <p>Common mistakes:</p>
@@ -2920,6 +3386,36 @@ The on-hand quantity becomes the counted quantity (re-read at posting time); a l
 <p>Stock Valuation, Low Stock, Project Material Consumption and Stock Movement, each with filters and an <strong>Export PDF</strong> button that uses the browser's print function. There is no CSV export for inventory reports yet. Permission: Inventory Reports — view.</p>
 <hr />
 <h2 id="11-projects">11. Projects</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>11</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Projects</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Project master, cost report and what the Projects menu offers today.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>Project Manager, Super Admin</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>MST-PRJ-001, MST-PRJ-002, MST-PRJ-003, MST-PRJ-004, MST-PRJ-005, MST-SITE-001, MST-SITE-002, MST-SITE-003, MST-SITE-004</td>
+</tr>
+</tbody>
+</table>
 <p>What exists today is the <strong>project master</strong> and the related masters. There is no project dashboard, budget lines, milestone or site-expense screen yet (chapter 20).</p>
 <h3 id="mst-prj-001--004-projects">[MST-PRJ-001 … 004] Projects</h3>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/master/projects" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/master/projects</code></a> (MST-PRJ-001) · <a class="url" href="https://seera.tech-brit.co.uk/admin/master/projects/create" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/master/projects/create</code></a> (MST-PRJ-002) · <code>https://seera.tech-brit.co.uk/admin/master/projects/{id}</code> (MST-PRJ-003) · <code>https://seera.tech-brit.co.uk/admin/master/projects/{id}/edit</code> (MST-PRJ-004)</p>
@@ -3091,6 +3587,36 @@ Sites — create / view / edit.</p>
 </ul>
 <hr />
 <h2 id="12-marketing">12. Marketing</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>12</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Marketing</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Leads, visits and conversion to customers.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>Marketing Manager</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>MKT-001, MKT-002, MKT-003, MKT-004, MKT-005</td>
+</tr>
+</tbody>
+</table>
 <h3 id="mkt-001-leads--visits-mkt-002-new-lead-mkt-004-edit-lead">[MKT-001] Leads &amp; Visits, [MKT-002] New Lead, [MKT-004] Edit Lead</h3>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/marketing/leads" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/marketing/leads</code></a> (MKT-001) · <a class="url" href="https://seera.tech-brit.co.uk/admin/marketing/leads/create" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/marketing/leads/create</code></a> (MKT-002) · <code>https://seera.tech-brit.co.uk/admin/marketing/leads/{id}/edit</code> (MKT-004)</p>
 <p>Purpose:
@@ -3174,6 +3700,36 @@ Lead Information, the visits list, and a <strong>Record Visit</strong> form (Vis
 <p>Filters by period, sales person and outcome; cards Clients Visited, Follow-ups Scheduled, Deals Won; rows Date / Time, Client, Location, Person Met, Visited By, Outcome, Next Follow-up, Remarks; <strong>Export Excel (CSV)</strong> needs Marketing — export.</p>
 <hr />
 <h2 id="13-activity-logs--audit">13. Activity Logs / Audit</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>13</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Activity Logs / Audit</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Who did what and when.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>Super Admin</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>ADM-020</td>
+</tr>
+</tbody>
+</table>
 <h3 id="adm-020-activity-logs">[ADM-020] Activity Logs</h3>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/activity-logs" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/activity-logs</code></a></p>
 <p>Purpose:
@@ -3190,6 +3746,36 @@ Filters (search, user, module, dates) and the table Date &amp; Time, User, Modul
 The Old Value and New Value columns are filled only for a few administrative entries; for business documents the log records the action and the document number, not the field-level change. Activity for one supplier or customer is also shown inside its workspace (Activity tab).</p>
 <hr />
 <h2 id="14-current-zatca-foundation">14. Current ZATCA Foundation</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>14</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Current ZATCA Foundation</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>What the local ZATCA records are and are not.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>Finance Manager</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>FIN-ZAT-001, FIN-ZAT-002</td>
+</tr>
+</tbody>
+</table>
 <p>Status: <strong>FOUNDATION ONLY</strong>. Read this chapter before promising anything about e-invoicing to a customer or an auditor.</p>
 <p>What Seera does today when a customer invoice is approved:</p>
 <table>
@@ -3257,6 +3843,36 @@ The Old Value and New Value columns are filled only for a few administrative ent
 <p>In the Customer workspace the tab is called <strong>Local ZATCA Records</strong> and every status is marked &quot;local, not verified live&quot;.</p>
 <hr />
 <h2 id="15-reports">15. Reports</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>15</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Reports</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Where every report lives and how to export it.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>Finance Manager, Finance Manager (company-level users only), Project Manager, Inventory Manager</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>FIN-REP-001, FIN-REP-002, FIN-REP-003, FIN-REP-004, FIN-REP-005, FIN-REP-006, FIN-REP-007, INV-REP-001, INV-REP-002, INV-REP-003, INV-REP-004, INV-REP-005</td>
+</tr>
+</tbody>
+</table>
 <p>All accounting reports have a period filter (presets or from / to), a Reset button, <strong>Export Excel (CSV)</strong> (needs Financial Reports — export) and <strong>Export PDF</strong> (browser print). Project, site and warehouse scoped users see only their own lines, and opening balances are shown to company-level users only.</p>
 <table>
 <thead>
@@ -3339,6 +3955,36 @@ The Old Value and New Value columns are filled only for a few administrative ent
 <p>Not available yet: HR reports (attendance register, payroll register), project dashboard and project reports as a menu (use FIN-REP-007 and INV-REP-004).</p>
 <hr />
 <h2 id="16-common-tasks">16. Common Tasks</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>16</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Common Tasks</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Step-by-step recipes for the most frequent jobs.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>All users</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>— (no screens; reference chapter)</td>
+</tr>
+</tbody>
+</table>
 <h3 id="create-a-supplier">Create a supplier</h3>
 <ol>
 <li>Sign in.</li>
@@ -3355,8 +4001,8 @@ The Old Value and New Value columns are filled only for a few administrative ent
 Next common action: create a Purchase Order, or open the supplier's workspace with Edit / Manage.</p>
 <h3 id="enter-and-approve-a-supplier-bill-for-goods-you-received">Enter and approve a supplier bill for goods you received</h3>
 <ol>
-<li>Open Inventory → Goods Receipt Notes and click View on the posted receipt (GRN-2026-0008).</li>
-<li>Click Create Supplier Bill. The bill form opens with the receipt lines filled in.</li>
+<li>Open Inventory → Goods Receipt Notes and click View on the posted receipt (GRN-2026-0008), or open the purchase order (PO-2026-0012) and its Goods Receipts section.</li>
+<li>Click Create Supplier Bill. The bill form opens with the receipt lines filled in (Cancel and Save &amp; close return to the receipt or the order you started from).</li>
 <li>Enter the supplier's Bill Number (GST-INV-1045) and check the Bill Date and VAT Rate.</li>
 <li>Adjust Invoiced Qty or Unit Price only if the supplier's invoice differs.</li>
 <li>Click Save. The bill details page opens.</li>
@@ -3388,6 +4034,36 @@ Next common action: Record Payment when the bill is paid.</p>
 <p>Use the language switch in the top bar. The screen turns to Arabic (right-to-left) or back to English immediately; your data is unchanged.</p>
 <hr />
 <h2 id="17-end-to-end-workflows">17. End-to-End Workflows</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>17</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>End-to-End Workflows</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>The documented business flows WF-001 to WF-015.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>Super Admin, HR Manager, Finance Manager, Account Assistant, Purchase Manager, Warehouse Incharge, Site In-Charge, Marketing Manager</td>
+</tr>
+<tr>
+<td><strong>Workflows in this chapter</strong></td>
+<td>WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015</td>
+</tr>
+</tbody>
+</table>
 <p>Each workflow lists purpose, roles, prerequisites, navigation, steps, example input, the system result, statuses before and after, the audit trail, common errors and the related Screen IDs. The Workflow Index is in <a href="WORKFLOW-INDEX.html">WORKFLOW-INDEX.md</a>.</p>
 <h3 id="wf-001-create-employee-and-user-access">WF-001 Create Employee and User Access</h3>
 <p>Purpose: register a new employee and give them a Seera login.
@@ -3407,26 +4083,32 @@ Common errors: contract start in the future; a user already linked to the employ
 Related screens: HR-EMP-002, HR-EMP-004, USR-002, USR-003.</li>
 </ol>
 <h3 id="wf-002-supplier--purchase-order--goods-receipt--supplier-bill--payment">WF-002 Supplier → Purchase Order → Goods Receipt → Supplier Bill → Payment</h3>
-<p>Purpose: buy materials, receive them, record the supplier's invoice and pay it, with correct accounting at every step.
-Roles involved: Purchase Manager (order), Warehouse Incharge (receipt), Account Assistant (bill), Finance Manager (approve, pay).
-Prerequisites: supplier SUP-014 with payment terms and payable account; item ITM-0031; warehouse Riyadh Site Warehouse; an open VAT period.
-Navigation: Inventory → Purchase Orders → + Add Purchase Order; Purchase Order → Create Goods Receipt; Goods Receipt → Post Stock; Goods Receipt → Create Supplier Bill; Bill → Approve &amp; Post; Bill → Record Payment.
+<p>Purpose: buy materials, receive them (in one or several deliveries), record the supplier's invoices and pay them, with correct accounting at every step, and read the whole chain from the purchase order.
+Roles involved: Site In-Charge (request), Purchase Manager (order), Warehouse Incharge (receipts), Account Assistant (bills), Finance Manager (approve, pay).
+Prerequisites: supplier SUP-014 Gulf Steel Trading with payment terms and payable account; item ITM-0031 Reinforcement Steel 16mm; warehouse Riyadh Site Warehouse (project Riyadh Commercial Tower); an open VAT period.
+Navigation: Inventory → Purchase Requests → Approve → Create Purchase Order; Purchase Order (INV-PO-003) → Approve Order → Create Goods Receipt; Goods Receipt → Post Stock; Purchase Order → Goods Receipts → Create Supplier Bill; Bill → Approve &amp; Post; Purchase Order → Billing &amp; GRN Matching → Record Payment.
 Steps and example input:</p>
 <ol>
-<li>Purchase order PO-2026-0012: supplier Gulf Steel Trading, deliver to Riyadh Site Warehouse, project Riyadh Commercial Tower, line 10 × Reinforcement Steel 16mm at 100.00, VAT 15%. Save, then Approve Order.</li>
-<li>Goods receipt GRN-2026-0008 from the order: received 10, accepted 10, unit cost 100.00. Save, then Post Stock.</li>
-<li>Supplier bill GST-INV-1045 from the receipt: line matched to GRN-2026-0008, invoiced qty 10 at 100.00. Save, then Approve &amp; Post.</li>
-<li>Payment: 1,150.00 from 1120 Bank Account, Bank Transfer, purpose Bill payment. Record Payment.
+<li>Purchase request PR-2026-0010 (Site In-Charge): Riyadh Commercial Tower, priority high, 10,000 kg of Reinforcement Steel 16mm, estimated 3.00 per kg. Save. The Purchase Manager approves it (WF-011).</li>
+<li>Purchase order PO-2026-0012 from the request: supplier Gulf Steel Trading, deliver to Riyadh Site Warehouse, project Riyadh Commercial Tower, line 10,000 kg × Reinforcement Steel 16mm at 3.00, VAT 15% (SAR 30,000 + 4,500 = 34,500). Save, then <strong>Approve Order</strong>. The order page now shows <em>Nothing received yet · still to receive 10000 kg</em>.</li>
+<li>First delivery — goods receipt GRN-2026-0008 from the order (Warehouse Incharge, Purchase Order → Create Goods Receipt): received 6,000, accepted 6,000, unit cost 3.00. <strong>Save</strong> (the receipt opens), then <strong>Post Stock</strong>. Back on the order: <em>Partially received · 6000 of 10000 kg · still to receive 4000 kg</em>; the Goods Receipts section lists GRN-2026-0008 as <em>Received but not invoiced</em>.</li>
+<li>Supplier bill GST-INV-1045 (Account Assistant, Purchase Order → Goods Receipts → Create Supplier Bill): line matched to GRN-2026-0008, invoiced qty 6,000 at 3.00 (SAR 18,000 + VAT 2,700 = 20,700). Save. The Finance Manager clicks <strong>Approve &amp; Post</strong>. The order's Billing section now shows Ordered 10000 · Received 6000 · Still to receive 4000 · Invoiced 6000 · Received but not invoiced 0, and the bill GST-INV-1045 with outstanding payment SAR 20,700.</li>
+<li>Second delivery — goods receipt GRN-2026-0009: received 4,000, accepted 4,000, unit cost 3.00. Save &amp; close returns to the order; open the receipt and Post Stock. The order becomes <em>Fully received</em>, billing state <em>Partly invoiced · received but not invoiced 4000 kg</em>.</li>
+<li>Second bill GST-INV-1071 for GRN-2026-0009: 4,000 at 3.00 (SAR 12,000 + 1,800 = 13,800). Save, Approve &amp; Post. The order reads <em>Fully invoiced</em>.</li>
+<li>Payment of GST-INV-1045: 20,700.00 from 1120 Bank Account, Bank Transfer, purpose Bill payment (Purchase Order → Billing → Record Payment). Record Payment returns to the order's Billing section, where the bill now shows Paid 20,700 and Outstanding payment 0. Pay GST-INV-1071 the same way (13,800.00).
 Expected accounting result:</li>
 </ol>
 <ul>
-<li>Step 2: Dr 1400 Inventory Asset 1,000 / Cr 2150 Goods Received Not Invoiced 1,000. Stock 10 units at 100.</li>
-<li>Step 3: Dr 2150 GRNI 1,000 / Dr 1300 Input VAT 150 / Cr 2100 Accounts Payable 1,150. One input VAT row of 150.</li>
-<li>Step 4: Dr 2100 Accounts Payable 1,150 / Cr 1120 Bank 1,150.
-Statuses: PO draft → approved → received; GRN draft → posted; bill draft → unpaid → paid.
-Audit trail: Created purchase order, Approved purchase order, Created goods receipt, Posted goods receipt, Created supplier bill, Approved supplier bill, Recorded supplier payment.
-Common errors: receiving more than ordered; bill for received goods entered as a direct line (goods expensed twice); bill dated in a finalized VAT period; payment larger than the balance; cash account chosen for a bank-only supplier.
-Related screens: SUP-002, INV-PO-002, INV-PO-003, INV-GRN-002, INV-GRN-003, FIN-AP-002, FIN-AP-003, FIN-AP-005, SUP-004.</li>
+<li>Step 3: Dr 1400 Inventory Asset 18,000 / Cr 2150 Goods Received Not Invoiced 18,000. Stock 6,000 kg at 3.00.</li>
+<li>Step 4: Dr 2150 GRNI 18,000 / Dr 1300 Input VAT 2,700 / Cr 2100 Accounts Payable 20,700. One input VAT row of 2,700.</li>
+<li>Step 5: Dr 1400 Inventory Asset 12,000 / Cr 2150 GRNI 12,000. Stock 10,000 kg at 3.00.</li>
+<li>Step 6: Dr 2150 GRNI 12,000 / Dr 1300 Input VAT 1,800 / Cr 2100 Accounts Payable 13,800. GRNI for the order is back to 0.</li>
+<li>Step 7: Dr 2100 Accounts Payable 20,700 / Cr 1120 Bank 20,700, then 13,800 / 13,800.
+Where to read it: the order's Accounting section lists all six journals; each goods receipt shows its own entry and its Bill Matches; each bill shows its GRN Matches, VAT, payments and balance.
+Statuses: request draft → pending → approved → converted; PO draft → approved → partially_received → received; GRN draft → posted (twice); bills draft → unpaid → paid.
+Audit trail: Created purchase request, Approved purchase request, Created purchase order, Approved purchase order, Created goods receipt, Posted goods receipt, Created supplier bill, Approved supplier bill, Recorded supplier payment — all visible in the order's Activity section.
+Common errors: receiving more than the order's outstanding quantity (refused with the remaining figure); a bill for received goods entered as a direct line (goods expensed twice, and the bill does not appear on the order); a bill dated in a finalized VAT period; a payment larger than the balance; a cash account chosen for a bank-only supplier.
+Related screens: SUP-002, INV-PR-002, INV-PR-003, INV-PO-002, INV-PO-003, INV-GRN-002, INV-GRN-003, FIN-AP-002, FIN-AP-003, FIN-AP-005, SUP-004.</li>
 </ul>
 <h3 id="wf-003-customer--invoice--receipt">WF-003 Customer → Invoice → Receipt</h3>
 <p>Purpose: invoice a customer and record the money received.
@@ -3519,16 +4201,18 @@ The flow in user language:</p>
 <li>A <strong>direct or service bill</strong> with no receipt posts Dr Expense / Dr Input VAT / Cr Accounts Payable.
 Rules the system enforces: a receipt line can be invoiced only up to its accepted quantity, across one or many bills; two bills cannot invoice the same quantity; a price difference between the invoice and the receipt goes to the line's expense account, never into inventory; reopening a bill gives the quantity back to the receipt.
 You never type these journals yourself. Do not edit posted journals; correct with Reopen or a new document.
-Related screens: INV-GRN-003, FIN-AP-002, FIN-AP-003, FIN-AP-005, SUP-004.</li>
+How it looks on screen (PO-2026-0012, 10,000 kg at 3.00): after GRN-2026-0008 (6,000 kg) is posted, the order's Billing &amp; GRN Matching section shows Ordered 10000 · Received 6000 · Still to receive 4000 · Invoiced 0 · <strong>Received but not invoiced 6000</strong> — that last figure is the GRNI accrual of SAR 18,000 on account 2150. The receipt's header reads <em>Received but not invoiced</em>. When GST-INV-1045 is approved for those 6,000 kg, Invoiced becomes 6000, Received but not invoiced 0, the receipt reads <em>Invoiced</em>, the bill's GRN Matches section shows the match as <em>Invoiced (bill approved)</em> and the order's Accounting section lists both journals. Received but not invoiced across all orders is what account 2150 holds.
+Related screens: INV-PO-003, INV-GRN-003, FIN-AP-002, FIN-AP-003, FIN-AP-005, SUP-004.</li>
 </ol>
 <h3 id="wf-011-purchase-request--purchase-order">WF-011 Purchase Request → Purchase Order</h3>
 <p>Purpose: let a site ask for materials and let purchasing turn the request into an order.
 Roles involved: Site In-Charge (request), Purchase Manager (approve, order).
 Navigation: Inventory → Purchase Requests → + Add Purchase Request; Request → Approve; Request → Create Purchase Order.
-Steps: request PR-2026-0009 for Riyadh Commercial Tower, priority high, 10 × Reinforcement Steel 16mm, estimated 100.00. Save. Approve. Create Purchase Order (lines copied), choose Gulf Steel Trading, Save, Approve Order.
+Steps: request PR-2026-0010 for Riyadh Commercial Tower, priority high, 10,000 kg × Reinforcement Steel 16mm, estimated 3.00 per kg. Save. Approve. Create Purchase Order (lines copied), choose Gulf Steel Trading, Save, Approve Order.
+What you see afterwards: the request page (INV-PR-003) reads <em>Fully ordered</em>, its Requested Items show Ordered so far 10000 / Still to order 0 and its Purchase Orders section lists PO-2026-0012 with the received quantity as deliveries are posted; the order page (INV-PO-003) shows the request under Source Purchase Request with a link back.
 Statuses: request draft → pending → approved → converted; order draft → approved.
-Audit trail: Created purchase request, Approved purchase request, Created purchase order.
-Related screens: INV-PR-002, INV-PR-003, INV-PO-002.</p>
+Audit trail: Created purchase request, Approved purchase request, Created purchase order (the request's Activity section and the order's Activity section both show them).
+Related screens: INV-PR-002, INV-PR-003, INV-PO-002, INV-PO-003.</p>
 <h3 id="wf-012-correct-an-approved-bill-or-invoice-reopen">WF-012 Correct an approved bill or invoice (Reopen)</h3>
 <p>Purpose: fix a wrong approved document without editing posted accounting.
 Roles involved: Super Admin.
@@ -3563,6 +4247,36 @@ Statuses: draft → approved.
 Related screens: HR-EOS-002, HR-EOS-003.</p>
 <hr />
 <h2 id="18-troubleshooting">18. Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>18</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Troubleshooting</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>What a message means and what to do.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>All users</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>— (no screens; reference chapter)</td>
+</tr>
+</tbody>
+</table>
 <table>
 <thead>
 <tr>
@@ -3644,6 +4358,36 @@ Related screens: HR-EOS-002, HR-EOS-003.</p>
 <table>
 <thead>
 <tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>19</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Glossary</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Terms used in this guide.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>All users</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>— (no screens; reference chapter)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
 <th>Term</th>
 <th>Meaning</th>
 </tr>
@@ -3660,6 +4404,10 @@ Related screens: HR-EOS-002, HR-EOS-003.</p>
 <tr>
 <td>Connected workspace</td>
 <td>The Edit / Manage page of a record where its profile and related records are managed in tabs</td>
+</tr>
+<tr>
+<td>Document workspace</td>
+<td>The read-only View page of a purchase order, request, goods receipt or bill that shows the document with everything related to it (receipts, bills, journals, activity), each section by permission</td>
 </tr>
 <tr>
 <td>Draft</td>
@@ -3690,8 +4438,16 @@ Related screens: HR-EOS-002, HR-EOS-003.</p>
 <td>A supplier bill line linked to a goods receipt line</td>
 </tr>
 <tr>
+<td>Outstanding payment</td>
+<td>The part of an approved bill not yet paid (bill total minus paid)</td>
+</tr>
+<tr>
 <td>Posted</td>
 <td>Written to the general ledger; cannot be edited</td>
+</tr>
+<tr>
+<td>Received but not invoiced</td>
+<td>Accepted receipt quantity not yet covered by an approved supplier bill; its value is the GRNI accrual</td>
 </tr>
 <tr>
 <td>Reopen</td>
@@ -3700,6 +4456,10 @@ Related screens: HR-EOS-002, HR-EOS-003.</p>
 <tr>
 <td>Save &amp; close / Save &amp; new / Save</td>
 <td>The standard form buttons (chapter 1)</td>
+</tr>
+<tr>
+<td>Still to receive</td>
+<td>Ordered quantity minus the quantity received by posted goods receipts</td>
 </tr>
 <tr>
 <td>VAT period</td>
@@ -3713,6 +4473,36 @@ Related screens: HR-EOS-002, HR-EOS-003.</p>
 </table>
 <hr />
 <h2 id="20-current-limitations--not-yet-operational">20. Current Limitations / Not Yet Operational</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>20</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Current Limitations / Not Yet Operational</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>What is not usable yet.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>Super Admin, trainers</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>— (no screens; reference chapter)</td>
+</tr>
+</tbody>
+</table>
 <p>Areas that exist as menus, settings or plans but are not usable business functions today. Do not train users on them as working features.</p>
 <table>
 <thead>
@@ -3809,14 +4599,49 @@ Related screens: HR-EOS-002, HR-EOS-003.</p>
 <td>Needs mail configuration on the server</td>
 </tr>
 <tr>
+<td>Purchase order ↔ supplier bill link without a goods receipt match</td>
+<td>PARTIAL</td>
+<td>A bill is linked to an order only through its goods receipt matches; a direct or service bill is not shown on the order</td>
+</tr>
+<tr>
 <td>Forms still on the older Save / Cancel layout</td>
 <td>PARTIAL</td>
-<td>Master Setup (except Suppliers and Customers), HR registers, Inventory, Marketing, Roles, Users (Save &amp; stay only)</td>
+<td>Master Setup (except Suppliers and Customers), HR registers, Inventory (except Goods Receipts), Marketing, Roles, Users (Save &amp; stay only)</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="21-quick-start-by-role">21. Quick Start by Role</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chapter number</strong></td>
+<td>21</td>
+</tr>
+<tr>
+<td><strong>Chapter name</strong></td>
+<td>Quick Start by Role</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>The screens each role uses daily.</td>
+</tr>
+<tr>
+<td><strong>Primary roles</strong></td>
+<td>All users</td>
+</tr>
+<tr>
+<td><strong>Screens in this chapter</strong></td>
+<td>— (no screens; reference chapter)</td>
+</tr>
+</tbody>
+</table>
 <h3 id="super-admin">Super Admin</h3>
 <p>Daily: Dashboard (ADM-010), Users (USR-001), Roles and Permission Matrix (ROL-001, ROL-005), Activity Logs (ADM-020). Setup: Company Profile (MST-COM-001), Organization Structure (MST-ORG-001), Projects and Locations (MST-PRJ-001, MST-SITE-001), Warehouses (MST-WH-001). Corrections: Reopen on bills and invoices (WF-012), receiving stock transfers (WF-006).</p>
 <h3 id="finance-manager">Finance Manager</h3>
@@ -3851,9 +4676,9 @@ Not available yet: mobile check-in, site expense entry, equipment.</p>
 <h3 id="warehouse-incharge">Warehouse Incharge</h3>
 <p>Goods Receipt Notes (WF-002 steps 2), Stock Issues (WF-007), Stock Transfers (WF-006), Stock Adjustments (WF-013), Stock On Hand and Stock Ledger.</p>
 <h3 id="purchase-manager--assistant">Purchase Manager / Assistant</h3>
-<p>Suppliers (SUP-001, SUP-004), Purchase Requests (INV-PR-003), Purchase Orders (INV-PO-002, INV-PO-003), Goods Receipts for viewing.</p>
+<p>Suppliers (SUP-001, SUP-004), Purchase Requests (INV-PR-003), Purchase Orders (INV-PO-002; INV-PO-003 is the document workspace that shows receipts, billing state and accounting for one order), Goods Receipts for viewing.</p>
 <h3 id="marketing-manager">Marketing Manager</h3>
 <p>Leads &amp; Visits (WF-014), Visit Report (MKT-005), Customers (CUS-004).</p>
 <hr />
 <p>End of guide. Screen IDs are indexed in <a href="SCREEN-INDEX.html">SCREEN-INDEX.md</a>; workflows in <a href="WORKFLOW-INDEX.html">WORKFLOW-INDEX.md</a>.</p>
-</main></div><footer>Seera ERP — Current System User Guide, version 1.0, prepared 27 September 2026. Examples use fictional training data.</footer></body></html>
+</main></div><footer>Seera ERP — Current System User Guide, version 1.1, prepared 27 September 2026. Examples use fictional training data.</footer></body></html>

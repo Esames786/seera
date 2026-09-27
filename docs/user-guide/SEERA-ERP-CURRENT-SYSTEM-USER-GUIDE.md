@@ -3,8 +3,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.0 |
-| **System state** | Current feature branch `feature/seera-connected-workspaces-2026-09-23` at the final HEAD of the 27 September 2026 sprint (Connected Workspace Standard; Accounting UX Batch 1; Supplier and Customer workspaces; F04 GRNI accounting) |
+| **Version** | 1.1 |
+| **System state** | Current feature branch `feature/seera-connected-workspaces-2026-09-23` at the final HEAD of the 27 September 2026 sprints (Connected Workspace Standard; Accounting UX Batch 1; Supplier and Customer workspaces; F04 GRNI accounting; Procure-to-Pay document workspace for Purchase Order, Purchase Request, Goods Receipt and Supplier Bill) |
 | **Prepared** | 27 September 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
@@ -34,9 +34,10 @@ All examples in this guide use the same fictional data. None of it is real.
 | Warehouse | Riyadh Site Warehouse |
 | Employee | Ahmed Hassan (code EMP-0042) |
 | Material | Reinforcement Steel 16mm (code ITM-0031) |
-| Purchase Order | PO-2026-0012 |
-| Goods Receipt | GRN-2026-0008 |
-| Supplier Bill | GST-INV-1045 |
+| Purchase Request | PR-2026-0010 |
+| Purchase Order | PO-2026-0012 — 10,000 kg of Reinforcement Steel 16mm at SAR 3.00 per kg (SAR 30,000 + VAT 4,500 = 34,500) |
+| Goods Receipts | GRN-2026-0008 (6,000 kg) and GRN-2026-0009 (4,000 kg) |
+| Supplier Bill | GST-INV-1045 (invoices GRN-2026-0008: SAR 18,000 + VAT 2,700 = 20,700) |
 | Customer Invoice | INV-2026-0031 |
 | VAT rate | 15% |
 
@@ -67,6 +68,14 @@ All examples in this guide use the same fictional data. None of it is real.
 ---
 
 ## 1. About Seera ERP
+
+| | |
+|---|---|
+| **Chapter number** | 1 |
+| **Chapter name** | About Seera ERP |
+| **Purpose** | What Seera is, how this guide is organised, the Connected Workspace Standard and the standard form buttons. |
+| **Primary roles** | All users |
+| **Screens in this chapter** | — (no screens; reference chapter) |
 
 Seera is the construction ERP of Seera Construction Company. It runs in the web browser. Everyone signs in with their own account, and every account has a role that decides which screens and buttons the person can use.
 
@@ -115,6 +124,14 @@ If you change something and then try to leave the page, Seera shows a dialog wit
 ---
 
 ## 2. Login and Navigation
+
+| | |
+|---|---|
+| **Chapter number** | 2 |
+| **Chapter name** | Login and Navigation |
+| **Purpose** | Sign in, change your password and find your way around the menu. |
+| **Primary roles** | All users, All new users |
+| **Screens in this chapter** | ADM-001, ADM-002, ADM-003, ADM-004 |
 
 ### [ADM-001] Login
 
@@ -241,6 +258,14 @@ Buttons:
 
 ## 3. Dashboard
 
+| | |
+|---|---|
+| **Chapter number** | 3 |
+| **Chapter name** | Dashboard |
+| **Purpose** | Read the company figures on the home page. |
+| **Primary roles** | All users |
+| **Screens in this chapter** | ADM-010 |
+
 ### [ADM-010] Dashboard
 
 Web address: `https://seera.tech-brit.co.uk/admin/dashboard`
@@ -269,6 +294,14 @@ FIN-DASH-001, HR-DASH-001, INV-DASH-001, ADM-020.
 ---
 
 ## 4. Users, Roles and Permissions
+
+| | |
+|---|---|
+| **Chapter number** | 4 |
+| **Chapter name** | Users, Roles and Permissions |
+| **Purpose** | Create logins, roles, the permission matrix and access scope. |
+| **Primary roles** | Super Admin |
+| **Screens in this chapter** | USR-001, USR-002, USR-003, USR-004, ROL-001, ROL-002, ROL-003, ROL-004, ROL-005, ROL-006, ROL-007, ROL-008, ROL-009, ROL-010 |
 
 How access works in Seera:
 
@@ -477,6 +510,14 @@ Buttons: + New Workflow, Preview, Edit, Delete, + Add Step, Save Workflow, Cance
 
 ## 5. Master Setup
 
+| | |
+|---|---|
+| **Chapter number** | 5 |
+| **Chapter name** | Master Setup |
+| **Purpose** | Company, organisation, projects, sites, warehouses and expense categories that every document refers to. |
+| **Primary roles** | Super Admin, HR Manager, Inventory Manager, Finance Manager |
+| **Screens in this chapter** | MST-COM-001, MST-ORG-001, MST-BR-001, MST-BR-002, MST-BR-003, MST-BR-004, MST-DEP-001, MST-DEP-002, MST-DEP-003, MST-DEP-004, MST-DES-001, MST-DES-002, MST-DES-003, MST-DES-004, MST-WH-001, MST-WH-002, MST-WH-003, MST-WH-004, MST-EXP-001, MST-EXP-002, MST-EXP-003, MST-EXP-004 |
+
 Master Setup holds the records every other module refers to. Set these up first, in this order: Company Profile → Organization Structure (branches, departments, designations) → Projects and Locations → Warehouses → Expense Categories → Suppliers and Customers.
 
 Most master forms still use the older button set (**Save** / **Update** and **Cancel**). Suppliers and Customers use the full standard (chapters 7 and 8).
@@ -623,6 +664,14 @@ Small lists with an inline "Add" section and inline Save / Delete per row. Payme
 ---
 
 ## 6. HR & Payroll
+
+| | |
+|---|---|
+| **Chapter number** | 6 |
+| **Chapter name** | HR & Payroll |
+| **Purpose** | Employees, documents, shifts, attendance, leave, overtime, salary structures, payroll runs and end of service. |
+| **Primary roles** | HR Manager, Site In-Charge, Finance Manager |
+| **Screens in this chapter** | HR-DASH-001, HR-EMP-001, HR-EMP-002, HR-EMP-003, HR-EMP-004, HR-DOC-001, HR-SHF-001, HR-SHF-002, HR-SHF-003, HR-ATT-001, HR-ATT-002, HR-ATT-003, HR-LV-001, HR-LV-002, HR-LV-003, HR-LV-004, HR-OT-001, HR-OT-002, HR-OT-003, HR-SAL-001, HR-SAL-002, HR-SAL-003, HR-SAL-004, HR-PAY-001, HR-PAY-002, HR-PAY-003, HR-PAY-004, HR-EOS-001, HR-EOS-002, HR-EOS-003, HR-EOS-004 |
 
 ### [HR-DASH-001] HR Dashboard
 
@@ -930,6 +979,14 @@ Fields: Employee *, Termination Date *, Reason For Leaving *, Service Years *, F
 
 ## 7. Customers
 
+| | |
+|---|---|
+| **Chapter number** | 7 |
+| **Chapter name** | Customers |
+| **Purpose** | Customer master with contacts, notes, projects, invoices, receipts and ageing in one workspace. |
+| **Primary roles** | Marketing Manager, Finance Manager, Any user with Customers — view |
+| **Screens in this chapter** | CUS-001, CUS-002, CUS-003, CUS-004 |
+
 Customers follow the Connected Workspace Standard:
 
 ```
@@ -1096,6 +1153,14 @@ CUS-003, FIN-AR-001, FIN-AR-003, FIN-ZAT-001.
 
 ## 8. Suppliers
 
+| | |
+|---|---|
+| **Chapter number** | 8 |
+| **Chapter name** | Suppliers |
+| **Purpose** | Supplier master with projects, orders, receipts, bills and payments in one workspace. |
+| **Primary roles** | Purchase Manager, Finance Manager, Any user with Suppliers — view, Super Admin |
+| **Screens in this chapter** | SUP-001, SUP-002, SUP-003, SUP-004, SUP-005 |
+
 Suppliers follow the Connected Workspace Standard:
 
 ```
@@ -1233,6 +1298,14 @@ INV-PO-001, INV-GRN-001, FIN-AP-001, WF-002, WF-010.
 
 ## 9. Accounting & Finance
 
+| | |
+|---|---|
+| **Chapter number** | 9 |
+| **Chapter name** | Accounting & Finance |
+| **Purpose** | Chart of accounts, journals, ledger, supplier bills, customer invoices, VAT, cost centers and financial reports. |
+| **Primary roles** | Finance Manager, Account Assistant, Finance Manager (company-level users only) |
+| **Screens in this chapter** | FIN-DASH-001, FIN-COA-001, FIN-COA-002, FIN-COA-003, FIN-COA-004, FIN-JE-001, FIN-JE-002, FIN-JE-003, FIN-JE-004, FIN-GL-001, FIN-AP-001, FIN-AP-002, FIN-AP-003, FIN-AP-004, FIN-AP-005, FIN-AR-001, FIN-AR-002, FIN-AR-003, FIN-AR-004, FIN-AR-005, FIN-VAT-001, FIN-VAT-002, FIN-CC-001, FIN-CC-002, FIN-CC-003, FIN-CC-004, FIN-PR-001, FIN-PR-002, FIN-PR-003, FIN-PR-004 |
+
 ### How accounting works in Seera (read this first)
 
 - Every financial document (supplier bill, customer invoice, payment, receipt, goods receipt, stock issue, stock adjustment) creates its **journal entry automatically** when you approve or post it. You do not type these journals.
@@ -1246,10 +1319,10 @@ Accounting entries created by the normal workflow (all amounts from the training
 
 | Event | Debit | Credit |
 |---|---|---|
-| Goods receipt posted (10 × Reinforcement Steel 16mm at 100) | 1400 Inventory Asset 1,000 | 2150 Goods Received Not Invoiced 1,000 |
-| Supplier bill approved, matched to that receipt (15% VAT) | 2150 GRNI 1,000 · 1300 Input VAT 150 | 2100 Accounts Payable 1,150 |
+| Goods receipt GRN-2026-0008 posted (6,000 kg Reinforcement Steel 16mm at 3.00) | 1400 Inventory Asset 18,000 | 2150 Goods Received Not Invoiced 18,000 |
+| Supplier bill GST-INV-1045 approved, matched to that receipt (15% VAT) | 2150 GRNI 18,000 · 1300 Input VAT 2,700 | 2100 Accounts Payable 20,700 |
 | Supplier bill approved, direct service line 500 | 5200 Material Expense (or chosen account) 500 · 1300 Input VAT 75 | 2100 Accounts Payable 575 |
-| Supplier payment 1,150 by bank | 2100 Accounts Payable 1,150 | 1120 Bank Account 1,150 |
+| Supplier payment 20,700 by bank | 2100 Accounts Payable 20,700 | 1120 Bank Account 20,700 |
 | Customer invoice approved, 2,000 + VAT | 1200 Accounts Receivable 2,300 | 4100 Project Revenue 2,000 · 2210 Output VAT 300 |
 | Customer receipt 2,300 by bank | 1120 Bank Account 2,300 | 1200 Accounts Receivable 2,300 |
 | Stock issue of 3 units to a project | 5200 Material Expense 300 | 1400 Inventory Asset 300 |
@@ -1414,13 +1487,13 @@ Fields:
 | Project, Site, Cost Center | Dimensions | Riyadh Commercial Tower / Riyadh Tower - Main Site / CC-RCT-01 | No | |
 | Notes | | — | No | |
 | Line: Description | What was billed | Reinforcement Steel 16mm | Yes (or filled from the receipt) | |
-| Line: Received Goods (GRN) | The posted receipt line this bill line invoices | GRN-2026-0008 · Reinforcement Steel 16mm · 10 left @ 100.00 | No | Only this supplier's uninvoiced receipt lines are offered. Leave "Direct / service line" for services |
-| Line: Invoiced Qty | Quantity of the receipt line invoiced now | 10 | Yes when a GRN line is chosen | Cannot exceed what is still uninvoiced |
+| Line: Received Goods (GRN) | The posted receipt line this bill line invoices | GRN-2026-0008 · Reinforcement Steel 16mm · 6,000 left @ 3.00 | No | Only this supplier's uninvoiced receipt lines are offered. Leave "Direct / service line" for services |
+| Line: Invoiced Qty | Quantity of the receipt line invoiced now | 6,000 | Yes when a GRN line is chosen | Cannot exceed what is still uninvoiced |
 | Line: Expense Category, Expense Account | Where a direct line is charged | Materials / 5200 - Material Expense | No | For a matched line the account only receives a price difference |
-| Line: Qty, Unit Price | Invoice quantity and price | 10 × 100.00 | Unit price yes | Defaults from the receipt when a GRN line is chosen |
+| Line: Qty, Unit Price | Invoice quantity and price | 6,000 × 3.00 | Unit price yes | Defaults from the receipt when a GRN line is chosen |
 | Line: Cost Center | | CC-RCT-01 | No | |
 
-Buttons: Cancel, Save (opens the bill details), Save & new, Save & close.
+Buttons: Cancel, Save (opens the bill details), Save & new, Save & close. When the form was opened from a goods receipt, the supplier workspace or a purchase order's Goods Receipts section, Cancel and Save & close return there.
 
 Important:
 Saving a bill never posts accounting. Rows without a description or unit price are ignored.
@@ -1453,14 +1526,26 @@ Permission required:
 Accounts Payable — view; approve for Approve & Post and Reopen; process for Record Payment; edit for Edit.
 
 What you see:
-Cards (taxable, VAT, total, balance), Bill Information, Accounting Entry (the posted journal lines with a link), Payments, Bill Lines with the Received Goods column (receipt number × quantity, accrued amount, or "Direct / service").
+The bill is a **light document workspace**. A header stays at the top: Bill Number, Supplier (with a View link for Suppliers — view), status and payment state (Draft, not posted / Awaiting payment / Overdue / Partly paid / Paid in full), bill and due dates, Project / Site, the matched goods receipts and their purchase orders (links need Goods Receipts — view and Purchase Orders — view), **Total**, **Paid**, **Outstanding payment**, and the accounting journal (link needs Journal Entries — view). A section bar links to Bill Info · Lines · GRN Matches · VAT · Accounting Entry · Payments · Balance · Activity; a section is present only when your role may read it.
+
+| Section | What it shows |
+|---|---|
+| Bill Info | Cards (taxable, VAT, total, balance) and Bill Information |
+| Lines | Bill Lines with the Received Goods column (receipt number × quantity, accrued amount, or "Direct / service") |
+| GRN Matches | One row per matched receipt line: goods receipt, purchase order, item, matched quantity, accrued amount (what the receipt posted to GRNI), billed amount, variance and the match state — *Provisional (bill still draft)* or *Invoiced (bill approved)* |
+| VAT | VAT rate, taxable amount, input VAT, total and whether the VAT ledger row exists yet |
+| Accounting Entry | The posted journal lines with a link (Journal Entries — view) |
+| Payments | Every payment with account, method, purpose, reference and journal; Record Payment for open bills |
+| Balance | Bill total, paid to date, outstanding payment, due date with the overdue days, payment state |
+| Activity | The latest entries that name this bill (Activity Logs — view), with View all |
 
 Buttons:
 
 | Button | What it does |
 |---|---|
+| Back | Returns to where you opened the bill from — the purchase order's Billing section, the goods receipt or the supplier workspace — otherwise to Accounts Payable |
 | Approve & Post | Posts the bill's journal and its input VAT row, consumes the matched receipt quantities and sets the bill to *unpaid*. Refused when the VAT period is finalized, an account is inactive, or a matched receipt quantity was invoiced by another bill first |
-| Record Payment | Opens FIN-AP-005 (open bills only) |
+| Record Payment | Opens FIN-AP-005 (open bills only); afterwards you return to the page you opened the bill from |
 | Reopen for Correction | Super Admin only, unpaid bills with no payments: posts a reversing journal, withdraws the VAT row, releases the receipt quantities and returns the bill to *draft* with your reason |
 | Edit | Drafts only |
 
@@ -1474,7 +1559,7 @@ Purpose:
 Pay all or part of an open bill.
 
 Navigation:
-Supplier Bill Details → Record Payment.
+Supplier Bill Details → Record Payment, or Purchase Order → Billing & GRN Matching → Record Payment.
 
 Permission required:
 Accounts Payable — process.
@@ -1487,10 +1572,10 @@ Fields:
 | Paid From (Cash / Bank Account) | The account money left | 1120 - Bank Account | Yes | Only the channels the supplier accepts are offered |
 | Payment Method | Cash, Bank Transfer, Cheque | Bank Transfer | Yes | |
 | Purpose | Bill payment, advance, etc. | Bill payment | Yes | |
-| Payment Amount (SAR) | Amount | 1,150.00 | Yes | Cannot exceed the outstanding balance |
+| Payment Amount (SAR) | Amount | 20,700.00 | Yes | Cannot exceed the outstanding balance |
 | Reference Number, Notes | | TRF-88123 | No | |
 
-Buttons: Record Payment, Back to Bill, Cancel.
+Buttons: Record Payment, Back (Back to Bill), Cancel. Back and Cancel return to the page you came from: the bill, or the purchase order's Billing section. After Record Payment you return there as well.
 
 What happens after Record Payment:
 A journal Dr Accounts Payable / Cr Cash or Bank is posted, the bill's paid and balance amounts update and the status moves to partially_paid or paid. If the same payment is submitted twice (double click, browser retry) the second one is recognised and nothing is added.
@@ -1574,6 +1659,14 @@ Fields: Source Module *, Trigger Event *, Cost Center Rule *, Debit Account, Cre
 
 ## 10. Inventory & Purchasing
 
+| | |
+|---|---|
+| **Chapter number** | 10 |
+| **Chapter name** | Inventory & Purchasing |
+| **Purpose** | Items, stock, purchase requests, purchase orders (the procure-to-pay document workspace), goods receipts, issues, transfers, adjustments and inventory reports. |
+| **Primary roles** | Inventory Manager, Warehouse Incharge, Purchase Manager, Site In-Charge, Purchase Assistant, Finance Manager |
+| **Screens in this chapter** | INV-DASH-001, INV-ITEM-001, INV-ITEM-002, INV-ITEM-003, INV-ITEM-004, INV-CAT-001, INV-CAT-002, INV-CAT-003, INV-UNIT-001, INV-UNIT-002, INV-UNIT-003, INV-STK-001, INV-PR-001, INV-PR-002, INV-PR-003, INV-PR-004, INV-PO-001, INV-PO-002, INV-PO-003, INV-PO-004, INV-GRN-001, INV-GRN-002, INV-GRN-003, INV-GRN-004, INV-ISS-001, INV-ISS-002, INV-ISS-003, INV-ISS-004, INV-TRF-001, INV-TRF-002, INV-TRF-003, INV-TRF-004, INV-ADJ-001, INV-ADJ-002, INV-ADJ-003, INV-ADJ-004, INV-LED-001 |
+
 ### How stock works in Seera
 
 - Stock always sits in a **warehouse**. On-hand quantity changes only through documents: goods receipt (in), stock issue (out), transfer (out of one warehouse, into another), adjustment (count correction). Nobody edits the on-hand number directly.
@@ -1640,7 +1733,15 @@ Inventory → Purchase Requests → + Add Purchase Request.
 Permission required:
 Purchase Requests — create / view / edit; approve / reject for the decision.
 
-Fields: Request Date *, Required Date, Priority *, Project, Site, Deliver To Warehouse, Status *, Reason, and lines Item *, Description, Quantity *, Unit, Est. Unit Cost, Budget Line (free text). Buttons: Save / Update, Cancel; on details **Approve**, **Reject Request** (with reason), Edit, **Create Purchase Order** (approved requests).
+Fields: Request Date *, Required Date, Priority *, Project, Site, Deliver To Warehouse, Status *, Reason, and lines Item *, Description, Quantity *, Unit, Est. Unit Cost, Budget Line (free text). Example: PR-2026-0010 for Riyadh Commercial Tower, priority high, 10,000 kg of Reinforcement Steel 16mm, estimated 3.00 per kg. Buttons: Save / Update, Cancel; on details **Approve** (Purchase Requests — approve), **Reject Request** with reason (Purchase Requests — reject), Edit (draft or pending), **Create Purchase Order** (approved requests; Purchase Orders — create).
+
+Purchase Request Details (INV-PR-003) is a **light connected view**. A header stays at the top: PR number, status and ordering state (No purchase order yet / Partly ordered / Fully ordered), requested by and date, Project / Site and Warehouse (links need Projects — view and Warehouses — view), required date and priority, estimated total, the approval (who and when, or the rejection reason) and how much of the requested quantity has been ordered. A section bar links to Request Information · Requested Items · Purchase Orders · Activity.
+
+| Section | What it shows |
+|---|---|
+| Requested Items | Each line with Quantity, **Ordered so far** (the lines of the purchase orders raised from this request, cancelled orders excluded) and **Still to order** |
+| Purchase Orders From This Request | PO number, supplier, total, Received (for example 6,000 of 10,000), status and View PO (Purchase Orders — view) |
+| Activity | The latest entries that name this request (Activity Logs — view), with View all |
 
 Statuses: draft → pending → approved / rejected → converted (when a PO is created from it).
 
@@ -1663,16 +1764,48 @@ Fields:
 |---|---|---|---|---|
 | Supplier | | Gulf Steel Trading ("+ New" available) | Yes | |
 | PO Date, Expected Delivery | | 20-Sep-2026 / 30-Sep-2026 | PO date yes | |
-| Source Purchase Request | The PR it fulfils | PR-2026-0009 | No | |
+| Source Purchase Request | The PR it fulfils | PR-2026-0010 | No | |
 | Deliver To Warehouse | | Riyadh Site Warehouse | Yes | |
 | Default VAT Rate (%) | | 15 | Yes | Lines may override |
 | Project, Site, Notes | | Riyadh Commercial Tower | No | |
-| Lines | Item *, Description, Qty *, Unit Price, Disc %, VAT %, Line Total | 10 × Reinforcement Steel 16mm at 100.00 | Yes | + Add Line |
+| Lines | Item *, Description, Qty *, Unit Price, Disc %, VAT %, Line Total | 10,000 kg × Reinforcement Steel 16mm at 3.00 | Yes | + Add Line |
 | Attach quotation files | Supplier quotations | quote.pdf | No | Upload / Remove on the details page while the order is open |
 
-Buttons: Save / Update, Cancel; on details **Approve Order**, Upload, Remove (quotation), Edit, **Create Goods Receipt** (approved or partially received orders).
+Buttons: Save / Update, Cancel; on details **Approve Order** (draft; Purchase Orders — approve), Upload, Remove (quotation), Edit (draft), **Create Goods Receipt**, Back to Purchase Orders.
 
-Statuses: draft → approved → partially_received → received. Received quantity per line is updated by posted goods receipts.
+#### Purchase Order Details (INV-PO-003) — the procure-to-pay document workspace
+
+Web address: `https://seera.tech-brit.co.uk/admin/inventory/purchase-orders/{id}`
+
+The order page is the **connected document workspace** of the whole procure-to-pay chain: everything that happened to the order is read here, while receiving, billing and payment stay explicit actions on their own pages. The page is read-only.
+
+Header (always visible): PO number, status and receiving state, approval (who and when), Supplier with **View** (Suppliers — view) and **Manage** (Suppliers — edit) links, PO date, expected delivery, Project / Site (link needs Projects — view), Deliver to warehouse (link needs Warehouses — view), order total and VAT, **Received x of y · still to receive**, **Invoiced · received but not invoiced**, billing state (Nothing to invoice yet / Received but not invoiced / Partly invoiced / Fully invoiced) with the number of bills and the outstanding payment (Accounts Payable — view), and the number of goods receipts (with how many are still draft).
+
+Section bar: Overview · Order Lines · Source Purchase Request · Supplier & Commercial · Quotations · Goods Receipts · Billing & GRN Matching · Accounting · Activity. A section is present only when your role may read it; the page never shows more than your permissions allow.
+
+| Section | What it shows | Needs |
+|---|---|---|
+| Overview | Cards (taxable, VAT, total, receiving state) and Order Information | Purchase Orders — view |
+| Order Lines | Per line: Ordered, **Received** (posted receipts), **Still to receive**, **Invoiced** (approved bills matched to the receipts), **Received but not invoiced**, unit price, discount, taxable, VAT, total | Purchase Orders — view |
+| Source Purchase Request | PR number (link), requested by, required date, priority, request status, requested lines and reason; or "raised directly, without a purchase request" | Purchase Requests — view |
+| Supplier & Commercial | Supplier code and name, contact, VAT / CR numbers, payment terms and accepted payment types, rating, supplier status, View Supplier / Manage Supplier; the payable account only with Accounts Payable — view | Suppliers — view |
+| Quotations | Supplier quotation files: download, Upload (Purchase Orders — create, while the order is open), Remove (draft only, Purchase Orders — delete) | Purchase Orders — view |
+| Goods Receipts | Every receipt against this order: GRN, date, warehouse, received by, accepted quantity, value, stock and status, invoicing state (Not posted yet / Received but not invoiced / n received but not invoiced / Invoiced), View GRN, the receipt's journal (Journal Entries — view), Create Supplier Bill (Accounts Payable — create, posted receipts with uninvoiced quantity) | Goods Receipts — view |
+| Billing & GRN Matching | The per-line table Ordered / Received / Still to receive / Invoiced / Received but not invoiced, then the supplier bills matched to this order's receipts: bill, dates, matched GRNs, total, paid, outstanding payment, status, View bill, Edit draft (Accounts Payable — edit), Record Payment (Accounts Payable — process) | Accounts Payable — view |
+| Accounting | The journals posted by this order's receipts, the bills matched to them and their payments, with a plain explanation of GRNI; view only | Journal Entries — view |
+| Activity | Entries that name the order, its receipts or its bills | Activity Logs — view |
+
+Goods Receipts, Billing, Accounting and Activity show the latest 5 rows with paging and a **View all** link to the full register.
+
+**Create Goods Receipt** appears in the page header and above the Goods Receipts section only when the order is approved or partially received, something is still to receive, and your role holds Goods Receipts — create (or receive). The receipt form opens with the outstanding quantities filled in; **Save & close** brings you back to this order's Goods Receipts section, **Save** stays on the receipt so you can Post Stock, and the receipt page keeps a Back link to the order.
+
+**Create Supplier Bill** from the Goods Receipts section and **Record Payment** / **Edit draft** from the Billing section return to this order's Billing section when you finish or cancel.
+
+How a bill is linked to an order: through its goods receipt matches (F04). A bill entered without a receipt match — a direct or service bill — does not appear on the order; find it under Accounts Payable.
+
+Example: PO-2026-0012 orders 10,000 kg. After GRN-2026-0008 (6,000 kg) is posted the header reads *Partially received · 6000 of 10000 kg · still to receive 4000 kg*. After GST-INV-1045 is approved for those 6,000 kg the billing state reads *Fully invoiced* for the received part, and once GRN-2026-0009 (4,000 kg) is posted it reads *Partly invoiced · received but not invoiced 4000 kg* until the second bill is approved.
+
+Statuses: draft → approved → partially_received → received. Received quantity per line is updated by posted goods receipts; invoiced quantity by approved supplier bills.
 
 ### [INV-GRN-001 … 004] Goods Receipt Notes
 
@@ -1685,7 +1818,7 @@ Who uses it:
 Warehouse Incharge.
 
 Navigation:
-Inventory → Goods Receipt Notes → + Add Goods Receipt, or Purchase Order → Create Goods Receipt (lines pre-filled with the outstanding quantities and the order prices after discount).
+Inventory → Goods Receipt Notes → + Add Goods Receipt, or Purchase Order → Create Goods Receipt (lines pre-filled with the outstanding quantities and the order prices after discount; Save & close returns to the order's Goods Receipts section).
 
 Permission required:
 Goods Receipts — create / view / edit; post for Post Stock.
@@ -1699,9 +1832,18 @@ Fields:
 | Received Date | | 26-Sep-2026 | Yes | |
 | Delivery Note Number, Supplier Invoice Number | Supplier papers | DN-7741 / GST-INV-1045 | No | Information only; the bill is entered in Accounts Payable |
 | VAT Rate (%) | Expected VAT | 15 | Yes | Shown for information; VAT is recorded on the supplier bill, not on the receipt |
-| Lines | Item *, Ordered, Received *, Accepted, Unit Cost | 10 / 10 / 10 / 100.00 | Yes | Accepted is what enters stock; the rest is recorded as rejected |
+| Lines | Item *, Ordered, Received *, Accepted, Unit Cost | 10,000 / 6,000 / 6,000 / 3.00 | Yes | Accepted is what enters stock; the rest is recorded as rejected |
 
-Buttons: Save / Update, Cancel; on details **Post Stock**, Edit (draft), and, once posted with uninvoiced quantity, **Create Supplier Bill**.
+Buttons: Cancel, **Save** (stays on the receipt, where Post Stock is), **Save & close** (returns to where you came from, otherwise the list); on details **Post Stock** (Goods Receipts — post), Edit (draft; Goods Receipts — edit), **Create Supplier Bill** (posted, uninvoiced quantity; Accounts Payable — create), **Back** / **Back to Purchase Order**.
+
+Goods Receipt Details (INV-GRN-003) is a **light document workspace**. A header stays at the top: GRN number, status, received date and by whom, the source purchase order (link needs Purchase Orders — view), supplier (View needs Suppliers — view), warehouse (link needs Warehouses — view), Project / Site, value, Stock (Posted to stock / Not posted yet), Accounting (Posted with the journal link for Journal Entries — view / Not posted yet) and the invoicing state (Not posted yet / Received but not invoiced / Partly invoiced / Invoiced, with the invoiced and received-but-not-invoiced quantities). A section bar links to Receipt Information · Received Lines · Bill Matches · Accounting Entry · Activity.
+
+| Section | What it shows |
+|---|---|
+| Received Lines | Ordered, Received, Accepted, Rejected, **Invoiced**, **Received but not invoiced**, unit cost, total cost |
+| Bill Matches | Each supplier bill line matched to this receipt: bill, date, bill status, item, matched quantity, accrued amount, match state (Provisional while the bill is draft, Invoiced once approved), View bill (Accounts Payable — view) |
+| Accounting Entry | The posted journal lines with a link (Journal Entries — view) |
+| Activity | The latest entries that name this receipt (Activity Logs — view), with View all |
 
 What happens after Post Stock:
 Stock and the stock ledger increase by the accepted quantity at the unit cost; the purchase order's received quantity and status update; the accounting entry **Dr Inventory Asset / Cr Goods Received Not Invoiced** is posted. No supplier payable and no VAT are recorded at this stage. The receipt becomes read-only.
@@ -1752,6 +1894,14 @@ Stock Valuation, Low Stock, Project Material Consumption and Stock Movement, eac
 ---
 
 ## 11. Projects
+
+| | |
+|---|---|
+| **Chapter number** | 11 |
+| **Chapter name** | Projects |
+| **Purpose** | Project master, cost report and what the Projects menu offers today. |
+| **Primary roles** | Project Manager, Super Admin |
+| **Screens in this chapter** | MST-PRJ-001, MST-PRJ-002, MST-PRJ-003, MST-PRJ-004, MST-PRJ-005, MST-SITE-001, MST-SITE-002, MST-SITE-003, MST-SITE-004 |
 
 What exists today is the **project master** and the related masters. There is no project dashboard, budget lines, milestone or site-expense screen yet (chapter 20).
 
@@ -1827,6 +1977,14 @@ Buttons: Save / Update, Cancel.
 
 ## 12. Marketing
 
+| | |
+|---|---|
+| **Chapter number** | 12 |
+| **Chapter name** | Marketing |
+| **Purpose** | Leads, visits and conversion to customers. |
+| **Primary roles** | Marketing Manager |
+| **Screens in this chapter** | MKT-001, MKT-002, MKT-003, MKT-004, MKT-005 |
+
 ### [MKT-001] Leads & Visits, [MKT-002] New Lead, [MKT-004] Edit Lead
 
 Web address: `https://seera.tech-brit.co.uk/admin/marketing/leads` (MKT-001) · `https://seera.tech-brit.co.uk/admin/marketing/leads/create` (MKT-002) · `https://seera.tech-brit.co.uk/admin/marketing/leads/{id}/edit` (MKT-004)
@@ -1874,6 +2032,14 @@ Filters by period, sales person and outcome; cards Clients Visited, Follow-ups S
 
 ## 13. Activity Logs / Audit
 
+| | |
+|---|---|
+| **Chapter number** | 13 |
+| **Chapter name** | Activity Logs / Audit |
+| **Purpose** | Who did what and when. |
+| **Primary roles** | Super Admin |
+| **Screens in this chapter** | ADM-020 |
+
 ### [ADM-020] Activity Logs
 
 Web address: `https://seera.tech-brit.co.uk/admin/activity-logs`
@@ -1899,6 +2065,14 @@ The Old Value and New Value columns are filled only for a few administrative ent
 ---
 
 ## 14. Current ZATCA Foundation
+
+| | |
+|---|---|
+| **Chapter number** | 14 |
+| **Chapter name** | Current ZATCA Foundation |
+| **Purpose** | What the local ZATCA records are and are not. |
+| **Primary roles** | Finance Manager |
+| **Screens in this chapter** | FIN-ZAT-001, FIN-ZAT-002 |
 
 Status: **FOUNDATION ONLY**. Read this chapter before promising anything about e-invoicing to a customer or an auditor.
 
@@ -1934,6 +2108,14 @@ In the Customer workspace the tab is called **Local ZATCA Records** and every st
 
 ## 15. Reports
 
+| | |
+|---|---|
+| **Chapter number** | 15 |
+| **Chapter name** | Reports |
+| **Purpose** | Where every report lives and how to export it. |
+| **Primary roles** | Finance Manager, Finance Manager (company-level users only), Project Manager, Inventory Manager |
+| **Screens in this chapter** | FIN-REP-001, FIN-REP-002, FIN-REP-003, FIN-REP-004, FIN-REP-005, FIN-REP-006, FIN-REP-007, INV-REP-001, INV-REP-002, INV-REP-003, INV-REP-004, INV-REP-005 |
+
 All accounting reports have a period filter (presets or from / to), a Reset button, **Export Excel (CSV)** (needs Financial Reports — export) and **Export PDF** (browser print). Project, site and warehouse scoped users see only their own lines, and opening balances are shown to company-level users only.
 
 | Screen ID | Report | What it shows | Notes |
@@ -1956,6 +2138,14 @@ Not available yet: HR reports (attendance register, payroll register), project d
 
 ## 16. Common Tasks
 
+| | |
+|---|---|
+| **Chapter number** | 16 |
+| **Chapter name** | Common Tasks |
+| **Purpose** | Step-by-step recipes for the most frequent jobs. |
+| **Primary roles** | All users |
+| **Screens in this chapter** | — (no screens; reference chapter) |
+
 ### Create a supplier
 
 1. Sign in.
@@ -1973,8 +2163,8 @@ Next common action: create a Purchase Order, or open the supplier's workspace wi
 
 ### Enter and approve a supplier bill for goods you received
 
-1. Open Inventory → Goods Receipt Notes and click View on the posted receipt (GRN-2026-0008).
-2. Click Create Supplier Bill. The bill form opens with the receipt lines filled in.
+1. Open Inventory → Goods Receipt Notes and click View on the posted receipt (GRN-2026-0008), or open the purchase order (PO-2026-0012) and its Goods Receipts section.
+2. Click Create Supplier Bill. The bill form opens with the receipt lines filled in (Cancel and Save & close return to the receipt or the order you started from).
 3. Enter the supplier's Bill Number (GST-INV-1045) and check the Bill Date and VAT Rate.
 4. Adjust Invoiced Qty or Unit Price only if the supplier's invoice differs.
 5. Click Save. The bill details page opens.
@@ -2018,6 +2208,14 @@ Use the language switch in the top bar. The screen turns to Arabic (right-to-lef
 
 ## 17. End-to-End Workflows
 
+| | |
+|---|---|
+| **Chapter number** | 17 |
+| **Chapter name** | End-to-End Workflows |
+| **Purpose** | The documented business flows WF-001 to WF-015. |
+| **Primary roles** | Super Admin, HR Manager, Finance Manager, Account Assistant, Purchase Manager, Warehouse Incharge, Site In-Charge, Marketing Manager |
+| **Workflows in this chapter** | WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
+
 Each workflow lists purpose, roles, prerequisites, navigation, steps, example input, the system result, statuses before and after, the audit trail, common errors and the related Screen IDs. The Workflow Index is in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).
 
 ### WF-001 Create Employee and User Access
@@ -2039,23 +2237,29 @@ Related screens: HR-EMP-002, HR-EMP-004, USR-002, USR-003.
 
 ### WF-002 Supplier → Purchase Order → Goods Receipt → Supplier Bill → Payment
 
-Purpose: buy materials, receive them, record the supplier's invoice and pay it, with correct accounting at every step.
-Roles involved: Purchase Manager (order), Warehouse Incharge (receipt), Account Assistant (bill), Finance Manager (approve, pay).
-Prerequisites: supplier SUP-014 with payment terms and payable account; item ITM-0031; warehouse Riyadh Site Warehouse; an open VAT period.
-Navigation: Inventory → Purchase Orders → + Add Purchase Order; Purchase Order → Create Goods Receipt; Goods Receipt → Post Stock; Goods Receipt → Create Supplier Bill; Bill → Approve & Post; Bill → Record Payment.
+Purpose: buy materials, receive them (in one or several deliveries), record the supplier's invoices and pay them, with correct accounting at every step, and read the whole chain from the purchase order.
+Roles involved: Site In-Charge (request), Purchase Manager (order), Warehouse Incharge (receipts), Account Assistant (bills), Finance Manager (approve, pay).
+Prerequisites: supplier SUP-014 Gulf Steel Trading with payment terms and payable account; item ITM-0031 Reinforcement Steel 16mm; warehouse Riyadh Site Warehouse (project Riyadh Commercial Tower); an open VAT period.
+Navigation: Inventory → Purchase Requests → Approve → Create Purchase Order; Purchase Order (INV-PO-003) → Approve Order → Create Goods Receipt; Goods Receipt → Post Stock; Purchase Order → Goods Receipts → Create Supplier Bill; Bill → Approve & Post; Purchase Order → Billing & GRN Matching → Record Payment.
 Steps and example input:
-1. Purchase order PO-2026-0012: supplier Gulf Steel Trading, deliver to Riyadh Site Warehouse, project Riyadh Commercial Tower, line 10 × Reinforcement Steel 16mm at 100.00, VAT 15%. Save, then Approve Order.
-2. Goods receipt GRN-2026-0008 from the order: received 10, accepted 10, unit cost 100.00. Save, then Post Stock.
-3. Supplier bill GST-INV-1045 from the receipt: line matched to GRN-2026-0008, invoiced qty 10 at 100.00. Save, then Approve & Post.
-4. Payment: 1,150.00 from 1120 Bank Account, Bank Transfer, purpose Bill payment. Record Payment.
+1. Purchase request PR-2026-0010 (Site In-Charge): Riyadh Commercial Tower, priority high, 10,000 kg of Reinforcement Steel 16mm, estimated 3.00 per kg. Save. The Purchase Manager approves it (WF-011).
+2. Purchase order PO-2026-0012 from the request: supplier Gulf Steel Trading, deliver to Riyadh Site Warehouse, project Riyadh Commercial Tower, line 10,000 kg × Reinforcement Steel 16mm at 3.00, VAT 15% (SAR 30,000 + 4,500 = 34,500). Save, then **Approve Order**. The order page now shows *Nothing received yet · still to receive 10000 kg*.
+3. First delivery — goods receipt GRN-2026-0008 from the order (Warehouse Incharge, Purchase Order → Create Goods Receipt): received 6,000, accepted 6,000, unit cost 3.00. **Save** (the receipt opens), then **Post Stock**. Back on the order: *Partially received · 6000 of 10000 kg · still to receive 4000 kg*; the Goods Receipts section lists GRN-2026-0008 as *Received but not invoiced*.
+4. Supplier bill GST-INV-1045 (Account Assistant, Purchase Order → Goods Receipts → Create Supplier Bill): line matched to GRN-2026-0008, invoiced qty 6,000 at 3.00 (SAR 18,000 + VAT 2,700 = 20,700). Save. The Finance Manager clicks **Approve & Post**. The order's Billing section now shows Ordered 10000 · Received 6000 · Still to receive 4000 · Invoiced 6000 · Received but not invoiced 0, and the bill GST-INV-1045 with outstanding payment SAR 20,700.
+5. Second delivery — goods receipt GRN-2026-0009: received 4,000, accepted 4,000, unit cost 3.00. Save & close returns to the order; open the receipt and Post Stock. The order becomes *Fully received*, billing state *Partly invoiced · received but not invoiced 4000 kg*.
+6. Second bill GST-INV-1071 for GRN-2026-0009: 4,000 at 3.00 (SAR 12,000 + 1,800 = 13,800). Save, Approve & Post. The order reads *Fully invoiced*.
+7. Payment of GST-INV-1045: 20,700.00 from 1120 Bank Account, Bank Transfer, purpose Bill payment (Purchase Order → Billing → Record Payment). Record Payment returns to the order's Billing section, where the bill now shows Paid 20,700 and Outstanding payment 0. Pay GST-INV-1071 the same way (13,800.00).
 Expected accounting result:
-- Step 2: Dr 1400 Inventory Asset 1,000 / Cr 2150 Goods Received Not Invoiced 1,000. Stock 10 units at 100.
-- Step 3: Dr 2150 GRNI 1,000 / Dr 1300 Input VAT 150 / Cr 2100 Accounts Payable 1,150. One input VAT row of 150.
-- Step 4: Dr 2100 Accounts Payable 1,150 / Cr 1120 Bank 1,150.
-Statuses: PO draft → approved → received; GRN draft → posted; bill draft → unpaid → paid.
-Audit trail: Created purchase order, Approved purchase order, Created goods receipt, Posted goods receipt, Created supplier bill, Approved supplier bill, Recorded supplier payment.
-Common errors: receiving more than ordered; bill for received goods entered as a direct line (goods expensed twice); bill dated in a finalized VAT period; payment larger than the balance; cash account chosen for a bank-only supplier.
-Related screens: SUP-002, INV-PO-002, INV-PO-003, INV-GRN-002, INV-GRN-003, FIN-AP-002, FIN-AP-003, FIN-AP-005, SUP-004.
+- Step 3: Dr 1400 Inventory Asset 18,000 / Cr 2150 Goods Received Not Invoiced 18,000. Stock 6,000 kg at 3.00.
+- Step 4: Dr 2150 GRNI 18,000 / Dr 1300 Input VAT 2,700 / Cr 2100 Accounts Payable 20,700. One input VAT row of 2,700.
+- Step 5: Dr 1400 Inventory Asset 12,000 / Cr 2150 GRNI 12,000. Stock 10,000 kg at 3.00.
+- Step 6: Dr 2150 GRNI 12,000 / Dr 1300 Input VAT 1,800 / Cr 2100 Accounts Payable 13,800. GRNI for the order is back to 0.
+- Step 7: Dr 2100 Accounts Payable 20,700 / Cr 1120 Bank 20,700, then 13,800 / 13,800.
+Where to read it: the order's Accounting section lists all six journals; each goods receipt shows its own entry and its Bill Matches; each bill shows its GRN Matches, VAT, payments and balance.
+Statuses: request draft → pending → approved → converted; PO draft → approved → partially_received → received; GRN draft → posted (twice); bills draft → unpaid → paid.
+Audit trail: Created purchase request, Approved purchase request, Created purchase order, Approved purchase order, Created goods receipt, Posted goods receipt, Created supplier bill, Approved supplier bill, Recorded supplier payment — all visible in the order's Activity section.
+Common errors: receiving more than the order's outstanding quantity (refused with the remaining figure); a bill for received goods entered as a direct line (goods expensed twice, and the bill does not appear on the order); a bill dated in a finalized VAT period; a payment larger than the balance; a cash account chosen for a bank-only supplier.
+Related screens: SUP-002, INV-PR-002, INV-PR-003, INV-PO-002, INV-PO-003, INV-GRN-002, INV-GRN-003, FIN-AP-002, FIN-AP-003, FIN-AP-005, SUP-004.
 
 ### WF-003 Customer → Invoice → Receipt
 
@@ -2160,17 +2364,19 @@ The flow in user language:
 4. A **direct or service bill** with no receipt posts Dr Expense / Dr Input VAT / Cr Accounts Payable.
 Rules the system enforces: a receipt line can be invoiced only up to its accepted quantity, across one or many bills; two bills cannot invoice the same quantity; a price difference between the invoice and the receipt goes to the line's expense account, never into inventory; reopening a bill gives the quantity back to the receipt.
 You never type these journals yourself. Do not edit posted journals; correct with Reopen or a new document.
-Related screens: INV-GRN-003, FIN-AP-002, FIN-AP-003, FIN-AP-005, SUP-004.
+How it looks on screen (PO-2026-0012, 10,000 kg at 3.00): after GRN-2026-0008 (6,000 kg) is posted, the order's Billing & GRN Matching section shows Ordered 10000 · Received 6000 · Still to receive 4000 · Invoiced 0 · **Received but not invoiced 6000** — that last figure is the GRNI accrual of SAR 18,000 on account 2150. The receipt's header reads *Received but not invoiced*. When GST-INV-1045 is approved for those 6,000 kg, Invoiced becomes 6000, Received but not invoiced 0, the receipt reads *Invoiced*, the bill's GRN Matches section shows the match as *Invoiced (bill approved)* and the order's Accounting section lists both journals. Received but not invoiced across all orders is what account 2150 holds.
+Related screens: INV-PO-003, INV-GRN-003, FIN-AP-002, FIN-AP-003, FIN-AP-005, SUP-004.
 
 ### WF-011 Purchase Request → Purchase Order
 
 Purpose: let a site ask for materials and let purchasing turn the request into an order.
 Roles involved: Site In-Charge (request), Purchase Manager (approve, order).
 Navigation: Inventory → Purchase Requests → + Add Purchase Request; Request → Approve; Request → Create Purchase Order.
-Steps: request PR-2026-0009 for Riyadh Commercial Tower, priority high, 10 × Reinforcement Steel 16mm, estimated 100.00. Save. Approve. Create Purchase Order (lines copied), choose Gulf Steel Trading, Save, Approve Order.
+Steps: request PR-2026-0010 for Riyadh Commercial Tower, priority high, 10,000 kg × Reinforcement Steel 16mm, estimated 3.00 per kg. Save. Approve. Create Purchase Order (lines copied), choose Gulf Steel Trading, Save, Approve Order.
+What you see afterwards: the request page (INV-PR-003) reads *Fully ordered*, its Requested Items show Ordered so far 10000 / Still to order 0 and its Purchase Orders section lists PO-2026-0012 with the received quantity as deliveries are posted; the order page (INV-PO-003) shows the request under Source Purchase Request with a link back.
 Statuses: request draft → pending → approved → converted; order draft → approved.
-Audit trail: Created purchase request, Approved purchase request, Created purchase order.
-Related screens: INV-PR-002, INV-PR-003, INV-PO-002.
+Audit trail: Created purchase request, Approved purchase request, Created purchase order (the request's Activity section and the order's Activity section both show them).
+Related screens: INV-PR-002, INV-PR-003, INV-PO-002, INV-PO-003.
 
 ### WF-012 Correct an approved bill or invoice (Reopen)
 
@@ -2216,6 +2422,14 @@ Related screens: HR-EOS-002, HR-EOS-003.
 
 ## 18. Troubleshooting
 
+| | |
+|---|---|
+| **Chapter number** | 18 |
+| **Chapter name** | Troubleshooting |
+| **Purpose** | What a message means and what to do. |
+| **Primary roles** | All users |
+| **Screens in this chapter** | — (no screens; reference chapter) |
+
 | What you see | Why | What to do |
 |---|---|---|
 | "You do not have permission to perform this action." | Your role lacks the module and action | Ask the Super Admin to grant it (ROL-005) |
@@ -2236,11 +2450,20 @@ Related screens: HR-EOS-002, HR-EOS-003.
 
 ## 19. Glossary
 
+| | |
+|---|---|
+| **Chapter number** | 19 |
+| **Chapter name** | Glossary |
+| **Purpose** | Terms used in this guide. |
+| **Primary roles** | All users |
+| **Screens in this chapter** | — (no screens; reference chapter) |
+
 | Term | Meaning |
 |---|---|
 | Access scope | The part of the company a role may see: All Company, Company Level, Project Level, Site Level, Warehouse Level |
 | Approve & Post | The button that makes a bill or invoice final and creates its accounting entry |
 | Connected workspace | The Edit / Manage page of a record where its profile and related records are managed in tabs |
+| Document workspace | The read-only View page of a purchase order, request, goods receipt or bill that shows the document with everything related to it (receipts, bills, journals, activity), each section by permission |
 | Draft | A saved document with no accounting or VAT effect yet |
 | GRN | Goods Receipt Note: the document that confirms goods arrived |
 | GRNI | Goods Received Not Invoiced, account 2150: the value of received goods whose supplier bill is not yet approved |
@@ -2248,15 +2471,26 @@ Related screens: HR-EOS-002, HR-EOS-003.
 | Journal entry | A balanced accounting entry; automatic ones come from documents, manual ones from FIN-JE-002 |
 | Local ZATCA record | Seera's own record of an approved invoice (UUID, QR payload, status); not a live ZATCA clearance |
 | Matched line | A supplier bill line linked to a goods receipt line |
+| Outstanding payment | The part of an approved bill not yet paid (bill total minus paid) |
 | Posted | Written to the general ledger; cannot be edited |
+| Received but not invoiced | Accepted receipt quantity not yet covered by an approved supplier bill; its value is the GRNI accrual |
 | Reopen | Return an unpaid approved document to draft with a reversing entry |
 | Save & close / Save & new / Save | The standard form buttons (chapter 1) |
+| Still to receive | Ordered quantity minus the quantity received by posted goods receipts |
 | VAT period | A quarter whose VAT figures are collected and, once finalized, sealed |
 | Weighted average cost | The stock valuation method: total value ÷ total quantity per warehouse |
 
 ---
 
 ## 20. Current Limitations / Not Yet Operational
+
+| | |
+|---|---|
+| **Chapter number** | 20 |
+| **Chapter name** | Current Limitations / Not Yet Operational |
+| **Purpose** | What is not usable yet. |
+| **Primary roles** | Super Admin, trainers |
+| **Screens in this chapter** | — (no screens; reference chapter) |
 
 Areas that exist as menus, settings or plans but are not usable business functions today. Do not train users on them as working features.
 
@@ -2279,11 +2513,20 @@ Areas that exist as menus, settings or plans but are not usable business functio
 | Inventory report CSV export | NOT YET OPERATIONAL | Print only |
 | Stock Transfers — receive right on standard roles | PARTIAL | Super Admin receives transfers |
 | Password reset by email | PARTIAL | Needs mail configuration on the server |
-| Forms still on the older Save / Cancel layout | PARTIAL | Master Setup (except Suppliers and Customers), HR registers, Inventory, Marketing, Roles, Users (Save & stay only) |
+| Purchase order ↔ supplier bill link without a goods receipt match | PARTIAL | A bill is linked to an order only through its goods receipt matches; a direct or service bill is not shown on the order |
+| Forms still on the older Save / Cancel layout | PARTIAL | Master Setup (except Suppliers and Customers), HR registers, Inventory (except Goods Receipts), Marketing, Roles, Users (Save & stay only) |
 
 ---
 
 ## 21. Quick Start by Role
+
+| | |
+|---|---|
+| **Chapter number** | 21 |
+| **Chapter name** | Quick Start by Role |
+| **Purpose** | The screens each role uses daily. |
+| **Primary roles** | All users |
+| **Screens in this chapter** | — (no screens; reference chapter) |
 
 ### Super Admin
 
@@ -2326,7 +2569,7 @@ Goods Receipt Notes (WF-002 steps 2), Stock Issues (WF-007), Stock Transfers (WF
 
 ### Purchase Manager / Assistant
 
-Suppliers (SUP-001, SUP-004), Purchase Requests (INV-PR-003), Purchase Orders (INV-PO-002, INV-PO-003), Goods Receipts for viewing.
+Suppliers (SUP-001, SUP-004), Purchase Requests (INV-PR-003), Purchase Orders (INV-PO-002; INV-PO-003 is the document workspace that shows receipts, billing state and accounting for one order), Goods Receipts for viewing.
 
 ### Marketing Manager
 
