@@ -15,7 +15,9 @@ use App\Models\SupplierBill;
 use App\Models\SupplierPayment;
 use App\Services\Accounting\GrnMatchingService;
 use App\Services\Accounting\PostingService;
+use App\Support\SaveAction;
 use App\Support\SettlementReplay;
+use App\Support\Workspace\DocumentActivity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -85,22 +87,34 @@ class AccountsPayableController extends Controller
         ActivityLog::record($request, 'Accounting', 'Created supplier bill', $bill->bill_number);
 
         // Save keeps the user on the bill's detail page, where Approve lives; Save & Close returns to the origin or list.
-        return \App\Support\SaveAction::redirect($request, [
+        return SaveAction::redirect($request, [
             'stay' => route('admin.accounting.accounts-payable.show', $bill),
             'close' => route('admin.accounting.accounts-payable.index'),
             'new' => route('admin.accounting.accounts-payable.create'),
         ])->with('status', 'Supplier bill "'.$bill->bill_number.'" saved. Approve it to post the accounting entry.');
     }
 
-    public function show(SupplierBill $accounts_payable): View
+    /**
+     * Light document workspace: identity header (total, paid, outstanding
+     * payment), lines, GRN matches, VAT, journal, payments, balance and activity.
+     */
+    public function show(Request $request, SupplierBill $accounts_payable): View
     {
         $accounts_payable->load([
             'supplier', 'project', 'site', 'costCenter',
-            'lines.expenseCategory', 'lines.account', 'lines.grnMatch.goodsReceipt',
-            'payments.paymentAccount', 'journalEntry.lines.account',
+            'lines.expenseCategory', 'lines.account', 'lines.grnMatch.goodsReceipt.purchaseOrder', 'lines.grnMatch.goodsReceiptLine.item',
+            'payments.paymentAccount', 'payments.journalEntry', 'journalEntry.lines.account',
         ]);
+        $user = $request->user();
 
-        return view('admin.accounting.accounts-payable.show', ['bill' => $accounts_payable]);
+        return view('admin.accounting.accounts-payable.show', [
+            'bill' => $accounts_payable,
+            'returnTo' => SaveAction::returnTo($request),
+            'canViewReceipts' => $user->hasPermission('Goods Receipts', 'view'),
+            'canViewOrders' => $user->hasPermission('Purchase Orders', 'view'),
+            'canViewJournals' => $user->hasPermission('Journal Entries', 'view'),
+            'activity' => DocumentActivity::latest($user, [$accounts_payable->bill_number], ['Accounting']),
+        ]);
     }
 
     public function edit(SupplierBill $accounts_payable): View
@@ -136,7 +150,7 @@ class AccountsPayableController extends Controller
 
         ActivityLog::record($request, 'Accounting', 'Updated supplier bill', $accounts_payable->bill_number);
 
-        return \App\Support\SaveAction::redirect($request, [
+        return SaveAction::redirect($request, [
             'stay' => route('admin.accounting.accounts-payable.show', $accounts_payable),
             'close' => route('admin.accounting.accounts-payable.index'),
             'new' => route('admin.accounting.accounts-payable.create'),
@@ -247,13 +261,15 @@ class AccountsPayableController extends Controller
             ->with('status', 'Bill reopened as a draft'.($reversal ? '; reversing entry '.$reversal->journal_number.' posted' : '').'. Correct it and approve again.');
     }
 
-    public function paymentForm(SupplierBill $accounts_payable): View
+    public function paymentForm(Request $request, SupplierBill $accounts_payable): View
     {
         $accounts_payable->load(['supplier', 'payments']);
         $allowedCodes = $accounts_payable->supplier->allowedPaymentAccountCodes();
 
         return view('admin.accounting.accounts-payable.payment', [
             'bill' => $accounts_payable,
+            // Where Record Payment / Cancel go back to: the origin (bill, PO billing section) when it is a safe admin path.
+            'returnTo' => SaveAction::returnTo($request) ?? route('admin.accounting.accounts-payable.show', $accounts_payable, false),
             // Only the channels this supplier accepts (client change request NR-28).
             'paymentAccounts' => $this->formOptions()['paymentAccounts']->filter(fn ($account) => in_array($account->account_code, $allowedCodes, true))->values(),
             'paymentMethods' => SupplierPayment::METHODS,
@@ -328,14 +344,16 @@ class AccountsPayableController extends Controller
             return [$payment, false];
         });
 
+        $destination = SaveAction::returnTo($request) ?? route('admin.accounting.accounts-payable.show', $accounts_payable);
+
         if ($alreadyRecorded) {
-            return redirect()->route('admin.accounting.accounts-payable.show', $accounts_payable)
+            return redirect()->to($destination)
                 ->with('status', 'This payment of SAR '.number_format((float) $payment->amount, 2).' was already recorded on '.$payment->payment_date->toDateString().'; nothing was added.');
         }
 
         ActivityLog::record($request, 'Accounting', 'Recorded supplier payment', $accounts_payable->bill_number.' - SAR '.number_format((float) $payment->amount, 2));
 
-        return redirect()->route('admin.accounting.accounts-payable.show', $accounts_payable)
+        return redirect()->to($destination)
             ->with('status', 'Payment recorded successfully.');
     }
 

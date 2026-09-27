@@ -5,7 +5,7 @@
 
 @section('content')
     <x-admin.page-header :title="'Record Payment: '.$bill->bill_number" :description="$bill->supplier->name.' · outstanding SAR '.number_format($bill->balance_amount, 2)">
-        <a class="btn outline" href="{{ route('admin.accounting.accounts-payable.show', $bill) }}">Back to Bill</a>
+        <a class="btn outline" href="{{ $returnTo }}">{{ str_starts_with($returnTo, route('admin.accounting.accounts-payable.show', $bill, false)) ? 'Back to Bill' : 'Back' }}</a>
     </x-admin.page-header>
 
     <div class="card-grid">
@@ -32,6 +32,7 @@
 
     <form method="POST" action="{{ route('admin.accounting.accounts-payable.payment.store', $bill) }}">
         @csrf
+        <input type="hidden" name="{{ \App\Support\SaveAction::RETURN_FIELD }}" value="{{ old(\App\Support\SaveAction::RETURN_FIELD, $returnTo) }}"/>
         {{-- One-time key so a double click or a retry cannot record this payment twice (F02). --}}
         <input type="hidden" name="idempotency_key" value="{{ old('idempotency_key', (string) \Illuminate\Support\Str::uuid()) }}"/>
 
@@ -77,7 +78,7 @@
         </div>
 
         <div class="form-actions">
-            <a class="btn outline" href="{{ route('admin.accounting.accounts-payable.show', $bill) }}">Cancel</a>
+            <a class="btn outline" href="{{ $returnTo }}">Cancel</a>
             <button type="submit" class="btn primary" @disabled($paymentAccounts->isEmpty())>Record Payment</button>
         </div>
     </form>
