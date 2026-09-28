@@ -1,6 +1,6 @@
 @php /** @var \App\Models\Site|null $site */ $site = $site ?? null; @endphp
 
-<form method="POST" action="{{ $site ? route('admin.master.sites.update', $site) : route('admin.master.sites.store') }}">
+<form method="POST" action="{{ $formAction ?? ($site ? route('admin.master.sites.update', $site) : route('admin.master.sites.store')) }}">
     @csrf
     @if ($site) @method('PUT') @endif
 
@@ -11,13 +11,14 @@
                 <div><label for="code">Site Code *</label><input id="code" name="code" class="input" value="{{ old('code', $site?->code) }}" placeholder="SITE-A" required/></div>
                 <div>
                     <label for="project_id">Project *</label>
-                    <select id="project_id" name="project_id" class="select">
+                    <select id="project_id" name="project_id" class="select" @disabled(isset($contextProject))>
                         <option value="">Select...</option>
                         @foreach ($projects as $project)
-                            <option value="{{ $project->id }}" @selected(old('project_id', $site?->project_id ?? request('project')) == $project->id)>{{ $project->name }}</option>
+                            <option value="{{ $project->id }}" @selected(($contextProject->id ?? old('project_id', $site?->project_id ?? request('project'))) == $project->id)>{{ $project->name }}</option>
                         @endforeach
                     </select>
                 </div>
+                @isset($contextProject)<input type="hidden" name="project_id" value="{{ $contextProject->id }}"/>@endisset
                 <div>
                     <label for="supervisor_id">Site Supervisor *</label>
                     <select id="supervisor_id" name="supervisor_id" class="select">
@@ -65,10 +66,14 @@
                 </div>
             </x-admin.form-section>
 
+            @isset($contextProject)
+                <x-admin.form-actions :cancel="route('admin.master.projects.show', $contextProject).'#sites'" :save-new="auth()->user()->hasPermission('Sites', 'create')"/>
+            @else
             <div class="form-actions">
                 <a class="btn outline" href="{{ route('admin.master.sites.index') }}">Cancel</a>
                 <button type="submit" class="btn primary">{{ $site ? 'Update Site' : 'Save Site' }}</button>
             </div>
+            @endisset
         </div>
 
         <div>

@@ -6,14 +6,14 @@
 @section('content')
     <x-admin.page-header title="Project Management Setup" description="Master project setup before budgeting, attendance, expense, inventory, and equipment assignment">
         <a class="btn outline" href="{{ route('admin.master.project-classifications.index') }}">Classifications</a>
-        <a class="btn primary" href="{{ route('admin.master.projects.create') }}">+ Create Project</a>
+        @if(auth()->user()->hasPermission('Projects', 'create'))<a class="btn primary" href="{{ route('admin.master.projects.create') }}">+ Create Project</a>@endif
     </x-admin.page-header>
 
     <div class="card-grid">
         <x-admin.metric-card color="blue" :value="$totalProjects" label="Total Projects"/>
         <x-admin.metric-card color="green" :value="$activeProjects" label="Active Projects"/>
         <x-admin.metric-card color="yellow" :value="'SAR '.number_format($totalBudget / 1000000, 1).'M'" label="Total Budget"/>
-        <x-admin.metric-card color="cyan" :value="$projects->sum('sites_count')" label="Linked Sites"/>
+        @if(auth()->user()->hasPermission('Sites', 'view'))<x-admin.metric-card color="cyan" :value="$projects->sum('sites_count')" label="Linked Sites (this page)"/>@endif
     </div>
 
     <x-admin.filter-bar>
@@ -61,10 +61,11 @@
                     <td>
                         <x-admin.action-buttons
                             :view="route('admin.master.projects.show', $project)"
-                            :edit="route('admin.master.projects.edit', $project)"
-                            :delete="route('admin.master.projects.destroy', $project)"
+                            :edit="auth()->user()->hasPermission('Projects', 'edit') ? route('admin.master.projects.edit', $project) : null"
+                            edit-label="Edit / Manage"
+                            :delete="auth()->user()->hasPermission('Projects', 'delete') ? route('admin.master.projects.destroy', $project) : null"
                             :name="$project->name">
-                            <a class="btn sm warning" href="{{ route('admin.master.sites.index', ['project' => $project->id]) }}">Sites</a>
+                            @if(auth()->user()->hasPermission('Sites', 'view'))<a class="btn sm warning" href="{{ route('admin.master.projects.show', $project).'#sites' }}">Sites</a>@endif
                         </x-admin.action-buttons>
                     </td>
                 </tr>

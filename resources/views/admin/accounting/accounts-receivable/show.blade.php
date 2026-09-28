@@ -5,6 +5,7 @@
 
 @section('content')
     <x-admin.page-header :title="'Invoice: '.$invoice->invoice_number" :description="$invoice->customer->name.' · '.$invoice->invoice_date->toDateString()">
+        @if($origin = \App\Support\SaveAction::returnTo())<a class="btn outline" href="{{ $origin }}">Back to origin</a>@endif
         @if ($invoice->isEditable())
             <a class="btn outline" href="{{ route('admin.accounting.accounts-receivable.edit', $invoice) }}">Edit</a>
         @endif

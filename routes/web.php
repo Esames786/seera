@@ -147,6 +147,11 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::resource('project-classifications', ProjectClassificationController::class)
             ->only(['index', 'store', 'update', 'destroy'])
             ->parameters(['project-classifications' => 'project_classification']);
+        Route::get('projects/{project}/workspace/{panel}', [\App\Http\Controllers\Admin\Master\ProjectWorkspaceController::class, 'panel'])->name('projects.workspace.panel');
+        Route::get('projects/{project}/sites/create', [\App\Http\Controllers\Admin\Master\ProjectSiteController::class, 'createForProject'])->name('sites.project.create');
+        Route::post('projects/{project}/sites', [\App\Http\Controllers\Admin\Master\ProjectSiteController::class, 'storeForProject'])->name('sites.project.store');
+        Route::get('projects/{project}/sites/{site}/edit', [\App\Http\Controllers\Admin\Master\ProjectSiteController::class, 'editForProject'])->name('sites.project.edit');
+        Route::put('projects/{project}/sites/{site}', [\App\Http\Controllers\Admin\Master\ProjectSiteController::class, 'updateForProject'])->name('sites.project.update');
         Route::resource('projects', ProjectController::class);
         Route::resource('sites', SiteController::class);
         Route::resource('warehouses', WarehouseController::class);

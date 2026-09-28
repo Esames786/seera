@@ -119,8 +119,5 @@
         <div class="full"><label for="description">Description</label><textarea id="description" name="description" class="textarea" placeholder="Project scope, commercial notes, client requirements...">{{ old('description', $project?->description) }}</textarea></div>
     </x-admin.form-section>
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.master.projects.index') }}">Cancel</a>
-        <button type="submit" class="btn primary">{{ $project ? 'Update Project' : 'Save Project' }}</button>
-    </div>
+    <x-admin.form-actions :cancel="route('admin.master.projects.index')" :save-new="auth()->user()->hasPermission('Projects', 'create')"/>
 </form>

@@ -11,6 +11,8 @@ use App\Models\Project;
 use App\Models\ProjectClassification;
 use App\Models\Role;
 use App\Models\User;
+use App\Support\SaveAction;
+use App\Support\Workspace\ProjectWorkspacePanels;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -52,37 +54,51 @@ class ProjectController extends Controller
     {
         $project = Project::create($this->validated($request));
 
-        ActivityLog::record($request, 'Projects', 'Created project', $project->name);
+        ActivityLog::record($request, 'Projects', 'Created project', '[Project #'.$project->id.'] '.$project->code.' / '.$project->name);
 
         if ($request->wantsJson()) {
             return response()->json(['id' => $project->id, 'label' => $project->name], 201);
         }
 
-        return redirect()->route('admin.master.projects.index')->with('status', 'Project "'.$project->name.'" created successfully.');
+        return $this->saved($request, $project);
     }
 
     public function show(Project $project): View
     {
-        $project->load([
-            'customer', 'branch', 'manager', 'classification', 'sites.supervisor', 'warehouses',
-            'suppliers', 'employees.designation', 'employees.site',
-        ]);
-
-        return view('admin.master.projects.show', ['project' => $project]);
+        return view('admin.master.projects.show', $this->workspace($project));
     }
 
     public function edit(Project $project): View
     {
-        return view('admin.master.projects.edit', ['project' => $project] + $this->formOptions());
+        return view('admin.master.projects.edit', $this->workspace($project) + $this->formOptions());
     }
 
     public function update(Request $request, Project $project): RedirectResponse
     {
         $project->update($this->validated($request, $project));
 
-        ActivityLog::record($request, 'Projects', 'Updated project', $project->name);
+        ActivityLog::record($request, 'Projects', 'Updated project', '[Project #'.$project->id.'] '.$project->code.' / '.$project->name);
 
-        return redirect()->route('admin.master.projects.index')->with('status', 'Project "'.$project->name.'" updated successfully.');
+        return $this->saved($request, $project);
+    }
+
+    private function workspace(Project $project): array
+    {
+        $project->load(['customer', 'branch', 'manager', 'classification']);
+
+        return ['project' => $project, 'panels' => ProjectWorkspacePanels::visibleDefinitions(request()->user()),
+            'summary' => ProjectWorkspacePanels::summary($project, request()->user())];
+    }
+
+    private function saved(Request $request, Project $project): RedirectResponse
+    {
+        $origin = SaveAction::returnTo($request);
+
+        return SaveAction::redirect($request, [
+            'stay' => route('admin.master.projects.edit', [$project, 'return_to' => $origin]),
+            'close' => route('admin.master.projects.index'),
+            'new' => route('admin.master.projects.create'),
+        ])->with('status', 'Project saved successfully.');
     }
 
     public function destroy(Request $request, Project $project): RedirectResponse

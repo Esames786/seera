@@ -94,7 +94,7 @@ class SiteController extends Controller
         return redirect()->route('admin.master.sites.index')->with('status', 'Site "'.$name.'" deleted successfully.');
     }
 
-    private function validated(Request $request, ?Site $site = null): array
+    protected function validated(Request $request, ?Site $site = null): array
     {
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],

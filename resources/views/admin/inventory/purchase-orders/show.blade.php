@@ -33,6 +33,7 @@
         @if ($receiptUrl)
             <a class="btn primary" href="{{ $receiptUrl }}">Create Goods Receipt</a>
         @endif
+        @if($origin = \App\Support\SaveAction::returnTo())<a class="btn outline" href="{{ $origin }}">Back to origin</a>@endif
         <a class="btn outline" href="{{ route('admin.inventory.purchase-orders.index') }}">Back to Purchase Orders</a>
     </x-admin.page-header>
 

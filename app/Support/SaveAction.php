@@ -90,8 +90,12 @@ final class SaveAction
             return false;
         }
 
-        // Relative, single leading slash (no protocol-relative "//host"), inside /admin, no control characters.
-        return Str::startsWith($path, '/admin')
+        // Validate the decoded path boundary too: /administrator and /admin/../logout
+        // are not admin destinations. Query strings may contain encoded return context.
+        $pathname = rawurldecode(explode('?', explode('#', $path, 2)[0], 2)[0]);
+
+        return preg_match('~^/admin(?:/|$)~', $pathname) === 1
+            && ! preg_match('~(?:^|/)\.{1,2}(?:/|$)|[%\\\\\x00-\x1F\x7F]~', $pathname)
             && ! Str::startsWith($path, '//')
             && ! str_contains($path, '\\')
             && preg_match('/[\x00-\x1F\x7F]/', $path) !== 1;
