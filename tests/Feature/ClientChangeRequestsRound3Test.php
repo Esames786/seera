@@ -249,7 +249,10 @@ class ClientChangeRequestsRound3Test extends TestCase
         $this->actingAs($admin)->get(route('admin.master.suppliers.show', $supplier))
             ->assertOk()->assertSee('Riyadh')->assertSee('Al Rajhi Bank')->assertSee($project->name);
         $this->actingAs($admin)->get(route('admin.master.projects.show', $project))
-            ->assertOk()->assertSee('Suppliers for this Project')->assertSee('Riyadh Scaffolding Co');
+            ->assertOk()->assertSee('data-workspace-related="suppliers"', false)->assertDontSee('Riyadh Scaffolding Co');
+        // Phase A loads the same linked supplier through its paged section, not all history on initial View.
+        $this->get(route('admin.master.projects.workspace.panel', [$project, 'suppliers']))
+            ->assertOk()->assertSee('Suppliers')->assertSee('Riyadh Scaffolding Co');
         $this->actingAs($admin)->get(route('admin.master.suppliers.create'))
             ->assertOk()->assertSee('Scaffolding')->assertSee('data-quick-create="qc-supplier-category"', false);
         $this->actingAs($admin)->get(route('admin.master.suppliers.index', ['rating' => 'Green']))
@@ -360,7 +363,13 @@ class ClientChangeRequestsRound3Test extends TestCase
         $employee = Employee::firstOrFail();
         $employee->update(['project_id' => $project->id]);
         $this->actingAs($admin)->get(route('admin.master.projects.show', $project))
-            ->assertOk()->assertSee('Assigned Staff')->assertSee($employee->name)->assertSee('+ Add Location')->assertSee('Locations in this Project');
+            ->assertOk()->assertSee('Project Team / Staff')->assertSee('data-workspace-related="sites"', false);
+        // Keep the original employee and Add Location coverage on their now-lazy sections.
+        $this->get(route('admin.master.projects.workspace.panel', [$project, 'staff']))
+            ->assertOk()->assertSee($employee->name);
+        $this->get(route('admin.master.projects.workspace.panel', [$project, 'sites']))
+            ->assertOk()->assertSee('Sites / Locations')->assertSee('+ Add Location')
+            ->assertSee(route('admin.master.sites.project.create', $project), false);
     }
 
     // Stage C: NR-11 / NR-12 / NR-13 / NR-14 -----------------------------------
