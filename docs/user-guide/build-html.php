@@ -108,9 +108,9 @@ $nav = '<a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUID
 
 $page = function (string $title, string $tocHtml, string $body) use ($css, $nav): string {
     return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>'.htmlspecialchars($title).' · Seera ERP</title><style>'.$css.'</style></head><body>'
-        .'<header class="top"><span class="brand">Seera ERP</span><span class="meta">'.htmlspecialchars($title).' · Version 1.1 · 27 September 2026 · Current implemented system only</span><nav>'.$nav.'</nav></header>'
+        .'<header class="top"><span class="brand">Seera ERP</span><span class="meta">'.htmlspecialchars($title).' · Version 1.2 · 28 September 2026 · Current implemented system only</span><nav>'.$nav.'</nav></header>'
         .'<div class="layout"><aside class="toc"><h2>Contents</h2>'.$tocHtml.'</aside><main>'.$body.'</main></div>'
-        .'<footer>Seera ERP — Current System User Guide, version 1.1, prepared 27 September 2026. Examples use fictional training data.</footer></body></html>';
+        .'<footer>Seera ERP — Current System User Guide, version 1.2, prepared 28 September 2026. Examples use fictional training data.</footer></body></html>';
 };
 
 foreach ($sources as $name => $meta) {
@@ -128,7 +128,7 @@ foreach ($sources as $name => $meta) {
 
 $index = <<<'HTML'
 <h1>SEERA ERP</h1><h1>Current System User Guide — HTML edition</h1>
-<p>Version 1.1 · Prepared 27 September 2026 · Status: current implemented system only. All examples use fictional training data.</p>
+<p>Version 1.2 · Prepared 28 September 2026 · Status: current implemented system only. All examples use fictional training data.</p>
 <table><thead><tr><th>Document</th><th>What it is for</th></tr></thead><tbody>
 <tr><td><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a></td><td>21 chapters: how to sign in, every screen with its web address, fields and buttons, the Connected Workspace Standard, 15 end-to-end workflows, troubleshooting, glossary, current limitations and a quick start by role.</td></tr>
 <tr><td><a href="SCREEN-INDEX.html">Screen Index</a></td><td>Master page index: 132 screens with permanent Screen IDs, web address, navigation path, primary role, permissions and status.</td></tr>

@@ -34,7 +34,7 @@ main a { color:var(--link); }
 main strong { color:#ffffff; }
 footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px solid var(--line); background:var(--panel); }
 @media (max-width: 900px) { .layout { grid-template-columns:1fr; } aside.toc { position:static; height:auto; max-height:40vh; } main { padding:18px 16px; } }
-@media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Current System User Guide · Version 1.1 · 27 September 2026 · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a class="l2" href="#training-dataset-used-in-the-examples">Training dataset used in the examples</a><a class="l2" href="#table-of-contents">Table of contents</a><a class="l2" href="#1-about-seera-erp">1. About Seera ERP</a><a class="l3" href="#the-three-ways-you-work-with-a-record">The three ways you work with a record</a><a class="l3" href="#the-save-buttons">The Save buttons</a><a class="l3" href="#unsaved-changes-protection">Unsaved changes protection</a><a class="l2" href="#2-login-and-navigation">2. Login and Navigation</a><a class="l3" href="#adm-001-login">[ADM-001] Login</a><a class="l3" href="#adm-002-forgot-password-and-adm-003-reset-password">[ADM-002] Forgot Password and [ADM-003] Reset Password</a><a class="l3" href="#adm-004-set-your-password-first-sign-in">[ADM-004] Set Your Password (first sign-in)</a><a class="l3" href="#navigation-basics">Navigation basics</a><a class="l2" href="#3-dashboard">3. Dashboard</a><a class="l3" href="#adm-010-dashboard">[ADM-010] Dashboard</a><a class="l2" href="#4-users-roles-and-permissions">4. Users, Roles and Permissions</a><a class="l3" href="#usr-001-users-list">[USR-001] Users List</a><a class="l3" href="#usr-002-add-user">[USR-002] Add User</a><a class="l3" href="#usr-003-user-details-and-usr-004-edit-user">[USR-003] User Details and [USR-004] Edit User</a><a class="l3" href="#rol-001-roles-list-rol-002-create-role-rol-003-role-details-rol-004-edit-role">[ROL-001] Roles List, [ROL-002] Create Role, [ROL-003] Role Details, [ROL-004] Edit Role</a><a class="l3" href="#rol-005-permission-matrix">[ROL-005] Permission Matrix</a><a class="l3" href="#rol-006-role-hierarchy">[ROL-006] Role Hierarchy</a><a class="l3" href="#rol-007-assign-users-to-role">[ROL-007] Assign Users to Role</a><a class="l3" href="#rol-008-approval-workflows-rol-009-create-rol-010-edit">[ROL-008] Approval Workflows, [ROL-009] Create, [ROL-010] Edit</a><a class="l2" href="#5-master-setup">5. Master Setup</a><a class="l3" href="#mst-com-001-company-profile">[MST-COM-001] Company Profile</a><a class="l3" href="#mst-org-001-organization-structure">[MST-ORG-001] Organization Structure</a><a class="l3" href="#branches-mst-br-001--004-departments-mst-dep-001--004-designations-mst-des-001--004">Branches [MST-BR-001 … 004], Departments [MST-DEP-001 … 004], Designations [MST-DES-001 … 004]</a><a class="l3" href="#projects-mst-prj-001--005-and-locations-mst-site-001--004">Projects [MST-PRJ-001 … 005] and Locations [MST-SITE-001 … 004]</a><a class="l3" href="#warehouses-mst-wh-001--004">Warehouses [MST-WH-001 … 004]</a><a class="l3" href="#expense-categories-mst-exp-001--004">Expense Categories [MST-EXP-001 … 004]</a><a class="l3" href="#payment-terms-sup-005-and-project-classifications-mst-prj-005">Payment Terms [SUP-005] and Project Classifications [MST-PRJ-005]</a><a class="l2" href="#6-hr--payroll">6. HR &amp; Payroll</a><a class="l3" href="#hr-dash-001-hr-dashboard">[HR-DASH-001] HR Dashboard</a><a class="l3" href="#hr-emp-001-employees-list">[HR-EMP-001] Employees List</a><a class="l3" href="#hr-emp-002-add-employee">[HR-EMP-002] Add Employee</a><a class="l3" href="#hr-emp-003-employee-view-read-only">[HR-EMP-003] Employee View (read-only)</a><a class="l3" href="#hr-emp-004-employee-workspace-edit">[HR-EMP-004] Employee Workspace (Edit)</a><a class="l3" href="#hr-doc-001-employee-documents--iqama">[HR-DOC-001] Employee Documents / IQAMA</a><a class="l3" href="#hr-shf-001--003-shifts">[HR-SHF-001 … 003] Shifts</a><a class="l3" href="#hr-att-001--003-attendance">[HR-ATT-001 … 003] Attendance</a><a class="l3" href="#hr-lv-001--004-leaves">[HR-LV-001 … 004] Leaves</a><a class="l3" href="#hr-ot-001--003-overtime">[HR-OT-001 … 003] Overtime</a><a class="l3" href="#hr-sal-001--004-salary-structures">[HR-SAL-001 … 004] Salary Structures</a><a class="l3" href="#hr-pay-001--004-payroll">[HR-PAY-001 … 004] Payroll</a><a class="l3" href="#hr-eos-001--004-end-of-service">[HR-EOS-001 … 004] End of Service</a><a class="l2" href="#7-customers">7. Customers</a><a class="l3" href="#cus-001-customers-list">[CUS-001] Customers List</a><a class="l3" href="#cus-002-add-customer">[CUS-002] Add Customer</a><a class="l3" href="#cus-003-customer-view-read-only">[CUS-003] Customer View (read-only)</a><a class="l3" href="#cus-004-customer-workspace-edit--manage">[CUS-004] Customer Workspace (Edit / Manage)</a><a class="l2" href="#8-suppliers">8. Suppliers</a><a class="l3" href="#sup-001-suppliers-list">[SUP-001] Suppliers List</a><a class="l3" href="#sup-002-add-supplier">[SUP-002] Add Supplier</a><a class="l3" href="#sup-003-supplier-view-read-only">[SUP-003] Supplier View (read-only)</a><a class="l3" href="#sup-004-supplier-workspace-edit--manage">[SUP-004] Supplier Workspace (Edit / Manage)</a><a class="l2" href="#9-accounting--finance">9. Accounting &amp; Finance</a><a class="l3" href="#how-accounting-works-in-seera-read-this-first">How accounting works in Seera (read this first)</a><a class="l3" href="#fin-dash-001-accounting-dashboard">[FIN-DASH-001] Accounting Dashboard</a><a class="l3" href="#fin-coa-001--004-chart-of-accounts">[FIN-COA-001 … 004] Chart of Accounts</a><a class="l3" href="#fin-je-001--004-journal-entries">[FIN-JE-001 … 004] Journal Entries</a><a class="l3" href="#fin-gl-001-general-ledger">[FIN-GL-001] General Ledger</a><a class="l3" href="#fin-ap-001-accounts-payable-supplier-bills">[FIN-AP-001] Accounts Payable (Supplier Bills)</a><a class="l3" href="#fin-ap-002-add-supplier-bill-and-fin-ap-004-edit-supplier-bill">[FIN-AP-002] Add Supplier Bill and [FIN-AP-004] Edit Supplier Bill</a><a class="l3" href="#fin-ap-003-supplier-bill-details">[FIN-AP-003] Supplier Bill Details</a><a class="l3" href="#fin-ap-005-record-supplier-payment">[FIN-AP-005] Record Supplier Payment</a><a class="l3" href="#fin-ar-001--005-accounts-receivable-customer-invoices-and-receipts">[FIN-AR-001 … 005] Accounts Receivable (Customer Invoices and Receipts)</a><a class="l3" href="#fin-vat-001-vat-management-and-fin-vat-002-vat-period">[FIN-VAT-001] VAT Management and [FIN-VAT-002] VAT Period</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-and-fin-zat-002-zatca-record">[FIN-ZAT-001] ZATCA E-Invoicing and [FIN-ZAT-002] ZATCA Record</a><a class="l3" href="#fin-cc-001--004-cost-centers">[FIN-CC-001 … 004] Cost Centers</a><a class="l3" href="#fin-pr-001--004-automatic-posting-rules">[FIN-PR-001 … 004] Automatic Posting Rules</a><a class="l2" href="#10-inventory--purchasing">10. Inventory &amp; Purchasing</a><a class="l3" href="#how-stock-works-in-seera">How stock works in Seera</a><a class="l3" href="#inv-dash-001-inventory-dashboard">[INV-DASH-001] Inventory Dashboard</a><a class="l3" href="#inv-item-001--004-materials--items">[INV-ITEM-001 … 004] Materials / Items</a><a class="l3" href="#inv-cat-001--003-item-categories-and-inv-unit-001--003-units">[INV-CAT-001 … 003] Item Categories and [INV-UNIT-001 … 003] Units</a><a class="l3" href="#inv-stk-001-stock-on-hand-and-inv-led-001-stock-ledger">[INV-STK-001] Stock On Hand and [INV-LED-001] Stock Ledger</a><a class="l3" href="#inv-pr-001--004-purchase-requests">[INV-PR-001 … 004] Purchase Requests</a><a class="l3" href="#inv-po-001--004-purchase-orders">[INV-PO-001 … 004] Purchase Orders</a><a class="l3" href="#inv-grn-001--004-goods-receipt-notes">[INV-GRN-001 … 004] Goods Receipt Notes</a><a class="l3" href="#inv-iss-001--004-stock-issues">[INV-ISS-001 … 004] Stock Issues</a><a class="l3" href="#inv-trf-001--004-stock-transfers">[INV-TRF-001 … 004] Stock Transfers</a><a class="l3" href="#inv-adj-001--004-stock-adjustments">[INV-ADJ-001 … 004] Stock Adjustments</a><a class="l3" href="#inv-rep-001--005-inventory-reports">[INV-REP-001 … 005] Inventory Reports</a><a class="l2" href="#11-projects">11. Projects</a><a class="l3" href="#mst-prj-001--004-projects">[MST-PRJ-001 … 004] Projects</a><a class="l3" href="#mst-site-001--004-locations-sites">[MST-SITE-001 … 004] Locations (Sites)</a><a class="l3" href="#where-project-figures-are-today">Where project figures are today</a><a class="l2" href="#12-marketing">12. Marketing</a><a class="l3" href="#mkt-001-leads--visits-mkt-002-new-lead-mkt-004-edit-lead">[MKT-001] Leads &amp; Visits, [MKT-002] New Lead, [MKT-004] Edit Lead</a><a class="l3" href="#mkt-003-lead-details-visits-convert">[MKT-003] Lead (details, visits, convert)</a><a class="l3" href="#mkt-005-visit-report">[MKT-005] Visit Report</a><a class="l2" href="#13-activity-logs--audit">13. Activity Logs / Audit</a><a class="l3" href="#adm-020-activity-logs">[ADM-020] Activity Logs</a><a class="l2" href="#14-current-zatca-foundation">14. Current ZATCA Foundation</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-local-records">[FIN-ZAT-001] ZATCA E-Invoicing (local records)</a><a class="l3" href="#fin-zat-002-zatca-record">[FIN-ZAT-002] ZATCA Record</a><a class="l2" href="#15-reports">15. Reports</a><a class="l2" href="#16-common-tasks">16. Common Tasks</a><a class="l3" href="#create-a-supplier">Create a supplier</a><a class="l3" href="#enter-and-approve-a-supplier-bill-for-goods-you-received">Enter and approve a supplier bill for goods you received</a><a class="l3" href="#record-a-customer-receipt">Record a customer receipt</a><a class="l3" href="#add-an-employee-and-give-them-a-login">Add an employee and give them a login</a><a class="l3" href="#find-everything-about-one-customer">Find everything about one customer</a><a class="l3" href="#post-a-manual-journal">Post a manual journal</a><a class="l3" href="#close-a-vat-quarter">Close a VAT quarter</a><a class="l3" href="#switch-language">Switch language</a><a class="l2" href="#17-end-to-end-workflows">17. End-to-End Workflows</a><a class="l3" href="#wf-001-create-employee-and-user-access">WF-001 Create Employee and User Access</a><a class="l3" href="#wf-002-supplier--purchase-order--goods-receipt--supplier-bill--payment">WF-002 Supplier → Purchase Order → Goods Receipt → Supplier Bill → Payment</a><a class="l3" href="#wf-003-customer--invoice--receipt">WF-003 Customer → Invoice → Receipt</a><a class="l3" href="#wf-004-manual-journal--general-ledger">WF-004 Manual Journal → General Ledger</a><a class="l3" href="#wf-005-vat-period-review-and-finalize">WF-005 VAT Period Review and Finalize</a><a class="l3" href="#wf-006-inventory-transfer-between-warehouses">WF-006 Inventory Transfer between Warehouses</a><a class="l3" href="#wf-007-stock-issue-to-a-project">WF-007 Stock Issue to a Project</a><a class="l3" href="#wf-008-payroll-run">WF-008 Payroll Run</a><a class="l3" href="#wf-009-leave-request-lifecycle">WF-009 Leave Request lifecycle</a><a class="l3" href="#wf-010-supplier-f04-grni-accounting-flow">WF-010 Supplier F04 GRNI accounting flow</a><a class="l3" href="#wf-011-purchase-request--purchase-order">WF-011 Purchase Request → Purchase Order</a><a class="l3" href="#wf-012-correct-an-approved-bill-or-invoice-reopen">WF-012 Correct an approved bill or invoice (Reopen)</a><a class="l3" href="#wf-013-stock-adjustment-after-a-physical-count">WF-013 Stock Adjustment after a physical count</a><a class="l3" href="#wf-014-marketing-lead--visit--customer">WF-014 Marketing Lead → Visit → Customer</a><a class="l3" href="#wf-015-end-of-service-settlement">WF-015 End of Service settlement</a><a class="l2" href="#18-troubleshooting">18. Troubleshooting</a><a class="l2" href="#19-glossary">19. Glossary</a><a class="l2" href="#20-current-limitations--not-yet-operational">20. Current Limitations / Not Yet Operational</a><a class="l2" href="#21-quick-start-by-role">21. Quick Start by Role</a><a class="l3" href="#super-admin">Super Admin</a><a class="l3" href="#finance-manager">Finance Manager</a><a class="l3" href="#hr-manager">HR Manager</a><a class="l3" href="#project-manager">Project Manager</a><a class="l3" href="#site-in-charge--site-supervisor">Site In-Charge / Site Supervisor</a><a class="l3" href="#warehouse-incharge">Warehouse Incharge</a><a class="l3" href="#purchase-manager--assistant">Purchase Manager / Assistant</a><a class="l3" href="#marketing-manager">Marketing Manager</a></aside><main><h1 id="seera-erp">SEERA ERP</h1>
+@media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Current System User Guide · Version 1.2 · 28 September 2026 · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a class="l2" href="#training-dataset-used-in-the-examples">Training dataset used in the examples</a><a class="l2" href="#table-of-contents">Table of contents</a><a class="l2" href="#1-about-seera-erp">1. About Seera ERP</a><a class="l3" href="#the-three-ways-you-work-with-a-record">The three ways you work with a record</a><a class="l3" href="#the-save-buttons">The Save buttons</a><a class="l3" href="#unsaved-changes-protection">Unsaved changes protection</a><a class="l2" href="#2-login-and-navigation">2. Login and Navigation</a><a class="l3" href="#adm-001-login">[ADM-001] Login</a><a class="l3" href="#adm-002-forgot-password-and-adm-003-reset-password">[ADM-002] Forgot Password and [ADM-003] Reset Password</a><a class="l3" href="#adm-004-set-your-password-first-sign-in">[ADM-004] Set Your Password (first sign-in)</a><a class="l3" href="#navigation-basics">Navigation basics</a><a class="l2" href="#3-dashboard">3. Dashboard</a><a class="l3" href="#adm-010-dashboard">[ADM-010] Dashboard</a><a class="l2" href="#4-users-roles-and-permissions">4. Users, Roles and Permissions</a><a class="l3" href="#usr-001-users-list">[USR-001] Users List</a><a class="l3" href="#usr-002-add-user">[USR-002] Add User</a><a class="l3" href="#usr-003-user-details-and-usr-004-edit-user">[USR-003] User Details and [USR-004] Edit User</a><a class="l3" href="#rol-001-roles-list-rol-002-create-role-rol-003-role-details-rol-004-edit-role">[ROL-001] Roles List, [ROL-002] Create Role, [ROL-003] Role Details, [ROL-004] Edit Role</a><a class="l3" href="#rol-005-permission-matrix">[ROL-005] Permission Matrix</a><a class="l3" href="#rol-006-role-hierarchy">[ROL-006] Role Hierarchy</a><a class="l3" href="#rol-007-assign-users-to-role">[ROL-007] Assign Users to Role</a><a class="l3" href="#rol-008-approval-workflows-rol-009-create-rol-010-edit">[ROL-008] Approval Workflows, [ROL-009] Create, [ROL-010] Edit</a><a class="l2" href="#5-master-setup">5. Master Setup</a><a class="l3" href="#mst-com-001-company-profile">[MST-COM-001] Company Profile</a><a class="l3" href="#mst-org-001-organization-structure">[MST-ORG-001] Organization Structure</a><a class="l3" href="#branches-mst-br-001--004-departments-mst-dep-001--004-designations-mst-des-001--004">Branches [MST-BR-001 … 004], Departments [MST-DEP-001 … 004], Designations [MST-DES-001 … 004]</a><a class="l3" href="#projects-mst-prj-001--005-and-locations-mst-site-001--004">Projects [MST-PRJ-001 … 005] and Locations [MST-SITE-001 … 004]</a><a class="l3" href="#warehouses-mst-wh-001--004">Warehouses [MST-WH-001 … 004]</a><a class="l3" href="#expense-categories-mst-exp-001--004">Expense Categories [MST-EXP-001 … 004]</a><a class="l3" href="#payment-terms-sup-005-and-project-classifications-mst-prj-005">Payment Terms [SUP-005] and Project Classifications [MST-PRJ-005]</a><a class="l2" href="#6-hr--payroll">6. HR &amp; Payroll</a><a class="l3" href="#hr-dash-001-hr-dashboard">[HR-DASH-001] HR Dashboard</a><a class="l3" href="#hr-emp-001-employees-list">[HR-EMP-001] Employees List</a><a class="l3" href="#hr-emp-002-add-employee">[HR-EMP-002] Add Employee</a><a class="l3" href="#hr-emp-003-employee-view-read-only">[HR-EMP-003] Employee View (read-only)</a><a class="l3" href="#hr-emp-004-employee-workspace-edit">[HR-EMP-004] Employee Workspace (Edit)</a><a class="l3" href="#hr-doc-001-employee-documents--iqama">[HR-DOC-001] Employee Documents / IQAMA</a><a class="l3" href="#hr-shf-001--003-shifts">[HR-SHF-001 … 003] Shifts</a><a class="l3" href="#hr-att-001--003-attendance">[HR-ATT-001 … 003] Attendance</a><a class="l3" href="#hr-lv-001--004-leaves">[HR-LV-001 … 004] Leaves</a><a class="l3" href="#hr-ot-001--003-overtime">[HR-OT-001 … 003] Overtime</a><a class="l3" href="#hr-sal-001--004-salary-structures">[HR-SAL-001 … 004] Salary Structures</a><a class="l3" href="#hr-pay-001--004-payroll">[HR-PAY-001 … 004] Payroll</a><a class="l3" href="#hr-eos-001--004-end-of-service">[HR-EOS-001 … 004] End of Service</a><a class="l2" href="#7-customers">7. Customers</a><a class="l3" href="#cus-001-customers-list">[CUS-001] Customers List</a><a class="l3" href="#cus-002-add-customer">[CUS-002] Add Customer</a><a class="l3" href="#cus-003-customer-view-read-only">[CUS-003] Customer View (read-only)</a><a class="l3" href="#cus-004-customer-workspace-edit--manage">[CUS-004] Customer Workspace (Edit / Manage)</a><a class="l2" href="#8-suppliers">8. Suppliers</a><a class="l3" href="#sup-001-suppliers-list">[SUP-001] Suppliers List</a><a class="l3" href="#sup-002-add-supplier">[SUP-002] Add Supplier</a><a class="l3" href="#sup-003-supplier-view-read-only">[SUP-003] Supplier View (read-only)</a><a class="l3" href="#sup-004-supplier-workspace-edit--manage">[SUP-004] Supplier Workspace (Edit / Manage)</a><a class="l2" href="#9-accounting--finance">9. Accounting &amp; Finance</a><a class="l3" href="#how-accounting-works-in-seera-read-this-first">How accounting works in Seera (read this first)</a><a class="l3" href="#fin-dash-001-accounting-dashboard">[FIN-DASH-001] Accounting Dashboard</a><a class="l3" href="#fin-coa-001--004-chart-of-accounts">[FIN-COA-001 … 004] Chart of Accounts</a><a class="l3" href="#fin-je-001--004-journal-entries">[FIN-JE-001 … 004] Journal Entries</a><a class="l3" href="#fin-gl-001-general-ledger">[FIN-GL-001] General Ledger</a><a class="l3" href="#fin-ap-001-accounts-payable-supplier-bills">[FIN-AP-001] Accounts Payable (Supplier Bills)</a><a class="l3" href="#fin-ap-002-add-supplier-bill-and-fin-ap-004-edit-supplier-bill">[FIN-AP-002] Add Supplier Bill and [FIN-AP-004] Edit Supplier Bill</a><a class="l3" href="#fin-ap-003-supplier-bill-details">[FIN-AP-003] Supplier Bill Details</a><a class="l3" href="#fin-ap-005-record-supplier-payment">[FIN-AP-005] Record Supplier Payment</a><a class="l3" href="#fin-ar-001--005-accounts-receivable-customer-invoices-and-receipts">[FIN-AR-001 … 005] Accounts Receivable (Customer Invoices and Receipts)</a><a class="l3" href="#fin-vat-001-vat-management-and-fin-vat-002-vat-period">[FIN-VAT-001] VAT Management and [FIN-VAT-002] VAT Period</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-and-fin-zat-002-zatca-record">[FIN-ZAT-001] ZATCA E-Invoicing and [FIN-ZAT-002] ZATCA Record</a><a class="l3" href="#fin-cc-001--004-cost-centers">[FIN-CC-001 … 004] Cost Centers</a><a class="l3" href="#fin-pr-001--004-automatic-posting-rules">[FIN-PR-001 … 004] Automatic Posting Rules</a><a class="l2" href="#10-inventory--purchasing">10. Inventory &amp; Purchasing</a><a class="l3" href="#how-stock-works-in-seera">How stock works in Seera</a><a class="l3" href="#inv-dash-001-inventory-dashboard">[INV-DASH-001] Inventory Dashboard</a><a class="l3" href="#inv-item-001--004-materials--items">[INV-ITEM-001 … 004] Materials / Items</a><a class="l3" href="#inv-cat-001--003-item-categories-and-inv-unit-001--003-units">[INV-CAT-001 … 003] Item Categories and [INV-UNIT-001 … 003] Units</a><a class="l3" href="#inv-stk-001-stock-on-hand-and-inv-led-001-stock-ledger">[INV-STK-001] Stock On Hand and [INV-LED-001] Stock Ledger</a><a class="l3" href="#inv-pr-001--004-purchase-requests">[INV-PR-001 … 004] Purchase Requests</a><a class="l3" href="#inv-po-001--004-purchase-orders">[INV-PO-001 … 004] Purchase Orders</a><a class="l3" href="#inv-grn-001--004-goods-receipt-notes">[INV-GRN-001 … 004] Goods Receipt Notes</a><a class="l3" href="#inv-iss-001--004-stock-issues">[INV-ISS-001 … 004] Stock Issues</a><a class="l3" href="#inv-trf-001--004-stock-transfers">[INV-TRF-001 … 004] Stock Transfers</a><a class="l3" href="#inv-adj-001--004-stock-adjustments">[INV-ADJ-001 … 004] Stock Adjustments</a><a class="l3" href="#inv-rep-001--005-inventory-reports">[INV-REP-001 … 005] Inventory Reports</a><a class="l2" href="#11-projects">11. Projects</a><a class="l3" href="#mst-prj-001--004-projects">[MST-PRJ-001 … 004] Projects</a><a class="l3" href="#mst-site-001--004-locations-sites">[MST-SITE-001 … 004] Locations (Sites)</a><a class="l3" href="#where-project-figures-are-today">Where project figures are today</a><a class="l2" href="#12-marketing">12. Marketing</a><a class="l3" href="#mkt-001-leads--visits-mkt-002-new-lead-mkt-004-edit-lead">[MKT-001] Leads &amp; Visits, [MKT-002] New Lead, [MKT-004] Edit Lead</a><a class="l3" href="#mkt-003-lead-details-visits-convert">[MKT-003] Lead (details, visits, convert)</a><a class="l3" href="#mkt-005-visit-report">[MKT-005] Visit Report</a><a class="l2" href="#13-activity-logs--audit">13. Activity Logs / Audit</a><a class="l3" href="#adm-020-activity-logs">[ADM-020] Activity Logs</a><a class="l2" href="#14-current-zatca-foundation">14. Current ZATCA Foundation</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-local-records">[FIN-ZAT-001] ZATCA E-Invoicing (local records)</a><a class="l3" href="#fin-zat-002-zatca-record">[FIN-ZAT-002] ZATCA Record</a><a class="l2" href="#15-reports">15. Reports</a><a class="l2" href="#16-common-tasks">16. Common Tasks</a><a class="l3" href="#create-a-supplier">Create a supplier</a><a class="l3" href="#enter-and-approve-a-supplier-bill-for-goods-you-received">Enter and approve a supplier bill for goods you received</a><a class="l3" href="#record-a-customer-receipt">Record a customer receipt</a><a class="l3" href="#add-an-employee-and-give-them-a-login">Add an employee and give them a login</a><a class="l3" href="#find-everything-about-one-customer">Find everything about one customer</a><a class="l3" href="#post-a-manual-journal">Post a manual journal</a><a class="l3" href="#close-a-vat-quarter">Close a VAT quarter</a><a class="l3" href="#switch-language">Switch language</a><a class="l2" href="#17-end-to-end-workflows">17. End-to-End Workflows</a><a class="l3" href="#wf-001-create-employee-and-user-access">WF-001 Create Employee and User Access</a><a class="l3" href="#wf-002-supplier--purchase-order--goods-receipt--supplier-bill--payment">WF-002 Supplier → Purchase Order → Goods Receipt → Supplier Bill → Payment</a><a class="l3" href="#wf-003-customer--invoice--receipt">WF-003 Customer → Invoice → Receipt</a><a class="l3" href="#wf-004-manual-journal--general-ledger">WF-004 Manual Journal → General Ledger</a><a class="l3" href="#wf-005-vat-period-review-and-finalize">WF-005 VAT Period Review and Finalize</a><a class="l3" href="#wf-006-inventory-transfer-between-warehouses">WF-006 Inventory Transfer between Warehouses</a><a class="l3" href="#wf-007-stock-issue-to-a-project">WF-007 Stock Issue to a Project</a><a class="l3" href="#wf-008-payroll-run">WF-008 Payroll Run</a><a class="l3" href="#wf-009-leave-request-lifecycle">WF-009 Leave Request lifecycle</a><a class="l3" href="#wf-010-supplier-f04-grni-accounting-flow">WF-010 Supplier F04 GRNI accounting flow</a><a class="l3" href="#wf-011-purchase-request--purchase-order">WF-011 Purchase Request → Purchase Order</a><a class="l3" href="#wf-012-correct-an-approved-bill-or-invoice-reopen">WF-012 Correct an approved bill or invoice (Reopen)</a><a class="l3" href="#wf-013-stock-adjustment-after-a-physical-count">WF-013 Stock Adjustment after a physical count</a><a class="l3" href="#wf-014-marketing-lead--visit--customer">WF-014 Marketing Lead → Visit → Customer</a><a class="l3" href="#wf-015-end-of-service-settlement">WF-015 End of Service settlement</a><a class="l3" href="#wf-016-project-operational-context">WF-016 Project operational context</a><a class="l2" href="#18-troubleshooting">18. Troubleshooting</a><a class="l2" href="#19-glossary">19. Glossary</a><a class="l2" href="#20-current-limitations--not-yet-operational">20. Current Limitations / Not Yet Operational</a><a class="l2" href="#21-quick-start-by-role">21. Quick Start by Role</a><a class="l3" href="#super-admin">Super Admin</a><a class="l3" href="#finance-manager">Finance Manager</a><a class="l3" href="#hr-manager">HR Manager</a><a class="l3" href="#project-manager">Project Manager</a><a class="l3" href="#site-in-charge--site-supervisor">Site In-Charge / Site Supervisor</a><a class="l3" href="#warehouse-incharge">Warehouse Incharge</a><a class="l3" href="#purchase-manager--assistant">Purchase Manager / Assistant</a><a class="l3" href="#marketing-manager">Marketing Manager</a></aside><main><h1 id="seera-erp">SEERA ERP</h1>
 <h1 id="current-system-user-guide">Current System User Guide</h1>
 <table>
 <thead>
@@ -46,15 +46,15 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 <tbody>
 <tr>
 <td><strong>Version</strong></td>
-<td>1.1</td>
+<td>1.2</td>
 </tr>
 <tr>
 <td><strong>System state</strong></td>
-<td>Current feature branch <code>feature/seera-connected-workspaces-2026-09-23</code> at the final HEAD of the 27 September 2026 sprints (Connected Workspace Standard; Accounting UX Batch 1; Supplier and Customer workspaces; F04 GRNI accounting; Procure-to-Pay document workspace for Purchase Order, Purchase Request, Goods Receipt and Supplier Bill)</td>
+<td>Feature branch <code>feature/seera-connected-workspaces-2026-09-23</code>, 28 September 2026: previous connected workspaces and P2P retained; Project Connected Workspace Phase A added. This describes code, not a claim of production deployment.</td>
 </tr>
 <tr>
 <td><strong>Prepared</strong></td>
-<td>27 September 2026</td>
+<td>28 September 2026</td>
 </tr>
 <tr>
 <td><strong>Status</strong></td>
@@ -3404,7 +3404,7 @@ The on-hand quantity becomes the counted quantity (re-read at posting time); a l
 </tr>
 <tr>
 <td><strong>Purpose</strong></td>
-<td>Project master, cost report and what the Projects menu offers today.</td>
+<td>Project Connected Workspace Phase A: existing operations, independent child flows and shared cost-report figures.</td>
 </tr>
 <tr>
 <td><strong>Primary roles</strong></td>
@@ -3416,96 +3416,157 @@ The on-hand quantity becomes the counted quantity (re-read at posting time); a l
 </tr>
 </tbody>
 </table>
-<p>What exists today is the <strong>project master</strong> and the related masters. There is no project dashboard, budget lines, milestone or site-expense screen yet (chapter 20).</p>
+<p>Project Connected Workspace <strong>Phase A is available</strong>: open one Project to understand its existing operational records. Site Expenses, BOQ/budget lines, labour-to-GL, equipment cost and progress tracking are still not operational. The separate Projects &amp; Site Expenses menu remains a placeholder.</p>
 <h3 id="mst-prj-001--004-projects">[MST-PRJ-001 … 004] Projects</h3>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/master/projects" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/master/projects</code></a> (MST-PRJ-001) · <a class="url" href="https://seera.tech-brit.co.uk/admin/master/projects/create" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/master/projects/create</code></a> (MST-PRJ-002) · <code>https://seera.tech-brit.co.uk/admin/master/projects/{id}</code> (MST-PRJ-003) · <code>https://seera.tech-brit.co.uk/admin/master/projects/{id}/edit</code> (MST-PRJ-004)</p>
-<p>Purpose:
-Define a project: client, manager, dates, budget amount, branch, classification.</p>
-<p>Who uses it:
-Project Manager, Super Admin.</p>
-<p>Navigation:
-Master Setup → Projects → + Create Project.</p>
-<p>Permission required:
-Projects — create / view / edit.</p>
-<p>Fields:</p>
+<p>Navigation: Master Setup → Projects → <strong>View</strong> (read-only) → <strong>Edit / Manage</strong> (profile editing). View and every related GET perform no business write. Each related record remains independent; no Save All. Global registers and approvals are retained.</p>
+<p>The identity header stays outside the section switcher: Project code/name, customer, manager, classification, branch, status, dates and master budget. Visible-site, assigned-staff and warehouse counts use your access scope. Open POs, Material Used, Amount Still to Receive and posted cost/revenue appear only with their corresponding permissions.</p>
+<h4 id="project-profile-fields-and-saves">Project profile fields and saves</h4>
 <table>
 <thead>
 <tr>
 <th>Field</th>
-<th>What to enter</th>
 <th>Example</th>
-<th>Required?</th>
-<th>Notes</th>
+<th>Validation / meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Project Name, Project Code</td>
-<td></td>
-<td>Riyadh Commercial Tower, PRJ-RCT-01</td>
-<td>Yes</td>
-<td>Code must be unique</td>
+<td>Name, Code</td>
+<td>Riyadh Commercial Tower / PRJ-RCT-01</td>
+<td>Required; code unique</td>
 </tr>
 <tr>
-<td>Client Name</td>
-<td>The customer (&quot;+ New Client&quot; dialog)</td>
+<td>Customer</td>
 <td>Al Noor Development Co.</td>
-<td>Yes</td>
-<td></td>
+<td>Existing customer; inline creation if authorized</td>
 </tr>
 <tr>
-<td>Classification</td>
-<td>List (&quot;+ New&quot;)</td>
-<td>Commercial</td>
-<td>No</td>
-<td></td>
-</tr>
-<tr>
-<td>Branch</td>
-<td></td>
-<td>Riyadh Head Office</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>Project Manager</td>
-<td>A user (&quot;+ New Project Manager Account&quot;)</td>
-<td>Fatimah Al-Zahrani</td>
-<td>Yes</td>
-<td>The manager sees this project even with a project-scoped role</td>
+<td>Classification, Branch, Project Manager</td>
+<td>Commercial / Riyadh Head Office / project manager user</td>
+<td>Existing master links; authorized inline creation retained</td>
 </tr>
 <tr>
 <td>Status</td>
-<td>active, planning, on hold, completed, inactive</td>
 <td>active</td>
-<td>Yes</td>
-<td></td>
+<td>active, planning, on hold, completed, inactive</td>
 </tr>
 <tr>
-<td>Start Date, End Date</td>
-<td></td>
+<td>Start / End</td>
 <td>01-Feb-2026 / 31-Dec-2027</td>
-<td>Yes</td>
-<td></td>
+<td>End cannot precede start; optional in current server validation</td>
 </tr>
 <tr>
-<td>Budget Amount (SAR)</td>
-<td>Total budget</td>
-<td>12,500,000</td>
-<td>Yes</td>
-<td>A single figure; the project cost report shows &quot;budget used %&quot; against it</td>
+<td>Master budget</td>
+<td>SAR 12,500,000</td>
+<td>Non-negative single master amount, not BOQ/budget lines</td>
 </tr>
 <tr>
-<td>Project Location, Description</td>
-<td></td>
-<td>Riyadh</td>
-<td>No</td>
-<td></td>
+<td>Location, Description</td>
+<td>Riyadh / tower construction</td>
+<td>Optional</td>
 </tr>
 </tbody>
 </table>
-<p>Buttons: Save / Update, Cancel. The list also offers <strong>Sites</strong> per project and <strong>Classifications</strong>.</p>
-<p>Project Details (MST-PRJ-003) shows Project Information, the sites with geo-fence, employees whose project is this one, suppliers for this project and warehouses in this project, with <strong>+ Add Location</strong> and Edit Project. A project with sites or warehouses cannot be deleted.</p>
+<p>Save stays on Edit / Manage. Save &amp; Close returns to the safe origin, otherwise the Projects list. Save &amp; New opens a fresh Project form where creation is permitted. Cancel leaves without saving. Related business actions are never triggered by profile Save.</p>
+<h4 id="project-sections-sources-and-permissions">Project sections, sources and permissions</h4>
+<p>Every panel additionally requires Projects — view. Hidden panels reject direct URL access too. Each list loads on demand, ten records at a time, with Previous/Next and <strong>View all (paged)</strong>. No full transaction history is loaded on the initial View. Without JavaScript the section links open standalone paged read-only screens.</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>What it shows / where to go next</th>
+<th>Additional permission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Overview</td>
+<td>Location, description and shared identity/summary header</td>
+<td>Projects — view; edit for profile form</td>
+</tr>
+<tr>
+<td>Customer</td>
+<td>Actual linked customer, VAT/CR/contact, authorized View / Edit Manage. Project approved invoice and outstanding totals only with AR view</td>
+<td>Customers — view; edit for Manage</td>
+</tr>
+<tr>
+<td>Sites / Locations</td>
+<td>Only this Project's visible sites, supervisor/address/status, geofence radius and stored attendance flags. Add Location / Edit Site use this fixed Project</td>
+<td>Sites — view; create/edit separately</td>
+</tr>
+<tr>
+<td>Project Team / Staff</td>
+<td>Current employees, department/designation/site/manager/status/mobile access, authorized Employee links</td>
+<td>HR — view; edit for Manage</td>
+</tr>
+<tr>
+<td>Warehouses</td>
+<td>Visible project warehouses, site/incharge/valuation/status; stocked item counts and positive stock value only with stock permission</td>
+<td>Warehouses — view; Warehouse Stock — view for figures</td>
+</tr>
+<tr>
+<td>Stock On Hand</td>
+<td>Positive stock balances per warehouse/item/unit, on-hand quantity, existing average cost and stored total value</td>
+<td>Warehouse Stock — view</td>
+</tr>
+<tr>
+<td>Suppliers</td>
+<td>Pivot-linked suppliers plus suppliers of visible project POs/bills when those document permissions exist. Non-cancelled project PO count/value excludes other projects</td>
+<td>Suppliers — view; Purchase Orders — view for purchase figures; Accounts Payable — view for bill-derived membership</td>
+</tr>
+<tr>
+<td>Purchase Requests</td>
+<td>Number/date/required date/status and visible linked project order count. Open existing PR View for requested/ordered quantities</td>
+<td>Purchase Requests — view; Purchase Orders — view for linked count</td>
+</tr>
+<tr>
+<td>Project Purchases</td>
+<td>PO number, supplier, date, total and current status/receiving state; billing state from visible posted receipt lines. View opens existing P2P workspace</td>
+<td>Purchase Orders — view; Goods Receipts — view for billing state</td>
+</tr>
+<tr>
+<td>Goods Receipts</td>
+<td>GRNs belonging through a visible PO of this Project, supplier/warehouse/date, stock and invoicing states</td>
+<td>Goods Receipts — view</td>
+</tr>
+<tr>
+<td>Material Used</td>
+<td>Posted Stock Issue ledger rows: issue/date/site/warehouse/item/unit/quantity/value. A warehouse receipt is NOT consumption</td>
+<td>Stock Issues — view; Inventory Reports — view for report drill-through</td>
+</tr>
+<tr>
+<td>Customer Invoices</td>
+<td>Project invoices, taxable/VAT/total/received/outstanding/status, local ZATCA state. Receipt action needs process permission and an unpaid/partially-paid invoice</td>
+<td>Accounts Receivable — view/process</td>
+</tr>
+<tr>
+<td>Customer Receipts</td>
+<td>Receipts whose invoice is visible and belongs to this Project, amount/date/method/reference</td>
+<td>Accounts Receivable — view</td>
+</tr>
+<tr>
+<td>Financial / Cost Summary</td>
+<td>Same calculation service as Project Cost Report, all dates; filtered report drill-through</td>
+<td>Financial Reports — view</td>
+</tr>
+<tr>
+<td>Activity</td>
+<td>New Project and context-Site saves with an exact immutable Project entity token, further restricted by Activity Logs visibility</td>
+<td>Activity Logs — view</td>
+</tr>
+</tbody>
+</table>
+<p>Stock values reuse stored Warehouse Stock <code>total_value</code>; they are not recomputed from a new valuation formula. Quantities are shown per item/unit rather than summing incompatible units. Material Used sums scoped issue-ledger values for visible posted Stock Issues; it does not add GRNs or count the same material cost again in GL.</p>
+<p>Financial semantics: posted expense-account lines tagged with the Project contribute debit minus credit; revenue-account lines contribute credit minus debit. Reversals net off. Margin is posted revenue minus posted cost. Budget used is posted cost divided by master budget (zero when no budget). Supplier Billed and Customer Invoiced preserve the report's <strong>non-draft</strong> semantics, including cancelled documents; these differ from approved-only AR totals and are not cash figures. Cost-centre linkage alone does not attribute a line to a Project. Scope-limited cost compared with the whole Project master budget is not a site-specific budget comparison. No payroll/labour, Site Expense or equipment integration is implied.</p>
+<h4 id="return-to-the-project">Return to the Project</h4>
+<ul>
+<li>Project → Sites → Add Location opens <code>/admin/master/projects/{project}/sites/create</code>; editing uses <code>/admin/master/projects/{project}/sites/{site}/edit</code>. These reuse MST-SITE-002/004, not new screens. The URL Project is authoritative; a forged Project or foreign Site is rejected. Save &amp; Close returns to Project → Sites. A site/warehouse-scoped user cannot create a new site outside their existing scope.</li>
+<li>Project → Project Purchases → View opens the existing PO View with a safe return origin. <strong>Back to origin</strong> returns to Project → Project Purchases.</li>
+<li>Project → Customer Invoices → View similarly provides <strong>Back to origin</strong>. Posting/approval/receipt entry still happen only through existing authorized screens.</li>
+<li>Safe return destinations must be relative internal admin paths; external URLs, misleading prefixes and path traversal are refused.</li>
+</ul>
+<p>Current limitations: one current Project per employee, no assignment-history engine; no direct stock or journal editing; old free-text/name-only activity omitted because it has no trustworthy entity key; no construction-progress estimate; no full BOQ/budget, Site Expenses, labour/equipment costing, mobile geofence runtime, offline sync or multi-step approval runtime. A Project with sites or warehouses still cannot be deleted.</p>
 <h3 id="mst-site-001--004-locations-sites">[MST-SITE-001 … 004] Locations (Sites)</h3>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/master/sites" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/master/sites</code></a> (MST-SITE-001) · <a class="url" href="https://seera.tech-brit.co.uk/admin/master/sites/create" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/master/sites/create</code></a> (MST-SITE-002) · <code>https://seera.tech-brit.co.uk/admin/master/sites/{id}</code> (MST-SITE-003) · <code>https://seera.tech-brit.co.uk/admin/master/sites/{id}/edit</code> (MST-SITE-004)</p>
 <p>Purpose:
@@ -3578,9 +3639,10 @@ Sites — create / view / edit.</p>
 </tbody>
 </table>
 <p>Buttons: Save / Update, Cancel.</p>
+<p>When opened from Project → Sites, the form instead offers Save / Save &amp; Close / Save &amp; New (if authorized) / Cancel, keeps the Project fixed, and returns to that Project's Sites section on close. The map and stored geofence flags are unchanged; live attendance enforcement is not implemented.</p>
 <h3 id="where-project-figures-are-today">Where project figures are today</h3>
 <ul>
-<li>Material cost: stock issues to the project (chapter 10) and the Project Material Consumption report.</li>
+<li>Material cost: Project → Material Used, stock issues to the project (chapter 10) and the Project Material Consumption report.</li>
 <li>Posted cost, revenue, supplier billed, customer invoiced, margin and budget used: the Project Cost Report (FIN-REP-007).</li>
 <li>Supplier and customer links: the Supplier and Customer workspaces.</li>
 <li>Labour cost, equipment cost and site expenses: NOT YET OPERATIONAL.</li>
@@ -4245,6 +4307,19 @@ Steps: Ahmed Hassan, termination 30-Sep-2026, reason resignation, service years 
 Expected result: an approved settlement figure. No accounting entry is created; Finance records the payment outside the system for now.
 Statuses: draft → approved.
 Related screens: HR-EOS-002, HR-EOS-003.</p>
+<h3 id="wf-016-project-operational-context">WF-016 Project operational context</h3>
+<ol>
+<li>Create or open <strong>Al Noor Development Co.</strong> in Customers. Create <strong>Riyadh Commercial Tower</strong> in Projects (MST-PRJ-002), choosing that customer, manager, dates and master budget.</li>
+<li>Open Project View (MST-PRJ-003), then Sites / Locations → Add Location. Save <strong>Riyadh Tower - Main Site</strong> and use Save &amp; Close to return to the same Project → Sites. Geofence settings are stored, not a live attendance check.</li>
+<li>In Warehouses (MST-WH-002), assign <strong>Riyadh Site Warehouse</strong> to the Project and Site. On the employee's Employment section (HR-EMP-004), assign the same current Project/Site. Return to Project → Warehouses or Project Team to read the resulting links. No new assignment engine exists.</li>
+<li>Link <strong>Gulf Steel Trading</strong> to the Project from Supplier Manage. Create a Purchase Request for <strong>Reinforcement Steel 16mm</strong>, then <strong>PO-2026-0012</strong> through the existing Inventory workflow. Project → Purchase Requests / Project Purchases shows only this project's authorized records. Open the PO for lines, partial receiving and F04 billing context (WF-002/WF-010/WF-011).</li>
+<li>Receive <strong>GRN-2026-0008</strong> into Riyadh Site Warehouse and explicitly Post Stock on its existing screen. Project → Goods Receipts shows stock/invoicing state; receipt is not material consumption.</li>
+<li>Create and post a Stock Issue to the Project/Site when materials are consumed (WF-007). Project → Material Used shows the posted issue ledger value and per-item/unit quantity. The accounting posting, when present, appears in Project → Financial / Cost Summary through the existing report logic; do not add Material Used to posted cost again.</li>
+<li>Create <strong>INV-2026-0031</strong> for this Project in Accounts Receivable. Approval and Record Receipt stay explicit authorized actions (WF-003). Project → Customer Invoices / Customer Receipts shows the resulting records and outstanding amounts. Back to origin on Invoice View returns to Project context.</li>
+<li>Review Project → Financial / Cost Summary, then Open Project Cost Report for the same Project. This is current operational context, not a full project management engine.</li>
+</ol>
+<p>Permissions are independent at every step. A project/site-scoped operator sees only rows permitted by the existing global scopes; the same scope feeds panel totals. Read-only pages do not post, approve, receive stock or process payroll.</p>
+<p>Pending Phase B: Site Expenses, budget lines/BOQ, labour/payroll-to-GL, equipment cost, expanded budget-vs-actual and a future operational site dashboard. No live ZATCA clearance or F08 multi-step approval runtime is introduced.</p>
 <hr />
 <h2 id="18-troubleshooting">18. Troubleshooting</h2>
 <table>
@@ -4519,9 +4594,9 @@ Related screens: HR-EOS-002, HR-EOS-003.</p>
 <td>Expense Categories master, a posting rule row and a seeded approval workflow only</td>
 </tr>
 <tr>
-<td>Projects &amp; Site Expenses menu, project dashboard, budget lines, milestones</td>
+<td>Projects &amp; Site Expenses menu, budget lines/BOQ, milestones, site expenses</td>
 <td>NOT YET OPERATIONAL</td>
-<td>Project master with one budget amount; Project Cost Report</td>
+<td>Project Connected Workspace Phase A under Master Setup: existing operational context, one master budget, shared Project Cost Report</td>
 </tr>
 <tr>
 <td>Equipment &amp; Vehicles</td>
@@ -4681,4 +4756,4 @@ Not available yet: mobile check-in, site expense entry, equipment.</p>
 <p>Leads &amp; Visits (WF-014), Visit Report (MKT-005), Customers (CUS-004).</p>
 <hr />
 <p>End of guide. Screen IDs are indexed in <a href="SCREEN-INDEX.html">SCREEN-INDEX.md</a>; workflows in <a href="WORKFLOW-INDEX.html">WORKFLOW-INDEX.md</a>.</p>
-</main></div><footer>Seera ERP — Current System User Guide, version 1.1, prepared 27 September 2026. Examples use fictional training data.</footer></body></html>
+</main></div><footer>Seera ERP — Current System User Guide, version 1.2, prepared 28 September 2026. Examples use fictional training data.</footer></body></html>

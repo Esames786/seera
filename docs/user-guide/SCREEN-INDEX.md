@@ -2,7 +2,7 @@
 
 Master index of every screen in the current system. Screen IDs are permanent; use them when you refer to a page in training, support tickets or the [User Guide](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md). Workflows are indexed in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).
 
-Version 1.1 · Prepared 27 September 2026 · System state: current feature branch (Connected Workspace Standard, Accounting UX Batch 1, Supplier and Customer workspaces, F04 GRNI model, Procure-to-Pay document workspace) · Status: current implemented system only.
+Version 1.2 · Prepared 28 September 2026 · System state: current feature branch, including Project Connected Workspace Phase A; previous P2P and other workspaces retained · Status: current implemented system only; not a deployment claim.
 
 How to read the columns:
 
@@ -62,8 +62,8 @@ How to read the columns:
 | MST-DES-004 | Edit Designation | `https://seera.tech-brit.co.uk/admin/master/designations/{id}/edit` | Master Setup | Designations → Edit | Super Admin, HR Manager | — | — | Designations — edit | — | AVAILABLE | [5](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#5-master-setup) |
 | MST-PRJ-001 | Projects List | `https://seera.tech-brit.co.uk/admin/master/projects` | Master Setup | Master Setup → Projects | Project Manager, Super Admin | Projects — create | Projects — view | Projects — edit | — | AVAILABLE | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
 | MST-PRJ-002 | Create Project | `https://seera.tech-brit.co.uk/admin/master/projects/create` | Master Setup | Projects → + Create Project | Project Manager, Super Admin | Projects — create | — | — | — | AVAILABLE | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
-| MST-PRJ-003 | Project Details | `https://seera.tech-brit.co.uk/admin/master/projects/{id}` | Master Setup | Projects → View | Project Manager, Super Admin | — | Projects — view | — | — | AVAILABLE | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
-| MST-PRJ-004 | Edit Project | `https://seera.tech-brit.co.uk/admin/master/projects/{id}/edit` | Master Setup | Projects → Edit | Project Manager, Super Admin | — | — | Projects — edit | — | AVAILABLE | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
+| MST-PRJ-003 | Project View / Connected Context | `https://seera.tech-brit.co.uk/admin/master/projects/{id}` | Master Setup | Projects → View → authorized related section | Project Manager, Super Admin | — | Projects — view plus each section's own module view | — | — | PHASE A AVAILABLE; read-only, lazy/paged | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
+| MST-PRJ-004 | Project Edit / Manage Workspace | `https://seera.tech-brit.co.uk/admin/master/projects/{id}/edit` | Master Setup | Projects → Edit / Manage | Project Manager, Super Admin | — | Projects — view for related panels | Projects — edit; child actions require their own rights | — | PHASE A AVAILABLE; independent profile and child saves | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
 | MST-PRJ-005 | Project Classifications | `https://seera.tech-brit.co.uk/admin/master/project-classifications` | Master Setup | Projects → Classifications | Super Admin | Projects — create | Projects — view | Projects — edit | — | AVAILABLE | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
 | MST-SITE-001 | Locations List | `https://seera.tech-brit.co.uk/admin/master/sites` | Master Setup | Master Setup → Locations | Project Manager, Super Admin | Sites — create | Sites — view | Sites — edit | — | AVAILABLE | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
 | MST-SITE-002 | Add Location | `https://seera.tech-brit.co.uk/admin/master/sites/create` | Master Setup | Locations → + Add Location | Project Manager, Super Admin | Sites — create | — | — | — | AVAILABLE | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |

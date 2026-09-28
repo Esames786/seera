@@ -3,9 +3,9 @@
 
 | | |
 |---|---|
-| **Version** | 1.1 |
-| **System state** | Current feature branch `feature/seera-connected-workspaces-2026-09-23` at the final HEAD of the 27 September 2026 sprints (Connected Workspace Standard; Accounting UX Batch 1; Supplier and Customer workspaces; F04 GRNI accounting; Procure-to-Pay document workspace for Purchase Order, Purchase Request, Goods Receipt and Supplier Bill) |
-| **Prepared** | 27 September 2026 |
+| **Version** | 1.2 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 28 September 2026: previous connected workspaces and P2P retained; Project Connected Workspace Phase A added. This describes code, not a claim of production deployment. |
+| **Prepared** | 28 September 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
 
@@ -1899,45 +1899,68 @@ Stock Valuation, Low Stock, Project Material Consumption and Stock Movement, eac
 |---|---|
 | **Chapter number** | 11 |
 | **Chapter name** | Projects |
-| **Purpose** | Project master, cost report and what the Projects menu offers today. |
+| **Purpose** | Project Connected Workspace Phase A: existing operations, independent child flows and shared cost-report figures. |
 | **Primary roles** | Project Manager, Super Admin |
 | **Screens in this chapter** | MST-PRJ-001, MST-PRJ-002, MST-PRJ-003, MST-PRJ-004, MST-PRJ-005, MST-SITE-001, MST-SITE-002, MST-SITE-003, MST-SITE-004 |
 
-What exists today is the **project master** and the related masters. There is no project dashboard, budget lines, milestone or site-expense screen yet (chapter 20).
+Project Connected Workspace **Phase A is available**: open one Project to understand its existing operational records. Site Expenses, BOQ/budget lines, labour-to-GL, equipment cost and progress tracking are still not operational. The separate Projects & Site Expenses menu remains a placeholder.
 
 ### [MST-PRJ-001 … 004] Projects
 
 Web address: `https://seera.tech-brit.co.uk/admin/master/projects` (MST-PRJ-001) · `https://seera.tech-brit.co.uk/admin/master/projects/create` (MST-PRJ-002) · `https://seera.tech-brit.co.uk/admin/master/projects/{id}` (MST-PRJ-003) · `https://seera.tech-brit.co.uk/admin/master/projects/{id}/edit` (MST-PRJ-004)
 
-Purpose:
-Define a project: client, manager, dates, budget amount, branch, classification.
+Navigation: Master Setup → Projects → **View** (read-only) → **Edit / Manage** (profile editing). View and every related GET perform no business write. Each related record remains independent; no Save All. Global registers and approvals are retained.
 
-Who uses it:
-Project Manager, Super Admin.
+The identity header stays outside the section switcher: Project code/name, customer, manager, classification, branch, status, dates and master budget. Visible-site, assigned-staff and warehouse counts use your access scope. Open POs, Material Used, Amount Still to Receive and posted cost/revenue appear only with their corresponding permissions.
 
-Navigation:
-Master Setup → Projects → + Create Project.
+#### Project profile fields and saves
 
-Permission required:
-Projects — create / view / edit.
+| Field | Example | Validation / meaning |
+|---|---|---|
+| Name, Code | Riyadh Commercial Tower / PRJ-RCT-01 | Required; code unique |
+| Customer | Al Noor Development Co. | Existing customer; inline creation if authorized |
+| Classification, Branch, Project Manager | Commercial / Riyadh Head Office / project manager user | Existing master links; authorized inline creation retained |
+| Status | active | active, planning, on hold, completed, inactive |
+| Start / End | 01-Feb-2026 / 31-Dec-2027 | End cannot precede start; optional in current server validation |
+| Master budget | SAR 12,500,000 | Non-negative single master amount, not BOQ/budget lines |
+| Location, Description | Riyadh / tower construction | Optional |
 
-Fields:
+Save stays on Edit / Manage. Save & Close returns to the safe origin, otherwise the Projects list. Save & New opens a fresh Project form where creation is permitted. Cancel leaves without saving. Related business actions are never triggered by profile Save.
 
-| Field | What to enter | Example | Required? | Notes |
-|---|---|---|---|---|
-| Project Name, Project Code | | Riyadh Commercial Tower, PRJ-RCT-01 | Yes | Code must be unique |
-| Client Name | The customer ("+ New Client" dialog) | Al Noor Development Co. | Yes | |
-| Classification | List ("+ New") | Commercial | No | |
-| Branch | | Riyadh Head Office | Yes | |
-| Project Manager | A user ("+ New Project Manager Account") | Fatimah Al-Zahrani | Yes | The manager sees this project even with a project-scoped role |
-| Status | active, planning, on hold, completed, inactive | active | Yes | |
-| Start Date, End Date | | 01-Feb-2026 / 31-Dec-2027 | Yes | |
-| Budget Amount (SAR) | Total budget | 12,500,000 | Yes | A single figure; the project cost report shows "budget used %" against it |
-| Project Location, Description | | Riyadh | No | |
+#### Project sections, sources and permissions
 
-Buttons: Save / Update, Cancel. The list also offers **Sites** per project and **Classifications**.
+Every panel additionally requires Projects — view. Hidden panels reject direct URL access too. Each list loads on demand, ten records at a time, with Previous/Next and **View all (paged)**. No full transaction history is loaded on the initial View. Without JavaScript the section links open standalone paged read-only screens.
 
-Project Details (MST-PRJ-003) shows Project Information, the sites with geo-fence, employees whose project is this one, suppliers for this project and warehouses in this project, with **+ Add Location** and Edit Project. A project with sites or warehouses cannot be deleted.
+| Section | What it shows / where to go next | Additional permission |
+|---|---|---|
+| Overview | Location, description and shared identity/summary header | Projects — view; edit for profile form |
+| Customer | Actual linked customer, VAT/CR/contact, authorized View / Edit Manage. Project approved invoice and outstanding totals only with AR view | Customers — view; edit for Manage |
+| Sites / Locations | Only this Project's visible sites, supervisor/address/status, geofence radius and stored attendance flags. Add Location / Edit Site use this fixed Project | Sites — view; create/edit separately |
+| Project Team / Staff | Current employees, department/designation/site/manager/status/mobile access, authorized Employee links | HR — view; edit for Manage |
+| Warehouses | Visible project warehouses, site/incharge/valuation/status; stocked item counts and positive stock value only with stock permission | Warehouses — view; Warehouse Stock — view for figures |
+| Stock On Hand | Positive stock balances per warehouse/item/unit, on-hand quantity, existing average cost and stored total value | Warehouse Stock — view |
+| Suppliers | Pivot-linked suppliers plus suppliers of visible project POs/bills when those document permissions exist. Non-cancelled project PO count/value excludes other projects | Suppliers — view; Purchase Orders — view for purchase figures; Accounts Payable — view for bill-derived membership |
+| Purchase Requests | Number/date/required date/status and visible linked project order count. Open existing PR View for requested/ordered quantities | Purchase Requests — view; Purchase Orders — view for linked count |
+| Project Purchases | PO number, supplier, date, total and current status/receiving state; billing state from visible posted receipt lines. View opens existing P2P workspace | Purchase Orders — view; Goods Receipts — view for billing state |
+| Goods Receipts | GRNs belonging through a visible PO of this Project, supplier/warehouse/date, stock and invoicing states | Goods Receipts — view |
+| Material Used | Posted Stock Issue ledger rows: issue/date/site/warehouse/item/unit/quantity/value. A warehouse receipt is NOT consumption | Stock Issues — view; Inventory Reports — view for report drill-through |
+| Customer Invoices | Project invoices, taxable/VAT/total/received/outstanding/status, local ZATCA state. Receipt action needs process permission and an unpaid/partially-paid invoice | Accounts Receivable — view/process |
+| Customer Receipts | Receipts whose invoice is visible and belongs to this Project, amount/date/method/reference | Accounts Receivable — view |
+| Financial / Cost Summary | Same calculation service as Project Cost Report, all dates; filtered report drill-through | Financial Reports — view |
+| Activity | New Project and context-Site saves with an exact immutable Project entity token, further restricted by Activity Logs visibility | Activity Logs — view |
+
+Stock values reuse stored Warehouse Stock `total_value`; they are not recomputed from a new valuation formula. Quantities are shown per item/unit rather than summing incompatible units. Material Used sums scoped issue-ledger values for visible posted Stock Issues; it does not add GRNs or count the same material cost again in GL.
+
+Financial semantics: posted expense-account lines tagged with the Project contribute debit minus credit; revenue-account lines contribute credit minus debit. Reversals net off. Margin is posted revenue minus posted cost. Budget used is posted cost divided by master budget (zero when no budget). Supplier Billed and Customer Invoiced preserve the report's **non-draft** semantics, including cancelled documents; these differ from approved-only AR totals and are not cash figures. Cost-centre linkage alone does not attribute a line to a Project. Scope-limited cost compared with the whole Project master budget is not a site-specific budget comparison. No payroll/labour, Site Expense or equipment integration is implied.
+
+#### Return to the Project
+
+- Project → Sites → Add Location opens `/admin/master/projects/{project}/sites/create`; editing uses `/admin/master/projects/{project}/sites/{site}/edit`. These reuse MST-SITE-002/004, not new screens. The URL Project is authoritative; a forged Project or foreign Site is rejected. Save & Close returns to Project → Sites. A site/warehouse-scoped user cannot create a new site outside their existing scope.
+- Project → Project Purchases → View opens the existing PO View with a safe return origin. **Back to origin** returns to Project → Project Purchases.
+- Project → Customer Invoices → View similarly provides **Back to origin**. Posting/approval/receipt entry still happen only through existing authorized screens.
+- Safe return destinations must be relative internal admin paths; external URLs, misleading prefixes and path traversal are refused.
+
+Current limitations: one current Project per employee, no assignment-history engine; no direct stock or journal editing; old free-text/name-only activity omitted because it has no trustworthy entity key; no construction-progress estimate; no full BOQ/budget, Site Expenses, labour/equipment costing, mobile geofence runtime, offline sync or multi-step approval runtime. A Project with sites or warehouses still cannot be deleted.
 
 ### [MST-SITE-001 … 004] Locations (Sites)
 
@@ -1966,9 +1989,11 @@ Fields:
 
 Buttons: Save / Update, Cancel.
 
+When opened from Project → Sites, the form instead offers Save / Save & Close / Save & New (if authorized) / Cancel, keeps the Project fixed, and returns to that Project's Sites section on close. The map and stored geofence flags are unchanged; live attendance enforcement is not implemented.
+
 ### Where project figures are today
 
-- Material cost: stock issues to the project (chapter 10) and the Project Material Consumption report.
+- Material cost: Project → Material Used, stock issues to the project (chapter 10) and the Project Material Consumption report.
 - Posted cost, revenue, supplier billed, customer invoiced, margin and budget used: the Project Cost Report (FIN-REP-007).
 - Supplier and customer links: the Supplier and Customer workspaces.
 - Labour cost, equipment cost and site expenses: NOT YET OPERATIONAL.
@@ -2418,6 +2443,21 @@ Expected result: an approved settlement figure. No accounting entry is created; 
 Statuses: draft → approved.
 Related screens: HR-EOS-002, HR-EOS-003.
 
+### WF-016 Project operational context
+
+1. Create or open **Al Noor Development Co.** in Customers. Create **Riyadh Commercial Tower** in Projects (MST-PRJ-002), choosing that customer, manager, dates and master budget.
+2. Open Project View (MST-PRJ-003), then Sites / Locations → Add Location. Save **Riyadh Tower - Main Site** and use Save & Close to return to the same Project → Sites. Geofence settings are stored, not a live attendance check.
+3. In Warehouses (MST-WH-002), assign **Riyadh Site Warehouse** to the Project and Site. On the employee's Employment section (HR-EMP-004), assign the same current Project/Site. Return to Project → Warehouses or Project Team to read the resulting links. No new assignment engine exists.
+4. Link **Gulf Steel Trading** to the Project from Supplier Manage. Create a Purchase Request for **Reinforcement Steel 16mm**, then **PO-2026-0012** through the existing Inventory workflow. Project → Purchase Requests / Project Purchases shows only this project's authorized records. Open the PO for lines, partial receiving and F04 billing context (WF-002/WF-010/WF-011).
+5. Receive **GRN-2026-0008** into Riyadh Site Warehouse and explicitly Post Stock on its existing screen. Project → Goods Receipts shows stock/invoicing state; receipt is not material consumption.
+6. Create and post a Stock Issue to the Project/Site when materials are consumed (WF-007). Project → Material Used shows the posted issue ledger value and per-item/unit quantity. The accounting posting, when present, appears in Project → Financial / Cost Summary through the existing report logic; do not add Material Used to posted cost again.
+7. Create **INV-2026-0031** for this Project in Accounts Receivable. Approval and Record Receipt stay explicit authorized actions (WF-003). Project → Customer Invoices / Customer Receipts shows the resulting records and outstanding amounts. Back to origin on Invoice View returns to Project context.
+8. Review Project → Financial / Cost Summary, then Open Project Cost Report for the same Project. This is current operational context, not a full project management engine.
+
+Permissions are independent at every step. A project/site-scoped operator sees only rows permitted by the existing global scopes; the same scope feeds panel totals. Read-only pages do not post, approve, receive stock or process payroll.
+
+Pending Phase B: Site Expenses, budget lines/BOQ, labour/payroll-to-GL, equipment cost, expanded budget-vs-actual and a future operational site dashboard. No live ZATCA clearance or F08 multi-step approval runtime is introduced.
+
 ---
 
 ## 18. Troubleshooting
@@ -2497,7 +2537,7 @@ Areas that exist as menus, settings or plans but are not usable business functio
 | Area | Status | What exists |
 |---|---|---|
 | Site Expenses (daily site purchases with photo, approval, posting) | NOT YET OPERATIONAL | Expense Categories master, a posting rule row and a seeded approval workflow only |
-| Projects & Site Expenses menu, project dashboard, budget lines, milestones | NOT YET OPERATIONAL | Project master with one budget amount; Project Cost Report |
+| Projects & Site Expenses menu, budget lines/BOQ, milestones, site expenses | NOT YET OPERATIONAL | Project Connected Workspace Phase A under Master Setup: existing operational context, one master budget, shared Project Cost Report |
 | Equipment & Vehicles | NOT YET OPERATIONAL | Menu placeholder and permission names only |
 | Mobile app, check-in / check-out, GPS geofence attendance | NOT YET OPERATIONAL | Mobile access flags on users and roles; site coordinates and radius; manual attendance with a typed geo-fence status |
 | Offline entry and sync | NOT YET OPERATIONAL | Nothing |

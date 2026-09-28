@@ -2,7 +2,7 @@
 
 Index of the end-to-end workflows documented in chapter 17 of the [User Guide](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#17-end-to-end-workflows). Screens are indexed in [SCREEN-INDEX.md](SCREEN-INDEX.md).
 
-Version 1.1 · Prepared 27 September 2026 · Status: current implemented system only.
+Version 1.2 · Prepared 28 September 2026 · Status: current implemented system only; no deployment claim.
 
 | Workflow ID | Workflow | Roles involved | Main screens | Status | Guide |
 |---|---|---|---|---|---|
@@ -21,5 +21,6 @@ Version 1.1 · Prepared 27 September 2026 · Status: current implemented system 
 | WF-013 | Stock Adjustment after a physical count | Warehouse Incharge, Inventory Manager | INV-ADJ-002, INV-ADJ-003 | AVAILABLE | [WF-013](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-013-stock-adjustment-after-a-physical-count) |
 | WF-014 | Marketing Lead → Visit → Customer | Marketing Manager | MKT-002, MKT-003, CUS-004 | AVAILABLE | [WF-014](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-014-marketing-lead--visit--customer) |
 | WF-015 | End of Service settlement | HR Manager | HR-EOS-002, HR-EOS-003 | AVAILABLE (calculation and approval; no accounting posting) | [WF-015](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-015-end-of-service-settlement) |
+| WF-016 | Project operational context: Customer → Project → Site → Warehouse → Employee → PR → PO → GRN → Material Issue → Cost → Invoice → Receipt | Project Manager, HR, Purchase, Warehouse, Finance | MST-PRJ-001/003/004, MST-SITE-002/004, MST-WH-002, HR-EMP-004, INV-PR-002, INV-PO-003, INV-GRN-003, INV-ISS-003, FIN-REP-007, FIN-AR-003/005 | PHASE A AVAILABLE; Site Expenses / BOQ / labour / equipment pending | [WF-016](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-016-project-operational-context) |
 
-Total: 15 workflows.
+Total: 16 workflows.
