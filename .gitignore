@@ -41,3 +41,6 @@ Thumbs.db
 # Raw transcript/evidence ledgers from the private media reviews.
 /docs/*-evidence.json
 /docs/*-sources.md
+
+# Client input documents belong outside the public web root.
+/public/Order to Cash.docx
