@@ -66,6 +66,7 @@
                 </template>
             @endif
             <div class="form-actions">
+                <x-admin.workspace-previous/>
                 <a class="btn outline" href="{{ route('admin.hr.employees.index') }}">{{ __('Cancel') }}</a>
                 <button type="submit" name="_save_action" value="stay" class="btn outline" data-save-default>{{ __('ui.save_stay') }}</button>
                 <button type="submit" name="_save_action" value="next" class="btn outline" @disabled(!$hasNext)>{{ __('ui.save_next') }}</button>
@@ -123,6 +124,7 @@
         </tbody>
     </table></div>
     <div class="form-actions">
+        @if(!$canSave)<x-admin.workspace-previous/>@endif
         @if(!$canSave && $hasNext)<button type="button" class="btn outline" data-workspace-next>{{ __('Next section') }}</button>@endif
         @if($rows->currentPage() > 1)<button type="button" class="btn outline" data-panel-load="{{ $panelUrl.'?page='.($rows->currentPage()-1) }}">{{ __('Previous') }}</button>@endif
         <span>{{ $rows->currentPage() }} / {{ $rows->lastPage() }}</span>

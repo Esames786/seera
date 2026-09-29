@@ -630,3 +630,49 @@ Post-release checks (read-only, signed in as a user with Purchase Orders view):
 
 Rollback: `git checkout 83d596e` (the docs-only HEAD before this release), then
 `$PHP artisan optimize`. No database or asset rollback is needed.
+
+## 19. Release packaging and 29 September navigation / reporting-parent follow-up
+
+For every prepared deployment, generate the matching frontend ZIP as part of the
+release, even when the server has no Node installation. On the Windows build machine:
+
+```powershell
+npm run build:release
+```
+
+This command runs Vite, packages `public/build.zip`, and verifies every archived file
+against the build. The root entries include `manifest.json` and `assets/`; there is
+no nested `build/` directory. Include `public/build.zip` with the matching code commit
+before pushing the feature branch. Do not claim the release is available to `git pull`
+until the commit and push have completed. Do not stage unrelated client media or local
+files with a blanket `git add .`.
+
+After database/files backups and confirming the published revision, use the following
+on cPanel. Run each command only if the previous one succeeded; keep the application
+in maintenance mode if a deployment step fails. Preserve server-specific `.htaccess`.
+
+```bash
+cd ~/seera
+PHP=/opt/cpanel/ea-php83/root/usr/bin/php
+git branch --show-current
+git status --short
+$PHP artisan down
+git pull --ff-only origin feature/seera-connected-workspaces-2026-09-23
+git log -1 --oneline
+unzip -tq public/build.zip
+unzip -oq public/build.zip -d public/build
+ls public/build/manifest.json
+$PHP artisan migrate --force
+$PHP artisan optimize:clear
+$PHP artisan up
+```
+
+The 29 September follow-up requires the additive
+`2026_09_29_000001_create_role_reporting_parents_table` migration. No seeder is needed.
+Do not run `migrate:fresh` or the demo `DatabaseSeeder`. If that migration file is not
+in the pulled release, the reporting-parent follow-up has not been deployed.
+
+Hard-refresh the browser and check Back / previous section in Employee, Customer and
+Supplier, plus multiple reporting-parent selections on Role Edit. Additional reporting
+links do not activate all-required-parent transactional approvals; that runtime is
+still pending. See [follow-up details](reporting-parents-and-workspace-back-2026-09-29.md).

@@ -477,6 +477,7 @@
     </x-admin.form-section>
 
     <div class="form-actions">
+        <x-admin.workspace-previous/>
         <a class="btn outline" href="{{ route('admin.hr.employees.index') }}">Cancel</a>
         <button type="submit" name="_save_action" value="stay" class="btn outline" data-save-default>{{ __('ui.save_stay') }}</button>
         <button type="submit" name="_save_action" value="next" class="btn outline">{{ __('ui.save_next') }}</button>

@@ -29,7 +29,7 @@
                 <tr><th>Role Name</th><td>{{ $role->name }}</td></tr>
                 <tr><th>Role Code</th><td>{{ $role->code }}</td></tr>
                 <tr><th>Department</th><td>{{ $role->department?->name ?? '-' }}</td></tr>
-                <tr><th>Parent Role</th><td>{{ $role->parent?->name ?? 'None' }}</td></tr>
+                <tr><th>{{ __('ui.reporting_parents') }}</th><td>@include('admin.roles._reporting-parents', ['role' => $role])</td></tr>
                 <tr><th>Role Level</th><td>Level {{ $role->level }}</td></tr>
                 <tr><th>Scope</th><td>{{ $role->access_scope }}</td></tr>
                 <tr><th>Mobile App</th><td><x-admin.status-badge :status="$role->mobile_app_access ? 'enabled' : 'disabled'"/></td></tr>

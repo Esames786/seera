@@ -1,6 +1,14 @@
 <?php
 
 return [
+    'previous_section' => 'Back / previous section',
+    'primary_parent' => 'Primary reporting parent',
+    'additional_parents' => 'Additional reporting parents',
+    'reporting_help' => 'Choose any additional parents below. The primary parent keeps the existing access hierarchy. Additional parents do not grant permissions, expand visibility, or activate approvals.',
+    'reporting_pending' => 'All-required-parent approval processing is not active yet; reporting links alone do not enforce it.',
+    'reporting_duplicate' => 'The primary parent cannot also be an additional parent.',
+    'reporting_cycle' => 'Reporting parents cannot include this role or create a reporting cycle.',
+    'reporting_parents' => 'Reporting parents',
     'linked_user' => 'Linked system user', 'linked_employee' => 'Linked employee',
     'view_linked_record' => 'View linked record', 'edit_linked_record' => 'Edit linked record',
     'link_unlinked' => 'No linked record.',

@@ -221,6 +221,7 @@
             @if ($rows->currentPage() > 1)<button type="button" class="btn outline" data-panel-load="{{ $panelUrl.'?page='.($rows->currentPage() - 1) }}">{{ __('Previous') }}</button>@endif
             <span>{{ $rows->currentPage() }} / {{ max($rows->lastPage(), 1) }}</span>
             @if ($rows->hasMorePages())<button type="button" class="btn outline" data-panel-load="{{ $panelUrl.'?page='.($rows->currentPage() + 1) }}">{{ __('Next') }}</button>@endif
+            <x-admin.workspace-previous/>
             @if ($hasNext)<button type="button" class="btn outline" data-workspace-next>{{ __('Next section') }}</button>@endif
         @endif
         @if ($viewAll)<a class="btn outline" href="{{ $viewAll }}">{{ __('View all') }}</a>@endif

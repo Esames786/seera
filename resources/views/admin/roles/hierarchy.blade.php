@@ -4,10 +4,10 @@
 @section('breadcrumb', 'Administration / Role Hierarchy')
 
 @section('content')
-    <x-admin.page-header title="Role Hierarchy" description="Tree structure for reporting, approval levels, and parent-child role relationship"/>
+    <x-admin.page-header title="Role Hierarchy" description="Primary hierarchy and additional reporting relationships"/>
 
     <div class="help-box">
-        This screen shows the reporting and approval hierarchy. Click a role in the tree to inspect its details.
+        {{ __('ui.reporting_help') }} {{ __('ui.reporting_pending') }}
     </div>
 
     <div class="split">
@@ -24,7 +24,7 @@
             @if ($selectedRole)
                 <x-admin.form-section title="Selected Role Details" columns="2">
                     <div><label>Role Name</label><input class="input" value="{{ $selectedRole->name }}" readonly/></div>
-                    <div><label>Parent Role</label><input class="input" value="{{ $selectedRole->parent?->name ?? 'None' }}" readonly/></div>
+                    <div><label>{{ __('ui.reporting_parents') }}</label>@include('admin.roles._reporting-parents', ['role' => $selectedRole])</div>
                     <div><label>Department</label><input class="input" value="{{ $selectedRole->department?->name ?? '-' }}" readonly/></div>
                     <div><label>Role Level</label><input class="input" value="{{ $selectedRole->level }}" readonly/></div>
                     <div><label>Can Approve Child Requests?</label><input class="input" value="{{ $selectedRole->can_approve_child_requests ? 'Yes' : 'No' }}" readonly/></div>
@@ -37,9 +37,9 @@
                     <tr><th>Rule</th><th>Value</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Child roles inherit reporting chain</td><td><span class="badge green">Enabled</span></td></tr>
-                    <tr><td>Parent role can view child requests</td><td><span class="badge green">Enabled</span></td></tr>
-                    <tr><td>Parent role can override child approvals</td><td><span class="badge yellow">Requires permission</span></td></tr>
+                    <tr><td>{{ __('ui.primary_parent') }}</td><td>Existing primary hierarchy; module permissions and access scopes still apply.</td></tr>
+                    <tr><td>{{ __('ui.additional_parents') }}</td><td>{{ __('ui.reporting_help') }}</td></tr>
+                    <tr><td>Approval routing</td><td>{{ __('ui.reporting_pending') }}</td></tr>
                 </tbody>
             </x-admin.data-table>
 

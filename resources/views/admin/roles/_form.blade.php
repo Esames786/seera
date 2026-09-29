@@ -46,7 +46,7 @@
             @endif
         </div>
         <div>
-            <label for="parent_id">Parent Role</label>
+            <label for="parent_id">{{ __('ui.primary_parent') }}</label>
             <select id="parent_id" name="parent_id" class="select">
                 <option value="">None (top level)</option>
                 @foreach ($parentRoles as $parentRole)
@@ -54,6 +54,7 @@
                     <option value="{{ $parentRole->id }}" @selected(old('parent_id', $role?->parent_id) == $parentRole->id)>{{ $parentRole->name }}</option>
                 @endforeach
             </select>
+            @error('parent_id')<div class="field-error">{{ $message }}</div>@enderror
         </div>
         <div>
             <label for="level">Role Level *</label>
@@ -78,6 +79,21 @@
                 @endforeach
             </select>
         </div>
+        <fieldset class="full">
+            <legend>{{ __('ui.additional_parents') }}</legend>
+            <p class="small">{{ __('ui.reporting_help') }}</p>
+            <input type="hidden" name="additional_parent_ids" value=""/>
+            @php $additionalIds = array_map('intval', (array) old('additional_parent_ids', $role?->additionalParents->pluck('id')->all() ?? [])); @endphp
+            <div class="form-grid three">
+                @foreach ($parentRoles as $parentRole)
+                    @continue($role && $parentRole->id === $role->id)
+                    <label><input type="checkbox" name="additional_parent_ids[]" value="{{ $parentRole->id }}" @checked(in_array($parentRole->id, $additionalIds, true))/> {{ $parentRole->name }}</label>
+                @endforeach
+            </div>
+            @error('additional_parent_ids')<div class="field-error">{{ $message }}</div>@enderror
+            @foreach($errors->get('additional_parent_ids.*') as $messages)@foreach($messages as $message)<div class="field-error">{{ $message }}</div>@endforeach @endforeach
+            <p class="small">{{ __('ui.reporting_pending') }}</p>
+        </fieldset>
         <div class="full"><label for="description">Description</label><textarea id="description" name="description" class="textarea">{{ old('description', $role?->description) }}</textarea></div>
     </x-admin.form-section>
 

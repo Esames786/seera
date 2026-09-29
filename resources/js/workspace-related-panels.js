@@ -48,6 +48,7 @@ export function relatedPanels({
             if (!response.ok || typeof body.html !== 'string') throw new Error();
             panel.innerHTML = body.html;
             panel.dataset.loaded = '1';
+            document.dispatchEvent(new CustomEvent('seera:workspace-panel-loaded'));
             const form = panel.querySelector('form');
             if (form) { leaveDays(form); signal(form, 'seera:form-baseline'); }
             status(panel, message);

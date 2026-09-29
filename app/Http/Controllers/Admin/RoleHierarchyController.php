@@ -11,7 +11,7 @@ class RoleHierarchyController extends Controller
 {
     public function index(Request $request): View
     {
-        $roles = Role::with('department')->orderBy('level')->orderBy('name')->get();
+        $roles = Role::with(['department', 'parent', 'additionalParents'])->orderBy('level')->orderBy('name')->get();
 
         $rootRoles = $roles->whereNull('parent_id');
         $childrenByParent = $roles->whereNotNull('parent_id')->groupBy('parent_id');

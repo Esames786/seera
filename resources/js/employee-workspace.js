@@ -11,7 +11,17 @@ if (employeeForm) {
     if (sections.length === keys.length && nav) {
         nav.hidden = false;
         sections.forEach((section, index) => { section.id = keys[index]; });
+        const links = [...nav.querySelectorAll('[data-employee-section], [data-employee-related]')];
+        const keyOf = link => link.dataset.employeeSection || link.dataset.employeeRelated;
+        let current = keys[0];
+        const previousButtons = () => document.querySelectorAll('[data-workspace-previous]').forEach(button => {
+            button.hidden = false;
+            button.disabled = links.findIndex(link => keyOf(link) === current) <= 0;
+        });
         const show = (key, all = false) => {
+            if (!links.some(link => keyOf(link) === key)) key = keys[0];
+            current = key;
+            previousButtons();
             const isRelated = !all && related.has(key);
             employeeForm.hidden = isRelated;
             related.show(isRelated ? key : null);
@@ -57,6 +67,16 @@ if (employeeForm) {
                 show(next.dataset.employeeSection || next.dataset.employeeRelated);
                 history.replaceState(null, '', next.hash);
             }
+        });
+        document.addEventListener('seera:workspace-panel-loaded', previousButtons);
+        document.addEventListener('click', event => {
+            const button = event.target.closest('[data-workspace-previous]');
+            if (!button || button.disabled || document.querySelector('[data-saving="1"]')) return;
+            const index = links.findIndex(link => keyOf(link) === current);
+            if (index <= 0) return;
+            show(keyOf(links[index - 1]));
+            history.replaceState(null, '', links[index - 1].hash);
+            nav.querySelector('[aria-current="location"]')?.focus();
         });
         document.addEventListener('seera:reveal-form', event => {
             const panel = event.target.closest('[data-related-panel]');

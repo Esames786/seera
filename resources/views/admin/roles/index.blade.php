@@ -39,7 +39,7 @@
     <x-admin.data-table title="Roles Listing" subtitle="Role table with hierarchy, scope, and actions">
         <thead>
             <tr>
-                <th>Role Name</th><th>Department</th><th>Parent Role</th><th>Access Scope</th>
+                <th>Role Name</th><th>Department</th><th>{{ __('ui.reporting_parents') }}</th><th>Access Scope</th>
                 <th>Total Users</th><th>Status</th><th>Created Date</th><th>Actions</th>
             </tr>
         </thead>
@@ -48,7 +48,7 @@
                 <tr>
                     <td>{{ $role->name }} @if($role->is_system)<span class="badge purple">System</span>@endif</td>
                     <td>{{ $role->department?->name ?? '-' }}</td>
-                    <td>{{ $role->parent?->name ?? 'None' }}</td>
+                    <td>@include('admin.roles._reporting-parents', ['role' => $role])</td>
                     <td>{{ $role->access_scope }}</td>
                     <td>{{ $role->users_count }}</td>
                     <td><x-admin.status-badge :status="$role->status"/></td>

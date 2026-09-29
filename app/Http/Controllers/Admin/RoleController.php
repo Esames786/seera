@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\ApprovalWorkflow;
 use App\Models\Department;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use App\Support\CodeGenerator;
 use App\Support\PermissionGroups;
+use App\Support\RoleReportingParents;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,7 +30,7 @@ class RoleController extends Controller
 
     public function index(Request $request): View
     {
-        $roles = Role::with(['department', 'parent'])
+        $roles = Role::with(['department', 'parent', 'additionalParents'])
             ->withCount('users')
             ->when($request->filled('search'), fn ($q) => $q->where('name', 'like', '%'.$request->string('search').'%'))
             ->when($request->filled('department'), fn ($q) => $q->where('department_id', $request->integer('department')))
@@ -45,7 +47,7 @@ class RoleController extends Controller
             'totalRoles' => Role::count(),
             'activeRoles' => Role::where('status', 'active')->count(),
             'assignedUsers' => User::has('roles')->count(),
-            'workflowCount' => \App\Models\ApprovalWorkflow::count(),
+            'workflowCount' => ApprovalWorkflow::count(),
         ]);
     }
 
@@ -62,6 +64,8 @@ class RoleController extends Controller
     public function store(Request $request): RedirectResponse|JsonResponse
     {
         $data = $this->validated($request);
+        $additionalIds = $data['additional_parent_ids'] ?? [];
+        unset($data['additional_parent_ids']);
 
         if (blank($data['code'] ?? null)) {
             $data['code'] = $this->uniqueCode(CodeGenerator::roleCode($data['name']));
@@ -74,8 +78,10 @@ class RoleController extends Controller
             $permissionIds = $permissionIds->merge($template->permissions->pluck('id'));
         }
 
-        $role = DB::transaction(function () use ($data, $permissionIds) {
+        $role = DB::transaction(function () use ($data, $permissionIds, $additionalIds) {
+            RoleReportingParents::lock();
             $role = Role::create($data);
+            RoleReportingParents::sync($role, $additionalIds);
             $role->permissions()->sync($permissionIds->unique()->values()->all());
 
             return $role;
@@ -97,9 +103,9 @@ class RoleController extends Controller
 
     public function show(Role $role): View
     {
-        $role->load(['department', 'parent', 'permissions', 'users.site', 'users.project']);
+        $role->load(['department', 'parent', 'additionalParents', 'permissions', 'users.site', 'users.project']);
 
-        $workflows = \App\Models\ApprovalWorkflow::whereHas('steps', fn ($q) => $q->where('approver_role_id', $role->id))
+        $workflows = ApprovalWorkflow::whereHas('steps', fn ($q) => $q->where('approver_role_id', $role->id))
             ->with('steps.approverRole')
             ->get();
 
@@ -111,7 +117,7 @@ class RoleController extends Controller
 
     public function edit(Role $role): View
     {
-        $role->load('permissions');
+        $role->load(['permissions', 'additionalParents']);
 
         return view('admin.roles.edit', ['role' => $role] + $this->formOptions());
     }
@@ -127,7 +133,15 @@ class RoleController extends Controller
         unset($data['code']);
 
         DB::transaction(function () use ($request, $role, $data) {
+            RoleReportingParents::lock();
+            $role->refresh();
+            // Legacy/quick-create clients do not send this key. Preserve links.
+            $additionalIds = array_key_exists('additional_parent_ids', $data)
+                ? ($data['additional_parent_ids'] ?? [])
+                : $role->additionalParents()->pluck('roles.id')->all();
+            unset($data['additional_parent_ids']);
             $role->update($data);
+            RoleReportingParents::sync($role, $additionalIds);
             $role->permissions()->sync($this->mergedPermissionIds($request, $role));
         });
 
@@ -142,7 +156,7 @@ class RoleController extends Controller
             return back()->withErrors(['role' => 'System roles cannot be deleted.']);
         }
 
-        if ($role->users()->exists() || $role->children()->exists()) {
+        if ($role->users()->exists() || $role->children()->exists() || $role->additionalChildren()->exists()) {
             return back()->withErrors(['role' => 'This role still has assigned users or child roles. Reassign them before deleting.']);
         }
 
@@ -265,6 +279,8 @@ class RoleController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'department_id' => ['nullable', 'exists:departments,id'],
             'parent_id' => ['nullable', 'exists:roles,id', $role ? 'not_in:'.$role->id : ''],
+            'additional_parent_ids' => ['nullable', 'array'],
+            'additional_parent_ids.*' => ['required', 'integer', 'distinct', 'exists:roles,id', $role ? 'not_in:'.$role->id : ''],
             'level' => ['required', 'integer', 'min:1', 'max:10'],
             'access_scope' => ['required', 'string', 'max:100'],
             'default_dashboard' => ['nullable', 'string', 'max:100'],

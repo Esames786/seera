@@ -11,8 +11,15 @@ if (root) {
     const links = [...nav.querySelectorAll('[data-workspace-section], [data-workspace-related]')];
     const keyOf = link => link.dataset.workspaceSection || link.dataset.workspaceRelated;
     const keys = links.map(keyOf);
+    let current = keys[0];
+    const previousButtons = () => root.querySelectorAll('[data-workspace-previous]').forEach(button => {
+        button.hidden = false;
+        button.disabled = keys.indexOf(current) <= 0;
+    });
     const show = key => {
         if (!keys.includes(key)) key = keys[0];
+        current = key;
+        previousButtons();
         const isRelated = related.has(key);
         if (form) form.hidden = isRelated;
         related.show(isRelated ? key : null);
@@ -37,6 +44,16 @@ if (root) {
             show(keys[index + 1]);
             history.replaceState(null, '', '#' + keys[index + 1]);
         }
+    });
+    document.addEventListener('seera:workspace-panel-loaded', previousButtons);
+    root.addEventListener('click', event => {
+        const button = event.target.closest('[data-workspace-previous]');
+        if (!button || button.disabled || root.querySelector('[data-saving="1"]')) return;
+        const index = keys.indexOf(current);
+        if (index <= 0) return;
+        show(keys[index - 1]);
+        history.replaceState(null, '', '#' + keys[index - 1]);
+        nav.querySelector('[aria-current="location"]')?.focus();
     });
     document.addEventListener('seera:reveal-form', event => {
         const panel = event.target.closest('[data-related-panel]');

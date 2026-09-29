@@ -4,6 +4,7 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
+        "build:release": "npm run build && powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-build.ps1",
         "dev": "vite"
     },
     "devDependencies": {

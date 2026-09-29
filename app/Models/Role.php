@@ -47,6 +47,16 @@ class Role extends Model
         return $this->hasMany(Role::class, 'parent_id');
     }
 
+    public function additionalParents()
+    {
+        return $this->belongsToMany(Role::class, 'role_reporting_parents', 'role_id', 'parent_role_id');
+    }
+
+    public function additionalChildren()
+    {
+        return $this->belongsToMany(Role::class, 'role_reporting_parents', 'parent_role_id', 'role_id');
+    }
+
     /**
      * Ids of every role beneath this one in the reporting hierarchy.
      *
@@ -56,10 +66,15 @@ class Role extends Model
     {
         $ids = [];
         $frontier = [$this->id];
+        $visited = [$this->id];
 
         while ($frontier !== []) {
-            $frontier = static::whereIn('parent_id', $frontier)->pluck('id')->all();
+            // Deliberately primary hierarchy only: extra reporting links must not
+            // widen visibleUserIds() or inherit permission grants. Also terminate
+            // safely if historical data contains a cycle.
+            $frontier = static::whereIn('parent_id', $frontier)->whereNotIn('id', $visited)->pluck('id')->all();
             $ids = array_merge($ids, $frontier);
+            $visited = array_merge($visited, $frontier);
         }
 
         return $ids;

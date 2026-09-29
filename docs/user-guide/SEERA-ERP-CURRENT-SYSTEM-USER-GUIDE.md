@@ -4,8 +4,8 @@
 | | |
 |---|---|
 | **Version** | 1.2 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 28 September 2026: previous connected workspaces and P2P retained; Project Connected Workspace Phase A added. This describes code, not a claim of production deployment. |
-| **Prepared** | 28 September 2026 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 29 September 2026: Project Phase A retained; Employee/Customer/Supplier previous-section navigation and multiple reporting-parent records added. All-required-parent approval processing remains pending. This describes code, not a claim of production deployment. |
+| **Prepared** | 29 September 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
 
@@ -427,7 +427,8 @@ Fields:
 | Role Code | Short code | SITE_ACCOUNTANT | No | Generated when left blank; cannot be changed later |
 | Department | Owning department | Accounts | No | "+ New" available |
 | Role Type | Type list | Operational | No | |
-| Parent Role | Role above this one in the hierarchy | Accounts Manager | No | Used for display and for who can see whose activity; permissions are not inherited |
+| Primary reporting parent | Role above this one in the primary hierarchy | Accounts Manager | No | Preserves the existing activity visibility hierarchy; permissions are not inherited |
+| Additional reporting parents | Tick one or more additional roles | Purchase Manager and Project Manager | No | Saved reporting links only: no additional data access, permissions or automatic approval authority. Duplicate, self and cyclic links are rejected. |
 | Role Level | 1 (highest) to 5 | 3 | Yes | |
 | Status | active / inactive | active | Yes | |
 | Default Dashboard | Landing page label | Accounting Dashboard | No | Label only |
@@ -446,6 +447,7 @@ Buttons:
 
 Important:
 A system role, a role that still has users, or a role with child roles cannot be deleted.
+This also protects a role used as an additional reporting parent. Listing, View, Edit and Hierarchy show the saved parents. Removing all additional checkboxes and saving clears only those extra reporting links. The confirmed requirement that **all required parents approve** is not enforced by these links; the approval runtime remains pending.
 
 Related screens:
 ROL-005 Permission Matrix, ROL-007 Assign Users.
@@ -472,7 +474,7 @@ Web address: `https://seera.tech-brit.co.uk/admin/roles/hierarchy`
 Purpose:
 See the tree of roles and the selected role's details.
 
-Status: **PARTIAL**. The tree and the details card are real; the "Hierarchy Rules" table is fixed text. Permissions are not inherited from a parent role.
+Status: **PARTIAL**. The tree shows the primary hierarchy, with named cross-links for additional reporting parents and all parents in the details card. Permissions are not inherited from a parent role. Additional links do not change access scope or implement all-required-parent approval processing.
 
 Buttons: Add Child Role (opens ROL-002 with the parent preset), Edit Selected Role.
 
@@ -763,6 +765,7 @@ Buttons:
 |---|---|
 | Save & stay | Saves and stays on this employee (Edit workspace) |
 | Save & next | Saves and opens the next section |
+| Back / previous section | Returns to the preceding visible section without saving or discarding. Typed entries and selected files remain in this workspace; Back is disabled on the first section. Customer and Supplier Edit related panels offer the same Back control. Leaving the page still checks for unsaved changes. |
 | Save & new | Saves and opens an empty employee form |
 | Save & close | Saves and returns to the list |
 | Cancel | Leaves without saving |
