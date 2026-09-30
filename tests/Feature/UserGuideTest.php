@@ -27,6 +27,8 @@ class UserGuideTest extends TestCase
         $this->actingAs($user)->get('/user-guide/index.html')->assertOk()->assertSee('Current System User Guide');
         $this->actingAs($user)->get('/user-guide/SCREEN-INDEX.html')->assertOk()->assertSee('SUP-004');
         $this->actingAs($user)->get('/user-guide/WORKFLOW-INDEX')->assertOk()->assertSee('WF-010');
+        $this->get('/user-guide/WORKFLOW-INDEX')->assertOk()->assertSee('WF-017');
+        $this->get('/user-guide/SCREEN-INDEX.html')->assertOk()->assertSee('APR-001')->assertSee('APR-002');
         $this->actingAs($user)->get('/user-guide/SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html')->assertOk()->assertSee('Goods Received Not Invoiced');
 
         $this->actingAs($user)->get('/user-guide/build-html.php')->assertNotFound();

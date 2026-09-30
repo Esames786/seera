@@ -2,7 +2,7 @@
 
 Master index of every screen in the current system. Screen IDs are permanent; use them when you refer to a page in training, support tickets or the [User Guide](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md). Workflows are indexed in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).
 
-Version 1.2 · Prepared 28 September 2026 · System state: current feature branch, including Project Connected Workspace Phase A; previous P2P and other workspaces retained · Status: current implemented system only; not a deployment claim.
+Version 1.3 · Prepared 30 September 2026 · System state: current feature branch, F08 runtime for Purchase Requests; existing workspaces retained · Status: current implemented system only; not a deployment claim.
 
 How to read the columns:
 
@@ -38,9 +38,9 @@ How to read the columns:
 | ROL-005 | Permission Matrix | `https://seera.tech-brit.co.uk/admin/roles/permission-matrix` | Administration | Administration → Permission Matrix | Super Admin | — | Roles — view | Roles — edit | — | AVAILABLE | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
 | ROL-006 | Role Hierarchy | `https://seera.tech-brit.co.uk/admin/roles/hierarchy` | Administration | Administration → Role Hierarchy | Super Admin | — | Roles — view | — | — | PARTIAL (display only; no permission inheritance) | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
 | ROL-007 | Assign Users to Role | `https://seera.tech-brit.co.uk/admin/roles/assign-users` | Administration | Administration → Assign Users | Super Admin | — | Roles — view | Roles — edit (Save Changes) | — | AVAILABLE | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
-| ROL-008 | Approval Workflows | `https://seera.tech-brit.co.uk/admin/roles/approval-workflows` | Administration | Administration → Approval Workflows | Super Admin | Roles — create | Roles — view | Roles — edit | — | FOUNDATION ONLY (configuration is saved; it is not executed by approvals yet) | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
-| ROL-009 | Create Approval Workflow | `https://seera.tech-brit.co.uk/admin/roles/approval-workflows/create` | Administration | Approval Workflows → + New Workflow | Super Admin | Roles — create | — | — | — | FOUNDATION ONLY | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
-| ROL-010 | Edit Approval Workflow | `https://seera.tech-brit.co.uk/admin/roles/approval-workflows/{id}/edit` | Administration | Approval Workflows → Edit | Super Admin | — | — | Roles — edit | — | FOUNDATION ONLY | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
+| ROL-008 | Approval Workflows | `https://seera.tech-brit.co.uk/admin/roles/approval-workflows` | Administration | Administration → Approval Workflows | Super Admin | Roles — create | Roles — view | Roles — edit | — | AVAILABLE for PR runtime; PARTIAL for other modules | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
+| ROL-009 | Create Approval Workflow | `https://seera.tech-brit.co.uk/admin/roles/approval-workflows/create` | Administration | Approval Workflows → + New Workflow | Super Admin | Roles — create | — | — | — | AVAILABLE for PR runtime; PARTIAL for other modules | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
+| ROL-010 | Edit Approval Workflow | `https://seera.tech-brit.co.uk/admin/roles/approval-workflows/{id}/edit` | Administration | Approval Workflows → Edit | Super Admin | — | — | Roles — edit | — | AVAILABLE for PR runtime; PARTIAL for other modules | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
 
 ## Master Setup
 
@@ -244,4 +244,11 @@ How to read the columns:
 | CS-004 | Project Reports | `https://seera.tech-brit.co.uk/admin/coming-soon/project-reports` | Reports | Reports → Project Reports | NOT YET OPERATIONAL as a menu; the reports exist | Use Project Cost Report (FIN-REP-007) and Project Material Consumption (INV-REP-004) |
 | CS-005 | System Settings | `https://seera.tech-brit.co.uk/admin/coming-soon/settings` | Settings | Settings → System Settings | NOT YET OPERATIONAL | Company Profile (MST-COM-001) holds company settings |
 
-Totals: 132 screens indexed (127 operational or partial screens plus 5 placeholders).
+## Runtime approvals
+
+| Screen ID | Screen Name | Web address | Sidebar Module | Navigation Path | Primary User Role | Create | View | Edit | Approve / Process | Status | Guide |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| APR-001 | My Approvals | `https://seera.tech-brit.co.uk/admin/my-approvals` | Main | Main → My Approvals | Currently eligible configured approvers | — | Purchase Requests — view, current task eligibility | — | Opens source context, no list mutation | AVAILABLE for PR only | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
+| APR-002 | PR approval panel / history | `https://seera.tech-brit.co.uk/admin/inventory/purchase-requests/{id}#approvals` | Inventory | Purchase Requests → View → Approvals | Requester, approvers, permitted viewers | Submit: PR create (own) or edit | PR view + Approval History view for detailed history | Rejected PR correction: PR edit | PR approve / reject plus current required step and scope | AVAILABLE for PR only | [WF-017](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-017-purchase-request-runtime-approval) |
+
+Existing Screen IDs retained. APR-002 identifies an embedded panel, not a separate document screen.

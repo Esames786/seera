@@ -3,8 +3,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.2 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 29 September 2026: Project Phase A retained; Employee/Customer/Supplier previous-section navigation and multiple reporting-parent records added. All-required-parent approval processing remains pending. This describes code, not a claim of production deployment. |
+| **Version** | 1.3 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 30 September 2026: F08 Approval Runtime AVAILABLE for explicitly submitted Purchase Requests only. Existing connected workspaces, previous-section navigation and multiple reporting-parent records retained. Other modules' runtime integration remains PARTIAL. This describes code, not a claim of production deployment. |
 | **Prepared** | 29 September 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
@@ -301,7 +301,7 @@ FIN-DASH-001, HR-DASH-001, INV-DASH-001, ADM-020.
 | **Chapter name** | Users, Roles and Permissions |
 | **Purpose** | Create logins, roles, the permission matrix and access scope. |
 | **Primary roles** | Super Admin |
-| **Screens in this chapter** | USR-001, USR-002, USR-003, USR-004, ROL-001, ROL-002, ROL-003, ROL-004, ROL-005, ROL-006, ROL-007, ROL-008, ROL-009, ROL-010 |
+| **Screens in this chapter** | USR-001, USR-002, USR-003, USR-004, ROL-001, ROL-002, ROL-003, ROL-004, ROL-005, ROL-006, ROL-007, ROL-008, ROL-009, ROL-010, APR-001, APR-002 |
 
 How access works in Seera:
 
@@ -447,7 +447,7 @@ Buttons:
 
 Important:
 A system role, a role that still has users, or a role with child roles cannot be deleted.
-This also protects a role used as an additional reporting parent. Listing, View, Edit and Hierarchy show the saved parents. Removing all additional checkboxes and saving clears only those extra reporting links. The confirmed requirement that **all required parents approve** is not enforced by these links; the approval runtime remains pending.
+This also protects a role used as an additional reporting parent. Listing, View, Edit and Hierarchy show the saved parents. Removing all additional checkboxes and saving clears only those extra reporting links. These links do not automatically route approvals. For Purchase Requests, configure each required approving role/user as a required workflow step: the runtime enforces **all required steps approve**. Other modules are not connected yet.
 
 Related screens:
 ROL-005 Permission Matrix, ROL-007 Assign Users.
@@ -504,9 +504,33 @@ Web address: `https://seera.tech-brit.co.uk/admin/roles/approval-workflows` (ROL
 Purpose:
 Record who should approve what, step by step.
 
-Status: **FOUNDATION ONLY**. The workflow (name, module, trigger action, department, scope, auto posting, notify requester, lock after approval, and steps with approver role, specific user, required, amount limit, SLA hours, escalation role, can reject, can send back) is saved and shown. **Approvals in the system do not follow these steps yet.** Today every Approve button is a single action by any user who has the approve permission for that module.
+Status: **AVAILABLE for Purchase Request runtime; PARTIAL for other modules**. The builder saves configuration; actual decisions are separate per-document runtime history. Configuration includes name, module, trigger, department, scope, auto posting, notify requester, lock after approval, and ordered role/user steps with required, amount limit, SLA, escalation, can reject and can send back.
+
+For PR runtime choose module **Purchase Request**, trigger **Request Created**, an appropriate requester department (or none), scope **All Company** or **All Projects / Assigned Project/Site** (the latter two require a project), **No Auto Posting**, at least one required active role and **blank amount limits**. Branch Level and amount-limit routing are not executed. Existing sample workflows with amounts will fail submission with an explanation until an administrator reviews their policy; no silent configuration rewrite occurs.
+
+Steps run in order. An optional step is retained as informational/skipped, not an approval task. A required role slot can be satisfied by one eligible assigned member; to require multiple actors configure multiple required steps, optionally with explicit users. An explicit user must also hold that role. All required slots must approve. Current schema has no parallel groups. Reporting parents, free-text names/notes, SLA, escalation, send-back and notification flags do not create additional actors or jobs. Requester and submitting editor cannot self-approve. The role and current document permissions/scope must still be valid at decision time. No automatic posting is performed by PR approval.
 
 Buttons: + New Workflow, Preview, Edit, Delete, + Add Step, Save Workflow, Cancel.
+
+### [APR-001] My Approvals
+
+Web address: `https://seera.tech-brit.co.uk/admin/my-approvals`
+
+Navigation: Main → My Approvals. Permission: Purchase Requests — view to open; an eligible current step plus approve/reject permission and document scope to see a task. Workflow configuration rights do not confer approval authority.
+
+Columns: Document, Module, Requested By, Project / Site, Submitted, Current Step, Status, Actions. Filter Module, Pending status, Project, Submitted from/to. Only currently actionable tasks appear, not previously completed decisions. **View**, **Review & approve** and **Review & reject** open the PR's Approvals panel; no decision is made from a list click.
+
+### [APR-002] Embedded approval history and decisions
+
+Web address: `https://seera.tech-brit.co.uk/admin/inventory/purchase-requests/{id}#approvals`
+
+Status: AVAILABLE for PR only. The panel shows current status, requester, submitted time and current role/step. Full attempt history (required steps, role/user, decisions, actor, timestamps and comments) additionally requires **Approval History — view**. Existing PR-view roles receive that permission on migration; the administrator can revoke it independently. Source-document view and scope are always required. Activity Logs is a separate audit permission, not a substitute for either.
+
+Save a new PR, then **Submit for approval** and choose its configured workflow. Saving with Status pending is not submission. During approval, editing/deletion is blocked. Authorized current actors see **Approve step** or **Reject request**; reject needs a reason and stops all later steps. After all required steps approve, Create Purchase Order is available to authorized purchasing users. Approval does not post accounting.
+
+For a runtime rejection: **Edit** the request and save corrections, then **Resubmit for approval**. A new attempt is created; old decisions/configuration are retained. Exact retries do not duplicate decisions; conflicting retries are refused. Documents with runtime history cannot be deleted. A new role member is not silently substituted into an existing attempt; there is no delegation/reassignment feature yet. If all snapshotted approvers lose eligibility, ask an administrator to review existing assignments—do not bypass approval.
+
+Legacy approved/converted records retain their original actor/date without fabricated runtime history. Legacy draft/pending records keep their old authorized single-action behavior, clearly labelled; authorized owners/editors may explicitly enrol an editable record. Once enrolled it uses the runtime. No automatic historical enrolment occurs. See WF-017.
 
 ---
 
@@ -1736,7 +1760,7 @@ Inventory → Purchase Requests → + Add Purchase Request.
 Permission required:
 Purchase Requests — create / view / edit; approve / reject for the decision.
 
-Fields: Request Date *, Required Date, Priority *, Project, Site, Deliver To Warehouse, Status *, Reason, and lines Item *, Description, Quantity *, Unit, Est. Unit Cost, Budget Line (free text). Example: PR-2026-0010 for Riyadh Commercial Tower, priority high, 10,000 kg of Reinforcement Steel 16mm, estimated 3.00 per kg. Buttons: Save / Update, Cancel; on details **Approve** (Purchase Requests — approve), **Reject Request** with reason (Purchase Requests — reject), Edit (draft or pending), **Create Purchase Order** (approved requests; Purchase Orders — create).
+Fields: Request Date *, Required Date, Priority *, Project, Site, Deliver To Warehouse, Status *, Reason, and lines Item *, Description, Quantity *, Unit, Est. Unit Cost, Budget Line (free text). Example: PR-2026-0010 for Riyadh Commercial Tower, priority high, 10,000 kg of Reinforcement Steel 16mm, estimated 3.00 per kg. Buttons: Save / Update, Cancel; on details **Submit for approval / Resubmit**, **Approve step** and **Reject request** only for the current eligible actor, Edit while editable, **Create Purchase Order** after full approval (Purchase Orders — create). Legacy documents retain labelled legacy actions. See APR-002 and WF-017.
 
 Purchase Request Details (INV-PR-003) is a **light connected view**. A header stays at the top: PR number, status and ordering state (No purchase order yet / Partly ordered / Fully ordered), requested by and date, Project / Site and Warehouse (links need Projects — view and Warehouses — view), required date and priority, estimated total, the approval (who and when, or the rejection reason) and how much of the requested quantity has been ordered. A section bar links to Request Information · Requested Items · Purchase Orders · Activity.
 
@@ -1746,7 +1770,7 @@ Purchase Request Details (INV-PR-003) is a **light connected view**. A header st
 | Purchase Orders From This Request | PO number, supplier, total, Received (for example 6,000 of 10,000), status and View PO (Purchase Orders — view) |
 | Activity | The latest entries that name this request (Activity Logs — view), with View all |
 
-Statuses: draft → pending → approved / rejected → converted (when a PO is created from it).
+Statuses: draft → explicit submission → pending → all required approvals → approved → converted (when a PO is created from it). Rejected runtime PRs can be corrected and explicitly resubmitted. The section bar also includes **Approvals** for status, steps, decisions and history.
 
 ### [INV-PO-001 … 004] Purchase Orders
 
@@ -1963,7 +1987,7 @@ Financial semantics: posted expense-account lines tagged with the Project contri
 - Project → Customer Invoices → View similarly provides **Back to origin**. Posting/approval/receipt entry still happen only through existing authorized screens.
 - Safe return destinations must be relative internal admin paths; external URLs, misleading prefixes and path traversal are refused.
 
-Current limitations: one current Project per employee, no assignment-history engine; no direct stock or journal editing; old free-text/name-only activity omitted because it has no trustworthy entity key; no construction-progress estimate; no full BOQ/budget, Site Expenses, labour/equipment costing, mobile geofence runtime, offline sync or multi-step approval runtime. A Project with sites or warehouses still cannot be deleted.
+Current limitations: one current Project per employee, no assignment-history engine; no direct stock or journal editing; old free-text/name-only activity omitted because it has no trustworthy entity key; no construction-progress estimate; no full BOQ/budget, Site Expenses, labour/equipment costing, mobile geofence runtime or offline sync. F08 approval runtime is available for PRs only, not Project-wide approval summaries. A Project with sites or warehouses still cannot be deleted.
 
 ### [MST-SITE-001 … 004] Locations (Sites)
 
@@ -2398,9 +2422,9 @@ Related screens: INV-PO-003, INV-GRN-003, FIN-AP-002, FIN-AP-003, FIN-AP-005, SU
 ### WF-011 Purchase Request → Purchase Order
 
 Purpose: let a site ask for materials and let purchasing turn the request into an order.
-Roles involved: Site In-Charge (request), Purchase Manager (approve, order).
-Navigation: Inventory → Purchase Requests → + Add Purchase Request; Request → Approve; Request → Create Purchase Order.
-Steps: request PR-2026-0010 for Riyadh Commercial Tower, priority high, 10,000 kg × Reinforcement Steel 16mm, estimated 3.00 per kg. Save. Approve. Create Purchase Order (lines copied), choose Gulf Steel Trading, Save, Approve Order.
+Roles involved: requester, configured required PR approvers, Purchase Manager (order).
+Navigation: Inventory → Purchase Requests → + Add Purchase Request; Request → Approvals → Submit; each required approver → My Approvals → document review and Approve step; approved Request → Create Purchase Order.
+Steps: request PR-2026-0010 for Riyadh Commercial Tower, priority high, 10,000 kg × Reinforcement Steel 16mm, estimated 3.00 per kg. Save, then submit a valid workflow. All required approvers decide in order (WF-017). Create Purchase Order (lines copied), choose Gulf Steel Trading, Save, Approve Order. The PO's own approval is unchanged and not integrated into F08 yet.
 What you see afterwards: the request page (INV-PR-003) reads *Fully ordered*, its Requested Items show Ordered so far 10000 / Still to order 0 and its Purchase Orders section lists PO-2026-0012 with the received quantity as deliveries are posted; the order page (INV-PO-003) shows the request under Source Purchase Request with a link back.
 Statuses: request draft → pending → approved → converted; order draft → approved.
 Audit trail: Created purchase request, Approved purchase request, Created purchase order (the request's Activity section and the order's Activity section both show them).
@@ -2459,7 +2483,21 @@ Related screens: HR-EOS-002, HR-EOS-003.
 
 Permissions are independent at every step. A project/site-scoped operator sees only rows permitted by the existing global scopes; the same scope feeds panel totals. Read-only pages do not post, approve, receive stock or process payroll.
 
-Pending Phase B: Site Expenses, budget lines/BOQ, labour/payroll-to-GL, equipment cost, expanded budget-vs-actual and a future operational site dashboard. No live ZATCA clearance or F08 multi-step approval runtime is introduced.
+Pending Phase B: Site Expenses, budget lines/BOQ, labour/payroll-to-GL, equipment cost, expanded budget-vs-actual and a future operational site dashboard. No live ZATCA clearance is introduced. F08 now supports PR approval only; Project approval summaries and Site Expenses integration remain pending.
+
+### WF-017 Purchase Request runtime approval
+
+Status: AVAILABLE for explicitly enrolled PRs only. Roles: requester/editor and configured approvers; no named-person or reporting-parent inference.
+
+1. Administrator configures required ordered role/user steps (ROL-008/009/010), without amount limits or automatic posting. Verify required role holders have current PR view/approve, optionally reject, and the document's project/site/warehouse scope.
+2. Requester saves PR-2026-0010 (INV-PR-002), then opens **Approvals → Submit for approval** (APR-002). Choose the intended workflow explicitly. Submission validates the entire chain atomically.
+3. First approver opens **My Approvals** (APR-001), reviews the request and items, then **Approve step**. Only the next required step unlocks. One approval does not complete a multi-step request.
+4. After ALL required steps approve, PR is approved and purchasing may create a PO. Approval creates no journal, VAT or stock movement.
+5. If any required actor rejects, enter a reason. All later steps stop. Requester/editor corrects the PR, saves, and explicitly **Resubmit for approval**. Attempt 2 is new; attempt 1 remains rejected with original comments and configuration.
+
+History permission is separate from decision permissions. Requests with runtime history cannot be deleted; pending/approved documents cannot be edited. Exact same-action/comment retries are safe, while conflicting decisions are refused. The audit contains Approval requested, Step approved, Rejected, Fully approved and Resubmitted. There is no parallel routing, delegation, amount-threshold routing or automatic escalation/notification job in this release.
+
+Legacy documents are labelled and not auto-enrolled; historical decisions are not reconstructed. Supplier Bill, PO, Customer Invoice, Leave and Payroll retain their existing behavior and are NOT part of F08 runtime yet.
 
 ---
 
@@ -2545,7 +2583,7 @@ Areas that exist as menus, settings or plans but are not usable business functio
 | Mobile app, check-in / check-out, GPS geofence attendance | NOT YET OPERATIONAL | Mobile access flags on users and roles; site coordinates and radius; manual attendance with a typed geo-fence status |
 | Offline entry and sync | NOT YET OPERATIONAL | Nothing |
 | Live ZATCA Phase-2 clearance, real QR, XML, signing | NOT YET OPERATIONAL (local records: FOUNDATION ONLY) | Chapter 14 |
-| Approval workflow execution (multi-step, all-required) | FOUNDATION ONLY | Builder and seeded workflows; every Approve is a single action |
+| Approval workflow execution (multi-step, all-required) | AVAILABLE for enrolled PRs; PARTIAL across other modules | Sequential required steps, separate runtime history and My Approvals; no parallel groups, thresholds, delegation, notification/escalation jobs or automatic parent expansion |
 | Payroll → accounting posting, payslips, bank / WPS file, GOSI | NOT YET OPERATIONAL | Payroll run calculation and approval |
 | HR Reports menu (attendance register, payroll register) | NOT YET OPERATIONAL | HR Dashboard for today's figures |
 | Project Reports menu | Placeholder | Project Cost Report and Project Material Consumption exist |

@@ -125,3 +125,46 @@ Batches 2 to 8 each ship with: List → View → Edit workspace navigation, per-
 **Phase A complete does not mean Project Management complete.** Phase B remains pending: BOQ/budget lines and approval, Site Expenses, labour/payroll-to-GL, equipment cost, expanded budget-vs-actual and the future operational site dashboard. Mobile attendance/geofence runtime, offline sync, F08 multi-step approvals and live ZATCA clearance remain outside this sprint.
 
 **Recommended next sprint (not started):** design and implement Site Expenses with explicit project/site/warehouse authorization, expense-account/cost-centre attribution, posting/reversal and permission tests; then integrate those real transactions into Project Phase B. Confirm approval/accounting policy before that implementation. BOQ, payroll and equipment costing should follow their own approved specifications rather than appearing as placeholder totals. Inventory write-scope and user role-sync audit gaps listed above remain separate known dependencies; Phase A does not claim to resolve them.
+
+### Batch 6 — F08 reusable approval runtime (30 September 2026)
+
+- Starting HEAD `9f8a045` on the same feature branch (includes changes newer than the
+  sprint brief's `06913c4`). Preserve earlier workspace navigation/reporting parents.
+- Separate `approval_instances` and `approval_instance_steps` store per-document
+  attempt/configuration/document/eligible-user snapshots and immutable-on-decision
+  audit. `ApprovalSubject` adapter contract + `ApprovalRuntimeService` own submission,
+  resolution, sequential eligibility, locked decisions, retries, rejection and completion.
+- **AVAILABLE: Purchase Request only**, via explicit Submit. ALL configured required
+  slots must approve in order. No parallel schema exists. Each role slot is satisfied
+  by one eligible assigned user (or its configured explicit user), not every member
+  of that role. Required people/roles must be explicitly represented by required steps.
+- Requester/submitting editor self-approval blocked. Current active role assignment,
+  module permission and project/site/warehouse scope checked again for every decision.
+  Role hierarchy/reporting-parent links do not independently confer authority.
+- Rejected PR corrections + explicit Resubmit create a new attempt. Old history remains.
+  Pending instances freeze PR edits. Documents with runtime history cannot be deleted.
+  Legacy approved/pending rows are not auto-enrolled or backfilled; existing authorized
+  legacy decisions are retained until explicit editable-document enrolment.
+- Embedded PR approval panel (APR-002) + global actionable My Approvals (APR-001).
+  Queue links open document context; no blind list mutation. Approval History/view is
+  a separate permission; migration adds it to existing PR-view roles, independently
+  revokable. Fresh demo seed grants are consistent; no production reseed required.
+- Lock source → instance → step/current step set. Unique source/attempt and step/order
+  indexes; transactions include document transition and ActivityLog. Current locking
+  reads protect MySQL REPEATABLE READ retries. Workflow edit/delete locks coordinate
+  with configuration snapshot creation.
+- No accounting/stock posting from PR approval. PO/AP/AR/HR/payroll posting logic
+  unchanged. Other module runtime integrations remain **PARTIAL / not connected**.
+- Unsupported: amount-limit routing, Branch Level workflow scope, parallel groups,
+  delegation/reassignment, automatic reporting-parent expansion, SLA/escalation jobs,
+  notifications, send-back and automatic posting. Unsupported threshold/posting
+  configuration fails PR submission explicitly; existing sample configuration is not rewritten.
+- Guide v1.3 adds APR-001/002 and WF-017, preserving all prior IDs, dark HTML and
+  `/user-guide` routes. See `approval-runtime-verification-2026-09-30.md` for measured gates.
+
+**Next planned item (not started): FULL SITE EXPENSE MODULE + PROJECT PHASE B INTEGRATION.**
+Use `ApprovalRuntimeService`, not a second approval implementation. Accounting may post
+only after all required approvals and a separately authorized/idempotent posting
+transition. Follow [Site Expense contract](site-expense-runtime-contract-2026-09-29.md)
+and resolve its owner/accountant decisions before implementing posting. No Site Expense
+schema/module, merge or deployment is included in F08.
