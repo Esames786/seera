@@ -31,6 +31,7 @@ class SidebarMenu
                 'label' => 'Main',
                 'items' => [
                     static::link('admin.dashboard', 'admin.dashboard', '📊', 'Dashboard'),
+                    static::link('admin.my-approvals.index', 'admin.my-approvals.*', '✅', 'My Approvals'),
                 ],
             ],
             [

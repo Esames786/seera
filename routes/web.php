@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\Inventory\InventoryReportController;
 use App\Http\Controllers\Admin\Inventory\ItemCategoryController;
 use App\Http\Controllers\Admin\Inventory\ItemController;
 use App\Http\Controllers\Admin\Inventory\PurchaseOrderController;
+use App\Http\Controllers\Admin\Inventory\PurchaseOrderWorkspaceController;
 use App\Http\Controllers\Admin\Inventory\PurchaseRequestController;
 use App\Http\Controllers\Admin\Inventory\StockAdjustmentController;
 use App\Http\Controllers\Admin\Inventory\StockController;
@@ -45,6 +46,7 @@ use App\Http\Controllers\Admin\Marketing\MarketingReportController;
 use App\Http\Controllers\Admin\Master\BranchController;
 use App\Http\Controllers\Admin\Master\CompanyProfileController;
 use App\Http\Controllers\Admin\Master\CustomerController;
+use App\Http\Controllers\Admin\Master\CustomerWorkspaceController;
 use App\Http\Controllers\Admin\Master\DepartmentController;
 use App\Http\Controllers\Admin\Master\DesignationController;
 use App\Http\Controllers\Admin\Master\ExpenseCategoryController;
@@ -53,15 +55,20 @@ use App\Http\Controllers\Admin\Master\OrganizationStructureController;
 use App\Http\Controllers\Admin\Master\PaymentTermController;
 use App\Http\Controllers\Admin\Master\ProjectClassificationController;
 use App\Http\Controllers\Admin\Master\ProjectController;
+use App\Http\Controllers\Admin\Master\ProjectSiteController;
+use App\Http\Controllers\Admin\Master\ProjectWorkspaceController;
 use App\Http\Controllers\Admin\Master\SiteController;
 use App\Http\Controllers\Admin\Master\SupplierController;
+use App\Http\Controllers\Admin\Master\SupplierWorkspaceController;
 use App\Http\Controllers\Admin\Master\WarehouseController;
+use App\Http\Controllers\Admin\MyApprovalController;
 use App\Http\Controllers\Admin\PasswordChangeController;
 use App\Http\Controllers\Admin\PermissionMatrixController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\RoleHierarchyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\UserGuideController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -105,12 +112,13 @@ Route::middleware(['auth', 'active'])->prefix('admin')->name('admin.')->group(fu
  */
 Route::middleware(['auth', 'active'])->group(function () {
     Route::get('user-guide', fn () => redirect()->route('user-guide.page', 'index.html'))->name('user-guide');
-    Route::get('user-guide/{page}', [\App\Http\Controllers\UserGuideController::class, 'show'])
+    Route::get('user-guide/{page}', [UserGuideController::class, 'show'])
         ->where('page', '[A-Za-z0-9-]+(\.html)?')->name('user-guide.page');
 });
 
 Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/my-approvals', [MyApprovalController::class, 'index'])->name('my-approvals.index');
 
     // Users
     Route::get('users/employee-search', [UserController::class, 'employeeSearch'])->name('users.employee-search');
@@ -147,11 +155,11 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::resource('project-classifications', ProjectClassificationController::class)
             ->only(['index', 'store', 'update', 'destroy'])
             ->parameters(['project-classifications' => 'project_classification']);
-        Route::get('projects/{project}/workspace/{panel}', [\App\Http\Controllers\Admin\Master\ProjectWorkspaceController::class, 'panel'])->name('projects.workspace.panel');
-        Route::get('projects/{project}/sites/create', [\App\Http\Controllers\Admin\Master\ProjectSiteController::class, 'createForProject'])->name('sites.project.create');
-        Route::post('projects/{project}/sites', [\App\Http\Controllers\Admin\Master\ProjectSiteController::class, 'storeForProject'])->name('sites.project.store');
-        Route::get('projects/{project}/sites/{site}/edit', [\App\Http\Controllers\Admin\Master\ProjectSiteController::class, 'editForProject'])->name('sites.project.edit');
-        Route::put('projects/{project}/sites/{site}', [\App\Http\Controllers\Admin\Master\ProjectSiteController::class, 'updateForProject'])->name('sites.project.update');
+        Route::get('projects/{project}/workspace/{panel}', [ProjectWorkspaceController::class, 'panel'])->name('projects.workspace.panel');
+        Route::get('projects/{project}/sites/create', [ProjectSiteController::class, 'createForProject'])->name('sites.project.create');
+        Route::post('projects/{project}/sites', [ProjectSiteController::class, 'storeForProject'])->name('sites.project.store');
+        Route::get('projects/{project}/sites/{site}/edit', [ProjectSiteController::class, 'editForProject'])->name('sites.project.edit');
+        Route::put('projects/{project}/sites/{site}', [ProjectSiteController::class, 'updateForProject'])->name('sites.project.update');
         Route::resource('projects', ProjectController::class);
         Route::resource('sites', SiteController::class);
         Route::resource('warehouses', WarehouseController::class);
@@ -161,14 +169,14 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
             ->parameters(['payment-terms' => 'payment_term']);
         Route::post('lookup-values', [LookupValueController::class, 'store'])->name('lookup-values.store');
         // Supplier connected workspace: related panels load and save inside the supplier context.
-        Route::get('suppliers/{supplier}/workspace/{panel}', [\App\Http\Controllers\Admin\Master\SupplierWorkspaceController::class, 'panel'])->name('suppliers.workspace.panel');
-        Route::post('suppliers/{supplier}/workspace/{panel}', [\App\Http\Controllers\Admin\Master\SupplierWorkspaceController::class, 'save'])->name('suppliers.workspace.save');
-        Route::post('suppliers/{supplier}/workspace/{panel}/{record}/{action}', [\App\Http\Controllers\Admin\Master\SupplierWorkspaceController::class, 'action'])->whereNumber('record')->name('suppliers.workspace.action');
+        Route::get('suppliers/{supplier}/workspace/{panel}', [SupplierWorkspaceController::class, 'panel'])->name('suppliers.workspace.panel');
+        Route::post('suppliers/{supplier}/workspace/{panel}', [SupplierWorkspaceController::class, 'save'])->name('suppliers.workspace.save');
+        Route::post('suppliers/{supplier}/workspace/{panel}/{record}/{action}', [SupplierWorkspaceController::class, 'action'])->whereNumber('record')->name('suppliers.workspace.action');
         Route::resource('suppliers', SupplierController::class);
         // Customer connected workspace: related panels load and save inside the customer context.
-        Route::get('customers/{customer}/workspace/{panel}', [\App\Http\Controllers\Admin\Master\CustomerWorkspaceController::class, 'panel'])->name('customers.workspace.panel');
-        Route::post('customers/{customer}/workspace/{panel}', [\App\Http\Controllers\Admin\Master\CustomerWorkspaceController::class, 'save'])->name('customers.workspace.save');
-        Route::post('customers/{customer}/workspace/{panel}/{record}/{action}', [\App\Http\Controllers\Admin\Master\CustomerWorkspaceController::class, 'action'])->whereNumber('record')->name('customers.workspace.action');
+        Route::get('customers/{customer}/workspace/{panel}', [CustomerWorkspaceController::class, 'panel'])->name('customers.workspace.panel');
+        Route::post('customers/{customer}/workspace/{panel}', [CustomerWorkspaceController::class, 'save'])->name('customers.workspace.save');
+        Route::post('customers/{customer}/workspace/{panel}/{record}/{action}', [CustomerWorkspaceController::class, 'action'])->whereNumber('record')->name('customers.workspace.action');
         Route::post('customers/{customer}/contacts', [CustomerController::class, 'storeContact'])->name('customers.contacts.store');
         Route::delete('customers/{customer}/contacts/{contact}', [CustomerController::class, 'destroyContact'])->name('customers.contacts.destroy');
         Route::post('customers/{customer}/notes', [CustomerController::class, 'storeNote'])->name('customers.notes.store');
@@ -287,6 +295,7 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::get('reports/movement', [InventoryReportController::class, 'movement'])->name('reports.movement');
 
         Route::post('purchase-requests/{purchase_request}/approve', [PurchaseRequestController::class, 'approve'])->name('purchase-requests.approve');
+        Route::post('purchase-requests/{purchase_request}/submit-approval', [PurchaseRequestController::class, 'submitApproval'])->name('purchase-requests.submit-approval');
         Route::post('purchase-requests/{purchase_request}/reject', [PurchaseRequestController::class, 'reject'])->name('purchase-requests.reject');
         Route::resource('purchase-requests', PurchaseRequestController::class);
 
@@ -295,7 +304,7 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::get('purchase-orders/{purchase_order}/attachments/{attachment}', [PurchaseOrderController::class, 'downloadAttachment'])->name('purchase-orders.attachments.download');
         Route::delete('purchase-orders/{purchase_order}/attachments/{attachment}', [PurchaseOrderController::class, 'destroyAttachment'])->name('purchase-orders.attachments.destroy');
         // Purchase Order document workspace: paged read-only sections (receipts, billing, accounting, activity).
-        Route::get('purchase-orders/{purchase_order}/workspace/{panel}', [\App\Http\Controllers\Admin\Inventory\PurchaseOrderWorkspaceController::class, 'panel'])->name('purchase-orders.workspace.panel');
+        Route::get('purchase-orders/{purchase_order}/workspace/{panel}', [PurchaseOrderWorkspaceController::class, 'panel'])->name('purchase-orders.workspace.panel');
         Route::resource('purchase-orders', PurchaseOrderController::class);
 
         Route::post('goods-receipts/{goods_receipt}/post-stock', [GoodsReceiptController::class, 'postStock'])->name('goods-receipts.post-stock');

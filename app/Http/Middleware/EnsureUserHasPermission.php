@@ -15,6 +15,7 @@ class EnsureUserHasPermission
         'users' => 'Users',
         'roles' => 'Roles',
         'activity-logs' => 'Activity Logs',
+        'my-approvals' => 'Purchase Requests',
         'master.company-profile' => 'Company Profile',
         'master.organization' => 'Departments',
         'master.branches' => 'Branches',
@@ -82,6 +83,15 @@ class EnsureUserHasPermission
     {
         $routeName = (string) $request->route()?->getName();
         $name = str($routeName)->after('admin.')->toString();
+
+        if ($routeName === 'admin.inventory.purchase-requests.submit-approval') {
+            $user = $request->user();
+            abort_unless($user && $user->hasPermission('Purchase Requests', 'view')
+                && ($user->hasPermission('Purchase Requests', 'create') || $user->hasPermission('Purchase Requests', 'edit')), 403);
+
+            // Runtime checks original requester/edit authority, source scope and state.
+            return $next($request);
+        }
 
         // Shared catalogue writes are authorized against the requested list's
         // module by LookupValueController, not the unrelated Dashboard module.

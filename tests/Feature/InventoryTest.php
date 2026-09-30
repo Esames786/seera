@@ -17,8 +17,10 @@ use App\Models\StockTransfer;
 use App\Models\Supplier;
 use App\Models\Unit;
 use App\Models\User;
+use App\Models\VatTransaction;
 use App\Models\Warehouse;
 use App\Models\WarehouseStock;
+use App\Services\Inventory\StockService;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -191,7 +193,7 @@ class InventoryTest extends TestCase
         $this->assertGreaterThan(0, WarehouseStock::sum('quantity'));
     }
 
-    public function test_purchase_request_can_be_created_and_approved(): void
+    public function test_new_purchase_request_requires_explicit_runtime_submission_before_approval(): void
     {
         $item = Item::firstOrFail();
         $warehouse = Warehouse::firstOrFail();
@@ -216,11 +218,13 @@ class InventoryTest extends TestCase
 
         $this->actingAs($this->admin())
             ->post(route('admin.inventory.purchase-requests.approve', $pr))
-            ->assertRedirect();
+            ->assertSessionHasErrors(['instance_id', 'step_id']);
 
         $pr->refresh();
-        $this->assertSame('approved', $pr->status);
-        $this->assertSame($this->admin()->id, $pr->approved_by);
+        $this->assertSame('pending', $pr->status);
+        $this->assertSame('runtime', $pr->approval_mode);
+        $this->assertNull($pr->approved_by);
+        $this->assertSame(0, $pr->approvalInstances()->count());
     }
 
     public function test_purchase_request_can_be_rejected_with_a_reason(): void
@@ -341,7 +345,7 @@ class InventoryTest extends TestCase
         $this->assertEqualsWithDelta((float) $grn->taxable_amount, $codes['2150'][1] ?? 0, 0.02, 'credit to Goods Received Not Invoiced');
         $this->assertArrayNotHasKey('2100', $codes->all(), 'no accounts payable on a receipt');
         $this->assertArrayNotHasKey('1300', $codes->all(), 'no input VAT on a receipt');
-        $this->assertSame(0, \App\Models\VatTransaction::where('source_module', 'Goods Receipt')->where('source_id', $grn->id)->count());
+        $this->assertSame(0, VatTransaction::where('source_module', 'Goods Receipt')->where('source_id', $grn->id)->count());
     }
 
     public function test_stock_issue_decreases_warehouse_stock(): void
@@ -530,7 +534,7 @@ class InventoryTest extends TestCase
 
         $adjustment = StockAdjustment::where('reason', 'Live balance regression')->firstOrFail();
         $item = Item::findOrFail($row->item_id);
-        app(\App\Services\Inventory\StockService::class)->receive(
+        app(StockService::class)->receive(
             $item,
             $row->warehouse_id,
             10,

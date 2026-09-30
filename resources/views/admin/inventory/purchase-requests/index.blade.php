@@ -61,7 +61,7 @@
                         <x-admin.action-buttons
                             :view="route('admin.inventory.purchase-requests.show', $pr)"
                             :edit="$pr->isEditable() ? route('admin.inventory.purchase-requests.edit', $pr) : null"
-                            :delete="$pr->isEditable() ? route('admin.inventory.purchase-requests.destroy', $pr) : null"
+                            :delete="$pr->isEditable() && !$pr->approvalInstances()->exists() ? route('admin.inventory.purchase-requests.destroy', $pr) : null"
                             :name="$pr->pr_number">
                             @if (in_array($pr->status, ['draft', 'pending']))
                                 <form method="POST" action="{{ route('admin.inventory.purchase-requests.approve', $pr) }}">

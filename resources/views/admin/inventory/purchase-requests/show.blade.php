@@ -9,8 +9,9 @@
         $user = auth()->user();
         $qty = fn ($v) => rtrim(rtrim(number_format((float) $v, 3, '.', ''), '0'), '.');
         $canEdit = $pr->isEditable() && $user->hasPermission('Purchase Requests', 'edit');
-        $canApprove = $pr->isEditable() && $user->hasPermission('Purchase Requests', 'approve');
-        $canReject = in_array($pr->status, ['draft', 'pending'], true) && $user->hasPermission('Purchase Requests', 'reject');
+        $legacyApproval = $pr->approval_mode === 'legacy' && !$approvalInstance;
+        $canApprove = $legacyApproval && $pr->isEditable() && $user->hasPermission('Purchase Requests', 'approve');
+        $canReject = $legacyApproval && in_array($pr->status, ['draft', 'pending'], true) && $user->hasPermission('Purchase Requests', 'reject');
         $canCreateOrder = $pr->status === 'approved' && $user->hasPermission('Purchase Orders', 'create');
         $canViewProject = $pr->project && $user->hasPermission('Projects', 'view');
         $canViewWarehouse = $pr->warehouse && $user->hasPermission('Warehouses', 'view');
@@ -23,7 +24,7 @@
             $orderedTotal + 0.0005 >= $requested => 'Fully ordered',
             default => 'Partly ordered',
         };
-        $sections = ['information' => 'Request Information', 'lines' => 'Requested Items', 'orders' => 'Purchase Orders'];
+        $sections = ['information' => 'Request Information', 'lines' => 'Requested Items', 'approvals' => 'Approvals', 'orders' => 'Purchase Orders'];
         if ($activity !== null) $sections['activity'] = 'Activity';
     @endphp
 
@@ -171,6 +172,8 @@
             @endforelse
         </tbody>
     </x-admin.data-table>
+
+    @include('admin.approvals.purchase-request-panel')
 
     @if ($activity !== null)
         <x-admin.data-table title="Activity" subtitle="Latest entries that name this request" id="activity">

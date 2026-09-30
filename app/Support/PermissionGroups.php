@@ -18,7 +18,7 @@ use Illuminate\Support\Collection;
 class PermissionGroups
 {
     /** Shown to every department so nobody loses the landing page. */
-    public const COMMON = ['Dashboard'];
+    public const COMMON = ['Dashboard', 'Approval History'];
 
     /**
      * Department code => label and relevant modules. Codes match the seeded

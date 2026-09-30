@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Services\DocumentNumberService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class PurchaseRequest extends Model
 {
@@ -28,7 +30,24 @@ class PurchaseRequest extends Model
 
     public function isEditable(): bool
     {
+        $history = $this->approvalInstances();
+        if (DB::transactionLevel() > 0) {
+            $history->lockForUpdate();
+        }
+        $latest = $history->first();
+        if ($latest?->status === 'pending') {
+            return false;
+        }
+        if ($this->approval_mode === 'runtime' && $this->status === 'rejected') {
+            return $latest?->status === 'rejected';
+        }
+
         return in_array($this->status, ['draft', 'pending'], true);
+    }
+
+    public function approvalInstances()
+    {
+        return $this->hasMany(ApprovalInstance::class, 'source_id')->where('source_type', 'purchase_request')->orderByDesc('attempt');
     }
 
     public function requester()
@@ -70,7 +89,7 @@ class PurchaseRequest extends Model
     {
         $prefix = 'PR-'.$year.'-';
 
-        return app(\App\Services\DocumentNumberService::class)
+        return app(DocumentNumberService::class)
             ->next('purchase-request-'.$year, $prefix, 'purchase_requests', 'pr_number');
     }
 }

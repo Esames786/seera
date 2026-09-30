@@ -67,6 +67,7 @@ class ApprovalWorkflowController extends Controller
         [$data, $steps] = $this->validated($request);
 
         DB::transaction(function () use ($approval_workflow, $data, $steps) {
+            $approval_workflow = ApprovalWorkflow::whereKey($approval_workflow->id)->lockForUpdate()->firstOrFail();
             $approval_workflow->update($data);
             $approval_workflow->steps()->delete();
             $approval_workflow->steps()->createMany($steps);
@@ -82,7 +83,7 @@ class ApprovalWorkflowController extends Controller
     public function destroy(Request $request, ApprovalWorkflow $approval_workflow): RedirectResponse
     {
         $name = $approval_workflow->name;
-        $approval_workflow->delete();
+        DB::transaction(fn () => ApprovalWorkflow::whereKey($approval_workflow->id)->lockForUpdate()->firstOrFail()->delete());
 
         ActivityLog::record($request, 'Workflows', 'Deleted approval workflow', $name);
 

@@ -168,6 +168,11 @@ class User extends Authenticatable
         return $this->cachedEffectiveRoles ??= $this->effectiveRolesQuery()->with('permissions')->get();
     }
 
+    public function hasEffectiveRole(int $roleId): bool
+    {
+        return $this->effectiveRoleModels()->contains('id', $roleId);
+    }
+
     private function effectiveRolesQuery()
     {
         return $this->roles()

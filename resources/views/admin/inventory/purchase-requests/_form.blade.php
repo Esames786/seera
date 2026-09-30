@@ -1,3 +1,4 @@
+<p class="small">Saving does not request approval. After saving, use the Approvals section on the request to submit a configured workflow.</p>
 @php
     /** @var \App\Models\PurchaseRequest|null $pr */
     $pr = $pr ?? null;

@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Admin\Inventory;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\ApprovalWorkflow;
 use App\Models\Item;
 use App\Models\Project;
 use App\Models\PurchaseRequest;
 use App\Models\Site;
 use App\Models\Unit;
 use App\Models\Warehouse;
+use App\Services\Approvals\ApprovalRuntimeService;
+use App\Services\Approvals\PurchaseRequestApprovalSubject;
 use App\Support\Workspace\DocumentActivity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,6 +22,8 @@ use Illuminate\View\View;
 
 class PurchaseRequestController extends Controller
 {
+    public function __construct(private ApprovalRuntimeService $approvals, private PurchaseRequestApprovalSubject $approvalSubject) {}
+
     public function index(Request $request): View
     {
         $requests = PurchaseRequest::with(['requester', 'project', 'warehouse'])
@@ -57,6 +62,7 @@ class PurchaseRequestController extends Controller
                 'requested_by' => $request->user()->id,
             ]);
             $pr->lines()->createMany($lines);
+            $pr->forceFill(['approval_mode' => 'runtime'])->save();
 
             return $pr;
         });
@@ -86,11 +92,22 @@ class PurchaseRequestController extends Controller
             ->groupBy('item_id')
             ->map(fn ($lines) => round((float) $lines->sum('quantity'), 3));
 
+        $history = $this->approvals->history($this->approvalSubject, $purchase_request)->get();
+        $instance = $history->first();
+        $current = $instance?->currentStep();
+
         return view('admin.inventory.purchase-requests.show', [
             'pr' => $purchase_request,
             'orderedByItem' => $orderedByItem,
             'canViewOrders' => $user->hasPermission('Purchase Orders', 'view'),
-            'activity' => DocumentActivity::latest($user, [$purchase_request->pr_number], ['Inventory']),
+            'activity' => DocumentActivity::latest($user, [$purchase_request->pr_number], ['Inventory', 'Approvals']),
+            'approvalHistory' => $history,
+            'canViewApprovalHistory' => $user->hasPermission('Approval History', 'view'),
+            'approvalInstance' => $instance, 'approvalStep' => $current,
+            'runtimeCanApprove' => $current && $this->approvals->eligible($this->approvalSubject, $purchase_request, $instance, $current, $user, 'approve'),
+            'runtimeCanReject' => $current && $this->approvals->eligible($this->approvalSubject, $purchase_request, $instance, $current, $user, 'reject'),
+            'canSubmitApproval' => $this->approvalSubject->canSubmit($purchase_request, $user),
+            'approvalWorkflows' => ApprovalWorkflow::where('module', 'Purchase Request')->where('trigger_action', 'Request Created')->where('status', 'active')->orderBy('name')->get(),
         ]);
     }
 
@@ -114,6 +131,10 @@ class PurchaseRequestController extends Controller
         [$data, $lines] = $this->validated($request);
 
         DB::transaction(function () use ($purchase_request, $data, $lines) {
+            $purchase_request = PurchaseRequest::whereKey($purchase_request->id)->lockForUpdate()->firstOrFail();
+            if (! $purchase_request->isEditable()) {
+                throw ValidationException::withMessages(['pr' => 'This request is locked for approval.']);
+            }
             $purchase_request->update($data);
             $purchase_request->lines()->delete();
             $purchase_request->lines()->createMany($lines);
@@ -132,7 +153,13 @@ class PurchaseRequestController extends Controller
         }
 
         $number = $purchase_request->pr_number;
-        $purchase_request->delete();
+        DB::transaction(function () use ($purchase_request) {
+            $pr = PurchaseRequest::whereKey($purchase_request->id)->lockForUpdate()->firstOrFail();
+            if (! $pr->isEditable() || $pr->approvalInstances()->exists()) {
+                throw ValidationException::withMessages(['pr' => 'Requests with approval history cannot be deleted.']);
+            }
+            $pr->delete();
+        });
 
         ActivityLog::record($request, 'Inventory', 'Deleted purchase request', $number);
 
@@ -142,40 +169,46 @@ class PurchaseRequestController extends Controller
 
     public function approve(Request $request, PurchaseRequest $purchase_request): RedirectResponse
     {
-        if (! in_array($purchase_request->status, ['draft', 'pending'], true)) {
-            return back()->withErrors(['pr' => 'Only a draft or pending purchase request can be approved.']);
-        }
-
-        $purchase_request->update([
-            'status' => 'approved',
-            'approved_by' => $request->user()->id,
-            'approved_at' => now(),
-            'rejection_reason' => null,
-        ]);
-
-        ActivityLog::record($request, 'Inventory', 'Approved purchase request', $purchase_request->pr_number);
-
-        return back()->with('status', 'Purchase request "'.$purchase_request->pr_number.'" approved and ready to convert into a purchase order.');
+        return $this->decision($request, $purchase_request, 'approve');
     }
 
     public function reject(Request $request, PurchaseRequest $purchase_request): RedirectResponse
     {
-        if (! in_array($purchase_request->status, ['draft', 'pending'], true)) {
-            return back()->withErrors(['pr' => 'Only a draft or pending purchase request can be rejected.']);
-        }
+        return $this->decision($request, $purchase_request, 'reject');
+    }
 
-        $data = $request->validate(['rejection_reason' => ['required', 'string', 'max:500']]);
+    public function submitApproval(Request $request, PurchaseRequest $purchase_request): RedirectResponse
+    {
+        $data = $request->validate(['approval_workflow_id' => ['required', 'integer'], 'previous_instance_id' => ['nullable', 'integer']]);
+        $this->approvals->start($this->approvalSubject, $purchase_request->id, $data['approval_workflow_id'], $request->user(), isset($data['previous_instance_id']) ? (int) $data['previous_instance_id'] : null);
 
-        $purchase_request->update([
-            'status' => 'rejected',
-            'approved_by' => $request->user()->id,
-            'approved_at' => now(),
-            'rejection_reason' => $data['rejection_reason'],
-        ]);
+        return redirect($this->approvalSubject->url($purchase_request))->with('status', 'Approval requested. All required steps must approve.');
+    }
 
-        ActivityLog::record($request, 'Inventory', 'Rejected purchase request', $purchase_request->pr_number);
+    private function decision(Request $request, PurchaseRequest $pr, string $action): RedirectResponse
+    {
+        // Same document lock as the runtime: legacy decision and explicit enrolment cannot race.
+        return DB::transaction(function () use ($request, $pr, $action) {
+            $pr = $this->approvalSubject->lockForApproval($pr->id);
+            if ($pr->approval_mode === 'runtime' || $pr->approvalInstances()->exists()) {
+                $data = $request->validate(['instance_id' => ['required', 'integer'], 'step_id' => ['required', 'integer'],
+                    'comment' => ['nullable', 'string', 'max:1000'], 'rejection_reason' => [$action === 'reject' ? 'required' : 'nullable', 'string', 'max:1000']]);
+                $instance = $this->approvals->decide($this->approvalSubject, $pr->id, $data['instance_id'], $data['step_id'], $request->user(), $action, $action === 'reject' ? $data['rejection_reason'] : ($data['comment'] ?? null));
 
-        return back()->with('status', 'Purchase request "'.$purchase_request->pr_number.'" rejected.');
+                return redirect($this->approvalSubject->url($pr))->with('status', 'Decision recorded. Approval status: '.$instance->status.'.');
+            }
+            $actor = $request->user()->fresh();
+            abort_unless($actor?->status === 'active' && $actor->hasPermission('Purchase Requests', $action), 403);
+            $this->approvalSubject->queryFor($actor)->whereKey($pr->id)->firstOrFail();
+            if (! in_array($pr->status, ['draft', 'pending'], true)) {
+                throw ValidationException::withMessages(['pr' => 'Only a draft or pending legacy request can be decided.']);
+            }
+            $reason = $action === 'reject' ? $request->validate(['rejection_reason' => ['required', 'string', 'max:500']])['rejection_reason'] : null;
+            $pr->update(['status' => $action === 'approve' ? 'approved' : 'rejected', 'approved_by' => $request->user()->id, 'approved_at' => now(), 'rejection_reason' => $reason]);
+            ActivityLog::record($request, 'Inventory', $action === 'approve' ? 'Approved purchase request' : 'Rejected purchase request', $pr->pr_number.' (legacy approval; no runtime history)');
+
+            return back()->with('status', 'Legacy purchase request '.$pr->status.'.');
+        }, 3);
     }
 
     /**

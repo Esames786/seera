@@ -175,7 +175,7 @@ class DatabaseSeeder extends Seeder
 
         foreach (Permission::MODULES as $module) {
             foreach (Permission::ACTIONS as $action) {
-                Permission::create(['module' => $module, 'action' => $action]);
+                Permission::firstOrCreate(['module' => $module, 'action' => $action]);
             }
         }
 
@@ -314,6 +314,9 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($grants as $roleId => $moduleActions) {
+            if (in_array('view', $moduleActions['Purchase Requests'] ?? [], true)) {
+                $moduleActions['Approval History'] = ['view'];
+            }
             $permissionIds = collect($moduleActions)
                 ->flatMap(fn ($granted, $module) => Permission::where('module', $module)
                     ->whereIn('action', $granted)
