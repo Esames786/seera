@@ -13,6 +13,7 @@ use App\Models\Project;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseRequest;
 use App\Models\Site;
+use App\Models\SiteExpense;
 use App\Models\StockIssue;
 use App\Models\StockLedgerEntry;
 use App\Models\Supplier;
@@ -34,6 +35,7 @@ class ProjectWorkspacePanels implements WorkspacePanels
     public static function panels(): array
     {
         $definitions = [
+            ['site-expenses', 'Site Expenses', 'Site Expenses'],
             ['customer', 'Customer', 'Customers'], ['sites', 'Sites / Locations', 'Sites'],
             ['staff', 'Project Team / Staff', 'HR'], ['warehouses', 'Warehouses', 'Warehouses'],
             ['stock', 'Stock On Hand', 'Warehouse Stock'], ['suppliers', 'Suppliers', 'Suppliers'],
@@ -67,6 +69,7 @@ class ProjectWorkspacePanels implements WorkspacePanels
     public static function query(Project $project, string $panel, User $user): Builder
     {
         return match ($panel) {
+            'site-expenses' => SiteExpense::where('project_id', $project->id)->with(['site', 'category', 'submitter', 'supplier']),
             'customer' => Customer::whereKey($project->customer_id ?? 0),
             'sites' => Site::where('project_id', $project->id)->with('supervisor'),
             'staff' => Employee::where('project_id', $project->id)->with(['department', 'designation', 'site', 'manager']),
@@ -103,6 +106,15 @@ class ProjectWorkspacePanels implements WorkspacePanels
     public static function summary(Project $project, User $user): array
     {
         $summary = [];
+        if ($user->hasPermission('Site Expenses', 'view')) {
+            foreach (['posted' => 'Posted site expenses', 'pending' => 'Expenses pending approval', 'rejected' => 'Rejected site expenses', 'approved_pending_posting' => 'Approved expenses awaiting posting'] as $status => $label) {
+                $query = self::query($project, 'site-expenses', $user)->where('status', $status);
+                $summary[$label] = $query->count();
+                if ($user->hasPermission('Financial Reports', 'view')) {
+                    $summary[$label.' (SAR)'] = number_format((float) $query->sum('total_amount'), 2);
+                }
+            }
+        }
         foreach (['sites' => 'Sites', 'staff' => 'Assigned staff', 'warehouses' => 'Warehouses'] as $key => $label) {
             if (self::definition($key)->canView($user)) {
                 $summary[$label] = self::query($project, $key, $user)->count();

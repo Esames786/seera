@@ -22,6 +22,7 @@ use App\Models\PurchaseRequest;
 use App\Models\PurchaseRequestLine;
 use App\Models\SalaryStructure;
 use App\Models\Site;
+use App\Models\SiteExpense;
 use App\Models\StockAdjustment;
 use App\Models\StockIssue;
 use App\Models\StockIssueLine;
@@ -61,7 +62,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         $scopedModels = [
-            Project::class, Site::class, Warehouse::class,
+            Project::class, Site::class, Warehouse::class, SiteExpense::class,
             Employee::class, AttendanceRecord::class,
             EmployeeDocument::class, LeaveRequest::class,
             OvertimeRecord::class, SalaryStructure::class,

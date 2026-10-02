@@ -7,7 +7,7 @@
     <x-admin.form-section title="Expense Category Information" columns="3">
         <div><label for="name">Category Name *</label><input id="name" name="name" class="input" value="{{ old('name', $category?->name) }}" required/></div>
         <div><label for="code">Category Code *</label><input id="code" name="code" class="input" value="{{ old('code', $category?->code) }}" placeholder="EXP-FUEL" required/></div>
-        <div><label for="linked_account">Linked Chart of Account *</label><input id="linked_account" name="linked_account" class="input" value="{{ old('linked_account', $category?->linked_account) }}" placeholder="Fuel Expense"/></div>
+        <div><label for="chart_of_account_id">Accounting expense account</label><select id="chart_of_account_id" name="chart_of_account_id" class="select"><option value="">Not configured</option>@foreach(\App\Models\ChartOfAccount::where('status', 'active')->where('account_type', 'expense')->orderBy('account_code')->get() as $account)<option value="{{ $account->id }}" @selected(old('chart_of_account_id', $category?->chart_of_account_id) == $account->id)>{{ $account->label() }}</option>@endforeach</select><small>Required for Site Expense posting. Legacy account text is not used as a mapping.</small></div>
         <div>
             <label for="approval_required">Approval Required</label>
             <select id="approval_required" name="approval_required" class="select">

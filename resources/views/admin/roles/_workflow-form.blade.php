@@ -14,7 +14,7 @@
     ])->all() ?? [['step_no' => 1, 'approver_role_id' => null, 'approver_user_id' => null, 'is_required' => true, 'amount_limit' => null, 'sla_hours' => 24, 'escalation_role_id' => null, 'can_reject' => true, 'can_send_back' => true]]);
 @endphp
 
-<div class="alert">Runtime execution is currently available for Purchase Requests only: sequential required steps, active role/user assignments, matching requester department and document scope, blank amount limits and No Auto Posting. All required steps must approve; requester/submitter self-approval is blocked. SLA, escalation, notification and send-back settings are configuration only. Other modules keep their existing approval behavior.</div>
+<div class="alert">Runtime execution supports Purchase Requests and Site Expenses: sequential required steps, active role/user assignments, matching requester department and document scope, blank amount limits. Purchase Requests uses No Auto Posting; Site Expenses uses Create Accounting Entry (Finance review-mode rules remain in force). All required steps must approve; requester/submitter self-approval is blocked. SLA, escalation, notification and send-back settings are configuration only. Other modules keep their existing approval behavior.</div>
 
 <form method="POST" action="{{ $workflow ? route('admin.roles.approval-workflows.update', $workflow) : route('admin.roles.approval-workflows.store') }}">
     @csrf

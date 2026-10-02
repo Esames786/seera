@@ -2,14 +2,42 @@
 
 namespace App\Models;
 
+use App\Services\DocumentNumberService;
+use App\Services\SiteExpenses\SiteExpenseAccountingService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class JournalEntry extends Model
 {
+    public function isSiteExpenseSource(): bool
+    {
+        return in_array($this->source_module, ['Site Expense', 'Site Expense Reimbursement'], true) || ($this->source_module === 'Supplier Bill'
+            && SupplierBill::withoutGlobalScopes()->whereKey($this->source_id)->whereNotNull('site_expense_id')->exists());
+    }
+
+    protected static function booted(): void
+    {
+        static::updated(function (JournalEntry $entry) {
+            if (! $entry->wasChanged('status')) {
+                return;
+            }
+            if ($entry->source_module === 'Site Expense') {
+                DB::afterCommit(fn () => app(SiteExpenseAccountingService::class)->sync($entry->source_id));
+            } elseif ($entry->source_module === 'Supplier Bill') {
+                DB::afterCommit(function () use ($entry) {
+                    $id = SupplierBill::withoutGlobalScopes()->whereKey($entry->source_id)->value('site_expense_id');
+                    if ($id) {
+                        app(SiteExpenseAccountingService::class)->sync($id);
+                    }
+                });
+            }
+        });
+    }
+
     public const STATUSES = ['draft', 'approved', 'posted', 'cancelled'];
 
     public const SOURCE_MODULES = [
-        'Manual', 'Payroll', 'Site Expense', 'Inventory',
+        'Manual', 'Payroll', 'Site Expense', 'Site Expense Reimbursement', 'Inventory',
         'Supplier Bill', 'Supplier Payment', 'Customer Invoice', 'Customer Receipt',
     ];
 
@@ -71,7 +99,8 @@ class JournalEntry extends Model
     public static function nextNumber(int $year): string
     {
         $prefix = 'JV-'.$year.'-';
-        return app(\App\Services\DocumentNumberService::class)
+
+        return app(DocumentNumberService::class)
             ->next('journal-'.$year, $prefix, 'journal_entries', 'journal_number');
     }
 }

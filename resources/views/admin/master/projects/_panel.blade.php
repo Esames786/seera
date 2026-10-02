@@ -2,6 +2,7 @@
     $data = compact('panel', 'project', 'user', 'returnTo') + ['supplierPurchases' => $supplierPurchases ?? collect(), 'orderReceipts' => $orderReceipts ?? collect(), 'warehouseQuantities' => $warehouseQuantities ?? collect()];
     $columns = \App\Support\Workspace\ProjectPanelTable::columns($panel);
     $empty = match($panel) {
+        'site-expenses' => 'No visible Site Expenses for this project. Add an expense and submit its receipt for approval.',
         'customer' => 'No customer is linked. Choose the customer on the Project profile.',
         'sites' => 'No visible locations belong to this project yet. Add a location when authorized.',
         'staff' => 'No visible employees are assigned. Set the current Project on the employee form; each employee has one current project.',
@@ -22,6 +23,7 @@
         @endif
     </div>
     <div data-panel-status role="status" aria-live="polite"></div>
+    @if($panel === 'site-expenses' && $user->hasPermission('Site Expenses', 'create'))<a class="btn primary sm" href="{{ route('admin.site-expenses.create', ['project_id' => $project->id]) }}">Add Site Expense</a>@endif
     @isset($materialTotal)<p class="note">Material used: SAR {{ number_format($materialTotal, 2) }}. Posted issue-ledger values only; receipts are not consumption. Quantities stay per item and unit, not one mixed-unit total.</p>@endisset
     @isset($materialQuantity)<p class="note">Total issued quantity (one shared unit): {{ number_format($materialQuantity, 3) }} {{ $materialUnit }}.</p>@endisset
     @isset($stockTotal)<p class="note">Current positive stock value: SAR {{ number_format($stockTotal, 2) }}. Stored inventory values; quantities are shown per item and unit.</p>@endisset
@@ -33,7 +35,7 @@
             @endforeach
         </tbody></table>
         <p class="note">All dates; same scoped calculations as Project Cost Report. Posted cost is net debit minus credit on expense-account journal lines carrying this Project. Revenue is net credit minus debit on revenue-account lines. Reversals net off. Billed/invoiced follow the report's non-draft document semantics (including cancelled documents); they are not cash or approved-only AR totals. Cost centres alone do not assign a Project.</p>
-        <p class="note">No operational Site Expenses, payroll/labour-to-GL or equipment-cost integration is implied. Budget is a master amount, not BOQ/budget lines. Scope-limited costs use the project-wide master budget; budget-used is not a site budget comparison.</p>
+        <p class="note">Posted Site Expenses contribute through journal lines only. Supplier Credit contributes through its linked posted Supplier Bill, never twice. Payroll/labour-to-GL and equipment cost remain outside this phase. Budget is a master amount, not BOQ/budget lines; it is not a site-specific budget.</p>
         <a class="btn outline" href="{{ route('admin.accounting.reports.project-cost-report', ['project' => $project->id]) }}">Open Project Cost Report</a>
     @else
         <div style="overflow-x:auto"><table>

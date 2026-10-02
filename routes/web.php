@@ -66,6 +66,7 @@ use App\Http\Controllers\Admin\PasswordChangeController;
 use App\Http\Controllers\Admin\PermissionMatrixController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\RoleHierarchyController;
+use App\Http\Controllers\Admin\SiteExpenseController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\UserGuideController;
@@ -119,6 +120,18 @@ Route::middleware(['auth', 'active'])->group(function () {
 Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/my-approvals', [MyApprovalController::class, 'index'])->name('my-approvals.index');
+    Route::get('site-expenses/mobile/create', [SiteExpenseController::class, 'mobile'])->name('site-expenses.mobile');
+    Route::get('site-expenses/{site_expense}/receipts/{receipt}', [SiteExpenseController::class, 'receiptFile'])->name('site-expenses.receipt-file');
+    foreach (['submit', 'approve', 'reject', 'retry', 'settle', 'reverse'] as $action) {
+        Route::post('site-expenses/{site_expense}/'.$action, [SiteExpenseController::class, $action])->name('site-expenses.'.$action);
+    }
+    Route::resource('site-expenses', SiteExpenseController::class);
+    Route::get('site-expenses/mobile/create', [SiteExpenseController::class, 'mobile'])->name('site-expenses.mobile');
+    Route::get('site-expenses/{site_expense}/receipts/{receipt}', [SiteExpenseController::class, 'receiptFile'])->name('site-expenses.receipt-file');
+    foreach (['submit', 'approve', 'reject', 'retry'] as $action) {
+        Route::post('site-expenses/{site_expense}/'.$action, [SiteExpenseController::class, $action])->name('site-expenses.'.$action);
+    }
+    Route::resource('site-expenses', SiteExpenseController::class);
 
     // Users
     Route::get('users/employee-search', [UserController::class, 'employeeSearch'])->name('users.employee-search');

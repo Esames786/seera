@@ -8,6 +8,7 @@ class ProjectPanelTable
     public static function columns(string $panel): array
     {
         return match ($panel) {
+            'site-expenses' => ['Expense', 'Date', 'Site', 'Category', 'Submitted by', 'Supplier', 'Payment type', 'Total (SAR)', 'Approval status', 'Accounting'],
             'customer' => ['Code', 'Customer', 'VAT / CR', 'Contact'],
             'sites' => ['Code', 'Site', 'Supervisor', 'Address', 'Status', 'Geofence / radius', 'Inside only / offline allowed'],
             'staff' => ['Code', 'Employee', 'Department', 'Designation', 'Site', 'Manager', 'Status', 'Mobile access'],
@@ -41,6 +42,8 @@ class ProjectPanelTable
         $stock = $user->hasPermission('Warehouse Stock', 'view');
         $po = $user->hasPermission('Purchase Orders', 'view');
         $cells = match ($panel) {
+            'site-expenses' => [$row->expense_number, $date($row->expense_date), $row->site?->name, $row->category?->name, $row->submitter?->name, $row->supplier?->name, $row->payment_type,
+                $user->hasPermission('Financial Reports', 'view') ? $money($row->total_amount) : 'Restricted', $row->status, $row->accounting_posted ? 'Posted' : 'Not posted'],
             'customer' => [$row->code, $row->name, ($row->vat_number ?? '-').' / '.($row->cr_number ?? '-'), implode(' / ', array_filter([$row->contact_person, $row->phone, $row->email]))],
             'sites' => [$row->code, $row->name, $row->supervisor?->name, $row->address, $row->status, $yes($row->geofence_enabled).' / '.$row->geofence_radius.' m', $yes($row->attendance_inside_only).' / '.$yes($row->offline_attendance_allowed)],
             'staff' => [$row->employee_code, $row->name, $row->department?->name, $row->designation?->name, $row->site?->name, $row->manager?->name, $row->status, $yes($row->mobile_access)],
@@ -65,6 +68,7 @@ class ProjectPanelTable
             'customer' => ['Customers', 'admin.master.customers'], 'staff' => ['HR', 'admin.hr.employees'],
             'suppliers' => ['Suppliers', 'admin.master.suppliers'], 'warehouses' => ['Warehouses', 'admin.master.warehouses'],
             'requests' => ['Purchase Requests', 'admin.inventory.purchase-requests'], 'orders' => ['Purchase Orders', 'admin.inventory.purchase-orders'],
+            'site-expenses' => ['Site Expenses', 'admin.site-expenses'],
             'receipts' => ['Goods Receipts', 'admin.inventory.goods-receipts'], 'invoices' => ['Accounts Receivable', 'admin.accounting.accounts-receivable'],
             default => null,
         };

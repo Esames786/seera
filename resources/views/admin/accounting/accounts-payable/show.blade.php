@@ -10,7 +10,7 @@
         $qty = fn ($v) => rtrim(rtrim(number_format((float) $v, 3, '.', ''), '0'), '.');
         $selfUrl = route('admin.accounting.accounts-payable.show', $bill, false);
         $origin = $returnTo ?? $selfUrl;
-        $canEdit = $bill->isEditable() && $user->hasPermission('Accounts Payable', 'edit');
+        $canEdit = ! $bill->site_expense_id && $bill->isEditable() && $user->hasPermission('Accounts Payable', 'edit');
         $canApprove = $bill->status === 'draft' && $user->hasPermission('Accounts Payable', 'approve');
         $canPay = in_array($bill->status, ['unpaid', 'partially_paid'], true) && $user->hasPermission('Accounts Payable', 'process');
         $canReopen = $bill->status === 'unpaid' && $bill->payments->isEmpty() && $user->isSuperAdmin();
@@ -30,6 +30,11 @@
         $sections += ['payments' => 'Payments', 'balance' => 'Balance'];
         if ($activity !== null) $sections['activity'] = 'Activity';
     @endphp
+
+    @if($bill->site_expense_id)
+        <div class="alert">Generated from an approved Site Expense. Finance approval/posting is still required; approved source values cannot be edited independently.
+        @if($user->hasPermission('Site Expenses','view') && \App\Models\SiteExpense::whereKey($bill->site_expense_id)->exists())<a href="{{ route('admin.site-expenses.show', $bill->site_expense_id) }}">Open originating Site Expense</a>@endif</div>
+    @endif
 
     <x-admin.page-header :title="'Bill: '.$bill->bill_number" :description="$bill->supplier->name.' · '.$bill->bill_date->toDateString()">
         @if ($canEdit)

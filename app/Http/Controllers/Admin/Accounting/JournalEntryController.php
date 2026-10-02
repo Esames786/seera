@@ -13,6 +13,7 @@ use App\Models\Site;
 use App\Models\User;
 use App\Services\Accounting\PostingService;
 use App\Services\UserAccessScopeService;
+use App\Support\SaveAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -74,7 +75,7 @@ class JournalEntryController extends Controller
         ActivityLog::record($request, 'Accounting', 'Created journal entry', $entry->journal_number);
 
         // Save keeps the user on the journal's detail page, where Post lives; Save & Close returns to the origin or list.
-        return \App\Support\SaveAction::redirect($request, [
+        return SaveAction::redirect($request, [
             'stay' => route('admin.accounting.journal-entries.show', $entry),
             'close' => route('admin.accounting.journal-entries.index'),
             'new' => route('admin.accounting.journal-entries.create'),
@@ -91,6 +92,7 @@ class JournalEntryController extends Controller
 
     public function edit(JournalEntry $journal_entry): View
     {
+        abort_if($journal_entry->isSiteExpenseSource(), 403, 'Correct the originating expense through Finance, not by editing its generated journal.');
         $this->assertWholeEntryAccess($journal_entry);
         if (! $journal_entry->isEditable()) {
             abort(403, 'A posted or cancelled journal entry cannot be edited.');
@@ -103,6 +105,7 @@ class JournalEntryController extends Controller
 
     public function update(Request $request, JournalEntry $journal_entry): RedirectResponse
     {
+        abort_if($journal_entry->isSiteExpenseSource(), 403, 'Generated Site Expense journals are immutable.');
         $this->assertWholeEntryAccess($journal_entry);
         if (! $journal_entry->isEditable()) {
             return back()->withErrors(['journal' => 'A posted or cancelled journal entry cannot be edited.']);
@@ -126,7 +129,7 @@ class JournalEntryController extends Controller
 
         ActivityLog::record($request, 'Accounting', 'Updated journal entry', $journal_entry->journal_number);
 
-        return \App\Support\SaveAction::redirect($request, [
+        return SaveAction::redirect($request, [
             'stay' => route('admin.accounting.journal-entries.show', $journal_entry),
             'close' => route('admin.accounting.journal-entries.index'),
             'new' => route('admin.accounting.journal-entries.create'),
@@ -135,6 +138,7 @@ class JournalEntryController extends Controller
 
     public function destroy(Request $request, JournalEntry $journal_entry): RedirectResponse
     {
+        abort_if($journal_entry->isSiteExpenseSource(), 403, 'Generated Site Expense journals must remain in history.');
         $this->assertWholeEntryAccess($journal_entry);
         if ($journal_entry->status === 'posted') {
             return back()->withErrors(['journal' => 'A posted journal entry cannot be deleted. Cancel it instead.']);
@@ -203,6 +207,7 @@ class JournalEntryController extends Controller
 
     public function cancel(Request $request, JournalEntry $journal_entry): RedirectResponse
     {
+        abort_if($journal_entry->isSiteExpenseSource(), 403, 'Use the originating Finance document correction flow.');
         $this->assertWholeEntryAccess($journal_entry);
         if ($journal_entry->status === 'posted') {
             return back()->withErrors(['journal' => 'A posted journal entry cannot be cancelled in this phase.']);

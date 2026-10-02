@@ -8,6 +8,7 @@ use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
 use App\Models\GoodsReceipt;
 use App\Models\JournalEntry;
+use App\Models\SiteExpense;
 use App\Models\StockAdjustment;
 use App\Models\StockIssue;
 use App\Models\Supplier;
@@ -33,6 +34,45 @@ use Illuminate\Validation\ValidationException;
  */
 class PostingService
 {
+    public function settleSiteExpense(SiteExpense $expense, ChartOfAccount $payment, int $actorId): JournalEntry
+    {
+        $payableLine = $expense->journalEntry->lines()->where('credit', '>', 0)->firstOrFail();
+        $payable = $this->activeOrRefuse(ChartOfAccount::find($payableLine->chart_of_account_id), 'Employee reimbursement payable');
+        if ($payable->account_type !== 'liability') {
+            $this->refuse('The original reimbursement payable account must be a liability.');
+        }
+        $dimensions = ['project_id' => $expense->project_id, 'site_id' => $expense->site_id, 'cost_center_id' => $payableLine->cost_center_id];
+
+        return $this->createEntry(['journal_date' => today(), 'reference_number' => $expense->expense_number,
+            'source_module' => 'Site Expense Reimbursement', 'source_id' => $expense->id, 'description' => 'Reimburse '.$expense->expense_number], [
+                $dimensions + ['chart_of_account_id' => $payable->id, 'description' => 'Employee reimbursement payable settled', 'debit' => $expense->total_amount, 'credit' => 0],
+                $dimensions + ['chart_of_account_id' => $payment->id, 'description' => 'Employee reimbursed', 'debit' => 0, 'credit' => $expense->total_amount],
+            ], 'Site Expense Reimbursement', 'Payment Recorded', $actorId, true);
+    }
+
+    /** Site Expense approval orchestration owns the document mutex/idempotency. */
+    public function postSiteExpense(SiteExpense $expense, ChartOfAccount $debit, ChartOfAccount $credit, ?int $costCenterId, ?int $actorId): JournalEntry
+    {
+        $dimensions = ['project_id' => $expense->project_id, 'site_id' => $expense->site_id, 'cost_center_id' => $costCenterId];
+        $lines = [
+            $dimensions + ['chart_of_account_id' => $debit->id, 'description' => $expense->description, 'debit' => $expense->taxable_amount, 'credit' => 0],
+            $dimensions + ['chart_of_account_id' => $credit->id, 'description' => $expense->expense_number, 'debit' => 0, 'credit' => $expense->total_amount],
+        ];
+        if ((float) $expense->vat_amount > 0) {
+            $vat = $this->requireAccount(self::INPUT_VAT, 'Input VAT');
+            $lines[] = $dimensions + ['chart_of_account_id' => $vat->id, 'description' => 'Input VAT '.$expense->expense_number, 'debit' => $expense->vat_amount, 'credit' => 0];
+        }
+        $entry = $this->createEntry(['journal_date' => $expense->expense_date, 'reference_number' => $expense->expense_number,
+            'source_module' => 'Site Expense', 'source_id' => $expense->id, 'description' => $expense->description,
+            'cost_center_id' => $costCenterId], $lines, 'Site Expense', 'Site Expense Approved', $actorId);
+        $this->recordVat('input', $expense->vat_amount, $expense->taxable_amount, $expense->vat_rate,
+            $expense->expense_date, 'Site Expense', $expense->id, $expense->reference_number ?? $expense->expense_number,
+            $expense->supplier_id ? 'supplier' : 'employee', $expense->supplier_id ?? $expense->employee_id,
+            $expense->supplier?->name ?? $expense->employee?->name);
+
+        return $entry;
+    }
+
     /** Well-known account codes seeded by the standard chart of accounts. */
     public const CASH = '1110';
 

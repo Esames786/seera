@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Services\SiteExpenses\SiteExpenseAccountingService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class SupplierBill extends Model
 {
@@ -12,7 +14,7 @@ class SupplierBill extends Model
         'supplier_id', 'bill_number', 'bill_date', 'due_date', 'reference_number',
         'project_id', 'site_id', 'cost_center_id', 'taxable_amount', 'vat_rate',
         'vat_amount', 'total_amount', 'paid_amount', 'balance_amount', 'status',
-        'journal_entry_id', 'notes',
+        'journal_entry_id', 'notes', 'site_expense_id',
     ];
 
     protected function casts(): array
@@ -27,6 +29,20 @@ class SupplierBill extends Model
             'paid_amount' => 'decimal:2',
             'balance_amount' => 'decimal:2',
         ];
+    }
+
+    public function siteExpense()
+    {
+        return $this->belongsTo(SiteExpense::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::updated(function (SupplierBill $bill) {
+            if ($bill->site_expense_id && $bill->wasChanged(['status', 'journal_entry_id'])) {
+                DB::afterCommit(fn () => app(SiteExpenseAccountingService::class)->sync($bill->site_expense_id));
+            }
+        });
     }
 
     public function isEditable(): bool

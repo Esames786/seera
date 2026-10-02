@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin\Master;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\ExpenseCategory;
+use App\Models\SiteExpense;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class ExpenseCategoryController extends Controller
@@ -66,6 +68,9 @@ class ExpenseCategoryController extends Controller
 
     public function destroy(Request $request, ExpenseCategory $expense_category): RedirectResponse
     {
+        if (SiteExpense::withoutGlobalScopes()->where('expense_category_id', $expense_category->id)->exists()) {
+            return back()->withErrors(['category' => 'This category is used by Site Expenses. Deactivate it instead.']);
+        }
         $name = $expense_category->name;
         $expense_category->delete();
 
@@ -80,6 +85,7 @@ class ExpenseCategoryController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'code' => ['required', 'string', 'max:50', 'unique:expense_categories,code'.($category ? ','.$category->id : '')],
             'linked_account' => ['nullable', 'string', 'max:255'],
+            'chart_of_account_id' => ['nullable', 'integer', Rule::exists('chart_of_accounts', 'id')->where('account_type', 'expense')->where('status', 'active')],
             'approval_required' => ['nullable', 'boolean'],
             'mobile_visible' => ['nullable', 'boolean'],
             'payment_type' => ['required', 'in:Cash,Bank,Both'],

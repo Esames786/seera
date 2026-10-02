@@ -21,6 +21,18 @@ class UserAccessScopeService
 
         $table = $model->getTable();
 
+        if ($table === 'site_expenses') {
+            if ($scope === 'project') {
+                $query->whereIn('project_id', $this->projectIdsFor($user) ?: [0]);
+            } elseif ($scope === 'site') {
+                $query->where('site_id', $user->site_id ?: 0)->whereIn('project_id', $this->projectIdsFor($user) ?: [0]);
+            } else {
+                $query->whereRaw('1 = 0');
+            }
+
+            return;
+        }
+
         if (in_array($table, ['attendance_records', 'employee_documents', 'leave_requests', 'overtime_records', 'salary_structures', 'end_of_service_records', 'payroll_run_items'], true)) {
             $query->whereHas('employee');
 

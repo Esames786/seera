@@ -58,7 +58,10 @@ class VatPeriodLockTest extends TestCase
 
     private function openDate(): string
     {
-        return $this->open->start_date->addDays(9)->toDateString();
+        // During the first nine days of a quarter, its tenth day is still
+        // in the future. Keep the fixture inside the open period AND legal
+        // for bill/invoice entry without weakening production date validation.
+        return $this->open->start_date->copy()->addDays(9)->min(today())->toDateString();
     }
 
     private function bill(string $date, float $vatRate = 15, string $number = 'BILL-F03'): SupplierBill

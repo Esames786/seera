@@ -31,7 +31,7 @@ class SidebarMenu
                 'label' => 'Main',
                 'items' => [
                     static::link('admin.dashboard', 'admin.dashboard', '📊', 'Dashboard'),
-                    static::link('admin.my-approvals.index', 'admin.my-approvals.*', '✅', 'My Approvals'),
+                    static::anyLink('admin.my-approvals.index', ['admin.my-approvals.*'], '✅', 'My Approvals', ['Purchase Requests', 'Site Expenses']),
                 ],
             ],
             [
@@ -75,7 +75,7 @@ class SidebarMenu
                 'items' => [
                     static::link('admin.hr.dashboard', 'admin.hr.dashboard', '📋', 'HR Dashboard'),
                     static::link('admin.hr.employees.index', 'admin.hr.employees.*', '👷', 'Employees'),
-                    static::soon('project-dashboard', '📊', 'Projects & Site Expenses'),
+                    static::link('admin.site-expenses.index', 'admin.site-expenses.*', '📊', 'Site Expenses'),
                     static::soon('equipment', '🚜', 'Equipment & Vehicles'),
                 ],
             ],

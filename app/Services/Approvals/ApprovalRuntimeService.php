@@ -18,6 +18,7 @@ class ApprovalRuntimeService
     {
         return match ($type) {
             'purchase_request' => app(PurchaseRequestApprovalSubject::class),
+            'site_expense' => app(SiteExpenseApprovalSubject::class),
             default => abort(404),
         };
     }
@@ -73,7 +74,11 @@ class ApprovalRuntimeService
                 || ($workflow->scope !== 'All Company' && ! $document->project_id)) {
                 $this->invalid('This workflow scope is unsupported or requires a project on the document.');
             }
-            if ($workflow->auto_posting !== 'No Auto Posting') {
+            $postingMode = $subject instanceof SiteExpenseApprovalSubject ? 'Create Accounting Entry' : 'No Auto Posting';
+            if ($workflow->auto_posting !== $postingMode) {
+                if ($subject instanceof SiteExpenseApprovalSubject) {
+                    $this->invalid('Site Expenses requires Create Accounting Entry. Finance posting rules still control ledger review mode.');
+                }
                 $this->invalid('This integration does not support automatic accounting posting.');
             }
             $required = $workflow->steps->where('is_required', true);
