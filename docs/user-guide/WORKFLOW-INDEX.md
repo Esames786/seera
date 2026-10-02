@@ -2,7 +2,7 @@
 
 Index of the end-to-end workflows documented in chapter 17 of the [User Guide](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#17-end-to-end-workflows). Screens are indexed in [SCREEN-INDEX.md](SCREEN-INDEX.md).
 
-Version 1.3 · Prepared 30 September 2026 · Status: current implemented system only; no deployment claim.
+Version 1.4 · Prepared 2 October 2026 · Status: current implemented system only; no deployment claim.
 
 | Workflow ID | Workflow | Roles involved | Main screens | Status | Guide |
 |---|---|---|---|---|---|
@@ -21,7 +21,8 @@ Version 1.3 · Prepared 30 September 2026 · Status: current implemented system 
 | WF-013 | Stock Adjustment after a physical count | Warehouse Incharge, Inventory Manager | INV-ADJ-002, INV-ADJ-003 | AVAILABLE | [WF-013](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-013-stock-adjustment-after-a-physical-count) |
 | WF-014 | Marketing Lead → Visit → Customer | Marketing Manager | MKT-002, MKT-003, CUS-004 | AVAILABLE | [WF-014](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-014-marketing-lead--visit--customer) |
 | WF-015 | End of Service settlement | HR Manager | HR-EOS-002, HR-EOS-003 | AVAILABLE (calculation and approval; no accounting posting) | [WF-015](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-015-end-of-service-settlement) |
-| WF-016 | Project operational context: Customer → Project → Site → Warehouse → Employee → PR → PO → GRN → Material Issue → Cost → Invoice → Receipt | Project Manager, HR, Purchase, Warehouse, Finance | MST-PRJ-001/003/004, MST-SITE-002/004, MST-WH-002, HR-EMP-004, INV-PR-002, INV-PO-003, INV-GRN-003, INV-ISS-003, FIN-REP-007, FIN-AR-003/005 | PHASE A AVAILABLE; Site Expenses / BOQ / labour / equipment pending | [WF-016](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-016-project-operational-context) |
-| WF-017 | Purchase Request runtime approval: Submit → all required steps → Approve, or Reject → Correct → Resubmit | Requester/editor, configured required role/user approvers | ROL-008/009/010, INV-PR-003/004, APR-001/002 | AVAILABLE for PR only; other modules PARTIAL | [WF-017](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-017-purchase-request-runtime-approval) |
+| WF-016 | Project operational context: Customer → Project → Site → Warehouse → Employee → PR → PO → GRN → Material Issue → Cost → Invoice → Receipt | Project Manager, HR, Purchase, Warehouse, Finance | MST-PRJ-001/003/004, MST-SITE-002/004, MST-WH-002, HR-EMP-004, INV-PR-002, INV-PO-003, INV-GRN-003, INV-ISS-003, FIN-REP-007, FIN-AR-003/005 | PHASE A AVAILABLE; Phase B Site Expenses integrated; BOQ / labour / equipment pending | [WF-016](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-016-project-operational-context) |
+| WF-017 | Purchase Request runtime approval: Submit → all required steps → Approve, or Reject → Correct → Resubmit | Requester/editor, configured required role/user approvers | ROL-008/009/010, INV-PR-003/004, APR-001/002 | AVAILABLE for PR; Site Expenses uses WF-018; other modules PARTIAL | [WF-017](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-017-purchase-request-runtime-approval) |
+| WF-018 | Site Expense: draft → receipt → all required approvals → accounting; Supplier Credit → draft Supplier Bill → Finance approval/posting | Site staff, configured reviewers, Finance | EXP-SE-001/002/003/004, APR-001, FIN-AP-003, FIN-JE-003, MST-PRJ-003 | AVAILABLE with configured masters/workflow; Project Phase B partial beyond expenses | [WF-018](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-018-site-expense-lifecycle) |
 
-Total: 17 workflows.
+Total: 18 workflows.

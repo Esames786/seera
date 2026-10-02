@@ -1,5 +1,13 @@
 # Connected Workspace Standard — suitability matrix and roadmap (27 September 2026)
 
+## Current update — 2 October 2026, Site Expenses / Project Phase B
+
+Site Expenses now has responsive online entry, private receipts, sequential all-required runtime approvals, Cash/Bank/Reimbursement accounting and a unique draft Supplier Bill bridge for credit. Existing Finance review mode remains authoritative. Approval survives posting failure; explicit retry is idempotent. Full reimbursement and eligible open-period reversal are separate Finance actions. See [implementation and verification](site-expense-implementation-2026-10-02.md) and the authoritative [Site Expense guide](user-guide/SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#site-expenses).
+
+Project Phase B is **PARTIAL**: scoped Site Expenses panel/summary/drill-through and posted-ledger cost integration are supplied; BOQ/budget lines, payroll/labour GL, equipment costing and construction progress are not. Project Phase A calculations are unchanged. Supplier Credit cost appears through its bill only, never twice.
+
+Runtime module coverage: **Purchase Requests and Site Expenses**. Other modules retain legacy controls until separately integrated. Next recommendation: Supplier Bill runtime rollout, preserving GRNI and this credit bridge; do not start automatically. GPS/geofence, payroll GL/HR reports, Equipment and BOQ remain later approved scopes. No native/offline/mobile GPS or live ZATCA status upgrade. Entries below are dated historical batches; their old “next sprint” references are superseded by this update.
+
 Owner decision: the Employee connected workspace is the default UX pattern wherever it
 makes business sense. "Save / Save & Close / Save & New" is only the save layer of that
 standard. This document records the standard, the suitability of each entity, and the

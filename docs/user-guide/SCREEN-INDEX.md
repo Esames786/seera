@@ -2,7 +2,7 @@
 
 Master index of every screen in the current system. Screen IDs are permanent; use them when you refer to a page in training, support tickets or the [User Guide](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md). Workflows are indexed in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).
 
-Version 1.3 · Prepared 30 September 2026 · System state: current feature branch, F08 runtime for Purchase Requests; existing workspaces retained · Status: current implemented system only; not a deployment claim.
+Version 1.4 · Prepared 2 October 2026 · System state: current feature branch, runtime for Purchase Requests and Site Expenses; Project Phase B expenses integrated · Status: current implemented system only; not a deployment claim.
 
 How to read the columns:
 
@@ -238,7 +238,7 @@ How to read the columns:
 
 | Screen ID | Screen Name | Web address | Sidebar Module | Navigation Path | Status | What exists instead |
 |---|---|---|---|---|---|---|
-| CS-001 | Projects & Site Expenses | `https://seera.tech-brit.co.uk/admin/coming-soon/project-dashboard` | Operations | Operations → Projects & Site Expenses | NOT YET OPERATIONAL | Projects master (MST-PRJ-001) and the Project Cost Report (FIN-REP-007) exist; there is no site expense entry screen |
+| CS-001 | Legacy Project dashboard placeholder (retired from navigation) | `https://seera.tech-brit.co.uk/admin/coming-soon/project-dashboard` | Operations | Legacy URL only | NOT YET OPERATIONAL as a dashboard | Use Projects (MST-PRJ-001) and the real Site Expenses register (EXP-SE-001); historical ID retained |
 | CS-002 | Equipment & Vehicles | `https://seera.tech-brit.co.uk/admin/coming-soon/equipment` | Operations | Operations → Equipment & Vehicles | NOT YET OPERATIONAL | Nothing operational; design reference only |
 | CS-003 | HR Reports | `https://seera.tech-brit.co.uk/admin/coming-soon/hr-reports` | Reports | Reports → HR Reports | NOT YET OPERATIONAL | HR Dashboard (HR-DASH-001) shows today's figures |
 | CS-004 | Project Reports | `https://seera.tech-brit.co.uk/admin/coming-soon/project-reports` | Reports | Reports → Project Reports | NOT YET OPERATIONAL as a menu; the reports exist | Use Project Cost Report (FIN-REP-007) and Project Material Consumption (INV-REP-004) |
@@ -248,7 +248,19 @@ How to read the columns:
 
 | Screen ID | Screen Name | Web address | Sidebar Module | Navigation Path | Primary User Role | Create | View | Edit | Approve / Process | Status | Guide |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| APR-001 | My Approvals | `https://seera.tech-brit.co.uk/admin/my-approvals` | Main | Main → My Approvals | Currently eligible configured approvers | — | Purchase Requests — view, current task eligibility | — | Opens source context, no list mutation | AVAILABLE for PR only | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
+| APR-001 | My Approvals | `https://seera.tech-brit.co.uk/admin/my-approvals` | Main | Main → My Approvals | Currently eligible configured approvers | — | Purchase Requests or Site Expenses — view, current task eligibility | — | Opens source context, no list mutation | AVAILABLE for PR and Site Expenses | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
 | APR-002 | PR approval panel / history | `https://seera.tech-brit.co.uk/admin/inventory/purchase-requests/{id}#approvals` | Inventory | Purchase Requests → View → Approvals | Requester, approvers, permitted viewers | Submit: PR create (own) or edit | PR view + Approval History view for detailed history | Rejected PR correction: PR edit | PR approve / reject plus current required step and scope | AVAILABLE for PR only | [WF-017](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-017-purchase-request-runtime-approval) |
 
 Existing Screen IDs retained. APR-002 identifies an embedded panel, not a separate document screen.
+
+
+## Site Expenses
+
+| Screen ID | Screen Name | Web address | Sidebar Module | Navigation Path | Primary User Role | Create | View | Edit | Approve / Process | Status | Guide |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| EXP-SE-001 | Site Expense register | `https://seera.tech-brit.co.uk/admin/site-expenses` | Operations | Operations → Site Expenses | Site staff, Project Manager, Finance | Site Expenses create | Site Expenses view + scope | — | Open source actions | AVAILABLE | [Expenses](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#site-expenses) |
+| EXP-SE-002 | Add Site Expense / mobile web entry | `https://seera.tech-brit.co.uk/admin/site-expenses/create` · `https://seera.tech-brit.co.uk/admin/site-expenses/mobile/create` | Operations | Site Expenses → Add | Site staff | Site Expenses create + view; mobile shortcut also Mobile Access flag | — | — | Explicit Submit; never automatic from Save | AVAILABLE (online responsive web) | [Expenses](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#site-expenses) |
+| EXP-SE-003 | Site Expense connected View | `https://seera.tech-brit.co.uk/admin/site-expenses/{id}` | Operations | Site Expenses → View | Submitter, reviewers, Finance | — | Site Expenses view + scope; receipt/history included | Edit only while draft/rejected | Eligible approve/reject; retry + post; settlement/reversal post + process | AVAILABLE | [WF-018](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-018-site-expense-lifecycle) |
+| EXP-SE-004 | Edit Site Expense | `https://seera.tech-brit.co.uk/admin/site-expenses/{id}/edit` | Operations | Site Expenses → Edit | Submitter, authorized editor | — | Site Expenses view | Site Expenses edit, or own draft/rejected with create | Resubmit rejected expense to new attempt | AVAILABLE | [Expenses](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#site-expenses) |
+
+Project → Site Expenses uses the existing Project workspace panel route `/admin/master/projects/{id}/workspace/site-expenses`; it requires Projects view and Site Expenses view. It is a section of MST-PRJ-003/004, not a replacement Project screen. Receipt files use `/admin/site-expenses/{id}/receipts/{receipt}` with authenticated scoped authorization; private storage paths are never public links.

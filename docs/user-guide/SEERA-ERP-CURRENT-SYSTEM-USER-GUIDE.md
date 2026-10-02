@@ -3,8 +3,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.3 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 30 September 2026: F08 Approval Runtime AVAILABLE for explicitly submitted Purchase Requests only. Existing connected workspaces, previous-section navigation and multiple reporting-parent records retained. Other modules' runtime integration remains PARTIAL. This describes code, not a claim of production deployment. |
+| **Version** | 1.4 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 2 October 2026: Approval Runtime supports Purchase Requests and Site Expenses. Responsive Site Expense entry, private receipts, accounting and Project Phase B expense integration are implemented. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
 | **Prepared** | 29 September 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
@@ -516,9 +516,9 @@ Buttons: + New Workflow, Preview, Edit, Delete, + Add Step, Save Workflow, Cance
 
 Web address: `https://seera.tech-brit.co.uk/admin/my-approvals`
 
-Navigation: Main → My Approvals. Permission: Purchase Requests — view to open; an eligible current step plus approve/reject permission and document scope to see a task. Workflow configuration rights do not confer approval authority.
+Navigation: Main → My Approvals. Permission: Purchase Requests or Site Expenses — view to open; an eligible current step plus the source module's approve/reject permission and document scope to see a task. Workflow configuration rights do not confer approval authority.
 
-Columns: Document, Module, Requested By, Project / Site, Submitted, Current Step, Status, Actions. Filter Module, Pending status, Project, Submitted from/to. Only currently actionable tasks appear, not previously completed decisions. **View**, **Review & approve** and **Review & reject** open the PR's Approvals panel; no decision is made from a list click.
+Columns: Document, Module, Requested By, Project / Site, Submitted, Current Step, Status, Actions. Filter Module, Pending status, Project, Submitted from/to. Only currently actionable tasks appear, not previously completed decisions. **View**, **Review & approve** and **Review & reject** open the source document's Approvals panel; no decision is made from a list click.
 
 ### [APR-002] Embedded approval history and decisions
 
@@ -659,7 +659,7 @@ Buttons: Save / Update, Cancel.
 Web address: `https://seera.tech-brit.co.uk/admin/master/expense-categories` (MST-EXP-001) · `https://seera.tech-brit.co.uk/admin/master/expense-categories/create` (MST-EXP-002) · `https://seera.tech-brit.co.uk/admin/master/expense-categories/{id}` (MST-EXP-003) · `https://seera.tech-brit.co.uk/admin/master/expense-categories/{id}/edit` (MST-EXP-004)
 
 Purpose:
-Categories used on supplier bill lines (and reserved for the future site expense screen).
+Categories used on supplier bill lines and Site Expenses. Site Expense posting requires an explicit active expense-account mapping; legacy account text is not used to guess an account.
 
 Who uses it:
 Finance Manager, Super Admin.
@@ -676,7 +676,7 @@ Fields:
 |---|---|---|---|---|
 | Category Name / Category Code | Name and code | Fuel, EXP-FUEL | Yes | |
 | Linked Chart of Account | Expense account | 5300 - Fuel Expense | Yes | |
-| Approval Required, Mobile App Visible, Allowed Payment Type, Invoice Photo Required, Default VAT Treatment | Settings for a future site expense entry | Yes / Yes / Cash / Yes / Standard 15% | No | Stored only today; the site expense screen is NOT YET OPERATIONAL |
+| Approval Required, Mobile App Visible, Allowed Payment Type, Invoice Photo Required, Default VAT Treatment | Site Expense configuration | Yes / Yes / Cash / Yes / VAT 15% | No | All Site Expenses require a runtime workflow regardless of Approval Required. Cash/Bank restriction applies to those paid channels. Required receipt is checked at submit; non-Finance mobile staff use mobile-visible categories. Category VAT default is server-calculated. |
 | Status, Description | | active | Status yes | |
 
 Buttons: Save / Update, Cancel.
@@ -1678,7 +1678,7 @@ Web address: `https://seera.tech-brit.co.uk/admin/accounting/posting-rules` (FIN
 Purpose:
 One row per automatic journal event (Inventory Purchase, Stock Issued, Stock Adjusted, Bill Approved, Invoice Approved, Payment Recorded, Receipt Recorded, Payroll Approved, Site Expense Approved).
 
-Status: **PARTIAL**. Only the **Auto Post** switch changes behaviour: when it is off, the event creates a *draft* journal that a finance user must post by hand (review mode). The debit and credit accounts, cost center rule and approval flag on the rule are informational; the real accounts come from the documents. "Payroll Approved" and "Site Expense Approved" have no event that fires them yet.
+Status: **PARTIAL**. Only the **Auto Post** switch changes behaviour: when it is off, the event creates a *draft* journal that a finance user must post by hand (review mode). The debit and credit accounts, cost center rule and approval flag on the rule are informational; real accounts come from documents. Site Expense Approved now fires after final required approval for Cash/Bank/Reimbursement. Supplier Credit instead creates a draft Supplier Bill. Payroll Approved still has no accounting event. A missing active Site Expense rule also creates a draft journal, not an automatic ledger posting.
 
 Fields: Source Module *, Trigger Event *, Cost Center Rule *, Debit Account, Credit Account, Auto Post, Approval Required, Status *, Notes. Buttons: Cancel, Save, Save & new, Save & close.
 
@@ -1930,7 +1930,7 @@ Stock Valuation, Low Stock, Project Material Consumption and Stock Movement, eac
 | **Primary roles** | Project Manager, Super Admin |
 | **Screens in this chapter** | MST-PRJ-001, MST-PRJ-002, MST-PRJ-003, MST-PRJ-004, MST-PRJ-005, MST-SITE-001, MST-SITE-002, MST-SITE-003, MST-SITE-004 |
 
-Project Connected Workspace **Phase A is available**: open one Project to understand its existing operational records. Site Expenses, BOQ/budget lines, labour-to-GL, equipment cost and progress tracking are still not operational. The separate Projects & Site Expenses menu remains a placeholder.
+Project Connected Workspace **Phase A is available**. Phase B now adds Site Expenses, scoped counts/totals and existing-ledger cost integration. BOQ/budget lines, labour-to-GL, equipment cost and progress tracking remain later work. Operations → Site Expenses opens the real expense register.
 
 ### [MST-PRJ-001 … 004] Projects
 
@@ -1978,7 +1978,7 @@ Every panel additionally requires Projects — view. Hidden panels reject direct
 
 Stock values reuse stored Warehouse Stock `total_value`; they are not recomputed from a new valuation formula. Quantities are shown per item/unit rather than summing incompatible units. Material Used sums scoped issue-ledger values for visible posted Stock Issues; it does not add GRNs or count the same material cost again in GL.
 
-Financial semantics: posted expense-account lines tagged with the Project contribute debit minus credit; revenue-account lines contribute credit minus debit. Reversals net off. Margin is posted revenue minus posted cost. Budget used is posted cost divided by master budget (zero when no budget). Supplier Billed and Customer Invoiced preserve the report's **non-draft** semantics, including cancelled documents; these differ from approved-only AR totals and are not cash figures. Cost-centre linkage alone does not attribute a line to a Project. Scope-limited cost compared with the whole Project master budget is not a site-specific budget comparison. No payroll/labour, Site Expense or equipment integration is implied.
+Financial semantics: posted expense-account lines tagged with the Project contribute debit minus credit; revenue-account lines contribute credit minus debit. Reversals net off. Margin is posted revenue minus posted cost. Budget used is posted cost divided by master budget (zero when no budget). Supplier Billed and Customer Invoiced preserve the report's **non-draft** semantics, including cancelled documents; these differ from approved-only AR totals and are not cash figures. Cost-centre linkage alone does not attribute a line to a Project. Scope-limited cost compared with the whole Project master budget is not a site-specific budget comparison. Site Expenses enter cost through posted expense-account journal lines; Supplier Credit enters through its linked bill only. Payroll/labour and equipment integration remain outside this phase.
 
 #### Return to the Project
 
@@ -1987,7 +1987,59 @@ Financial semantics: posted expense-account lines tagged with the Project contri
 - Project → Customer Invoices → View similarly provides **Back to origin**. Posting/approval/receipt entry still happen only through existing authorized screens.
 - Safe return destinations must be relative internal admin paths; external URLs, misleading prefixes and path traversal are refused.
 
-Current limitations: one current Project per employee, no assignment-history engine; no direct stock or journal editing; old free-text/name-only activity omitted because it has no trustworthy entity key; no construction-progress estimate; no full BOQ/budget, Site Expenses, labour/equipment costing, mobile geofence runtime or offline sync. F08 approval runtime is available for PRs only, not Project-wide approval summaries. A Project with sites or warehouses still cannot be deleted.
+Current limitations: one current Project per employee, no assignment-history engine; no direct stock or journal editing; old name-only activity omitted; no construction-progress estimate, full BOQ/budget, labour/equipment costing, mobile geofence runtime or offline sync. Runtime supports PR and Site Expenses, not every Project document. A Project with sites or warehouses still cannot be deleted.
+
+### Site Expenses
+
+Screen IDs **EXP-SE-001** register, **EXP-SE-002** Add, **EXP-SE-003** View, **EXP-SE-004** Edit. Mobile entry reuses EXP-SE-002, not a native application.
+
+Addresses: [Register](https://seera.tech-brit.co.uk/admin/site-expenses), [Add](https://seera.tech-brit.co.uk/admin/site-expenses/create), [Mobile entry](https://seera.tech-brit.co.uk/admin/site-expenses/mobile/create), `https://seera.tech-brit.co.uk/admin/site-expenses/{id}` and `https://seera.tech-brit.co.uk/admin/site-expenses/{id}/edit`.
+
+Navigation: Operations → Site Expenses, or Project → Site Expenses → Add / View. The mobile shortcut additionally requires the user's Mobile Access flag and Site Expenses create permission. It is online responsive web: no native app, GPS capture or offline entry.
+
+| Field | Meaning and validation |
+|---|---|
+| Date, Project, Site | Required; Site must belong to Project and both must be permitted for the user |
+| Category | Active master; its explicit expense account drives accounting, never a name-based guess |
+| Amount before VAT | Positive SAR net amount; two-decimal rounding |
+| VAT applicable | Yes uses category default (VAT 15% or Non-VAT); No uses zero. Only Site Expenses post permission allows an explicit rate override; calculated VAT and total are always server-owned |
+| Payment type | Cash, Bank, Employee Reimbursement, Supplier Credit |
+| Paid from | Active Cash 1110 or Bank 1120 for the matching paid channel; no arbitrary GL choices |
+| Supplier | Required for Supplier Credit; optional for other receipts |
+| Receipt / invoice | Private JPG/JPEG/PNG/PDF, maximum 10 MB; add from camera/file picker. Category-required evidence must exist before submit |
+| Description, Reference, Notes | Description required; reference/notes optional. Capture actual invoice evidence; no ZATCA clearance claim |
+| Submitter, Employee, number | Server-owned authenticated requester, linked employee where present, unique SE-year-number. Reimbursement requires that employee link |
+
+Buttons: **Save draft & stay**, **Save & close**, **Save & new**, **Back to expenses**, **Submit for approval**. Rejected records use **Resubmit for approval**. Saving corrections keeps rejected status and old decisions. No automatic submission from an ordinary Save.
+
+The read-only View keeps expense/date/Project/Site/submitter/total/status context, with Details, Receipts, Approval History, Accounting and Activity sections. Authorized private **View / Download** goes through scoped server authorization. Merely opening a page does not save, approve or post anything. Original documents and receipts remain after cancellation/rejection.
+
+Register filters: number/description, Project, Site, category, submitter, payment type, approval/document status, accounting-posted and date range. Project panel lists scoped expenses; Financial Reports view is additionally required for Project-panel monetary totals. Summary groups are posted, pending approval, rejected and approved awaiting posting. Cost still comes only from posted expense-account journal lines, not a second sum of Site Expense documents.
+
+| State / action | Business behavior |
+|---|---|
+| draft | Editable; draft cancellation retains history |
+| pending | Runtime approvals underway; ordinary editing blocked |
+| rejected | Reason and history retained; authorized correction then explicit new-attempt resubmit |
+| approved_pending_posting | All approvals completed; posting failed, Finance review-mode journal awaits posting, or generated Supplier Bill awaits Finance |
+| posted | Accounting journal is posted; expense immutable |
+| reversed | Finance posted an opposite journal; original remains unchanged |
+
+Configure an active Site Expenses / Expense Submitted workflow with **Create Accounting Entry**, sequential required steps, active eligible reviewers and blank amount limits. No workflow, no eligible reviewer or unsupported thresholds blocks submission without losing the draft. All required slots approve; requester/submitting editor cannot approve themselves. My Approvals is shared with PR. Notification boundary: status, Activity and queue; no new email/SMS/escalation service.
+
+After final approval commits, accounting is attempted automatically. Approval history survives accounting failure. Finance sees the mapping/period error and **Retry accounting** (Site Expenses retry + post). If a journal already exists in review mode, Finance posts that journal using Journal Entries post; retry never duplicates it. Existing Automatic Posting Rule **Auto Post** on means immediate posted entry; off or no active rule means draft for review. The workflow's Create Accounting Entry does not silently override Finance review mode.
+
+| Payment type | Initial accounting and follow-up |
+|---|---|
+| Cash / Bank | Dr category expense, Dr applicable Input VAT, Cr selected allowed Cash/Bank |
+| Employee Reimbursement | Dr expense + applicable VAT, Cr shared Employee Expense Reimbursement Payable (2310). Not initially a Cash/Bank credit. Authorized Finance **Record full reimbursement** then Dr original payable / Cr chosen Cash/Bank. One full settlement only; repeat retries do not pay again |
+| Supplier Credit | Create ONE draft direct/service Supplier Bill linked both ways. NO independent Site Expense AP journal. Finance uses existing Bill Approve and, if review mode, Journal Post. Posted cost/AP enter through that bill only |
+
+Category mapping is mandatory at posting, not guessed from legacy text. One active Project cost center is derived where present; absent required/ambiguous mapping leaves approved-awaiting-posting. Finance must resolve configuration; site staff do not choose a cost center or ledger account.
+
+Permissions: view for register/source/receipts; create for own drafts/submission; edit for authorized corrections; delete for cancel draft; approve/reject plus current runtime eligibility for decisions; post + retry for retry; post + process for reimbursement/reversal. Accounting references/errors additionally require Finance-capable permission; Journal/AP links require their own view rights and scope. Site Expense source view includes its approval history; PR's separately permissioned APR-002 history remains unchanged.
+
+Finance **Reverse expense** requires a reason and a posted, unsettled non-credit expense. It reuses the existing opposite-journal/open-VAT-period correction rules and cannot reopen sealed VAT periods. Supplier Credit follows existing unpaid Supplier Bill Reopen controls: accounting reverses, bill returns to draft, expense returns to awaiting posting. Generated source values cannot be independently edited/deleted; broader amendments/credit notes require a later design. Partial/batch reimbursements and reversal of an already settled reimbursement are not supplied. Equipment, payroll-to-GL, BOQ, GPS and offline support remain outside this release.
 
 ### [MST-SITE-001 … 004] Locations (Sites)
 
@@ -2023,7 +2075,7 @@ When opened from Project → Sites, the form instead offers Save / Save & Close 
 - Material cost: Project → Material Used, stock issues to the project (chapter 10) and the Project Material Consumption report.
 - Posted cost, revenue, supplier billed, customer invoiced, margin and budget used: the Project Cost Report (FIN-REP-007).
 - Supplier and customer links: the Supplier and Customer workspaces.
-- Labour cost, equipment cost and site expenses: NOT YET OPERATIONAL.
+- Labour and equipment cost: NOT YET OPERATIONAL. Site Expenses contribute only when their accounting journal (or linked Supplier Bill journal) is posted.
 
 ---
 
@@ -2483,7 +2535,7 @@ Related screens: HR-EOS-002, HR-EOS-003.
 
 Permissions are independent at every step. A project/site-scoped operator sees only rows permitted by the existing global scopes; the same scope feeds panel totals. Read-only pages do not post, approve, receive stock or process payroll.
 
-Pending Phase B: Site Expenses, budget lines/BOQ, labour/payroll-to-GL, equipment cost, expanded budget-vs-actual and a future operational site dashboard. No live ZATCA clearance is introduced. F08 now supports PR approval only; Project approval summaries and Site Expenses integration remain pending.
+Phase B expense integration is available: see WF-018. Pending: budget lines/BOQ, labour/payroll-to-GL, equipment cost, expanded budget-vs-actual and a future operational site dashboard. No live ZATCA clearance is introduced. Runtime supports PR and Site Expenses; other module rollouts remain pending.
 
 ### WF-017 Purchase Request runtime approval
 
@@ -2500,6 +2552,22 @@ History permission is separate from decision permissions. Requests with runtime 
 Legacy documents are labelled and not auto-enrolled; historical decisions are not reconstructed. Supplier Bill, PO, Customer Invoice, Leave and Payroll retain their existing behavior and are NOT part of F08 runtime yet.
 
 ---
+
+### WF-018 Site Expense lifecycle
+
+Fictional example: Ahmed Hassan (linked user/employee) opens Site Expenses and selects Riyadh Commercial Tower → Riyadh Tower - Main Site → Fuel. Enter **SAR 1,000 before VAT**, attach a receipt and, for this VAT-15% category example, select VAT applicable: Yes. Server calculates VAT 150 and total 1,150. Choose Cash and its permitted account. Other categories can be Non-VAT; this is not a universal tax rate.
+
+1. Save draft; review the receipt and description on EXP-SE-003.
+2. Submit the configured Expense Submitted workflow. Example configured required slots: Site Supervisor → Project Manager → Finance Manager. Names/order come from configuration, not hardcoded people.
+3. Each reviewer opens My Approvals and reviews the source before deciding. One rejection stops the attempt; explain, correct and resubmit to a new attempt. All required approvals are necessary.
+4. Final approval commits, then accounting is attempted. With Auto Post enabled, Dr Fuel expense 1,000, Dr Input VAT 150, Cr Cash 1,150. If mapping fails, approval remains and Finance retries; review-mode journals require separate posting.
+5. Project → Site Expenses shows status. Posted Project Cost increases by **1,000**, not 1,150, using the existing expense-account ledger calculation.
+
+Supplier Credit variation: choose Gulf Steel Trading and Supplier Credit. Approval creates one **draft direct Supplier Bill**, not an expense journal. Finance separately approves/posts that bill. Project Cost increases by 1,000 **once**, through the bill journal. AP payment remains the existing Supplier Payment process; no second expense AP posting is made.
+
+Employee-paid variation: select Employee Reimbursement. Final accounting credits reimbursement payable, not Cash/Bank. Finance later records one full reimbursement from permitted Cash/Bank; that clears liability without increasing Project Cost again. A duplicate settlement request reuses the original result.
+
+See [Site Expenses](#site-expenses). Project Phase B remains partial beyond this expense integration; WF-017 continues to identify PR runtime approval.
 
 ## 18. Troubleshooting
 
@@ -2577,13 +2645,13 @@ Areas that exist as menus, settings or plans but are not usable business functio
 
 | Area | Status | What exists |
 |---|---|---|
-| Site Expenses (daily site purchases with photo, approval, posting) | NOT YET OPERATIONAL | Expense Categories master, a posting rule row and a seeded approval workflow only |
-| Projects & Site Expenses menu, budget lines/BOQ, milestones, site expenses | NOT YET OPERATIONAL | Project Connected Workspace Phase A under Master Setup: existing operational context, one master budget, shared Project Cost Report |
+| Site Expenses | AVAILABLE with configured masters/permissions/workflow | Responsive web entry, private receipt, sequential approvals, accounting/retry, reimbursement and linked Supplier Bill; see WF-018 |
+| Project Phase B: BOQ, milestones, labour/equipment costing | PARTIAL | Phase A and Site Expense panel/cost integration available; remaining construction planning/cost modules are not built |
 | Equipment & Vehicles | NOT YET OPERATIONAL | Menu placeholder and permission names only |
 | Mobile app, check-in / check-out, GPS geofence attendance | NOT YET OPERATIONAL | Mobile access flags on users and roles; site coordinates and radius; manual attendance with a typed geo-fence status |
 | Offline entry and sync | NOT YET OPERATIONAL | Nothing |
 | Live ZATCA Phase-2 clearance, real QR, XML, signing | NOT YET OPERATIONAL (local records: FOUNDATION ONLY) | Chapter 14 |
-| Approval workflow execution (multi-step, all-required) | AVAILABLE for enrolled PRs; PARTIAL across other modules | Sequential required steps, separate runtime history and My Approvals; no parallel groups, thresholds, delegation, notification/escalation jobs or automatic parent expansion |
+| Approval workflow execution (multi-step, all-required) | AVAILABLE for PR and Site Expenses; PARTIAL across other modules | Sequential required steps, runtime history and shared My Approvals; no parallel groups, thresholds, delegation, notification/escalation jobs or automatic parent expansion |
 | Payroll → accounting posting, payslips, bank / WPS file, GOSI | NOT YET OPERATIONAL | Payroll run calculation and approval |
 | HR Reports menu (attendance register, payroll register) | NOT YET OPERATIONAL | HR Dashboard for today's figures |
 | Project Reports menu | Placeholder | Project Cost Report and Project Material Consumption exist |
@@ -2637,12 +2705,12 @@ Daily: Dashboard (ADM-010), Users (USR-001), Roles and Permission Matrix (ROL-00
 3. Purchase Requests (INV-PR-001): approve site requests (WF-011).
 4. Project Cost Report (FIN-REP-007) and Project Material Consumption (INV-REP-004).
 5. Customer workspace (CUS-004) for the client's invoices and contacts.
-Not available yet: project dashboard, budget lines, site expenses, equipment.
+Use Project → Site Expenses for expense status and authorized totals. Not available yet: construction-progress dashboard, BOQ/budget lines and equipment.
 
 ### Site In-Charge / Site Supervisor
 
 Current usable screens: Purchase Requests (INV-PR-002) to ask for materials; Manual Attendance (HR-ATT-002) for the site's staff; Stock On Hand (INV-STK-001) for the site store; Locations (MST-SITE-003) to read the site details.
-Not available yet: mobile check-in, site expense entry, equipment.
+Use Operations → Site Expenses → Add for responsive expense entry. Not available yet: mobile check-in/GPS, offline entry and equipment.
 
 ### Warehouse Incharge
 

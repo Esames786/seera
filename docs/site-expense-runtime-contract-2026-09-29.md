@@ -1,4 +1,6 @@
-# Site Expense integration contract — next sprint, not implemented
+# Site Expense integration contract — historical F08 design
+
+**Superseded for current implementation on 2 October 2026:** the owner's next-sprint brief approved the four payment modes and implementation now lives in [the implementation ledger](site-expense-implementation-2026-10-02.md) and the authoritative [User Guide](user-guide/SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#site-expenses). The following text is retained as the F08-era design/audit record, not current feature status. No production deployment is claimed.
 
 Prepared 30 September 2026. Filename retained as requested. Evidence: current
 `ApprovalRuntimeService`, `PurchaseRequestApprovalSubject`, `PostingService`,
