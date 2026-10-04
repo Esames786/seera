@@ -46,6 +46,7 @@ class SettlementIdempotencyTest extends TestCase
             'lines' => [['description' => 'Cement', 'quantity' => 10, 'unit_price' => 100]],
         ])->assertSessionHasNoErrors();
         $bill = SupplierBill::where('bill_number', 'BILL-F02')->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.approve', $bill))->assertSessionHasNoErrors();
 
         return $bill->fresh();

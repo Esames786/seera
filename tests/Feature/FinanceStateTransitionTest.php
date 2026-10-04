@@ -56,6 +56,7 @@ class FinanceStateTransitionTest extends TestCase
     {
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.store'), $this->billPayload())->assertSessionHasNoErrors();
         $bill = SupplierBill::where('bill_number', 'BILL-F11')->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.approve', $bill))->assertSessionHasNoErrors();
         $journal = $bill->fresh()->journal_entry_id;
 

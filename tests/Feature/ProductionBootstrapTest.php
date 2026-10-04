@@ -2,9 +2,18 @@
 
 namespace Tests\Feature;
 
+use App\Models\AutomaticPostingRule;
+use App\Models\ChartOfAccount;
+use App\Models\JournalEntry;
+use App\Models\LeaveType;
 use App\Models\Role;
+use App\Models\Supplier;
+use App\Models\SupplierBill;
 use App\Models\User;
+use App\Models\VatPeriod;
 use Database\Seeders\OrganizationHierarchySeeder;
+use Database\Seeders\ProductionBootstrapSeeder;
+use Database\Seeders\ProductionChartOfAccountsSeeder;
 use Database\Seeders\ProductionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -62,7 +71,7 @@ class ProductionBootstrapTest extends TestCase
             'seera.organization.email_domain' => 'seera.com',
         ]);
 
-        $this->seed(\Database\Seeders\ProductionBootstrapSeeder::class);
+        $this->seed(ProductionBootstrapSeeder::class);
 
         $this->assertSame(13, User::count());
         $this->assertSame(0, User::where('email', 'like', '%@example.com')->count(), 'no demo accounts');
@@ -70,7 +79,7 @@ class ProductionBootstrapTest extends TestCase
         $this->assertTrue(User::where('email', 'omar@seera.com')->firstOrFail()->must_change_password);
 
         // Re-running is safe: nothing duplicated, no password reset.
-        $this->seed(\Database\Seeders\ProductionBootstrapSeeder::class);
+        $this->seed(ProductionBootstrapSeeder::class);
         $this->assertSame(13, User::count());
     }
 
@@ -84,32 +93,33 @@ class ProductionBootstrapTest extends TestCase
             'seera.organization.email_domain' => 'seera.com',
         ]);
 
-        $this->seed(\Database\Seeders\ProductionBootstrapSeeder::class);
+        $this->seed(ProductionBootstrapSeeder::class);
 
-        $payable = \App\Models\ChartOfAccount::where('account_code', '2100')->firstOrFail();
+        $payable = ChartOfAccount::where('account_code', '2100')->firstOrFail();
         $this->assertSame('Accounts Payable', $payable->account_name);
         $this->assertSame('2000', $payable->parent->account_code);
-        $this->assertSame(0.0, (float) \App\Models\ChartOfAccount::sum('opening_balance'), 'no balances are invented');
-        $this->assertSame(9, \App\Models\AutomaticPostingRule::count());
-        $this->assertSame(1, \App\Models\VatPeriod::count());
-        $this->assertSame(['ANNUAL', 'SICK', 'UNPAID', 'URGENT'], \App\Models\LeaveType::orderBy('code')->pluck('code')->all(), 'leave types are ready for the first request (NR-17)');
-        $this->assertSame(0, \App\Models\JournalEntry::count());
-        $this->assertSame(0, \App\Models\SupplierBill::count());
+        $this->assertSame(0.0, (float) ChartOfAccount::sum('opening_balance'), 'no balances are invented');
+        $this->assertSame(9, AutomaticPostingRule::count());
+        $this->assertSame(1, VatPeriod::count());
+        $this->assertSame(['ANNUAL', 'SICK', 'UNPAID', 'URGENT'], LeaveType::orderBy('code')->pluck('code')->all(), 'leave types are ready for the first request (NR-17)');
+        $this->assertSame(0, JournalEntry::count());
+        $this->assertSame(0, SupplierBill::count());
 
         // Re-running adds nothing and changes nothing.
-        $accounts = \App\Models\ChartOfAccount::count();
-        $this->seed(\Database\Seeders\ProductionChartOfAccountsSeeder::class);
-        $this->assertSame($accounts, \App\Models\ChartOfAccount::count());
-        $this->assertSame(9, \App\Models\AutomaticPostingRule::count());
-        $this->assertSame(1, \App\Models\VatPeriod::count());
+        $accounts = ChartOfAccount::count();
+        $this->seed(ProductionChartOfAccountsSeeder::class);
+        $this->assertSame($accounts, ChartOfAccount::count());
+        $this->assertSame(9, AutomaticPostingRule::count());
+        $this->assertSame(1, VatPeriod::count());
 
         // An accountant's own change to an account survives a re-run.
         $payable->update(['account_name' => 'Trade Creditors']);
-        $this->seed(\Database\Seeders\ProductionChartOfAccountsSeeder::class);
+        $this->seed(ProductionChartOfAccountsSeeder::class);
         $this->assertSame('Trade Creditors', $payable->fresh()->account_name);
 
-        // The very first supplier bill on a fresh production database posts straight to the ledger.
-        $supplier = \App\Models\Supplier::create(['name' => 'First Supplier', 'code' => 'SUP-001', 'status' => 'active']);
+        // Production chart still supports a pre-runtime legacy bill's posting.
+        // New bills use explicit runtime configuration (covered by runtime tests).
+        $supplier = Supplier::create(['name' => 'First Supplier', 'code' => 'SUP-001', 'status' => 'active']);
         $this->assertSame($payable->id, $supplier->linked_account_id, 'new suppliers link to Accounts Payable by default');
 
         $admin = User::where('email', 'admin@seera.com')->firstOrFail();
@@ -124,13 +134,14 @@ class ProductionBootstrapTest extends TestCase
             ])
             ->assertRedirect();
 
-        $bill = \App\Models\SupplierBill::firstOrFail();
-        $this->actingAs($admin)->post(route('admin.accounting.accounts-payable.approve', $bill))->assertRedirect();
+        $bill = SupplierBill::firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']);
+        $this->actingAs($admin)->post(route('admin.accounting.accounts-payable.approve', $bill))->assertRedirect()->assertSessionHasNoErrors();
 
         $entry = $bill->refresh()->journalEntry;
         $this->assertSame('posted', $entry->status);
         $this->assertSame(1150.0, (float) $entry->lines->firstWhere('chart_of_account_id', $payable->id)->credit);
-        $this->assertDatabaseHas('vat_transactions', ['source_reference' => 'BILL-0001', 'vat_period_id' => \App\Models\VatPeriod::first()->id]);
+        $this->assertDatabaseHas('vat_transactions', ['source_reference' => 'BILL-0001', 'vat_period_id' => VatPeriod::first()->id]);
     }
 
     public function test_the_bootstrap_seeder_refuses_the_placeholder_domain(): void
@@ -144,7 +155,7 @@ class ProductionBootstrapTest extends TestCase
         ]);
 
         $this->expectException(\RuntimeException::class);
-        $this->seed(\Database\Seeders\ProductionBootstrapSeeder::class);
+        $this->seed(ProductionBootstrapSeeder::class);
     }
 
     public function test_the_admin_account_is_not_disturbed_by_the_org_seeder(): void

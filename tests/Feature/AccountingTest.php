@@ -7,10 +7,13 @@ use App\Models\ChartOfAccount;
 use App\Models\CostCenter;
 use App\Models\Customer;
 use App\Models\CustomerInvoice;
+use App\Models\CustomerReceipt;
 use App\Models\JournalEntry;
 use App\Models\Permission;
+use App\Models\Role;
 use App\Models\Supplier;
 use App\Models\SupplierBill;
+use App\Models\SupplierPayment;
 use App\Models\User;
 use App\Models\VatPeriod;
 use App\Models\VatTransaction;
@@ -44,9 +47,12 @@ class AccountingTest extends TestCase
         $account = $this->account('5200');
         $entry = JournalEntry::firstOrFail();
         $bill = SupplierBill::firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $draftBill = SupplierBill::where('status', 'draft')->firstOrFail();
+        $draftBill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $invoice = CustomerInvoice::firstOrFail();
         $unpaidBill = SupplierBill::whereIn('status', ['unpaid', 'partially_paid'])->firstOrFail();
+        $unpaidBill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $unpaidInvoice = CustomerInvoice::whereIn('payment_status', ['unpaid', 'partially_paid'])->firstOrFail();
         $vatPeriod = VatPeriod::firstOrFail();
         $zatca = ZatcaInvoiceRecord::firstOrFail();
@@ -272,6 +278,7 @@ class AccountingTest extends TestCase
             ->assertRedirect();
 
         $bill = SupplierBill::where('bill_number', 'BILL-TEST-001')->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $this->assertSame('10000.00', (string) $bill->taxable_amount);
         $this->assertSame('1500.00', (string) $bill->vat_amount);
         $this->assertSame('11500.00', (string) $bill->total_amount);
@@ -303,6 +310,7 @@ class AccountingTest extends TestCase
     public function test_supplier_payment_posts_and_updates_bill_status(): void
     {
         $bill = SupplierBill::where('status', 'unpaid')->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $balance = (float) $bill->balance_amount;
 
         $this->actingAs($this->admin())
@@ -326,6 +334,7 @@ class AccountingTest extends TestCase
     public function test_supplier_payment_cannot_exceed_outstanding_balance(): void
     {
         $bill = SupplierBill::where('status', 'unpaid')->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
 
         $this->actingAs($this->admin())
             ->post(route('admin.accounting.accounts-payable.payment.store', $bill), [
@@ -524,7 +533,7 @@ class AccountingTest extends TestCase
         $this->assertDatabaseHas('permissions', ['module' => 'Journal Entries', 'action' => 'post']);
         $this->assertDatabaseHas('permissions', ['module' => 'ZATCA Invoicing', 'action' => 'retry']);
 
-        $finance = \App\Models\Role::where('code', 'FINANCE_MANAGER')->firstOrFail();
+        $finance = Role::where('code', 'FINANCE_MANAGER')->firstOrFail();
         $granted = $finance->permissions()->where('module', 'Journal Entries')->pluck('action')->all();
 
         $this->assertContains('post', $granted);
@@ -547,9 +556,9 @@ class AccountingTest extends TestCase
         $this->assertGreaterThan(0, CostCenter::where('type', 'project')->count());
         $this->assertGreaterThan(0, JournalEntry::where('status', 'posted')->count());
         $this->assertSame(4, SupplierBill::count());
-        $this->assertGreaterThan(0, \App\Models\SupplierPayment::count());
+        $this->assertGreaterThan(0, SupplierPayment::count());
         $this->assertSame(4, CustomerInvoice::count());
-        $this->assertGreaterThan(0, \App\Models\CustomerReceipt::count());
+        $this->assertGreaterThan(0, CustomerReceipt::count());
         $this->assertSame(2, VatPeriod::count());
         $this->assertGreaterThan(0, VatTransaction::where('vat_type', 'input')->count());
         $this->assertGreaterThan(0, VatTransaction::where('vat_type', 'output')->count());

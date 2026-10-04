@@ -56,7 +56,10 @@ class FinancePostingIntegrityTest extends TestCase
             'lines' => [$line + ['description' => 'Steel bars', 'quantity' => 10, 'unit_price' => 100]],
         ])->assertSessionHasNoErrors();
 
-        return SupplierBill::where('bill_number', $number)->firstOrFail();
+        $bill = SupplierBill::where('bill_number', $number)->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Preserve the legacy Finance/F04 regression path.
+
+        return $bill;
     }
 
     private function draftInvoice(): CustomerInvoice

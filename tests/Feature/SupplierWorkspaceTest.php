@@ -119,6 +119,7 @@ class SupplierWorkspaceTest extends TestCase
             'lines' => [['description' => 'Service', 'quantity' => 1, 'unit_price' => $net]],
         ])->assertSessionHasNoErrors();
         $bill = SupplierBill::where('bill_number', $number)->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.approve', $bill))->assertSessionHasNoErrors();
 
         return $bill->fresh();
@@ -296,6 +297,7 @@ class SupplierWorkspaceTest extends TestCase
                 'lines' => [['description' => 'Goods', 'goods_receipt_line_id' => $line->id, 'matched_quantity' => $qty, 'quantity' => $qty, 'unit_price' => 100]],
             ])->assertSessionHasNoErrors();
             $bill = SupplierBill::where('bill_number', $number)->firstOrFail();
+            $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
             $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.approve', $bill))->assertSessionHasNoErrors();
             $html = $this->panel($this->admin(), 'goods-receipts')->json('html');
             $this->assertStringContainsString($qty === 4 ? '2 uninvoiced' : '>Invoiced<', $html);

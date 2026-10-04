@@ -159,6 +159,7 @@ class PurchaseOrderWorkspaceTest extends TestCase
             'lines' => [['description' => 'Reinforcement Steel 16mm', 'goods_receipt_line_id' => $line->id, 'matched_quantity' => $qty, 'quantity' => $qty, 'unit_price' => (float) $line->unit_cost]],
         ])->assertSessionHasNoErrors();
         $bill = SupplierBill::where('bill_number', $number)->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.approve', $bill))->assertSessionHasNoErrors();
 
         return $bill->fresh();
@@ -485,6 +486,7 @@ class PurchaseOrderWorkspaceTest extends TestCase
             'lines' => [['description' => 'Steel', 'goods_receipt_line_id' => $line->id, 'matched_quantity' => 6000, 'quantity' => 6000, 'unit_price' => 3]],
         ])->assertSessionHasNoErrors()->assertRedirect($billing);
         $bill = SupplierBill::where('bill_number', 'GST-INV-1045')->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.approve', $bill))->assertSessionHasNoErrors();
 
         // The payment form opened from the order's Billing section cancels and records back to it.

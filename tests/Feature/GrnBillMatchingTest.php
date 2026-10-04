@@ -139,7 +139,10 @@ class GrnBillMatchingTest extends TestCase
 
     private function lastBill(): SupplierBill
     {
-        return SupplierBill::withoutGlobalScopes()->where('bill_number', 'BILL-F04-'.$this->billSeq)->firstOrFail();
+        $bill = SupplierBill::withoutGlobalScopes()->where('bill_number', 'BILL-F04-'.$this->billSeq)->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Preserve the legacy Finance/F04 regression path.
+
+        return $bill;
     }
 
     private function approve(SupplierBill $bill): TestResponse

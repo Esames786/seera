@@ -212,6 +212,7 @@ class AccountingFormUxTest extends TestCase
     {
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.store'), $this->billPayload())->assertSessionHasNoErrors();
         $bill = SupplierBill::where('bill_number', 'BILL-UX')->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.approve', $bill), [SaveAction::FIELD => SaveAction::NEW])
             ->assertSessionHasNoErrors()
             ->assertRedirect(route('admin.accounting.accounts-payable.show', $bill));
@@ -259,6 +260,7 @@ class AccountingFormUxTest extends TestCase
         ]))->assertSessionHasNoErrors()->assertRedirect($grnPage);
 
         $bill = SupplierBill::where('bill_number', 'BILL-UX')->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $this->assertSame(1, $bill->grnMatches()->count());
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.approve', $bill))->assertSessionHasNoErrors();
         $this->assertSame(4.0, (float) $line->fresh()->invoiced_quantity);

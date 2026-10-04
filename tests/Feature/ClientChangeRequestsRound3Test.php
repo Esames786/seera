@@ -9,16 +9,22 @@ use App\Models\CustomerInvoice;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\JournalEntry;
+use App\Models\LeaveRequest;
+use App\Models\LeaveType;
 use App\Models\MarketingLead;
 use App\Models\Permission;
-use App\Models\Role;
-use App\Models\SupplierBill;
 use App\Models\Project;
+use App\Models\ProjectClassification;
+use App\Models\Role;
 use App\Models\Shift;
 use App\Models\Supplier;
+use App\Models\SupplierBill;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\ProductionHrDefaultsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 /**
@@ -269,10 +275,10 @@ class ClientChangeRequestsRound3Test extends TestCase
     public function test_customer_shows_rating_overdue_days_contacts_and_shared_notes(): void
     {
         $admin = $this->user('admin@example.com');
-        $customer = \App\Models\Customer::firstOrFail();
+        $customer = Customer::firstOrFail();
         $customer->update(['rating' => 'Amber']);
 
-        \App\Models\CustomerInvoice::create([
+        CustomerInvoice::create([
             'customer_id' => $customer->id, 'invoice_number' => 'INV-OVERDUE-1',
             'invoice_date' => now()->subDays(40)->toDateString(), 'due_date' => now()->subDays(10)->toDateString(),
             'taxable_amount' => 1000, 'vat_rate' => 15, 'vat_amount' => 150, 'total_amount' => 1150,
@@ -345,7 +351,7 @@ class ClientChangeRequestsRound3Test extends TestCase
         $admin = $this->user('admin@example.com');
         $project = Project::firstOrFail();
 
-        $classification = \App\Models\ProjectClassification::create(['name' => 'Infrastucture', 'status' => 'active']);
+        $classification = ProjectClassification::create(['name' => 'Infrastucture', 'status' => 'active']);
         $this->actingAs($admin)
             ->putJson(route('admin.master.project-classifications.update', $classification), ['name' => 'Infrastructure'])
             ->assertOk()
@@ -376,7 +382,7 @@ class ClientChangeRequestsRound3Test extends TestCase
 
     public function test_documents_are_one_source_with_subtypes_renewals_and_list_filters(): void
     {
-        \Illuminate\Support\Facades\Storage::fake('local');
+        Storage::fake('local');
         $admin = $this->user('admin@example.com');
         $employee = Employee::firstOrFail();
 
@@ -399,14 +405,14 @@ class ClientChangeRequestsRound3Test extends TestCase
                 'documents' => [[
                     'document_type' => 'IQAMA', 'document_subtype' => 'Electrician', 'document_number' => '2455001122',
                     'issue_date' => now()->subYear()->toDateString(), 'expiry_date' => $expiry,
-                    'file' => \Illuminate\Http\UploadedFile::fake()->create('iqama.pdf', 40, 'application/pdf'),
+                    'file' => UploadedFile::fake()->create('iqama.pdf', 40, 'application/pdf'),
                 ]],
             ])
             ->assertRedirect(route('admin.hr.employees.index'));
 
         $document = $employee->documents()->where('document_number', '2455001122')->firstOrFail();
         $this->assertSame('Electrician', $document->document_subtype);
-        \Illuminate\Support\Facades\Storage::disk('local')->assertExists($document->file_path);
+        Storage::disk('local')->assertExists($document->file_path);
 
         // Employee summary columns follow the document, so dashboard, list and register agree.
         $employee->refresh();
@@ -421,7 +427,7 @@ class ClientChangeRequestsRound3Test extends TestCase
                 'existing_documents' => [$document->id => [
                     'document_subtype' => 'Senior Electrician', 'document_number' => '2455001122',
                     'issue_date' => now()->toDateString(), 'expiry_date' => $renewed,
-                    'file' => \Illuminate\Http\UploadedFile::fake()->create('iqama-renewed.pdf', 40, 'application/pdf'),
+                    'file' => UploadedFile::fake()->create('iqama-renewed.pdf', 40, 'application/pdf'),
                 ]],
             ])
             ->assertRedirect(route('admin.hr.employees.index'));
@@ -430,8 +436,8 @@ class ClientChangeRequestsRound3Test extends TestCase
         $this->assertSame('Senior Electrician', $document->document_subtype);
         $this->assertSame($renewed, $document->expiry_date->toDateString());
         $this->assertNotSame($oldPath, $document->file_path);
-        \Illuminate\Support\Facades\Storage::disk('local')->assertMissing($oldPath);
-        \Illuminate\Support\Facades\Storage::disk('local')->assertExists($document->file_path);
+        Storage::disk('local')->assertMissing($oldPath);
+        Storage::disk('local')->assertExists($document->file_path);
         $this->assertSame($renewed, $employee->refresh()->iqama_expiry_date->toDateString());
         $this->assertSame(1, $employee->documents()->where('document_type', 'IQAMA')->where('document_number', '2455001122')->count(), 'renewal edits the row instead of adding one');
 
@@ -455,19 +461,19 @@ class ClientChangeRequestsRound3Test extends TestCase
 
     public function test_leave_types_attachments_and_balance(): void
     {
-        \Illuminate\Support\Facades\Storage::fake('local');
+        Storage::fake('local');
         $admin = $this->user('admin@example.com');
         $employee = Employee::firstOrFail();
 
         // The production defaults add what is missing and never duplicate.
-        $before = \App\Models\LeaveType::count();
-        $this->seed(\Database\Seeders\ProductionHrDefaultsSeeder::class);
-        $this->assertSame($before + 1, \App\Models\LeaveType::count(), 'only the missing Urgent / Personal type is added');
-        $this->seed(\Database\Seeders\ProductionHrDefaultsSeeder::class);
-        $this->assertSame($before + 1, \App\Models\LeaveType::count());
+        $before = LeaveType::count();
+        $this->seed(ProductionHrDefaultsSeeder::class);
+        $this->assertSame($before + 1, LeaveType::count(), 'only the missing Urgent / Personal type is added');
+        $this->seed(ProductionHrDefaultsSeeder::class);
+        $this->assertSame($before + 1, LeaveType::count());
 
         $balanceBefore = $employee->leaveBalance();
-        $annual = \App\Models\LeaveType::where('code', 'ANNUAL')->firstOrFail();
+        $annual = LeaveType::where('code', 'ANNUAL')->firstOrFail();
 
         $this->actingAs($admin)
             ->post(route('admin.hr.leaves.store'), [
@@ -475,13 +481,13 @@ class ClientChangeRequestsRound3Test extends TestCase
                 'start_date' => now()->startOfYear()->addMonths(10)->toDateString(),
                 'end_date' => now()->startOfYear()->addMonths(10)->addDays(2)->toDateString(),
                 'reason' => 'Family visit', 'status' => 'approved',
-                'attachment' => \Illuminate\Http\UploadedFile::fake()->create('tickets.pdf', 30, 'application/pdf'),
+                'attachment' => UploadedFile::fake()->create('tickets.pdf', 30, 'application/pdf'),
             ])
             ->assertRedirect(route('admin.hr.leaves.index'));
 
-        $leave = \App\Models\LeaveRequest::latest('id')->firstOrFail();
+        $leave = LeaveRequest::latest('id')->firstOrFail();
         $this->assertSame('tickets.pdf', $leave->attachment_name);
-        \Illuminate\Support\Facades\Storage::disk('local')->assertExists($leave->attachment_path);
+        Storage::disk('local')->assertExists($leave->attachment_path);
         $this->actingAs($admin)->get(route('admin.hr.leaves.attachment', $leave))->assertOk()->assertDownload('tickets.pdf');
 
         $balance = $employee->fresh()->leaveBalance();
@@ -515,7 +521,10 @@ class ClientChangeRequestsRound3Test extends TestCase
             'lines' => [['description' => 'Steel bars', 'quantity' => 10, 'unit_price' => 1000]],
         ])->assertSessionHasNoErrors();
 
-        return SupplierBill::where('bill_number', $number)->firstOrFail();
+        $bill = SupplierBill::where('bill_number', $number)->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Preserve the legacy Finance/F04 regression path.
+
+        return $bill;
     }
 
     private function createInvoice(User $user): CustomerInvoice

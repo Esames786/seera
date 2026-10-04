@@ -19,8 +19,10 @@ use App\Models\SiteExpense;
 use App\Models\Supplier;
 use App\Models\User;
 use App\Models\VatPeriod;
+use App\Services\Accounting\SupplierBillPostingService;
 use App\Services\Approvals\ApprovalRuntimeService;
 use App\Services\Approvals\SiteExpenseApprovalSubject;
+use App\Services\Approvals\SupplierBillApprovalSubject;
 use App\Services\SiteExpenses\SiteExpenseAccountingService;
 use App\Support\Workspace\ProjectWorkspacePanels;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -327,8 +329,26 @@ class SiteExpenseTest extends TestCase
         $this->assertDatabaseCount('supplier_bills', 1);
         $this->assertDatabaseCount('journal_entries', 0);
         $this->assertEquals(0, ProjectWorkspacePanels::finance($this->project)['cost']);
+        $this->assertSame('runtime', $bill->approval_mode);
+        $this->assertSame(0, $bill->approvals()->count()); // Expense approval is not bill approval.
+        $this->grant($this->owner, 'Accounts Payable', ['view', 'edit']);
+        $this->grant($this->first, 'Accounts Payable', ['view', 'approve', 'reject']);
         $this->grant($this->finance, 'Accounts Payable', ['view', 'approve', 'edit', 'delete']);
-        $this->actingAs($this->finance->fresh())->post(route('admin.accounting.accounts-payable.approve', $bill))->assertSessionHasNoErrors()->assertRedirect();
+        $workflow = ApprovalWorkflow::create(['name' => 'Credit bill reviewers', 'module' => 'Supplier Bill', 'trigger_action' => 'Bill Submitted',
+            'scope' => 'All Projects', 'auto_posting' => 'Create Accounting Entry', 'status' => 'active']);
+        foreach ([$this->first, $this->finance] as $i => $actor) {
+            $workflow->steps()->create(['step_no' => $i + 1, 'approver_role_id' => $actor->roles()->first()->id, 'is_required' => true, 'can_reject' => true]);
+        }
+        $runtime = app(ApprovalRuntimeService::class);
+        $subject = app(SupplierBillApprovalSubject::class);
+        $approval = $runtime->start($subject, $bill->id, $workflow->id, $this->owner);
+        $this->actingAs($this->finance->fresh())->get(route('admin.site-expenses.show', $expense))->assertOk()->assertSee('Pending Approval');
+        $this->assertEquals(0, ProjectWorkspacePanels::finance($this->project)['cost']);
+        $runtime->decide($subject, $bill->id, $approval->id, $approval->steps[0]->id, $this->first, 'approve');
+        $runtime->decide($subject, $bill->id, $approval->id, $approval->steps[1]->id, $this->finance, 'approve');
+        app(SupplierBillPostingService::class)->attempt($bill->id, $this->finance->id);
+        $this->assertSame('approved', $instance->fresh()->status);
+        $this->assertDatabaseCount('vat_transactions', 1);
         $this->assertTrue($expense->fresh()->accounting_posted);
         $this->assertNull($expense->fresh()->journal_entry_id);
         $this->assertDatabaseCount('journal_entries', 1);

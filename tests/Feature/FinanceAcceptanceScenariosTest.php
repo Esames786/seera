@@ -24,6 +24,8 @@ use App\Models\WarehouseStock;
 use App\Services\Accounting\PostingService;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
@@ -94,7 +96,7 @@ class FinanceAcceptanceScenariosTest extends TestCase
         return $out;
     }
 
-    private function vatRows(string $module, int $id): \Illuminate\Support\Collection
+    private function vatRows(string $module, int $id): Collection
     {
         return VatTransaction::where('source_module', $module)->where('source_id', $id)->get();
     }
@@ -115,7 +117,10 @@ class FinanceAcceptanceScenariosTest extends TestCase
             'lines' => [['description' => 'Service', 'quantity' => 1, 'unit_price' => $net]],
         ])->assertSessionHasNoErrors();
 
-        return SupplierBill::where('bill_number', $number)->firstOrFail();
+        $bill = SupplierBill::where('bill_number', $number)->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Preserve the legacy Finance/F04 regression path.
+
+        return $bill;
     }
 
     private function approvedBill(string $number = 'BILL-FIN', float $net = 1000): SupplierBill
@@ -574,6 +579,7 @@ class FinanceAcceptanceScenariosTest extends TestCase
             'lines' => [['description' => 'Cement bags', 'goods_receipt_line_id' => $grnLine->id, 'matched_quantity' => 10, 'quantity' => 10, 'unit_price' => 100]],
         ])->assertSessionHasNoErrors();
         $bill = SupplierBill::where('bill_number', 'BILL-FIN08')->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.approve', $bill))->assertSessionHasNoErrors();
 
         // Expected: Dr GRNI 1,000 / Dr Input VAT 150 / Cr AP 1,150; GRNI nets to zero; the
@@ -669,7 +675,7 @@ class FinanceAcceptanceScenariosTest extends TestCase
         $this->pay($paid, 1150, 'fin10-paid')->assertSessionHasNoErrors();
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.reopen', $paid), ['reason' => 'x'])->assertSessionHasErrors('bill');
         $this->assertSame('paid', $paid->fresh()->status);
-        $this->assertFalse(\Illuminate\Support\Facades\Route::has('admin.accounting.accounts-payable.payment.reverse'), 'no payment reversal route exists yet (known gap, documented)');
+        $this->assertFalse(Route::has('admin.accounting.accounts-payable.payment.reverse'), 'no payment reversal route exists yet (known gap, documented)');
 
         // Audit log.
         $this->logged('Reopened supplier bill', 'BILL-FIN10');

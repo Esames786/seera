@@ -126,6 +126,7 @@ class ClientChangeRequestsRound2Test extends TestCase
             ->assertRedirect();
 
         $bill = SupplierBill::where('bill_number', 'BILL-TERMS-001')->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $this->assertSame('2026-10-16', $bill->due_date->toDateString());
 
         $this->actingAs($this->admin())->get(route('admin.master.payment-terms.index'))->assertOk()->assertSee('45 Days');
@@ -192,6 +193,7 @@ class ClientChangeRequestsRound2Test extends TestCase
             ->assertRedirect();
 
         $bill = SupplierBill::where('bill_number', 'BILL-LINK-001')->firstOrFail();
+        $bill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.approve', $bill))->assertRedirect();
 
         $entry = $bill->refresh()->journalEntry;
@@ -217,6 +219,7 @@ class ClientChangeRequestsRound2Test extends TestCase
             ])
             ->assertRedirect();
         $fuelBill = SupplierBill::where('bill_number', 'BILL-LINK-002')->firstOrFail();
+        $fuelBill->update(['approval_mode' => 'legacy']); // Explicit pre-runtime fixture; runtime coverage is separate.
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.approve', $fuelBill))->assertRedirect();
         $this->assertSame(1150.0, (float) $fuelBill->refresh()->journalEntry->lines->firstWhere('chart_of_account_id', $control->id)->credit);
 
