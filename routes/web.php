@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Accounting\CostCenterController;
 use App\Http\Controllers\Admin\Accounting\FinancialReportController;
 use App\Http\Controllers\Admin\Accounting\GeneralLedgerController;
 use App\Http\Controllers\Admin\Accounting\JournalEntryController;
+use App\Http\Controllers\Admin\Accounting\SupplierBillApprovalController;
 use App\Http\Controllers\Admin\Accounting\VatController;
 use App\Http\Controllers\Admin\Accounting\ZatcaInvoiceController;
 use App\Http\Controllers\Admin\ActivityLogController;
@@ -247,6 +248,14 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
 
         Route::get('general-ledger', [GeneralLedgerController::class, 'index'])->name('general-ledger');
 
+        Route::post('accounts-payable/{accounts_payable}/submit-approval', [SupplierBillApprovalController::class, 'submit'])->name('accounts-payable.submit-approval');
+        Route::post('accounts-payable/{accounts_payable}/approval/approve', [SupplierBillApprovalController::class, 'approve'])->name('accounts-payable.runtime.approve');
+        Route::post('accounts-payable/{accounts_payable}/approval/reject', [SupplierBillApprovalController::class, 'reject'])->name('accounts-payable.runtime.reject');
+        Route::post('accounts-payable/{accounts_payable}/retry', [SupplierBillApprovalController::class, 'retry'])->name('accounts-payable.retry');
+        Route::post('accounts-payable/{accounts_payable}/submit-approval', [SupplierBillApprovalController::class, 'submit'])->name('accounts-payable.submit-approval');
+        Route::post('accounts-payable/{accounts_payable}/approval/approve', [SupplierBillApprovalController::class, 'approve'])->name('accounts-payable.runtime.approve');
+        Route::post('accounts-payable/{accounts_payable}/approval/reject', [SupplierBillApprovalController::class, 'reject'])->name('accounts-payable.runtime.reject');
+        Route::post('accounts-payable/{accounts_payable}/retry', [SupplierBillApprovalController::class, 'retry'])->name('accounts-payable.retry');
         Route::post('accounts-payable/{accounts_payable}/approve', [AccountsPayableController::class, 'approve'])->name('accounts-payable.approve');
         Route::post('accounts-payable/{accounts_payable}/reopen', [AccountsPayableController::class, 'reopen'])->name('accounts-payable.reopen');
         Route::get('accounts-payable/{accounts_payable}/payment', [AccountsPayableController::class, 'paymentForm'])->name('accounts-payable.payment');

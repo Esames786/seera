@@ -77,7 +77,7 @@ class EnsureUserHasPermission
      * @var array<string, array<int, string>>
      */
     public const ANY_OF = [
-        'my-approvals.index' => ['Purchase Requests', 'Site Expenses'],
+        'my-approvals.index' => ['Purchase Requests', 'Site Expenses', 'Accounts Payable'],
         'master.organization' => ['Branches', 'Departments', 'Designations'],
     ];
 
@@ -85,6 +85,15 @@ class EnsureUserHasPermission
     {
         $routeName = (string) $request->route()?->getName();
         $name = str($routeName)->after('admin.')->toString();
+
+        if (str_starts_with($routeName, 'admin.accounting.accounts-payable.')) {
+            abort_unless($request->user()?->hasPermission('Accounts Payable', 'view'), 403);
+            if ($routeName === 'admin.accounting.accounts-payable.submit-approval') {
+                abort_unless($request->user()->hasPermission('Accounts Payable', 'edit') || $request->user()->hasPermission('Accounts Payable', 'create'), 403);
+
+                return $next($request);
+            }
+        }
 
         if (in_array($routeName, ['admin.site-expenses.submit', 'admin.site-expenses.edit', 'admin.site-expenses.update'], true)) {
             $user = $request->user();

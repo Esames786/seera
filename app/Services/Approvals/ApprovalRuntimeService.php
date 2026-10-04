@@ -3,6 +3,7 @@
 namespace App\Services\Approvals;
 
 use App\Contracts\ApprovalSubject;
+use App\Contracts\SeparateApprovalState;
 use App\Models\ActivityLog;
 use App\Models\ApprovalInstance;
 use App\Models\ApprovalInstanceStep;
@@ -19,6 +20,7 @@ class ApprovalRuntimeService
         return match ($type) {
             'purchase_request' => app(PurchaseRequestApprovalSubject::class),
             'site_expense' => app(SiteExpenseApprovalSubject::class),
+            'supplier_bill' => app(SupplierBillApprovalSubject::class),
             default => abort(404),
         };
     }
@@ -50,7 +52,7 @@ class ApprovalRuntimeService
                 return $previous->setRelation('steps', $previous->steps()->lockForUpdate()->get());
             }
             abort_unless($subject->canSubmit($document, $actor), 403, 'This document cannot be submitted by your account in its current state.');
-            if ($previous && ($previous->status !== 'rejected' || $previousId !== $previous->id)) {
+            if ($previous && ((! ($subject instanceof SeparateApprovalState ? $subject->canResubmit($document, $previous) : $previous->status === 'rejected')) || $previousId !== $previous->id)) {
                 $this->invalid('Use the current rejected attempt to resubmit. Active or approved history cannot be reset.');
             }
             if (! $previous && $previousId !== null) {
@@ -59,7 +61,7 @@ class ApprovalRuntimeService
 
             $workflow = ApprovalWorkflow::whereKey($workflowId)->lockForUpdate()->firstOrFail();
             $workflow->setRelation('steps', $workflow->steps()->with('approverRole', 'approverUser')->lockForUpdate()->get());
-            $requester = User::find($document->requested_by);
+            $requester = User::find($subject instanceof SeparateApprovalState ? $subject->requesterId($document, $actor) : $document->requested_by);
             if (! $requester) {
                 $this->invalid('The original requester must exist before approval can be requested.');
             }
@@ -74,10 +76,10 @@ class ApprovalRuntimeService
                 || ($workflow->scope !== 'All Company' && ! $document->project_id)) {
                 $this->invalid('This workflow scope is unsupported or requires a project on the document.');
             }
-            $postingMode = $subject instanceof SiteExpenseApprovalSubject ? 'Create Accounting Entry' : 'No Auto Posting';
+            $postingMode = $subject instanceof SiteExpenseApprovalSubject || $subject instanceof SupplierBillApprovalSubject ? 'Create Accounting Entry' : 'No Auto Posting';
             if ($workflow->auto_posting !== $postingMode) {
-                if ($subject instanceof SiteExpenseApprovalSubject) {
-                    $this->invalid('Site Expenses requires Create Accounting Entry. Finance posting rules still control ledger review mode.');
+                if ($postingMode === 'Create Accounting Entry') {
+                    $this->invalid($subject->workflowModule().' requires Create Accounting Entry. Finance posting rules still control ledger review mode.');
                 }
                 $this->invalid('This integration does not support automatic accounting posting.');
             }
@@ -85,6 +87,7 @@ class ApprovalRuntimeService
             if ($required->isEmpty() || $workflow->steps->pluck('step_no')->unique()->count() !== $workflow->steps->count()) {
                 $this->invalid('Configure at least one required step and unique sequential step numbers.');
             }
+            $excluded = array_values(array_unique(array_merge([$requester->id, $actor->id], $subject instanceof SeparateApprovalState ? $subject->excludedApproverIds($document) : [])));
             $rows = [];
             foreach ($workflow->steps as $step) {
                 if ($step->amount_limit !== null) {
@@ -98,7 +101,7 @@ class ApprovalRuntimeService
                     $candidates = $step->approverRole->users()->where('users.status', 'active')
                         ->when($step->approver_user_id, fn ($q) => $q->where('users.id', $step->approver_user_id))->get();
                     foreach ($candidates as $candidate) {
-                        if (in_array($candidate->id, [$requester->id, $actor->id], true)) {
+                        if (in_array($candidate->id, $excluded, true)) {
                             continue;
                         }
                         if (! $candidate->hasEffectiveRole((int) $step->approver_role_id)
@@ -127,6 +130,7 @@ class ApprovalRuntimeService
                 'attempt' => ($previous?->attempt ?? 0) + 1, 'approval_workflow_id' => $workflow->id,
                 'status' => 'pending', 'requested_by' => $requester->id, 'submitted_by' => $actor->id, 'requested_at' => now(),
                 'snapshot' => ['version' => 1, 'mode' => 'sequential', 'previous_instance_id' => $previous?->id,
+                    'excluded_approver_ids' => $excluded,
                     'requester_name' => $requester->name, 'submitter_name' => $actor->name,
                     'workflow' => $workflow->attributesToArray(), 'subject' => $subject->snapshot($document)],
             ]);
@@ -143,6 +147,7 @@ class ApprovalRuntimeService
     {
         return in_array($action, ['approve', 'reject'], true) && $actor->status === 'active'
             && $actor->id != $instance->requested_by && $actor->id != $instance->submitted_by
+            && ! in_array($actor->id, $instance->snapshot['excluded_approver_ids'] ?? [], true)
             && in_array($actor->id, $step->eligible_user_ids, true)
             && $actor->hasEffectiveRole((int) $step->approver_role_id)
             && (! $step->approver_user_id || $actor->id == $step->approver_user_id)
@@ -180,7 +185,7 @@ class ApprovalRuntimeService
                 }
                 $this->invalid('This step already has a decision. Conflicting retries cannot rewrite history.');
             }
-            if ($instance->status !== 'pending' || $document->status !== 'pending'
+            if ($instance->status !== 'pending' || ! ($subject instanceof SeparateApprovalState ? $subject->isPending($document) : $document->status === 'pending')
                 || $instance->currentStep()?->id !== $step->id) {
                 $this->invalid('This step is not currently actionable.');
             }

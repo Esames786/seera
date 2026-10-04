@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Accounting;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\ApprovalWorkflow;
 use App\Models\ChartOfAccount;
 use App\Models\CostCenter;
 use App\Models\ExpenseCategory;
@@ -15,6 +16,9 @@ use App\Models\SupplierBill;
 use App\Models\SupplierPayment;
 use App\Services\Accounting\GrnMatchingService;
 use App\Services\Accounting\PostingService;
+use App\Services\Accounting\SupplierBillPostingService;
+use App\Services\Approvals\ApprovalRuntimeService;
+use App\Services\Approvals\SupplierBillApprovalSubject;
 use App\Support\SaveAction;
 use App\Support\SettlementReplay;
 use App\Support\Workspace\DocumentActivity;
@@ -35,7 +39,7 @@ class AccountsPayableController extends Controller
 
     public function index(Request $request): View
     {
-        $bills = SupplierBill::with(['supplier', 'project'])
+        $bills = SupplierBill::with(['supplier', 'project', 'journalEntry'])
             ->when($request->filled('search'), function ($query) use ($request) {
                 $search = $request->string('search');
                 $query->where(fn ($q) => $q->where('bill_number', 'like', "%{$search}%")
@@ -77,8 +81,8 @@ class AccountsPayableController extends Controller
     {
         [$data, $lines] = $this->validated($request);
 
-        $bill = DB::transaction(function () use ($data, $lines) {
-            $bill = SupplierBill::create($data);
+        $bill = DB::transaction(function () use ($data, $lines, $request) {
+            $bill = SupplierBill::create($data + ['approval_mode' => 'runtime', 'requested_by' => $request->user()->id, 'last_edited_by' => $request->user()->id]);
             $this->writeLines($bill, $lines);
 
             return $bill;
@@ -91,7 +95,7 @@ class AccountsPayableController extends Controller
             'stay' => route('admin.accounting.accounts-payable.show', $bill),
             'close' => route('admin.accounting.accounts-payable.index'),
             'new' => route('admin.accounting.accounts-payable.create'),
-        ])->with('status', 'Supplier bill "'.$bill->bill_number.'" saved. Approve it to post the accounting entry.');
+        ])->with('status', 'Supplier bill "'.$bill->bill_number.'" saved. Review it and submit for approval.');
     }
 
     /**
@@ -113,12 +117,17 @@ class AccountsPayableController extends Controller
             'canViewReceipts' => $user->hasPermission('Goods Receipts', 'view'),
             'canViewOrders' => $user->hasPermission('Purchase Orders', 'view'),
             'canViewJournals' => $user->hasPermission('Journal Entries', 'view'),
-            'activity' => DocumentActivity::latest($user, [$accounts_payable->bill_number], ['Accounting']),
+            'activity' => DocumentActivity::latest($user, [$accounts_payable->bill_number], ['Accounting', 'Approvals']),
+            'approvalHistory' => app(ApprovalRuntimeService::class)->history(app(SupplierBillApprovalSubject::class), $accounts_payable)->get(),
+            'approvalRuntime' => app(ApprovalRuntimeService::class),
+            'approvalSubject' => app(SupplierBillApprovalSubject::class),
+            'billWorkflows' => ApprovalWorkflow::where('module', 'Supplier Bill')->where('trigger_action', 'Bill Submitted')->where('status', 'active')->orderBy('name')->get(),
         ]);
     }
 
     public function edit(SupplierBill $accounts_payable): View
     {
+        abort_if($accounts_payable->site_expense_id, 403, 'Approved Site Expense values cannot be edited independently.');
         if (! $accounts_payable->isEditable()) {
             abort(403, 'An approved supplier bill can no longer be edited.');
         }
@@ -137,17 +146,21 @@ class AccountsPayableController extends Controller
 
         [$data, $lines] = $this->validated($request, $accounts_payable);
 
-        DB::transaction(function () use ($accounts_payable, $data, $lines) {
+        DB::transaction(function () use ($accounts_payable, $data, $lines, $request) {
             // Re-check under lock: an approval that landed since the form was opened wins (F11).
             $bill = SupplierBill::whereKey($accounts_payable->id)->lockForUpdate()->firstOrFail();
             if (! $bill->isEditable()) {
                 throw ValidationException::withMessages(['bill' => 'This bill was approved while you were editing it; your changes were not saved.']);
             }
 
-            $bill->update($data);
+            $this->matching->lockForChanges($bill, collect($lines)->pluck('_match.goods_receipt_line_id')->filter()->all());
+            $bill->update($data + ['last_edited_by' => $request->user()->id]);
             $bill->lines()->delete();   // draft matches go with their lines (cascade)
             $this->writeLines($bill, $lines);
-        });
+            if ($bill->approval_status === 'rejected') {
+                $this->matching->reserve($bill);
+            }
+        }, 3);
 
         ActivityLog::record($request, 'Accounting', 'Updated supplier bill', $accounts_payable->bill_number);
 
@@ -169,6 +182,9 @@ class AccountsPayableController extends Controller
 
         DB::transaction(function () use ($accounts_payable) {
             $bill = SupplierBill::whereKey($accounts_payable->id)->lockForUpdate()->firstOrFail();
+            if ($bill->approvals()->exists()) {
+                throw ValidationException::withMessages(['bill' => 'Approval history must be retained; this bill cannot be deleted.']);
+            }
             if (! $bill->isEditable()) {
                 throw ValidationException::withMessages(['bill' => 'This bill was approved in the meantime and cannot be deleted.']);
             }
@@ -186,29 +202,7 @@ class AccountsPayableController extends Controller
      */
     public function approve(Request $request, SupplierBill $accounts_payable): RedirectResponse
     {
-        $entry = DB::transaction(function () use ($accounts_payable, $request) {
-            $accounts_payable = SupplierBill::whereKey($accounts_payable->id)->lockForUpdate()->firstOrFail();
-            if ($accounts_payable->status !== 'draft') {
-                throw ValidationException::withMessages(['bill' => 'Only a draft supplier bill can be approved.']);
-            }
-
-            // Lines invoicing received goods consume the receipt quantities under lock first (F04);
-            // a stale or duplicate match refuses the whole approval.
-            $this->matching->commit($accounts_payable);
-
-            // Posting refuses (and rolls this transaction back) when an account is missing,
-            // inactive or the entry would not balance (NR-30, F01): no half-approved bill.
-            $entry = $this->posting->postSupplierBill($accounts_payable, $request->user()->id);
-
-            $accounts_payable->update([
-                'status' => 'unpaid',
-                'paid_amount' => 0,
-                'balance_amount' => $accounts_payable->total_amount,
-                'journal_entry_id' => $entry->id,
-            ]);
-
-            return $entry;
-        });
+        $entry = app(SupplierBillPostingService::class)->approveLegacy($accounts_payable->id, $request->user()->id);
 
         ActivityLog::record($request, 'Accounting', 'Approved supplier bill', $accounts_payable->bill_number);
 
@@ -231,7 +225,7 @@ class AccountsPayableController extends Controller
         $reversal = DB::transaction(function () use ($accounts_payable, $data, $request) {
             $bill = SupplierBill::whereKey($accounts_payable->id)->lockForUpdate()->firstOrFail();
 
-            if ($bill->status !== 'unpaid' || $bill->payments()->exists()) {
+            if ($bill->status !== 'unpaid' || $bill->payments()->exists() || $bill->journalEntry?->status !== 'posted') {
                 throw ValidationException::withMessages(['bill' => 'Only an approved bill with no payments can be reopened. Reverse the payments first.']);
             }
 
@@ -247,6 +241,8 @@ class AccountsPayableController extends Controller
             $bill->update([
                 'status' => 'draft',
                 'journal_entry_id' => null,
+                'approval_status' => $bill->approval_mode === 'runtime' ? 'correction' : $bill->approval_status,
+                'posting_error' => null,
                 'paid_amount' => 0,
                 'balance_amount' => $bill->total_amount,
                 'notes' => trim(($bill->notes ? $bill->notes."\n" : '')
@@ -265,6 +261,7 @@ class AccountsPayableController extends Controller
 
     public function paymentForm(Request $request, SupplierBill $accounts_payable): View
     {
+        abort_unless($accounts_payable->isPayable(), 403, 'Payment is available only after the bill journal is actually posted.');
         $accounts_payable->load(['supplier', 'payments']);
         $allowedCodes = $accounts_payable->supplier->allowedPaymentAccountCodes();
 
@@ -325,7 +322,7 @@ class AccountsPayableController extends Controller
                 }
             }
 
-            if (in_array($accounts_payable->status, ['draft', 'cancelled', 'paid'], true)) {
+            if (! $accounts_payable->isPayable()) {
                 throw ValidationException::withMessages(['payment' => 'This bill is not open for payment.']);
             }
             if ((float) $data['amount'] > (float) $accounts_payable->balance_amount + 0.001) {
@@ -410,7 +407,7 @@ class AccountsPayableController extends Controller
         $matches = $this->matching->resolve((int) $supplierId, collect($data['lines'])
             ->filter(fn ($line) => filled($line['goods_receipt_line_id'] ?? null))
             ->map(fn ($line) => ['goods_receipt_line_id' => $line['goods_receipt_line_id'], 'matched_quantity' => $line['matched_quantity'] ?? null])
-            ->all());
+            ->all(), $bill?->id);
 
         $lines = collect($data['lines'])
             ->map(function ($line, $index) use ($matches) {

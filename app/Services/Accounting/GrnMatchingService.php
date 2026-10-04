@@ -5,6 +5,7 @@ namespace App\Services\Accounting;
 use App\Models\GoodsReceipt;
 use App\Models\GoodsReceiptLine;
 use App\Models\SupplierBill;
+use App\Models\SupplierBillGrnMatch;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 
@@ -62,7 +63,7 @@ class GrnMatchingService
      * @param  array<int, array{goods_receipt_line_id: mixed, matched_quantity: mixed}>  $requests
      * @return array<int, array<string, mixed>>
      */
-    public function resolve(int $supplierId, array $requests): array
+    public function resolve(int $supplierId, array $requests, ?int $billId = null): array
     {
         if ($requests === []) {
             return [];
@@ -97,11 +98,11 @@ class GrnMatchingService
             }
 
             $requestedPerLine[$lineId] = round(($requestedPerLine[$lineId] ?? 0) + $quantity, 3);
-            if ($requestedPerLine[$lineId] > $grnLine->uninvoicedQuantity() + self::TOLERANCE) {
+            if ($requestedPerLine[$lineId] > $this->availableQuantity($grnLine, $billId) + self::TOLERANCE) {
                 $this->refuse(sprintf(
                     '%s / %s has only %s uninvoiced; this bill asks for %s.',
                     $grn->grn_number, $grnLine->item?->label() ?? 'item',
-                    rtrim(rtrim(number_format($grnLine->uninvoicedQuantity(), 3, '.', ''), '0'), '.'),
+                    rtrim(rtrim(number_format($this->availableQuantity($grnLine, $billId), 3, '.', ''), '0'), '.'),
                     rtrim(rtrim(number_format($requestedPerLine[$lineId], 3, '.', ''), '0'), '.')
                 ));
             }
@@ -133,7 +134,7 @@ class GrnMatchingService
             return;
         }
 
-        $perLine = $matches->groupBy('goods_receipt_line_id');
+        $perLine = $matches->groupBy('goods_receipt_line_id')->sortKeys();
 
         foreach ($perLine as $lineId => $group) {
             $grnLine = GoodsReceiptLine::with('goodsReceipt')->whereKey($lineId)->lockForUpdate()->first();
@@ -147,11 +148,11 @@ class GrnMatchingService
             }
 
             $wanted = round((float) $group->sum('matched_quantity'), 3);
-            if ($wanted > $grnLine->uninvoicedQuantity() + self::TOLERANCE) {
+            if ($wanted > $this->availableQuantity($grnLine, $bill->id) + self::TOLERANCE) {
                 $this->refuse(sprintf(
                     'Goods receipt %s / %s has only %s uninvoiced now (another bill was approved first); this bill asks for %s. Nothing was posted.',
                     $grn->grn_number, $grnLine->item?->label() ?? 'item',
-                    rtrim(rtrim(number_format($grnLine->uninvoicedQuantity(), 3, '.', ''), '0'), '.'),
+                    rtrim(rtrim(number_format($this->availableQuantity($grnLine, $bill->id), 3, '.', ''), '0'), '.'),
                     rtrim(rtrim(number_format($wanted, 3, '.', ''), '0'), '.')
                 ));
             }
@@ -167,14 +168,46 @@ class GrnMatchingService
     {
         $matches = $bill->grnMatches()->whereNotNull('committed_at')->get();
 
-        foreach ($matches->groupBy('goods_receipt_line_id') as $lineId => $group) {
+        foreach ($matches->groupBy('goods_receipt_line_id')->sortKeys() as $lineId => $group) {
             $grnLine = GoodsReceiptLine::withoutGlobalScopes()->whereKey($lineId)->lockForUpdate()->first();
             if ($grnLine) {
                 $grnLine->update(['invoiced_quantity' => round(max((float) $grnLine->invoiced_quantity - (float) $group->sum('matched_quantity'), 0), 3)]);
             }
         }
 
-        $bill->grnMatches()->whereNotNull('committed_at')->update(['committed_at' => null]);
+        $bill->grnMatches()->whereNotNull('committed_at')->update(['committed_at' => null, 'reserved_at' => null]);
+    }
+
+    /** Runtime submission reserves capacity; it does NOT invoice it or create accounting. */
+    public function lockForChanges(SupplierBill $bill, array $newLineIds): void
+    {
+        $ids = $bill->grnMatches()->pluck('goods_receipt_line_id')->merge($newLineIds)->filter()->unique()->sort()->values();
+        // Source -> ordered GRN rows -> match rows, also when replacing rejected
+        // reservations. Never delete reservation rows before acquiring their mutex.
+        GoodsReceiptLine::withoutGlobalScopes()->whereIn('id', $ids)->orderBy('id')->lockForUpdate()->get();
+    }
+
+    public function reserve(SupplierBill $bill): void
+    {
+        foreach ($bill->grnMatches()->whereNull('committed_at')->get()->groupBy('goods_receipt_line_id')->sortKeys() as $lineId => $matches) {
+            $line = GoodsReceiptLine::with('goodsReceipt')->whereKey($lineId)->lockForUpdate()->first();
+            if (! $line || $line->goodsReceipt->status !== 'posted' || (int) $line->goodsReceipt->supplier_id !== (int) $bill->supplier_id
+                || round((float) $matches->sum('matched_quantity'), 3) > $this->availableQuantity($line, $bill->id) + self::TOLERANCE) {
+                $this->refuse('Matched received quantity is unavailable or reserved by another submitted bill. Review the matches; nothing was submitted.');
+            }
+        }
+        $bill->grnMatches()->whereNull('committed_at')->update(['reserved_at' => now()]);
+    }
+
+    private function availableQuantity(GoodsReceiptLine $line, ?int $billId): float
+    {
+        // Current locking read after the GRN mutex, including MySQL REPEATABLE READ.
+        // Do not scope this aggregate: another project's reservation must not be stolen.
+        $reserved = SupplierBillGrnMatch::withoutGlobalScopes()->where('goods_receipt_line_id', $line->id)
+            ->whereNotNull('reserved_at')->whereNull('committed_at')
+            ->when($billId, fn ($q) => $q->where('supplier_bill_id', '!=', $billId))->lockForUpdate()->get()->sum('matched_quantity');
+
+        return max(0, round($line->uninvoicedQuantity() - (float) $reserved, 3));
     }
 
     private function refuse(string $message): never

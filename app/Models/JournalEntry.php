@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\DB;
 
 class JournalEntry extends Model
 {
+    public function isApprovalControlledSource(): bool
+    {
+        return $this->isSiteExpenseSource() || ($this->source_module === 'Supplier Bill'
+            && SupplierBill::withoutGlobalScopes()->whereKey($this->source_id)->where('approval_mode', 'runtime')->exists());
+    }
+
     public function isSiteExpenseSource(): bool
     {
         return in_array($this->source_module, ['Site Expense', 'Site Expense Reimbursement'], true) || ($this->source_module === 'Supplier Bill'

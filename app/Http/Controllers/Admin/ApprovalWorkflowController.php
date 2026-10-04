@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class ApprovalWorkflowController extends Controller
@@ -121,6 +122,16 @@ class ApprovalWorkflowController extends Controller
             'steps.required' => 'Add at least one approval step.',
         ]);
 
+        if ($data['module'] === 'Supplier Bill' && $data['status'] === 'active') {
+            if (collect($data['steps'])->contains(fn ($step) => isset($step['amount_limit']))
+                || collect($data['steps'])->pluck('step_no')->unique()->count() !== count($data['steps'])
+                || ! collect($data['steps'])->contains(fn ($step) => (bool) ($step['is_required'] ?? true))
+                || $data['auto_posting'] !== 'Create Accounting Entry' || $data['trigger_action'] !== 'Bill Submitted'
+                || ! in_array($data['scope'], ['Assigned Project/Site', 'All Projects', 'All Company'], true)) {
+                throw ValidationException::withMessages(['steps' => 'Supplier Bills requires Bill Submitted, Create Accounting Entry, a supported scope and required sequential steps with unique numbers. Amount limits and parallel groups are not supported.']);
+            }
+        }
+
         $steps = collect($data['steps'])
             ->sortBy('step_no')
             ->values()
@@ -150,8 +161,8 @@ class ApprovalWorkflowController extends Controller
             'departments' => Department::orderBy('name')->get(),
             'roles' => Role::orderBy('level')->orderBy('name')->get(),
             'users' => User::orderBy('name')->get(),
-            'modules' => ['Site Expenses', 'Purchase Request', 'Payroll', 'Leave Request', 'Inventory Transfer', 'Equipment Maintenance'],
-            'triggers' => ['Expense Submitted', 'Request Created', 'Payroll Generated', 'Transfer Requested', 'Maintenance Reported'],
+            'modules' => ['Supplier Bill', 'Site Expenses', 'Purchase Request', 'Payroll', 'Leave Request', 'Inventory Transfer', 'Equipment Maintenance'],
+            'triggers' => ['Bill Submitted', 'Expense Submitted', 'Request Created', 'Payroll Generated', 'Transfer Requested', 'Maintenance Reported'],
             'scopes' => ['Assigned Project/Site', 'All Projects', 'All Company', 'Branch Level'],
             'postings' => ['No Auto Posting', 'Create Accounting Entry'],
         ];

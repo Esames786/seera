@@ -92,7 +92,7 @@ class JournalEntryController extends Controller
 
     public function edit(JournalEntry $journal_entry): View
     {
-        abort_if($journal_entry->isSiteExpenseSource(), 403, 'Correct the originating expense through Finance, not by editing its generated journal.');
+        abort_if($journal_entry->isApprovalControlledSource(), 403, 'Correct the originating document through Finance, not by editing its approved journal.');
         $this->assertWholeEntryAccess($journal_entry);
         if (! $journal_entry->isEditable()) {
             abort(403, 'A posted or cancelled journal entry cannot be edited.');
@@ -105,7 +105,7 @@ class JournalEntryController extends Controller
 
     public function update(Request $request, JournalEntry $journal_entry): RedirectResponse
     {
-        abort_if($journal_entry->isSiteExpenseSource(), 403, 'Generated Site Expense journals are immutable.');
+        abort_if($journal_entry->isApprovalControlledSource(), 403, 'Approval-controlled journals are immutable.');
         $this->assertWholeEntryAccess($journal_entry);
         if (! $journal_entry->isEditable()) {
             return back()->withErrors(['journal' => 'A posted or cancelled journal entry cannot be edited.']);
@@ -138,7 +138,7 @@ class JournalEntryController extends Controller
 
     public function destroy(Request $request, JournalEntry $journal_entry): RedirectResponse
     {
-        abort_if($journal_entry->isSiteExpenseSource(), 403, 'Generated Site Expense journals must remain in history.');
+        abort_if($journal_entry->isApprovalControlledSource(), 403, 'Approval-controlled journals must remain in history.');
         $this->assertWholeEntryAccess($journal_entry);
         if ($journal_entry->status === 'posted') {
             return back()->withErrors(['journal' => 'A posted journal entry cannot be deleted. Cancel it instead.']);
@@ -207,7 +207,7 @@ class JournalEntryController extends Controller
 
     public function cancel(Request $request, JournalEntry $journal_entry): RedirectResponse
     {
-        abort_if($journal_entry->isSiteExpenseSource(), 403, 'Use the originating Finance document correction flow.');
+        abort_if($journal_entry->isApprovalControlledSource(), 403, 'Use the originating Finance document correction flow.');
         $this->assertWholeEntryAccess($journal_entry);
         if ($journal_entry->status === 'posted') {
             return back()->withErrors(['journal' => 'A posted journal entry cannot be cancelled in this phase.']);
