@@ -176,3 +176,24 @@ only after all required approvals and a separately authorized/idempotent posting
 transition. Follow [Site Expense contract](site-expense-runtime-contract-2026-09-29.md)
 and resolve its owner/accountant decisions before implementing posting. No Site Expense
 schema/module, merge or deployment is included in F08.
+
+### Current status — Supplier Bill approval sprint (4 October 2026)
+
+This supersedes the historical Batch 6 next-step note above. Full Site Expense and Project Phase B expense integration shipped on the feature branch at `eedc786`; this sprint starts from that commit and adds Supplier Bills to the SAME reusable Approval Runtime. No merge or production deployment is included.
+
+- AVAILABLE runtime subjects: Purchase Requests, Site Expenses, Supplier Bills. PO, Customer Invoice, Leave and Payroll runtime are still unimplemented. All configured required sequential slots must approve. No parallel groups, amount thresholds, implicit reporting-parent expansion, delegation or escalation/notification jobs.
+- Supplier Bills retain draft/unpaid/partially_paid/paid financial states, with separate approval mode/status and immutable attempt history. New bills explicitly Submit; legacy drafts only enrol through Submit, while historical paid/posted bills gain no fabricated decisions.
+- Final approval commits before the single extracted existing F04/direct/mixed posting path. Source-locked Finance retry cannot duplicate AP/VAT/journal/GRN consumption. Approved history survives posting failure. Review journals are not payable until actually posted.
+- Pending approval freezes bill fields/matches; submitted GRN reservations survive rejection. Correction replaces reservations transactionally. Reopen performs existing financial reversal and preserves approved history; new approval is mandatory before reposting.
+- FIN-AP-003 adds Approval beside its existing sections. Supplier, PO/P2P and Project Finance contexts show approval labels without introducing profile-save approval or new Project cost formulas. APR-001 remains the only actionable queue.
+- Site Expense Supplier Credit creates exactly one runtime-mode draft bill, no separate AP journal. Its original operational approval and the bill's financial approval remain independent. The expense shows linked bill status; posted cost enters through that bill once.
+- One additive migration, no production seeder, no automatic permission grants/workflow policy. Administrators configure Supplier Bill / Bill Submitted / Create Accounting Entry and explicit eligible reviewers. See `supplier-bill-runtime-2026-10-03.md` for audit and measured release gates; authoritative guide v1.5 adds WF-019 and preserves Screen IDs.
+
+### Recommended next sprint — Connected Workspace Optimization Wave 2 (NOT STARTED)
+
+1. **Batch A: Users + Sites.** Apply the existing persistent identity, profile save/close/new/back and lazy related-panel conventions, keeping employee linking and project/site scope server-authoritative.
+2. **Batch B: Items + Warehouses.** Centralize related read/work actions without duplicating stock posting, transfers, valuation or ledger logic.
+3. **Batch C: Customer Invoice document workspace refinement.** Consistent document context, accounting/receipt states and return navigation; do not silently introduce AR Approval Runtime.
+4. **Batch D: HR connected optimization around Employee.** Attendance / Leave / Overtime / Payroll context improvements; preserve accepted calculations, separate permissions, approval and payroll-processing actions.
+
+Each batch needs source audit, regression coverage, permission/scope checks and a client review boundary. No automatic Wave 2 work is authorized by this sprint's completion.

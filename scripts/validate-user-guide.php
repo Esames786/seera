@@ -48,7 +48,7 @@ foreach ($documents as $file => $xpath) {
         $checked++;
     }
 }
-foreach (['WF-017', 'WF-018'] as $id) {
+foreach (['WF-017', 'WF-018', 'WF-019'] as $id) {
     if ($documents['WORKFLOW-INDEX.html']->query('//tr[td[1][normalize-space()="'.$id.'"]]')->length !== 1) {
         throw new RuntimeException($id.' must appear exactly once as a workflow table row.');
     }
@@ -58,4 +58,4 @@ foreach (['EXP-SE-001', 'EXP-SE-002', 'EXP-SE-003', 'EXP-SE-004'] as $id) {
         throw new RuntimeException($id.' must appear exactly once as a screen table row.');
     }
 }
-echo "PASS four guide pages; $checked internal links/anchors; stable Site Expense/approval IDs.\n";
+echo "PASS four guide pages; $checked internal links/anchors; stable Site Expense/approval IDs including WF-019.\n";

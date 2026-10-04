@@ -3,9 +3,9 @@
 
 | | |
 |---|---|
-| **Version** | 1.4 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 2 October 2026: Approval Runtime supports Purchase Requests and Site Expenses. Responsive Site Expense entry, private receipts, accounting and Project Phase B expense integration are implemented. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
-| **Prepared** | 29 September 2026 |
+| **Version** | 1.5 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 4 October 2026: Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Responsive Site Expense entry, private receipts, accounting and Project Phase B expense integration are implemented. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
+| **Prepared** | 4 October 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
 
@@ -504,7 +504,7 @@ Web address: `https://seera.tech-brit.co.uk/admin/roles/approval-workflows` (ROL
 Purpose:
 Record who should approve what, step by step.
 
-Status: **AVAILABLE for Purchase Request runtime; PARTIAL for other modules**. The builder saves configuration; actual decisions are separate per-document runtime history. Configuration includes name, module, trigger, department, scope, auto posting, notify requester, lock after approval, and ordered role/user steps with required, amount limit, SLA, escalation, can reject and can send back.
+Status: **AVAILABLE for Purchase Request, Site Expense and Supplier Bill runtime; PARTIAL for other modules**. The builder saves configuration; actual decisions are separate per-document runtime history. Configuration includes name, module, trigger, department, scope, auto posting, notify requester, lock after approval, and ordered role/user steps with required, amount limit, SLA, escalation, can reject and can send back.
 
 For PR runtime choose module **Purchase Request**, trigger **Request Created**, an appropriate requester department (or none), scope **All Company** or **All Projects / Assigned Project/Site** (the latter two require a project), **No Auto Posting**, at least one required active role and **blank amount limits**. Branch Level and amount-limit routing are not executed. Existing sample workflows with amounts will fail submission with an explanation until an administrator reviews their policy; no silent configuration rewrite occurs.
 
@@ -512,13 +512,17 @@ Steps run in order. An optional step is retained as informational/skipped, not a
 
 Buttons: + New Workflow, Preview, Edit, Delete, + Add Step, Save Workflow, Cancel.
 
+For Supplier Bills choose **Supplier Bill / Bill Submitted / Create Accounting Entry**, a supported scope and sequential required reviewers. Active unsupported amount limits or duplicate step numbers are refused, not ignored. Every required step needs an eligible non-requester/non-submitter/non-last-editor reviewer. Workflow configuration does not grant Finance permissions. Site Expenses use **Site Expenses / Expense Submitted / Create Accounting Entry**. Finance's Auto Post setting remains separate: an off/missing active rule creates a review journal, which must be posted before payment.
+
 ### [APR-001] My Approvals
 
 Web address: `https://seera.tech-brit.co.uk/admin/my-approvals`
 
-Navigation: Main → My Approvals. Permission: Purchase Requests or Site Expenses — view to open; an eligible current step plus the source module's approve/reject permission and document scope to see a task. Workflow configuration rights do not confer approval authority.
+Navigation: Main → My Approvals. Permission: Purchase Requests, Site Expenses or Accounts Payable — view to open; an eligible current step plus the source module's approve/reject permission and document scope to see a task. Workflow configuration rights do not confer approval authority.
 
 Columns: Document, Module, Requested By, Project / Site, Submitted, Current Step, Status, Actions. Filter Module, Pending status, Project, Submitted from/to. Only currently actionable tasks appear, not previously completed decisions. **View**, **Review & approve** and **Review & reject** open the source document's Approvals panel; no decision is made from a list click.
+
+Supplier Bill tasks additionally show Supplier, Total and Submitted By. Choose **Supplier Bills** in the module filter. The link opens FIN-AP-003 at its Approval section; completed/rejected tasks leave this queue but remain in the source history.
 
 ### [APR-002] Embedded approval history and decisions
 
@@ -1337,7 +1341,7 @@ INV-PO-001, INV-GRN-001, FIN-AP-001, WF-002, WF-010.
 
 - Every financial document (supplier bill, customer invoice, payment, receipt, goods receipt, stock issue, stock adjustment) creates its **journal entry automatically** when you approve or post it. You do not type these journals.
 - **Save** keeps a document as a *draft*. A draft has no accounting effect and no VAT effect.
-- **Approve & Post** (bills, invoices) and **Post** (journals, stock documents) are the moments accounting happens. If anything is wrong (inactive account, unbalanced entry, sealed VAT period), nothing is saved and a message tells you why.
+- For new Supplier Bills, **all required runtime approvals** complete before existing bill posting is attempted. A failed accounting attempt preserves approval history and exposes **Retry Posting** to Finance. Legacy bills and Customer Invoices retain their explicitly labelled **Approve & Post** path; **Post** applies to journals/stock documents. Accounting failures roll back financial writes. A review journal is not payable until actually posted.
 - **Pay** and **Record Receipt** create their own journals when you record them.
 - A **finalized VAT period** is sealed: no document with VAT dated inside it can be approved, corrected or recalculated.
 - Posted journals are never edited. Corrections are made by **Reopen** (which posts a reversing entry) or by a new manual journal.
@@ -1480,7 +1484,7 @@ Permission required:
 Accounts Payable — view.
 
 What you see:
-Cards Outstanding Payable, Overdue Bills, Draft Bills, Paid This Month; filters (search, supplier, status, dates); the bills table (Bill Number, Supplier, Bill Date, Due Date, Taxable, VAT, Total, Paid, Balance, Status) with **View**, **Approve** (drafts) and **Pay** (open bills) per row; Recent Supplier Payments.
+Cards Outstanding Payable, Overdue Bills, Draft Bills, Paid This Month; filters (search, supplier, status, dates); the bills table (Bill Number, Supplier, Bill Date, Due Date, Taxable, VAT, Total, Paid, Balance, financial Status and separate Approval Status) with **View**, explicitly labelled legacy approval for eligible legacy drafts, and **Pay** only for payable bills with a posted journal. Recent Supplier Payments remain unchanged.
 
 ### [FIN-AP-002] Add Supplier Bill and [FIN-AP-004] Edit Supplier Bill
 
@@ -1550,18 +1554,19 @@ Navigation:
 Accounts Payable → View.
 
 Permission required:
-Accounts Payable — view; approve for Approve & Post and Reopen; process for Record Payment; edit for Edit.
+Accounts Payable — view always; create for the original creator's Submit or edit for an authorized editor's Submit; approve/reject plus current step eligibility for decisions; post AND retry for Retry Posting; process for Record Payment; edit for corrections. Reopen additionally requires Super Admin and approve. Project/site scope is checked on every server action.
 
 What you see:
-The bill is a **light document workspace**. A header stays at the top: Bill Number, Supplier (with a View link for Suppliers — view), status and payment state (Draft, not posted / Awaiting payment / Overdue / Partly paid / Paid in full), bill and due dates, Project / Site, the matched goods receipts and their purchase orders (links need Goods Receipts — view and Purchase Orders — view), **Total**, **Paid**, **Outstanding payment**, and the accounting journal (link needs Journal Entries — view). A section bar links to Bill Info · Lines · GRN Matches · VAT · Accounting Entry · Payments · Balance · Activity; a section is present only when your role may read it.
+The bill is a **light document workspace**. A header stays at the top: Bill Number, Supplier (with a View link for Suppliers — view), status and payment state (Draft, not posted / Awaiting payment / Overdue / Partly paid / Paid in full), bill and due dates, Project / Site, the matched goods receipts and their purchase orders (links need Goods Receipts — view and Purchase Orders — view), **Total**, **Paid**, **Outstanding payment**, and the accounting journal (link needs Journal Entries — view). The header also shows separate approval status and actual accounting state. A section bar links to Bill Info · Lines · GRN Matches · VAT · Approval · Accounting Entry · Payments · Balance · Activity; a section is present only when your role may read it.
 
 | Section | What it shows |
 |---|---|
 | Bill Info | Cards (taxable, VAT, total, balance) and Bill Information |
 | Lines | Bill Lines with the Received Goods column (receipt number × quantity, accrued amount, or "Direct / service") |
-| GRN Matches | One row per matched receipt line: goods receipt, purchase order, item, matched quantity, accrued amount (what the receipt posted to GRNI), billed amount, variance and the match state — *Provisional (bill still draft)* or *Invoiced (bill approved)* |
+| GRN Matches | One row per matched receipt line: goods receipt, purchase order, item, matched quantity, accrued amount (what the receipt posted to GRNI), billed amount, variance and match state — *Provisional (bill still draft)*, *Reserved for this approval (not invoiced)*, or *Invoiced (bill approved)* |
 | VAT | VAT rate, taxable amount, input VAT, total and whether the VAT ledger row exists yet |
-| Accounting Entry | The posted journal lines with a link (Journal Entries — view) |
+| Approval | Attempt number, submitter/time, current step, required role/user, decision actor/time/comment, rejected history, explicit Submit/Resubmit and eligible Approve/Reject actions |
+| Accounting Entry | Actual journal state (including draft review mode), lines and link (Journal Entries — view). Approval-controlled snapshots cannot be independently edited, cancelled or deleted |
 | Payments | Every payment with account, method, purpose, reference and journal; Record Payment for open bills |
 | Balance | Bill total, paid to date, outstanding payment, due date with the overdue days, payment state |
 | Activity | The latest entries that name this bill (Activity Logs — view), with View all |
@@ -1571,12 +1576,17 @@ Buttons:
 | Button | What it does |
 |---|---|
 | Back | Returns to where you opened the bill from — the purchase order's Billing section, the goods receipt or the supplier workspace — otherwise to Accounts Payable |
-| Approve & Post | Posts the bill's journal and its input VAT row, consumes the matched receipt quantities and sets the bill to *unpaid*. Refused when the VAT period is finalized, an account is inactive, or a matched receipt quantity was invoiced by another bill first |
-| Record Payment | Opens FIN-AP-005 (open bills only); afterwards you return to the page you opened the bill from |
+| Submit for Approval / Resubmit for Approval | Explicitly creates a required sequential approval attempt. No supported workflow: blocked with administrator guidance, never silently falls back. Pending/approved fields and matches are frozen |
+| Approve / Reject | Only the current eligible required step. Reject requires a reason. All required steps must approve before posting is attempted; conflicting retries cannot rewrite history |
+| Retry Posting | Finance post + retry permissions. Rechecks approved authority under a bill lock and reuses existing accounting. Never creates a second journal or consumes GRN quantity/VAT/AP twice |
+| Legacy Approve & Post | Existing legacy drafts only, before explicit runtime enrolment. Reuses existing accounting; old paid/posted history is not backfilled |
+| Record Payment | Opens FIN-AP-005 only when financial status is unpaid/partially paid AND the bill journal is actually posted; approval completion or a review journal alone is insufficient |
 | Reopen for Correction | Super Admin only, unpaid bills with no payments: posts a reversing journal, withdraws the VAT row, releases the receipt quantities and returns the bill to *draft* with your reason |
 | Edit | Drafts only |
 
-Statuses: draft → unpaid → partially_paid → paid. A second Approve on the same bill is refused; an edit of an approved bill is refused.
+Financial statuses remain draft → unpaid → partially_paid → paid. Separate approval labels are Draft—not submitted, Pending Approval, Rejected, Approved—Posting Pending, Approved, and Correction—new approval required. Reopen preserves the old approved attempt and requires a new explicit submission before reposting. Failed posting retains approved history and a Finance-visible error; retry is source-locked. Review-mode journals keep payment blocked until Journal Entries → Post to Ledger.
+
+Submission reserves matched GRN capacity without invoicing it or creating accounting. Competing bills cannot take it. Rejection retains the reservation; authorized correction replaces it atomically. Submitted history cannot be deleted. Source-linked Site Expense financial values remain immutable; bill approval is a separate Finance control. See [WF-019](#wf-019-supplier-bill-approval-and-payment).
 
 ### [FIN-AP-005] Record Supplier Payment
 
@@ -1611,7 +1621,7 @@ A journal Dr Accounts Payable / Cr Cash or Bank is posted, the bill's paid and b
 
 Web address: `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable` (FIN-AR-001) · `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/create` (FIN-AR-002) · `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/{id}` (FIN-AR-003) · `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/{id}/edit` (FIN-AR-004) · `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/{id}/receipt` (FIN-AR-005)
 
-These screens mirror Accounts Payable.
+These screens share Finance entry conventions with Accounts Payable, but Customer Invoices do NOT use Approval Runtime yet; their existing one-click approval remains.
 
 Add Customer Invoice (FIN-AR-002) fields: Customer *, Invoice Number (generated when blank), Invoice Date * (not in the future), Due Date, VAT Rate (%) *, Project, Cost Center, Notes, and lines with Item / Description *, Qty, Unit Price, Revenue Account, Cost Center. Buttons: Cancel, Save, Save & new, Save & close.
 
@@ -1987,7 +1997,7 @@ Financial semantics: posted expense-account lines tagged with the Project contri
 - Project → Customer Invoices → View similarly provides **Back to origin**. Posting/approval/receipt entry still happen only through existing authorized screens.
 - Safe return destinations must be relative internal admin paths; external URLs, misleading prefixes and path traversal are refused.
 
-Current limitations: one current Project per employee, no assignment-history engine; no direct stock or journal editing; old name-only activity omitted; no construction-progress estimate, full BOQ/budget, labour/equipment costing, mobile geofence runtime or offline sync. Runtime supports PR and Site Expenses, not every Project document. A Project with sites or warehouses still cannot be deleted.
+Current limitations: one current Project per employee, no assignment-history engine; no direct stock or journal editing; old name-only activity omitted; no construction-progress estimate, full BOQ/budget, labour/equipment costing, mobile geofence runtime or offline sync. Runtime supports PR, Site Expenses and Supplier Bills, not every Project document. A Project with sites or warehouses still cannot be deleted.
 
 ### Site Expenses
 
@@ -2025,7 +2035,7 @@ Register filters: number/description, Project, Site, category, submitter, paymen
 | posted | Accounting journal is posted; expense immutable |
 | reversed | Finance posted an opposite journal; original remains unchanged |
 
-Configure an active Site Expenses / Expense Submitted workflow with **Create Accounting Entry**, sequential required steps, active eligible reviewers and blank amount limits. No workflow, no eligible reviewer or unsupported thresholds blocks submission without losing the draft. All required slots approve; requester/submitting editor cannot approve themselves. My Approvals is shared with PR. Notification boundary: status, Activity and queue; no new email/SMS/escalation service.
+Configure an active Site Expenses / Expense Submitted workflow with **Create Accounting Entry**, sequential required steps, active eligible reviewers and blank amount limits. No workflow, no eligible reviewer or unsupported thresholds blocks submission without losing the draft. All required slots approve; requester/submitting editor cannot approve themselves. My Approvals is shared with PR and Supplier Bills. Notification boundary: status, Activity and queue; no new email/SMS/escalation service.
 
 After final approval commits, accounting is attempted automatically. Approval history survives accounting failure. Finance sees the mapping/period error and **Retry accounting** (Site Expenses retry + post). If a journal already exists in review mode, Finance posts that journal using Journal Entries post; retry never duplicates it. Existing Automatic Posting Rule **Auto Post** on means immediate posted entry; off or no active rule means draft for review. The workflow's Create Accounting Entry does not silently override Finance review mode.
 
@@ -2033,7 +2043,7 @@ After final approval commits, accounting is attempted automatically. Approval hi
 |---|---|
 | Cash / Bank | Dr category expense, Dr applicable Input VAT, Cr selected allowed Cash/Bank |
 | Employee Reimbursement | Dr expense + applicable VAT, Cr shared Employee Expense Reimbursement Payable (2310). Not initially a Cash/Bank credit. Authorized Finance **Record full reimbursement** then Dr original payable / Cr chosen Cash/Bank. One full settlement only; repeat retries do not pay again |
-| Supplier Credit | Create ONE draft direct/service Supplier Bill linked both ways. NO independent Site Expense AP journal. Finance uses existing Bill Approve and, if review mode, Journal Post. Posted cost/AP enter through that bill only |
+| Supplier Credit | Create ONE runtime-mode draft direct/service Supplier Bill linked both ways, with NO independent Site Expense AP journal. Finance reviews and explicitly submits the bill; all its required approvals complete, then existing bill posting runs. If review mode, Journal Post is still needed. Posted cost/AP enter through that bill only; see WF-019 |
 
 Category mapping is mandatory at posting, not guessed from legacy text. One active Project cost center is derived where present; absent required/ambiguous mapping leaves approved-awaiting-posting. Finance must resolve configuration; site staff do not choose a cost center or ledger account.
 
@@ -2272,7 +2282,7 @@ Next common action: create a Purchase Order, or open the supplier's workspace wi
 3. Enter the supplier's Bill Number (GST-INV-1045) and check the Bill Date and VAT Rate.
 4. Adjust Invoiced Qty or Unit Price only if the supplier's invoice differs.
 5. Click Save. The bill details page opens.
-6. Click Approve & Post.
+6. Open Approval → Submit for Approval; all configured required reviewers must approve (WF-019). If Finance review mode creates a draft journal, post that journal before payment.
 
 Expected result: status *unpaid*, an accounting entry Dr GRNI / Dr Input VAT / Cr Accounts Payable, one VAT row, and the receipt shows the quantity as invoiced.
 Next common action: Record Payment when the bill is paid.
@@ -2344,14 +2354,14 @@ Related screens: HR-EMP-002, HR-EMP-004, USR-002, USR-003.
 Purpose: buy materials, receive them (in one or several deliveries), record the supplier's invoices and pay them, with correct accounting at every step, and read the whole chain from the purchase order.
 Roles involved: Site In-Charge (request), Purchase Manager (order), Warehouse Incharge (receipts), Account Assistant (bills), Finance Manager (approve, pay).
 Prerequisites: supplier SUP-014 Gulf Steel Trading with payment terms and payable account; item ITM-0031 Reinforcement Steel 16mm; warehouse Riyadh Site Warehouse (project Riyadh Commercial Tower); an open VAT period.
-Navigation: Inventory → Purchase Requests → Approve → Create Purchase Order; Purchase Order (INV-PO-003) → Approve Order → Create Goods Receipt; Goods Receipt → Post Stock; Purchase Order → Goods Receipts → Create Supplier Bill; Bill → Approve & Post; Purchase Order → Billing & GRN Matching → Record Payment.
+Navigation: Inventory → Purchase Requests → Approve → Create Purchase Order; Purchase Order (INV-PO-003) → Approve Order → Create Goods Receipt; Goods Receipt → Post Stock; Purchase Order → Goods Receipts → Create Supplier Bill; Bill → Submit for Approval → all required reviewers approve → posting; Purchase Order → Billing & GRN Matching → Record Payment.
 Steps and example input:
 1. Purchase request PR-2026-0010 (Site In-Charge): Riyadh Commercial Tower, priority high, 10,000 kg of Reinforcement Steel 16mm, estimated 3.00 per kg. Save. The Purchase Manager approves it (WF-011).
 2. Purchase order PO-2026-0012 from the request: supplier Gulf Steel Trading, deliver to Riyadh Site Warehouse, project Riyadh Commercial Tower, line 10,000 kg × Reinforcement Steel 16mm at 3.00, VAT 15% (SAR 30,000 + 4,500 = 34,500). Save, then **Approve Order**. The order page now shows *Nothing received yet · still to receive 10000 kg*.
 3. First delivery — goods receipt GRN-2026-0008 from the order (Warehouse Incharge, Purchase Order → Create Goods Receipt): received 6,000, accepted 6,000, unit cost 3.00. **Save** (the receipt opens), then **Post Stock**. Back on the order: *Partially received · 6000 of 10000 kg · still to receive 4000 kg*; the Goods Receipts section lists GRN-2026-0008 as *Received but not invoiced*.
-4. Supplier bill GST-INV-1045 (Account Assistant, Purchase Order → Goods Receipts → Create Supplier Bill): line matched to GRN-2026-0008, invoiced qty 6,000 at 3.00 (SAR 18,000 + VAT 2,700 = 20,700). Save. The Finance Manager clicks **Approve & Post**. The order's Billing section now shows Ordered 10000 · Received 6000 · Still to receive 4000 · Invoiced 6000 · Received but not invoiced 0, and the bill GST-INV-1045 with outstanding payment SAR 20,700.
+4. Supplier bill GST-INV-1045 (Account Assistant, Purchase Order → Goods Receipts → Create Supplier Bill): line matched to GRN-2026-0008, invoiced qty 6,000 at 3.00 (SAR 18,000 + VAT 2,700 = 20,700). Save. The Account Assistant explicitly submits; all configured required reviewers approve (WF-019), then bill accounting posts. The order's Billing section now shows Ordered 10000 · Received 6000 · Still to receive 4000 · Invoiced 6000 · Received but not invoiced 0, and the bill GST-INV-1045 with outstanding payment SAR 20,700.
 5. Second delivery — goods receipt GRN-2026-0009: received 4,000, accepted 4,000, unit cost 3.00. Save & close returns to the order; open the receipt and Post Stock. The order becomes *Fully received*, billing state *Partly invoiced · received but not invoiced 4000 kg*.
-6. Second bill GST-INV-1071 for GRN-2026-0009: 4,000 at 3.00 (SAR 12,000 + 1,800 = 13,800). Save, Approve & Post. The order reads *Fully invoiced*.
+6. Second bill GST-INV-1071 for GRN-2026-0009: 4,000 at 3.00 (SAR 12,000 + 1,800 = 13,800). Save, Submit for Approval, then complete all required bill approvals and posting. The order reads *Fully invoiced*.
 7. Payment of GST-INV-1045: 20,700.00 from 1120 Bank Account, Bank Transfer, purpose Bill payment (Purchase Order → Billing → Record Payment). Record Payment returns to the order's Billing section, where the bill now shows Paid 20,700 and Outstanding payment 0. Pay GST-INV-1071 the same way (13,800.00).
 Expected accounting result:
 - Step 3: Dr 1400 Inventory Asset 18,000 / Cr 2150 Goods Received Not Invoiced 18,000. Stock 6,000 kg at 3.00.
@@ -2488,7 +2498,7 @@ Purpose: fix a wrong approved document without editing posted accounting.
 Roles involved: Super Admin.
 Prerequisites: the bill or invoice is unpaid with no payments or receipts; its VAT period is still open; for an invoice, the local ZATCA record is not cleared.
 Navigation: Bill or Invoice Details → Reopen for Correction → enter the reason.
-Expected result: a reversing journal is posted (the original stays), the VAT row is withdrawn, matched receipt quantities are released, the document returns to draft with the reason in its notes. Correct it and Approve & Post again.
+Expected result: a reversing journal is posted (the original stays), the VAT row is withdrawn, matched receipt quantities are released, the document returns to draft with the reason in its notes. For a runtime Supplier Bill, its old approval remains historical; correct it and explicitly submit a NEW attempt before posting. Customer Invoices and unenrolled legacy bills retain their existing approval path.
 Audit trail: Reopened supplier bill / Reopened customer invoice with the reason.
 Common errors: reopening a paid bill (refused: reverse the payment first, which is not yet possible in a screen); reopening inside a finalized period (refused).
 Related screens: FIN-AP-003, FIN-AR-003.
@@ -2535,7 +2545,7 @@ Related screens: HR-EOS-002, HR-EOS-003.
 
 Permissions are independent at every step. A project/site-scoped operator sees only rows permitted by the existing global scopes; the same scope feeds panel totals. Read-only pages do not post, approve, receive stock or process payroll.
 
-Phase B expense integration is available: see WF-018. Pending: budget lines/BOQ, labour/payroll-to-GL, equipment cost, expanded budget-vs-actual and a future operational site dashboard. No live ZATCA clearance is introduced. Runtime supports PR and Site Expenses; other module rollouts remain pending.
+Phase B expense integration is available: see WF-018. Pending: budget lines/BOQ, labour/payroll-to-GL, equipment cost, expanded budget-vs-actual and a future operational site dashboard. No live ZATCA clearance is introduced. Runtime supports PR, Site Expenses and Supplier Bills; other module rollouts remain pending.
 
 ### WF-017 Purchase Request runtime approval
 
@@ -2549,7 +2559,7 @@ Status: AVAILABLE for explicitly enrolled PRs only. Roles: requester/editor and 
 
 History permission is separate from decision permissions. Requests with runtime history cannot be deleted; pending/approved documents cannot be edited. Exact same-action/comment retries are safe, while conflicting decisions are refused. The audit contains Approval requested, Step approved, Rejected, Fully approved and Resubmitted. There is no parallel routing, delegation, amount-threshold routing or automatic escalation/notification job in this release.
 
-Legacy documents are labelled and not auto-enrolled; historical decisions are not reconstructed. Supplier Bill, PO, Customer Invoice, Leave and Payroll retain their existing behavior and are NOT part of F08 runtime yet.
+Legacy documents are labelled and not auto-enrolled; historical decisions are not reconstructed. PO, Customer Invoice, Leave and Payroll retain their existing behavior and are NOT part of F08 runtime yet.
 
 ---
 
@@ -2563,11 +2573,29 @@ Fictional example: Ahmed Hassan (linked user/employee) opens Site Expenses and s
 4. Final approval commits, then accounting is attempted. With Auto Post enabled, Dr Fuel expense 1,000, Dr Input VAT 150, Cr Cash 1,150. If mapping fails, approval remains and Finance retries; review-mode journals require separate posting.
 5. Project → Site Expenses shows status. Posted Project Cost increases by **1,000**, not 1,150, using the existing expense-account ledger calculation.
 
-Supplier Credit variation: choose Gulf Steel Trading and Supplier Credit. Approval creates one **draft direct Supplier Bill**, not an expense journal. Finance separately approves/posts that bill. Project Cost increases by 1,000 **once**, through the bill journal. AP payment remains the existing Supplier Payment process; no second expense AP posting is made.
+Supplier Credit variation: choose Gulf Steel Trading and Supplier Credit. Approval creates one **draft direct Supplier Bill**, not an expense journal. Finance separately submits that bill for its own required approvals (WF-019). The Site Expense page displays the linked bill's approval/financial state, with View Bill and a review/submit link where permitted. Expense approval does not approve the payable. Project Cost increases by 1,000 **once**, through the posted bill journal. AP payment remains the existing Supplier Payment process; no second expense AP posting is made.
 
 Employee-paid variation: select Employee Reimbursement. Final accounting credits reimbursement payable, not Cash/Bank. Finance later records one full reimbursement from permitted Cash/Bank; that clears liability without increasing Project Cost again. A duplicate settlement request reuses the original result.
 
 See [Site Expenses](#site-expenses). Project Phase B remains partial beyond this expense integration; WF-017 continues to identify PR runtime approval.
+
+### WF-019 Supplier Bill Approval and Payment
+
+Training example: Gulf Steel Trading bills the Riyadh Commercial Tower for SAR 1,000 of services plus SAR 150 VAT. The Account Assistant creates the draft; independently configured Purchase and Finance reviewers approve sequentially.
+
+1. Configure Supplier Bill / Bill Submitted / Create Accounting Entry, supported scope, blank amount limits and both reviewers as required steps. Give each reviewer Accounts Payable view + approve/reject and the correct project/site scope. Do not configure the creator/submitting editor/last editor as the only eligible reviewer.
+2. Open FIN-AP-002, enter supplier, date, project/site and lines, then Save. For received materials choose the relevant GRN line; do not expense the same received goods again. Saving does not submit, post or pay.
+3. At FIN-AP-003 → Approval, review and **Submit for Approval**. Missing/unsupported workflows block submission without losing the draft. Existing legacy drafts join runtime only through this explicit action; historical paid/posted bills gain no invented decisions.
+4. The first reviewer opens APR-001 → Supplier Bills → the bill, reviews it and approves. Only the next required step unlocks. Pending lines, dimensions, VAT and matches cannot be edited. Reserved GRN quantities remain uninvoiced until the accounting transaction.
+5. The final required approval commits history and triggers the single existing bill posting path. Direct/service: existing expense + input VAT + AP; matched: GRNI + input VAT + any price variance + AP; mixed lines reuse both existing calculations. No F04 formula is replaced.
+6. If posting fails, approval remains complete; Finance sees Approved—Posting Pending and a safe error. Correct permitted accounting configuration and use **Retry Posting** (post + retry rights). Exact retries cannot duplicate journal, AP, VAT or GRN consumption. If a review journal already exists, use Journal Entries → Post to Ledger; retry does not force-post or recreate it.
+7. Only an actually posted, unpaid/partially paid bill permits FIN-AP-005 → Record Payment. Pay SAR 1,150 from the configured accepted Cash/Bank account; the existing settlement retry key prevents duplicate payment. Supplier, Project and PO context panels show the bill state without approving it from profile Save.
+8. Reject with a reason when incorrect. The draft, bill number, reservation and old history stay. Correct an editable rejected bill and explicitly Resubmit; a NEW attempt must receive all approvals. Approved Site Expense source values cannot be edited independently.
+9. Super Admin may Reopen an actually posted unpaid bill with no payments, subject to existing open-VAT-period/reversal rules. Financial reversal and released quantities do not erase the old approved attempt. Correction requires a NEW approval; the old approval cannot repost changed values.
+
+Source-linked credit variation: WF-018 approves operational expenditure → exactly one draft Supplier Bill → steps 3–7 above authorize the payable separately. The expense has no second AP journal; project cost comes from the posted bill only. Original expense approval history never changes.
+
+Audit: runtime instances/steps are authoritative. Activity also records submission, each approved step, rejection, final completion, posting completed/failed/retried and Reopen. ALL configured required steps must approve. Parallel groups, amount thresholds, delegation, automatic reporting-parent expansion and escalation/notification jobs remain unsupported. PO, Customer Invoice, Leave and Payroll runtime remain unimplemented.
 
 ## 18. Troubleshooting
 
@@ -2610,7 +2638,7 @@ See [Site Expenses](#site-expenses). Project Phase B remains partial beyond this
 | Term | Meaning |
 |---|---|
 | Access scope | The part of the company a role may see: All Company, Company Level, Project Level, Site Level, Warehouse Level |
-| Approve & Post | The button that makes a bill or invoice final and creates its accounting entry |
+| Approve & Post | Existing legacy-bill/customer-invoice action. New Supplier Bills require explicit runtime submission and all required approvals before the same accounting path runs |
 | Connected workspace | The Edit / Manage page of a record where its profile and related records are managed in tabs |
 | Document workspace | The read-only View page of a purchase order, request, goods receipt or bill that shows the document with everything related to it (receipts, bills, journals, activity), each section by permission |
 | Draft | A saved document with no accounting or VAT effect yet |
@@ -2651,7 +2679,7 @@ Areas that exist as menus, settings or plans but are not usable business functio
 | Mobile app, check-in / check-out, GPS geofence attendance | NOT YET OPERATIONAL | Mobile access flags on users and roles; site coordinates and radius; manual attendance with a typed geo-fence status |
 | Offline entry and sync | NOT YET OPERATIONAL | Nothing |
 | Live ZATCA Phase-2 clearance, real QR, XML, signing | NOT YET OPERATIONAL (local records: FOUNDATION ONLY) | Chapter 14 |
-| Approval workflow execution (multi-step, all-required) | AVAILABLE for PR and Site Expenses; PARTIAL across other modules | Sequential required steps, runtime history and shared My Approvals; no parallel groups, thresholds, delegation, notification/escalation jobs or automatic parent expansion |
+| Approval workflow execution (multi-step, all-required) | AVAILABLE for PR, Site Expenses and Supplier Bills; PARTIAL across other modules | Sequential required steps, runtime history and shared My Approvals; no parallel groups, thresholds, delegation, notification/escalation jobs or automatic parent expansion |
 | Payroll → accounting posting, payslips, bank / WPS file, GOSI | NOT YET OPERATIONAL | Payroll run calculation and approval |
 | HR Reports menu (attendance register, payroll register) | NOT YET OPERATIONAL | HR Dashboard for today's figures |
 | Project Reports menu | Placeholder | Project Cost Report and Project Material Consumption exist |
