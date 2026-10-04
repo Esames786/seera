@@ -48,6 +48,7 @@ class SiteExpenseAccountingService
                         $this->invalid('Choose an active supplier before Finance can generate the bill.');
                     }
                     $bill = SupplierBill::create([
+                        'approval_mode' => 'runtime', 'requested_by' => $expense->submitted_by_user_id,
                         'site_expense_id' => $expense->id, 'supplier_id' => $supplier->id,
                         'bill_number' => $expense->expense_number, 'bill_date' => $expense->expense_date,
                         'reference_number' => $expense->reference_number,

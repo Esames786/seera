@@ -36,7 +36,7 @@
         <div class="full"><label for="notes">Notes</label><textarea id="notes" name="notes" class="textarea" maxlength="4000">{{ old('notes', $expense->notes) }}</textarea></div>
         @if($workflows->count() > 1)<div><label for="workflow_id">Approval workflow</label><select name="workflow_id" id="workflow_id" class="select"><option value="">Select workflow</option>@foreach($workflows as $workflow)<option value="{{ $workflow->id }}" @selected(old('workflow_id') == $workflow->id)>{{ $workflow->name }}</option>@endforeach</select></div>@endif
     </x-admin.form-section>
-    <div class="alert">Employee-paid expenses remain payable until Finance reimburses them. Supplier Credit creates a draft Supplier Bill after approval; Finance must approve/post it separately.</div>
+    <div class="alert">Employee-paid expenses remain payable until Finance reimburses them. Supplier Credit creates one draft Supplier Bill after expense approval. Finance must review and submit that bill for its own required approvals before bill accounting and payment.</div>
     <div class="form-actions">
         <a class="btn outline" href="{{ route('admin.site-expenses.index') }}">Back to expenses</a>
         <button type="submit" data-save-default class="btn outline" name="_save_action" value="stay">Save draft &amp; stay</button>

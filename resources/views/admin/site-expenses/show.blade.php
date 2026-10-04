@@ -27,7 +27,7 @@
 </section>
 <section class="card" id="accounting" style="padding:20px"><h2>Accounting</h2>
 @if($expense->status === 'approved_pending_posting')<p>Approved; accounting is awaiting Finance. Your approval history is safe.</p>@endif
-@if($expense->payment_type === 'Supplier Credit')<p>Site Expense approval creates one draft Supplier Bill. Finance must approve/post that bill; no separate Site Expense journal is created.</p>@endif
+@if($expense->payment_type === 'Supplier Credit')<p>Site Expense approval creates one draft Supplier Bill. Its separate required bill approvals must complete before accounting; no separate Site Expense AP journal is created.</p>@endif
 @if($expense->payment_type === 'Employee Reimbursement')<p>Employee-paid expense is recorded as reimbursement payable, not a Cash/Bank payment. Settlement: {{ $expense->settlement_journal_id ? 'Reimbursed' : 'Not reimbursed' }}.</p>@endif
 @if($finance)
     @if($expense->settlementJournal && auth()->user()->hasPermission('Journal Entries','view'))<p><a href="{{ route('admin.accounting.journal-entries.show',$expense->settlementJournal) }}">Reimbursement journal {{ $expense->settlementJournal->journal_number }}</a></p>@endif
@@ -38,7 +38,10 @@
     @endif
     @if($expense->posting_error)<div class="alert">{{ $expense->posting_error }}</div>@endif
     @if($expense->journalEntry && auth()->user()->hasPermission('Journal Entries','view'))<p><a href="{{ route('admin.accounting.journal-entries.show',$expense->journalEntry) }}">Journal {{ $expense->journalEntry->journal_number }}</a> — {{ $expense->journalEntry->status }}</p>@endif
-    @if($expense->supplierBill && auth()->user()->hasPermission('Accounts Payable','view'))<p><a href="{{ route('admin.accounting.accounts-payable.show',$expense->supplierBill) }}">Supplier Bill {{ $expense->supplierBill->bill_number }}</a> — {{ $expense->supplierBill->status }}</p>@endif
+    @if($expense->supplierBill && auth()->user()->hasPermission('Accounts Payable','view'))
+        <p><a href="{{ route('admin.accounting.accounts-payable.show',$expense->supplierBill) }}">Supplier Bill {{ $expense->supplierBill->bill_number }}</a> — {{ $expense->supplierBill->approvalLabel() }} / {{ $expense->supplierBill->status }}</p>
+        @if(app(\App\Services\Approvals\SupplierBillApprovalSubject::class)->canSubmit($expense->supplierBill, auth()->user()))<a class="btn outline" href="{{ route('admin.accounting.accounts-payable.show',$expense->supplierBill) }}#approvals">Review and submit Bill for Approval</a>@endif
+    @endif
     @if($expense->status==='approved_pending_posting' && auth()->user()->hasPermission('Site Expenses','post') && auth()->user()->hasPermission('Site Expenses','retry'))<form method="POST" action="{{ route('admin.site-expenses.retry',$expense) }}">@csrf<button class="btn primary">Retry accounting</button></form><p>If a review-mode journal exists, post that journal in Finance; retry does not create another.</p>@endif
 @else<p>Accounting details are available to authorized Finance users.</p>@endif
 </section>
