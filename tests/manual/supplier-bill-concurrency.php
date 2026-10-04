@@ -138,9 +138,12 @@ if ($action !== 'parent') {
         }
         fwrite($signal, "OK\n");
     } catch (ValidationException $e) {
-        billProbeCheck(in_array($action, ['edit', 'compete', 'reopen', 'payment'], true), 'Unexpected validation failure: '.$e->getMessage());
-        $key = ['edit' => 'bill', 'compete' => 'matching', 'reopen' => 'bill', 'payment' => 'payment'][$action];
+        billProbeCheck(in_array($action, ['edit', 'compete', 'reopen', 'payment'], true) || ($action === 'approve' && ($ids['expect_conflict'] ?? false)), 'Unexpected validation failure: '.$e->getMessage());
+        $key = ['edit' => 'bill', 'compete' => 'matching', 'reopen' => 'bill', 'payment' => 'payment', 'approve' => 'approval'][$action];
         billProbeCheck(array_key_exists($key, $e->errors()), 'Wrong refusal reason: '.$e->getMessage());
+        if ($action === 'approve') {
+            billProbeCheck(str_contains($e->getMessage(), 'already has a decision'), 'Expected competing-actor conflict, not another validation failure');
+        }
         fwrite($signal, "OK REFUSED\n");
     }
     exit;
@@ -176,6 +179,8 @@ foreach (['requester', 'reviewer', 'finance'] as $name) {
     $actor->roles()->attach($role, ['is_primary' => true]);
     $actors[$name] = $actor;
 }
+$alternate = User::create(['name' => 'Alternate Finance', 'email' => 'alternate@example.invalid', 'password' => 'isolated-probe-only', 'status' => 'active']);
+$alternate->roles()->attach($actors['finance']->roles()->first()->id, ['is_primary' => true]);
 $accounts = [];
 foreach (['1110' => 'asset', '1300' => 'asset', '2100' => 'liability', '2150' => 'liability', '5200' => 'expense'] as $code => $type) {
     $accounts[$code] = ChartOfAccount::firstOrCreate(['account_code' => $code], ['account_name' => 'Probe '.$code, 'account_type' => $type, 'normal_balance' => $type === 'liability' ? 'credit' : 'debit', 'status' => 'active']);
@@ -197,7 +202,7 @@ $makeBill = function ($number, $grn, $qty, $mode = 'runtime') use ($supplier, $p
 $server = stream_socket_server('tcp://127.0.0.1:0', $errno, $error);
 billProbeCheck(is_resource($server), 'IPC listener failed');
 $address = stream_socket_get_name($server, false);
-$scenarios = ['duplicate_final_approval' => 'approve', 'final_approval_vs_retry' => 'retry', 'final_approval_vs_edit' => 'edit',
+$scenarios = ['duplicate_final_approval' => 'approve', 'final_approval_by_two_users' => 'approve', 'final_approval_vs_retry' => 'retry', 'final_approval_vs_edit' => 'edit',
     'final_approval_vs_competing_grn_bill' => 'compete', 'duplicate_retry' => 'retry', 'final_approval_vs_reopen' => 'reopen', 'payment_while_posting_pending' => 'payment'];
 foreach ($scenarios as $scenario => $workerAction) {
     Auth::forgetGuards();
@@ -209,6 +214,10 @@ foreach ($scenarios as $scenario => $workerAction) {
     $instance = $runtime->start($subject, $bill->id, $workflow->id, $actors['requester']);
     $runtime->decide($subject, $bill->id, $instance->id, $instance->steps[0]->id, $actors['reviewer'], 'approve');
     $ids = ['bill' => $bill->id, 'instance' => $instance->id, 'step' => $instance->steps[1]->id, 'actor' => $actors['finance']->id, 'competitor' => $competitor?->id, 'cash' => $accounts['1110']->id];
+    if ($scenario === 'final_approval_by_two_users') {
+        $ids['actor'] = $alternate->id;
+        $ids['expect_conflict'] = true;
+    }
     if (in_array($scenario, ['duplicate_retry', 'payment_while_posting_pending'], true)) {
         $accounts['2100']->update(['status' => 'inactive']);
         $runtime->decide($subject, $bill->id, $instance->id, $ids['step'], $actors['finance'], 'approve');
@@ -279,4 +288,4 @@ foreach ($scenarios as $scenario => $workerAction) {
     }
 }
 fclose($server);
-echo 'PASS 7 Supplier Bill MySQL concurrency scenarios ('.DB::selectOne('SELECT @@transaction_isolation AS level')->level.")\n";
+echo 'PASS 8 Supplier Bill MySQL concurrency scenarios ('.DB::selectOne('SELECT @@transaction_isolation AS level')->level.")\n";
