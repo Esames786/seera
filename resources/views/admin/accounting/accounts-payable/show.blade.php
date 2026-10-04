@@ -11,9 +11,9 @@
         $selfUrl = route('admin.accounting.accounts-payable.show', $bill, false);
         $origin = $returnTo ?? $selfUrl;
         $canEdit = ! $bill->site_expense_id && $bill->isEditable() && $user->hasPermission('Accounts Payable', 'edit');
-        $canApprove = $bill->status === 'draft' && $user->hasPermission('Accounts Payable', 'approve');
-        $canPay = in_array($bill->status, ['unpaid', 'partially_paid'], true) && $user->hasPermission('Accounts Payable', 'process');
-        $canReopen = $bill->status === 'unpaid' && $bill->payments->isEmpty() && $user->isSuperAdmin();
+        $canApprove = $bill->approval_mode !== 'runtime' && $bill->status === 'draft' && $user->hasPermission('Accounts Payable', 'approve');
+        $canPay = $bill->isPayable() && $user->hasPermission('Accounts Payable', 'process');
+        $canReopen = $bill->isPayable() && $bill->status === 'unpaid' && $bill->payments->isEmpty() && $user->isSuperAdmin() && $user->hasPermission('Accounts Payable', 'approve');
         $canViewSupplier = $user->hasPermission('Suppliers', 'view');
         $matches = $bill->lines->map(fn ($line) => $line->grnMatch)->filter()->values();
         $matchedReceipts = $matches->pluck('goodsReceipt')->filter()->unique('id')->values();
@@ -25,7 +25,7 @@
             'draft' => 'Draft, not posted',
             default => ucfirst(str_replace('_', ' ', $bill->status)),
         };
-        $sections = ['information' => 'Bill Info', 'lines' => 'Lines', 'grn-matches' => 'GRN Matches', 'vat' => 'VAT'];
+        $sections = ['information' => 'Bill Info', 'lines' => 'Lines', 'grn-matches' => 'GRN Matches', 'vat' => 'VAT', 'approvals' => 'Approval'];
         if ($canViewJournals) $sections['accounting'] = 'Accounting Entry';
         $sections += ['payments' => 'Payments', 'balance' => 'Balance'];
         if ($activity !== null) $sections['activity'] = 'Activity';
@@ -43,7 +43,7 @@
         @if ($canApprove)
             <form method="POST" action="{{ route('admin.accounting.accounts-payable.approve', $bill) }}">
                 @csrf
-                <button type="submit" class="btn primary">Approve &amp; Post</button>
+                <button type="submit" class="btn outline">Legacy Approve &amp; Post</button>
             </form>
         @endif
         @if ($canPay)
@@ -77,6 +77,7 @@
             <dd>{{ $bill->supplier->name }} @if ($canViewSupplier)<a class="small" href="{{ route('admin.master.suppliers.show', $bill->supplier) }}">View</a>@endif</dd>
             <dt>Bill date / Due</dt><dd>{{ $bill->bill_date->toDateString() }} / {{ $bill->due_date?->toDateString() ?? '-' }}</dd>
             <dt>Project / Site</dt><dd>{{ $bill->project?->name ?? '-' }}{{ $bill->site ? ' / '.$bill->site->name : '' }}</dd>
+            <dt>Approval</dt><dd>{{ $bill->approvalLabel() }}</dd>
             <dt>Matched receipts</dt>
             <dd>
                 @forelse ($matchedReceipts as $receipt)
@@ -93,7 +94,7 @@
             <dt>Total</dt><dd>SAR {{ number_format($bill->total_amount, 2) }}</dd>
             <dt>Paid</dt><dd>SAR {{ number_format($bill->paid_amount, 2) }}</dd>
             <dt>Outstanding payment</dt><dd>SAR {{ number_format($bill->balance_amount, 2) }}</dd>
-            <dt>Accounting</dt><dd>@if ($bill->journalEntry) Posted @if($canViewJournals)· <a href="{{ route('admin.accounting.journal-entries.show', $bill->journalEntry) }}">{{ $bill->journalEntry->journal_number }}</a>@endif @else Not posted yet @endif</dd>
+            <dt>Accounting</dt><dd>@if ($bill->journalEntry) {{ $bill->journalEntry->status === 'posted' ? 'Posted' : 'Journal awaiting Finance posting' }} @if($canViewJournals)· <a href="{{ route('admin.accounting.journal-entries.show', $bill->journalEntry) }}">{{ $bill->journalEntry->journal_number }}</a>@endif @else Not posted yet @endif</dd>
         </dl>
     </div>
 
@@ -102,6 +103,8 @@
             <a class="tab" href="#{{ $key }}">{{ $label }}</a>
         @endforeach
     </nav>
+
+    @include('admin.accounting.accounts-payable._approval')
 
     <div class="card-grid" id="information">
         <x-admin.metric-card color="blue" :value="'SAR '.number_format($bill->taxable_amount, 2)" label="Taxable Amount"/>
@@ -172,7 +175,7 @@
                     <td>SAR {{ number_format($match->matched_taxable_amount, 2) }}</td>
                     <td>SAR {{ number_format($line->taxable_amount, 2) }}</td>
                     <td>{{ $variance == 0.0 ? '-' : 'SAR '.number_format($variance, 2) }}</td>
-                    <td>{{ $match->committed_at ? 'Invoiced (bill approved)' : 'Provisional (bill still draft)' }}</td>
+                    <td>{{ $match->committed_at ? 'Invoiced (bill approved)' : ($match->reserved_at ? 'Reserved for this approval (not invoiced)' : 'Provisional (bill still draft)') }}</td>
                 </tr>
             @empty
                 <tr><td colspan="8" class="table-empty">No goods receipt is matched to this bill. It is a direct or service bill.</td></tr>

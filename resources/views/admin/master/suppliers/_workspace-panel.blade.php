@@ -127,12 +127,12 @@
                             <td>{{ $money($bill->total_amount) }}</td>
                             <td>{{ $money($bill->paid_amount) }}</td>
                             <td>{{ $money($bill->balance_amount) }}</td>
-                            <td><x-admin.status-badge :status="$bill->status"/></td>
+                            <td><x-admin.status-badge :status="$bill->status"/><div class="small">{{ $bill->approvalLabel() }}</div></td>
                             <td>{{ $bill->grn_matches_count > 0 ? $bill->grn_matches_count.' GRN line'.($bill->grn_matches_count === 1 ? '' : 's') : 'Direct' }}</td>
                             <td>
                                 <a class="btn sm outline" href="{{ route('admin.accounting.accounts-payable.show', $bill) }}">View</a>
-                                @if ($canEditBill && $bill->isEditable())<a class="btn sm outline" href="{{ route('admin.accounting.accounts-payable.edit', $bill) }}">Edit draft</a>@endif
-                                @if ($canPay && in_array($bill->status, \App\Support\Workspace\SupplierWorkspacePanels::OPEN_BILL_STATUSES, true))<a class="btn sm outline" href="{{ route('admin.accounting.accounts-payable.payment', $bill) }}">Record payment</a>@endif
+                                @if ($canEditBill && ! $bill->site_expense_id && $bill->isEditable())<a class="btn sm outline" href="{{ route('admin.accounting.accounts-payable.edit', $bill) }}">Edit draft</a>@endif
+                                @if ($canPay && $bill->isPayable())<a class="btn sm outline" href="{{ route('admin.accounting.accounts-payable.payment', $bill) }}">Record payment</a>@endif
                             </td>
                         </tr>
                     @empty

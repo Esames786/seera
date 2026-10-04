@@ -86,11 +86,11 @@
                             <td>{{ $money($bill->total_amount) }}</td>
                             <td>{{ $money($bill->paid_amount) }}</td>
                             <td>{{ $money($bill->balance_amount) }}</td>
-                            <td><x-admin.status-badge :status="$bill->status"/></td>
+                            <td><x-admin.status-badge :status="$bill->status"/><div class="small">{{ $bill->approvalLabel() }}</div></td>
                             <td>
                                 <a class="btn sm outline" href="{{ route('admin.accounting.accounts-payable.show', $bill) }}">View bill</a>
                                 @if ($canEditBill && $bill->isEditable())<a class="btn sm outline" href="{{ route('admin.accounting.accounts-payable.edit', ['accounts_payable' => $bill, 'return_to' => $returnTo]) }}">Edit draft</a>@endif
-                                @if ($canPay && in_array($bill->status, ['unpaid', 'partially_paid'], true))<a class="btn sm primary" href="{{ route('admin.accounting.accounts-payable.payment', ['accounts_payable' => $bill, 'return_to' => $returnTo]) }}">Record Payment</a>@endif
+                                @if ($canPay && $bill->isPayable())<a class="btn sm primary" href="{{ route('admin.accounting.accounts-payable.payment', ['accounts_payable' => $bill, 'return_to' => $returnTo]) }}">Record Payment</a>@endif
                             </td>
                         </tr>
                     @empty

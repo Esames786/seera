@@ -11,7 +11,6 @@ use App\Models\Supplier;
 use App\Models\SupplierBill;
 use App\Models\SupplierPayment;
 use App\Models\User;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -53,7 +52,7 @@ class SupplierWorkspacePanels implements WorkspacePanels
             'goods-receipts' => GoodsReceipt::query()->where('supplier_id', $supplier->id)
                 ->with(['purchaseOrder', 'warehouse.project', 'warehouse.site', 'lines'])->latest('received_date')->latest('id'),
             'bills' => SupplierBill::query()->where('supplier_id', $supplier->id)
-                ->with(['project', 'site'])->withCount('grnMatches')->latest('bill_date')->latest('id'),
+                ->with(['project', 'site', 'journalEntry'])->withCount('grnMatches')->latest('bill_date')->latest('id'),
             'payments' => SupplierPayment::query()->where('supplier_id', $supplier->id)
                 ->with(['bill', 'paymentAccount', 'journalEntry'])->latest('payment_date')->latest('id'),
             'accounting' => JournalEntry::query()

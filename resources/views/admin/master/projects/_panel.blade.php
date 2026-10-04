@@ -37,6 +37,14 @@
         <p class="note">All dates; same scoped calculations as Project Cost Report. Posted cost is net debit minus credit on expense-account journal lines carrying this Project. Revenue is net credit minus debit on revenue-account lines. Reversals net off. Billed/invoiced follow the report's non-draft document semantics (including cancelled documents); they are not cash or approved-only AR totals. Cost centres alone do not assign a Project.</p>
         <p class="note">Posted Site Expenses contribute through journal lines only. Supplier Credit contributes through its linked posted Supplier Bill, never twice. Payroll/labour-to-GL and equipment cost remain outside this phase. Budget is a master amount, not BOQ/budget lines; it is not a site-specific budget.</p>
         <a class="btn outline" href="{{ route('admin.accounting.reports.project-cost-report', ['project' => $project->id]) }}">Open Project Cost Report</a>
+        @if($user->hasPermission('Accounts Payable', 'view'))
+            <h3>Supplier Bill approval context (latest 10)</h3>
+            <table><thead><tr><th>Bill / Supplier</th><th>Approval</th><th>Payment status</th><th>Accounting</th></tr></thead><tbody>
+            @forelse($supplierBills as $bill)
+                <tr><td><a href="{{ route('admin.accounting.accounts-payable.show', $bill) }}#approvals">{{ $bill->bill_number }}</a> / {{ $bill->supplier?->name }}</td><td>{{ $bill->approvalLabel() }}</td><td>{{ $bill->status }}</td><td>{{ $bill->journalEntry?->status === 'posted' ? 'Posted' : 'Not posted' }}</td></tr>
+            @empty<tr><td colspan="4">No visible supplier bills.</td></tr>@endforelse
+            </tbody></table>
+        @endif
     @else
         <div style="overflow-x:auto"><table>
             <thead><tr>@foreach($columns as $column)<th>{{ $column }}</th>@endforeach<th>Actions</th></tr></thead>

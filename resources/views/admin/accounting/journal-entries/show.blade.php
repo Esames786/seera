@@ -6,15 +6,19 @@
 @section('content')
     <x-admin.page-header :title="'Journal Entry: '.$entry->journal_number" :description="$entry->source_module.' · '.$entry->journal_date->toDateString()">
         @if ($entry->isEditable())
+            @if (! $entry->isApprovalControlledSource())
             <a class="btn outline" href="{{ route('admin.accounting.journal-entries.edit', $entry) }}">Edit</a>
+            @endif
             <form method="POST" action="{{ route('admin.accounting.journal-entries.post', $entry) }}">
                 @csrf
                 <button type="submit" class="btn primary">Post to Ledger</button>
             </form>
+            @if (! $entry->isApprovalControlledSource())
             <form method="POST" action="{{ route('admin.accounting.journal-entries.cancel', $entry) }}">
                 @csrf
                 <button type="submit" class="btn danger">Cancel Entry</button>
             </form>
+            @endif
         @endif
     </x-admin.page-header>
 

@@ -2,10 +2,10 @@
 @section('title', 'My Approvals')
 @section('breadcrumb', 'My Approvals')
 @section('content')
-    <x-admin.page-header title="My Approvals" description="Your currently actionable Purchase Request and Site Expense approvals. Review each document before deciding." />
+    <x-admin.page-header title="My Approvals" description="Your actionable Purchase Request, Site Expense and Supplier Bill approvals. Review each document before deciding." />
     <form method="GET" class="card" style="padding:16px">
         <div class="form-grid">
-            <div><label for="module">Module</label><select id="module" name="module" class="select"><option value="">All integrated modules</option>@foreach(['Purchase Requests', 'Site Expenses'] as $module)@if(auth()->user()->hasPermission($module, 'view'))<option @selected(request('module') === $module)>{{ $module }}</option>@endif @endforeach</select></div>
+            <div><label for="module">Module</label><select id="module" name="module" class="select"><option value="">All integrated modules</option>@foreach(['Purchase Requests', 'Site Expenses', 'Accounts Payable'] as $module)@if(auth()->user()->hasPermission($module, 'view'))<option value="{{ $module }}" @selected(request('module') === $module)>{{ $module === 'Accounts Payable' ? 'Supplier Bills' : $module }}</option>@endif @endforeach</select></div>
             <div><label for="status">Status</label><select id="status" name="status" class="select"><option value="pending">Pending (actionable only)</option></select></div>
             <div><label for="project">Project</label><select id="project" name="project" class="select"><option value="">All permitted projects</option>@foreach($projects as $project)<option value="{{ $project->id }}" @selected(request('project') == $project->id)>{{ $project->name }}</option>@endforeach</select></div>
             <div><label for="from">Submitted from</label><input class="input" id="from" name="from" type="date" value="{{ request('from') }}"></div>
@@ -18,6 +18,7 @@
         <tbody>
         @forelse($tasks as $task)
             @php $instance = $task['instance']; $step = $task['step']; $document = $task['document']; $url = $task['url']; @endphp
+            @if($instance->source_type === 'supplier_bill')<tr><td colspan="8">Supplier Bill · {{ $document->supplier?->name }} · SAR {{ $document->total_amount }} · Submitted by {{ $instance->snapshot['submitter_name'] ?? '-' }}</td></tr>@endif
             <tr><td><a href="{{ $url }}">{{ $task['reference'] }}</a></td><td>{{ $instance->module }}</td><td>{{ $instance->snapshot['requester_name'] }}</td><td>{{ $document->project?->name ?? '-' }} / {{ $document->site?->name ?? '-' }}</td><td>{{ $instance->requested_at->format('Y-m-d H:i') }}</td><td>{{ $step->step_no }} — {{ $step->snapshot['role_name'] ?? '-' }}</td><td>Pending</td><td><a class="btn sm outline" href="{{ $url }}">View</a> @if($task['approve'])<a class="btn sm primary" href="{{ $url }}">Review &amp; approve</a>@endif @if($task['reject'])<a class="btn sm outline" href="{{ $url }}">Review &amp; reject</a>@endif</td></tr>
         @empty
             <tr><td colspan="8" class="table-empty">No actionable approvals for your account and filters.</td></tr>

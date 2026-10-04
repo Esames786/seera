@@ -59,19 +59,19 @@
                     <td>{{ number_format($bill->total_amount, 2) }}</td>
                     <td>{{ number_format($bill->paid_amount, 2) }}</td>
                     <td><strong>{{ number_format($bill->balance_amount, 2) }}</strong></td>
-                    <td><x-admin.status-badge :status="$bill->status"/></td>
+                    <td><x-admin.status-badge :status="$bill->status"/><div class="small">{{ $bill->approvalLabel() }}</div></td>
                     <td>
                         <x-admin.action-buttons
                             :view="route('admin.accounting.accounts-payable.show', $bill)"
-                            :edit="$bill->isEditable() ? route('admin.accounting.accounts-payable.edit', $bill) : null"
-                            :delete="$bill->isEditable() ? route('admin.accounting.accounts-payable.destroy', $bill) : null"
+                            :edit="! $bill->site_expense_id && $bill->isEditable() ? route('admin.accounting.accounts-payable.edit', $bill) : null"
+                            :delete="! $bill->site_expense_id && $bill->isEditable() && ! $bill->approvals()->exists() ? route('admin.accounting.accounts-payable.destroy', $bill) : null"
                             :name="$bill->bill_number">
-                            @if ($bill->status === 'draft')
+                            @if ($bill->status === 'draft' && $bill->approval_mode !== 'runtime' && auth()->user()->hasPermission('Accounts Payable', 'approve'))
                                 <form method="POST" action="{{ route('admin.accounting.accounts-payable.approve', $bill) }}">
                                     @csrf
-                                    <button type="submit" class="btn sm warning">Approve</button>
+                                    <button type="submit" class="btn sm warning">Legacy Approve &amp; Post</button>
                                 </form>
-                            @elseif (in_array($bill->status, ['unpaid', 'partially_paid']))
+                            @elseif ($bill->isPayable() && auth()->user()->hasPermission('Accounts Payable', 'process'))
                                 <a class="btn sm warning" href="{{ route('admin.accounting.accounts-payable.payment', $bill) }}">Pay</a>
                             @endif
                         </x-admin.action-buttons>

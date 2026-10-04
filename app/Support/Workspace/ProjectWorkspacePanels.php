@@ -149,6 +149,8 @@ class ProjectWorkspacePanels implements WorkspacePanels
         $extra = [];
         if ($panel === 'finance') {
             $extra['finance'] = self::finance($project);
+            $extra['supplierBills'] = $user->hasPermission('Accounts Payable', 'view')
+                ? SupplierBill::where('project_id', $project->id)->with(['supplier', 'journalEntry'])->latest('id')->limit(10)->get() : collect();
         }
         if ($panel === 'materials') {
             $extra['materialTotal'] = (float) self::materials($project)->sum('value');

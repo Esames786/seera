@@ -55,8 +55,8 @@
                     <td>
                         <x-admin.action-buttons
                             :view="route('admin.accounting.journal-entries.show', $entry)"
-                            :edit="$entry->isEditable() ? route('admin.accounting.journal-entries.edit', $entry) : null"
-                            :delete="$entry->status !== 'posted' ? route('admin.accounting.journal-entries.destroy', $entry) : null"
+                            :edit="$entry->isEditable() && ! $entry->isApprovalControlledSource() ? route('admin.accounting.journal-entries.edit', $entry) : null"
+                            :delete="$entry->status !== 'posted' && ! $entry->isApprovalControlledSource() ? route('admin.accounting.journal-entries.destroy', $entry) : null"
                             :name="$entry->journal_number">
                             @if ($entry->status !== 'posted' && $entry->status !== 'cancelled')
                                 <form method="POST" action="{{ route('admin.accounting.journal-entries.post', $entry) }}">
