@@ -15,6 +15,7 @@ class SupplierBill extends Model
         'project_id', 'site_id', 'cost_center_id', 'taxable_amount', 'vat_rate',
         'vat_amount', 'total_amount', 'paid_amount', 'balance_amount', 'status',
         'journal_entry_id', 'notes', 'site_expense_id',
+        'approval_mode', 'approval_status', 'requested_by', 'last_edited_by', 'rejection_reason', 'posting_error',
     ];
 
     protected function casts(): array
@@ -47,7 +48,29 @@ class SupplierBill extends Model
 
     public function isEditable(): bool
     {
-        return in_array($this->status, ['draft', 'cancelled'], true);
+        return in_array($this->status, ['draft', 'cancelled'], true)
+            && ! in_array($this->approval_status, ['pending', 'approved'], true);
+    }
+
+    public function approvals()
+    {
+        return $this->hasMany(ApprovalInstance::class, 'source_id')->where('source_type', 'supplier_bill');
+    }
+
+    public function isPayable(): bool
+    {
+        return in_array($this->status, ['unpaid', 'partially_paid'], true) && $this->journalEntry?->status === 'posted';
+    }
+
+    public function approvalLabel(): string
+    {
+        return match ($this->approval_status) {
+            'pending' => 'Pending Approval',
+            'rejected' => 'Rejected',
+            'correction' => 'Correction — new approval required',
+            'approved' => $this->journalEntry?->status === 'posted' ? 'Approved' : 'Approved — Posting Pending',
+            default => $this->approval_mode === 'runtime' ? 'Draft — not submitted' : 'Legacy — no runtime history',
+        };
     }
 
     public function supplier()
