@@ -86,6 +86,12 @@ class EnsureUserHasPermission
         $routeName = (string) $request->route()?->getName();
         $name = str($routeName)->after('admin.')->toString();
 
+        if ($routeName === 'admin.users.employee-search') {
+            abort_unless($request->user()?->hasPermission('Users', 'create') || $request->user()?->hasPermission('Users', 'edit'), 403);
+
+            return $next($request);
+        }
+
         if (str_starts_with($routeName, 'admin.accounting.accounts-payable.')) {
             abort_unless($request->user()?->hasPermission('Accounts Payable', 'view'), 403);
             if ($routeName === 'admin.accounting.accounts-payable.submit-approval') {
@@ -155,6 +161,12 @@ class EnsureUserHasPermission
     /** @return array{0: ?string, 1: string} */
     public static function permissionForRoute(string $routeName, ?string $comingSoonModule = null): array
     {
+        if (str_starts_with($routeName, 'admin.users.workspace.')) {
+            return ['Users', str_ends_with($routeName, '.save') ? 'edit' : 'view'];
+        }
+        if (str_starts_with($routeName, 'admin.master.sites.expenses.')) {
+            return ['Sites', 'view'];
+        }
         if (str_starts_with($routeName, 'admin.hr.employees.workspace.')) {
             // The workspace controller ALSO enforces each child module/action.
             return ['HR', 'edit'];

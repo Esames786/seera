@@ -13,7 +13,10 @@ use App\Models\Role;
 use App\Models\Site;
 use App\Models\User;
 use App\Models\Warehouse;
+use App\Services\UserRoleAssignments;
 use App\Support\LinkedIdentityNavigation;
+use App\Support\SaveAction;
+use App\Support\Workspace\UserWorkspacePanels;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -64,7 +67,12 @@ class UserController extends Controller
     public function employeeSearch(Request $request): JsonResponse
     {
         abort_unless($request->user()->hasPermission('HR', 'view') && $request->user()->hasPermission('HR', 'edit'), 403);
-        $request->validate(['q' => ['required', 'string', 'min:2', 'max:100']]);
+        $request->validate(['q' => ['required', 'string', 'min:2', 'max:100'], 'target_user' => ['nullable', 'integer']]);
+        $target = null;
+        if ($request->filled('target_user')) {
+            $target = app(LinkedIdentityNavigation::class)->users($request->user())->findOrFail($request->integer('target_user'));
+            abort_unless($request->user()->hasPermission('Users', 'edit'), 403);
+        }
         $term = '%'.str_replace(['%', '_'], '', trim($request->string('q'))).'%';
         $matches = Employee::query()
             ->where(fn ($q) => $q->where('employee_code', 'like', $term)->orWhere('email', 'like', $term)
@@ -74,7 +82,7 @@ class UserController extends Controller
                     }
                 }))
             ->orderBy('employee_code');
-        $usedCodes = User::whereNotNull('employee_id')->select('employee_id');
+        $usedCodes = User::whereNotNull('employee_id')->when($target, fn ($q) => $q->whereKeyNot($target->id))->select('employee_id');
         $employees = (clone $matches)->whereNull('user_id')->where('status', 'active')
             ->whereNotIn('employee_code', clone $usedCodes)->limit(15)->get();
         // Same Employee access scope as eligible results. Never expose another
@@ -89,7 +97,7 @@ class UserController extends Controller
                 'name' => $employee->name, 'employee_id' => $employee->employee_code,
                 'email' => $employee->email, 'phone' => $employee->phone,
                 'department_id' => $employee->department_id, 'designation_id' => $employee->designation_id,
-                'branch_id' => $employee->branch_id, 'project_id' => $employee->project_id, 'site_id' => $employee->site_id,
+                'branch_id' => $employee->branch_id,
                 'employee_classification' => $employee->employee_classification,
                 'joining_date' => $employee->joining_date?->toDateString(), 'contract_type' => $employee->contract_type,
                 'iqama_number' => $employee->iqama_number, 'iqama_expiry_date' => $employee->iqama_expiry_date?->toDateString(),
@@ -124,7 +132,7 @@ class UserController extends Controller
         }
         $data = $this->validated($request);
         $roleId = $data['role_id'];
-        unset($data['role_id']);
+        unset($data['role_id'], $data['password']);
 
         $password = $request->filled('password') ? $request->input('password') : self::DEFAULT_PASSWORD;
         $data['must_change_password'] = ! $request->filled('password');
@@ -157,51 +165,61 @@ class UserController extends Controller
             ], 201);
         }
 
-        return redirect()->route($request->input('_save_action') === 'stay' ? 'admin.users.edit' : 'admin.users.index', $request->input('_save_action') === 'stay' ? [$user] : [])->with('status', 'User "'.$user->name.'" created successfully.');
+        return $this->saved($request, $user)->with('status', 'User "'.$user->name.'" created successfully.');
     }
 
     public function show(User $user): View
     {
         abort_unless(app(LinkedIdentityNavigation::class)->canUser(auth()->user(), $user, 'view'), 403);
-        $user->load(['department', 'designation', 'branch', 'project', 'site', 'warehouse', 'roles.parent', 'roles.permissions', 'employee']);
+        $user->load('roles');
 
         return view('admin.users.show', [
             'user' => $user,
-            'linkedEmployee' => app(LinkedIdentityNavigation::class)->employeeCard($user, auth()->user()),
-            'recentLogs' => $user->activityLogs()->latest('created_at')->limit(6)->get(),
+            'linkedEmployee' => auth()->user()->hasPermission('HR', 'view') ? app(LinkedIdentityNavigation::class)->employeeCard($user, auth()->user()) : ['state' => 'unavailable'],
+            'panels' => UserWorkspacePanels::visibleDefinitions(auth()->user()),
         ]);
     }
 
     public function edit(User $user): View
     {
         abort_unless(app(LinkedIdentityNavigation::class)->canUser(auth()->user(), $user, 'edit'), 403);
-        $user->load(['roles', 'employee']);
+        $user->load('roles');
 
         return view('admin.users.edit', ['user' => $user,
-            'linkedEmployee' => app(LinkedIdentityNavigation::class)->employeeCard($user, auth()->user()),
-        ] + $this->formOptions());
+            'linkedEmployee' => auth()->user()->hasPermission('HR', 'view') ? app(LinkedIdentityNavigation::class)->employeeCard($user, auth()->user()) : ['state' => 'unavailable'],
+            'panels' => auth()->user()->hasPermission('Users', 'view') ? UserWorkspacePanels::visibleDefinitions(auth()->user()) : [],
+        ]);
     }
 
     public function update(Request $request, User $user): RedirectResponse
     {
         abort_unless(app(LinkedIdentityNavigation::class)->canUser($request->user(), $user, 'edit'), 403);
+        if ($request->boolean('_workspace_profile')) {
+            $data = $request->validate(['name' => ['required', 'string', 'max:255'], 'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+                'phone' => ['nullable', 'string', 'max:30'], 'username' => ['nullable', 'string', 'max:100', Rule::unique('users')->ignore($user->id)], 'language' => ['required', 'in:English,Arabic']]);
+            $user->update($data);
+            ActivityLog::record($request, 'Users', 'Updated profile', '[User #'.$user->id.']');
+
+            return $this->saved($request, $user)->with('status', __('workspace.saved'));
+        }
         $data = $this->validated($request, $user);
         $roleId = $data['role_id'];
-        unset($data['role_id']);
+        unset($data['role_id'], $data['password']);
 
         if ($request->filled('password')) {
             $data['password'] = $request->input('password');
         }
 
         DB::transaction(function () use ($user, $data, $roleId) {
+            $user = User::whereKey($user->id)->lockForUpdate()->firstOrFail();
             $user->update($data);
-            $user->roles()->sync([$roleId => ['is_primary' => true]]);
+            app(UserRoleAssignments::class)->primary($user, (int) $roleId);
             $this->syncEmployeeClassification($user);
         });
 
         ActivityLog::record($request, 'Users', 'Updated user', $user->name.' ('.$user->email.')');
 
-        return redirect()->route($request->input('_save_action') === 'stay' ? 'admin.users.edit' : 'admin.users.index', $request->input('_save_action') === 'stay' ? [$user] : [])->with('status', 'User "'.$user->name.'" updated successfully.');
+        return $this->saved($request, $user)->with('status', 'User "'.$user->name.'" updated successfully.');
     }
 
     public function destroy(Request $request, User $user): RedirectResponse
@@ -232,6 +250,8 @@ class UserController extends Controller
 
     private function validated(Request $request, ?User $user = null): array
     {
+        UserWorkspaceController::validateScope($request->only('project_id', 'site_id', 'warehouse_id'));
+
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'.($user ? ','.$user->id : '')],
@@ -254,10 +274,17 @@ class UserController extends Controller
             'two_factor_enabled' => ['nullable', 'boolean'],
             'temporary_access' => ['nullable', 'boolean'],
             'access_start_date' => ['nullable', 'date'],
-            'access_end_date' => ['nullable', 'date'],
+            'access_end_date' => ['nullable', 'date', 'after_or_equal:access_start_date'],
             'status' => ['required', 'in:active,inactive,locked,pending'],
             'role_id' => ['required', 'exists:roles,id'],
+            'password' => ['nullable', 'string', 'min:8'],
         ]);
+    }
+
+    private function saved(Request $request, User $user): RedirectResponse
+    {
+        return SaveAction::redirect($request, ['stay' => route('admin.users.edit', [$user, 'return_to' => SaveAction::returnTo($request)]),
+            'close' => route('admin.users.index')] + ($request->user()->hasPermission('Users', 'create') ? ['new' => route('admin.users.create')] : []));
     }
 
     private function formOptions(): array

@@ -59,9 +59,11 @@
                     <td><x-admin.status-badge :status="$user->status"/></td>
                     <td>
                         <x-admin.action-buttons
-                            :view="route('admin.users.show', $user)"
-                            :edit="route('admin.users.edit', $user)"
-                            :delete="route('admin.users.destroy', $user)"
+                            :view="auth()->user()->hasPermission('Users','view') ? route('admin.users.show', $user) : null"
+                            :edit="auth()->user()->hasPermission('Users','edit') ? route('admin.users.edit', $user) : null"
+                            :edit-label="__('workspace.manage')"
+                            :delete="auth()->user()->hasPermission('Users','delete') ? route('admin.users.destroy', $user) : null"
+                            :deactivate="true" :delete-label="__('ui.deactivate')"
                             :name="$user->name"/>
                     </td>
                 </tr>

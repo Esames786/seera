@@ -11,18 +11,21 @@
                 <div><label for="code">Site Code *</label><input id="code" name="code" class="input" value="{{ old('code', $site?->code) }}" placeholder="SITE-A" required/></div>
                 <div>
                     <label for="project_id">Project *</label>
-                    <select id="project_id" name="project_id" class="select" @disabled(isset($contextProject))>
+                    <select id="project_id" name="project_id" class="select" @disabled(isset($contextProject) || $site)>
                         <option value="">Select...</option>
                         @foreach ($projects as $project)
                             <option value="{{ $project->id }}" @selected(($contextProject->id ?? old('project_id', $site?->project_id ?? request('project'))) == $project->id)>{{ $project->name }}</option>
                         @endforeach
                     </select>
                 </div>
-                @isset($contextProject)<input type="hidden" name="project_id" value="{{ $contextProject->id }}"/>@endisset
+                @if(isset($contextProject) || $site)<input type="hidden" name="project_id" value="{{ $contextProject->id ?? $site->project_id }}"/>@endif
                 <div>
                     <label for="supervisor_id">Site Supervisor *</label>
                     <select id="supervisor_id" name="supervisor_id" class="select">
                         <option value="">Select...</option>
+                        @if($site?->supervisor_id && !$supervisors->contains('id',$site->supervisor_id))
+                            <option value="{{ $site->supervisor_id }}" @selected(old('supervisor_id',$site->supervisor_id) == $site->supervisor_id)>{{ $site->supervisor?->name ?: '#'.$site->supervisor_id }}</option>
+                        @endif
                         @foreach ($supervisors as $supervisor)
                             <option value="{{ $supervisor->id }}" @selected(old('supervisor_id', $site?->supervisor_id) == $supervisor->id)>{{ $supervisor->name }}</option>
                         @endforeach
@@ -66,14 +69,7 @@
                 </div>
             </x-admin.form-section>
 
-            @isset($contextProject)
-                <x-admin.form-actions :cancel="route('admin.master.projects.show', $contextProject).'#sites'" :save-new="auth()->user()->hasPermission('Sites', 'create')"/>
-            @else
-            <div class="form-actions">
-                <a class="btn outline" href="{{ route('admin.master.sites.index') }}">Cancel</a>
-                <button type="submit" class="btn primary">{{ $site ? 'Update Site' : 'Save Site' }}</button>
-            </div>
-            @endisset
+            <x-admin.form-actions :cancel="isset($contextProject) ? route('admin.master.projects.show', $contextProject).'#sites' : route('admin.master.sites.index')" :save-new="auth()->user()->hasPermission('Sites','create')"/>
         </div>
 
         <div>
@@ -88,7 +84,8 @@
                 </div>
             </div>
             <div class="note">
-                Click the map to drop the site pin; latitude and longitude fill in automatically. The circle follows the geo-fence radius and is what mobile attendance check-in will be tested against.
+                {{ __('workspace.map_help') }}
+                {{ __('workspace.geofence_help') }}
             </div>
         </div>
     </div>

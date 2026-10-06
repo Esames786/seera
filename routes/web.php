@@ -59,6 +59,7 @@ use App\Http\Controllers\Admin\Master\ProjectController;
 use App\Http\Controllers\Admin\Master\ProjectSiteController;
 use App\Http\Controllers\Admin\Master\ProjectWorkspaceController;
 use App\Http\Controllers\Admin\Master\SiteController;
+use App\Http\Controllers\Admin\Master\SiteWorkspaceController;
 use App\Http\Controllers\Admin\Master\SupplierController;
 use App\Http\Controllers\Admin\Master\SupplierWorkspaceController;
 use App\Http\Controllers\Admin\Master\WarehouseController;
@@ -69,6 +70,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\RoleHierarchyController;
 use App\Http\Controllers\Admin\SiteExpenseController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\UserWorkspaceController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\UserGuideController;
 use Illuminate\Support\Facades\Route;
@@ -136,6 +138,8 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
 
     // Users
     Route::get('users/employee-search', [UserController::class, 'employeeSearch'])->name('users.employee-search');
+    Route::get('users/{user}/workspace/{panel}', [UserWorkspaceController::class, 'panel'])->name('users.workspace.panel');
+    Route::post('users/{user}/workspace/{panel}', [UserWorkspaceController::class, 'save'])->name('users.workspace.save');
     Route::resource('users', UserController::class);
 
     // Roles - static routes must be registered before roles/{role}.
@@ -176,6 +180,9 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::put('projects/{project}/sites/{site}', [ProjectSiteController::class, 'updateForProject'])->name('sites.project.update');
         Route::resource('projects', ProjectController::class);
         Route::resource('sites', SiteController::class);
+        Route::get('sites/{site}/workspace/{panel}', [SiteWorkspaceController::class, 'panel'])->name('sites.workspace.panel');
+        Route::get('sites/{site}/expenses/create', [SiteWorkspaceController::class, 'createExpense'])->name('sites.expenses.create');
+        Route::post('sites/{site}/expenses', [SiteWorkspaceController::class, 'storeExpense'])->name('sites.expenses.store');
         Route::resource('warehouses', WarehouseController::class);
         Route::resource('expense-categories', ExpenseCategoryController::class);
         Route::resource('payment-terms', PaymentTermController::class)

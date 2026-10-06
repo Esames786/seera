@@ -260,11 +260,7 @@
                 </div>
             </x-admin.form-section>
 
-            <div class="form-actions">
-                <a class="btn outline" href="{{ route('admin.users.index') }}">Cancel</a>
-                <button type="submit" name="_save_action" value="stay" class="btn outline">{{ __('ui.save_stay') }}</button>
-                <button type="submit" class="btn primary">{{ $user ? 'Update User' : 'Save User' }}</button>
-            </div>
+            <x-admin.form-actions :cancel="route('admin.users.index')" :save-new="auth()->user()->hasPermission('Users','create')"/>
         </div>
     </div>
 </form>

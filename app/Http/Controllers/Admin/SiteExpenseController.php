@@ -144,7 +144,7 @@ class SiteExpenseController extends Controller
         $request->validate(['workflow_id' => ['nullable', 'integer'], 'previous_instance_id' => ['nullable', 'integer']]);
         $this->start($request, $site_expense);
 
-        return redirect()->route('admin.site-expenses.show', $site_expense)->with('status', 'Expense '.$site_expense->expense_number.' submitted for approval. All required reviewers must approve before accounting is attempted.');
+        return redirect()->route('admin.site-expenses.show', [$site_expense, 'return_to' => SaveAction::returnTo($request)])->with('status', 'Expense '.$site_expense->expense_number.' submitted for approval. All required reviewers must approve before accounting is attempted.');
     }
 
     private function submitSaved(Request $request, SiteExpense $expense)
@@ -152,7 +152,7 @@ class SiteExpenseController extends Controller
         try {
             return $this->submit($request, $expense);
         } catch (ValidationException $error) {
-            return redirect()->route('admin.site-expenses.show', $expense)->withErrors($error->errors())
+            return redirect()->route('admin.site-expenses.show', [$expense, 'return_to' => SaveAction::returnTo($request)])->withErrors($error->errors())
                 ->with('status', 'Expense saved safely. Resolve the approval configuration before submitting.');
         }
     }
@@ -340,7 +340,7 @@ class SiteExpenseController extends Controller
 
     private function saved(Request $request, SiteExpense $expense)
     {
-        return SaveAction::redirect($request, ['stay' => route('admin.site-expenses.edit', $expense),
+        return SaveAction::redirect($request, ['stay' => route('admin.site-expenses.edit', [$expense, 'return_to' => SaveAction::returnTo($request)]),
             'close' => route('admin.site-expenses.index'), 'new' => route('admin.site-expenses.create')])->with('status', 'Expense '.$expense->expense_number.' saved.');
     }
 }

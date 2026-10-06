@@ -3,8 +3,9 @@
 @section('breadcrumb', 'Site Expenses / View')
 @section('content')
 <x-admin.page-header :title="$expense->expense_number" :description="$expense->project?->name.' / '.$expense->site?->name">
+    @if($returnTo=\App\Support\SaveAction::returnTo())<a class="btn outline" href="{{ $returnTo }}">{{ __('workspace.back') }}</a>@endif
     <a class="btn outline" href="{{ route('admin.site-expenses.index') }}">Back to expenses</a>
-    @if(app(\App\Services\Approvals\SiteExpenseApprovalSubject::class)->canSubmit($expense, auth()->user()))<a class="btn primary" href="{{ route('admin.site-expenses.edit',$expense) }}">Edit</a>@endif
+    @if(app(\App\Services\Approvals\SiteExpenseApprovalSubject::class)->canSubmit($expense, auth()->user()))<a class="btn primary" href="{{ route('admin.site-expenses.edit',[$expense,'return_to'=>\App\Support\SaveAction::returnTo()]) }}">Edit</a>@endif
 </x-admin.page-header>
 <div class="card" style="padding:20px"><p>{{ $expense->expense_date->format('Y-m-d') }} · {{ $expense->submitter?->name }} · SAR {{ $expense->total_amount }}</p><p>Approval / document: <strong>{{ str_replace('_',' ',$expense->status) }}</strong> · Accounting: <strong>{{ $expense->accounting_posted ? 'Posted' : 'Not posted' }}</strong></p><nav><a href="#details">Details</a> · <a href="#receipts">Receipts</a> · <a href="#approvals">Approval history</a> · <a href="#accounting">Accounting</a> · <a href="#activity">Activity</a></nav></div>
 <section class="card" id="details" style="padding:20px"><h2>Expense details</h2><p>{{ $expense->description }}</p><dl><dt>Category</dt><dd>{{ $expense->category?->name }}</dd><dt>Payment type</dt><dd>{{ $expense->payment_type }}</dd><dt>Supplier</dt><dd>{{ $expense->supplier?->name ?? '—' }}</dd><dt>Amount before VAT / VAT / Total</dt><dd>SAR {{ $expense->taxable_amount }} / {{ $expense->vat_amount }} ({{ $expense->vat_rate }}%) / {{ $expense->total_amount }}</dd><dt>Reference</dt><dd>{{ $expense->reference_number ?? '—' }}</dd></dl><p>{{ $expense->notes }}</p></section>

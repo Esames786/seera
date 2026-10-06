@@ -12,6 +12,13 @@ if (root) {
     const keyOf = link => link.dataset.workspaceSection || link.dataset.workspaceRelated;
     const keys = links.map(keyOf);
     let current = keys[0];
+    const guardedShow = (key, callback) => {
+        if (root.querySelector('[data-saving="1"]')) return;
+        if (key === current) { callback?.(); return; }
+        const currentForm = root.querySelector('[data-related-panel="' + current + '"] form') || (!related.has(current) ? form?.querySelector('form') : null);
+        const navigate = () => { show(key); callback?.(); };
+        if (!root.hasAttribute('data-workspace-guard-tabs') || !currentForm || currentForm.dispatchEvent(new CustomEvent('seera:before-form-close', { bubbles: true, cancelable: true, detail: { close: navigate } }))) navigate();
+    };
     const previousButtons = () => root.querySelectorAll('[data-workspace-previous]').forEach(button => {
         button.hidden = false;
         button.disabled = keys.indexOf(current) <= 0;
@@ -35,8 +42,7 @@ if (root) {
         const link = event.target.closest('[data-workspace-section], [data-workspace-related]');
         if (!link) return;
         event.preventDefault();
-        show(keyOf(link));
-        history.replaceState(null, '', link.hash);
+        guardedShow(keyOf(link), () => history.replaceState(null, '', link.hash));
     });
     document.addEventListener('seera:workspace-next', event => {
         const index = keys.indexOf(event.detail.panel);
@@ -51,15 +57,21 @@ if (root) {
         if (!button || button.disabled || root.querySelector('[data-saving="1"]')) return;
         const index = keys.indexOf(current);
         if (index <= 0) return;
-        show(keys[index - 1]);
-        history.replaceState(null, '', '#' + keys[index - 1]);
-        nav.querySelector('[aria-current="location"]')?.focus();
+        guardedShow(keys[index - 1], () => {
+            history.replaceState(null, '', '#' + keys[index - 1]);
+            nav.querySelector('[aria-current="location"]')?.focus();
+        });
     });
     document.addEventListener('seera:reveal-form', event => {
         const panel = event.target.closest('[data-related-panel]');
         show(panel ? panel.dataset.relatedPanel : keys[0]);
     });
-    window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+    window.addEventListener('hashchange', () => {
+        const key = location.hash.slice(1);
+        if (!root.hasAttribute('data-workspace-guard-tabs')) { show(key); return; }
+        history.replaceState(null, '', '#' + current);
+        guardedShow(key, () => history.replaceState(null, '', '#' + key));
+    });
     // A parent form with validation errors opens on the profile so the errors are visible.
     show(form?.querySelector('.field-error, .alert.danger, .is-invalid') ? keys[0] : location.hash.slice(1));
 }

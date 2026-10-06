@@ -53,9 +53,10 @@
                     <td><x-admin.status-badge :status="$site->status"/></td>
                     <td>
                         <x-admin.action-buttons
-                            :view="route('admin.master.sites.show', $site)"
-                            :edit="route('admin.master.sites.edit', $site)"
-                            :delete="route('admin.master.sites.destroy', $site)"
+                            :view="auth()->user()->hasPermission('Sites','view') ? route('admin.master.sites.show', $site) : null"
+                            :edit="auth()->user()->hasPermission('Sites','edit') ? route('admin.master.sites.edit', $site) : null"
+                            :edit-label="__('workspace.manage')"
+                            :delete="auth()->user()->hasPermission('Sites','delete') ? route('admin.master.sites.destroy', $site) : null"
                             :name="$site->name"/>
                     </td>
                 </tr>

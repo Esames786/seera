@@ -96,6 +96,8 @@ export function relatedPanels({
                 } else {
                     saved = true;
                     if (body.panel_url) savedUrl = body.panel_url;
+                    const identity = document.querySelector('[data-workspace-identity]');
+                    if (identity && typeof body.identity_html === 'string') identity.innerHTML = body.identity_html;
                 }
             } catch { errors.textContent = host.dataset.error; errors.hidden = false; }
             finally {

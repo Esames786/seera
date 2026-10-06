@@ -1,6 +1,8 @@
 // Employee lookup is progressively enhanced; manual account creation still works.
-const search = document.querySelector('[data-employee-search]');
+function initEmployeeSearch() {
+const search = document.querySelector('[data-employee-search]:not([data-search-ready])');
 if (search) {
+    search.dataset.searchReady = '1';
     const results = document.getElementById('employee-search-results');
     const form = search.form;
     let timer;
@@ -13,7 +15,9 @@ if (search) {
         timer = setTimeout(async () => {
             request = new AbortController();
             try {
-                const response = await fetch(`${search.dataset.employeeSearch}?q=${encodeURIComponent(search.value.trim())}`, {
+                const url = new URL(search.dataset.employeeSearch, location.href);
+                url.searchParams.set('q', search.value.trim());
+                const response = await fetch(url, {
                     headers: { Accept: 'application/json' }, signal: request.signal,
                 });
                 if (!response.ok) throw new Error('lookup');
@@ -72,3 +76,6 @@ if (search) {
         results.textContent = search.dataset.cleared;
     });
 }
+}
+initEmployeeSearch();
+document.addEventListener('seera:workspace-panel-loaded', initEmployeeSearch);

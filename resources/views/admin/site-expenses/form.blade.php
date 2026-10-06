@@ -12,16 +12,21 @@
 @endpush
 @section('content')
 <x-admin.page-header :title="$expense->exists ? 'Edit '.$expense->expense_number : 'Add Site Expense'" description="Record an expense and attach its receipt. Save a draft or send it for approval from this screen." />
-<form method="POST" enctype="multipart/form-data" action="{{ $expense->exists ? route('admin.site-expenses.update', $expense) : route('admin.site-expenses.store') }}" data-se-form>
+<form method="POST" enctype="multipart/form-data" action="{{ $formAction ?? ($expense->exists ? route('admin.site-expenses.update', $expense) : route('admin.site-expenses.store')) }}" data-se-form>
     @csrf @if($expense->exists) @method('PUT') @endif
+    @if($origin = \App\Support\SaveAction::returnTo())<input type="hidden" name="_return_to" value="{{ $origin }}">@endif
+    @isset($contextSite)
+        <input type="hidden" name="project_id" value="{{ $contextSite->project_id }}">
+        <input type="hidden" name="site_id" value="{{ $contextSite->id }}">
+    @endisset
     @if($expense->status === 'rejected')
         <div class="alert">Rejected: {{ $expense->rejection_reason }}. Saving corrections keeps the rejection history; Submit starts a new approval attempt.</div>
         <input type="hidden" name="previous_instance_id" value="{{ $expense->approvals()->latest('attempt')->value('id') }}">
     @endif
     <x-admin.form-section title="Expense details" columns="2">
         <div><label for="expense_date">Date *</label><input id="expense_date" type="date" name="expense_date" class="input" required value="{{ old('expense_date', $expense->expense_date?->format('Y-m-d') ?? now()->toDateString()) }}">@error('expense_date')<p role="alert">{{ $message }}</p>@enderror</div>
-        <div><label for="project_id">Project *</label><select id="project_id" name="project_id" class="select" required><option value="">Select project</option>@foreach($projects as $project)<option value="{{ $project->id }}" @selected(old('project_id', $expense->project_id ?? request('project_id') ?? auth()->user()->project_id) == $project->id)>{{ $project->name }}</option>@endforeach</select>@error('project_id')<p role="alert">{{ $message }}</p>@enderror</div>
-        <div><label for="site_id">Site *</label><select id="site_id" name="site_id" class="select" required><option value="">Select site</option>@foreach($sites as $site)<option value="{{ $site->id }}" data-project="{{ $site->project_id }}" @selected(old('site_id', $expense->site_id ?? auth()->user()->site_id) == $site->id)>{{ $site->name }}</option>@endforeach</select>@error('site_id')<p role="alert">{{ $message }}</p>@enderror</div>
+        <div><label for="project_id">Project *</label><select id="project_id" name="project_id" class="select" required @disabled(isset($contextSite))><option value="">Select project</option>@foreach($projects as $project)<option value="{{ $project->id }}" @selected(($contextSite->project_id ?? old('project_id', $expense->project_id ?? request('project_id') ?? auth()->user()->project_id)) == $project->id)>{{ $project->name }}</option>@endforeach</select>@error('project_id')<p role="alert">{{ $message }}</p>@enderror</div>
+        <div><label for="site_id">Site *</label><select id="site_id" name="site_id" class="select" required @disabled(isset($contextSite))><option value="">Select site</option>@foreach($sites as $site)<option value="{{ $site->id }}" data-project="{{ $site->project_id }}" @selected(($contextSite->id ?? old('site_id', $expense->site_id ?? auth()->user()->site_id)) == $site->id)>{{ $site->name }}</option>@endforeach</select>@error('site_id')<p role="alert">{{ $message }}</p>@enderror</div>
         <div><label for="expense_category_id">Category *</label><select id="expense_category_id" name="expense_category_id" class="select" required><option value="">Select category</option>@foreach($categories as $category)<option value="{{ $category->id }}" data-rate="{{ $category->vat_treatment === 'VAT 15%' ? 15 : 0 }}" @selected(old('expense_category_id', $expense->expense_category_id) == $category->id)>{{ $category->name }}</option>@endforeach</select>@error('expense_category_id')<p role="alert">{{ $message }}</p>@enderror</div>
         <div><label for="taxable_amount">Amount before VAT (SAR) *</label><input class="input" id="taxable_amount" name="taxable_amount" type="number" min="0.01" step="0.01" inputmode="decimal" required value="{{ old('taxable_amount', $expense->taxable_amount) }}">@error('taxable_amount')<p role="alert">{{ $message }}</p>@enderror</div>
         <div><label for="vat_applicable">VAT applicable *</label><select class="select" name="vat_applicable" id="vat_applicable"><option value="0" @selected(!old('vat_applicable', (float)$expense->vat_rate > 0))>No</option><option value="1" @selected(old('vat_applicable', (float)$expense->vat_rate > 0))>Yes — use category rate</option></select>
@@ -38,7 +43,7 @@
     </x-admin.form-section>
     <div class="alert">Employee-paid expenses remain payable until Finance reimburses them. Supplier Credit creates one draft Supplier Bill after expense approval. Finance must review and submit that bill for its own required approvals before bill accounting and payment.</div>
     <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.site-expenses.index') }}">Back to expenses</a>
+        <a class="btn outline" href="{{ \App\Support\SaveAction::cancelUrl(route('admin.site-expenses.index')) }}">{{ __('workspace.back') }}</a>
         <button type="submit" data-save-default class="btn outline" name="_save_action" value="stay">Save draft &amp; stay</button>
         <button type="submit" class="btn outline" name="_save_action" value="new">Save &amp; new</button>
         <button class="btn outline" name="_save_action" value="close">Save &amp; close</button>

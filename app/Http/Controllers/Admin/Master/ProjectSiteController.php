@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin\Master;
 use App\Models\ActivityLog;
 use App\Models\Project;
 use App\Models\Site;
-use App\Models\User;
+use App\Support\LinkedIdentityNavigation;
 use App\Support\SaveAction;
 use Illuminate\Http\Request;
 
@@ -43,9 +43,9 @@ class ProjectSiteController extends SiteController
 
         return view($site ? 'admin.master.sites.edit' : 'admin.master.sites.create', [
             'site' => $site, 'contextProject' => $project, 'projects' => collect([$project]),
-            'supervisors' => User::orderBy('name')->get(),
+            'supervisors' => app(LinkedIdentityNavigation::class)->users($request->user())->orderBy('name')->get(),
             'formAction' => $site ? route('admin.master.sites.project.update', [$project, $site]) : route('admin.master.sites.project.store', $project),
-        ]);
+        ] + ($site ? $this->workspaceData($site) : []));
     }
 
     public function storeForProject(Request $request, Project $project)
@@ -73,6 +73,7 @@ class ProjectSiteController extends SiteController
             $site = Site::create($values);
         }
         ActivityLog::record($request, 'Projects', 'Saved location', '[Project #'.$project->id.'] '.$project->code.' / Site '.$site->code);
+        ActivityLog::record($request, 'Sites', 'Saved location', '[Site #'.$site->id.'] '.$site->code);
         $origin = SaveAction::returnTo($request) ?? route('admin.master.projects.show', $project, false).'#sites';
 
         return SaveAction::redirect($request, [
