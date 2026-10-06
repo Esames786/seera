@@ -2,7 +2,7 @@
 
 Master index of every screen in the current system. Screen IDs are permanent; use them when you refer to a page in training, support tickets or the [User Guide](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md). Workflows are indexed in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).
 
-Version 1.5 · Prepared 4 October 2026 · System state: current feature branch, runtime for Purchase Requests, Site Expenses and Supplier Bills; Project Phase B expenses integrated · Status: current implemented system only; not a deployment claim.
+Version 1.6 · Prepared 6 October 2026 · System state: current feature branch, runtime for Purchase Requests, Site Expenses and Supplier Bills; Project Phase B expenses integrated; Wave 2 Batch A User/Site workspaces · Status: current implemented system only; not a deployment claim.
 
 How to read the columns:
 
@@ -29,8 +29,8 @@ How to read the columns:
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | USR-001 | Users List | `https://seera.tech-brit.co.uk/admin/users` | Administration | Administration → Users | Super Admin | Users — create | Users — view | Users — edit | — | AVAILABLE | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
 | USR-002 | Add User | `https://seera.tech-brit.co.uk/admin/users/create` | Administration | Users → + Add New User | Super Admin | Users — create | — | — | — | AVAILABLE | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
-| USR-003 | User Details | `https://seera.tech-brit.co.uk/admin/users/{id}` | Administration | Users → View | Super Admin | — | Users — view | — | — | AVAILABLE | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
-| USR-004 | Edit User | `https://seera.tech-brit.co.uk/admin/users/{id}/edit` | Administration | Users → Edit | Super Admin | — | — | Users — edit | — | AVAILABLE | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
+| USR-003 | User View Workspace | `https://seera.tech-brit.co.uk/admin/users/{id}` | Administration | Users → View | Super Admin | — | Users — view + child view permissions | — | — | AVAILABLE | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
+| USR-004 | User Edit / Manage Workspace | `https://seera.tech-brit.co.uk/admin/users/{id}/edit` | Administration | Users → Edit / Manage | Super Admin | — | — | Users — edit + child permissions | Roles — process for assignments | AVAILABLE | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
 | ROL-001 | Roles List | `https://seera.tech-brit.co.uk/admin/roles` | Administration | Administration → Roles | Super Admin | Roles — create | Roles — view | Roles — edit | — | AVAILABLE | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
 | ROL-002 | Create Role | `https://seera.tech-brit.co.uk/admin/roles/create` | Administration | Roles → + Add New Role | Super Admin | Roles — create | — | — | — | AVAILABLE | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
 | ROL-003 | Role Details | `https://seera.tech-brit.co.uk/admin/roles/{id}` | Administration | Roles → View | Super Admin | — | Roles — view | — | — | AVAILABLE | [4](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#4-users-roles-and-permissions) |
@@ -67,8 +67,8 @@ How to read the columns:
 | MST-PRJ-005 | Project Classifications | `https://seera.tech-brit.co.uk/admin/master/project-classifications` | Master Setup | Projects → Classifications | Super Admin | Projects — create | Projects — view | Projects — edit | — | AVAILABLE | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
 | MST-SITE-001 | Locations List | `https://seera.tech-brit.co.uk/admin/master/sites` | Master Setup | Master Setup → Locations | Project Manager, Super Admin | Sites — create | Sites — view | Sites — edit | — | AVAILABLE | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
 | MST-SITE-002 | Add Location | `https://seera.tech-brit.co.uk/admin/master/sites/create` | Master Setup | Locations → + Add Location | Project Manager, Super Admin | Sites — create | — | — | — | AVAILABLE | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
-| MST-SITE-003 | Location Details | `https://seera.tech-brit.co.uk/admin/master/sites/{id}` | Master Setup | Locations → View | Project Manager, Super Admin | — | Sites — view | — | — | AVAILABLE | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
-| MST-SITE-004 | Edit Location | `https://seera.tech-brit.co.uk/admin/master/sites/{id}/edit` | Master Setup | Locations → Edit | Project Manager, Super Admin | — | — | Sites — edit | — | AVAILABLE | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
+| MST-SITE-003 | Site View Workspace | `https://seera.tech-brit.co.uk/admin/master/sites/{id}` | Master Setup | Locations → View | Project Manager, Super Admin | — | Sites — view + child view permissions | — | — | AVAILABLE | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
+| MST-SITE-004 | Site Edit / Manage Workspace | `https://seera.tech-brit.co.uk/admin/master/sites/{id}/edit` | Master Setup | Locations → Edit / Manage | Project Manager, Super Admin | — | — | Sites — edit | — | AVAILABLE | [11](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#11-projects) |
 | MST-WH-001 | Warehouses List | `https://seera.tech-brit.co.uk/admin/master/warehouses` | Master Setup | Master Setup → Warehouses | Inventory Manager, Super Admin | Warehouses — create | Warehouses — view | Warehouses — edit | — | AVAILABLE | [5](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#5-master-setup) |
 | MST-WH-002 | Add Warehouse | `https://seera.tech-brit.co.uk/admin/master/warehouses/create` | Master Setup | Warehouses → + Add Warehouse | Inventory Manager, Super Admin | Warehouses — create | — | — | — | AVAILABLE | [5](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#5-master-setup) |
 | MST-WH-003 | Warehouse Details | `https://seera.tech-brit.co.uk/admin/master/warehouses/{id}` | Master Setup | Warehouses → View | Inventory Manager, Super Admin | — | Warehouses — view | — | — | AVAILABLE | [5](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#5-master-setup) |

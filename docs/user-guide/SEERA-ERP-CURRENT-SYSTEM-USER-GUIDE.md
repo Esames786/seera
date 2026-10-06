@@ -3,9 +3,9 @@
 
 | | |
 |---|---|
-| **Version** | 1.5 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 4 October 2026: Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Responsive Site Expense entry, private receipts, accounting and Project Phase B expense integration are implemented. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
-| **Prepared** | 4 October 2026 |
+| **Version** | 1.6 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 6 October 2026: Wave 2 Batch A adds connected User and Site View/Manage workspaces. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
+| **Prepared** | 6 October 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
 
@@ -306,7 +306,7 @@ FIN-DASH-001, HR-DASH-001, INV-DASH-001, ADM-020.
 How access works in Seera:
 
 1. A **Role** is a named set of permissions (for example Accounts Manager). Each permission is a module plus an action: view, create, edit, delete, approve, reject, export, mobile access, post, process, retry, receive, issue, transfer, adjust.
-2. A **User** has one primary role. The role also carries an **access scope**: All Company / Company Level (sees everything), Project Level (sees only the project set on the user), Site Level or Warehouse Level.
+2. A **User** has a primary role and may have additional permanent or dated temporary assignments. Permissions and effective scope use current active assignments, not reporting-parent inheritance. Project scope includes the assigned project and projects the user manages; Site and Warehouse scopes use their stored assignments. Branch is profile metadata, not an implemented access-scope dimension.
 3. Every screen and button checks the module and action. A user without "Accounts Payable — approve" does not see the Approve button and cannot approve by any other route.
 
 ### [USR-001] Users List
@@ -326,7 +326,7 @@ Permission required:
 Users — view.
 
 What you see:
-Cards (Total Users, Active Users, Mobile App Users, Locked / Inactive), filters (search, department, role, status) and the list: Employee ID, Name, Email / Phone, Department, Primary Role, Assigned Project/Site, Mobile Access, Last Login, Status, Actions (View, Edit, Deactivate).
+Cards (Total Users, Active Users, Mobile App Users, Locked / Inactive), filters (search, department, role, status) and the list: Employee ID, Name, Email / Phone, Department, Primary Role, Assigned Project/Site, Mobile Access, Last Login, Status, Actions (View, Edit / Manage, Deactivate), each subject to permission. Counts use the same scoped User dataset.
 
 Related screens:
 USR-002, USR-003, USR-004.
@@ -366,15 +366,16 @@ Fields:
 | Account Status | active, inactive, locked, pending | active | Yes | |
 | Mobile App Access | Yes / No | Yes | No | Stored on the account; the mobile app itself is not built yet |
 | Access Start Date / Access End Date | Temporary access window | 01-Oct-2026 to 31-Dec-2026 | No | Informational on the user; enforced dates are set on ROL-007 |
-| Assigned Branch / Project / Site / Warehouse | What the account may see when the role is scoped | Riyadh Commercial Tower | No | Required in practice for Project, Site or Warehouse scoped roles |
+| Assigned Branch / Project / Site / Warehouse | Explicit assignments; Branch is profile metadata | Riyadh Commercial Tower | No | Project/Site/Warehouse affect their supported scope; linking an employee does not select access scope for you |
 | Upload Profile Photo | Picture | photo.jpg | No | |
 
 Buttons:
 
 | Button | What it does |
 |---|---|
-| Save & stay | Saves and stays on the user's edit page |
-| Save User | Saves and returns to the list |
+| Save | Saves and opens/stays in Edit / Manage |
+| Save & Close | Saves and returns to the safe origin or Users list |
+| Save & New | Saves and opens a blank Add User form, if Users create is allowed |
 | Cancel | Leaves without saving |
 
 Important:
@@ -395,10 +396,25 @@ USR-001, USR-004, HR-EMP-004, ROL-002.
 
 Web address: `https://seera.tech-brit.co.uk/admin/users/{id}` (USR-003) · `https://seera.tech-brit.co.uk/admin/users/{id}/edit` (USR-004)
 
-USR-003 is read-only: an Access Summary (Employee ID, Primary Role, Parent Role, Access Scope, Department, Designation, Branch, Contract Type, Classification, Iqama Number, Mobile App Access, Two Factor Auth, Last Login) and the user's Recent Activity. USR-004 is the same form as USR-002 with the same buttons.
+USR-003 is a read-only connected workspace; GET does not update business records and no profile/assignment write forms appear. USR-004 is Edit / Manage, with independent small saves. The persistent header shows name, email, code reference, status, primary/current effective roles, current temporary roles, Mobile Access and the authorized actual linked Employee.
 
-Important:
-Saving the Edit User form sets the user's primary role. Extra roles given on Assign Users (ROL-007) are replaced by that primary role when the user form is saved. Reassign them afterwards on ROL-007 if needed.
+| Section | What is available | Additional permission / safety |
+|---|---|---|
+| Profile | Name, email, phone, username, English/Arabic | Users edit; Save stays, Save & Close returns, Save & New opens a blank User if Users create is allowed |
+| Employment information | Existing department/designation/branch, dates, contract and Iqama metadata | Users view/edit; classification editing additionally needs HR view/edit and preserves existing linked-employee classification synchronization |
+| Linked Employee | Search, reference preview, View/Manage Employee, explicit Link or Unlink | HR view; changing/searching needs Users edit and HR edit; Employee must be visible and active for linking |
+| Roles & Permissions | Assigned roles, reporting parents, actual role permissions, permanent/temporary and effective state | Roles view; changes require Users edit + Roles process |
+| Temporary Access | Grant/change dates; End temporary access now | Same role permissions; inclusive start/end on user_roles, not account metadata |
+| Access Scope | Effective scope and assigned Project/Site/Warehouse; controlled changes/clear | Users view/edit; visible IDs and Project→Site→Warehouse consistency checked on server |
+| Mobile Access | Existing online access flag | Users view/edit; no native app, offline sync or GPS attendance implied |
+| Security / Account Status | Status, last login, forced-password-change flag; optional new password | Users view/edit; new password requires confirmation and change on next sign-in; no hash shown, no mail/2FA verification claim |
+| Activity | Recorded actions performed by this login | Activity Logs view and existing visibility rules; not an invented security-event feed |
+
+All read panels require Users view and the child permission. Manage writes additionally require Users edit. Related rows load on demand, ten per page. Save/Save & Close and Cancel apply to each editable section; there is no giant Save All or Save & Next. Previous section is navigation, not a save. Tab changes warn on the currently edited form; leaving the page checks all dirty forms. A failed save keeps inputs. Browser refresh/close uses the browser's native warning.
+
+The actual relationship is **employees.user_id**. **users.employee_id is only a readable code reference**. New Users lookup copies identity/employment reference fields, not Project/Site/Warehouse, roles or mobile rights. Linking an existing User changes only the FK/code, never grants access. Unlink keeps the code for reference; re-link search permits that same user's code. Existing ambiguous links are not guessed/repaired automatically. A second link, foreign-scope Employee or another user's code is rejected. The older HR System Account provisioning workflow remains separate and must be reviewed for its explicit access choices.
+
+The historical destructive User-edit role sync is fixed: profile saves leave assignments untouched, and changing primary preserves all other permanent/temporary rows. The old primary remains an additional permanent role until explicitly removed. Do not assume changing primary revokes the old role. Existing global Assign Users bulk-replacement behavior is unchanged. A temporary assignment cannot silently become permanent. Future/expired temporary assignments do not grant permissions; End retains the row and sets its inclusive end to yesterday, with before/after audit. For a scheduled grant this can put the end before its original start: it means revoked, not a new grant. User-level temporary flags/dates remain metadata, not login expiry enforcement.
 
 ### [ROL-001] Roles List, [ROL-002] Create Role, [ROL-003] Role Details, [ROL-004] Edit Role
 
@@ -2076,9 +2092,27 @@ Fields:
 | Geo-Fence Radius (meters) | | 300 | Yes | 10 to 100,000 |
 | Geo-Fence Enabled, Attendance Allowed Inside Boundary, Offline Attendance Allowed | Flags | Yes / Yes / No | No | Stored for the future attendance check; not enforced today |
 
-Buttons: Save / Update, Cancel.
+Locations list keeps its filters and global register. View (MST-SITE-003) opens the read-only workspace; Edit / Manage (MST-SITE-004) edits existing Site master data only. The header retains Site code/name, permitted Project name, supervisor, address, status, coordinates, radius, stored boundary flags and authorized Staff/Warehouse counts.
 
-When opened from Project → Sites, the form instead offers Save / Save & Close / Save & New (if authorized) / Cancel, keeps the Project fixed, and returns to that Project's Sites section on close. The map and stored geofence flags are unchanged; live attendance enforcement is not implemented.
+Buttons: **Save** stays in Manage; **Save & Close** returns to the safe origin or Locations list; **Save & New** opens a blank Location if authorized; **Cancel / Back** leaves without saving, subject to the unsaved-change warning. When opened from Project → Sites, close returns to that Project's Sites section. The Project is fixed for existing Sites, including direct edit: changing a Site's Project needs a separate reviewed reassignment because its children already carry Project context.
+
+| Site section | Source and behavior | Child permission |
+|---|---|---|
+| Overview / Geofence and Location | Stored coordinates, map pin/radius and flags; edit in Overview | Sites view/edit |
+| Project | Linked visible Project, permitted Customer, manager/status; View/Manage links | Projects view; Customers view for customer name; Projects edit for Manage |
+| Staff | Employees assigned to this exact Site and Project; View/Manage links | HR view/edit respectively |
+| Warehouses | Exact Site/Project warehouses, incharge/status; View and stock links | Warehouses view; Warehouse Stock view for positive stocked-item count/value; Stock Ledger view for ledger link |
+| Purchase Requests / Orders / Goods Receipts | Existing scoped document links, dates and states | Each document module's view permission |
+| Material / Stock Context | Existing ledger movements from posted Stock Issues for this exact Site/Project | Stock Issues view; no new valuation or stock write |
+| Site Expenses | Number/date/category/submitter/payment type/amount/workflow state/accounting state | Site Expenses view; Add additionally needs create |
+| Attendance Context | Recent stored Site/Project attendance, source and recorded geofence label | Attendance view |
+| Activity | Visible Activity Logs with exact immutable Site token | Activity Logs view; ambiguous old name-only events omitted |
+
+Every child panel additionally needs Sites view; hidden tabs are also denied at direct endpoints. Related rows are lazy-loaded and paginated at ten. Counts and stock values use the same authorized queries; no hidden Site/Project totals. Global registers remain available for searching, batch work and approvals. GRNs are associated through the visible PO's exact Site/Project, not a warehouse guess. Goods received are **not** counted as consumption.
+
+Site Expenses → Add preselects and locks Project/Site; the URL Site is authoritative and forged body parent IDs fail. Existing Site Expense validation, approvals, accounting and permissions are reused, not duplicated. Save & Close returns to Site → Expenses; Save stays on the expense editor with a return link, and Submit retains return context on the expense details page. Missing approval setup leaves the saved draft intact. No posting happens from a Site profile save.
+
+**Geofence is configuration, not live enforcement.** Existing map clicks/dragging select coordinates and radius only. Attendance is manually recorded; stored source/geofence labels are not evidence of device GPS/haversine checks. Offline flags do not implement offline sync. The map uses the existing external tile service and needs network availability. English/Arabic workspace labels and RTL shell are supported; older underlying master/map/document strings are not comprehensively translated in this batch.
 
 ### Where project figures are today
 
@@ -2343,11 +2377,11 @@ Steps:
 2. Click Save & stay. The Employee Workspace opens.
 3. Open the System Account tab. Choose the role (Site In-Charge), status active, leave the password blank, click Save.
 4. Give the employee the temporary password. They set their own password at first sign-in (ADM-004).
-Expected system result: employee EMP-0042 with an automatic salary structure; a user linked to the employee; the user sees only Riyadh Commercial Tower data because the role is project-scoped.
+Expected system result: employee EMP-0042 with an automatic salary structure and a linked login. Review the User's effective role and Access Scope in USR-004 explicitly before handover. The HR System Account provisioning path retains its existing assignment behavior; using Users search/link does not automatically grant employee Project/Site access. Project-scoped users see their assigned/managed projects, not arbitrary projects.
 Statuses: employee active; user active with "must change password".
 Audit trail: "Created employee", "Created user" (Users module) entries with your name.
 Common errors: contract start in the future; a user already linked to the employee; missing project on a project-scoped role.
-Related screens: HR-EMP-002, HR-EMP-004, USR-002, USR-003.
+Related screens: HR-EMP-002, HR-EMP-004, USR-002, USR-003, USR-004. Use User Manage for separate Profile, Employee Link, Roles, Temporary Access, Scope, Mobile and Account Status changes; all saves preserve unrelated role assignments.
 
 ### WF-002 Supplier → Purchase Order → Goods Receipt → Supplier Bill → Payment
 
@@ -2542,6 +2576,8 @@ Related screens: HR-EOS-002, HR-EOS-003.
 6. Create and post a Stock Issue to the Project/Site when materials are consumed (WF-007). Project → Material Used shows the posted issue ledger value and per-item/unit quantity. The accounting posting, when present, appears in Project → Financial / Cost Summary through the existing report logic; do not add Material Used to posted cost again.
 7. Create **INV-2026-0031** for this Project in Accounts Receivable. Approval and Record Receipt stay explicit authorized actions (WF-003). Project → Customer Invoices / Customer Receipts shows the resulting records and outstanding amounts. Back to origin on Invoice View returns to Project context.
 8. Review Project → Financial / Cost Summary, then Open Project Cost Report for the same Project. This is current operational context, not a full project management engine.
+9. Open the Site (MST-SITE-003) for the narrower location context: Staff, Warehouses, PR/PO/GRN, posted material issues, Site Expenses, recorded Attendance and Activity. Tabs depend on their own permissions. Choose Manage for Site configuration only; Save & Close returns to Project → Sites when opened there.
+10. Site → Expenses → Add Site Expense locks that Site/Project and reuses WF-018. Draft save, Submit and correction retain a safe return link. View never approves, posts or changes stock; GPS attendance and offline sync are not supplied.
 
 Permissions are independent at every step. A project/site-scoped operator sees only rows permitted by the existing global scopes; the same scope feeds panel totals. Read-only pages do not post, approve, receive stock or process payroll.
 
