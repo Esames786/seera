@@ -3,9 +3,9 @@
 
 | | |
 |---|---|
-| **Version** | 1.6 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 6 October 2026: Wave 2 Batch A adds connected User and Site View/Manage workspaces. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
-| **Prepared** | 6 October 2026 |
+| **Version** | 1.7 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 7 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
+| **Prepared** | 7 October 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
 
@@ -672,7 +672,25 @@ Fields:
 | Status | active / inactive | active | Yes | |
 | Location / Address | Free text | Gate 2, Riyadh Tower | No | |
 
-Buttons: Save / Update, Cancel.
+View (MST-WH-003) is a read-only, location-centric workspace. Manage (MST-WH-004) edits master data only. The persistent header shows code/name, status, valuation setting, permitted Project/Site, incharge and authorized stock summaries. **Save** (stay), **Save & Close**, **Save & New** (with create permission) and **Cancel** use the shared save workflow and safe origin. Back returns to the origin/list; panel Back returns to the previous section. Unsaved master changes are guarded before switching sections or leaving.
+
+| Section | What it shows | Additional permission |
+|---|---|---|
+| Overview | Master details; profile fields in Manage | Warehouses edit to change |
+| Stock On Hand | Item/unit, quantity, reorder/minimum, low-stock state, stored warehouse average/value | Warehouse Stock view |
+| Stock Ledger | Stored movement rows/balances and filtered global ledger link | Stock Ledger view; Warehouse Stock view for cost/value |
+| Goods Receipts | Receipt lines into this warehouse, quantities, posting state, permitted PO/supplier context | Goods Receipts view; AP view for F04 invoiced/uninvoiced quantities |
+| Material Issues | Posted issue lines leaving this warehouse, item/unit and Project/Site | Stock Issues view; Warehouse Stock view for cost |
+| Transfers | Authorized inbound/outbound lines, From/To, dispatch/receive dates and state | Stock Transfers view |
+| Adjustments | This warehouse's existing adjustments, quantity change and reason | Stock Adjustments view; Warehouse Stock view for value |
+| Project / Site Context | Links to existing connected workspaces, not duplicate editors | Projects / Sites view respectively |
+| Activity | Exact warehouse-tagged activity visible to your role | Activity Logs view |
+
+Every panel also requires Warehouses view. Lists load on demand, ten rows at a time; **View all matching rows** opens the standalone paginated panel. Global inventory registers remain available. Stock value is the sum of the same authorized `WarehouseStock.total_value` rows, not a new valuation formula. Stocked-item count uses positive balances; quantities are grouped by unit (KG and pieces are not added together). No stock balance can be edited here.
+
+For a new warehouse, the selected Site must belong to its visible Project. Existing Project/Site ownership is fixed, including on direct requests, so master editing cannot relocate historical stock. Use the existing reviewed stock transfer process to move stock. **Deactivate** preserves stock, movements and documents; it does not delete or reverse them. Inactive status is not a newly implemented stock-posting lock.
+
+Transfers retain existing scope: Project/Site access is source-scoped; Warehouse access covers either endpoint. An inaccessible counterpart is labelled **Outside permitted scope**. Receive remains a separate existing action with its own permission, absent from standard seeded roles. This workspace neither grants Receive nor changes transfer scope. Historical name-only activity is omitted because it cannot be attributed safely.
 
 ### Expense Categories [MST-EXP-001 … 004]
 
@@ -1759,7 +1777,25 @@ Fields:
 | Linked Inventory Account, Linked Expense Account | Accounts used when posting receipts and issues | 1400 Inventory Asset / 5200 Material Expense | No | Standard accounts are used when blank |
 | VAT Applicable | Flag | Yes | No | Stored only; VAT comes from the document rate |
 
-Buttons: Save / Update, Cancel. Delete deactivates an item that has stock or history. Details show Stock By Warehouse (on hand, reserved, available, average cost, value) and Recent Stock Movement.
+View (INV-ITEM-003) is read-only, **item-centric context**. Manage (INV-ITEM-004) edits existing master fields, with **Save** (stay), **Save & Close**, **Save & New** (create permission) and **Cancel**. The header retains code/name/unit/category/status, valuation setting and VAT flag. Back returns to the safe origin/list; panel Back restores the previous section. Switching away from unsaved master changes uses the shared guard.
+
+With Warehouse Stock view, the header shows on-hand quantity, positive stocked-warehouse count and stored stock value from permitted warehouse rows only. Company-wide `Item.average_cost` is not used or exposed as a scoped cost. Reorder > 0 and scoped quantity <= reorder produces the header low-stock state; warehouse rows use the same rule per balance. Minimum/maximum are stored settings, not automatic controls.
+
+| Section | Source and behavior | Additional permission |
+|---|---|---|
+| Overview | Master details and current preferred supplier; Manage edits the profile only | Suppliers view for supplier context |
+| Stock by Warehouse | Authorized balances, unit, permitted Project/Site, on hand, reorder/minimum, average cost and value | Warehouse Stock view |
+| Stock Ledger / Movements | This item's authorized movements, stored balance, quantity in/out; filtered global ledger link | Stock Ledger view; Warehouse Stock view for cost/value |
+| Purchase Requests / Purchase Orders | Actual item lines and visible parents; requested/ordered quantity, status, supplier and received quantity as applicable | Purchase Requests / Purchase Orders view respectively; Suppliers view for supplier label |
+| Goods Receipts | Actual item lines: received/accepted/rejected, stock state, permitted PO/supplier and cost context | Goods Receipts view; Warehouse Stock view for cost; Accounts Payable view for existing F04 invoiced/uninvoiced quantities |
+| Material Issues / Consumption | Posted Stock Issue lines only; receipt is not consumption | Stock Issues view; Warehouse Stock view for cost |
+| Transfers / Adjustments | Existing item lines or single-item adjustments; read-only state/history and View links | Stock Transfers / Stock Adjustments view respectively |
+| Accounting Mapping | Existing inventory/consumption accounts, valuation and VAT setting | Chart of Accounts view; Items create/edit also required to change mappings in the profile |
+| Activity | Exact Item entity-tagged events visible to your role | Activity Logs view |
+
+Every panel additionally requires Items view; hiding a tab does not replace server-side permission checks. All history is lazy and paginated at ten rows. **View all matching rows** opens a standalone paginated panel. Existing document View links open their current workflows; saving an Item never Approves, Posts, Pays, Dispatches or Receives stock. No FIFO engine or new valuation formula is introduced.
+
+Delete deactivates any Item with stock or document history, including history outside the current user's visible scope; hidden data is not exposed. A genuinely unused Item retains the existing delete behavior. The master register remains for searching; Warehouse Stock permission gates its quantity/value cards, stock cells and low-stock filter. Global reports and document registers remain separate. Activity excludes ambiguous old name-only logs. English and Arabic workspace labels are included; this is not a claim that every legacy inventory form is fully translated.
 
 ### [INV-CAT-001 … 003] Item Categories and [INV-UNIT-001 … 003] Units
 
@@ -1772,6 +1808,8 @@ Categories: Category Code *, Category Name *, Parent Category, Linked Inventory 
 Web address: `https://seera.tech-brit.co.uk/admin/inventory/stock` (INV-STK-001) · `https://seera.tech-brit.co.uk/admin/inventory/stock-ledger` (INV-LED-001)
 
 Stock On Hand: cards (Total Stock Value, Total Quantity, Stocked Items, Low Stock Rows), Warehouse Stock Summary, and the rows (Item, Project / Site, On Hand, Reserved, Available, Reorder, Avg Cost, Status) with a low-stock filter. Stock Ledger: every movement (Date, Reference, Movement, Item, Warehouse, In Qty, Out Qty, Balance, Unit Cost, Value, Project / Site) with filters. Permissions: Warehouse Stock — view; Stock Ledger — view.
+
+Item and Warehouse workspaces provide parent-filtered read-only stock/ledger context. The **Open filtered Stock Ledger** link uses the existing Item or Warehouse filter. Stored movement balances are displayed as recorded, not replayed or recalculated by the workspace. Existing Project/Site ledger scope can omit transfer movements without Project/Site attribution; the workspace does not bypass it. These global screens are retained for full searching/reporting.
 
 ### [INV-PR-001 … 004] Purchase Requests
 
@@ -1891,6 +1929,8 @@ Buttons: Cancel, **Save** (stays on the receipt, where Post Stock is), **Save & 
 
 Goods Receipt Details (INV-GRN-003) is a **light document workspace**. A header stays at the top: GRN number, status, received date and by whom, the source purchase order (link needs Purchase Orders — view), supplier (View needs Suppliers — view), warehouse (link needs Warehouses — view), Project / Site, value, Stock (Posted to stock / Not posted yet), Accounting (Posted with the journal link for Journal Entries — view / Not posted yet) and the invoicing state (Not posted yet / Received but not invoiced / Partly invoiced / Invoiced, with the invoiced and received-but-not-invoiced quantities). A section bar links to Receipt Information · Received Lines · Bill Matches · Accounting Entry · Activity.
 
+Item / Warehouse → Goods Receipts lists authorized matching receipt lines and links here, with the existing F04 invoiced/uninvoiced quantities only for Accounts Payable viewers. Cost columns additionally need Warehouse Stock view in those panels. No receipt posting or invoice matching occurs on a master save.
+
 | Section | What it shows |
 |---|---|
 | Received Lines | Ordered, Received, Accepted, Rejected, **Invoiced**, **Received but not invoiced**, unit cost, total cost |
@@ -1915,6 +1955,8 @@ Take materials out of a warehouse for a project or site.
 
 Fields: Issue From Warehouse *, Issue Date *, Issue To Project, Issue To Site, Purpose, lines Item *, Quantity *. Buttons: Save / Update, Cancel; on details **Post Issue**, Edit (draft).
 
+Item / Warehouse → Material Issues lists **posted** matching issue lines, by item/unit, and links to the existing View. Use the global Issues register for drafts. GRNs are not consumption; no posting controls are embedded in the parent workspace.
+
 What happens after Post Issue:
 Stock decreases at the current average cost; the entry Dr Material Expense (or the item's expense account) / Cr Inventory Asset is posted with the project and site; the project cost report and the material consumption report include it. If any line has insufficient stock the whole issue is refused.
 
@@ -1929,11 +1971,15 @@ Statuses: draft → dispatched → received. No accounting entry is created (sto
 Important:
 Receive needs the Stock Transfers — receive right. The standard roles delivered with the system do not hold it yet, so a Super Admin receives transfers until the roles are updated.
 
+Item / Warehouse → Transfers shows matching authorized lines, From/To and dispatch/receive dates. Project/Site scope remains source-based; Warehouse scope covers either endpoint. This can hide an inbound transfer from a destination Project/Site user. Restricted counterpart names are not disclosed. No additional Receive authority is granted by the workspace.
+
 ### [INV-ADJ-001 … 004] Stock Adjustments
 
 Web address: `https://seera.tech-brit.co.uk/admin/inventory/stock-adjustments` (INV-ADJ-001) · `https://seera.tech-brit.co.uk/admin/inventory/stock-adjustments/create` (INV-ADJ-002) · `https://seera.tech-brit.co.uk/admin/inventory/stock-adjustments/{id}` (INV-ADJ-003) · `https://seera.tech-brit.co.uk/admin/inventory/stock-adjustments/{id}/edit` (INV-ADJ-004)
 
 Fields: Warehouse *, Item *, Adjustment Date *, Counted Quantity *, Reason. Buttons: Save / Update, Cancel; **Approve** then **Post Adjustment**, Edit (draft).
+
+Item / Warehouse → Adjustments shows matching quantity changes, reasons, dates and state; cost/value needs Warehouse Stock view. View opens this existing workflow. The parent profile cannot alter balances or approve/post an adjustment.
 
 What happens after Post Adjustment:
 The on-hand quantity becomes the counted quantity (re-read at posting time); a loss posts Dr Inventory Adjustment Expense / Cr Inventory Asset, a gain the opposite.

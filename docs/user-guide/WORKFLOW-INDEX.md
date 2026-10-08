@@ -2,7 +2,9 @@
 
 Index of the end-to-end workflows documented in chapter 17 of the [User Guide](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#17-end-to-end-workflows). Screens are indexed in [SCREEN-INDEX.md](SCREEN-INDEX.md).
 
-Version 1.6 · Prepared 6 October 2026 · Status: current implemented system only; no deployment claim.
+Version 1.7 · Prepared 7 October 2026 · Status: current implemented system only; no deployment claim.
+
+Wave 2 Batch B adds read-only Item-centric and Warehouse-centric context to the existing inventory workflows below (WF-002, WF-006, WF-007, WF-010, WF-013 and WF-016). Open an Item or Warehouse, choose its permissioned document panel, then View the existing workflow. Saving master data never dispatches, receives, adjusts or posts stock. These are contextual entry points, not new Workflow IDs or new approval runtimes. Transfer Receive still needs its explicit right; Project/Site transfer scope remains source-based.
 
 | Workflow ID | Workflow | Roles involved | Main screens | Status | Guide |
 |---|---|---|---|---|---|
