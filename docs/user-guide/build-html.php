@@ -108,9 +108,9 @@ $nav = '<a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUID
 
 $page = function (string $title, string $tocHtml, string $body) use ($css, $nav): string {
     return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>'.htmlspecialchars($title).' · Seera ERP</title><style>'.$css.'</style></head><body>'
-        .'<header class="top"><span class="brand">Seera ERP</span><span class="meta">'.htmlspecialchars($title).' · Version 1.7 · 7 October 2026 · Current implemented system only</span><nav>'.$nav.'</nav></header>'
+        .'<header class="top"><span class="brand">Seera ERP</span><span class="meta">'.htmlspecialchars($title).' · Version 1.8 · 8 October 2026 · Current implemented system only</span><nav>'.$nav.'</nav></header>'
         .'<div class="layout"><aside class="toc"><h2>Contents</h2>'.$tocHtml.'</aside><main>'.$body.'</main></div>'
-        .'<footer>Seera ERP — Current System User Guide, version 1.7, prepared 7 October 2026. Examples use fictional training data.</footer></body></html>';
+        .'<footer>Seera ERP — Current System User Guide, version 1.8, prepared 8 October 2026. Examples use fictional training data.</footer></body></html>';
 };
 
 foreach ($sources as $name => $meta) {
@@ -128,7 +128,7 @@ foreach ($sources as $name => $meta) {
 
 $index = <<<'HTML'
 <h1>SEERA ERP</h1><h1>Current System User Guide — HTML edition</h1>
-<p>Version 1.7 · Prepared 7 October 2026 · Status: current implemented system only. All examples use fictional training data.</p>
+<p>Version 1.8 · Prepared 8 October 2026 · Status: current implemented system only. All examples use fictional training data.</p>
 <table><thead><tr><th>Document</th><th>What it is for</th></tr></thead><tbody>
 <tr><td><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a></td><td>21 chapters: sign-in, screen addresses, fields and buttons, Connected Workspace Standard, 19 end-to-end workflows, troubleshooting, glossary, limitations and quick start by role.</td></tr>
 <tr><td><a href="SCREEN-INDEX.html">Screen Index</a></td><td>Permanent Screen IDs, web addresses, navigation, permissions and status, including My Approvals and the embedded PR approval panel.</td></tr>

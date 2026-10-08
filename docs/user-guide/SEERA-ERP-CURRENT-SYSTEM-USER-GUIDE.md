@@ -3,9 +3,9 @@
 
 | | |
 |---|---|
-| **Version** | 1.7 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 7 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
-| **Prepared** | 7 October 2026 |
+| **Version** | 1.8 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 8 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context). Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
+| **Prepared** | 8 October 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
 
@@ -1201,7 +1201,7 @@ The same header, then tabs. **Profile** is the customer form with Save, Save & n
 Buttons on the page: View (read-only), Back to Customers.
 
 Important:
-- Approving or reopening an invoice and recording a receipt are done on the invoice (FIN-AR-003, FIN-AR-005), never from the customer profile.
+- Approving or reopening an invoice and recording a receipt are done on the invoice (FIN-AR-003, FIN-AR-005), never from the customer profile. View, Edit draft and Record receipt from the Invoices tab open the invoice workspace and return to this customer page afterwards.
 - Saving the Profile tab does not touch contacts, notes, invoices or projects.
 
 What happens after Save (Profile):
@@ -1659,9 +1659,49 @@ These screens share Finance entry conventions with Accounts Payable, but Custome
 
 Add Customer Invoice (FIN-AR-002) fields: Customer *, Invoice Number (generated when blank), Invoice Date * (not in the future), Due Date, VAT Rate (%) *, Project, Cost Center, Notes, and lines with Item / Description *, Qty, Unit Price, Revenue Account, Cost Center. Buttons: Cancel, Save, Save & new, Save & close.
 
-Customer Invoice Details (FIN-AR-003): Invoice Information, ZATCA Record (UUID, QR Code, XML, Digital Signature, Clearance, Retry Count, Open Record), Accounting Entry, Invoice Lines, Receipts. Buttons **Approve & Post** (posts Dr Receivable / Cr Revenue / Cr Output VAT, records the output VAT row and creates the local ZATCA record), **Record Receipt**, **Reopen for Correction** (Super Admin; unpaid, no receipts; refused when the local ZATCA record is cleared), Edit (draft only).
+#### Customer Invoice Details (FIN-AR-003) — the finance document workspace
 
-Record Customer Receipt (FIN-AR-005) fields: Receipt Date *, Received Into (Bank / Cash Account) * (only the channels the customer accepts), Payment Method * (must match the account: Cash for the cash account, Bank Transfer or Cheque for the bank), Received Amount (SAR) * (not more than the balance), Reference Number, Notes. Buttons: Record Receipt, Back to Invoice, Cancel. Repeated submissions are recognised and not added twice.
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/{id}`
+
+The invoice page is a **read-only document workspace**: everything about one invoice is read here, while approval, receipts and reopening stay explicit actions. Opening the page never changes data.
+
+Lifecycle: Save creates a *draft* (no accounting, no VAT, no local e-invoice record). **Approve & Post** posts Dr 1200 Accounts Receivable / Cr revenue per line / Cr 2210 Output VAT, records the output VAT row and creates the local e-invoice record; the invoice becomes *unpaid*. Each **Record Receipt** posts Dr cash or bank / Cr 1200 and moves the invoice to *partially_paid* or *paid*. **Reopen for Correction** (Super Admin only; unpaid, no receipts, local record not cleared) reverses the journal, withdraws the VAT row, cancels the local record and returns the invoice to *draft*. Statuses: draft → unpaid → partially_paid → paid.
+
+View vs Edit: View (this page) has no save buttons. **Edit Draft** opens FIN-AR-004 only while the invoice is a draft and only with Accounts Receivable — edit; an approved invoice can no longer be edited or deleted.
+
+Header (always visible): invoice number, status and payment state (Draft, not posted / Awaiting receipt / Overdue by n days / Partly received / Received in full), Customer with **View** (Customers — view) and **Manage** (Customers — edit) links, invoice and due dates, Project (link needs Projects — view) and cost center, local e-invoice state, **Total** with VAT, **Received**, **Outstanding**, Accounting (Posted with the journal link for Journal Entries — view, or Not posted yet).
+
+Section bar: Invoice Information · Invoice Lines · Customer · Project / Cost Center · VAT · Accounting · Receipts · Balance / Ageing · Local e-Invoice Record · Activity. A section is present only when your role may read it.
+
+| Section | What it shows | Needs |
+|---|---|---|
+| Invoice Information | Cards (taxable, VAT, total, outstanding), number, customer, dates, project, cost center, subtotal, VAT, total, received, outstanding, status, local e-invoice state, notes | Accounts Receivable — view |
+| Invoice Lines | Description, quantity, unit price, revenue account, cost center, taxable, VAT %, VAT, line total (the stored figures; no recalculation) | Accounts Receivable — view |
+| Customer | Code and name, VAT and CR numbers, contact, accepted payment types, the customer's outstanding across the invoices you may see, View Customer / Manage Customer | Customers — view (Manage needs edit) |
+| Project / Cost Center | Project code, name, customer and status, cost center, View Project. A site is not recorded on a customer invoice | Projects — view |
+| VAT | Rate, taxable, output VAT, total, VAT treatment, whether the VAT ledger row exists (recorded on approval) | Accounts Receivable — view |
+| Accounting | The posted journal: accounts, project / cost center, debit, credit, journal number, date, status, View Journal. View only | Journal Entries — view |
+| Receipts | Receipts of this invoice only (date, account, method, amount, reference, journal), 10 per page, Record Receipt for open invoices | Accounts Receivable — view (Record Receipt needs process) |
+| Balance / Ageing | Invoice total, received with the receipt count, outstanding, due date, days overdue, ageing bucket (the shared Current / 1–30 / 31–60 / 60+ rule as of today), payment state | Accounts Receivable — view |
+| Local e-Invoice Record | UUID, local clearance status, QR payload, XML path reference, signature flag, local hash, retries, response, Open Local Record — every field labelled as local, not verified live | ZATCA Invoicing — view |
+| Activity | Latest entries that name this invoice, limited to the users your role may see, with View all | Activity Logs — view |
+
+Buttons:
+
+| Button | What it does |
+|---|---|
+| Edit Draft | Opens FIN-AR-004 (draft only; Accounts Receivable — edit). Save stays on the invoice, Save & close returns to where you came from |
+| Approve & Post | Draft only; Accounts Receivable — approve. Refused when the VAT period is finalized or an account is inactive |
+| Record Receipt | Open invoices only; Accounts Receivable — process. Opens FIN-AR-005 and returns here (or to the customer / project page you came from) afterwards |
+| View Journal | Journal Entries — view; opens the posted journal |
+| Reopen for Correction | Super Admin with Accounts Receivable — approve; unpaid, no receipts, local record not cleared |
+| Back to origin / Back to Accounts Receivable | Returns to the customer or project page the invoice was opened from, otherwise to the register |
+
+Scope: a project-scoped user cannot open, edit or receive against an invoice of another project (not found), and the customer outstanding figure counts only the invoices that user may see.
+
+Local e-invoice truth: the local record is foundation data only. The system never contacts ZATCA; "pending" means a local record exists and has not been sent, "cleared" would only ever be a local flag. Live ZATCA Phase 2 clearance, real QR codes, XML files and digital signing are NOT YET OPERATIONAL (chapter 14).
+
+Record Customer Receipt (FIN-AR-005) fields: Receipt Date *, Received Into (Bank / Cash Account) * (only the channels the customer accepts), Payment Method * (must match the account: Cash for the cash account, Bank Transfer or Cheque for the bank), Received Amount (SAR) * (not more than the outstanding balance), Reference Number, Notes. Buttons: Record Receipt, Back / Back to Invoice, Cancel. Back, Cancel and a recorded receipt all return to the page you came from (the invoice, or the customer / project page). Repeated submissions are recognised and not added twice; a key sent against a different invoice is refused.
 
 Statuses: draft → unpaid → partially_paid → paid.
 
@@ -2460,16 +2500,17 @@ Related screens: SUP-002, INV-PR-002, INV-PR-003, INV-PO-002, INV-PO-003, INV-GR
 Purpose: invoice a customer and record the money received.
 Roles involved: Account Assistant (invoice), Finance Manager (approve, receipt).
 Prerequisites: customer CUS-021 with accepted payment types; project; open VAT period.
-Navigation: Finance → Accounts Receivable → + Add Customer Invoice; Invoice → Approve & Post; Invoice → Record Receipt.
+Navigation: Finance → Accounts Receivable → + Add Customer Invoice (or Customer → Invoices, or Project → Customer Invoices); Invoice (FIN-AR-003) → Approve & Post; Invoice → Record Receipt.
 Steps and example input:
-1. Invoice INV-2026-0031: customer Al Noor Development Co., project Riyadh Commercial Tower, date 27-Sep-2026, VAT 15%, line "Progress claim 3", 1 × 2,000.00. Save.
-2. Approve & Post.
-3. Record Receipt: 2,300.00 into 1120 Bank Account, Bank Transfer.
-Expected result: step 2 posts Dr 1200 Accounts Receivable 2,300 / Cr 4100 Project Revenue 2,000 / Cr 2210 Output VAT 300, one output VAT row and a local ZATCA record (pending, not verified live); step 3 posts Dr 1120 Bank 2,300 / Cr 1200 Accounts Receivable 2,300.
-Statuses: draft → unpaid → paid.
+1. Invoice INV-2026-0031: customer Al Noor Development Co., project Riyadh Commercial Tower, date 27-Sep-2026, VAT 15%, line "Progress claim 3", 1 × 2,000.00. Save. The invoice workspace opens: *Draft, not posted*, Outstanding SAR 2,300.00, Accounting *Not posted yet*, local e-invoice *No local record yet*.
+2. Approve & Post. The header now reads *Awaiting receipt*; the Accounting section shows the journal and View Journal; the Local e-Invoice Record section shows the local record as pending, not verified live.
+3. Record Receipt: 1,000.00 into 1120 Bank Account, Bank Transfer. Back on the invoice: *Partly received*, Received 1,000.00, Outstanding 1,300.00, the receipt listed with its journal.
+4. Record Receipt: 1,300.00. The invoice reads *Received in full*; Record Receipt disappears.
+Expected result: step 2 posts Dr 1200 Accounts Receivable 2,300 / Cr 4100 Project Revenue 2,000 / Cr 2210 Output VAT 300, one output VAT row and a local e-invoice record (pending, not verified live); steps 3 and 4 post Dr 1120 Bank / Cr 1200 Accounts Receivable for 1,000 and 1,300. The Customer workspace (CUS-004 → Invoices, Receipts & Balance, Ageing) and the Project workspace (MST-PRJ-003 → Customer Invoices) show the same stored figures.
+Statuses: draft → unpaid → partially_paid → paid.
 Audit trail: Created customer invoice, Approved customer invoice, Recorded customer receipt.
-Common errors: bank receipt for a cash-only customer; receipt larger than the balance; invoice dated in a finalized period.
-Related screens: CUS-002, FIN-AR-002, FIN-AR-003, FIN-AR-005, CUS-004.
+Common errors: bank receipt for a cash-only customer; receipt larger than the outstanding balance; invoice dated in a finalized period; the same receipt submitted twice (recognised, nothing added).
+Related screens: CUS-002, FIN-AR-002, FIN-AR-003, FIN-AR-005, CUS-004, MST-PRJ-003.
 
 ### WF-004 Manual Journal → General Ledger
 
@@ -2722,7 +2763,7 @@ Audit: runtime instances/steps are authoritative. Activity also records submissi
 | Access scope | The part of the company a role may see: All Company, Company Level, Project Level, Site Level, Warehouse Level |
 | Approve & Post | Existing legacy-bill/customer-invoice action. New Supplier Bills require explicit runtime submission and all required approvals before the same accounting path runs |
 | Connected workspace | The Edit / Manage page of a record where its profile and related records are managed in tabs |
-| Document workspace | The read-only View page of a purchase order, request, goods receipt or bill that shows the document with everything related to it (receipts, bills, journals, activity), each section by permission |
+| Document workspace | The read-only View page of a purchase order, request, goods receipt, supplier bill or customer invoice that shows the document with everything related to it (receipts, bills, journals, activity), each section by permission |
 | Draft | A saved document with no accounting or VAT effect yet |
 | GRN | Goods Receipt Note: the document that confirms goods arrived |
 | GRNI | Goods Received Not Invoiced, account 2150: the value of received goods whose supplier bill is not yet approved |
@@ -2730,6 +2771,7 @@ Audit: runtime instances/steps are authoritative. Activity also records submissi
 | Journal entry | A balanced accounting entry; automatic ones come from documents, manual ones from FIN-JE-002 |
 | Local ZATCA record | Seera's own record of an approved invoice (UUID, QR payload, status); not a live ZATCA clearance |
 | Matched line | A supplier bill line linked to a goods receipt line |
+| Outstanding (invoice) | The part of an approved customer invoice not yet received (invoice total minus received); kept on the invoice and refreshed by every receipt |
 | Outstanding payment | The part of an approved bill not yet paid (bill total minus paid) |
 | Posted | Written to the general ledger; cannot be edited |
 | Received but not invoiced | Accepted receipt quantity not yet covered by an approved supplier bill; its value is the GRNI accrual |
@@ -2772,6 +2814,7 @@ Areas that exist as menus, settings or plans but are not usable business functio
 | Inventory report CSV export | NOT YET OPERATIONAL | Print only |
 | Stock Transfers — receive right on standard roles | PARTIAL | Super Admin receives transfers |
 | Password reset by email | PARTIAL | Needs mail configuration on the server |
+| Customer invoice site, print / PDF, credit notes, receipt reversal | NOT YET OPERATIONAL | An invoice carries a project and cost center only; there is no print or PDF route; corrections use Reopen (unpaid, no receipts) |
 | Purchase order ↔ supplier bill link without a goods receipt match | PARTIAL | A bill is linked to an order only through its goods receipt matches; a direct or service bill is not shown on the order |
 | Forms still on the older Save / Cancel layout | PARTIAL | Master Setup (except Suppliers and Customers), HR registers, Inventory (except Goods Receipts), Marketing, Roles, Users (Save & stay only) |
 
