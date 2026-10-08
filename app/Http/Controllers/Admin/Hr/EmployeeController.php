@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Support\CodeGenerator;
 use App\Support\EmployeeWorkspacePanels;
 use App\Support\LinkedIdentityNavigation;
+use App\Support\Workspace\EmployeeHrContext;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -105,31 +106,17 @@ class EmployeeController extends Controller
                 .($structure ? ' Their salary structure was created from the payroll information, effective '.$structure->effective_from->toDateString().'.' : ''));
     }
 
-    public function show(Employee $employee): View
+    /**
+     * Read-only employee view with HR context (attendance, leave, overtime,
+     * salary and payroll), each section behind its own module permission.
+     */
+    public function show(Request $request, Employee $employee): View
     {
-        $employee->load([
-            'department', 'designation', 'branch', 'project', 'site', 'manager',
-            'documents', 'shiftAssignments.shift',
-            'salaryStructures.items',
-        ]);
+        $employee->load(['department', 'designation', 'branch', 'project', 'site', 'manager', 'documents', 'shiftAssignments.shift', 'salaryStructures.items']);
+        $request->validate(['page_attendance' => ['nullable', 'integer', 'min:1'], 'page_leaves' => ['nullable', 'integer', 'min:1'], 'page_overtime' => ['nullable', 'integer', 'min:1'], 'page_payroll' => ['nullable', 'integer', 'min:1']]);
 
-        return view('admin.hr.employees.show', [
-            'employee' => $employee,
-            'linkedUser' => app(LinkedIdentityNavigation::class)->userCard($employee, auth()->user()),
-            'attendance' => $employee->attendanceRecords()->with('shift')->latest('attendance_date')->limit(10)->get(),
-            'leaves' => $employee->leaveRequests()->with('leaveType')->latest('start_date')->limit(10)->get(),
-            'leaveBalance' => $employee->leaveBalance(),
-            'overtime' => $employee->overtimeRecords()->latest('overtime_date')->limit(10)->get(),
-            'payrollItems' => $employee->payrollItems()->with('payrollRun')->latest('id')->limit(10)->get(),
-            'presentDays' => $employee->attendanceRecords()
-                ->whereIn('status', ['present', 'late'])
-                ->whereBetween('attendance_date', [now()->startOfMonth(), now()->endOfMonth()])
-                ->count(),
-            'workedDays' => $employee->attendanceRecords()
-                ->whereBetween('attendance_date', [now()->startOfMonth(), now()->endOfMonth()])
-                ->count(),
-            'pendingCount' => $employee->leaveRequests()->where('status', 'pending')->count()
-                + $employee->overtimeRecords()->where('status', 'pending')->count(),
+        return view('admin.hr.employees.show', EmployeeHrContext::data($employee, $request->user(), $request) + [
+            'linkedUser' => app(LinkedIdentityNavigation::class)->userCard($employee, $request->user()),
         ]);
     }
 

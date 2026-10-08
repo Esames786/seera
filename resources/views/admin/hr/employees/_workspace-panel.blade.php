@@ -89,6 +89,12 @@
                             $value = match ($column) {
                                 'shift_id' => $row->shift?->name,
                                 'payroll_run_id' => $row->payrollRun?->code,
+                                'period' => $row->payrollRun?->periodLabel(),
+                                'run_status' => $row->payrollRun?->status,
+                                'leave_type_id' => $row->leaveType?->name,
+                                'project_id' => $row->project?->name,
+                                'site_id' => $row->site?->name,
+                                'attendance_record_id' => $row->attendanceRecord?->attendance_date?->toDateString(),
                                 default => $row->{$column},
                             };
                         @endphp
@@ -129,5 +135,6 @@
         @if($rows->currentPage() > 1)<button type="button" class="btn outline" data-panel-load="{{ $panelUrl.'?page='.($rows->currentPage()-1) }}">{{ __('Previous') }}</button>@endif
         <span>{{ $rows->currentPage() }} / {{ $rows->lastPage() }}</span>
         @if($rows->hasMorePages())<button type="button" class="btn outline" data-panel-load="{{ $panelUrl.'?page='.($rows->currentPage()+1) }}">{{ __('Next') }}</button>@endif
+        @if($register = \App\Support\EmployeeWorkspacePanels::registerUrl($employee, $panel))<a class="btn outline" href="{{ $register }}">{{ __('workspace.hr_view_register') }}</a>@endif
     </div>
 </div>

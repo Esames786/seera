@@ -159,12 +159,12 @@ class EmployeeWorkspacePanels implements \App\Support\Workspace\WorkspacePanels
     {
         return match ($panel) {
             'salary' => ['effective_from', 'effective_to', 'basic_salary', 'housing_allowance', 'status'],
-            'attendance' => ['attendance_date', 'check_in', 'check_out', 'status', 'source'],
-            'leaves' => ['start_date', 'end_date', 'total_days', 'reason', 'status'],
-            'overtime' => ['overtime_date', 'hours', 'rate', 'amount', 'status'],
+            'attendance' => ['attendance_date', 'shift_id', 'check_in', 'check_out', 'late_minutes', 'overtime_minutes', 'project_id', 'site_id', 'status', 'source'],
+            'leaves' => ['leave_type_id', 'start_date', 'end_date', 'total_days', 'reason', 'status'],
+            'overtime' => ['overtime_date', 'attendance_record_id', 'hours', 'rate', 'amount', 'status'],
             'shifts' => ['shift_id', 'effective_from', 'effective_to', 'status'],
             'eosb' => ['termination_date', 'service_years', 'eosb_amount', 'final_amount', 'status'],
-            'payroll-history' => ['payroll_run_id', 'basic_salary', 'total_allowances', 'overtime_amount', 'total_deductions', 'net_amount'],
+            'payroll-history' => ['payroll_run_id', 'period', 'basic_salary', 'total_allowances', 'overtime_amount', 'total_deductions', 'net_amount', 'run_status'],
             'account' => ['name', 'email', 'username', 'language', 'status'],
         };
     }
@@ -174,9 +174,25 @@ class EmployeeWorkspacePanels implements \App\Support\Workspace\WorkspacePanels
         return match ($name) {
             'shift_id' => 'Shift', 'leave_type_id' => 'Leave Type', 'role_id' => 'Role',
             'attendance_record_id' => 'Attendance Record', 'payroll_run_id' => 'Payroll Run',
+            'project_id' => 'Project', 'site_id' => 'Site', 'period' => 'Period', 'run_status' => 'Run Status',
+            'late_minutes' => 'Late (min)', 'overtime_minutes' => 'Overtime (min)',
             'last_basic_salary' => 'Final Wage (SAR)', 'eosb_amount' => 'EOSB Amount',
             'total_days_override' => 'Day Calculation', 'is_paid' => 'Paid Leave',
             default => Str::headline($name),
+        };
+    }
+
+    /** The register that lists this panel's records for the employee (View all). */
+    public static function registerUrl(Employee $employee, string $panel): ?string
+    {
+        return match ($panel) {
+            'attendance' => route('admin.hr.attendance.index', ['employee' => $employee->id]),
+            'leaves' => route('admin.hr.leaves.index', ['employee' => $employee->id]),
+            'overtime' => route('admin.hr.overtime.index', ['employee' => $employee->id]),
+            'salary' => route('admin.hr.salary-structures.index', ['search' => $employee->employee_code]),
+            'payroll-history' => route('admin.hr.payroll.index'),
+            'eosb' => route('admin.hr.eosb.index', ['search' => $employee->employee_code]),
+            default => null,
         };
     }
 
