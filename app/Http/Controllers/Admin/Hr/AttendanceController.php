@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Hr;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Support\SaveAction;
 use App\Models\AttendanceRecord;
 use App\Models\Department;
 use App\Models\Employee;
@@ -25,6 +26,7 @@ class AttendanceController extends Controller
                     ->orWhere('last_name', 'like', "%{$search}%")
                     ->orWhere('employee_code', 'like', "%{$search}%"));
             })
+            ->when($request->filled('employee'), fn ($q) => $q->where('employee_id', $request->integer('employee')))
             ->when($request->filled('department'), fn ($q) => $q->whereHas('employee', fn ($e) => $e->where('department_id', $request->integer('department'))))
             ->when($request->filled('project'), fn ($q) => $q->where('project_id', $request->integer('project')))
             ->when($request->filled('site'), fn ($q) => $q->where('site_id', $request->integer('site')))
@@ -41,6 +43,8 @@ class AttendanceController extends Controller
 
         return view('admin.hr.attendance.index', [
             'records' => $records,
+            // The employee filter comes from the employee page; the scoped Employee query decides whether it may be named.
+            'filterEmployee' => $request->filled('employee') ? Employee::find($request->integer('employee')) : null,
             'presentToday' => AttendanceRecord::whereDate('attendance_date', $today)->where('status', 'present')->count(),
             'lateToday' => AttendanceRecord::whereDate('attendance_date', $today)->where('status', 'late')->count(),
             'absentToday' => AttendanceRecord::whereDate('attendance_date', $today)->where('status', 'absent')->count(),
@@ -48,9 +52,12 @@ class AttendanceController extends Controller
         ] + $this->formOptions());
     }
 
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('admin.hr.attendance.create', $this->formOptions());
+        return view('admin.hr.attendance.create', [
+            // Opened from an employee page: that employee is preselected and the form returns there.
+            'prefillEmployee' => $request->filled('employee') ? Employee::find($request->integer('employee')) : null,
+        ] + $this->formOptions());
     }
 
     public function store(Request $request): RedirectResponse
@@ -60,13 +67,16 @@ class AttendanceController extends Controller
 
         ActivityLog::record($request, 'Attendance', 'Created attendance record', $record->employee->name.' - '.$record->attendance_date->toDateString());
 
-        return redirect()->route('admin.hr.attendance.index')
-            ->with('status', 'Attendance record saved successfully.');
+        // Save stays on the record; Save & close returns to the origin (an employee page) or the register.
+        return SaveAction::redirect($request, [
+            'stay' => route('admin.hr.attendance.edit', [$record, 'return_to' => SaveAction::returnTo($request)]),
+            'close' => route('admin.hr.attendance.index'),
+        ])->with('status', 'Attendance record saved successfully.');
     }
 
-    public function edit(AttendanceRecord $attendance_record): View
+    public function edit(Request $request, AttendanceRecord $attendance_record): View
     {
-        return view('admin.hr.attendance.edit', ['record' => $attendance_record] + $this->formOptions());
+        return view('admin.hr.attendance.edit', ['record' => $attendance_record, 'returnTo' => SaveAction::returnTo($request)] + $this->formOptions());
     }
 
     public function update(Request $request, AttendanceRecord $attendance_record): RedirectResponse
@@ -76,8 +86,10 @@ class AttendanceController extends Controller
 
         ActivityLog::record($request, 'Attendance', 'Updated attendance record', $attendance_record->employee->name.' - '.$attendance_record->attendance_date->toDateString());
 
-        return redirect()->route('admin.hr.attendance.index')
-            ->with('status', 'Attendance record updated successfully.');
+        return SaveAction::redirect($request, [
+            'stay' => route('admin.hr.attendance.edit', [$attendance_record, 'return_to' => SaveAction::returnTo($request)]),
+            'close' => route('admin.hr.attendance.index'),
+        ])->with('status', 'Attendance record updated successfully.');
     }
 
     public function destroy(Request $request, AttendanceRecord $attendance_record): RedirectResponse

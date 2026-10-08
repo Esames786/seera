@@ -10,7 +10,7 @@
             <select id="employee_id" name="employee_id" class="select" required>
                 <option value="">Select...</option>
                 @foreach ($employees as $employee)
-                    <option value="{{ $employee->id }}" @selected(old('employee_id', $leave?->employee_id) == $employee->id)>{{ $employee->employee_code }} - {{ $employee->name }}</option>
+                    <option value="{{ $employee->id }}" @selected(old('employee_id', $leave?->employee_id ?? ($prefillEmployee ?? null)?->id) == $employee->id)>{{ $employee->employee_code }} - {{ $employee->name }}</option>
                 @endforeach
             </select>
         </div>
@@ -65,10 +65,7 @@
         Approved Annual Leave counts against the employee's yearly entitlement shown on their profile.
     </div>
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.hr.leaves.index') }}">Cancel</a>
-        <button type="submit" class="btn primary">{{ $leave ? 'Update Leave Request' : 'Save Leave Request' }}</button>
-    </div>
+    <x-admin.form-actions :cancel="route('admin.hr.leaves.index')"/>
 </form>
 
 <script>

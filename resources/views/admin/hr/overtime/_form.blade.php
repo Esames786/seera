@@ -10,7 +10,7 @@
             <select id="employee_id" name="employee_id" class="select" required>
                 <option value="">Select...</option>
                 @foreach ($employees as $employee)
-                    <option value="{{ $employee->id }}" @selected(old('employee_id', $record?->employee_id) == $employee->id)>{{ $employee->employee_code }} - {{ $employee->name }}</option>
+                    <option value="{{ $employee->id }}" @selected(old('employee_id', $record?->employee_id ?? ($prefillEmployee ?? null)?->id) == $employee->id)>{{ $employee->employee_code }} - {{ $employee->name }}</option>
                 @endforeach
             </select>
         </div>
@@ -39,8 +39,5 @@
 
     <div class="help-box">Amount is calculated automatically as hours × hourly rate.</div>
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.hr.overtime.index') }}">Cancel</a>
-        <button type="submit" class="btn primary">{{ $record ? 'Update Overtime' : 'Save Overtime' }}</button>
-    </div>
+    <x-admin.form-actions :cancel="route('admin.hr.overtime.index')"/>
 </form>

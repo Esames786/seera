@@ -10,7 +10,7 @@
             <select id="employee_id" name="employee_id" class="select" required>
                 <option value="">Select...</option>
                 @foreach ($employees as $employee)
-                    <option value="{{ $employee->id }}" @selected(old('employee_id', $record?->employee_id) == $employee->id)>{{ $employee->employee_code }} - {{ $employee->name }}</option>
+                    <option value="{{ $employee->id }}" @selected(old('employee_id', $record?->employee_id ?? ($prefillEmployee ?? null)?->id) == $employee->id)>{{ $employee->employee_code }} - {{ $employee->name }}</option>
                 @endforeach
             </select>
         </div>
@@ -80,10 +80,7 @@
         Mobile and offline records are created by the mobile app in a later phase. Manual entries created here are marked with the source you choose.
     </div>
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.hr.attendance.index') }}">Cancel</a>
-        <button type="submit" class="btn primary">{{ $record ? 'Update Attendance' : 'Save Attendance' }}</button>
-    </div>
+    <x-admin.form-actions :cancel="route('admin.hr.attendance.index')"/>
 </form>
 
 <x-admin.dependent-select parent="project_id" child="site_id" placeholder="sites"/>

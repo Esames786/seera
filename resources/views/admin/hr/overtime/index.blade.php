@@ -15,7 +15,13 @@
         <x-admin.metric-card color="cyan" :value="'SAR '.number_format($totalAmount, 2)" label="Approved Amount"/>
     </div>
 
+    @if($filterEmployee ?? null)
+        <div class="help-box">{{ __('workspace.hr_showing_employee', ['employee' => $filterEmployee->employee_code.' - '.$filterEmployee->name]) }}
+            <a href="{{ route('admin.hr.employees.show', $filterEmployee) }}">{{ __('workspace.hr_back_employee') }}</a> ·
+            <a href="{{ route('admin.hr.overtime.index') }}">{{ __('workspace.hr_show_all') }}</a></div>
+    @endif
     <x-admin.filter-bar>
+        @if(request('employee'))<input type="hidden" name="employee" value="{{ request('employee') }}"/>@endif
         <input class="input" style="width:230px" type="search" name="search" value="{{ request('search') }}" placeholder="Employee code or name..."/>
         <select class="select" style="width:150px" name="status">
             <option value="">All Status</option>

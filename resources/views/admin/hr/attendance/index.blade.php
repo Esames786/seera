@@ -15,7 +15,13 @@
         <x-admin.metric-card color="cyan" :value="$outsideGeofence" label="Outside Geo-Fence Today"/>
     </div>
 
+    @if($filterEmployee ?? null)
+        <div class="help-box">{{ __('workspace.hr_showing_employee', ['employee' => $filterEmployee->employee_code.' - '.$filterEmployee->name]) }}
+            <a href="{{ route('admin.hr.employees.show', $filterEmployee) }}">{{ __('workspace.hr_back_employee') }}</a> ·
+            <a href="{{ route('admin.hr.attendance.index') }}">{{ __('workspace.hr_show_all') }}</a></div>
+    @endif
     <x-admin.filter-bar>
+        @if(request('employee'))<input type="hidden" name="employee" value="{{ request('employee') }}"/>@endif
         <input class="input" style="width:200px" type="search" name="search" value="{{ request('search') }}" placeholder="Employee code or name..."/>
         <input class="input" style="width:150px" type="date" name="from" value="{{ request('from') }}"/>
         <input class="input" style="width:150px" type="date" name="to" value="{{ request('to') }}"/>

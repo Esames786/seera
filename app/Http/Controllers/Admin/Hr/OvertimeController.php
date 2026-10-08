@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Hr;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Support\SaveAction;
 use App\Models\AttendanceRecord;
 use App\Models\Employee;
 use App\Models\OvertimeRecord;
@@ -22,6 +23,7 @@ class OvertimeController extends Controller
                     ->orWhere('last_name', 'like', "%{$search}%")
                     ->orWhere('employee_code', 'like', "%{$search}%"));
             })
+            ->when($request->filled('employee'), fn ($q) => $q->where('employee_id', $request->integer('employee')))
             ->when($request->filled('status'), fn ($q) => $q->where('status', $request->string('status')))
             ->orderByDesc('overtime_date')
             ->paginate(10)
@@ -29,6 +31,7 @@ class OvertimeController extends Controller
 
         return view('admin.hr.overtime.index', [
             'records' => $records,
+            'filterEmployee' => $request->filled('employee') ? Employee::find($request->integer('employee')) : null,
             'pendingOvertime' => OvertimeRecord::where('status', 'pending')->count(),
             'approvedOvertime' => OvertimeRecord::where('status', 'approved')->count(),
             'totalHours' => (float) OvertimeRecord::where('status', 'approved')->sum('hours'),
@@ -36,9 +39,11 @@ class OvertimeController extends Controller
         ] + $this->formOptions());
     }
 
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('admin.hr.overtime.create', $this->formOptions());
+        return view('admin.hr.overtime.create', [
+            'prefillEmployee' => $request->filled('employee') ? Employee::find($request->integer('employee')) : null,
+        ] + $this->formOptions());
     }
 
     public function store(Request $request): RedirectResponse
@@ -48,13 +53,15 @@ class OvertimeController extends Controller
 
         ActivityLog::record($request, 'HR', 'Created overtime record', $record->employee->name);
 
-        return redirect()->route('admin.hr.overtime.index')
-            ->with('status', 'Overtime record saved successfully.');
+        return SaveAction::redirect($request, [
+            'stay' => route('admin.hr.overtime.edit', [$record, 'return_to' => SaveAction::returnTo($request)]),
+            'close' => route('admin.hr.overtime.index'),
+        ])->with('status', 'Overtime record saved successfully.');
     }
 
-    public function edit(OvertimeRecord $overtime_record): View
+    public function edit(Request $request, OvertimeRecord $overtime_record): View
     {
-        return view('admin.hr.overtime.edit', ['record' => $overtime_record] + $this->formOptions());
+        return view('admin.hr.overtime.edit', ['record' => $overtime_record, 'returnTo' => SaveAction::returnTo($request)] + $this->formOptions());
     }
 
     public function update(Request $request, OvertimeRecord $overtime_record): RedirectResponse
@@ -64,8 +71,10 @@ class OvertimeController extends Controller
 
         ActivityLog::record($request, 'HR', 'Updated overtime record', $overtime_record->employee->name);
 
-        return redirect()->route('admin.hr.overtime.index')
-            ->with('status', 'Overtime record updated successfully.');
+        return SaveAction::redirect($request, [
+            'stay' => route('admin.hr.overtime.edit', [$overtime_record, 'return_to' => SaveAction::returnTo($request)]),
+            'close' => route('admin.hr.overtime.index'),
+        ])->with('status', 'Overtime record updated successfully.');
     }
 
     public function destroy(Request $request, OvertimeRecord $overtime_record): RedirectResponse

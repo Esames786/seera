@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Hr;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Support\SaveAction;
 use App\Models\Employee;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
@@ -31,6 +32,7 @@ class LeaveRequestController extends Controller
                     ->orWhere('last_name', 'like', "%{$search}%")
                     ->orWhere('employee_code', 'like', "%{$search}%"));
             })
+            ->when($request->filled('employee'), fn ($q) => $q->where('employee_id', $request->integer('employee')))
             ->when($request->filled('leave_type'), fn ($q) => $q->where('leave_type_id', $request->integer('leave_type')))
             ->when($request->filled('status'), fn ($q) => $q->where('status', $request->string('status')))
             ->orderByDesc('start_date')
@@ -39,6 +41,7 @@ class LeaveRequestController extends Controller
 
         return view('admin.hr.leaves.index', [
             'leaves' => $leaves,
+            'filterEmployee' => $request->filled('employee') ? Employee::find($request->integer('employee')) : null,
             'pendingLeaves' => LeaveRequest::where('status', 'pending')->count(),
             'approvedLeaves' => LeaveRequest::where('status', 'approved')->count(),
             'rejectedLeaves' => LeaveRequest::where('status', 'rejected')->count(),
@@ -46,9 +49,11 @@ class LeaveRequestController extends Controller
         ] + $this->formOptions());
     }
 
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('admin.hr.leaves.create', $this->formOptions());
+        return view('admin.hr.leaves.create', [
+            'prefillEmployee' => $request->filled('employee') ? Employee::find($request->integer('employee')) : null,
+        ] + $this->formOptions());
     }
 
     public function store(Request $request): RedirectResponse
@@ -69,23 +74,27 @@ class LeaveRequestController extends Controller
 
         ActivityLog::record($request, 'HR', 'Created leave request', $leave->employee->name);
 
-        return redirect()->route('admin.hr.leaves.index')
-            ->with('status', 'Leave request created successfully.');
+        // Save opens the leave (where Approve lives) and keeps the origin; Save & close returns to the origin or the register.
+        return SaveAction::redirect($request, [
+            'stay' => route('admin.hr.leaves.show', [$leave, 'return_to' => SaveAction::returnTo($request)]),
+            'close' => route('admin.hr.leaves.index'),
+        ])->with('status', 'Leave request created successfully.');
     }
 
-    public function show(LeaveRequest $leave_request): View
+    public function show(Request $request, LeaveRequest $leave_request): View
     {
         $leave_request->load(['employee.department', 'employee.designation', 'leaveType', 'approver']);
 
         return view('admin.hr.leaves.show', [
             'leave' => $leave_request,
+            'returnTo' => SaveAction::returnTo($request),
             'balance' => $leave_request->employee->leaveBalance((int) $leave_request->start_date->year),
         ]);
     }
 
-    public function edit(LeaveRequest $leave_request): View
+    public function edit(Request $request, LeaveRequest $leave_request): View
     {
-        return view('admin.hr.leaves.edit', ['leave' => $leave_request] + $this->formOptions());
+        return view('admin.hr.leaves.edit', ['leave' => $leave_request, 'returnTo' => SaveAction::returnTo($request)] + $this->formOptions());
     }
 
     public function update(Request $request, LeaveRequest $leave_request): RedirectResponse
@@ -112,8 +121,10 @@ class LeaveRequestController extends Controller
 
         ActivityLog::record($request, 'HR', 'Updated leave request', $leave_request->employee->name);
 
-        return redirect()->route('admin.hr.leaves.index')
-            ->with('status', 'Leave request updated successfully.');
+        return SaveAction::redirect($request, [
+            'stay' => route('admin.hr.leaves.show', [$leave_request, 'return_to' => SaveAction::returnTo($request)]),
+            'close' => route('admin.hr.leaves.index'),
+        ])->with('status', 'Leave request updated successfully.');
     }
 
     public function destroy(Request $request, LeaveRequest $leave_request): RedirectResponse

@@ -5,7 +5,8 @@
 
 @section('content')
     <x-admin.page-header :title="'Leave Request: '.$leave->employee->name" :description="$leave->leaveType->name.' — '.$leave->start_date->toDateString().' to '.$leave->end_date->toDateString()">
-        <a class="btn outline" href="{{ route('admin.hr.leaves.edit', $leave) }}">Edit</a>
+        <a class="btn outline" href="{{ route('admin.hr.leaves.edit', ['leave_request' => $leave, 'return_to' => $returnTo ?? null]) }}">Edit</a>
+        @if($returnTo ?? null)<a class="btn outline" href="{{ $returnTo }}">{{ __('workspace.inv_back_origin') }}</a>@endif
         @if ($leave->status === 'pending')
             <form method="POST" action="{{ route('admin.hr.leaves.approve', $leave) }}">
                 @csrf
