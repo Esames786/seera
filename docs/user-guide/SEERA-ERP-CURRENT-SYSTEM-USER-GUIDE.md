@@ -3,9 +3,9 @@
 
 | | |
 |---|---|
-| **Version** | 1.8 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 8 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context). Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
-| **Prepared** | 8 October 2026 |
+| **Version** | 1.9 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 9 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS attendance, geofence runtime, offline attendance and Payroll → GL remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
+| **Prepared** | 9 October 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
 
@@ -733,7 +733,7 @@ Small lists with an inline "Add" section and inline Save / Delete per row. Payme
 |---|---|
 | **Chapter number** | 6 |
 | **Chapter name** | HR & Payroll |
-| **Purpose** | Employees, documents, shifts, attendance, leave, overtime, salary structures, payroll runs and end of service. |
+| **Purpose** | Employees, documents, shifts, attendance, leave, overtime, salary structures, payroll runs and end of service. The Employee View (HR-EMP-003) is the employee-centred entry point to all of them. Status truth for this chapter: manual attendance only; GPS attendance, geofence runtime and offline attendance are NOT YET OPERATIONAL; payroll runs calculate pay but Payroll → GL posting, payslips and bank / WPS files are NOT YET OPERATIONAL; leave, overtime and payroll approvals are single explicit actions (no approval runtime). |
 | **Primary roles** | HR Manager, Site In-Charge, Finance Manager |
 | **Screens in this chapter** | HR-DASH-001, HR-EMP-001, HR-EMP-002, HR-EMP-003, HR-EMP-004, HR-DOC-001, HR-SHF-001, HR-SHF-002, HR-SHF-003, HR-ATT-001, HR-ATT-002, HR-ATT-003, HR-LV-001, HR-LV-002, HR-LV-003, HR-LV-004, HR-OT-001, HR-OT-002, HR-OT-003, HR-SAL-001, HR-SAL-002, HR-SAL-003, HR-SAL-004, HR-PAY-001, HR-PAY-002, HR-PAY-003, HR-PAY-004, HR-EOS-001, HR-EOS-002, HR-EOS-003, HR-EOS-004 |
 
@@ -856,8 +856,26 @@ Employees → View.
 Permission required:
 HR — view.
 
+Permission required (per section):
+HR — view opens the page (Overview, Contract & IQAMA, Documents, Leaves). Attendance needs Attendance — view; Overtime, Salary Structures, Payroll Information and Payroll need Payroll — view; Activity needs Activity Logs — view. A section your role may not read is absent from the page and from the section bar; HR — view alone never shows pay figures.
+
 What you see:
-Employment Information, Personal & Documents, Payroll Information, Documents, Recent Attendance, Leave Data with the annual balance, Overtime, Salary Structures, Payroll History, and cards for Attendance This Month and Pending Leave / Overtime. A "+ New Structure From Profile" link opens the salary structure form when the profile amounts no longer match the active structure.
+A persistent header: employee code and name, status, designation, project / site, classification, department, manager, contract type and period, IQAMA number, expiry and validity, attendance this month (present / recorded; Attendance view), remaining annual leave of the current year, pending leave / overtime counts and, with Payroll view, the basic salary. Alerts appear when the IQAMA has expired or expires within 60 days and when the contract end date is past or within 60 days. A section bar links to Overview · Documents · Attendance · Leaves · Overtime · Salary Structures · Payroll · Activity.
+
+| Section | What it shows | Actions (each by its own permission) |
+|---|---|---|
+| Overview | Employment Information (with contract status and annual entitlement), Contract & IQAMA (contact, IQAMA, passport, insurance and driving-license numbers with validity, documents on file / expiring / expired), Payroll Information (Payroll view) | — |
+| Documents | Every document with issue, expiry, validity and private View / Download | + Attach Document (HR edit), View register (HR-DOC-001 filtered to this employee) |
+| Attendance | Latest 10 records: date, check in / out, shift, status, late and overtime minutes, project, site, source and the stored geo-fence label; paged | Add attendance (Attendance create; employee preselected), Edit (Attendance edit), View register (HR-ATT-001 filtered to this employee) |
+| Leaves | Annual balance of the current year (entitlement, used, awaiting approval, remaining — the existing balance rule) and the latest 10 requests: type, from, to, days, status, reason, decided by; paged | Create leave (HR create; employee preselected), View (HR-LV-003), Edit (pending only; HR edit), View register (HR-LV-001 filtered) |
+| Overtime | Latest 10 records: date, hours, rate, amount (hours × rate as recorded), linked attendance date, status, reason; approved hours total; paged | Add overtime (Payroll create), Edit (pending only; Payroll edit), View register (HR-OT-001 filtered) |
+| Salary Structures | Every structure with basic, allowances, deductions, net and status; mismatch warning when the profile and the active structure differ | + New Structure From Profile (Payroll create), View register |
+| Payroll | Latest 10 payroll rows: run, period, basic, allowances, overtime, deductions, net, present / leave days, run status; paged | Open payroll run (HR-PAY-003), View register |
+| Activity | Latest HR, attendance, payroll and account entries that name this employee, limited to the users your role may see | View all |
+
+Return-to-context: Add / Edit links opened from this page carry the employee as the origin. On those forms Cancel, Save & close and the Back to origin button return to the same section of this page; Save stays on the record.
+
+What this page does not do: it never records attendance, leave, overtime or pay itself; it does not calculate payroll or leave balances anew; it shows stored geo-fence and source labels only (no GPS or mobile check-in exists); it offers no payslip, because none exists in the current system.
 
 ### [HR-EMP-004] Employee Workspace (Edit)
 
@@ -891,7 +909,7 @@ Employee
  └─ System Account        (Users)
 ```
 
-Each related tab has its own small form and its own saved-records table with Edit here, Approve, Reject or Delete where allowed. Saving a tab keeps you on the employee and on that tab. A linked user card at the top links to the user account (USR-003 / USR-004) when you may open it.
+Each related tab has its own small form and its own saved-records table (10 rows per page) with Edit here, Approve, Reject or Delete where allowed, plus a **View register** link to the matching register already filtered to this employee. Attendance rows show shift, check in / out, late and overtime minutes, project, site, status and source; Leave rows show the leave type; Overtime rows show the linked attendance date; Payroll History rows show the run, period, amounts and run status. Saving a tab keeps you on the employee and on that tab. A linked user card at the top links to the user account (USR-003 / USR-004) when you may open it.
 
 Important:
 - Leave and Overtime saved here are always *pending*; approval is a separate button.
@@ -954,7 +972,7 @@ Fields:
 | Geo-Fence Status | inside / outside / unknown | inside | Yes | Chosen by the user; not verified by location |
 | Remarks | Free text | — | No | |
 
-Buttons: Save / Update, Cancel. The list offers Edit and Delete per row.
+Buttons: Cancel, Save (stays on the record), Save & close (returns to the employee page you came from, otherwise the list). The list offers Edit and Delete per row and can be filtered to one employee (`?employee={id}`, used by the Employee View's View register link, which also offers Back to employee / Show all).
 
 ### [HR-LV-001 … 004] Leaves
 
@@ -980,7 +998,7 @@ Fields:
 | Reason, Supporting Document | | Family visit, PDF | No | Document stored privately |
 | Rejection Reason | Only when rejecting | — | Yes when rejecting | |
 
-Buttons: Save / Update, Cancel; on details: **Approve**, **Reject Request** (asks for a reason), Edit, Attachment.
+Buttons: Cancel, Save (opens the leave details, where Approve lives), Save & close (returns to the employee page you came from, otherwise the list); on details: **Approve**, **Reject Request** (asks for a reason), Edit, Attachment, Back to origin when opened from an employee. The list can be filtered to one employee.
 
 What happens after Approve:
 Status becomes approved and the days count against the annual entitlement shown on the employee.
@@ -989,7 +1007,7 @@ Status becomes approved and the days count against the annual entitlement shown 
 
 Web address: `https://seera.tech-brit.co.uk/admin/hr/overtime` (HR-OT-001) · `https://seera.tech-brit.co.uk/admin/hr/overtime/create` (HR-OT-002) · `https://seera.tech-brit.co.uk/admin/hr/overtime/{id}/edit` (HR-OT-003)
 
-Fields: Employee *, Date *, Attendance Record (optional link), Hours *, Hourly Rate (SAR) *, Status *, Reason. Amount = hours × rate. **Approve** is a separate button; only approved overtime enters payroll.
+Fields: Employee *, Date *, Attendance Record (optional link), Hours *, Hourly Rate (SAR) *, Status *, Reason. Amount = hours × rate. Buttons: Cancel, Save, Save & close (returns to the employee page you came from, otherwise the list). **Approve** is a separate button; only approved overtime enters payroll. The list can be filtered to one employee. Permission module: Payroll (there is no separate Overtime module).
 
 ### [HR-SAL-001 … 004] Salary Structures
 
@@ -2800,7 +2818,7 @@ Areas that exist as menus, settings or plans but are not usable business functio
 | Site Expenses | AVAILABLE with configured masters/permissions/workflow | Responsive web entry, private receipt, sequential approvals, accounting/retry, reimbursement and linked Supplier Bill; see WF-018 |
 | Project Phase B: BOQ, milestones, labour/equipment costing | PARTIAL | Phase A and Site Expense panel/cost integration available; remaining construction planning/cost modules are not built |
 | Equipment & Vehicles | NOT YET OPERATIONAL | Menu placeholder and permission names only |
-| Mobile app, check-in / check-out, GPS geofence attendance | NOT YET OPERATIONAL | Mobile access flags on users and roles; site coordinates and radius; manual attendance with a typed geo-fence status |
+| Mobile app, check-in / check-out, GPS geofence attendance, geofence runtime enforcement | NOT YET OPERATIONAL | Mobile access flags on users and roles; site coordinates and radius; manual attendance with a typed geo-fence status |
 | Offline entry and sync | NOT YET OPERATIONAL | Nothing |
 | Live ZATCA Phase-2 clearance, real QR, XML, signing | NOT YET OPERATIONAL (local records: FOUNDATION ONLY) | Chapter 14 |
 | Approval workflow execution (multi-step, all-required) | AVAILABLE for PR, Site Expenses and Supplier Bills; PARTIAL across other modules | Sequential required steps, runtime history and shared My Approvals; no parallel groups, thresholds, delegation, notification/escalation jobs or automatic parent expansion |
@@ -2816,7 +2834,7 @@ Areas that exist as menus, settings or plans but are not usable business functio
 | Password reset by email | PARTIAL | Needs mail configuration on the server |
 | Customer invoice site, print / PDF, credit notes, receipt reversal | NOT YET OPERATIONAL | An invoice carries a project and cost center only; there is no print or PDF route; corrections use Reopen (unpaid, no receipts) |
 | Purchase order ↔ supplier bill link without a goods receipt match | PARTIAL | A bill is linked to an order only through its goods receipt matches; a direct or service bill is not shown on the order |
-| Forms still on the older Save / Cancel layout | PARTIAL | Master Setup (except Suppliers and Customers), HR registers, Inventory (except Goods Receipts), Marketing, Roles, Users (Save & stay only) |
+| Forms still on the older Save / Cancel layout | PARTIAL | Master Setup (except Suppliers and Customers), HR registers other than Attendance / Leaves / Overtime, Inventory (except Goods Receipts), Marketing, Roles, Users (Save & stay only) |
 
 ---
 

@@ -2,13 +2,13 @@
 
 Index of the end-to-end workflows documented in chapter 17 of the [User Guide](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#17-end-to-end-workflows). Screens are indexed in [SCREEN-INDEX.md](SCREEN-INDEX.md).
 
-Version 1.8 · Prepared 8 October 2026 · Status: current implemented system only; no deployment claim.
+Version 1.9 · Prepared 9 October 2026 · Status: current implemented system only; no deployment claim.
 
 Wave 2 Batch B adds read-only Item-centric and Warehouse-centric context to the existing inventory workflows below (WF-002, WF-006, WF-007, WF-010, WF-013 and WF-016). Open an Item or Warehouse, choose its permissioned document panel, then View the existing workflow. Saving master data never dispatches, receives, adjusts or posts stock. These are contextual entry points, not new Workflow IDs or new approval runtimes. Transfer Receive still needs its explicit right; Project/Site transfer scope remains source-based.
 
 | Workflow ID | Workflow | Roles involved | Main screens | Status | Guide |
 |---|---|---|---|---|---|
-| WF-001 | Create Employee and User Access; manage linked identity, roles, temporary dates and scope | HR Manager, Super Admin | HR-EMP-002, HR-EMP-004, USR-002/003/004 | AVAILABLE | [WF-001](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-001-create-employee-and-user-access) |
+| WF-001 | Create Employee and User Access; manage linked identity, roles, temporary dates and scope (the Employee View then shows attendance, leave, overtime and payroll context by permission) | HR Manager, Super Admin | HR-EMP-002, HR-EMP-003, HR-EMP-004, USR-002/003/004 | AVAILABLE | [WF-001](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-001-create-employee-and-user-access) |
 | WF-002 | Supplier → Purchase Order → Goods Receipt → Supplier Bill → Payment (partial deliveries and invoices, read from the order's document workspace) | Site In-Charge, Purchase Manager, Warehouse Incharge, Account Assistant, Finance Manager | SUP-002, INV-PR-002, INV-PO-002, INV-PO-003, INV-GRN-002, INV-GRN-003, FIN-AP-002, FIN-AP-003, FIN-AP-005 | AVAILABLE | [WF-002](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-002-supplier--purchase-order--goods-receipt--supplier-bill--payment) |
 | WF-003 | Customer → Invoice → Receipt (read from the invoice document workspace; partial receipts) | Account Assistant, Finance Manager | CUS-002, CUS-004, FIN-AR-002, FIN-AR-003, FIN-AR-005, MST-PRJ-003 | AVAILABLE | [WF-003](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-003-customer--invoice--receipt) |
 | WF-004 | Manual Journal → General Ledger | Finance Manager | FIN-JE-002, FIN-JE-003, FIN-GL-001 | AVAILABLE | [WF-004](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-004-manual-journal--general-ledger) |
