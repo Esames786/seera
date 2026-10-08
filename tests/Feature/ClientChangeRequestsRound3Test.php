@@ -496,7 +496,7 @@ class ClientChangeRequestsRound3Test extends TestCase
         $this->assertSame(round(21 - $balance['used'], 1), $balance['remaining']);
 
         $this->actingAs($admin)->get(route('admin.hr.employees.show', $employee))
-            ->assertOk()->assertSee('Leave Data')->assertSee('Entitlement')->assertSee('Remaining');
+            ->assertOk()->assertSee('id="leaves"', false)->assertSee('Entitlement')->assertSee('Remaining');
         $this->actingAs($admin)->get(route('admin.hr.leaves.show', $leave))->assertOk()->assertSee('tickets.pdf')->assertSee('Remaining Balance');
 
         // Entitlement is editable per employee.
