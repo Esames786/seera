@@ -5,14 +5,16 @@
 
 @section('content')
     <x-admin.page-header title="Materials / Items" description="Item master with valuation, reorder levels and linked accounts">
-        <a class="btn primary" href="{{ route('admin.inventory.items.create') }}">+ Add Item</a>
+        @if(auth()->user()->hasPermission('Items','create'))<a class="btn primary" href="{{ route('admin.inventory.items.create') }}">+ Add Item</a>@endif
     </x-admin.page-header>
 
     <div class="card-grid">
         <x-admin.metric-card color="blue" :value="$totalItems" label="Total Items"/>
         <x-admin.metric-card color="green" :value="$activeItems" label="Active Items"/>
+        @if(auth()->user()->hasPermission('Warehouse Stock','view'))
         <x-admin.metric-card color="red" :value="$lowStockCount" label="Low Stock Rows"/>
         <x-admin.metric-card color="cyan" :value="'SAR '.number_format($stockValue, 2)" label="Stock Value"/>
+        @endif
     </div>
 
     <x-admin.filter-bar>
@@ -46,7 +48,7 @@
 
     <x-admin.data-table title="Items Listing">
         <thead>
-            <tr><th>Code</th><th>Item</th><th>Category</th><th>Unit</th><th>On Hand</th><th>Avg Cost</th><th>Stock Value</th><th>Reorder</th><th>Status</th><th>Actions</th></tr>
+            <tr><th>Code</th><th>Item</th><th>Category</th><th>Unit</th>@if(auth()->user()->hasPermission('Warehouse Stock','view'))<th>On Hand</th><th>Stock Value</th>@endif<th>Reorder</th><th>Status</th><th>Actions</th></tr>
         </thead>
         <tbody>
             @forelse ($items as $item)
@@ -55,21 +57,22 @@
                     <td><a href="{{ route('admin.inventory.items.show', $item) }}" style="color:var(--blue);font-weight:700">{{ $item->name }}</a></td>
                     <td>{{ $item->category?->name ?? '-' }}</td>
                     <td>{{ $item->unit?->code ?? '-' }}</td>
+                    @if(auth()->user()->hasPermission('Warehouse Stock','view'))
                     <td>
                         {{ rtrim(rtrim(number_format($item->on_hand ?? 0, 3), '0'), '.') }}
                         @if ((float) $item->reorder_level > 0 && (float) ($item->on_hand ?? 0) <= (float) $item->reorder_level)
                             <span class="badge red">Low</span>
                         @endif
                     </td>
-                    <td>SAR {{ number_format($item->average_cost, 2) }}</td>
                     <td>SAR {{ number_format($item->stock_value ?? 0, 2) }}</td>
+                    @endif
                     <td>{{ rtrim(rtrim(number_format($item->reorder_level, 3), '0'), '.') }}</td>
                     <td><x-admin.status-badge :status="$item->status"/></td>
                     <td>
                         <x-admin.action-buttons
                             :view="route('admin.inventory.items.show', $item)"
-                            :edit="route('admin.inventory.items.edit', $item)"
-                            :delete="route('admin.inventory.items.destroy', $item)"
+                            :edit="auth()->user()->hasPermission('Items','edit') ? route('admin.inventory.items.edit', $item) : null"
+                            :delete="auth()->user()->hasPermission('Items','delete') ? route('admin.inventory.items.destroy', $item) : null"
                             :name="$item->name"/>
                     </td>
                 </tr>

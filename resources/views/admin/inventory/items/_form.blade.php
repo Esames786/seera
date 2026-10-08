@@ -60,6 +60,7 @@
     </x-admin.form-section>
 
     <x-admin.form-section title="C. Accounting" columns="3">
+        @if(auth()->user()->hasPermission('Chart of Accounts','view'))
         <div>
             <label for="inventory_account_id">Linked Inventory Account</label>
             <select id="inventory_account_id" name="inventory_account_id" class="select">
@@ -78,6 +79,7 @@
                 @endforeach
             </select>
         </div>
+        @endif
         <div>
             <label for="vat_applicable">VAT Applicable</label>
             <select id="vat_applicable" name="vat_applicable" class="select">
@@ -91,8 +93,5 @@
         Average cost is maintained automatically by goods receipts and stock issues. FIFO is stored as a valuation option but batch costing is not built in this phase.
     </div>
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.inventory.items.index') }}">Cancel</a>
-        <button type="submit" class="btn primary">{{ $item ? 'Update Item' : 'Save Item' }}</button>
-    </div>
+    <x-admin.form-actions :cancel="route('admin.inventory.items.index')" :save-new="auth()->user()->hasPermission('Items','create')"/>
 </form>

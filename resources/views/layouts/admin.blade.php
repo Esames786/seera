@@ -59,7 +59,7 @@
                 message.textContent = 'Are you sure you want to delete "' + (trigger.dataset.deleteName || 'this record') + '"?';
                 const deactivate = trigger.dataset.deactivate === '1';
                 title.textContent = submit.textContent = deactivate ? overlay.dataset.deactivateTitle : 'Confirm Delete';
-                help.textContent = deactivate ? overlay.dataset.deactivateHelp : deleteHelp;
+                help.textContent = deactivate ? (trigger.dataset.deactivateHelp || overlay.dataset.deactivateHelp) : deleteHelp;
                 if (deactivate) message.textContent = overlay.dataset.deactivateMessage.replace(':name', trigger.dataset.deleteName || '');
                 overlay.classList.add('open');
                 return;

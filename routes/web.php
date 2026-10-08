@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\Hr\ShiftController;
 use App\Http\Controllers\Admin\Inventory\GoodsReceiptController;
 use App\Http\Controllers\Admin\Inventory\InventoryDashboardController;
 use App\Http\Controllers\Admin\Inventory\InventoryReportController;
+use App\Http\Controllers\Admin\Inventory\InventoryWorkspaceController;
 use App\Http\Controllers\Admin\Inventory\ItemCategoryController;
 use App\Http\Controllers\Admin\Inventory\ItemController;
 use App\Http\Controllers\Admin\Inventory\PurchaseOrderController;
@@ -184,6 +185,7 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::get('sites/{site}/expenses/create', [SiteWorkspaceController::class, 'createExpense'])->name('sites.expenses.create');
         Route::post('sites/{site}/expenses', [SiteWorkspaceController::class, 'storeExpense'])->name('sites.expenses.store');
         Route::resource('warehouses', WarehouseController::class);
+        Route::get('warehouses/{warehouse}/workspace/{panel}', [InventoryWorkspaceController::class, 'warehouse'])->name('warehouses.workspace.panel');
         Route::resource('expense-categories', ExpenseCategoryController::class);
         Route::resource('payment-terms', PaymentTermController::class)
             ->only(['index', 'store', 'update', 'destroy'])
@@ -310,6 +312,7 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::get('dashboard', [InventoryDashboardController::class, 'index'])->name('dashboard');
 
         Route::resource('items', ItemController::class);
+        Route::get('items/{item}/workspace/{panel}', [InventoryWorkspaceController::class, 'item'])->name('items.workspace.panel');
         Route::resource('categories', ItemCategoryController::class)->except(['show'])->parameters(['categories' => 'category']);
         Route::resource('units', UnitController::class)->except(['show']);
 

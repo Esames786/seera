@@ -18,7 +18,8 @@
         </div>
         <div>
             <label for="project_id">Project (optional)</label>
-            <select id="project_id" name="project_id" class="select">
+            @if($warehouse)<input type="hidden" name="project_id" value="{{ $warehouse->project_id }}"/>@endif
+            <select id="project_id" name="project_id" class="select" @disabled($warehouse)>
                 <option value="">Branch level</option>
                 @foreach ($projects as $project)
                     <option value="{{ $project->id }}" @selected(old('project_id', $warehouse?->project_id) == $project->id)>{{ $project->name }}</option>
@@ -27,7 +28,8 @@
         </div>
         <div>
             <label for="site_id">Site (optional)</label>
-            <select id="site_id" name="site_id" class="select">
+            @if($warehouse)<input type="hidden" name="site_id" value="{{ $warehouse->site_id }}"/>@endif
+            <select id="site_id" name="site_id" class="select" @disabled($warehouse)>
                 <option value="">None</option>
                 @foreach ($sites as $site)
                     <option value="{{ $site->id }}" data-parent="{{ $site->project_id }}" @selected(old('site_id', $warehouse?->site_id) == $site->id)>{{ $site->name }}</option>
@@ -41,6 +43,7 @@
                 @foreach ($users as $user)
                     <option value="{{ $user->id }}" @selected(old('incharge_id', $warehouse?->incharge_id) == $user->id)>{{ $user->name }}</option>
                 @endforeach
+                @if($warehouse?->incharge && !$users->contains('id',$warehouse->incharge_id))<option value="{{ $warehouse->incharge_id }}" selected>{{ $warehouse->incharge->name }}</option>@endif
             </select>
         </div>
         <div>
@@ -60,10 +63,8 @@
         <div class="full"><label for="address">Location / Address</label><textarea id="address" name="address" class="textarea" placeholder="Warehouse address...">{{ old('address', $warehouse?->address) }}</textarea></div>
     </x-admin.form-section>
 
-    <div class="form-actions">
-        <a class="btn outline" href="{{ route('admin.master.warehouses.index') }}">Cancel</a>
-        <button type="submit" class="btn primary">{{ $warehouse ? 'Update Warehouse' : 'Save Warehouse' }}</button>
-    </div>
+    <p class="note">{{ __('inventory_workspace.ownership_fixed') }} {{ __('inventory_workspace.valuation_help') }}</p>
+    <x-admin.form-actions :cancel="route('admin.master.warehouses.index')" :save-new="auth()->user()->hasPermission('Warehouses','create')"/>
 </form>
 
-<x-admin.dependent-select parent="project_id" child="site_id" placeholder="sites"/>
+@if(!$warehouse)<x-admin.dependent-select parent="project_id" child="site_id" placeholder="sites"/>@endif

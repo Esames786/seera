@@ -29,7 +29,7 @@
             <option value="inactive" @selected(request('status') === 'inactive')>Inactive</option>
         </select>
         <x-slot:actions>
-            <a class="btn primary" href="{{ route('admin.master.warehouses.create') }}">+ Add Warehouse</a>
+            @if(auth()->user()->hasPermission('Warehouses','create'))<a class="btn primary" href="{{ route('admin.master.warehouses.create') }}">+ Add Warehouse</a>@endif
         </x-slot:actions>
     </x-admin.filter-bar>
 
@@ -53,8 +53,9 @@
                     <td>
                         <x-admin.action-buttons
                             :view="route('admin.master.warehouses.show', $warehouse)"
-                            :edit="route('admin.master.warehouses.edit', $warehouse)"
-                            :delete="route('admin.master.warehouses.destroy', $warehouse)"
+                            :edit="auth()->user()->hasPermission('Warehouses','edit') ? route('admin.master.warehouses.edit', $warehouse) : null"
+                            :delete="auth()->user()->hasPermission('Warehouses','delete') ? route('admin.master.warehouses.destroy', $warehouse) : null"
+                            :edit-label="__('workspace.manage')" :delete-label="__('inventory_workspace.deactivate')" :deactivate="true" :deactivate-help="__('inventory_workspace.deactivation_help')"
                             :name="$warehouse->name"/>
                     </td>
                 </tr>

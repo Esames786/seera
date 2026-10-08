@@ -7,10 +7,13 @@ use App\Models\ActivityLog;
 use App\Models\Branch;
 use App\Models\Project;
 use App\Models\Site;
-use App\Models\User;
 use App\Models\Warehouse;
+use App\Support\LinkedIdentityNavigation;
+use App\Support\SaveAction;
+use App\Support\Workspace\InventoryWorkspace as Workspace;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class WarehouseController extends Controller
@@ -44,46 +47,64 @@ class WarehouseController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        abort_unless(in_array($request->user()->effectiveAccessScope(), ['company', 'project', 'site'], true), 403);
         $warehouse = Warehouse::create($this->validated($request));
 
-        ActivityLog::record($request, 'Warehouses', 'Created warehouse', $warehouse->name);
+        ActivityLog::record($request, 'Warehouses', 'Created warehouse', '[Warehouse #'.$warehouse->id.'] '.$warehouse->code);
 
-        return redirect()->route('admin.master.warehouses.index')->with('status', 'Warehouse "'.$warehouse->name.'" created successfully.');
+        return $this->saved($request, $warehouse)->with('status', 'Warehouse "'.$warehouse->name.'" created successfully.');
     }
 
     public function show(Warehouse $warehouse): View
     {
-        $warehouse->load(['branch', 'project', 'site', 'incharge']);
-
-        return view('admin.master.warehouses.show', ['warehouse' => $warehouse]);
+        return view('admin.master.warehouses.show', Workspace::data($warehouse));
     }
 
     public function edit(Warehouse $warehouse): View
     {
-        return view('admin.master.warehouses.edit', ['warehouse' => $warehouse] + $this->formOptions());
+        return view('admin.master.warehouses.edit', Workspace::data($warehouse) + $this->formOptions());
     }
 
     public function update(Request $request, Warehouse $warehouse): RedirectResponse
     {
         $warehouse->update($this->validated($request, $warehouse));
 
-        ActivityLog::record($request, 'Warehouses', 'Updated warehouse', $warehouse->name);
+        ActivityLog::record($request, 'Warehouses', 'Updated warehouse', '[Warehouse #'.$warehouse->id.'] '.$warehouse->code);
 
-        return redirect()->route('admin.master.warehouses.index')->with('status', 'Warehouse "'.$warehouse->name.'" updated successfully.');
+        return $this->saved($request, $warehouse)->with('status', 'Warehouse "'.$warehouse->name.'" updated successfully.');
     }
 
     public function destroy(Request $request, Warehouse $warehouse): RedirectResponse
     {
         $name = $warehouse->name;
-        $warehouse->delete();
+        $warehouse->update(['status' => 'inactive']);
 
-        ActivityLog::record($request, 'Warehouses', 'Deleted warehouse', $name);
+        ActivityLog::record($request, 'Warehouses', 'Deactivated warehouse', '[Warehouse #'.$warehouse->id.'] '.$warehouse->code);
 
-        return redirect()->route('admin.master.warehouses.index')->with('status', 'Warehouse "'.$name.'" deleted successfully.');
+        return redirect()->route('admin.master.warehouses.index')->with('status', __('inventory_workspace.deactivated'));
     }
 
     private function validated(Request $request, ?Warehouse $warehouse = null): array
     {
+        if ($warehouse) {
+            foreach (['project_id', 'site_id'] as $field) {
+                if ($request->exists($field) && (string) $request->input($field) !== (string) $warehouse->$field) {
+                    throw ValidationException::withMessages([$field => __('inventory_workspace.ownership_fixed')]);
+                }
+                $request->merge([$field => $warehouse->$field]);
+            }
+        } else {
+            if ($request->filled('project_id')) {
+                Project::findOrFail($request->integer('project_id'));
+            }
+            if ($request->filled('site_id')) {
+                Site::whereKey($request->integer('site_id'))->where('project_id', $request->input('project_id'))->firstOrFail();
+            }
+        }
+        if ($request->filled('incharge_id') && (int) $request->input('incharge_id') !== (int) $warehouse?->incharge_id) {
+            abort_unless(app(LinkedIdentityNavigation::class)->users($request->user())->whereKey($request->integer('incharge_id'))->exists(), 403);
+        }
+
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'code' => ['required', 'string', 'max:50', 'unique:warehouses,code'.($warehouse ? ','.$warehouse->id : '')],
@@ -103,7 +124,13 @@ class WarehouseController extends Controller
             'branches' => Branch::orderBy('name')->get(),
             'projects' => Project::orderBy('name')->get(),
             'sites' => Site::orderBy('name')->get(),
-            'users' => User::orderBy('name')->get(),
+            'users' => app(LinkedIdentityNavigation::class)->users(auth()->user())->orderBy('name')->get(),
         ];
+    }
+
+    private function saved(Request $request, Warehouse $warehouse): RedirectResponse
+    {
+        return SaveAction::redirect($request, ['stay' => route('admin.master.warehouses.edit', [$warehouse, 'return_to' => SaveAction::returnTo($request)]), 'close' => route('admin.master.warehouses.index')]
+            + ($request->user()->hasPermission('Warehouses', 'create') ? ['new' => route('admin.master.warehouses.create')] : []));
     }
 }
