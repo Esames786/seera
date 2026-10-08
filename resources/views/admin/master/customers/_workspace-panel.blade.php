@@ -2,6 +2,8 @@
     /** @var \App\Models\Customer $customer */
     $readonly = $readonly ?? false;
     $panelUrl = route('admin.master.customers.workspace.panel', [$customer, $panel]);
+    // Invoice pages opened from here return to this customer context (View page or Edit / Manage workspace).
+    $invoiceOrigin = ($readonly ? route('admin.master.customers.show', $customer, false) : route('admin.master.customers.edit', $customer, false)).'#'.$panel;
     $money = fn ($v) => 'SAR '.number_format((float) $v, 2);
     $prefix = 'customer-'.$customer->id.'-'.$panel.'-';
     $editing = $editing ?? null;   // contact being edited (loaded with ?record=)
@@ -134,9 +136,9 @@
                             <td><x-admin.status-badge :status="$invoice->payment_status"/></td>
                             <td>@if ($invoice->zatcaRecord)<span class="small">{{ $invoice->zatcaRecord->clearance_status }} (local record)</span>@else <span class="small">-</span>@endif</td>
                             <td>
-                                <a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.show', $invoice) }}">View</a>
-                                @if ($canEditInvoice && $invoice->isEditable())<a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.edit', $invoice) }}">Edit draft</a>@endif
-                                @if ($canReceive && in_array($invoice->payment_status, \App\Support\Workspace\CustomerWorkspacePanels::OPEN_INVOICE_STATUSES, true))<a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.receipt', $invoice) }}">Record receipt</a>@endif
+                                <a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.show', ['accounts_receivable' => $invoice, 'return_to' => $invoiceOrigin]) }}">View</a>
+                                @if ($canEditInvoice && $invoice->isEditable())<a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.edit', ['accounts_receivable' => $invoice, 'return_to' => $invoiceOrigin]) }}">Edit draft</a>@endif
+                                @if ($canReceive && in_array($invoice->payment_status, \App\Support\Workspace\CustomerWorkspacePanels::OPEN_INVOICE_STATUSES, true))<a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.receipt', ['accounts_receivable' => $invoice, 'return_to' => $invoiceOrigin]) }}">Record receipt</a>@endif
                             </td>
                         </tr>
                     @empty
@@ -162,7 +164,7 @@
                     @forelse ($rows as $receipt)
                         <tr>
                             <td>{{ $receipt->receipt_date?->toDateString() }}</td>
-                            <td>@if($receipt->invoice)<a href="{{ route('admin.accounting.accounts-receivable.show', $receipt->invoice) }}">{{ $receipt->invoice->invoice_number }}</a>@else - @endif</td>
+                            <td>@if($receipt->invoice)<a href="{{ route('admin.accounting.accounts-receivable.show', ['accounts_receivable' => $receipt->invoice, 'return_to' => $invoiceOrigin]) }}">{{ $receipt->invoice->invoice_number }}</a>@else - @endif</td>
                             <td>{{ $receipt->receiptAccount?->label() ?? '-' }}</td>
                             <td>{{ $receipt->payment_method ?? '-' }}</td>
                             <td>{{ $money($receipt->amount) }}</td>
