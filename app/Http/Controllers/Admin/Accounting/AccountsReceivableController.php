@@ -11,7 +11,9 @@ use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
 use App\Models\Project;
 use App\Services\Accounting\PostingService;
+use App\Support\SaveAction;
 use App\Support\SettlementReplay;
+use App\Support\Workspace\CustomerInvoiceWorkspace;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -70,24 +72,35 @@ class AccountsReceivableController extends Controller
         ActivityLog::record($request, 'Accounting', 'Created customer invoice', $invoice->invoice_number);
 
         // Save keeps the user on the invoice's detail page, where Approve lives; Save & Close returns to the origin or list.
-        return \App\Support\SaveAction::redirect($request, [
-            'stay' => route('admin.accounting.accounts-receivable.show', $invoice),
+        return SaveAction::redirect($request, [
+            'stay' => route('admin.accounting.accounts-receivable.show', [$invoice, 'return_to' => SaveAction::returnTo($request)]),
             'close' => route('admin.accounting.accounts-receivable.index'),
             'new' => route('admin.accounting.accounts-receivable.create'),
         ])->with('status', 'Invoice "'.$invoice->invoice_number.'" saved. Approve it to post the accounting entry and create the ZATCA record.');
     }
 
-    public function show(CustomerInvoice $accounts_receivable): View
+    /**
+     * Customer Invoice document workspace (read-only): identity header, lines,
+     * customer and project context, VAT, journal, receipts, balance, the local
+     * e-invoice record and activity, each section behind its own permission.
+     */
+    public function show(Request $request, CustomerInvoice $accounts_receivable): View
     {
         $accounts_receivable->load([
-            'customer', 'project', 'costCenter', 'lines.revenueAccount',
-            'receipts.receiptAccount', 'journalEntry.lines.account', 'zatcaRecord',
+            'customer', 'project.customer', 'costCenter', 'lines.revenueAccount', 'lines.costCenter',
+            'journalEntry.lines.account', 'journalEntry.lines.costCenter', 'zatcaRecord',
         ]);
+        $request->validate(['page_receipts' => ['nullable', 'integer', 'min:1']]);
 
-        return view('admin.accounting.accounts-receivable.show', ['invoice' => $accounts_receivable]);
+        return view('admin.accounting.accounts-receivable.show', CustomerInvoiceWorkspace::data(
+            $accounts_receivable,
+            $request->user(),
+            SaveAction::returnTo($request),
+            $request->integer('page_receipts') ?: null,
+        ));
     }
 
-    public function edit(CustomerInvoice $accounts_receivable): View
+    public function edit(Request $request, CustomerInvoice $accounts_receivable): View
     {
         if (! $accounts_receivable->isEditable()) {
             abort(403, 'An approved invoice can no longer be edited.');
@@ -95,7 +108,10 @@ class AccountsReceivableController extends Controller
 
         $accounts_receivable->load('lines');
 
-        return view('admin.accounting.accounts-receivable.edit', ['invoice' => $accounts_receivable] + $this->formOptions());
+        return view('admin.accounting.accounts-receivable.edit', [
+            'invoice' => $accounts_receivable,
+            'returnTo' => SaveAction::returnTo($request),
+        ] + $this->formOptions());
     }
 
     public function update(Request $request, CustomerInvoice $accounts_receivable): RedirectResponse
@@ -120,8 +136,9 @@ class AccountsReceivableController extends Controller
 
         ActivityLog::record($request, 'Accounting', 'Updated customer invoice', $accounts_receivable->invoice_number);
 
-        return \App\Support\SaveAction::redirect($request, [
-            'stay' => route('admin.accounting.accounts-receivable.show', $accounts_receivable),
+        // Save stays on the invoice workspace and keeps the origin for its Back link; Save & Close returns to the origin or the list.
+        return SaveAction::redirect($request, [
+            'stay' => route('admin.accounting.accounts-receivable.show', [$accounts_receivable, 'return_to' => SaveAction::returnTo($request)]),
             'close' => route('admin.accounting.accounts-receivable.index'),
             'new' => route('admin.accounting.accounts-receivable.create'),
         ])->with('status', 'Invoice "'.$accounts_receivable->invoice_number.'" updated successfully.');
@@ -233,7 +250,7 @@ class AccountsReceivableController extends Controller
             ->with('status', 'Invoice reopened as a draft'.($reversal ? '; reversing entry '.$reversal->journal_number.' posted' : '').'. Correct it and approve again.');
     }
 
-    public function receiptForm(CustomerInvoice $accounts_receivable): View
+    public function receiptForm(Request $request, CustomerInvoice $accounts_receivable): View
     {
         $accounts_receivable->load(['customer', 'receipts']);
 
@@ -247,6 +264,8 @@ class AccountsReceivableController extends Controller
 
         return view('admin.accounting.accounts-receivable.receipt', [
             'invoice' => $accounts_receivable,
+            // Where Record Receipt / Cancel go back to: the origin (invoice, customer or project context) when it is a safe admin path.
+            'returnTo' => SaveAction::returnTo($request) ?? route('admin.accounting.accounts-receivable.show', $accounts_receivable, false),
         ] + $options);
     }
 
@@ -317,14 +336,16 @@ class AccountsReceivableController extends Controller
             return [$receipt, false];
         });
 
+        $destination = SaveAction::returnTo($request) ?? route('admin.accounting.accounts-receivable.show', $accounts_receivable);
+
         if ($alreadyRecorded) {
-            return redirect()->route('admin.accounting.accounts-receivable.show', $accounts_receivable)
+            return redirect()->to($destination)
                 ->with('status', 'This receipt of SAR '.number_format((float) $receipt->amount, 2).' was already recorded on '.$receipt->receipt_date->toDateString().'; nothing was added.');
         }
 
         ActivityLog::record($request, 'Accounting', 'Recorded customer receipt', $accounts_receivable->invoice_number.' - SAR '.number_format((float) $receipt->amount, 2));
 
-        return redirect()->route('admin.accounting.accounts-receivable.show', $accounts_receivable)
+        return redirect()->to($destination)
             ->with('status', 'Receipt recorded successfully.');
     }
 

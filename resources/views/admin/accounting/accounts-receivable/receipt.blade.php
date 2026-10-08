@@ -5,7 +5,7 @@
 
 @section('content')
     <x-admin.page-header :title="'Record Receipt: '.$invoice->invoice_number" :description="$invoice->customer->name.' · outstanding SAR '.number_format($invoice->balance_amount, 2)">
-        <a class="btn outline" href="{{ route('admin.accounting.accounts-receivable.show', $invoice) }}">Back to Invoice</a>
+        <a class="btn outline" href="{{ $returnTo }}">{{ str_starts_with($returnTo, route('admin.accounting.accounts-receivable.show', $invoice, false)) ? 'Back to Invoice' : 'Back' }}</a>
     </x-admin.page-header>
 
     <div class="card-grid">
@@ -24,6 +24,7 @@
 
     <form method="POST" action="{{ route('admin.accounting.accounts-receivable.receipt.store', $invoice) }}">
         @csrf
+        <input type="hidden" name="{{ \App\Support\SaveAction::RETURN_FIELD }}" value="{{ old(\App\Support\SaveAction::RETURN_FIELD, $returnTo) }}"/>
         {{-- One-time key so a double click or a retry cannot record this receipt twice (F02). --}}
         <input type="hidden" name="idempotency_key" value="{{ old('idempotency_key', (string) \Illuminate\Support\Str::uuid()) }}"/>
 
@@ -57,7 +58,7 @@
         </div>
 
         <div class="form-actions">
-            <a class="btn outline" href="{{ route('admin.accounting.accounts-receivable.show', $invoice) }}">Cancel</a>
+            <a class="btn outline" href="{{ $returnTo }}">Cancel</a>
             <button type="submit" class="btn primary" @disabled($receiptAccounts->isEmpty())>Record Receipt</button>
         </div>
     </form>
