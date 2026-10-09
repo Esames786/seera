@@ -161,6 +161,9 @@ class EnsureUserHasPermission
     /** @return array{0: ?string, 1: string} */
     public static function permissionForRoute(string $routeName, ?string $comingSoonModule = null): array
     {
+        if (str_starts_with($routeName, 'admin.hr.attendance.mobile')) {
+            return ['Attendance', 'mobile'];
+        }
         if (str_starts_with($routeName, 'admin.users.workspace.')) {
             return ['Users', str_ends_with($routeName, '.save') ? 'edit' : 'view'];
         }

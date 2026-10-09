@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\ApprovalWorkflowController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Hr\AttendanceController;
+use App\Http\Controllers\Admin\Hr\MobileAttendanceController;
 use App\Http\Controllers\Admin\Hr\EmployeeController;
 use App\Http\Controllers\Admin\Hr\EmployeeDocumentController;
 use App\Http\Controllers\Admin\Hr\EmployeeWorkspaceController;
@@ -221,6 +222,11 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::get('documents/{document}/view', [EmployeeDocumentController::class, 'view'])->name('documents.view');
         Route::resource('shifts', ShiftController::class)->except(['show']);
 
+        // Location-validated mobile attendance (online): acts for the signed-in user's own linked employee.
+        Route::get('attendance/mobile', [MobileAttendanceController::class, 'show'])->name('attendance.mobile');
+        Route::post('attendance/mobile/locate', [MobileAttendanceController::class, 'locate'])->name('attendance.mobile.locate');
+        Route::post('attendance/mobile/check-in', [MobileAttendanceController::class, 'checkIn'])->name('attendance.mobile.check-in');
+        Route::post('attendance/mobile/check-out', [MobileAttendanceController::class, 'checkOut'])->name('attendance.mobile.check-out');
         Route::resource('attendance', AttendanceController::class)
             ->except(['show'])
             ->parameters(['attendance' => 'attendance_record']);
