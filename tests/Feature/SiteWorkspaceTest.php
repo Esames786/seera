@@ -67,14 +67,14 @@ class SiteWorkspaceTest extends TestCase
 
     public function test_readonly_view_manage_identity_geofence_and_all_panel_endpoints(): void
     {
-        $this->actingAs($this->actor)->get(route('admin.master.sites.show', $this->site))->assertOk()->assertSee('SITE-A')->assertSee('Project A')->assertDontSee('name="_save_action"', false)->assertSee('configuration only');
+        $this->actingAs($this->actor)->get(route('admin.master.sites.show', $this->site))->assertOk()->assertSee('SITE-A')->assertSee('Project A')->assertDontSee('name="_save_action"', false)->assertSee('Mobile Attendance');
         $this->get(route('admin.master.sites.edit', $this->site))->assertOk()->assertSee('data-workspace-guard-tabs', false)->assertSee('name="latitude"', false);
         foreach (array_keys(Panels::panels()) as $panel) {
             $response = $this->panel($panel)->assertOk();
             $this->assertStringNotContainsString('data-related-save', $response->json('html'));
         }
-        $this->panel('location')->assertSee('300')->assertSee('24.5')->assertSee('not implemented');
-        $this->panel('attendance')->assertSee('manually recorded');
+        $this->panel('location')->assertSee('300')->assertSee('24.5')->assertSee('not implemented')->assertSee('Mobile Attendance');
+        $this->panel('attendance')->assertSee('location-validated')->assertSee('typed by HR');
     }
 
     public function test_save_actions_safe_origin_and_project_nested_workspace(): void

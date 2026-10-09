@@ -173,7 +173,7 @@ class EmployeeHrContextTest extends TestCase
 
         $page = $this->open($this->fullReader())->assertOk();
         $page->assertSee('id="attendance"', false)->assertSeeInOrder(['07:05', '16:10', 'Tower Day Shift', '5 min', '30 min', 'Riyadh Commercial Tower', 'Riyadh Tower - Main Site'])
-            ->assertSee('Geo-Fence (stored)')->assertSee('no employee check-in, GPS capture, geofence enforcement or offline sync')
+            ->assertSee('Geo-Fence')->assertSee('offline attendance is not yet operational')
             ->assertDontSee('09:59')->assertSee(route('admin.hr.attendance.index', ['employee' => $this->employee->id]));
 
         $this->open($this->hrViewer())->assertOk()->assertDontSee('id="attendance"', false)->assertDontSee('07:05')->assertDontSee('Attendance this month');
