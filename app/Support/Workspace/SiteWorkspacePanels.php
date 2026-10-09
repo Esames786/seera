@@ -65,7 +65,7 @@ class SiteWorkspacePanels implements WorkspacePanels
             'receipts' => [$row->grn_number, $row->received_date?->format('Y-m-d'), $row->status],
             'materials' => [$row->reference_number, $row->movement_date?->format('Y-m-d'), $row->item?->name, $row->out_quantity, number_format((float) $row->value, 2)],
             'expenses' => [$row->expense_number, $row->expense_date?->format('Y-m-d'), $row->category?->name, $row->submitter?->name, $row->payment_type, number_format((float) $row->total_amount, 2), $row->status, $row->accounting_posted ? __('workspace.posted') : __('workspace.not_posted')],
-            'attendance' => [$row->attendance_date?->format('Y-m-d'), $row->employee?->name, $row->status, $row->source, $row->geofence_status],
+            'attendance' => [$row->attendance_date?->format('Y-m-d'), $row->employee?->name, $row->status, $row->sourceLabel(), AttendanceRecord::geofenceLabel($row->geofence_status).($row->isGpsRecord() && $row->check_in_distance_meters !== null ? ' · '.number_format((float) $row->check_in_distance_meters).' m' : '')],
             'activity' => [$row->created_at, $row->action, $row->user_name],
         };
     }

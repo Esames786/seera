@@ -4,8 +4,13 @@
 @section('breadcrumb', 'HR & Payroll / Attendance')
 
 @section('content')
-    <x-admin.page-header title="Attendance Management" description="Manual, mobile and offline attendance with geo-fence validation">
-        <a class="btn primary" href="{{ route('admin.hr.attendance.create') }}">+ Manual Attendance</a>
+    <x-admin.page-header title="Attendance Management" description="Manual entries by HR and location-validated mobile check-in / check-out by employees (online). Offline attendance is not yet operational.">
+        @if(auth()->user()->mobile_access && auth()->user()->hasPermission('Attendance', 'mobile'))
+            <a class="btn outline" href="{{ route('admin.hr.attendance.mobile') }}">{{ __('mobile_attendance.open_mobile') }}</a>
+        @endif
+        @if(auth()->user()->hasPermission('Attendance', 'create'))
+            <a class="btn primary" href="{{ route('admin.hr.attendance.create') }}">+ Manual Attendance</a>
+        @endif
     </x-admin.page-header>
 
     <div class="card-grid">
@@ -79,8 +84,8 @@
                     <td>{{ $record->check_out ?? '-' }}</td>
                     <td>{{ $record->late_minutes }} min</td>
                     <td>{{ $record->overtime_minutes }} min</td>
-                    <td><x-admin.status-badge :status="$record->source"/></td>
-                    <td><x-admin.status-badge :status="$record->geofence_status"/></td>
+                    <td>@if($record->isGpsRecord())<span class="badge green">{{ $record->sourceLabel() }}</span>@else<x-admin.status-badge :status="$record->source"/>@endif</td>
+                    <td>{{ \App\Models\AttendanceRecord::geofenceLabel($record->geofence_status) }}@if($record->isGpsRecord() && $record->check_in_distance_meters !== null) <span class="small">· {{ number_format($record->check_in_distance_meters) }} m</span>@endif</td>
                     <td><x-admin.status-badge :status="$record->status"/></td>
                     <td>
                         <x-admin.action-buttons

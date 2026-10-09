@@ -152,7 +152,7 @@
                 <a class="btn sm outline" href="{{ $links['attendance_all'] }}">{{ __('workspace.hr_view_register') }}</a>
             </x-slot:headerActions>
             <thead>
-                <tr><th>Date</th><th>Check In</th><th>Check Out</th><th>Shift</th><th>Status</th><th>Late</th><th>Overtime</th><th>Project</th><th>Site</th><th>Source</th><th>Geo-Fence (stored)</th><th></th></tr>
+                <tr><th>Date</th><th>Check In</th><th>Check Out</th><th>Shift</th><th>Status</th><th>Late</th><th>Overtime</th><th>Project</th><th>Site</th><th>Source</th><th>Geo-Fence</th><th></th></tr>
             </thead>
             <tbody>
                 @forelse ($attendance as $record)
@@ -166,8 +166,8 @@
                         <td>{{ $record->overtime_minutes }} min</td>
                         <td>{{ $record->project?->name ?? '-' }}</td>
                         <td>{{ $record->site?->name ?? '-' }}</td>
-                        <td><x-admin.status-badge :status="$record->source"/></td>
-                        <td><x-admin.status-badge :status="$record->geofence_status"/></td>
+                        <td>@if($record->isGpsRecord())<span class="badge green">{{ $record->sourceLabel() }}</span>@else<x-admin.status-badge :status="$record->source"/>@endif</td>
+                        <td>{{ \App\Models\AttendanceRecord::geofenceLabel($record->geofence_status) }}@if($record->isGpsRecord() && $record->check_in_distance_meters !== null) <span class="small">· {{ number_format($record->check_in_distance_meters) }} m</span>@endif</td>
                         <td>@if($canEditAttendance)<a class="btn sm outline" href="{{ route('admin.hr.attendance.edit', ['attendance_record' => $record, 'return_to' => $links['origin_attendance']]) }}">Edit</a>@endif</td>
                     </tr>
                 @empty

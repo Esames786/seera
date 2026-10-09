@@ -59,7 +59,7 @@
         </div>
         <div>
             <label for="source">Source *</label>
-            <select id="source" name="source" class="select" required>
+            <select id="source" name="source" class="select" required @disabled($record?->isGpsRecord())>
                 @foreach ($sources as $source)
                     <option value="{{ $source }}" @selected(old('source', $record?->source ?? 'manual') === $source)>{{ ucfirst($source) }}</option>
                 @endforeach
@@ -67,7 +67,7 @@
         </div>
         <div>
             <label for="geofence_status">Geo-Fence Status *</label>
-            <select id="geofence_status" name="geofence_status" class="select" required>
+            <select id="geofence_status" name="geofence_status" class="select" required @disabled($record?->isGpsRecord())>
                 @foreach ($geofenceStatuses as $status)
                     <option value="{{ $status }}" @selected(old('geofence_status', $record?->geofence_status ?? 'inside') === $status)>{{ ucfirst($status) }}</option>
                 @endforeach
@@ -76,9 +76,17 @@
         <div class="full"><label for="remarks">Remarks</label><textarea id="remarks" name="remarks" class="textarea">{{ old('remarks', $record?->remarks) }}</textarea></div>
     </x-admin.form-section>
 
-    <div class="help-box">
-        Mobile and offline records are created by the mobile app in a later phase. Manual entries created here are marked with the source you choose.
-    </div>
+    @if($record?->isGpsRecord())
+        <x-admin.form-section :title="__('mobile_attendance.location_evidence')" columns="2">
+            <div><strong>{{ __('mobile_attendance.check_in_evidence') }}</strong><br/>{{ $record->check_in_latitude }}, {{ $record->check_in_longitude }} · {{ __('mobile_attendance.accuracy') }} {{ $record->check_in_accuracy_meters !== null ? number_format($record->check_in_accuracy_meters).' m' : '-' }} · {{ $record->check_in_distance_meters !== null ? number_format($record->check_in_distance_meters).' m' : '-' }} · {{ \App\Models\AttendanceRecord::geofenceLabel($record->check_in_geofence_status) }} · {{ __('mobile_attendance.recorded') }} {{ $record->check_in_recorded_at?->format('Y-m-d H:i:s') ?? '-' }}</div>
+            <div><strong>{{ __('mobile_attendance.check_out_evidence') }}</strong><br/>@if($record->check_out_recorded_at){{ $record->check_out_latitude }}, {{ $record->check_out_longitude }} · {{ __('mobile_attendance.accuracy') }} {{ $record->check_out_accuracy_meters !== null ? number_format($record->check_out_accuracy_meters).' m' : '-' }} · {{ $record->check_out_distance_meters !== null ? number_format($record->check_out_distance_meters).' m' : '-' }} · {{ \App\Models\AttendanceRecord::geofenceLabel($record->check_out_geofence_status) }} · {{ __('mobile_attendance.recorded') }} {{ $record->check_out_recorded_at->format('Y-m-d H:i:s') }}@else - @endif</div>
+            <div class="full help-box">{{ __('mobile_attendance.gps_protected') }}</div>
+        </x-admin.form-section>
+    @else
+        <div class="help-box">
+            Manual entries record what you type here and are marked "Manual". Location-validated records are created only by employees through Mobile Attendance (source "GPS / Mobile"); offline attendance is not yet operational.
+        </div>
+    @endif
 
     <x-admin.form-actions :cancel="route('admin.hr.attendance.index')"/>
 </form>
