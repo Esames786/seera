@@ -3,8 +3,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.9 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 9 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS attendance, geofence runtime, offline attendance and Payroll → GL remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
+| **Version** | 1.10 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 9 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Offline attendance and Payroll → GL remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
 | **Prepared** | 9 October 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
@@ -733,9 +733,9 @@ Small lists with an inline "Add" section and inline Save / Delete per row. Payme
 |---|---|
 | **Chapter number** | 6 |
 | **Chapter name** | HR & Payroll |
-| **Purpose** | Employees, documents, shifts, attendance, leave, overtime, salary structures, payroll runs and end of service. The Employee View (HR-EMP-003) is the employee-centred entry point to all of them. Status truth for this chapter: manual attendance only; GPS attendance, geofence runtime and offline attendance are NOT YET OPERATIONAL; payroll runs calculate pay but Payroll → GL posting, payslips and bank / WPS files are NOT YET OPERATIONAL; leave, overtime and payroll approvals are single explicit actions (no approval runtime). |
+| **Purpose** | Employees, documents, shifts, attendance, leave, overtime, salary structures, payroll runs and end of service. The Employee View (HR-EMP-003) is the employee-centred entry point to all of them. Status truth for this chapter: attendance is recorded manually by HR or by the employee's own location-validated mobile check-in / check-out (online; the server compares the device position with the site's pin and radius); offline attendance is NOT YET OPERATIONAL; payroll runs calculate pay but Payroll → GL posting, payslips and bank / WPS files are NOT YET OPERATIONAL; leave, overtime and payroll approvals are single explicit actions (no approval runtime). |
 | **Primary roles** | HR Manager, Site In-Charge, Finance Manager |
-| **Screens in this chapter** | HR-DASH-001, HR-EMP-001, HR-EMP-002, HR-EMP-003, HR-EMP-004, HR-DOC-001, HR-SHF-001, HR-SHF-002, HR-SHF-003, HR-ATT-001, HR-ATT-002, HR-ATT-003, HR-LV-001, HR-LV-002, HR-LV-003, HR-LV-004, HR-OT-001, HR-OT-002, HR-OT-003, HR-SAL-001, HR-SAL-002, HR-SAL-003, HR-SAL-004, HR-PAY-001, HR-PAY-002, HR-PAY-003, HR-PAY-004, HR-EOS-001, HR-EOS-002, HR-EOS-003, HR-EOS-004 |
+| **Screens in this chapter** | HR-DASH-001, HR-EMP-001, HR-EMP-002, HR-EMP-003, HR-EMP-004, HR-DOC-001, HR-SHF-001, HR-SHF-002, HR-SHF-003, HR-ATT-001, HR-ATT-002, HR-ATT-003, HR-ATT-004, HR-LV-001, HR-LV-002, HR-LV-003, HR-LV-004, HR-OT-001, HR-OT-002, HR-OT-003, HR-SAL-001, HR-SAL-002, HR-SAL-003, HR-SAL-004, HR-PAY-001, HR-PAY-002, HR-PAY-003, HR-PAY-004, HR-EOS-001, HR-EOS-002, HR-EOS-003, HR-EOS-004 |
 
 ### [HR-DASH-001] HR Dashboard
 
@@ -944,14 +944,42 @@ Fields: Shift Name *, Shift Code *, Status *, Start Time *, End Time *, Break (m
 Important:
 Grace and overtime-after minutes are stored but are not yet used to calculate late minutes or overtime automatically; those are typed on the attendance record.
 
-### [HR-ATT-001 … 003] Attendance
+### [HR-ATT-001 … 004] Attendance
 
-Web address: `https://seera.tech-brit.co.uk/admin/hr/attendance` (HR-ATT-001) · `https://seera.tech-brit.co.uk/admin/hr/attendance/create` (HR-ATT-002) · `https://seera.tech-brit.co.uk/admin/hr/attendance/{id}/edit` (HR-ATT-003)
+Web address: `https://seera.tech-brit.co.uk/admin/hr/attendance` (HR-ATT-001) · `https://seera.tech-brit.co.uk/admin/hr/attendance/create` (HR-ATT-002) · `https://seera.tech-brit.co.uk/admin/hr/attendance/{id}/edit` (HR-ATT-003) · `https://seera.tech-brit.co.uk/admin/hr/attendance/mobile` (HR-ATT-004)
 
 Purpose:
-Record who was present, late or absent.
+Record who was present, late or absent: by HR (manual entry) or by the employee from a phone (location-validated check-in / check-out).
 
-Status: **PARTIAL** — manual entry only. There is no employee check-in / check-out, no GPS capture and no automatic geofence check yet.
+Status: **AVAILABLE** — manual entry (HR) and online mobile check-in / check-out with server-side geofence validation (HR-ATT-004). **Offline attendance is NOT YET OPERATIONAL.** Location-validated means the server compares the position the phone reports with the site's stored pin and radius; it is not tamper-proof (a compromised device can report a false position) and there is no device attestation.
+
+#### [HR-ATT-004] Mobile Attendance (Check In / Check Out)
+
+Web address: `https://seera.tech-brit.co.uk/admin/hr/attendance/mobile`
+
+Who uses it:
+Any employee whose login is linked to their employee record, has Mobile Access on and holds Attendance — mobile (the seeded Site In-Charge, Mechanic, Operator and Site Worker roles). Opened from the Attendance list (Mobile Attendance button) or directly by address on the phone.
+
+What you see:
+Your employee code and name, project, site, shift (when assigned), the server time and today's state: *Not checked in yet* → **Check in**; *Checked in, not checked out* → **Check out**; *Checked in and out*; *Recorded by HR for today* (a manual record exists, no mobile action). If your account is not eligible the page says why (not linked to an employee, employee inactive, Mobile Access or permission missing, no site assignment, site inactive or not in your project).
+
+How Check in works:
+1. Tap **Check in**. The phone asks for location permission (first time) and the page shows "Getting your location…". Nothing is sent until a position exists.
+2. The server receives latitude, longitude and accuracy, works out your site from your employee record (never from the phone), computes the distance to the site pin and applies the site's policy. The page shows Site, Allowed radius, Your location accuracy, Distance from site and Inside / Outside / Not enforced.
+3. Tap **Confirm check-in**. The server records the attendance with its own clock (the phone clock is never used): date, check-in time, project, site, shift, source **GPS / Mobile**, the geofence result and the position evidence (coordinates, accuracy, distance, time).
+4. Later, tap **Check out** and confirm: a fresh position is captured and judged again; the check-in position is kept separately from the check-out position.
+
+Site policy (set on the site, MST-SITE-004): with *Geofence enabled* the distance is compared with the site radius exactly (no hidden tolerance). With *Attendance inside only* an outside position is **blocked** ("You are n m from the site; the allowed radius is r m") and the blocked attempt is logged. Without *Attendance inside only* an outside position is recorded as *Outside*. With *Geofence enabled* off the position is recorded as *Not enforced* (the distance is still kept as evidence). A site without coordinates blocks inside-only check-ins ("ask an administrator to set the site location") and records *Site location unavailable* otherwise. A reported accuracy worse than 2,000 m is refused as unusable; smaller accuracy values are recorded, not judged.
+
+Lateness and overtime: if a shift assignment is in force, check-in later than the shift start plus its grace minutes marks the record *late* with the minutes late; without a shift the record is *present*. Overtime is not derived from check-out; overtime claims stay in the Overtime register and only approved ones reach payroll.
+
+Safeguards: one record per employee per day — a second check-in or a retry after a network error is answered "already checked in"; a second check-out is refused; two simultaneous requests from the same phone produce one record (verified on MySQL with row locks). The request can carry no employee, project or site: those come from your own record, and foreign ids are refused.
+
+Privacy: the position is captured only at the moment you check in or check out. There is no continuous tracking, route recording or background location.
+
+Errors you may see: location permission refused (allow it in the browser settings), location timed out (move to open sky, check location services are on), browser without location support (use a current mobile browser over HTTPS).
+
+Manual attendance and corrections: HR records are marked **Manual** (source typed by HR, geo-fence label typed by HR, no evidence). A GPS / Mobile record opened by HR shows its *Location evidence* read-only; HR may correct times, status, remarks or minutes, but the source, geofence state, employee, site and the captured positions are kept and the correction is logged as "Corrected GPS attendance record".
 
 Navigation:
 HR Registers & Approvals → Attendance → + Manual Attendance.
@@ -968,11 +996,11 @@ Fields:
 | Check In / Check Out | Times | 07:05 / 16:10 | No | |
 | Late (minutes), Overtime (minutes) | Typed by hand | 5 / 0 | Yes | Not calculated automatically |
 | Status | present, late, absent, leave, half day | present | Yes | |
-| Source | manual / mobile / offline | manual | Yes | Only "manual" is produced by the system today |
-| Geo-Fence Status | inside / outside / unknown | inside | Yes | Chosen by the user; not verified by location |
+| Source | manual / mobile / offline | manual | Yes | Typed labels for HR records. "GPS / Mobile" is written only by Mobile Attendance and cannot be typed |
+| Geo-Fence Status | inside / outside / unknown | inside | Yes | Typed label for HR records; GPS / Mobile records carry the server-computed state instead |
 | Remarks | Free text | — | No | |
 
-Buttons: Cancel, Save (stays on the record), Save & close (returns to the employee page you came from, otherwise the list). The list offers Edit and Delete per row and can be filtered to one employee (`?employee={id}`, used by the Employee View's View register link, which also offers Back to employee / Show all).
+Buttons: Cancel, Save (stays on the record), Save & close (returns to the employee page you came from, otherwise the list). The list offers **Mobile Attendance** (users with Mobile Access and Attendance — mobile), Edit and Delete per row, shows *GPS / Mobile* rows with their geofence state and distance, and can be filtered to one employee (`?employee={id}`, used by the Employee View's View register link, which also offers Back to employee / Show all).
 
 ### [HR-LV-001 … 004] Leaves
 
@@ -2209,14 +2237,14 @@ Buttons: **Save** stays in Manage; **Save & Close** returns to the safe origin o
 | Purchase Requests / Orders / Goods Receipts | Existing scoped document links, dates and states | Each document module's view permission |
 | Material / Stock Context | Existing ledger movements from posted Stock Issues for this exact Site/Project | Stock Issues view; no new valuation or stock write |
 | Site Expenses | Number/date/category/submitter/payment type/amount/workflow state/accounting state | Site Expenses view; Add additionally needs create |
-| Attendance Context | Recent stored Site/Project attendance, source and recorded geofence label | Attendance view |
+| Attendance Context | Recent attendance at this site: *GPS / Mobile* rows with the server-computed geofence state and distance, *Manual* rows with their typed labels | Attendance view |
 | Activity | Visible Activity Logs with exact immutable Site token | Activity Logs view; ambiguous old name-only events omitted |
 
 Every child panel additionally needs Sites view; hidden tabs are also denied at direct endpoints. Related rows are lazy-loaded and paginated at ten. Counts and stock values use the same authorized queries; no hidden Site/Project totals. Global registers remain available for searching, batch work and approvals. GRNs are associated through the visible PO's exact Site/Project, not a warehouse guess. Goods received are **not** counted as consumption.
 
 Site Expenses → Add preselects and locks Project/Site; the URL Site is authoritative and forged body parent IDs fail. Existing Site Expense validation, approvals, accounting and permissions are reused, not duplicated. Save & Close returns to Site → Expenses; Save stays on the expense editor with a return link, and Submit retains return context on the expense details page. Missing approval setup leaves the saved draft intact. No posting happens from a Site profile save.
 
-**Geofence is configuration, not live enforcement.** Existing map clicks/dragging select coordinates and radius only. Attendance is manually recorded; stored source/geofence labels are not evidence of device GPS/haversine checks. Offline flags do not implement offline sync. The map uses the existing external tile service and needs network availability. English/Arabic workspace labels and RTL shell are supported; older underlying master/map/document strings are not comprehensively translated in this batch.
+**Geofence configuration drives Mobile Attendance (HR-ATT-004).** The map pin, radius, *Geofence enabled* and *Attendance inside only* flags are applied by the server when an employee checks in or out from a phone (Haversine distance, no hidden tolerance). Manual attendance rows typed by HR are not location evidence. The *Offline attendance allowed* flag is stored only; offline sync is not implemented. The map uses the existing external tile service and needs network availability. English/Arabic workspace labels and RTL shell are supported; older underlying master/map/document strings are not comprehensively translated in this batch.
 
 ### Where project figures are today
 
@@ -2466,7 +2494,7 @@ Use the language switch in the top bar. The screen turns to Arabic (right-to-lef
 | **Chapter name** | End-to-End Workflows |
 | **Purpose** | The documented business flows WF-001 to WF-015. |
 | **Primary roles** | Super Admin, HR Manager, Finance Manager, Account Assistant, Purchase Manager, Warehouse Incharge, Site In-Charge, Marketing Manager |
-| **Workflows in this chapter** | WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
+| **Workflows in this chapter** | WF-020, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
 
 Each workflow lists purpose, roles, prerequisites, navigation, steps, example input, the system result, statuses before and after, the audit trail, common errors and the related Screen IDs. The Workflow Index is in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).
 
@@ -2738,6 +2766,27 @@ Source-linked credit variation: WF-018 approves operational expenditure → exac
 
 Audit: runtime instances/steps are authoritative. Activity also records submission, each approved step, rejection, final completion, posting completed/failed/retried and Reopen. ALL configured required steps must approve. Parallel groups, amount thresholds, delegation, automatic reporting-parent expansion and escalation/notification jobs remain unsupported. PO, Customer Invoice, Leave and Payroll runtime remain unimplemented.
 
+### WF-020 Mobile Attendance: location-validated Check In and Check Out
+
+Purpose: let an employee record their own attendance from a phone, validated against their site's location, with HR reading the result.
+Roles involved: Employee with a linked login, Mobile Access and Attendance — mobile (Site In-Charge, Mechanic, Operator, Site Worker); HR Manager (register, corrections); Site supervisor (Site workspace).
+Prerequisites: the employee record is linked to the login (employees.user_id) and active; a current project and site assignment; the site is active with coordinates, radius and the geofence flags set (MST-SITE-004); a phone browser over HTTPS with location services on.
+Navigation: HR Registers & Approvals → Attendance → **Mobile Attendance** (or `https://seera.tech-brit.co.uk/admin/hr/attendance/mobile`).
+Steps and example input:
+1. Ahmed Hassan (EMP-0042, Riyadh Tower - Main Site, radius 300 m, geofence enabled, inside only) opens Mobile Attendance at 07:04 and taps **Check in**. The phone asks for location; the page shows "Getting your location…".
+2. The server computes 42 m from the site pin, accuracy 9 m: *Inside site*. Ahmed taps **Confirm check-in**. The record is created: date today, check-in 07:04 (server time), shift Day Shift (07:00, grace 10) → *present*, source GPS / Mobile, geofence Inside, evidence stored.
+3. At 16:08 Ahmed taps **Check out** from the site gate (120 m, inside) and confirms. Check-out 16:08 is recorded with its own position.
+4. A colleague who tries to check in from 1,000 m away on an inside-only site is blocked: "You are 1,000 m from the site; the allowed radius is 300 m"; the attempt is logged and nothing is recorded.
+5. HR opens the Attendance register or the employee's page: both rows show *GPS / Mobile · Inside · 42 m*. A manual entry HR types for another employee shows *Manual*.
+Expected result: one attendance row per employee per day; late minutes only from the shift start plus grace; overtime untouched (separate Overtime register); Activity shows "Mobile check-in" and "Mobile check-out" (and "Blocked mobile check-in" for refused attempts).
+Statuses: not checked in → checked in (open) → checked in and out. A manual HR record for the day leaves no mobile action.
+Audit trail: Mobile check-in, Mobile check-out, Blocked mobile check-in / check-out, Corrected GPS attendance record.
+Common errors: location permission refused; location timed out; accuracy worse than 2,000 m; outside the radius on an inside-only site; site without coordinates; account not linked, inactive, without Mobile Access or without the Attendance mobile permission; already checked in / already checked out.
+Privacy: position captured only at check-in and check-out; no tracking in between.
+Related screens: HR-ATT-004, HR-ATT-001, HR-ATT-003, HR-EMP-003, MST-SITE-003, MST-SITE-004, USR-003.
+
+---
+
 ## 18. Troubleshooting
 
 | | |
@@ -2818,7 +2867,9 @@ Areas that exist as menus, settings or plans but are not usable business functio
 | Site Expenses | AVAILABLE with configured masters/permissions/workflow | Responsive web entry, private receipt, sequential approvals, accounting/retry, reimbursement and linked Supplier Bill; see WF-018 |
 | Project Phase B: BOQ, milestones, labour/equipment costing | PARTIAL | Phase A and Site Expense panel/cost integration available; remaining construction planning/cost modules are not built |
 | Equipment & Vehicles | NOT YET OPERATIONAL | Menu placeholder and permission names only |
-| Mobile app, check-in / check-out, GPS geofence attendance, geofence runtime enforcement | NOT YET OPERATIONAL | Mobile access flags on users and roles; site coordinates and radius; manual attendance with a typed geo-fence status |
+| Native mobile app | NOT YET OPERATIONAL | Mobile Attendance (HR-ATT-004) is a responsive web page used in the phone browser; location-validated online check-in / check-out is AVAILABLE |
+| Offline attendance (check-in without connectivity, later sync) | NOT YET OPERATIONAL | Site flag stored only |
+| Device attestation / anti-spoofing for mobile attendance | NOT YET OPERATIONAL | Attendance is location-validated by the server, not tamper-proof |
 | Offline entry and sync | NOT YET OPERATIONAL | Nothing |
 | Live ZATCA Phase-2 clearance, real QR, XML, signing | NOT YET OPERATIONAL (local records: FOUNDATION ONLY) | Chapter 14 |
 | Approval workflow execution (multi-step, all-required) | AVAILABLE for PR, Site Expenses and Supplier Bills; PARTIAL across other modules | Sequential required steps, runtime history and shared My Approvals; no parallel groups, thresholds, delegation, notification/escalation jobs or automatic parent expansion |

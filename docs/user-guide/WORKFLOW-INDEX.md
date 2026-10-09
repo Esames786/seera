@@ -2,7 +2,7 @@
 
 Index of the end-to-end workflows documented in chapter 17 of the [User Guide](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#17-end-to-end-workflows). Screens are indexed in [SCREEN-INDEX.md](SCREEN-INDEX.md).
 
-Version 1.9 · Prepared 9 October 2026 · Status: current implemented system only; no deployment claim.
+Version 1.10 · Prepared 9 October 2026 · Status: current implemented system only; no deployment claim.
 
 Wave 2 Batch B adds read-only Item-centric and Warehouse-centric context to the existing inventory workflows below (WF-002, WF-006, WF-007, WF-010, WF-013 and WF-016). Open an Item or Warehouse, choose its permissioned document panel, then View the existing workflow. Saving master data never dispatches, receives, adjusts or posts stock. These are contextual entry points, not new Workflow IDs or new approval runtimes. Transfer Receive still needs its explicit right; Project/Site transfer scope remains source-based.
 
@@ -27,5 +27,6 @@ Wave 2 Batch B adds read-only Item-centric and Warehouse-centric context to the 
 | WF-017 | Purchase Request runtime approval: Submit → all required steps → Approve, or Reject → Correct → Resubmit | Requester/editor, configured required role/user approvers | ROL-008/009/010, INV-PR-003/004, APR-001/002 | AVAILABLE for PR; Site Expenses uses WF-018; other modules PARTIAL | [WF-017](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-017-purchase-request-runtime-approval) |
 | WF-018 | Site Expense: draft → receipt → all required approvals → accounting; Supplier Credit → draft Supplier Bill → separate bill runtime (WF-019) | Site staff, configured reviewers, Finance | EXP-SE-001/002/003/004, APR-001, FIN-AP-003, FIN-JE-003, MST-PRJ-003 | AVAILABLE with configured masters/workflow; Project Phase B partial beyond expenses | [WF-018](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-018-site-expense-lifecycle) |
 | WF-019 | Supplier Bill: draft → explicit Submit → all required approvals → existing posting → payment; rejected/reopened corrections need a new attempt | Account Assistant, configured role/user reviewers, Finance, Super Admin for Reopen | FIN-AP-002/003/004/005, APR-001, ROL-008/009/010, FIN-JE-003, EXP-SE-003 | AVAILABLE; legacy history preserved; no parallel groups or thresholds | [WF-019](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-019-supplier-bill-approval-and-payment) |
+| WF-020 | Mobile Attendance: location-validated Check In → Check Out (online); server computes distance against the site pin and radius; HR reads the result | Employee with linked login, Mobile Access and Attendance — mobile; HR Manager; Site supervisor | HR-ATT-004, HR-ATT-001, HR-ATT-003, HR-EMP-003, MST-SITE-003/004, USR-003 | AVAILABLE (online; offline attendance and device attestation NOT YET OPERATIONAL) | [WF-020](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md#wf-020-mobile-attendance-location-validated-check-in-and-check-out) |
 
 Total: 19 workflows.
