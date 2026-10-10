@@ -298,7 +298,7 @@
                 <a class="btn sm outline" href="{{ $links['payroll_all'] }}">{{ __('workspace.hr_view_register') }}</a>
             </x-slot:headerActions>
             <thead>
-                <tr><th>Payroll Run</th><th>Period</th><th>Basic</th><th>Allowances</th><th>Overtime</th><th>Deductions</th><th>Net</th><th>Present / Leave days</th><th>Run Status</th><th></th></tr>
+                <tr><th>Payroll Run</th><th>Period</th><th>Basic</th><th>Allowances</th><th>Overtime</th><th>Deductions</th><th>Net</th><th>Present / Leave days</th><th>Run Status</th><th>Accounting</th><th></th></tr>
             </thead>
             <tbody>
                 @forelse ($payrollItems as $item)
@@ -312,10 +312,11 @@
                         <td><strong>{{ $money($item->net_amount) }}</strong></td>
                         <td>{{ $item->present_days }} / {{ $item->leave_days }}</td>
                         <td>@if($item->payrollRun)<x-admin.status-badge :status="$item->payrollRun->status"/>@else - @endif</td>
-                        <td>@if($item->payrollRun)<a class="btn sm outline" href="{{ route('admin.hr.payroll.show', $item->payrollRun) }}">{{ __('workspace.hr_open_run') }}</a>@endif</td>
+                        <td class="small">{{ $item->payrollRun?->accountingLabel() ?? '-' }}</td>
+                        <td>@if($item->payrollRun)<a class="btn sm outline" href="{{ route('admin.hr.payroll.show', $item->payrollRun) }}">{{ __('workspace.hr_open_run') }}</a> <a class="btn sm outline" href="{{ route('admin.hr.payroll.payslip', [$item->payrollRun, $item->id, 'return_to' => $selfUrl.'#payroll']) }}">{{ __('workspace.hr_payslip') }}</a>@endif</td>
                     </tr>
                 @empty
-                    <tr><td colspan="10" class="table-empty">{{ __('workspace.hr_no_payroll') }}</td></tr>
+                    <tr><td colspan="11" class="table-empty">{{ __('workspace.hr_no_payroll') }}</td></tr>
                 @endforelse
             </tbody>
             <x-slot:footer>
