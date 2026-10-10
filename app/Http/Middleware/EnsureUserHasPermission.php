@@ -161,6 +161,10 @@ class EnsureUserHasPermission
     /** @return array{0: ?string, 1: string} */
     public static function permissionForRoute(string $routeName, ?string $comingSoonModule = null): array
     {
+        if ($routeName === 'admin.hr.payroll.reverse') {
+            // Reversal is a Finance correction: the controller also requires Payroll approve.
+            return ['Payroll', 'post'];
+        }
         if (str_starts_with($routeName, 'admin.hr.attendance.mobile')) {
             return ['Attendance', 'mobile'];
         }

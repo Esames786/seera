@@ -219,7 +219,7 @@ return [
     'hr_leave_help' => 'Annual leave position from the existing balance rule: entitlement minus approved days; pending days are shown separately. Approval is a separate action on the leave page.',
     'hr_overtime_help' => 'Amount = hours × hourly rate as recorded. Only approved overtime enters a payroll run.',
     'hr_salary_help' => 'Payroll uses the structure that covers the run period; without one it falls back to the profile amounts. Create a new structure for a change; history is never edited.',
-    'hr_payroll_help' => 'Rows from processed payroll runs. Payroll is processed and approved on the Payroll screens; there is no payslip, bank / WPS file or accounting posting in the current system.',
+    'hr_payroll_help' => 'Rows from processed payroll runs with their accounting state. Payroll is processed, approved and posted to accounting on the Payroll screens; each approved row opens its payslip. There is still no bank / WPS file or GOSI in the current system.',
     'hr_activity_help' => 'Latest HR, attendance, payroll and account entries that name this employee, limited to the users your role may see.',
     'hr_no_attendance' => 'No attendance records yet.',
     'hr_no_leaves' => 'No leave taken or requested yet.',
@@ -240,4 +240,6 @@ return [
     'hr_back_employee' => 'Back to employee',
     'hr_showing_employee' => 'Showing records of :employee only.',
     'hr_show_all' => 'Show all',
+    'hr_payslip' => 'Payslip',
+    'hr_accounting' => 'Accounting',
 ];

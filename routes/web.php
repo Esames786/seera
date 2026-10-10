@@ -245,6 +245,10 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
 
         Route::post('payroll/{payroll_run}/process', [PayrollRunController::class, 'process'])->name('payroll.process');
         Route::post('payroll/{payroll_run}/approve', [PayrollRunController::class, 'approve'])->name('payroll.approve');
+        // Payroll → GL (Phase 1): Finance posts / retries and reverses; payslips render stored rows.
+        Route::post('payroll/{payroll_run}/post', [PayrollRunController::class, 'post'])->name('payroll.post');
+        Route::post('payroll/{payroll_run}/reverse', [PayrollRunController::class, 'reverse'])->name('payroll.reverse');
+        Route::get('payroll/{payroll_run}/items/{item}/payslip', [PayrollRunController::class, 'payslip'])->whereNumber('item')->name('payroll.payslip');
         Route::resource('payroll', PayrollRunController::class)->parameters(['payroll' => 'payroll_run']);
 
         Route::post('eosb/{end_of_service_record}/approve', [EndOfServiceController::class, 'approve'])->name('eosb.approve');

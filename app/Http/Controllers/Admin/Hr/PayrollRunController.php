@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Hr;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Branch;
+use App\Models\CompanyProfile;
 use App\Models\Employee;
 use App\Models\OvertimeRecord;
 use App\Models\PayrollRun;
@@ -14,10 +15,16 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Services\Payroll\PayrollAccountingService;
+use App\Support\SaveAction;
+use App\Support\Workspace\DocumentActivity;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class PayrollRunController extends Controller
 {
+    public function __construct(private readonly PayrollAccountingService $accounting) {}
+
     public function index(Request $request): View
     {
         $runs = PayrollRun::with(['branch', 'project'])
@@ -57,11 +64,82 @@ class PayrollRunController extends Controller
             ->with('status', 'Payroll run "'.$run->code.'" created. Process it to generate salary items.');
     }
 
-    public function show(PayrollRun $payroll_run): View
+    /**
+     * Payroll run workspace: summary header, paged items with payslip links,
+     * accounting state with Finance actions, activity. Read-only.
+     */
+    public function show(Request $request, PayrollRun $payroll_run): View
     {
-        $payroll_run->load(['branch', 'project', 'approver', 'items.employee.department']);
+        $payroll_run->load(['branch', 'project', 'approver', 'journalEntry.lines.account', 'reversalJournal']);
+        $request->validate(['page' => ['nullable', 'integer', 'min:1']]);
+        $user = $request->user();
+        $items = $payroll_run->items()->with(['employee.department', 'employee.designation', 'employee.project'])
+            ->orderBy('id')->paginate(25)->withQueryString()->fragment('items');
+        $totals = $payroll_run->items()->selectRaw('COALESCE(SUM(basic_salary),0) as basic, COALESCE(SUM(total_allowances),0) as allowances, COALESCE(SUM(overtime_amount),0) as overtime, COALESCE(SUM(total_deductions),0) as deductions, COALESCE(SUM(gross_amount),0) as gross, COALESCE(SUM(net_amount),0) as net, COUNT(*) as employees')->first();
 
-        return view('admin.hr.payroll.show', ['run' => $payroll_run]);
+        return view('admin.hr.payroll.show', [
+            'run' => $payroll_run,
+            'items' => $items,
+            'totals' => $totals,
+            'canProcess' => ! $payroll_run->isApproved() && $user->hasPermission('Payroll', 'create'),
+            'canEdit' => ! $payroll_run->isApproved() && $user->hasPermission('Payroll', 'edit'),
+            'canApprove' => $payroll_run->status === 'processed' && $user->hasPermission('Payroll', 'approve'),
+            'canPost' => $payroll_run->isApproved() && ! $payroll_run->reversal_journal_id && $payroll_run->accounting_status !== PayrollRun::ACCOUNTING_POSTED && $user->hasPermission('Payroll', 'post'),
+            'canReverse' => $payroll_run->accounting_status === PayrollRun::ACCOUNTING_POSTED && $user->hasPermission('Payroll', 'post') && $user->hasPermission('Payroll', 'approve'),
+            'canViewJournal' => $user->hasPermission('Journal Entries', 'view'),
+            'canViewEmployee' => $user->hasPermission('HR', 'view'),
+            'activity' => DocumentActivity::latest($user, [$payroll_run->code], ['Payroll', 'Accounting']),
+        ]);
+    }
+
+    /** Finance: post the approved run to accounting, or retry after a failure. Idempotent. */
+    public function post(Request $request, PayrollRun $payroll_run): RedirectResponse
+    {
+        if (! $payroll_run->isApproved()) {
+            return back()->withErrors(['posting' => 'Only an approved payroll run can be posted to accounting.']);
+        }
+        try {
+            $this->accounting->attempt($payroll_run->id, $request->user()->id);
+        } catch (ValidationException $exception) {
+            return back()->withErrors($exception->errors());
+        }
+        $payroll_run->refresh();
+
+        return redirect()->route('admin.hr.payroll.show', $payroll_run)
+            ->with('status', $payroll_run->accounting_status === PayrollRun::ACCOUNTING_POSTED
+                ? 'Payroll accounting posted: '.$payroll_run->journalEntry?->journal_number.'.'
+                : 'Payroll accounting checked: '.$payroll_run->accountingLabel().'. Existing journals are never duplicated.');
+    }
+
+    /** Finance: reverse the posted payroll journal; the run stays approved and immutable. */
+    public function reverse(Request $request, PayrollRun $payroll_run): RedirectResponse
+    {
+        abort_unless($request->user()->hasPermission('Payroll', 'post') && $request->user()->hasPermission('Payroll', 'approve'), 403);
+        $data = $request->validate(['reason' => ['required', 'string', 'max:500']], ['reason.required' => 'Give the reason for reversing; it is kept on the run.']);
+        try {
+            $this->accounting->reverse($payroll_run->id, trim($data['reason']), $request->user()->id);
+        } catch (ValidationException $exception) {
+            return back()->withErrors($exception->errors());
+        }
+        ActivityLog::record($request, 'Payroll', 'Reversed payroll accounting', $payroll_run->code.': '.trim($data['reason']));
+
+        return redirect()->route('admin.hr.payroll.show', $payroll_run)
+            ->with('status', 'Reversing journal posted; the original payroll journal and the approved run stay in history.');
+    }
+
+    /** Printable payslip from the stored payroll row (historical values, never recalculated). */
+    public function payslip(Request $request, PayrollRun $payroll_run, int $item): View
+    {
+        // The item must belong to this run and be visible to the viewer's scope (payroll_run_items are scoped through the employee).
+        $row = $payroll_run->items()->with(['employee.department', 'employee.designation', 'employee.project', 'employee.branch'])->findOrFail($item);
+
+        return view('admin.hr.payroll.payslip', [
+            'run' => $payroll_run,
+            'item' => $row,
+            'company' => CompanyProfile::query()->first(),
+            'generatedAt' => now(),
+            'returnTo' => SaveAction::returnTo($request) ?? route('admin.hr.payroll.show', $payroll_run, false),
+        ]);
     }
 
     public function edit(PayrollRun $payroll_run): View
@@ -71,7 +149,7 @@ class PayrollRunController extends Controller
 
     public function update(Request $request, PayrollRun $payroll_run): RedirectResponse
     {
-        if (in_array($payroll_run->status, ['approved', 'paid'], true)) {
+        if ($payroll_run->isApproved() || $payroll_run->isFinanciallyLocked()) {
             return back()->withErrors(['payroll' => 'An approved payroll run can no longer be edited.']);
         }
 
@@ -85,7 +163,7 @@ class PayrollRunController extends Controller
 
     public function destroy(Request $request, PayrollRun $payroll_run): RedirectResponse
     {
-        if (in_array($payroll_run->status, ['approved', 'paid'], true)) {
+        if ($payroll_run->isApproved() || $payroll_run->isFinanciallyLocked()) {
             return back()->withErrors(['payroll' => 'An approved payroll run cannot be deleted.']);
         }
 
@@ -103,7 +181,7 @@ class PayrollRunController extends Controller
      */
     public function process(Request $request, PayrollRun $payroll_run): RedirectResponse
     {
-        if (in_array($payroll_run->status, ['approved', 'paid'], true)) {
+        if ($payroll_run->isApproved() || $payroll_run->isFinanciallyLocked()) {
             return back()->withErrors(['payroll' => 'An approved payroll run cannot be reprocessed.']);
         }
 
@@ -151,20 +229,33 @@ class PayrollRunController extends Controller
 
     public function approve(Request $request, PayrollRun $payroll_run): RedirectResponse
     {
-        if ($payroll_run->status !== 'processed') {
+        $approved = DB::transaction(function () use ($request, $payroll_run) {
+            // Re-check under lock: two Approve clicks or a race with Process cannot approve twice.
+            $run = PayrollRun::whereKey($payroll_run->id)->lockForUpdate()->firstOrFail();
+            if ($run->status !== 'processed') {
+                return false;
+            }
+            $run->update(['status' => 'approved', 'approved_by' => $request->user()->id, 'approved_at' => now()]);
+
+            return true;
+        });
+        if (! $approved) {
             return back()->withErrors(['payroll' => 'Only a processed payroll run can be approved.']);
         }
 
-        $payroll_run->update([
-            'status' => 'approved',
-            'approved_by' => $request->user()->id,
-            'approved_at' => now(),
-        ]);
-
         ActivityLog::record($request, 'Payroll', 'Approved payroll run', $payroll_run->code);
 
+        // Accounting runs AFTER the approval has committed and never undoes it: a failure
+        // leaves the run approved with the reason for Finance, who can retry.
+        try {
+            $this->accounting->attempt($payroll_run->id, $request->user()->id);
+        } catch (ValidationException) {
+            // Recorded on the run as posting_error; shown in the Accounting section.
+        }
+        $payroll_run->refresh();
+
         return redirect()->route('admin.hr.payroll.show', $payroll_run)
-            ->with('status', 'Payroll run "'.$payroll_run->code.'" approved.');
+            ->with('status', 'Payroll run "'.$payroll_run->code.'" approved. Accounting: '.$payroll_run->accountingLabel().'.');
     }
 
     private function buildItem(PayrollRun $run, Employee $employee): array
