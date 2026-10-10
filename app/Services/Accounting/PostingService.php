@@ -8,6 +8,7 @@ use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
 use App\Models\GoodsReceipt;
 use App\Models\JournalEntry;
+use App\Models\PayrollRun;
 use App\Models\SiteExpense;
 use App\Models\StockAdjustment;
 use App\Models\StockIssue;
@@ -71,6 +72,25 @@ class PostingService
             $expense->supplier?->name ?? $expense->employee?->name);
 
         return $entry;
+    }
+
+    /**
+     * Payroll → GL (Phase 1). The PayrollAccountingService owns the run mutex,
+     * the account mapping and the line construction; this method only writes the
+     * journal through the shared validation (active accounts, balance, VAT-period
+     * guard for VAT accounts) and lets the Payroll posting rule decide between an
+     * automatic posting and a draft review journal. Posting date = period end.
+     */
+    public function postPayrollRun(PayrollRun $run, array $lines, ?int $userId = null): JournalEntry
+    {
+        return $this->createEntry([
+            'journal_date' => $run->period_end,
+            'reference_number' => $run->code,
+            'source_module' => 'Payroll',
+            'source_id' => $run->id,
+            'description' => 'Payroll '.$run->code.' - '.$run->periodLabel(),
+            'cost_center_id' => null,
+        ], $lines, 'Payroll', 'Payroll Approved', $userId);
     }
 
     /** Well-known account codes seeded by the standard chart of accounts. */

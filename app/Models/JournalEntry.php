@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\DocumentNumberService;
+use App\Services\Payroll\PayrollAccountingService;
 use App\Services\SiteExpenses\SiteExpenseAccountingService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -11,8 +12,14 @@ class JournalEntry extends Model
 {
     public function isApprovalControlledSource(): bool
     {
-        return $this->isSiteExpenseSource() || ($this->source_module === 'Supplier Bill'
+        return $this->isSiteExpenseSource() || $this->isPayrollSource() || ($this->source_module === 'Supplier Bill'
             && SupplierBill::withoutGlobalScopes()->whereKey($this->source_id)->where('approval_mode', 'runtime')->exists());
+    }
+
+    /** A payroll journal is corrected through the payroll run (reverse), never edited or cancelled here. */
+    public function isPayrollSource(): bool
+    {
+        return $this->source_module === 'Payroll' && PayrollRun::whereKey($this->source_id)->exists();
     }
 
     public function isSiteExpenseSource(): bool
@@ -27,7 +34,9 @@ class JournalEntry extends Model
             if (! $entry->wasChanged('status')) {
                 return;
             }
-            if ($entry->source_module === 'Site Expense') {
+            if ($entry->source_module === 'Payroll') {
+                DB::afterCommit(fn () => app(PayrollAccountingService::class)->sync($entry->source_id));
+            } elseif ($entry->source_module === 'Site Expense') {
                 DB::afterCommit(fn () => app(SiteExpenseAccountingService::class)->sync($entry->source_id));
             } elseif ($entry->source_module === 'Supplier Bill') {
                 DB::afterCommit(function () use ($entry) {
