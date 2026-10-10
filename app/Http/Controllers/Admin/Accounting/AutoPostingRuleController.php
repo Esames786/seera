@@ -97,6 +97,7 @@ class AutoPostingRuleController extends Controller
             'trigger_event' => ['required', 'string', 'max:100'],
             'debit_account_id' => ['nullable', 'exists:chart_of_accounts,id'],
             'credit_account_id' => ['nullable', 'exists:chart_of_accounts,id'],
+            'deduction_account_id' => ['nullable', 'exists:chart_of_accounts,id'],
             'cost_center_rule' => ['required', 'string', 'max:100'],
             'auto_post' => ['nullable', 'boolean'],
             'approval_required' => ['nullable', 'boolean'],

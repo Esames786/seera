@@ -48,6 +48,16 @@
             </select>
         </div>
         <div>
+            <label for="deduction_account_id">Deduction Liability Account (Payroll only)</label>
+            <select id="deduction_account_id" name="deduction_account_id" class="select">
+                <option value="">Not configured</option>
+                @foreach ($accounts as $account)
+                    <option value="{{ $account->id }}" @selected(old('deduction_account_id', $rule?->deduction_account_id) == $account->id)>{{ $account->label() }}</option>
+                @endforeach
+            </select>
+            <small>Used by the Payroll / Payroll Approved rule to credit employee deductions. A payroll run with deductions cannot be posted until a liability account is chosen here.</small>
+        </div>
+        <div>
             <label for="auto_post">Auto Post</label>
             <select id="auto_post" name="auto_post" class="select">
                 <option value="0" @selected(! old('auto_post', $rule?->auto_post ?? false))>No — create a draft journal</option>

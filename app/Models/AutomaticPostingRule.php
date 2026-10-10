@@ -12,7 +12,7 @@ class AutomaticPostingRule extends Model
     ];
 
     protected $fillable = [
-        'source_module', 'trigger_event', 'debit_account_id', 'credit_account_id',
+        'source_module', 'trigger_event', 'debit_account_id', 'credit_account_id', 'deduction_account_id',
         'cost_center_rule', 'auto_post', 'approval_required', 'status', 'notes',
     ];
 
@@ -32,5 +32,11 @@ class AutomaticPostingRule extends Model
     public function creditAccount()
     {
         return $this->belongsTo(ChartOfAccount::class, 'credit_account_id');
+    }
+
+    /** Payroll only: liability account that receives employee deductions. */
+    public function deductionAccount()
+    {
+        return $this->belongsTo(ChartOfAccount::class, 'deduction_account_id');
     }
 }
