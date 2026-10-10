@@ -230,7 +230,7 @@ class EmployeeHrContextTest extends TestCase
         $page = $this->open($this->fullReader())->assertOk();
         $page->assertSee('id="payroll"', false)->assertSee('id="salary"', false)->assertSee('Payroll Information')->assertSee('SAR 6,500.00')
             ->assertSee('SAR 8,200.00')->assertSee('September 2026')->assertSee('22 / 0')->assertSee('Open payroll run')
-            ->assertDontSee('12,345.67')->assertSee('no payslip, bank / WPS file or accounting posting');
+            ->assertDontSee('12,345.67')->assertSee('no bank / WPS file or GOSI');
     }
 
     public function test_contract_and_iqama_summary_comes_from_existing_fields_and_documents(): void

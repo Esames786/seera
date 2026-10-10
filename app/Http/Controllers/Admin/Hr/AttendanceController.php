@@ -84,7 +84,7 @@ class AttendanceController extends Controller
         if ($attendance_record->isGpsRecord()) {
             // A location-validated record keeps what the runtime captured: source, geofence status, employee, site
             // and the position evidence (never in the form). Other fields may be corrected; the correction is logged.
-            $request->merge(['source' => AttendanceRecord::SOURCE_GPS, 'geofence_status' => $attendance_record->geofence_status]);
+            $request->merge(['source' => AttendanceRecord::SOURCE_GPS, 'geofence_status' => $attendance_record->geofence_status, 'employee_id' => $attendance_record->employee_id, 'site_id' => $attendance_record->site_id, 'project_id' => $attendance_record->project_id]);
             $data = $this->validated($request, $attendance_record);
             unset($data['source'], $data['geofence_status'], $data['employee_id'], $data['site_id'], $data['project_id']);
             $changes = collect($data)->filter(fn ($value, $key) => (string) $attendance_record->{$key} !== (string) $value)->keys()->implode(', ');
