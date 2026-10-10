@@ -3,8 +3,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.10 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 9 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Offline attendance and Payroll → GL remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
+| **Version** | 1.11 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 10 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Offline attendance, bank / WPS file, salary payment and GOSI remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
 | **Prepared** | 9 October 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
@@ -83,7 +83,7 @@ What Seera covers today:
 
 - **Administration**: users, roles, permission matrix, role hierarchy, approval workflow configuration, activity logs.
 - **Master Setup**: company profile, branches, departments, designations, projects, locations (sites), warehouses, expense categories, suppliers, customers.
-- **HR & Payroll**: employees with a connected workspace, documents and IQAMA register, shifts, attendance (manual entry), leaves, overtime, salary structures, payroll runs, end of service.
+- **HR & Payroll**: employees with a connected workspace, documents and IQAMA register, shifts, attendance (manual entry and mobile check-in), leaves, overtime, salary structures, payroll runs with accounting posting and payslips, end of service.
 - **Accounting & Finance**: chart of accounts, journal entries, general ledger, accounts payable, accounts receivable, VAT periods, local ZATCA records, cost centers, posting rules, financial reports.
 - **Inventory & Purchasing**: items, categories, units, stock on hand, purchase requests, purchase orders, goods receipts, stock issues, transfers, adjustments, stock ledger, inventory reports.
 - **Marketing**: leads, visits, visit report, conversion to customer.
@@ -733,9 +733,9 @@ Small lists with an inline "Add" section and inline Save / Delete per row. Payme
 |---|---|
 | **Chapter number** | 6 |
 | **Chapter name** | HR & Payroll |
-| **Purpose** | Employees, documents, shifts, attendance, leave, overtime, salary structures, payroll runs and end of service. The Employee View (HR-EMP-003) is the employee-centred entry point to all of them. Status truth for this chapter: attendance is recorded manually by HR or by the employee's own location-validated mobile check-in / check-out (online; the server compares the device position with the site's pin and radius); offline attendance is NOT YET OPERATIONAL; payroll runs calculate pay but Payroll → GL posting, payslips and bank / WPS files are NOT YET OPERATIONAL; leave, overtime and payroll approvals are single explicit actions (no approval runtime). |
+| **Purpose** | Employees, documents, shifts, attendance, leave, overtime, salary structures, payroll runs and end of service. The Employee View (HR-EMP-003) is the employee-centred entry point to all of them. Status truth for this chapter: attendance is recorded manually by HR or by the employee's own location-validated mobile check-in / check-out (online; the server compares the device position with the site's pin and radius); offline attendance is NOT YET OPERATIONAL; payroll runs calculate pay, an approved run is posted to accounting through the Payroll posting rule (salary expense and payroll payable; Finance can retry or reverse) and each row has a printable payslip; bank / WPS file, salary payment, GOSI, loans and proration are NOT YET OPERATIONAL; leave, overtime and payroll approvals are single explicit actions (no approval runtime). |
 | **Primary roles** | HR Manager, Site In-Charge, Finance Manager |
-| **Screens in this chapter** | HR-DASH-001, HR-EMP-001, HR-EMP-002, HR-EMP-003, HR-EMP-004, HR-DOC-001, HR-SHF-001, HR-SHF-002, HR-SHF-003, HR-ATT-001, HR-ATT-002, HR-ATT-003, HR-ATT-004, HR-LV-001, HR-LV-002, HR-LV-003, HR-LV-004, HR-OT-001, HR-OT-002, HR-OT-003, HR-SAL-001, HR-SAL-002, HR-SAL-003, HR-SAL-004, HR-PAY-001, HR-PAY-002, HR-PAY-003, HR-PAY-004, HR-EOS-001, HR-EOS-002, HR-EOS-003, HR-EOS-004 |
+| **Screens in this chapter** | HR-DASH-001, HR-EMP-001, HR-EMP-002, HR-EMP-003, HR-EMP-004, HR-DOC-001, HR-SHF-001, HR-SHF-002, HR-SHF-003, HR-ATT-001, HR-ATT-002, HR-ATT-003, HR-ATT-004, HR-LV-001, HR-LV-002, HR-LV-003, HR-LV-004, HR-OT-001, HR-OT-002, HR-OT-003, HR-SAL-001, HR-SAL-002, HR-SAL-003, HR-SAL-004, HR-PAY-001, HR-PAY-002, HR-PAY-003, HR-PAY-004, HR-PAY-005, HR-EOS-001, HR-EOS-002, HR-EOS-003, HR-EOS-004 |
 
 ### [HR-DASH-001] HR Dashboard
 
@@ -870,12 +870,12 @@ A persistent header: employee code and name, status, designation, project / site
 | Leaves | Annual balance of the current year (entitlement, used, awaiting approval, remaining — the existing balance rule) and the latest 10 requests: type, from, to, days, status, reason, decided by; paged | Create leave (HR create; employee preselected), View (HR-LV-003), Edit (pending only; HR edit), View register (HR-LV-001 filtered) |
 | Overtime | Latest 10 records: date, hours, rate, amount (hours × rate as recorded), linked attendance date, status, reason; approved hours total; paged | Add overtime (Payroll create), Edit (pending only; Payroll edit), View register (HR-OT-001 filtered) |
 | Salary Structures | Every structure with basic, allowances, deductions, net and status; mismatch warning when the profile and the active structure differ | + New Structure From Profile (Payroll create), View register |
-| Payroll | Latest 10 payroll rows: run, period, basic, allowances, overtime, deductions, net, present / leave days, run status; paged | Open payroll run (HR-PAY-003), View register |
+| Payroll | Latest 10 payroll rows: run, period, basic, allowances, overtime, deductions, net, present / leave days, run status, accounting state; paged | Open payroll run (HR-PAY-003), Payslip (HR-PAY-005; returns to this section), View register |
 | Activity | Latest HR, attendance, payroll and account entries that name this employee, limited to the users your role may see | View all |
 
 Return-to-context: Add / Edit links opened from this page carry the employee as the origin. On those forms Cancel, Save & close and the Back to origin button return to the same section of this page; Save stays on the record.
 
-What this page does not do: it never records attendance, leave, overtime or pay itself; it does not calculate payroll or leave balances anew; it shows stored geo-fence and source labels only (no GPS or mobile check-in exists); it offers no payslip, because none exists in the current system.
+What this page does not do: it never records attendance, leave, overtime or pay itself; it does not calculate payroll or leave balances anew; it shows the stored geo-fence and source labels of each attendance row; the Payslip link opens the stored payroll row (HR-PAY-005) for Payroll viewers, and nothing on this page posts or reverses accounting.
 
 ### [HR-EMP-004] Employee Workspace (Edit)
 
@@ -1049,34 +1049,58 @@ Fields: Employee *, Effective From *, Effective To, Basic Salary *, Housing / Tr
 Important:
 Create a new structure for a change; do not edit history. The employee profile amounts and the active structure are compared and Seera warns when they differ.
 
-### [HR-PAY-001 … 004] Payroll
+### [HR-PAY-001 … 005] Payroll
 
-Web address: `https://seera.tech-brit.co.uk/admin/hr/payroll` (HR-PAY-001) · `https://seera.tech-brit.co.uk/admin/hr/payroll/create` (HR-PAY-002) · `https://seera.tech-brit.co.uk/admin/hr/payroll/{id}` (HR-PAY-003) · `https://seera.tech-brit.co.uk/admin/hr/payroll/{id}/edit` (HR-PAY-004)
+Web address: `https://seera.tech-brit.co.uk/admin/hr/payroll` (HR-PAY-001) · `https://seera.tech-brit.co.uk/admin/hr/payroll/create` (HR-PAY-002) · `https://seera.tech-brit.co.uk/admin/hr/payroll/{id}` (HR-PAY-003) · `https://seera.tech-brit.co.uk/admin/hr/payroll/{id}/edit` (HR-PAY-004) · `https://seera.tech-brit.co.uk/admin/hr/payroll/{id}/items/{item}/payslip` (HR-PAY-005)
 
 Purpose:
-Calculate a month's pay for a set of employees.
+Calculate a month's pay for a set of employees, approve it, post it to accounting and print each employee's payslip.
 
-Status: **PARTIAL** — the run calculates basic, allowances, approved overtime, fixed deductions and net. There is no payslip, no bank or WPS file, and **no accounting posting** when a run is approved.
+Status: **AVAILABLE** for calculation, approval, accounting posting (Payroll → GL, Phase 1) and payslips. NOT YET OPERATIONAL: bank / WPS file, salary disbursement (bank or cash payment), GOSI, employee loans, attendance-based proration and a multi-step payroll approval runtime.
+
+Lifecycle: **Process → Review → Approve → Accounting posting → Payslip.** Process never creates accounting; accounting starts only after approval.
 
 Navigation:
-HR Registers & Approvals → Payroll → + Create Payroll Run.
+HR Registers & Approvals → Payroll → + Create Payroll Run; Run → Process Payroll; Run → Approve Payroll; Run → Accounting → Post to Accounting / Retry Posting / Reverse Posting; Run → employee row → Payslip.
 
 Permission required:
-Payroll — create / view / edit; Payroll — process and approve for the actions.
+Payroll — create / view / edit; Payroll — process (Process Payroll); Payroll — approve (Approve Payroll); Payroll — post (Post to Accounting, Retry Posting); Payroll — post **and** approve (Reverse Posting); Journal Entries — view to open the journal and see its lines; HR — view to open the employee from a row.
 
 Fields:
 
 | Field | What to enter | Example | Required? | Notes |
 |---|---|---|---|---|
-| Payroll Month, Payroll Year | Period | September, 2026 | Yes | |
-| Period Start, Period End | Dates | 01-Sep-2026 to 30-Sep-2026 | No | |
-| Branch, Project | Limit the run | Riyadh Head Office / Riyadh Commercial Tower | No | |
+| Payroll Month, Payroll Year | Period | September, 2026 | Yes | The posting date of the journal is the period end |
+| Period Start, Period End | Dates | 01-Sep-2026 to 30-Sep-2026 | No | Default: the calendar month |
+| Branch, Project | Limit the run | Riyadh Head Office / Riyadh Commercial Tower | No | Only active employees of that branch / project are processed |
 | Notes | | — | No | |
 
-Buttons: Save (draft), then on the details page **Process Payroll** (builds the employee rows) and **Approve Payroll** (only a processed run), Edit.
+Buttons: Save (draft); on the run page **Process Payroll** (builds the employee rows; allowed until approval), **Approve Payroll** (processed run only; also triggers the accounting posting), **Post to Accounting** / **Retry Posting** (approved run whose accounting is not posted yet; repeating it never creates a second journal), **Reverse Posting** (posted run; reason required), **View Journal**, **Payslip** on each employee row, Edit (until approval), Back.
 
-Statuses: draft → processed → approved. Present and leave days are counted from attendance but do not change pay in the current system.
+Run page (HR-PAY-003) sections: header (code, run status, accounting state, period, scope, employees, approved by, gross, allowances / overtime, deductions, net, journal), **Summary**, **Employee rows** (25 per page: employee, department, project, present / leave days, basic, allowances, overtime, gross, deductions, net, Payslip), **Accounting** (state, journal number and status, posting date, debit / credit totals, posted at, posting error, reversal with reason, journal lines for Journal Entries viewers, Post / Retry), **Activity** (payroll and accounting entries of this run, limited to the users your role may see).
 
+Accounting mapping (Finance configuration, FIN-PR-004): the Automatic Posting Rule **Payroll / Payroll Approved** decides every account; nothing is hard-coded or guessed by name.
+
+| Rule field | Used for | Rule |
+|---|---|---|
+| Debit Account | Salary expense | One debit line per employee for the **gross** pay (basic + allowances + approved overtime), carrying the employee's project, site and the project's single active project cost center. Must be an active expense account. |
+| Credit Account | Payroll payable | One credit line for the total **net** pay. Must be an active liability account. Bank / Cash is never used: paying salaries is a later step. |
+| Deduction Liability Account | Deductions | One credit line for the total deductions. Required whenever any employee row has deductions; must be an active liability account. |
+| Auto Post | Posting mode | On: the journal is posted at approval (*Posted to accounting*). Off: a *draft* journal is created and the run shows *Approved — accounting review required* until Finance posts it from FIN-JE-003; a draft is never called posted. |
+
+One original journal per run (source Payroll, reference = run code, posting date = period end, description "Payroll PR-… - September 2026"). No VAT line is ever created. The Project Cost Report (FIN-REP-007) reads payroll through these ledger lines only, so an employee's gross pay is counted once on the project and a reversal removes it.
+
+Accounting states (separate from the run status): Not posted · Approved — not posted · Approved — accounting review required · Approved — posting failed (reason shown; Retry Posting) · Posted to accounting · Accounting reversed.
+
+What blocks posting (the run stays approved and shows the reason; Finance fixes the configuration and uses Retry Posting): no active Payroll / Payroll Approved rule; debit, credit or deduction account missing, inactive or of the wrong type (VAT control accounts are refused); deductions present but no Deduction Liability Account; the salary expense account marked *Cost center required* while an employee's project has no single active project cost center (in the standard chart, 5100 Salary Expense requires a cost center, so every employee's project needs its cost center before posting); a row that does not reconcile (gross ≠ net + deductions).
+
+Immutability: an approved run can no longer be edited, reprocessed or deleted; the payroll journal cannot be edited, cancelled or deleted from Accounting (source-controlled, like bills and invoices); a later salary-structure change never alters the stored rows, the journal or the payslip.
+
+Reverse Posting (Payroll — post and approve): enter the reason; Seera posts an opposite journal dated today, keeps the original journal and the approved run in history and shows *Accounting reversed* with the reason. The run is not reposted automatically; a corrected month is a new payroll run.
+
+Payslip (HR-PAY-005): a print-friendly page rendered from the **stored** row, never recalculated: company, period and run, employee (code, name, department, designation, project, branch, IQAMA, payment method / bank / IBAN), Basic Salary, Allowances, Approved Overtime, Gross, Deductions, Net Salary, present / leave days (informational), run status, accounting state and journal, generated time and reference. **Print / Save as PDF** uses the browser's print dialog; no PDF file is stored. Open it from the run's employee rows or from Employee View → Payroll; Back returns to where you came from. Permission: Payroll — view (HR — view alone does not open it); a project-scoped user opens only payslips of employees in scope. There is no employee self-service and no public link.
+
+Statuses: draft → processed → approved (run). Present and leave days are counted from attendance but do not change pay (no proration).
 ### [HR-EOS-001 … 004] End of Service
 
 Web address: `https://seera.tech-brit.co.uk/admin/hr/eosb` (HR-EOS-001) · `https://seera.tech-brit.co.uk/admin/hr/eosb/create` (HR-EOS-002) · `https://seera.tech-brit.co.uk/admin/hr/eosb/{id}` (HR-EOS-003) · `https://seera.tech-brit.co.uk/admin/hr/eosb/{id}/edit` (HR-EOS-004)
@@ -1808,9 +1832,9 @@ Web address: `https://seera.tech-brit.co.uk/admin/accounting/posting-rules` (FIN
 Purpose:
 One row per automatic journal event (Inventory Purchase, Stock Issued, Stock Adjusted, Bill Approved, Invoice Approved, Payment Recorded, Receipt Recorded, Payroll Approved, Site Expense Approved).
 
-Status: **PARTIAL**. Only the **Auto Post** switch changes behaviour: when it is off, the event creates a *draft* journal that a finance user must post by hand (review mode). The debit and credit accounts, cost center rule and approval flag on the rule are informational; real accounts come from documents. Site Expense Approved now fires after final required approval for Cash/Bank/Reimbursement. Supplier Credit instead creates a draft Supplier Bill. Payroll Approved still has no accounting event. A missing active Site Expense rule also creates a draft journal, not an automatic ledger posting.
+Status: **PARTIAL**. For every event the **Auto Post** switch changes behaviour: when it is off, the event creates a *draft* journal that a finance user must post by hand (review mode). For the document events (bills, invoices, payments, receipts, stock, Site Expenses) the debit and credit accounts, cost center rule and approval flag on the rule are informational; real accounts come from the documents. **Payroll / Payroll Approved is the real mapping for payroll posting (WF-021):** its Debit Account is the salary expense (one line per employee, gross, with the employee's project and cost center), its Credit Account the payroll payable (total net) and its **Deduction Liability Account** the employee deductions (required when a run has deductions). All three must be active accounts of the right type (expense / liability / liability); VAT control accounts are refused; a run cannot be posted while the rule is inactive or incomplete, and the run shows the reason. Site Expense Approved fires after final required approval for Cash/Bank/Reimbursement. Supplier Credit instead creates a draft Supplier Bill. A missing active Site Expense rule also creates a draft journal, not an automatic ledger posting.
 
-Fields: Source Module *, Trigger Event *, Cost Center Rule *, Debit Account, Credit Account, Auto Post, Approval Required, Status *, Notes. Buttons: Cancel, Save, Save & new, Save & close.
+Fields: Source Module *, Trigger Event *, Cost Center Rule *, Debit Account, Credit Account, Deduction Liability Account (Payroll only), Auto Post, Approval Required, Status *, Notes. Buttons: Cancel, Save, Save & new, Save & close.
 
 ---
 
@@ -2492,9 +2516,9 @@ Use the language switch in the top bar. The screen turns to Arabic (right-to-lef
 |---|---|
 | **Chapter number** | 17 |
 | **Chapter name** | End-to-End Workflows |
-| **Purpose** | The documented business flows WF-001 to WF-015. |
+| **Purpose** | The documented business flows WF-001 to WF-021. |
 | **Primary roles** | Super Admin, HR Manager, Finance Manager, Account Assistant, Purchase Manager, Warehouse Incharge, Site In-Charge, Marketing Manager |
-| **Workflows in this chapter** | WF-020, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
+| **Workflows in this chapter** | WF-020, WF-021, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
 
 Each workflow lists purpose, roles, prerequisites, navigation, steps, example input, the system result, statuses before and after, the audit trail, common errors and the related Screen IDs. The Workflow Index is in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).
 
@@ -2610,17 +2634,17 @@ Related screens: INV-ISS-002, INV-ISS-003, FIN-REP-007, INV-REP-004.
 
 ### WF-008 Payroll Run
 
-Purpose: calculate a month's salaries.
-Status: PARTIAL.
+Purpose: calculate a month's salaries and approve them.
+Status: AVAILABLE (calculation and approval; accounting posting and payslips continue in WF-021).
 Roles involved: HR Manager (create, process), Finance Manager (approve).
-Prerequisites: active salary structures; approved overtime for the month.
+Prerequisites: active salary structures; approved overtime for the month; for the posting that follows approval, the Payroll posting rule configured (WF-021).
 Navigation: HR Registers & Approvals → Payroll → + Create Payroll Run; Run → Process Payroll; Run → Approve Payroll.
-Steps: September 2026, period 01-Sep to 30-Sep, all branches. Save. Process Payroll. Review the employee rows (basic, allowances, overtime, deductions, net). Approve Payroll.
-Expected result: the run holds one row per employee with the net amount; the employee's Payroll History tab shows it.
-Statuses: draft → processed → approved.
+Steps: September 2026, period 01-Sep to 30-Sep, all branches. Save. Process Payroll. Review the employee rows (basic, allowances, overtime, deductions, net; present / leave days are informational). Approve Payroll.
+Expected result: the run holds one row per employee with gross, deductions and net; approval locks the run (no edit, reprocess or delete) and immediately attempts the accounting posting (WF-021); the employee's Payroll section and Payroll History tab show the row with its accounting state and Payslip link.
+Statuses: draft → processed → approved; the accounting state is shown separately.
 Audit trail: Created payroll run, Processed payroll run, Approved payroll run.
-Not done by the system: payslips, bank / WPS file, accounting posting, GOSI or unpaid-leave deductions.
-Related screens: HR-PAY-002, HR-PAY-003, HR-SAL-001, HR-EMP-004.
+Not done by the system: bank / WPS file, salary payment, GOSI, loans, unpaid-leave or attendance-based deductions, multi-step payroll approval.
+Related screens: HR-PAY-002, HR-PAY-003, HR-PAY-005, HR-SAL-001, HR-EMP-003, HR-EMP-004.
 
 ### WF-009 Leave Request lifecycle
 
@@ -2714,7 +2738,7 @@ Related screens: HR-EOS-002, HR-EOS-003.
 
 Permissions are independent at every step. A project/site-scoped operator sees only rows permitted by the existing global scopes; the same scope feeds panel totals. Read-only pages do not post, approve, receive stock or process payroll.
 
-Phase B expense integration is available: see WF-018. Pending: budget lines/BOQ, labour/payroll-to-GL, equipment cost, expanded budget-vs-actual and a future operational site dashboard. No live ZATCA clearance is introduced. Runtime supports PR, Site Expenses and Supplier Bills; other module rollouts remain pending.
+Phase B expense integration is available: see WF-018. Pending: budget lines/BOQ, labour costing beyond the ledger payroll lines (payroll reaches project cost through the Payroll → GL posting, WF-021), equipment cost, expanded budget-vs-actual and a future operational site dashboard. No live ZATCA clearance is introduced. Runtime supports PR, Site Expenses and Supplier Bills; other module rollouts remain pending.
 
 ### WF-017 Purchase Request runtime approval
 
@@ -2785,6 +2809,23 @@ Common errors: location permission refused; location timed out; accuracy worse t
 Privacy: position captured only at check-in and check-out; no tracking in between.
 Related screens: HR-ATT-004, HR-ATT-001, HR-ATT-003, HR-EMP-003, MST-SITE-003, MST-SITE-004, USR-003.
 
+### WF-021 Payroll → Accounting posting and payslip
+
+Purpose: turn an approved payroll run into one balanced salary journal (Dr salary expense per employee, Cr payroll payable, Cr deductions) and give each employee a payslip.
+Status: AVAILABLE (Payroll → GL, Phase 1: expense and payable only; bank / WPS file, salary payment, GOSI, loans and proration NOT YET OPERATIONAL).
+Roles involved: HR Manager (create, process), Finance Manager (approve; post, retry, reverse), any Payroll viewer (payslip).
+Prerequisites: FIN-PR-004 rule *Payroll / Payroll Approved* active with a salary expense Debit Account, a payroll payable Credit Account and, when any employee has deductions, a Deduction Liability Account; every employee's project has one active project cost center (5100 Salary Expense requires one); active salary structures; approved overtime for the month.
+Navigation: HR Registers & Approvals → Payroll → + Create Payroll Run → Process Payroll → Approve Payroll; Run → Accounting → Post to Accounting / Retry Posting; Run → Reverse Posting; Run → employee row → Payslip; Finance → Journal Entries → the journal.
+Steps: September 2026, project Riyadh Commercial Tower. Ahmed Hassan: basic 6,500, housing 1,500, transport 500, fixed deduction 300 → gross 8,500, net 8,200. Khalid Al-Otaibi: basic 9,000, approved overtime 200 → gross 9,200, net 9,200. Process Payroll, review the rows, Approve Payroll.
+Expected result: the run shows *Approved* and *Posted to accounting* with journal JV-2026-…: Dr 5100 Salary Expense 8,500.00 (Ahmed, project Riyadh Commercial Tower, cost center CC-RCT) · Dr 5100 Salary Expense 9,200.00 (Khalid) · Cr 2300 Salary Payable 17,400.00 · Cr 2320 Payroll Deductions Payable 300.00; posting date 30-Sep-2026; no VAT line. The Project Cost Report for September shows 17,700.00 of payroll cost on the project. Each employee row opens its payslip; Employee View → Payroll shows the row with *Posted to accounting* and the Payslip link.
+Review mode: with Auto Post off the journal is a draft and the run shows *Approved — accounting review required* until Finance posts it (FIN-JE-003).
+Posting failure: the run stays *Approved* with *Approved — posting failed* and the reason (for example "Payroll deductions of SAR 300.00 have no accounting account configured"). Finance corrects the rule and clicks Retry Posting; repeated Post / Retry never creates a second journal.
+Reverse: Reverse Posting with a reason posts the opposite journal dated today; the run shows *Accounting reversed*; original journal, rows and payslips stay in history; the project cost report no longer counts the run.
+Statuses: run draft → processed → approved; accounting Not posted → Posted to accounting (or Approved — accounting review required / Approved — posting failed) → Accounting reversed.
+Audit trail: Created payroll run, Processed payroll run, Approved payroll run, Payroll accounting entry created, Payroll accounting pending, Reversed payroll accounting / Payroll accounting reversed.
+Common errors: approving a draft (process first); posting a draft or processed run; missing rule or accounts; deductions without a deduction account; employee project without a cost center; editing, reprocessing or deleting an approved run; editing or cancelling the payroll journal from Accounting; a second reversal with a different reason; opening a payslip with HR — view only or for an employee outside your scope.
+Related screens: HR-PAY-002, HR-PAY-003, HR-PAY-005, FIN-PR-004, FIN-JE-003, FIN-REP-007, HR-EMP-003.
+
 ---
 
 ## 18. Troubleshooting
@@ -2840,6 +2881,8 @@ Related screens: HR-ATT-004, HR-ATT-001, HR-ATT-003, HR-EMP-003, MST-SITE-003, M
 | Matched line | A supplier bill line linked to a goods receipt line |
 | Outstanding (invoice) | The part of an approved customer invoice not yet received (invoice total minus received); kept on the invoice and refreshed by every receipt |
 | Outstanding payment | The part of an approved bill not yet paid (bill total minus paid) |
+| Payroll payable | The liability account credited with the net salaries of an approved payroll run (2300 Salary Payable in the standard chart) until they are paid; paying them is not part of the current system |
+| Payslip | The printable page of one employee's stored payroll row (HR-PAY-005); never recalculated |
 | Posted | Written to the general ledger; cannot be edited |
 | Received but not invoiced | Accepted receipt quantity not yet covered by an approved supplier bill; its value is the GRNI accrual |
 | Reopen | Return an unpaid approved document to draft with a reversing entry |
@@ -2873,7 +2916,7 @@ Areas that exist as menus, settings or plans but are not usable business functio
 | Offline entry and sync | NOT YET OPERATIONAL | Nothing |
 | Live ZATCA Phase-2 clearance, real QR, XML, signing | NOT YET OPERATIONAL (local records: FOUNDATION ONLY) | Chapter 14 |
 | Approval workflow execution (multi-step, all-required) | AVAILABLE for PR, Site Expenses and Supplier Bills; PARTIAL across other modules | Sequential required steps, runtime history and shared My Approvals; no parallel groups, thresholds, delegation, notification/escalation jobs or automatic parent expansion |
-| Payroll → accounting posting, payslips, bank / WPS file, GOSI | NOT YET OPERATIONAL | Payroll run calculation and approval |
+| Payroll bank / WPS file, salary payment (bank / cash), GOSI, employee loans, attendance-based proration, multi-step payroll approval | NOT YET OPERATIONAL | Payroll calculation, approval, Payroll → GL posting with Retry / Reverse and payslips are AVAILABLE (WF-021); the posted journal credits payroll payable only |
 | HR Reports menu (attendance register, payroll register) | NOT YET OPERATIONAL | HR Dashboard for today's figures |
 | Project Reports menu | Placeholder | Project Cost Report and Project Material Consumption exist |
 | System Settings menu | NOT YET OPERATIONAL | Company Profile |

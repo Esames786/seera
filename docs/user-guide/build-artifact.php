@@ -130,7 +130,7 @@ main hr { border: 0; border-top: 1px solid var(--line); margin: 30px 0; }
 </style>
 HTML;
 
-$band = '<div class="band"><span class="brand">Seera ERP</span><span class="meta">Current System User Guide · Version 1.10 · 9 October 2026 · Current implemented system only · Examples use fictional training data</span><nav><a href="#guide-top">User Guide</a><a href="#screens-top">Screen Index</a><a href="#workflows-top">Workflow Index</a></nav></div>';
+$band = '<div class="band"><span class="brand">Seera ERP</span><span class="meta">Current System User Guide · Version 1.11 · 10 October 2026 · Current implemented system only · Examples use fictional training data</span><nav><a href="#guide-top">User Guide</a><a href="#screens-top">Screen Index</a><a href="#workflows-top">Workflow Index</a></nav></div>';
 
 file_put_contents($out, $page.$band.'<div class="wrap"><aside class="rail">'.$rail.'</aside><main>'.$sections.'</main></div>');
 echo 'written '.number_format(filesize($out))." bytes\n";
