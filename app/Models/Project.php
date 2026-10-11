@@ -61,4 +61,15 @@ class Project extends Model
     {
         return $this->hasMany(Employee::class);
     }
+
+    /** Detailed budget (BOQ) versions; the scalar `budget` column stays the master budget. */
+    public function budgets()
+    {
+        return $this->hasMany(ProjectBudget::class)->orderByDesc('version');
+    }
+
+    public function currentBudget()
+    {
+        return $this->hasOne(ProjectBudget::class)->where('is_current', true)->latestOfMany('version');
+    }
 }
