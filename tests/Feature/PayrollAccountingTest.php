@@ -391,7 +391,7 @@ class PayrollAccountingTest extends TestCase
         $page->assertSee('EMP-PAY-A')->assertDontSee('EMP-PAY-B');
         // The company journal is already posted with both employees; a scoped viewer cannot create a subset posting.
         $this->assertSame(1, JournalEntry::where('source_module', 'Payroll')->where('source_id', $run->id)->count());
-        $this->actingAs($scoped)->post(route('admin.hr.payroll.post', $run))->assertSessionHasNoErrors();
+        $this->actingAs($scoped)->post(route('admin.hr.payroll.post', $run))->assertForbidden();   // whole-run authorization (Phase 2)
         $this->assertSame(1, JournalEntry::where('source_module', 'Payroll')->where('source_id', $run->id)->count());
         $this->assertEqualsWithDelta(17700, (float) $run->journalEntry->fresh()->total_debit, 0.01);
     }
