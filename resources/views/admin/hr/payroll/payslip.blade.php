@@ -61,7 +61,8 @@
                 <tr><th>Project</th><td>{{ $employee?->project?->name ?? 'Head Office' }}</td></tr>
                 <tr><th>Branch</th><td>{{ $employee?->branch?->name ?? '-' }}</td></tr>
                 <tr><th>IQAMA / ID</th><td>{{ $employee?->iqama_number ?? '-' }}</td></tr>
-                <tr><th>Payment Method</th><td>{{ $employee?->payment_method ?? '-' }}{{ $employee?->bank_name ? ' · '.$employee->bank_name : '' }}{{ $employee?->iban ? ' · '.$employee->iban : '' }}</td></tr>
+                <tr><th>Payment Method</th><td>{{ $employee?->payment_method ?? '-' }}{{ $employee?->bank_name ? ' · '.$employee->bank_name : '' }}{{ $employee?->iban ? ' · '.\App\Support\Iban::mask($employee->iban) : '' }}</td></tr>
+                <tr><th>Salary Payment</th><td>{{ $run->paymentLabel() }}{{ $run->settled_at ? ' · '.$run->settled_at->format('Y-m-d') : '' }}</td></tr>
             </tbody>
         </table>
 

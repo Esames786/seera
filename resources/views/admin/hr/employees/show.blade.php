@@ -104,7 +104,7 @@
                         <tr><th>Other Allowance</th><td>{{ $money($employee->other_allowance) }}</td></tr>
                         <tr><th>Payment Method</th><td>{{ $employee->payment_method }}</td></tr>
                         <tr><th>Bank Name</th><td>{{ $employee->bank_name ?? '-' }}</td></tr>
-                        <tr><th>IBAN</th><td>{{ $employee->iban ?? '-' }}</td></tr>
+                        <tr><th>IBAN</th><td>{{ \App\Support\Iban::mask($employee->iban) ?? '-' }}@if ($employee->iban && ! \App\Support\Iban::isValid($employee->iban)) <span class="badge red">Invalid format</span>@endif</td></tr>
                     </tbody>
                 </x-admin.data-table>
             @endif
@@ -298,7 +298,7 @@
                 <a class="btn sm outline" href="{{ $links['payroll_all'] }}">{{ __('workspace.hr_view_register') }}</a>
             </x-slot:headerActions>
             <thead>
-                <tr><th>Payroll Run</th><th>Period</th><th>Basic</th><th>Allowances</th><th>Overtime</th><th>Deductions</th><th>Net</th><th>Present / Leave days</th><th>Run Status</th><th>Accounting</th><th></th></tr>
+                <tr><th>Payroll Run</th><th>Period</th><th>Basic</th><th>Allowances</th><th>Overtime</th><th>Deductions</th><th>Net</th><th>Present / Leave days</th><th>Run Status</th><th>Accounting</th><th>{{ __('workspace.hr_payment') }}</th><th></th></tr>
             </thead>
             <tbody>
                 @forelse ($payrollItems as $item)
@@ -313,10 +313,11 @@
                         <td>{{ $item->present_days }} / {{ $item->leave_days }}</td>
                         <td>@if($item->payrollRun)<x-admin.status-badge :status="$item->payrollRun->status"/>@else - @endif</td>
                         <td class="small">{{ $item->payrollRun?->accountingLabel() ?? '-' }}</td>
+                        <td class="small">{{ $item->payrollRun?->paymentLabel() ?? '-' }}</td>
                         <td>@if($item->payrollRun)<a class="btn sm outline" href="{{ route('admin.hr.payroll.show', $item->payrollRun) }}">{{ __('workspace.hr_open_run') }}</a> <a class="btn sm outline" href="{{ route('admin.hr.payroll.payslip', [$item->payrollRun, $item->id, 'return_to' => $selfUrl.'#payroll']) }}">{{ __('workspace.hr_payslip') }}</a>@endif</td>
                     </tr>
                 @empty
-                    <tr><td colspan="11" class="table-empty">{{ __('workspace.hr_no_payroll') }}</td></tr>
+                    <tr><td colspan="12" class="table-empty">{{ __('workspace.hr_no_payroll') }}</td></tr>
                 @endforelse
             </tbody>
             <x-slot:footer>

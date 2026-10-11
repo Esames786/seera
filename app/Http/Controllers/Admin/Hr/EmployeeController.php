@@ -368,12 +368,17 @@ class EmployeeController extends Controller
             'other_allowance' => ['nullable', 'numeric', 'min:0'],
             'payment_method' => ['required', 'string', 'max:50'],
             'bank_name' => ['nullable', 'string', 'max:100'],
-            'iban' => ['nullable', 'string', 'max:50'],
+            'iban' => ['nullable', 'string', 'max:50', function (string $attribute, mixed $value, callable $fail) {
+                if (! \App\Support\Iban::isValid($value)) {
+                    $fail('Enter a valid IBAN (letters and digits, 15–34 characters, correct check digits), e.g. SA03 8000 0000 6080 1016 7519.');
+                }
+            }],
             'mobile_access' => ['nullable', 'boolean'],
             'status' => ['required', 'in:active,inactive,on leave,terminated'],
         ]);
 
         $data['mobile_access'] = $request->boolean('mobile_access');
+        $data['iban'] = \App\Support\Iban::normalize($data['iban'] ?? null);
 
         if (! $employee && blank($data['employee_code'] ?? null)) {
             $prefix = config('seera.employee_codes.'.$data['employee_classification'], 'EMP-');
