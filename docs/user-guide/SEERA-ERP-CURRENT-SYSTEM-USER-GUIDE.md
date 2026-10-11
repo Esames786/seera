@@ -3,8 +3,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.12 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 11 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Payroll Phase 2 (11 October 2026) adds the salary payment of a posted run from a bank / cash account (Dr payroll payable, Cr bank / cash) with replay protection and reversal, a generic bank transfer export frozen at generation, IBAN validation and masking (WF-022). Offline attendance, an official Saudi WPS / Mudad file and GOSI remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
+| **Version** | 1.13 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 11 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Payroll Phase 2 (11 October 2026) adds the salary payment of a posted run from a bank / cash account (Dr payroll payable, Cr bank / cash) with replay protection and reversal, a generic bank transfer export frozen at generation, IBAN validation and masking (WF-022). The Project BOQ / Detailed Budget Engine Phase 1 (11 October 2026) adds budget versions and BOQ lines per project, Set as Current / revisions and Budget vs Actual on the posted ledger (MST-PRJ-006 / 007, WF-023). Offline attendance, an official Saudi WPS / Mudad file, GOSI, equipment actual cost, budget approval runtime and project scheduling remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
 | **Prepared** | 9 October 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
@@ -2112,11 +2112,11 @@ Stock Valuation, Low Stock, Project Material Consumption and Stock Movement, eac
 |---|---|
 | **Chapter number** | 11 |
 | **Chapter name** | Projects |
-| **Purpose** | Project Connected Workspace Phase A: existing operations, independent child flows and shared cost-report figures. |
+| **Purpose** | Project Connected Workspace Phase A: existing operations, independent child flows and shared cost-report figures; Phase B adds Site Expenses, ledger cost integration and the Detailed Budget / BOQ engine (versions, lines, Budget vs Actual). |
 | **Primary roles** | Project Manager, Super Admin |
-| **Screens in this chapter** | MST-PRJ-001, MST-PRJ-002, MST-PRJ-003, MST-PRJ-004, MST-PRJ-005, MST-SITE-001, MST-SITE-002, MST-SITE-003, MST-SITE-004 |
+| **Screens in this chapter** | MST-PRJ-001, MST-PRJ-002, MST-PRJ-003, MST-PRJ-004, MST-PRJ-005, MST-PRJ-006, MST-PRJ-007, MST-SITE-001, MST-SITE-002, MST-SITE-003, MST-SITE-004 |
 
-Project Connected Workspace **Phase A is available**. Phase B now adds Site Expenses, scoped counts/totals and existing-ledger cost integration. BOQ/budget lines, labour-to-GL, equipment cost and progress tracking remain later work. Operations → Site Expenses opens the real expense register.
+Project Connected Workspace **Phase A is available**. Phase B adds Site Expenses, scoped counts/totals, existing-ledger cost integration (including payroll through Payroll → GL) and, since 11 October 2026, the **Detailed Budget / BOQ engine** (MST-PRJ-006: budget versions, BOQ lines, Budget vs Actual). Equipment cost and progress tracking remain later work. Operations → Site Expenses opens the real expense register.
 
 ### [MST-PRJ-001 … 004] Projects
 
@@ -2124,7 +2124,7 @@ Web address: `https://seera.tech-brit.co.uk/admin/master/projects` (MST-PRJ-001)
 
 Navigation: Master Setup → Projects → **View** (read-only) → **Edit / Manage** (profile editing). View and every related GET perform no business write. Each related record remains independent; no Save All. Global registers and approvals are retained.
 
-The identity header stays outside the section switcher: Project code/name, customer, manager, classification, branch, status, dates and master budget. Visible-site, assigned-staff and warehouse counts use your access scope. Open POs, Material Used, Amount Still to Receive and posted cost/revenue appear only with their corresponding permissions.
+The identity header stays outside the section switcher: Project code/name, customer, manager, classification, branch, status, dates, master budget and the detailed current budget (reference and total, or "none yet"). Visible-site, assigned-staff and warehouse counts use your access scope. Open POs, Material Used, Amount Still to Receive and posted cost/revenue appear only with their corresponding permissions.
 
 #### Project profile fields and saves
 
@@ -2135,7 +2135,7 @@ The identity header stays outside the section switcher: Project code/name, custo
 | Classification, Branch, Project Manager | Commercial / Riyadh Head Office / project manager user | Existing master links; authorized inline creation retained |
 | Status | active | active, planning, on hold, completed, inactive |
 | Start / End | 01-Feb-2026 / 31-Dec-2027 | End cannot precede start; optional in current server validation |
-| Master budget | SAR 12,500,000 | Non-negative single master amount, not BOQ/budget lines |
+| Master budget | SAR 12,500,000 | Non-negative single master amount on the profile. The detailed BOQ budget lives on Budget / BOQ (MST-PRJ-006) with its own total and never overwrites this field |
 | Location, Description | Riyadh / tower construction | Optional |
 
 Save stays on Edit / Manage. Save & Close returns to the safe origin, otherwise the Projects list. Save & New opens a fresh Project form where creation is permitted. Cancel leaves without saving. Related business actions are never triggered by profile Save.
@@ -2147,6 +2147,7 @@ Every panel additionally requires Projects — view. Hidden panels reject direct
 | Section | What it shows / where to go next | Additional permission |
 |---|---|---|
 | Overview | Location, description and shared identity/summary header | Projects — view; edit for profile form |
+| Budget / BOQ | Opens the Budget / BOQ page (MST-PRJ-006): budget versions, lines, Budget vs Actual, revisions | Projects — view; Financial Reports — view for actual / committed |
 | Customer | Actual linked customer, VAT/CR/contact, authorized View / Edit Manage. Project approved invoice and outstanding totals only with AR view | Customers — view; edit for Manage |
 | Sites / Locations | Only this Project's visible sites, supervisor/address/status, geofence radius and stored attendance flags. Add Location / Edit Site use this fixed Project | Sites — view; create/edit separately |
 | Project Team / Staff | Current employees, department/designation/site/manager/status/mobile access, authorized Employee links | HR — view; edit for Manage |
@@ -2159,7 +2160,7 @@ Every panel additionally requires Projects — view. Hidden panels reject direct
 | Material Used | Posted Stock Issue ledger rows: issue/date/site/warehouse/item/unit/quantity/value. A warehouse receipt is NOT consumption | Stock Issues — view; Inventory Reports — view for report drill-through |
 | Customer Invoices | Project invoices, taxable/VAT/total/received/outstanding/status, local ZATCA state. Receipt action needs process permission and an unpaid/partially-paid invoice | Accounts Receivable — view/process |
 | Customer Receipts | Receipts whose invoice is visible and belongs to this Project, amount/date/method/reference | Accounts Receivable — view |
-| Financial / Cost Summary | Same calculation service as Project Cost Report, all dates; filtered report drill-through | Financial Reports — view |
+| Financial / Cost Summary | Same calculation service as Project Cost Report, all dates; master budget next to the detailed current budget with committed and remaining; filtered report and Budget / BOQ drill-through | Financial Reports — view |
 | Activity | New Project and context-Site saves with an exact immutable Project entity token, further restricted by Activity Logs visibility | Activity Logs — view |
 
 Stock values reuse stored Warehouse Stock `total_value`; they are not recomputed from a new valuation formula. Quantities are shown per item/unit rather than summing incompatible units. Material Used sums scoped issue-ledger values for visible posted Stock Issues; it does not add GRNs or count the same material cost again in GL.
@@ -2227,6 +2228,60 @@ Permissions: view for register/source/receipts; create for own drafts/submission
 
 Finance **Reverse expense** requires a reason and a posted, unsettled non-credit expense. It reuses the existing opposite-journal/open-VAT-period correction rules and cannot reopen sealed VAT periods. Supplier Credit follows existing unpaid Supplier Bill Reopen controls: accounting reverses, bill returns to draft, expense returns to awaiting posting. Generated source values cannot be independently edited/deleted; broader amendments/credit notes require a later design. Partial/batch reimbursements and reversal of an already settled reimbursement are not supplied. Equipment, payroll-to-GL, BOQ, GPS and offline support remain outside this release.
 
+### [MST-PRJ-006 … 007] Project Budget / BOQ
+
+Web address: `https://seera.tech-brit.co.uk/admin/master/projects/{id}/budget` (MST-PRJ-006) · `https://seera.tech-brit.co.uk/admin/master/projects/{id}/budget/{budget}/lines/{line}/edit` (MST-PRJ-007)
+
+Purpose:
+Plan a project's cost as BOQ / budget lines in numbered versions, set one version as the current budget, revise it without losing history, and compare Budget, Committed and Actual cost by category and cost code.
+
+Status: **AVAILABLE** (Detailed Budget Engine, Phase 1). NOT YET OPERATIONAL: equipment actual cost (an equipment line shows only what was posted to its mapped account), budget multi-step approval runtime, project scheduling / milestones / progress billing.
+
+Budget is planning, not accounting: creating, editing, setting as current, revising or discarding a budget **never** creates a journal entry, supplier bill, customer invoice, stock movement or payroll change, and never alters the posted cost history. The **master budget** on the project profile (MST-PRJ-004) stays a separate single amount; the detailed budget has its own calculated total and both are shown side by side. Making the detailed budget authoritative for the profile figure is a later, explicit decision.
+
+Navigation:
+Master Setup → Projects → View → **Budget / BOQ** (tab); Project → Financial / Cost Summary → Open Budget / BOQ.
+
+Permission required:
+Projects — view (open the page, read budget figures); Projects — edit (Create Detailed Budget, Add / Edit / Copy / Remove draft lines); Projects — approve (Set as Current Budget, Create Revision); Projects — delete (Discard Draft); Financial Reports — view (Actual, Committed, Remaining, Variance and the Budget vs Actual comparison); Projects — export together with Financial Reports — view (Export CSV); Activity Logs — view (Activity section). A project-scoped user reaches only the budgets of their own project(s); the project in the address is authoritative and a budget, line or site of another project is simply not found.
+
+Sections: **Budget Summary** (budget of the version, committed, actual, remaining or Over budget; budget by category), **Budget Lines** (25 per page; filters by site, category and cost code; Add Line on a draft), **Budget vs Actual** (by cost code; drill-down links to Material Used, Project Purchases, Site Expenses, Supplier Bills, Payroll runs and the Project Cost Report), **Versions / Revisions**, **Activity**.
+
+Budget line fields:
+
+| Field | What to enter | Example | Required? | Notes |
+|---|---|---|---|---|
+| Cost code | Stable human-readable code | MAT-001 | Yes | Letters, digits, "-", "." or "/"; stored upper-case; several lines may share a code |
+| Category | Materials, Labour, Subcontract, Site Expenses, Equipment, Other | Materials | Yes | Business grouping; no accounting effect |
+| Description | What is planned | Reinforcement steel 16mm | Yes | Up to 200 characters |
+| Site | A site of this project | Riyadh Tower - Main Site | No | Empty = whole project; a site of another project or a forged id is refused |
+| Item | Item master (materials) | Reinforcement Steel 16mm | No | Active items only; the unit follows the item unless chosen; posted issues of the item are shown as "Issued to project" |
+| Unit | Unit master | Tonne | No | |
+| Quantity, Rate | Planned quantity and unit rate | 100 × 2,850.00 | No | **Amount = quantity × rate, calculated on the server**; a submitted total is ignored |
+| Lump sum | Amount when there is no quantity × rate | 90,000.00 | Only without qty × rate | A lump-sum line stores no quantity or rate |
+| Cost account | Active expense account the line is compared with | 5200 Material Expense | No | Leave empty for a planning-only line (no actual shown). Within one version an account belongs to **one cost code**, so posted cost is never counted twice |
+| Notes | | — | No | |
+
+Buttons: **Create Detailed Budget** (first draft), **Add Line**, Edit / Copy / Remove (draft lines), **Set as Current Budget**, **Create Revision**, **Discard Draft**, **Export CSV**, Back to Project.
+
+Version lifecycle: Draft (editable) → **Current budget** (read-only; the one version Budget vs Actual uses on the project pages) → Superseded (read-only history when a later revision becomes current). **Create Revision** copies every line of the current version into a new draft (one open draft per project); the current version stays unchanged until the draft is set as current. **Discard Draft** keeps the draft in the version list as read-only; version numbers are never reused and nothing is deleted. Set as Current re-validates every line (site ownership, active item, active expense account, one account per cost code) and refuses an empty draft. Exactly one version is current per project; two users finalizing at once leave one current version (project row lock).
+
+Budget vs Actual (Financial Reports — view): figures for the project and, when a site filter is applied, for that site only.
+
+| Figure | Source |
+|---|---|
+| Budget | Σ line amounts of the version (per cost code / category) |
+| Actual | Net posted expense-account journal lines carrying the project, grouped by account — exactly the Project Cost Report semantics. Materials = posted Stock Issues (Dr Material Expense); Labour = Payroll → GL salary lines; Site Expenses = posted site expense journals; Subcontract / direct = posted supplier bill expense lines. **Never counted**: goods receipts, GRNI, warehouse stock, PO quantities, draft or unposted documents, payroll item totals on top of the GL, salary settlements, other projects |
+| Committed | Open purchase orders of the project (approved / partially received): unreceived quantity × net unit price (before VAT), bucketed by the ordered item's expense account (Material Expense when the item has none). Received quantities are stock / GRNI and reach cost only when issued |
+| Remaining | Budget − Actual (negative = **Over budget**, always shown) |
+| Variance | Budget − Actual − Committed ("Committed beyond budget" when negative while Remaining is still positive) |
+| Used | Actual ÷ Budget |
+
+Rows map through the cost account: a cost code's actual and committed are the sums on the accounts its lines map to; lines without an account show "No account mapped". Posted cost or commitments on accounts that no line of the version maps to appear as **"Other posted cost / commitments on accounts no budget line maps to"**, so the total actual of the page always equals the Project Cost Report posted cost for the same project. Equipment: the category carries the note that equipment actual-cost integration is NOT YET OPERATIONAL; a zero or empty actual is not proof that no equipment cost exists.
+
+Export CSV: Category, Cost Code, Description, Sites, Lines, Accounts, Budget, Committed, Actual, Remaining, Variance after commitments, Status, plus the "Other" row and the total — the exact figures of the screen.
+
+Activity: Created project budget, Added / Edited / Removed budget line, Set current project budget, Created budget revision, Discarded draft project budget — carried with the project token, so they also appear in Project → Activity.
 ### [MST-SITE-001 … 004] Locations (Sites)
 
 Web address: `https://seera.tech-brit.co.uk/admin/master/sites` (MST-SITE-001) · `https://seera.tech-brit.co.uk/admin/master/sites/create` (MST-SITE-002) · `https://seera.tech-brit.co.uk/admin/master/sites/{id}` (MST-SITE-003) · `https://seera.tech-brit.co.uk/admin/master/sites/{id}/edit` (MST-SITE-004)
@@ -2520,9 +2575,9 @@ Use the language switch in the top bar. The screen turns to Arabic (right-to-lef
 |---|---|
 | **Chapter number** | 17 |
 | **Chapter name** | End-to-End Workflows |
-| **Purpose** | The documented business flows WF-001 to WF-022. |
+| **Purpose** | The documented business flows WF-001 to WF-023. |
 | **Primary roles** | Super Admin, HR Manager, Finance Manager, Account Assistant, Purchase Manager, Warehouse Incharge, Site In-Charge, Marketing Manager |
-| **Workflows in this chapter** | WF-020, WF-021, WF-022, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
+| **Workflows in this chapter** | WF-020, WF-021, WF-022, WF-023, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
 
 Each workflow lists purpose, roles, prerequisites, navigation, steps, example input, the system result, statuses before and after, the audit trail, common errors and the related Screen IDs. The Workflow Index is in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).
 
@@ -2742,7 +2797,7 @@ Related screens: HR-EOS-002, HR-EOS-003.
 
 Permissions are independent at every step. A project/site-scoped operator sees only rows permitted by the existing global scopes; the same scope feeds panel totals. Read-only pages do not post, approve, receive stock or process payroll.
 
-Phase B expense integration is available: see WF-018. Pending: budget lines/BOQ, labour costing beyond the ledger payroll lines (payroll reaches project cost through the Payroll → GL posting, WF-021), equipment cost, expanded budget-vs-actual and a future operational site dashboard. No live ZATCA clearance is introduced. Runtime supports PR, Site Expenses and Supplier Bills; other module rollouts remain pending.
+Phase B expense integration is available: see WF-018; budget lines / BOQ and Budget vs Actual: see WF-023. Pending: labour costing beyond the ledger payroll lines (payroll reaches project cost through the Payroll → GL posting, WF-021), equipment cost and a future operational site dashboard. No live ZATCA clearance is introduced. Runtime supports PR, Site Expenses and Supplier Bills; other module rollouts remain pending.
 
 ### WF-017 Purchase Request runtime approval
 
@@ -2846,6 +2901,20 @@ Audit trail: Bank export generated, Bank export downloaded, Recorded salary paym
 Common errors: run not posted or review draft; already paid; account not an active Cash / Bank account; payment date in the future; employees outside your scope (whole-run authorization); incomplete bank details listed by employee code and name; Reverse Posting refused while a salary payment is recorded.
 Related screens: HR-PAY-003, HR-PAY-005, HR-EMP-003, HR-EMP-004, FIN-JE-003, FIN-COA-001.
 
+### WF-023 Project Budget / BOQ and Budget vs Actual
+
+Purpose: plan a project's cost as BOQ lines in versions, set the current budget, and compare Budget, Committed and Actual cost from the posted ledger.
+Status: AVAILABLE (Phase 1). NOT YET OPERATIONAL: equipment actual cost, budget multi-step approval, scheduling / milestones.
+Roles involved: Project Manager (Projects — edit for the draft and its lines; Projects — approve for Set as Current / Create Revision), Finance Manager (Financial Reports — view for actual and committed; Projects — export for the CSV).
+Prerequisites: the project with its sites (MST-PRJ-003); items for material lines; active expense accounts; posted operations (Stock Issues, Site Expenses, Supplier Bills, Payroll → GL) for actuals; approved POs for commitments.
+Navigation: Master Setup → Projects → View → Budget / BOQ → Create Detailed Budget → Add Line … → Set as Current Budget; Budget vs Actual; Create Revision; Export CSV.
+Steps: **Riyadh Commercial Tower** (master budget SAR 12,500,000). 1. Budget / BOQ → Create Detailed Budget → draft PRJ-RCT-01-B01. 2. Add lines: MAT-001 Materials "Reinforcement steel 16mm", site Riyadh Tower - Main Site, item Reinforcement Steel 16mm, 100 t × 2,850.00 = 285,000.00, account 5200 Material Expense; LAB-001 Labour "Site labour", lump sum 180,000.00, account 5100 Salary Expense; FUEL-001 Site Expenses "Generator fuel", 500 × 120.00 = 60,000.00, account 5300 Fuel Expense; EQP-001 Equipment "Crane hire", lump sum 90,000.00, no account. 3. Set as Current Budget → B01 is current, total SAR 615,000.00; the profile master budget is unchanged. 4. Operations run as usual: PO-2026-0012 for 100 t steel is approved and 40 t received → Committed 171,000.00 on MAT-001; a Stock Issue of 30 t is posted → Actual 85,500.00; the September payroll is posted → Actual 185,000.00 on LAB-001; fuel site expenses of 42,000.00 are posted. 5. Budget vs Actual: MAT-001 Budget 285,000 · Committed 171,000 · Actual 85,500 · Remaining 199,500 · Variance 28,500 · Within budget; LAB-001 Actual 185,000 · Remaining −5,000 · **Over budget**; FUEL-001 Remaining 18,000; EQP-001 "No account mapped" with the equipment note; total actual equals the Project Cost Report. 6. Create Revision → draft B02 with the same lines; raise LAB-001 to 200,000.00; Set as Current → B02 current, B01 superseded and still readable.
+Expected result: one current version per project; the posted cost history is untouched; no journal, bill, stock movement or payroll change was created by any budget action; the Project View header and Financial / Cost Summary show the detailed current budget, committed and remaining next to the master budget.
+Statuses: draft → current → superseded; a discarded draft stays listed read-only.
+Audit trail: Created project budget, Added budget line, Edited budget line, Removed budget line, Set current project budget, Created budget revision, Discarded draft project budget.
+Common errors: site not part of this project; inactive or unknown item; account not an active expense account; account already mapped to another cost code in the version; neither quantity × rate nor a lump sum; finalizing an empty draft; editing a current or superseded version; a second draft while one is open; project outside your scope (not found); Export without Financial Reports view.
+Related screens: MST-PRJ-006, MST-PRJ-007, MST-PRJ-003, MST-PRJ-004, FIN-REP-007, INV-PO-003, EXP-SE-003, HR-PAY-003.
+
 ---
 
 ## 18. Troubleshooting
@@ -2890,6 +2959,9 @@ Related screens: HR-PAY-003, HR-PAY-005, HR-EMP-003, HR-EMP-004, FIN-JE-003, FIN
 |---|---|
 | Access scope | The part of the company a role may see: All Company, Company Level, Project Level, Site Level, Warehouse Level |
 | Approve & Post | Existing legacy-bill/customer-invoice action. New Supplier Bills require explicit runtime submission and all required approvals before the same accounting path runs |
+| BOQ / detailed budget | A project's planned cost as versioned budget lines (cost code, category, site, item, quantity × rate or lump sum, cost account) on MST-PRJ-006; planning only, never accounting |
+| Budget version | One numbered set of BOQ lines: draft (editable), current (the one compared with actuals), superseded (history) or discarded draft |
+| Committed cost | Unreceived value of approved purchase orders of the project (quantity not yet received × net unit price); not yet actual cost |
 | Connected workspace | The Edit / Manage page of a record where its profile and related records are managed in tabs |
 | Document workspace | The read-only View page of a purchase order, request, goods receipt, supplier bill or customer invoice that shows the document with everything related to it (receipts, bills, journals, activity), each section by permission |
 | Draft | A saved document with no accounting or VAT effect yet |
@@ -2930,7 +3002,7 @@ Areas that exist as menus, settings or plans but are not usable business functio
 | Area | Status | What exists |
 |---|---|---|
 | Site Expenses | AVAILABLE with configured masters/permissions/workflow | Responsive web entry, private receipt, sequential approvals, accounting/retry, reimbursement and linked Supplier Bill; see WF-018 |
-| Project Phase B: BOQ, milestones, labour/equipment costing | PARTIAL | Phase A and Site Expense panel/cost integration available; remaining construction planning/cost modules are not built |
+| Project Phase B: milestones / scheduling, labour costing beyond ledger payroll lines, equipment costing, budget approval runtime | PARTIAL | Phase A, Site Expense integration, Payroll → GL cost and the Detailed Budget / BOQ engine with Budget vs Actual (MST-PRJ-006, WF-023) are available; equipment actual cost is shown as NOT YET OPERATIONAL on the budget page; budget approval is a single Set as Current action |
 | Equipment & Vehicles | NOT YET OPERATIONAL | Menu placeholder and permission names only |
 | Native mobile app | NOT YET OPERATIONAL | Mobile Attendance (HR-ATT-004) is a responsive web page used in the phone browser; location-validated online check-in / check-out is AVAILABLE |
 | Offline attendance (check-in without connectivity, later sync) | NOT YET OPERATIONAL | Site flag stored only |
