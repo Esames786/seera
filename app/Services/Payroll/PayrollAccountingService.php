@@ -9,6 +9,7 @@ use App\Models\CostCenter;
 use App\Models\Employee;
 use App\Models\JournalEntry;
 use App\Models\PayrollRun;
+use App\Models\PayrollRunItem;
 use App\Services\Accounting\PostingService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -130,7 +131,10 @@ class PayrollAccountingService
      */
     public function lines(PayrollRun $run, ChartOfAccount $expense, ChartOfAccount $payable, ?ChartOfAccount $deduction): array
     {
-        $items = $run->items()->with(['employee:id,employee_code,first_name,last_name,project_id,site_id,department_id'])->orderBy('id')->get();
+        // The whole run, whatever the acting user's scope: a posting is never a subset of the employees.
+        $items = PayrollRunItem::withoutGlobalScopes()->where('payroll_run_id', $run->id)
+            ->with(['employee' => fn ($q) => $q->withoutGlobalScopes()->select(['id', 'employee_code', 'first_name', 'last_name', 'project_id', 'site_id', 'department_id'])])
+            ->orderBy('id')->get();
         if ($items->isEmpty()) {
             $this->invalid('This payroll run has no employee rows to post. Process it first.');
         }
@@ -195,6 +199,10 @@ class PayrollAccountingService
             }
             if ($run->accounting_status !== PayrollRun::ACCOUNTING_POSTED || ! $run->journal_entry_id) {
                 $this->invalid('Only a payroll run whose journal is posted can be reversed.');
+            }
+            // Order of corrections: the salary payment must be reversed before the liability it settled.
+            if ($run->isPaid()) {
+                $this->invalid('A salary payment of SAR '.number_format((float) $run->paid_amount, 2).' is recorded against this payroll run. Reverse the salary payment first, then the payroll posting.');
             }
             $entry = JournalEntry::withoutGlobalScopes()->whereKey($run->journal_entry_id)->lockForUpdate()->firstOrFail();
             if ($entry->status !== 'posted') {

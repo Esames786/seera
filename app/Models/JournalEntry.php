@@ -19,7 +19,8 @@ class JournalEntry extends Model
     /** A payroll journal is corrected through the payroll run (reverse), never edited or cancelled here. */
     public function isPayrollSource(): bool
     {
-        return $this->source_module === 'Payroll' && PayrollRun::whereKey($this->source_id)->exists();
+        return ($this->source_module === 'Payroll' && PayrollRun::whereKey($this->source_id)->exists())
+            || ($this->source_module === 'Payroll Settlement' && PayrollSettlement::whereKey($this->source_id)->exists());
     }
 
     public function isSiteExpenseSource(): bool
@@ -52,7 +53,7 @@ class JournalEntry extends Model
     public const STATUSES = ['draft', 'approved', 'posted', 'cancelled'];
 
     public const SOURCE_MODULES = [
-        'Manual', 'Payroll', 'Site Expense', 'Site Expense Reimbursement', 'Inventory',
+        'Manual', 'Payroll', 'Payroll Settlement', 'Site Expense', 'Site Expense Reimbursement', 'Inventory',
         'Supplier Bill', 'Supplier Payment', 'Customer Invoice', 'Customer Receipt',
     ];
 

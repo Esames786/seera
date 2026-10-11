@@ -8,7 +8,9 @@ use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
 use App\Models\GoodsReceipt;
 use App\Models\JournalEntry;
+use App\Models\JournalEntryLine;
 use App\Models\PayrollRun;
+use App\Models\PayrollSettlement;
 use App\Models\SiteExpense;
 use App\Models\StockAdjustment;
 use App\Models\StockIssue;
@@ -91,6 +93,55 @@ class PostingService
             'description' => 'Payroll '.$run->code.' - '.$run->periodLabel(),
             'cost_center_id' => null,
         ], $lines, 'Payroll', 'Payroll Approved', $userId);
+    }
+
+    /**
+     * Payroll Phase 2: settle the payroll payable of a posted run from a bank /
+     * cash account. The payable account is the one credited by the run's own
+     * posted journal (never re-derived from a rule that may have changed), the
+     * amount is exactly that payable, and the expense is not touched again.
+     * Posted immediately like every other recorded payment.
+     */
+    public function settlePayrollRun(PayrollRun $run, PayrollSettlement $settlement, ChartOfAccount $payment, int $actorId): JournalEntry
+    {
+        $original = JournalEntry::withoutGlobalScopes()->with(['lines' => fn ($q) => $q->withoutGlobalScopes()])->find($run->journal_entry_id);
+        if (! $original || $original->status !== 'posted') {
+            $this->refuse('Salary payment needs the posted payroll journal of '.$run->code.'; it is '.($original?->status ?? 'missing').'.');
+        }
+        $rule = AutomaticPostingRule::where('source_module', 'Payroll')->where('trigger_event', 'Payroll Approved')->first();
+        $credits = $original->lines->filter(fn ($line) => (float) $line->credit > 0);
+        $payableLine = $credits->first(fn ($line) => $rule && (int) $line->chart_of_account_id === (int) $rule->credit_account_id)
+            ?? $credits->first(fn ($line) => abs((float) $line->credit - (float) $run->net_amount) < 0.01);
+        if (! $payableLine) {
+            $this->refuse('The payroll payable line of journal '.$original->journal_number.' could not be identified; Finance must review the payroll posting before paying.');
+        }
+        $payable = $this->activeOrRefuse(ChartOfAccount::find($payableLine->chart_of_account_id), 'Payroll payable');
+        if ($payable->account_type !== 'liability') {
+            $this->refuse('The payroll payable account must be a liability; '.$payable->label().' is '.$payable->account_type.'.');
+        }
+        if ($payment->account_type !== 'asset' || $payment->status !== 'active') {
+            $this->refuse('Salaries can only be paid from an active Cash or Bank (asset) account.');
+        }
+        if (array_intersect([$payable->id, $payment->id], $this->vatAccountIds()) !== []) {
+            $this->refuse('Salary payment must not touch a VAT control account.');
+        }
+        $amount = round((float) $settlement->amount, 2);
+        if (abs($amount - (float) $payableLine->credit) >= 0.01) {
+            $this->refuse('The salary payment must settle the full payroll payable of SAR '.number_format((float) $payableLine->credit, 2).' (partial salary settlement is not supported).');
+        }
+        $dimensions = ['project_id' => $run->project_id, 'site_id' => null, 'cost_center_id' => null];
+
+        return $this->createEntry([
+            'journal_date' => $settlement->payment_date,
+            'reference_number' => $run->code,
+            'source_module' => 'Payroll Settlement',
+            'source_id' => $settlement->id,
+            'description' => 'Salary payment '.$run->code.' - '.$run->periodLabel(),
+            'cost_center_id' => null,
+        ], [
+            $dimensions + ['chart_of_account_id' => $payable->id, 'description' => 'Payroll payable settled '.$run->code, 'debit' => $amount, 'credit' => 0],
+            $dimensions + ['chart_of_account_id' => $payment->id, 'description' => 'Salaries paid '.$run->code.' ('.$settlement->payment_method.')', 'debit' => 0, 'credit' => $amount],
+        ], 'Payroll Settlement', 'Payment Recorded', $actorId, true);
     }
 
     /** Well-known account codes seeded by the standard chart of accounts. */
@@ -644,7 +695,8 @@ class PostingService
      */
     public function reverseEntry(JournalEntry $entry, string $description, ?int $userId = null): JournalEntry
     {
-        $entry->loadMissing('lines');
+        // Every line, whatever the acting user's scope: a reversal is never partial.
+        $entry->setRelation('lines', JournalEntryLine::withoutGlobalScopes()->where('journal_entry_id', $entry->id)->orderBy('id')->get());
 
         $lines = $entry->lines->map(fn ($line) => [
             'chart_of_account_id' => $line->chart_of_account_id,
