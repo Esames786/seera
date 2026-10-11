@@ -2,6 +2,9 @@
 <div data-workspace>
     <nav class="tabs workspace-nav" data-workspace-nav aria-label="Project sections">
         <a class="tab" href="#profile" data-workspace-section="profile">Overview</a>
+        @if(auth()->user()->hasPermission('Projects', 'view'))
+            <a class="tab" href="{{ route('admin.master.projects.budget.show', $project) }}" title="Detailed budget / BOQ, versions and Budget vs Actual">Budget / BOQ</a>
+        @endif
         @foreach($panels as $key => $definition)
             <a class="tab" href="{{ route('admin.master.projects.workspace.panel', [$project, $key]).'#'.$key }}" data-workspace-related="{{ $key }}" data-related-url="{{ route('admin.master.projects.workspace.panel', [$project, $key]) }}">{{ __($definition->title) }}</a>
         @endforeach

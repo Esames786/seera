@@ -8,6 +8,7 @@
         <span>Start: {{ $project->start_date?->toDateString() ?? 'Not set' }}</span>
         <span>End: {{ $project->end_date?->toDateString() ?? 'Not set' }}</span>
         <span>Master budget: SAR {{ number_format((float) $project->budget, 2) }}</span>
+        <span>Detailed current budget: {{ $project->currentBudget ? 'SAR '.number_format((float) $project->currentBudget->total_amount, 2).' ('.$project->currentBudget->reference.')' : 'none yet' }}</span>
     </div>
     <div style="padding:0 16px 16px;display:flex;flex-wrap:wrap;gap:16px">
         @foreach($summary as $label => $value)<span><strong>{{ $label }}:</strong> {{ $value }}</span>@endforeach

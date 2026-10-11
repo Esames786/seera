@@ -23,6 +23,7 @@ use App\Models\User;
 use App\Models\Warehouse;
 use App\Models\WarehouseStock;
 use App\Services\Accounting\ProjectCostReport;
+use App\Services\Projects\ProjectBudgetReport;
 use App\Support\ReportPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -133,9 +134,25 @@ class ProjectWorkspacePanels implements WorkspacePanels
             $finance = self::finance($project);
             $summary['Posted cost (SAR)'] = number_format($finance['cost'], 2);
             $summary['Posted revenue (SAR)'] = number_format($finance['revenue'], 2);
+            if ($detailed = self::detailedBudget($project)) {
+                $summary['Detailed current budget (SAR)'] = number_format($detailed['budget'], 2);
+                $summary['Committed (SAR)'] = number_format($detailed['committed'], 2);
+                $summary['Remaining detailed budget (SAR)'] = number_format($detailed['remaining'], 2).($detailed['over_budget'] ? ' (over budget)' : '');
+            }
         }
 
         return $summary;
+    }
+
+    /** Totals of the current detailed budget (Budget / BOQ) against the same posted cost as the report; null when none is current. */
+    public static function detailedBudget(Project $project): ?array
+    {
+        $current = $project->currentBudget;
+        if (! $current) {
+            return null;
+        }
+
+        return app(ProjectBudgetReport::class)->build($project, $current)['totals'] + ['reference' => $current->reference, 'version' => $current->version, 'title' => $current->title];
     }
 
     public static function finance(Project $project): array
@@ -149,6 +166,7 @@ class ProjectWorkspacePanels implements WorkspacePanels
         $extra = [];
         if ($panel === 'finance') {
             $extra['finance'] = self::finance($project);
+            $extra['detailedBudget'] = self::detailedBudget($project);
             $extra['supplierBills'] = $user->hasPermission('Accounts Payable', 'view')
                 ? SupplierBill::where('project_id', $project->id)->with(['supplier', 'journalEntry'])->latest('id')->limit(10)->get() : collect();
         }

@@ -59,6 +59,7 @@ use App\Http\Controllers\Admin\Master\PaymentTermController;
 use App\Http\Controllers\Admin\Master\ProjectClassificationController;
 use App\Http\Controllers\Admin\Master\ProjectController;
 use App\Http\Controllers\Admin\Master\ProjectSiteController;
+use App\Http\Controllers\Admin\Master\ProjectBudgetController;
 use App\Http\Controllers\Admin\Master\ProjectWorkspaceController;
 use App\Http\Controllers\Admin\Master\SiteController;
 use App\Http\Controllers\Admin\Master\SiteWorkspaceController;
@@ -176,6 +177,18 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
             ->only(['index', 'store', 'update', 'destroy'])
             ->parameters(['project-classifications' => 'project_classification']);
         Route::get('projects/{project}/workspace/{panel}', [ProjectWorkspaceController::class, 'panel'])->name('projects.workspace.panel');
+        // Project Budget / BOQ (Phase 1): planning versions and lines; Budget vs Actual reads the ledger, never writes it.
+        Route::get('projects/{project}/budget', [ProjectBudgetController::class, 'show'])->name('projects.budget.show');
+        Route::post('projects/{project}/budget', [ProjectBudgetController::class, 'store'])->name('projects.budget.store');
+        Route::post('projects/{project}/budget/{budget}/lines', [ProjectBudgetController::class, 'storeLine'])->whereNumber('budget')->name('projects.budget.lines.store');
+        Route::get('projects/{project}/budget/{budget}/lines/{line}/edit', [ProjectBudgetController::class, 'editLine'])->whereNumber(['budget', 'line'])->name('projects.budget.lines.edit');
+        Route::put('projects/{project}/budget/{budget}/lines/{line}', [ProjectBudgetController::class, 'updateLine'])->whereNumber(['budget', 'line'])->name('projects.budget.lines.update');
+        Route::post('projects/{project}/budget/{budget}/lines/{line}/copy', [ProjectBudgetController::class, 'copyLine'])->whereNumber(['budget', 'line'])->name('projects.budget.lines.copy');
+        Route::delete('projects/{project}/budget/{budget}/lines/{line}', [ProjectBudgetController::class, 'destroyLine'])->whereNumber(['budget', 'line'])->name('projects.budget.lines.destroy');
+        Route::post('projects/{project}/budget/{budget}/finalize', [ProjectBudgetController::class, 'finalize'])->whereNumber('budget')->name('projects.budget.finalize');
+        Route::post('projects/{project}/budget/{budget}/revise', [ProjectBudgetController::class, 'revise'])->whereNumber('budget')->name('projects.budget.revise');
+        Route::delete('projects/{project}/budget/{budget}', [ProjectBudgetController::class, 'destroy'])->whereNumber('budget')->name('projects.budget.destroy');
+        Route::get('projects/{project}/budget/{budget}/export', [ProjectBudgetController::class, 'export'])->whereNumber('budget')->name('projects.budget.export');
         Route::get('projects/{project}/sites/create', [ProjectSiteController::class, 'createForProject'])->name('sites.project.create');
         Route::post('projects/{project}/sites', [ProjectSiteController::class, 'storeForProject'])->name('sites.project.store');
         Route::get('projects/{project}/sites/{site}/edit', [ProjectSiteController::class, 'editForProject'])->name('sites.project.edit');

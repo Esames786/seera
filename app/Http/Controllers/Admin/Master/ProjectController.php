@@ -84,7 +84,7 @@ class ProjectController extends Controller
 
     private function workspace(Project $project): array
     {
-        $project->load(['customer', 'branch', 'manager', 'classification']);
+        $project->load(['customer', 'branch', 'manager', 'classification', 'currentBudget']);
 
         return ['project' => $project, 'panels' => ProjectWorkspacePanels::visibleDefinitions(request()->user()),
             'summary' => ProjectWorkspacePanels::summary($project, request()->user())];

@@ -35,8 +35,19 @@
             @endforeach
         </tbody></table>
         <p class="note">All dates; same scoped calculations as Project Cost Report. Posted cost is net debit minus credit on expense-account journal lines carrying this Project. Revenue is net credit minus debit on revenue-account lines. Reversals net off. Billed/invoiced follow the report's non-draft document semantics (including cancelled documents); they are not cash or approved-only AR totals. Cost centres alone do not assign a Project.</p>
-        <p class="note">Posted Site Expenses contribute through journal lines only. Supplier Credit contributes through its linked posted Supplier Bill, never twice. Payroll/labour-to-GL and equipment cost remain outside this phase. Budget is a master amount, not BOQ/budget lines; it is not a site-specific budget.</p>
+        <p class="note">Posted Site Expenses and payroll contribute through journal lines only. Supplier Credit contributes through its linked posted Supplier Bill, never twice. Equipment cost remains outside this phase. Master budget is the scalar amount on the project profile; the detailed budget (BOQ lines, versions, Budget vs Actual) lives on the Budget / BOQ page.</p>
+        @if($detailedBudget ?? null)
+            <table><tbody>
+                <tr><th>Detailed current budget</th><td>SAR {{ number_format($detailedBudget['budget'], 2) }} ({{ $detailedBudget['reference'] }} · {{ $detailedBudget['title'] }})</td></tr>
+                <tr><th>Committed (open purchase orders)</th><td>SAR {{ number_format($detailedBudget['committed'], 2) }}</td></tr>
+                <tr><th>Actual (posted cost, same as above)</th><td>SAR {{ number_format($detailedBudget['actual'], 2) }}</td></tr>
+                <tr><th>Remaining detailed budget</th><td>SAR {{ number_format($detailedBudget['remaining'], 2) }}{{ $detailedBudget['over_budget'] ? ' — Over budget' : '' }}</td></tr>
+            </tbody></table>
+        @else
+            <p class="note">No detailed budget has been set as current for this project yet. Open Budget / BOQ to create one.</p>
+        @endif
         <a class="btn outline" href="{{ route('admin.accounting.reports.project-cost-report', ['project' => $project->id]) }}">Open Project Cost Report</a>
+        <a class="btn outline" href="{{ route('admin.master.projects.budget.show', $project) }}">Open Budget / BOQ</a>
         @if($user->hasPermission('Accounts Payable', 'view'))
             <h3>Supplier Bill approval context (latest 10)</h3>
             <table><thead><tr><th>Bill / Supplier</th><th>Approval</th><th>Payment status</th><th>Accounting</th></tr></thead><tbody>

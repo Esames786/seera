@@ -172,6 +172,17 @@ class EnsureUserHasPermission
         if (str_starts_with($routeName, 'admin.hr.attendance.mobile')) {
             return ['Attendance', 'mobile'];
         }
+        if (str_starts_with($routeName, 'admin.master.projects.budget.')) {
+            // Budget / BOQ: view to read, edit for draft lines, approve to Set as Current / revise,
+            // delete for a draft version, export for the CSV (the controller also needs Financial Reports view).
+            return ['Projects', match (str($routeName)->afterLast('.')->toString()) {
+                'show' => 'view',
+                'finalize', 'revise' => 'approve',
+                'export' => 'export',
+                'destroy' => str_contains($routeName, '.lines.') ? 'edit' : 'delete',
+                default => 'edit',
+            }];
+        }
         if (str_starts_with($routeName, 'admin.users.workspace.')) {
             return ['Users', str_ends_with($routeName, '.save') ? 'edit' : 'view'];
         }
