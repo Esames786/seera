@@ -16,6 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Services\Payroll\PayrollAccountingService;
+use App\Services\Payroll\PayrollBankExportService;
+use App\Services\Payroll\PayrollSettlementService;
+use App\Support\Iban;
 use App\Support\SaveAction;
 use App\Support\Workspace\DocumentActivity;
 use Illuminate\Validation\ValidationException;
@@ -23,7 +26,11 @@ use Illuminate\View\View;
 
 class PayrollRunController extends Controller
 {
-    public function __construct(private readonly PayrollAccountingService $accounting) {}
+    public function __construct(
+        private readonly PayrollAccountingService $accounting,
+        private readonly PayrollSettlementService $settlement,
+        private readonly PayrollBankExportService $bankExport,
+    ) {}
 
     public function index(Request $request): View
     {
@@ -70,9 +77,16 @@ class PayrollRunController extends Controller
      */
     public function show(Request $request, PayrollRun $payroll_run): View
     {
-        $payroll_run->load(['branch', 'project', 'approver', 'journalEntry.lines.account', 'reversalJournal']);
+        $payroll_run->load(['branch', 'project', 'approver', 'journalEntry.lines.account', 'reversalJournal',
+            'activeSettlement.paymentAccount', 'activeSettlement.journalEntry', 'activeSettlement.creator',
+            'settlements.paymentAccount', 'settlements.journalEntry', 'settlements.reversalJournal']);
         $request->validate(['page' => ['nullable', 'integer', 'min:1']]);
         $user = $request->user();
+        // Salary payment and bank export act on the WHOLE run: a scoped viewer who sees only some rows gets neither.
+        $wholeRun = PayrollSettlementService::coversWholeRun($user, $payroll_run);
+        $settlementRole = $user->hasPermission('Payroll', 'post') && $user->hasPermission('Accounts Payable', 'process');
+        $settlementError = $this->settlement->eligibilityError($payroll_run);
+        $canExport = $wholeRun && $user->hasPermission('Payroll', 'export') && $payroll_run->isApproved();
         $items = $payroll_run->items()->with(['employee.department', 'employee.designation', 'employee.project'])
             ->orderBy('id')->paginate(25)->withQueryString()->fragment('items');
         $totals = $payroll_run->items()->selectRaw('COALESCE(SUM(basic_salary),0) as basic, COALESCE(SUM(total_allowances),0) as allowances, COALESCE(SUM(overtime_amount),0) as overtime, COALESCE(SUM(total_deductions),0) as deductions, COALESCE(SUM(gross_amount),0) as gross, COALESCE(SUM(net_amount),0) as net, COUNT(*) as employees')->first();
@@ -89,12 +103,108 @@ class PayrollRunController extends Controller
             'canViewJournal' => $user->hasPermission('Journal Entries', 'view'),
             'canViewEmployee' => $user->hasPermission('HR', 'view'),
             'activity' => DocumentActivity::latest($user, [$payroll_run->code], ['Payroll', 'Accounting']),
+            // Salary payment (Phase 2)
+            'wholeRun' => $wholeRun,
+            'settlement' => $payroll_run->activeSettlement,
+            'settlements' => $payroll_run->settlements,
+            'settlementRole' => $settlementRole,
+            'settlementError' => $settlementError,
+            'canSettle' => $wholeRun && $settlementRole && $settlementError === null,
+            'canReverseSettlement' => $wholeRun && $settlementRole && $user->hasPermission('Payroll', 'approve') && $payroll_run->isPaid(),
+            'canViewSettlementFinance' => $user->hasPermission('Accounts Payable', 'view') || $user->hasPermission('Journal Entries', 'view'),
+            'settlementAccounts' => PayrollSettlementService::paymentAccounts()->get(),
+            // Bank export (Phase 2)
+            'canExport' => $canExport,
+            'canExportRole' => $user->hasPermission('Payroll', 'export'),
+            'readiness' => $canExport ? $this->bankExport->readiness($payroll_run) : null,
+            'exports' => $canExport ? $payroll_run->bankExports()->with('generator')->get() : collect(),
+        ]);
+    }
+
+    /** Finance: record the full salary payment of a posted run from a Cash / Bank account. Replay-safe. */
+    public function settle(Request $request, PayrollRun $payroll_run): RedirectResponse
+    {
+        $user = $request->user();
+        abort_unless($user->hasPermission('Payroll', 'post') && $user->hasPermission('Accounts Payable', 'process'), 403, 'Recording a salary payment needs Payroll post and the Accounts Payable payment right.');
+        abort_unless(PayrollSettlementService::coversWholeRun($user, $payroll_run), 403, 'This payroll run includes employees outside your scope; only a user authorized for the whole run can pay it.');
+        $data = $request->validate([
+            'payment_date' => ['required', 'date', 'before_or_equal:today'],
+            'payment_account_id' => ['required', 'integer'],
+            'reference_number' => ['nullable', 'string', 'max:100'],
+            'notes' => ['nullable', 'string', 'max:1000'],
+            'idempotency_key' => ['nullable', 'string', 'max:64'],
+        ], ['payment_date.before_or_equal' => 'The payment date cannot be in the future.']);
+        try {
+            [$settlement, $replayed] = $this->settlement->settle($payroll_run->id, $data, $user->id);
+        } catch (ValidationException $exception) {
+            return back()->withErrors($exception->errors())->withInput();
+        }
+        if ($replayed) {
+            return redirect()->to(route('admin.hr.payroll.show', $payroll_run).'#payment')
+                ->with('status', 'This salary payment of SAR '.number_format((float) $settlement->amount, 2).' was already recorded on '.$settlement->payment_date->toDateString().'; nothing was added.');
+        }
+        ActivityLog::record($request, 'Payroll', 'Recorded salary payment', $payroll_run->code.' - SAR '.number_format((float) $settlement->amount, 2).' from '.$settlement->paymentAccount?->label());
+
+        return redirect()->to(route('admin.hr.payroll.show', $payroll_run).'#payment')
+            ->with('status', 'Salary payment recorded: '.$settlement->journalEntry?->journal_number.' (Dr payroll payable, Cr '.$settlement->paymentAccount?->account_name.'). The run is now Paid.');
+    }
+
+    /** Finance-only: reverse the salary payment; the run becomes unpaid again, the original settlement stays in history. */
+    public function reverseSettlement(Request $request, PayrollRun $payroll_run): RedirectResponse
+    {
+        $user = $request->user();
+        abort_unless($user->hasPermission('Payroll', 'post') && $user->hasPermission('Accounts Payable', 'process') && $user->hasPermission('Payroll', 'approve'), 403);
+        abort_unless(PayrollSettlementService::coversWholeRun($user, $payroll_run), 403);
+        $data = $request->validate(['reason' => ['required', 'string', 'max:500']], ['reason.required' => 'Give the reason for reversing the salary payment; it is kept on the settlement.']);
+        try {
+            $this->settlement->reverse($payroll_run->id, trim($data['reason']), $user->id);
+        } catch (ValidationException $exception) {
+            return back()->withErrors($exception->errors());
+        }
+        ActivityLog::record($request, 'Payroll', 'Reversed salary payment', $payroll_run->code.': '.trim($data['reason']));
+
+        return redirect()->to(route('admin.hr.payroll.show', $payroll_run).'#payment')
+            ->with('status', 'Salary payment reversed (Dr bank / cash, Cr payroll payable); the run is unpaid again and the original settlement stays in history.');
+    }
+
+    /** Generate a new, frozen version of the generic bank transfer file (CSV). Whole-run authorization required. */
+    public function bankExport(Request $request, PayrollRun $payroll_run): RedirectResponse
+    {
+        $user = $request->user();
+        abort_unless($user->hasPermission('Payroll', 'export'), 403);
+        abort_unless(PayrollSettlementService::coversWholeRun($user, $payroll_run), 403, 'This payroll run includes employees outside your scope; only a user authorized for the whole run can export it.');
+        try {
+            $export = $this->bankExport->generate($payroll_run, $user->id);
+        } catch (ValidationException $exception) {
+            return back()->withErrors($exception->errors());
+        }
+        ActivityLog::record($request, 'Payroll', 'Bank export generated', $payroll_run->code.' - '.$export->file_name.' · '.$export->row_count.' employees · SAR '.number_format((float) $export->total_amount, 2));
+
+        return redirect()->to(route('admin.hr.payroll.show', $payroll_run).'#export')
+            ->with('status', 'Bank transfer file '.$export->file_name.' generated for '.$export->row_count.' bank-transfer employees (SAR '.number_format((float) $export->total_amount, 2).'). Download it from the Bank Export section.');
+    }
+
+    /** Download a generated file exactly as it was frozen. No public URL; Payroll export + whole-run authorization. */
+    public function bankExportDownload(Request $request, PayrollRun $payroll_run, int $export)
+    {
+        $user = $request->user();
+        abort_unless($user->hasPermission('Payroll', 'export'), 403);
+        abort_unless(PayrollSettlementService::coversWholeRun($user, $payroll_run), 403);
+        $file = $payroll_run->bankExports()->findOrFail($export);
+        ActivityLog::record($request, 'Payroll', 'Bank export downloaded', $payroll_run->code.' - '.$file->file_name);
+
+        return response($this->bankExport->csv($file), 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="'.$file->file_name.'"',
+            'Cache-Control' => 'private, no-store',
+            'X-Content-Type-Options' => 'nosniff',
         ]);
     }
 
     /** Finance: post the approved run to accounting, or retry after a failure. Idempotent. */
     public function post(Request $request, PayrollRun $payroll_run): RedirectResponse
     {
+        abort_unless(PayrollSettlementService::coversWholeRun($request->user(), $payroll_run), 403, 'This payroll run includes employees outside your scope; only a user authorized for the whole run can post it.');
         if (! $payroll_run->isApproved()) {
             return back()->withErrors(['posting' => 'Only an approved payroll run can be posted to accounting.']);
         }
@@ -115,6 +225,7 @@ class PayrollRunController extends Controller
     public function reverse(Request $request, PayrollRun $payroll_run): RedirectResponse
     {
         abort_unless($request->user()->hasPermission('Payroll', 'post') && $request->user()->hasPermission('Payroll', 'approve'), 403);
+        abort_unless(PayrollSettlementService::coversWholeRun($request->user(), $payroll_run), 403, 'This payroll run includes employees outside your scope; only a user authorized for the whole run can reverse it.');
         $data = $request->validate(['reason' => ['required', 'string', 'max:500']], ['reason.required' => 'Give the reason for reversing; it is kept on the run.']);
         try {
             $this->accounting->reverse($payroll_run->id, trim($data['reason']), $request->user()->id);

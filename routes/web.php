@@ -249,6 +249,11 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::post('payroll/{payroll_run}/post', [PayrollRunController::class, 'post'])->name('payroll.post');
         Route::post('payroll/{payroll_run}/reverse', [PayrollRunController::class, 'reverse'])->name('payroll.reverse');
         Route::get('payroll/{payroll_run}/items/{item}/payslip', [PayrollRunController::class, 'payslip'])->whereNumber('item')->name('payroll.payslip');
+        // Payroll Phase 2: salary settlement (Dr payroll payable, Cr bank / cash) and the generic bank transfer export.
+        Route::post('payroll/{payroll_run}/settle', [PayrollRunController::class, 'settle'])->name('payroll.settle');
+        Route::post('payroll/{payroll_run}/settlement/reverse', [PayrollRunController::class, 'reverseSettlement'])->name('payroll.settlement-reverse');
+        Route::post('payroll/{payroll_run}/bank-export', [PayrollRunController::class, 'bankExport'])->name('payroll.bank-export');
+        Route::get('payroll/{payroll_run}/bank-export/{export}', [PayrollRunController::class, 'bankExportDownload'])->whereNumber('export')->name('payroll.bank-export.download');
         Route::resource('payroll', PayrollRunController::class)->parameters(['payroll' => 'payroll_run']);
 
         Route::post('eosb/{end_of_service_record}/approve', [EndOfServiceController::class, 'approve'])->name('eosb.approve');

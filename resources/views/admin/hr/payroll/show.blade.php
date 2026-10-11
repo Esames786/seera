@@ -16,11 +16,14 @@
             \App\Models\PayrollRun::ACCOUNTING_REVERSED => 'gray',
             default => 'gray',
         };
-        $sections = ['summary' => 'Run Summary', 'items' => 'Payroll Items', 'accounting' => 'Accounting'];
+        $paymentClass = $run->isPaid() ? 'green' : ($run->accounting_status === \App\Models\PayrollRun::ACCOUNTING_POSTED ? 'yellow' : 'gray');
+        $sections = ['summary' => 'Run Summary', 'items' => 'Employees', 'accounting' => 'Accounting', 'payment' => 'Salary Payment'];
+        if ($canExport || $canExportRole) $sections['export'] = 'Bank Export';
         if ($activity !== null) $sections['activity'] = 'Activity';
+        $paymentJournal = $settlement?->journalEntry;
     @endphp
 
-    <x-admin.page-header :title="'Payroll Run: '.$run->code" :description="$run->periodLabel().' — '.$run->period_start->toDateString().' to '.$run->period_end->toDateString().'. Read-only view; Process, Approve, Post and Reverse are explicit actions.'">
+    <x-admin.page-header :title="'Payroll Run: '.$run->code" :description="$run->periodLabel().' — '.$run->period_start->toDateString().' to '.$run->period_end->toDateString().'. Read-only view; Process, Approve, Post, Pay and Reverse are explicit actions.'">
         @if ($canEdit)
             <a class="btn outline" href="{{ route('admin.hr.payroll.edit', $run) }}">Edit</a>
         @endif
@@ -42,7 +45,10 @@
                 <button type="submit" class="btn primary">{{ $run->accounting_status === \App\Models\PayrollRun::ACCOUNTING_FAILED ? 'Retry Posting' : 'Post to Accounting' }}</button>
             </form>
         @endif
-        @if ($canReverse)
+        @if ($canSettle)
+            <a class="btn primary" href="#payment">Record Salary Payment</a>
+        @endif
+        @if ($canReverse && ! $run->isPaid())
             <form method="POST" action="{{ route('admin.hr.payroll.reverse', $run) }}" onsubmit="var reason = prompt('Reason for reversing this payroll posting (kept on the run):'); if (!reason) return false; this.reason.value = reason;">
                 @csrf
                 <input type="hidden" name="reason" value=""/>
@@ -62,6 +68,7 @@
             <div>
                 <x-admin.status-badge :status="$run->status"/>
                 <span class="badge {{ $accountingClass }}">{{ $run->accountingLabel() }}</span>
+                <span class="badge {{ $paymentClass }}">{{ $run->paymentLabel() }}</span>
             </div>
         </div>
         <dl>
@@ -79,6 +86,11 @@
             <dd>
                 {{ $run->accountingLabel() }}
                 @if ($journal && $canViewJournal) · <a href="{{ route('admin.accounting.journal-entries.show', $journal) }}">{{ $journal->journal_number }}</a>@endif
+            </dd>
+            <dt>Salary payment</dt>
+            <dd>
+                {{ $run->paymentLabel() }}{{ $run->settled_at ? ' · '.$run->settled_at->format('Y-m-d') : '' }}
+                @if ($paymentJournal && $canViewJournal) · <a href="{{ route('admin.accounting.journal-entries.show', $paymentJournal) }}">{{ $paymentJournal->journal_number }}</a>@endif
             </dd>
         </dl>
     </div>
@@ -110,12 +122,13 @@
             <tr><th>Approved At</th><td>{{ $run->approved_at?->format('Y-m-d H:i') ?? '-' }}</td></tr>
             <tr><th>Basic / Allowances / Overtime</th><td>{{ $money($totals->basic) }} / {{ $money($totals->allowances) }} / {{ $money($totals->overtime) }}</td></tr>
             <tr><th>Accounting</th><td>{{ $run->accountingLabel() }}</td></tr>
+            <tr><th>Salary payment</th><td>{{ $run->paymentLabel() }}</td></tr>
             <tr><th>Notes</th><td>{{ $run->notes ?? '-' }}</td></tr>
         </tbody>
     </x-admin.data-table>
 
-    {{-- Payroll Items --}}
-    <x-admin.data-table title="Payroll Items" :subtitle="$totals->employees.' employees · stored values from Process; net = basic + allowances + approved overtime − deductions' " id="items">
+    {{-- Employees --}}
+    <x-admin.data-table title="Employees" :subtitle="$totals->employees.' employees · stored values from Process; net = basic + allowances + approved overtime − deductions' " id="items">
         <thead>
             <tr><th>Employee</th><th>Department</th><th>Project / Cost Center</th><th>Present / Leave</th><th>Basic</th><th>Allowances</th><th>Overtime</th><th>Gross</th><th>Deductions</th><th>Net</th><th></th></tr>
         </thead>
@@ -145,7 +158,7 @@
     </x-admin.data-table>
 
     {{-- Accounting --}}
-    <x-admin.data-table title="Accounting" subtitle="Approval is HR authorization; posting is the financial recognition (Dr salary expense per employee with the employee's project, Cr payroll payable for the net, Cr deduction liability). Salary payment is a later phase." class="detail-table" id="accounting">
+    <x-admin.data-table title="Accounting" subtitle="Approval is HR authorization; posting is the financial recognition (Dr salary expense per employee with the employee's project, Cr payroll payable for the net, Cr deduction liability). Paying the salaries is the separate Salary Payment step below." class="detail-table" id="accounting">
         <tbody>
             <tr><th>Accounting state</th><td><span class="badge {{ $accountingClass }}">{{ $run->accountingLabel() }}</span></td></tr>
             @if ($journal)
@@ -176,10 +189,103 @@
                         <button type="submit" class="btn sm primary">{{ $run->accounting_status === \App\Models\PayrollRun::ACCOUNTING_FAILED ? 'Retry Posting' : 'Post to Accounting' }}</button>
                     </form>
                 @endif
-                <span class="small">Posting is idempotent: a retry never creates a second journal.</span>
+                <span class="small">Posting is idempotent: a retry never creates a second journal.{{ $canReverse && $run->isPaid() ? ' Reversing the payroll posting is not offered while a salary payment is recorded: reverse the salary payment first.' : '' }}</span>
             </x-slot:footer>
         @endif
     </x-admin.data-table>
+
+    {{-- Salary Payment --}}
+    <x-admin.data-table title="Salary Payment" subtitle="Settlement of the payroll payable: Dr payroll payable, Cr the chosen Cash / Bank account. One full payment per run; the expense is never posted again and project cost does not move. Bank / WPS file generation is the separate Bank Export section." class="detail-table" id="payment">
+        <tbody>
+            <tr><th>Payroll payable</th><td>{{ $money($run->net_amount) }}</td></tr>
+            <tr><th>Paid</th><td>{{ $money($run->paid_amount) }}</td></tr>
+            <tr><th>Remaining</th><td><strong>{{ $money($run->remainingPayable()) }}</strong></td></tr>
+            <tr><th>Payment state</th><td><span class="badge {{ $paymentClass }}">{{ $run->paymentLabel() }}</span></td></tr>
+            @if ($settlement)
+                <tr><th>Payment date</th><td>{{ $settlement->payment_date->toDateString() }} · recorded {{ $settlement->created_at?->format('Y-m-d H:i') }} by {{ $settlement->creator?->name ?? '-' }}</td></tr>
+                <tr><th>Payment journal</th><td>@if ($paymentJournal && $canViewJournal)<a href="{{ route('admin.accounting.journal-entries.show', $paymentJournal) }}" style="font-weight:700">{{ $paymentJournal->journal_number }}</a>@else{{ $paymentJournal?->journal_number ?? '-' }}@endif @if ($paymentJournal)· <x-admin.status-badge :status="$paymentJournal->status"/>@endif</td></tr>
+                @if ($canViewSettlementFinance)
+                    <tr><th>Bank / Cash account</th><td>{{ $settlement->paymentAccount?->label() ?? '-' }} · {{ $settlement->payment_method }}</td></tr>
+                    <tr><th>Reference</th><td>{{ $settlement->reference_number ?? '-' }}</td></tr>
+                @endif
+            @elseif ($settlementRole && $settlementError)
+                <tr><th>Why not payable yet</th><td class="small">{{ $settlementError }}</td></tr>
+            @endif
+            @foreach ($settlements->filter(fn ($s) => $s->isReversed()) as $old)
+                <tr><th class="small">Reversed payment</th><td class="small">{{ $old->payment_date->toDateString() }} · SAR {{ number_format($old->amount, 2) }}{{ $canViewSettlementFinance ? ' · '.($old->paymentAccount?->label() ?? '') : '' }} · journal {{ $old->journalEntry?->journal_number }} reversed by {{ $old->reversalJournal?->journal_number }} on {{ $old->reversed_at?->format('Y-m-d') }} — {{ $old->reversal_reason }}</td></tr>
+            @endforeach
+            @if (! $wholeRun)
+                <tr><th>Authorization</th><td class="small">This payroll run includes employees outside your scope; only a user authorized for the whole run can pay or export it.</td></tr>
+            @endif
+        </tbody>
+        @if ($canSettle || $canReverseSettlement)
+            <x-slot:footer>
+                @if ($canSettle)
+                    <form method="POST" action="{{ route('admin.hr.payroll.settle', $run) }}" style="display:flex;flex-wrap:wrap;gap:8px;align-items:end">
+                        @csrf
+                        {{-- One-time key so a double click or a retry cannot record this payment twice (F02). --}}
+                        <input type="hidden" name="idempotency_key" value="{{ old('idempotency_key', (string) \Illuminate\Support\Str::uuid()) }}"/>
+                        <div><label for="payment_date">Payment date</label><input id="payment_date" type="date" name="payment_date" class="input" value="{{ old('payment_date', today()->toDateString()) }}" max="{{ today()->toDateString() }}" required/></div>
+                        <div><label for="payment_account_id">Pay from</label>
+                            <select id="payment_account_id" name="payment_account_id" class="select" required>
+                                <option value="">Select Cash / Bank account</option>
+                                @foreach ($settlementAccounts as $account)
+                                    <option value="{{ $account->id }}" @selected((string) old('payment_account_id') === (string) $account->id)>{{ $account->label() }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div><label for="reference_number">Reference</label><input id="reference_number" name="reference_number" class="input" maxlength="100" value="{{ old('reference_number') }}" placeholder="Bank batch / voucher"/></div>
+                        <button type="submit" class="btn sm primary" onclick="return confirm('Record the full salary payment of {{ $money($run->net_amount) }} for {{ $run->code }}?');">Record Salary Payment</button>
+                    </form>
+                @endif
+                @if ($canReverseSettlement)
+                    <form method="POST" action="{{ route('admin.hr.payroll.settlement-reverse', $run) }}" onsubmit="var reason = prompt('Reason for reversing this salary payment (kept on the settlement):'); if (!reason) return false; this.reason.value = reason;">
+                        @csrf
+                        <input type="hidden" name="reason" value=""/>
+                        <button type="submit" class="btn sm danger" title="Posts the opposite journal (Dr bank / cash, Cr payroll payable); the run becomes unpaid again">Reverse Salary Payment</button>
+                    </form>
+                @endif
+            </x-slot:footer>
+        @endif
+    </x-admin.data-table>
+
+    {{-- Bank Export --}}
+    @if ($canExport || $canExportRole)
+        <x-admin.data-table title="Bank Export" subtitle="Generic payroll bank transfer file (CSV) built from the stored payroll rows and the employees' bank details, frozen when generated. This is not a verified Saudi WPS / Mudad file." class="detail-table" id="export">
+            <tbody>
+                @if (! $canExport)
+                    <tr><th>Not available</th><td class="small">{{ ! $run->isApproved() ? 'The run must be approved before a transfer file can be generated.' : 'This payroll run includes employees outside your scope; only a user authorized for the whole run can export it.' }}</td></tr>
+                @else
+                    <tr><th>Employees</th><td>{{ $readiness['employees'] }} total · {{ $readiness['bank'] }} bank transfer · {{ $readiness['cash'] }} cash{{ $readiness['other'] ? ' · '.$readiness['other'].' other' : '' }}</td></tr>
+                    <tr><th>Net salary total</th><td>{{ $money($readiness['net_total']) }} (bank transfer rows: {{ $money($readiness['bank_total']) }})</td></tr>
+                    <tr><th>Readiness</th><td>@if ($readiness['errors'] === [])<span class="badge green">Ready</span>@else<span class="badge red">{{ $readiness['incomplete'] }} employee(s) with incomplete bank details</span>@endif</td></tr>
+                    @foreach ($readiness['errors'] as $error)
+                        <tr><th class="small">{{ $loop->first ? 'Fix before export' : '' }}</th><td class="small">{{ $error['code'] }} · {{ $error['name'] }} — {{ $error['problem'] }}</td></tr>
+                    @endforeach
+                    @forelse ($exports as $file)
+                        <tr><th class="small">{{ $loop->first ? 'Generated files' : '' }}</th><td class="small"><a href="{{ route('admin.hr.payroll.bank-export.download', [$run, $file->id]) }}" style="font-weight:700">{{ $file->file_name }}</a> · {{ $file->row_count }} employees · {{ $money($file->total_amount) }} · {{ $file->created_at?->format('Y-m-d H:i') }} by {{ $file->generator?->name ?? '-' }} · SHA-256 {{ substr($file->file_hash, 0, 12) }}…</td></tr>
+                    @empty
+                        <tr><th class="small">Generated files</th><td class="small">None yet.</td></tr>
+                    @endforelse
+                @endif
+            </tbody>
+            @if ($canExport)
+                <x-slot:footer>
+                    @if ($run->isPaid())
+                        <span class="small">The run is paid: the file generated before payment stays downloadable; no new version is created.</span>
+                    @elseif ($run->reversal_journal_id)
+                        <span class="small">The payroll accounting was reversed; no transfer file can be generated.</span>
+                    @else
+                        <form method="POST" action="{{ route('admin.hr.payroll.bank-export', $run) }}">
+                            @csrf
+                            <button type="submit" class="btn sm primary" @disabled($readiness['errors'] !== [] || $readiness['rows'] === [])>Generate bank transfer file</button>
+                        </form>
+                        <span class="small">Each generation freezes a new version; a later change to an employee's bank details never alters an earlier file.</span>
+                    @endif
+                </x-slot:footer>
+            @endif
+        </x-admin.data-table>
+    @endif
 
     {{-- Activity --}}
     @if ($activity !== null)
@@ -202,6 +308,6 @@
     @endif
 
     <div class="note">
-        Present and leave days are informational; they do not change pay in the current system. GOSI, WPS / bank files and salary payment settlement are not yet operational.
+        Present and leave days are informational; they do not change pay in the current system. GOSI and an official Saudi WPS / Mudad file are not yet operational; the Bank Export is a generic transfer list.
     </div>
 @endsection
