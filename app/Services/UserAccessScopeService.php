@@ -39,6 +39,24 @@ class UserAccessScopeService
             return;
         }
 
+        // Equipment: an asset is visible through its current project / site; its history, logs and files follow the asset.
+        if ($table === 'equipment_assets') {
+            if ($scope === 'project') {
+                $query->whereIn('current_project_id', $this->projectIdsFor($user) ?: [0]);
+            } elseif ($scope === 'site') {
+                $query->where('current_site_id', $user->site_id ?: 0);
+            } else {
+                $query->whereRaw('1 = 0');
+            }
+
+            return;
+        }
+        if (in_array($table, ['equipment_assignments', 'equipment_fuel_logs', 'equipment_maintenance_records', 'equipment_documents'], true)) {
+            $query->whereHas('asset');
+
+            return;
+        }
+
         if (in_array($table, ['purchase_request_lines', 'purchase_order_lines', 'goods_receipt_lines', 'stock_issue_lines', 'stock_transfer_lines'], true)) {
             $relation = match ($table) {
                 'purchase_request_lines' => 'purchaseRequest',

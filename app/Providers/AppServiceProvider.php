@@ -6,6 +6,11 @@ use App\Models\AttendanceRecord;
 use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
 use App\Models\Employee;
+use App\Models\EquipmentAsset;
+use App\Models\EquipmentAssignment;
+use App\Models\EquipmentDocument;
+use App\Models\EquipmentFuelLog;
+use App\Models\EquipmentMaintenanceRecord;
 use App\Models\EmployeeDocument;
 use App\Models\EndOfServiceRecord;
 use App\Models\GoodsReceipt;
@@ -64,6 +69,7 @@ class AppServiceProvider extends ServiceProvider
         $scopedModels = [
             Project::class, Site::class, Warehouse::class, SiteExpense::class,
             Employee::class, AttendanceRecord::class,
+            EquipmentAsset::class, EquipmentAssignment::class, EquipmentFuelLog::class, EquipmentMaintenanceRecord::class, EquipmentDocument::class,
             EmployeeDocument::class, LeaveRequest::class,
             OvertimeRecord::class, SalaryStructure::class,
             EndOfServiceRecord::class, PayrollRunItem::class,
