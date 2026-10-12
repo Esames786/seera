@@ -1,11 +1,12 @@
 @php
-    $data = compact('panel', 'project', 'user', 'returnTo') + ['supplierPurchases' => $supplierPurchases ?? collect(), 'orderReceipts' => $orderReceipts ?? collect(), 'warehouseQuantities' => $warehouseQuantities ?? collect()];
+    $data = compact('panel', 'project', 'user', 'returnTo') + ['supplierPurchases' => $supplierPurchases ?? collect(), 'orderReceipts' => $orderReceipts ?? collect(), 'warehouseQuantities' => $warehouseQuantities ?? collect(), 'equipmentFuel' => $equipmentFuel ?? collect(), 'equipmentMaintenance' => $equipmentMaintenance ?? collect()];
     $columns = \App\Support\Workspace\ProjectPanelTable::columns($panel);
     $empty = match($panel) {
         'site-expenses' => 'No visible Site Expenses for this project. Add an expense and submit its receipt for approval.',
         'customer' => 'No customer is linked. Choose the customer on the Project profile.',
         'sites' => 'No visible locations belong to this project yet. Add a location when authorized.',
         'staff' => 'No visible employees are assigned. Set the current Project on the employee form; each employee has one current project.',
+        'equipment' => 'No equipment is currently assigned to this project. Open Equipment & Vehicles → View → Current Assignment to assign an asset.',
         'warehouses', 'stock' => 'No visible warehouses or positive stock balances for this project. Assign a warehouse to the project; receive stock through Inventory documents.',
         'suppliers' => 'No visible suppliers are linked. Link this project from Supplier Manage or create an authorized project purchase document.',
         'requests', 'orders', 'receipts' => 'No visible project documents yet. Use the existing Inventory purchase workflow and choose this project; a GRN follows its PO.',
@@ -24,6 +25,7 @@
     </div>
     <div data-panel-status role="status" aria-live="polite"></div>
     @if($panel === 'site-expenses' && $user->hasPermission('Site Expenses', 'create'))<a class="btn primary sm" href="{{ route('admin.site-expenses.create', ['project_id' => $project->id]) }}">Add Site Expense</a>@endif
+    @if($panel === 'equipment')<p class="note">Assets whose active assignment is this project. Posted fuel / maintenance are the Finance-posted amounts (information only); the Project Cost Report and Budget vs Actual remain the cost truth. Live GPS tracking is not connected.</p>@if($user->hasPermission('Equipment', 'process'))<a class="btn primary sm" href="{{ route('admin.equipment.index', ['status' => 'available']) }}">Assign Equipment (open register)</a>@endif @endif
     @isset($materialTotal)<p class="note">Material used: SAR {{ number_format($materialTotal, 2) }}. Posted issue-ledger values only; receipts are not consumption. Quantities stay per item and unit, not one mixed-unit total.</p>@endisset
     @isset($materialQuantity)<p class="note">Total issued quantity (one shared unit): {{ number_format($materialQuantity, 3) }} {{ $materialUnit }}.</p>@endisset
     @isset($stockTotal)<p class="note">Current positive stock value: SAR {{ number_format($stockTotal, 2) }}. Stored inventory values; quantities are shown per item and unit.</p>@endisset

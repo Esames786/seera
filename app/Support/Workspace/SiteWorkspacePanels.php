@@ -5,6 +5,7 @@ namespace App\Support\Workspace;
 use App\Models\ActivityLog;
 use App\Models\AttendanceRecord;
 use App\Models\Employee;
+use App\Models\EquipmentAsset;
 use App\Models\GoodsReceipt;
 use App\Models\Project;
 use App\Models\PurchaseOrder;
@@ -23,7 +24,7 @@ class SiteWorkspacePanels implements WorkspacePanels
     public static function panels(): array
     {
         $panels = [];
-        foreach (['project' => 'Projects', 'location' => 'Sites', 'staff' => 'HR', 'warehouses' => 'Warehouses', 'requests' => 'Purchase Requests', 'orders' => 'Purchase Orders', 'receipts' => 'Goods Receipts', 'materials' => 'Stock Issues', 'expenses' => 'Site Expenses', 'attendance' => 'Attendance', 'activity' => 'Activity Logs'] as $key => $module) {
+        foreach (['project' => 'Projects', 'location' => 'Sites', 'staff' => 'HR', 'equipment' => 'Equipment', 'warehouses' => 'Warehouses', 'requests' => 'Purchase Requests', 'orders' => 'Purchase Orders', 'receipts' => 'Goods Receipts', 'materials' => 'Stock Issues', 'expenses' => 'Site Expenses', 'attendance' => 'Attendance', 'activity' => 'Activity Logs'] as $key => $module) {
             $panels[$key] = new PanelDefinition($key, 'workspace.'.$key, $module);
         }
 
@@ -37,6 +38,7 @@ class SiteWorkspacePanels implements WorkspacePanels
         return match ($panel) {
             'project' => Project::whereKey($site->project_id ?? 0)->with(['manager'])->when($actor->hasPermission('Customers', 'view'), fn ($q) => $q->with('customer')),
             'staff' => $scoped(Employee::query())->with(['department', 'designation', 'project']),
+            'equipment' => EquipmentAsset::where('current_site_id', $site->id)->where('current_project_id', $site->project_id)->with(['operator', 'project']),
             'warehouses' => $scoped(Warehouse::query())->with(['incharge', 'project'])->when($actor->hasPermission('Warehouse Stock', 'view'), fn ($q) => $q->withCount(['stocks as stocked_items' => fn ($s) => $s->where('quantity', '>', 0)])->withSum(['stocks' => fn ($s) => $s->where('quantity', '>', 0)], 'total_value')),
             'requests' => $scoped(PurchaseRequest::query()),
             'orders' => $scoped(PurchaseOrder::query()),
@@ -59,6 +61,7 @@ class SiteWorkspacePanels implements WorkspacePanels
         return match ($panel) {
             'project' => [$row->code, $row->name, $actor->hasPermission('Customers', 'view') ? $row->customer?->name : null, $row->manager?->name, $row->status],
             'staff' => [$row->employee_code, $row->name, $row->department?->name, $row->designation?->name, $row->project?->name, $row->status, $row->mobile_access ? __('workspace.yes') : __('workspace.no')],
+            'equipment' => [$row->asset_code, $row->name, $row->typeLabel(), $row->operator?->name, $row->statusLabel(), $row->meterLabel()],
             'warehouses' => [$row->code, $row->name, $row->incharge?->name, $row->project?->name, $row->status, ...($actor->hasPermission('Warehouse Stock', 'view') ? [$row->stocked_items, number_format((float) $row->stocks_sum_total_value, 2)] : [])],
             'requests' => [$row->pr_number, $row->request_date?->format('Y-m-d'), $row->status],
             'orders' => [$row->po_number, $row->po_date?->format('Y-m-d'), $row->status],
@@ -74,6 +77,7 @@ class SiteWorkspacePanels implements WorkspacePanels
     {
         return match ($panel) {
             'project' => ['code', 'name', 'customer', 'manager', 'status'], 'staff' => ['code', 'name', 'department', 'designation', 'project', 'status', 'mobile'],
+            'equipment' => ['code', 'name', 'eq_type', 'eq_operator', 'status', 'eq_meter'],
             'warehouses' => ['code', 'name', 'manager', 'project', 'status', ...($actor->hasPermission('Warehouse Stock', 'view') ? ['stocked_items', 'stock_value'] : [])],
             'requests','orders','receipts' => ['number', 'date', 'status'], 'materials' => ['number', 'date', 'item', 'quantity', 'value'],
             'expenses' => ['number', 'date', 'category', 'submitter', 'payment_type', 'amount', 'approval_state', 'accounting_state'],
@@ -84,7 +88,7 @@ class SiteWorkspacePanels implements WorkspacePanels
     public static function route(string $panel): ?string
     {
         return match ($panel) {
-            'project' => 'admin.master.projects.show', 'staff' => 'admin.hr.employees.show', 'warehouses' => 'admin.master.warehouses.show',
+            'project' => 'admin.master.projects.show', 'staff' => 'admin.hr.employees.show', 'equipment' => 'admin.equipment.show', 'warehouses' => 'admin.master.warehouses.show',
             'requests' => 'admin.inventory.purchase-requests.show','orders' => 'admin.inventory.purchase-orders.show','receipts' => 'admin.inventory.goods-receipts.show',
             'materials' => 'admin.inventory.stock-issues.show','expenses' => 'admin.site-expenses.show', default => null,
         };

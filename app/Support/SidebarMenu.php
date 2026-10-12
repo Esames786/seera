@@ -76,7 +76,7 @@ class SidebarMenu
                     static::link('admin.hr.dashboard', 'admin.hr.dashboard', '📋', 'HR Dashboard'),
                     static::link('admin.hr.employees.index', 'admin.hr.employees.*', '👷', 'Employees'),
                     static::link('admin.site-expenses.index', 'admin.site-expenses.*', '📊', 'Site Expenses'),
-                    static::soon('equipment', '🚜', 'Equipment & Vehicles'),
+                    static::link('admin.equipment.index', 'admin.equipment.*', '🚜', 'Equipment & Vehicles'),
                 ],
             ],
             [

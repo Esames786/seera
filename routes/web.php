@@ -71,6 +71,8 @@ use App\Http\Controllers\Admin\PasswordChangeController;
 use App\Http\Controllers\Admin\PermissionMatrixController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\RoleHierarchyController;
+use App\Http\Controllers\Admin\Equipment\EquipmentAssetController;
+use App\Http\Controllers\Admin\Equipment\EquipmentOperationsController;
 use App\Http\Controllers\Admin\SiteExpenseController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserWorkspaceController;
@@ -132,6 +134,21 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::post('site-expenses/{site_expense}/'.$action, [SiteExpenseController::class, $action])->name('site-expenses.'.$action);
     }
     Route::resource('site-expenses', SiteExpenseController::class);
+
+    // Equipment & Vehicles (Phase 1): register, workspace, assignment, fuel, maintenance, private documents, Finance posting.
+    Route::get('equipment/export', [EquipmentAssetController::class, 'export'])->name('equipment.export');
+    Route::post('equipment/{equipment}/assign', [EquipmentOperationsController::class, 'assign'])->name('equipment.assign');
+    Route::post('equipment/{equipment}/release', [EquipmentOperationsController::class, 'release'])->name('equipment.release');
+    Route::post('equipment/{equipment}/fuel', [EquipmentOperationsController::class, 'storeFuel'])->name('equipment.fuel.store');
+    Route::post('equipment/{equipment}/fuel/{fuel}/post', [EquipmentOperationsController::class, 'postFuel'])->whereNumber('fuel')->name('equipment.fuel.post');
+    Route::post('equipment/{equipment}/maintenance', [EquipmentOperationsController::class, 'storeMaintenance'])->name('equipment.maintenance.store');
+    Route::post('equipment/{equipment}/maintenance/{record}/complete', [EquipmentOperationsController::class, 'completeMaintenance'])->whereNumber('record')->name('equipment.maintenance.complete');
+    Route::post('equipment/{equipment}/maintenance/{record}/cancel', [EquipmentOperationsController::class, 'cancelMaintenance'])->whereNumber('record')->name('equipment.maintenance.cancel');
+    Route::post('equipment/{equipment}/maintenance/{record}/post', [EquipmentOperationsController::class, 'postMaintenance'])->whereNumber('record')->name('equipment.maintenance.post');
+    Route::post('equipment/{equipment}/documents', [EquipmentOperationsController::class, 'storeDocument'])->name('equipment.documents.store');
+    Route::get('equipment/{equipment}/documents/{document}', [EquipmentOperationsController::class, 'documentFile'])->whereNumber('document')->name('equipment.documents.file');
+    Route::resource('equipment', EquipmentAssetController::class)->except(['destroy'])->parameters(['equipment' => 'equipment']);
+
     Route::get('site-expenses/mobile/create', [SiteExpenseController::class, 'mobile'])->name('site-expenses.mobile');
     Route::get('site-expenses/{site_expense}/receipts/{receipt}', [SiteExpenseController::class, 'receiptFile'])->name('site-expenses.receipt-file');
     foreach (['submit', 'approve', 'reject', 'retry'] as $action) {

@@ -17,6 +17,7 @@ class EnsureUserHasPermission
         'activity-logs' => 'Activity Logs',
         'my-approvals' => 'Purchase Requests',
         'site-expenses' => 'Site Expenses',
+        'equipment' => 'Equipment',
         'master.company-profile' => 'Company Profile',
         'master.organization' => 'Departments',
         'master.branches' => 'Branches',
@@ -171,6 +172,19 @@ class EnsureUserHasPermission
         }
         if (str_starts_with($routeName, 'admin.hr.attendance.mobile')) {
             return ['Attendance', 'mobile'];
+        }
+        if (str_starts_with($routeName, 'admin.equipment.')) {
+            // Equipment: view (register, workspace, private files), create (asset, fuel, maintenance, documents), edit (asset,
+            // complete / cancel maintenance), process (assign / release), post (accounting), export (CSV).
+            return ['Equipment', match (str($routeName)->afterLast('.')->toString()) {
+                'index', 'show', 'file' => 'view',
+                'create', 'store' => 'create',
+                'edit', 'update', 'complete', 'cancel' => 'edit',
+                'assign', 'release' => 'process',
+                'post' => 'post',
+                'export' => 'export',
+                default => 'view',
+            }];
         }
         if (str_starts_with($routeName, 'admin.master.projects.budget.')) {
             // Budget / BOQ: view to read, edit for draft lines, approve to Set as Current / revise,

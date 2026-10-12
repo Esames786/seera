@@ -261,7 +261,8 @@
                     @if (auth()->user()->hasPermission('Accounts Payable', 'view'))<a class="btn sm outline" href="{{ route('admin.master.projects.workspace.panel', [$project, 'finance']) }}">Supplier Bills</a>@endif
                     @if (auth()->user()->hasPermission('Payroll', 'view'))<a class="btn sm outline" href="{{ route('admin.hr.payroll.index') }}">Payroll runs</a>@endif
                     <a class="btn sm outline" href="{{ route('admin.accounting.reports.project-cost-report', ['project' => $project->id]) }}">Project Cost Report</a>
-                    <span class="small">Equipment actual-cost integration is NOT YET OPERATIONAL: an equipment line shows only what was posted to its mapped account.</span>
+                    @if (auth()->user()->hasPermission('Equipment', 'view'))<a class="btn sm outline" href="{{ route('admin.master.projects.workspace.panel', [$project, 'equipment']) }}">Equipment (fuel / maintenance)</a>@endif
+                    <span class="small">Equipment actual = posted fuel / maintenance cost on the mapped accounts (an operational log counts only once Finance posts it); live GPS usage costing is not included.</span>
                 </x-slot:footer>
             @endif
         </x-admin.data-table>

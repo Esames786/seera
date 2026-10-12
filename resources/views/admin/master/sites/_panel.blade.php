@@ -6,6 +6,7 @@
     <a class="btn outline" href="{{ route('admin.master.sites.show',$site) }}#profile">{{ __('workspace.map_overview') }}</a>
 @else
     @if($panel === 'attendance')<p class="note">{{ __('workspace.attendance_help') }}</p>@endif
+    @if($panel === 'equipment')<p class="note">{{ __('workspace.equipment_help') }}</p>@endif
     @if($panel === 'materials')<p class="note">{{ __('workspace.material_help') }}</p>@endif
     @if($panel === 'receipts')<p class="note">{{ __('workspace.receipts_help') }}</p>@endif
     @if($panel === 'activity')<p class="note">{{ __('workspace.site_activity_help') }}</p>@endif

@@ -12,6 +12,7 @@ class ProjectPanelTable
             'customer' => ['Code', 'Customer', 'VAT / CR', 'Contact'],
             'sites' => ['Code', 'Site', 'Supervisor', 'Address', 'Status', 'Geofence / radius', 'Inside only / offline allowed'],
             'staff' => ['Code', 'Employee', 'Department', 'Designation', 'Site', 'Manager', 'Status', 'Mobile access'],
+            'equipment' => ['Asset', 'Type', 'Site', 'Operator', 'Status', 'Meter', 'Posted fuel (SAR)', 'Posted maintenance (SAR)'],
             'warehouses' => ['Code', 'Warehouse', 'Site', 'Incharge', 'Valuation', 'Status', 'Stocked items', 'On hand (by unit)', 'Stock value (SAR)'],
             'stock' => ['Warehouse', 'Item', 'Unit', 'On hand', 'Average cost', 'Current value (SAR)'],
             'suppliers' => ['Code', 'Supplier', 'Category', 'Contact', 'Status', 'Project POs (not cancelled)', 'Purchase value (SAR)'],
@@ -47,6 +48,8 @@ class ProjectPanelTable
             'customer' => [$row->code, $row->name, ($row->vat_number ?? '-').' / '.($row->cr_number ?? '-'), implode(' / ', array_filter([$row->contact_person, $row->phone, $row->email]))],
             'sites' => [$row->code, $row->name, $row->supervisor?->name, $row->address, $row->status, $yes($row->geofence_enabled).' / '.$row->geofence_radius.' m', $yes($row->attendance_inside_only).' / '.$yes($row->offline_attendance_allowed)],
             'staff' => [$row->employee_code, $row->name, $row->department?->name, $row->designation?->name, $row->site?->name, $row->manager?->name, $row->status, $yes($row->mobile_access)],
+            'equipment' => [$row->asset_code.' · '.$row->name, $row->typeLabel().($row->category ? ' · '.$row->category : ''), $row->site?->name ?? 'Whole project', $row->operator?->name, $row->statusLabel(), $row->meterLabel(),
+                $user->hasPermission('Financial Reports', 'view') ? $money($data['equipmentFuel'][$row->id] ?? 0) : 'Restricted', $user->hasPermission('Financial Reports', 'view') ? $money($data['equipmentMaintenance'][$row->id] ?? 0) : 'Restricted'],
             'warehouses' => [$row->code, $row->name, $row->site?->name, $row->incharge?->name, $row->valuation_method, $row->status, $stock ? $row->stocked_items : 'Restricted', $stock ? ($data['warehouseQuantities'][$row->id] ?? 'No positive stock') : 'Restricted', $stock ? $money($row->stocks_sum_total_value) : 'Restricted'],
             'stock' => [$row->warehouse?->name, $row->item?->name, $row->item?->unit?->name, $row->quantity, $row->average_cost, $money($row->total_value)],
             'suppliers' => [$row->code, $row->name, $row->category, implode(' / ', array_filter([$row->contact_person, $row->phone, $row->email])), $row->status, $po ? ($purchase?->orders ?? 0) : 'Restricted', $po ? $money($purchase?->value) : 'Restricted'],
@@ -77,6 +80,10 @@ class ProjectPanelTable
             if (in_array($panel, ['customer', 'staff', 'suppliers'])) {
                 $link('Edit / Manage', $entity[0], 'edit', $entity[1].'.edit', [$row->id]);
             }
+        }
+        if ($panel === 'equipment') {
+            $link('View Equipment', 'Equipment', 'view', 'admin.equipment.show', [$row->id]);
+            $link('Assign / Release', 'Equipment', 'process', 'admin.equipment.show', [$row->id]);
         }
         if ($panel === 'sites') {
             $link('View Site', 'Sites', 'view', 'admin.master.sites.show', [$row->id]);

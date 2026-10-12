@@ -7,6 +7,9 @@ use App\Models\Customer;
 use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
 use App\Models\Employee;
+use App\Models\EquipmentAsset;
+use App\Models\EquipmentFuelLog;
+use App\Models\EquipmentMaintenanceRecord;
 use App\Models\GoodsReceipt;
 use App\Models\GoodsReceiptLine;
 use App\Models\Project;
@@ -38,7 +41,7 @@ class ProjectWorkspacePanels implements WorkspacePanels
         $definitions = [
             ['site-expenses', 'Site Expenses', 'Site Expenses'],
             ['customer', 'Customer', 'Customers'], ['sites', 'Sites / Locations', 'Sites'],
-            ['staff', 'Project Team / Staff', 'HR'], ['warehouses', 'Warehouses', 'Warehouses'],
+            ['staff', 'Project Team / Staff', 'HR'], ['equipment', 'Equipment', 'Equipment'], ['warehouses', 'Warehouses', 'Warehouses'],
             ['stock', 'Stock On Hand', 'Warehouse Stock'], ['suppliers', 'Suppliers', 'Suppliers'],
             ['requests', 'Purchase Requests', 'Purchase Requests'], ['orders', 'Project Purchases', 'Purchase Orders'],
             ['receipts', 'Goods Receipts', 'Goods Receipts'], ['materials', 'Material Used', 'Stock Issues'],
@@ -74,6 +77,7 @@ class ProjectWorkspacePanels implements WorkspacePanels
             'customer' => Customer::whereKey($project->customer_id ?? 0),
             'sites' => Site::where('project_id', $project->id)->with('supervisor'),
             'staff' => Employee::where('project_id', $project->id)->with(['department', 'designation', 'site', 'manager']),
+            'equipment' => EquipmentAsset::where('current_project_id', $project->id)->with(['site', 'operator']),
             'warehouses' => Warehouse::where('project_id', $project->id)->with(['site', 'incharge'])
                 ->when($user->hasPermission('Warehouse Stock', 'view'), fn ($q) => $q
                     ->withCount(['stocks as stocked_items' => fn ($s) => $s->where('quantity', '>', 0)])
@@ -181,6 +185,13 @@ class ProjectWorkspacePanels implements WorkspacePanels
         }
         if ($panel === 'stock') {
             $extra['stockTotal'] = (float) self::query($project, $panel, $user)->sum('total_value');
+        }
+        if ($panel === 'equipment' && $user->hasPermission('Financial Reports', 'view')) {
+            // Posted fuel / maintenance cost per asset on this project (information; the Project Cost Report stays authoritative).
+            $sum = fn ($query) => $query->where('project_id', $project->id)->where('accounting_status', 'posted')->whereIn('equipment_asset_id', $rows->pluck('id'))
+                ->groupBy('equipment_asset_id')->selectRaw('equipment_asset_id, COALESCE(SUM(total_amount), 0) as total')->pluck('total', 'equipment_asset_id');
+            $extra['equipmentFuel'] = $sum(EquipmentFuelLog::query());
+            $extra['equipmentMaintenance'] = $sum(EquipmentMaintenanceRecord::query());
         }
         if ($panel === 'warehouses' && $user->hasPermission('Warehouse Stock', 'view')) {
             $extra['warehouseQuantities'] = WarehouseStock::whereIn('warehouse_id', $rows->pluck('id'))->where('quantity', '>', 0)
