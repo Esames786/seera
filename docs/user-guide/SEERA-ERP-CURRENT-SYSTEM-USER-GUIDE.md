@@ -3,8 +3,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.13 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 11 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Payroll Phase 2 (11 October 2026) adds the salary payment of a posted run from a bank / cash account (Dr payroll payable, Cr bank / cash) with replay protection and reversal, a generic bank transfer export frozen at generation, IBAN validation and masking (WF-022). The Project BOQ / Detailed Budget Engine Phase 1 (11 October 2026) adds budget versions and BOQ lines per project, Set as Current / revisions and Budget vs Actual on the posted ledger (MST-PRJ-006 / 007, WF-023). Offline attendance, an official Saudi WPS / Mudad file, GOSI, equipment actual cost, budget approval runtime and project scheduling remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
+| **Version** | 1.14 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 12 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Payroll Phase 2 (11 October 2026) adds the salary payment of a posted run from a bank / cash account (Dr payroll payable, Cr bank / cash) with replay protection and reversal, a generic bank transfer export frozen at generation, IBAN validation and masking (WF-022). The Project BOQ / Detailed Budget Engine Phase 1 (11 October 2026) adds budget versions and BOQ lines per project, Set as Current / revisions and Budget vs Actual on the posted ledger (MST-PRJ-006 / 007, WF-023). Equipment & Vehicles Phase 1 (12 October 2026) adds the asset register, project / site assignment history, fuel logs, maintenance records, private documents and Finance posting of equipment cost into the project ledger (EQP-001 … 004, WF-024). Offline attendance, an official Saudi WPS / Mudad file, GOSI, live GPS tracking, budget approval runtime and project scheduling remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
 | **Prepared** | 9 October 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
@@ -64,6 +64,7 @@ All examples in this guide use the same fictional data. None of it is real.
 19. [Glossary](#19-glossary)
 20. [Current Limitations / Not Yet Operational](#20-current-limitations--not-yet-operational)
 21. [Quick Start by Role](#21-quick-start-by-role)
+22. [Equipment & Vehicles](#22-equipment--vehicles)
 
 ---
 
@@ -83,6 +84,7 @@ What Seera covers today:
 
 - **Administration**: users, roles, permission matrix, role hierarchy, approval workflow configuration, activity logs.
 - **Master Setup**: company profile, branches, departments, designations, projects, locations (sites), warehouses, expense categories, suppliers, customers.
+- **Equipment & Vehicles**: asset register, project / site assignment with history and operator, fuel and maintenance records, private documents, Finance posting into project cost (live GPS not connected).
 - **HR & Payroll**: employees with a connected workspace, documents and IQAMA register, shifts, attendance (manual entry and mobile check-in), leaves, overtime, salary structures, payroll runs with accounting posting and payslips, end of service.
 - **Accounting & Finance**: chart of accounts, journal entries, general ledger, accounts payable, accounts receivable, VAT periods, local ZATCA records, cost centers, posting rules, financial reports.
 - **Inventory & Purchasing**: items, categories, units, stock on hand, purchase requests, purchase orders, goods receipts, stock issues, transfers, adjustments, stock ledger, inventory reports.
@@ -2235,7 +2237,7 @@ Web address: `https://seera.tech-brit.co.uk/admin/master/projects/{id}/budget` (
 Purpose:
 Plan a project's cost as BOQ / budget lines in numbered versions, set one version as the current budget, revise it without losing history, and compare Budget, Committed and Actual cost by category and cost code.
 
-Status: **AVAILABLE** (Detailed Budget Engine, Phase 1). NOT YET OPERATIONAL: equipment actual cost (an equipment line shows only what was posted to its mapped account), budget multi-step approval runtime, project scheduling / milestones / progress billing.
+Status: **AVAILABLE** (Detailed Budget Engine, Phase 1). Equipment lines mapped to the fuel / maintenance accounts receive the posted equipment cost (WF-024). NOT YET OPERATIONAL: budget multi-step approval runtime, project scheduling / milestones / progress billing.
 
 Budget is planning, not accounting: creating, editing, setting as current, revising or discarding a budget **never** creates a journal entry, supplier bill, customer invoice, stock movement or payroll change, and never alters the posted cost history. The **master budget** on the project profile (MST-PRJ-004) stays a separate single amount; the detailed budget has its own calculated total and both are shown side by side. Making the detailed budget authoritative for the profile figure is a later, explicit decision.
 
@@ -2277,7 +2279,7 @@ Budget vs Actual (Financial Reports — view): figures for the project and, when
 | Variance | Budget − Actual − Committed ("Committed beyond budget" when negative while Remaining is still positive) |
 | Used | Actual ÷ Budget |
 
-Rows map through the cost account: a cost code's actual and committed are the sums on the accounts its lines map to; lines without an account show "No account mapped". Posted cost or commitments on accounts that no line of the version maps to appear as **"Other posted cost / commitments on accounts no budget line maps to"**, so the total actual of the page always equals the Project Cost Report posted cost for the same project. Equipment: the category carries the note that equipment actual-cost integration is NOT YET OPERATIONAL; a zero or empty actual is not proof that no equipment cost exists.
+Rows map through the cost account: a cost code's actual and committed are the sums on the accounts its lines map to; lines without an account show "No account mapped". Posted cost or commitments on accounts that no line of the version maps to appear as **"Other posted cost / commitments on accounts no budget line maps to"**, so the total actual of the page always equals the Project Cost Report posted cost for the same project. Equipment: the category's actual is the posted fuel, maintenance and other cost on the mapped accounts (operational equipment logs count only once Finance posts them; live GPS usage costing is not included).
 
 Export CSV: Category, Cost Code, Description, Sites, Lines, Accounts, Budget, Committed, Actual, Remaining, Variance after commitments, Status, plus the "Other" row and the total — the exact figures of the screen.
 
@@ -2575,9 +2577,9 @@ Use the language switch in the top bar. The screen turns to Arabic (right-to-lef
 |---|---|
 | **Chapter number** | 17 |
 | **Chapter name** | End-to-End Workflows |
-| **Purpose** | The documented business flows WF-001 to WF-023. |
+| **Purpose** | The documented business flows WF-001 to WF-024. |
 | **Primary roles** | Super Admin, HR Manager, Finance Manager, Account Assistant, Purchase Manager, Warehouse Incharge, Site In-Charge, Marketing Manager |
-| **Workflows in this chapter** | WF-020, WF-021, WF-022, WF-023, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
+| **Workflows in this chapter** | WF-020, WF-021, WF-022, WF-023, WF-024, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
 
 Each workflow lists purpose, roles, prerequisites, navigation, steps, example input, the system result, statuses before and after, the audit trail, common errors and the related Screen IDs. The Workflow Index is in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).
 
@@ -2904,7 +2906,7 @@ Related screens: HR-PAY-003, HR-PAY-005, HR-EMP-003, HR-EMP-004, FIN-JE-003, FIN
 ### WF-023 Project Budget / BOQ and Budget vs Actual
 
 Purpose: plan a project's cost as BOQ lines in versions, set the current budget, and compare Budget, Committed and Actual cost from the posted ledger.
-Status: AVAILABLE (Phase 1). NOT YET OPERATIONAL: equipment actual cost, budget multi-step approval, scheduling / milestones.
+Status: AVAILABLE (Phase 1). Equipment actuals come from posted fuel / maintenance cost (WF-024). NOT YET OPERATIONAL: budget multi-step approval, scheduling / milestones.
 Roles involved: Project Manager (Projects — edit for the draft and its lines; Projects — approve for Set as Current / Create Revision), Finance Manager (Financial Reports — view for actual and committed; Projects — export for the CSV).
 Prerequisites: the project with its sites (MST-PRJ-003); items for material lines; active expense accounts; posted operations (Stock Issues, Site Expenses, Supplier Bills, Payroll → GL) for actuals; approved POs for commitments.
 Navigation: Master Setup → Projects → View → Budget / BOQ → Create Detailed Budget → Add Line … → Set as Current Budget; Budget vs Actual; Create Revision; Export CSV.
@@ -2914,6 +2916,20 @@ Statuses: draft → current → superseded; a discarded draft stays listed read-
 Audit trail: Created project budget, Added budget line, Edited budget line, Removed budget line, Set current project budget, Created budget revision, Discarded draft project budget.
 Common errors: site not part of this project; inactive or unknown item; account not an active expense account; account already mapped to another cost code in the version; neither quantity × rate nor a lump sum; finalizing an empty draft; editing a current or superseded version; a second draft while one is open; project outside your scope (not found); Export without Financial Reports view.
 Related screens: MST-PRJ-006, MST-PRJ-007, MST-PRJ-003, MST-PRJ-004, FIN-REP-007, INV-PO-003, EXP-SE-003, HR-PAY-003.
+
+### WF-024 Equipment: register → assign → fuel / maintenance → Finance posting → project cost
+
+Purpose: keep every machine and vehicle on the right project with its operator, record what it consumes and what it costs, and let Finance post that cost into the project ledger once.
+Status: AVAILABLE (Phase 1). NOT YET OPERATIONAL: live GPS / routes / speed / idle, utilization analytics, depreciation.
+Roles involved: Site In-Charge (Equipment create / edit / process: asset, assignment, fuel, maintenance, documents), Finance Manager (Equipment post; Financial Reports view), Project Manager (project / site panels).
+Prerequisites: Expense Categories "Fuel" and "Equipment Maintenance" with active expense accounts (MST-EXP); the project with its sites and, if the account requires it, one project cost center; an active supplier for supplier-credit records.
+Navigation: Operations → Equipment & Vehicles → + Add Equipment / Vehicle → View → Current Assignment → Assign; View → Fuel → Record Fuel; View → Maintenance → Record Maintenance → Complete; Finance: View → Post to accounting / Create supplier bill; Project View → Equipment; Budget / BOQ → Budget vs Actual.
+Steps: 1. Register **EXC-001 Excavator CAT 320** (equipment, hour meter 1,000.0 h, insurance expiry 15-Jan-2027). 2. Assign it to **Riyadh Commercial Tower / Riyadh Tower - Main Site**, operator Saeed, from 01-Oct-2026, meter 1,010.0 h. 3. Record Fuel 03-Oct-2026: 100 litre × 3.50, VAT 15 %, Cash from 1110 Cash in Hand, category Fuel, meter 1,050.0 → FUEL-2026-0001 = SAR 402.50 (350.00 + VAT), *Not posted*. 4. Record Maintenance 04-Oct-2026: repair "Hydraulic hose replacement", Bank 1120, category Equipment Maintenance, "Take out of service" → MNT-2026-0001 open, asset *Under Maintenance*; Complete with final cost 1,200.00 and meter 1,100.0 → asset back to *Assigned*. 5. Finance → Post to accounting on both: JV Dr 5300 Fuel Expense 350.00 · Dr 1300 Input VAT 52.50 · Cr 1110 Cash 402.50; JV Dr 5400 Maintenance Expense 1,200.00 · Cr 1120 Bank 1,200.00 — each carrying project and site. 6. A diesel delivery on credit: Record Fuel with Supplier Credit and the fuel station → Create supplier bill → draft bill FUEL-2026-0002 for Finance (WF-019); the record follows the bill and reads *Posted to accounting* once the bill is posted.
+Expected result: Project Cost Report shows 1,550.00 of equipment cost for the project (350 + 1,200, net of VAT; the credit fuel after its bill posts), the project budget's Equipment lines mapped to 5300 / 5400 show the same actuals, Project View → Equipment lists EXC-001 with Main Site, Saeed, meter 1,100.0 h and the posted fuel / maintenance totals for Finance viewers; the asset page shows the journals and the service history.
+Statuses: asset Available → Assigned → Under Maintenance → Assigned → (Released) Available; fuel / maintenance accounting Not posted → Posted to accounting (or Supplier bill created — awaiting Finance → Posted to accounting), Posting failed with Retry; maintenance Open → Completed / Cancelled.
+Audit trail: Created equipment, Assigned equipment, Recorded fuel, Recorded maintenance, Completed maintenance, Posted fuel cost, Posted maintenance cost, Requested equipment cost bill / Supplier bill created, Corrected equipment meter, Uploaded equipment document, Released equipment.
+Common errors: site not of the chosen project; operator not an active employee in scope; project outside your scope; assignment or fuel date in the future; meter lower than the current reading without "Meter correction"; Cash / Bank record without the payment account; Supplier Credit without an active supplier; expense category without an active expense account (Retry after fixing); posting an open or cancelled maintenance record; editing an equipment-sourced bill in Accounting; assigning a retired or out-of-service asset.
+Related screens: EQP-001, EQP-002, EQP-003, EQP-004, MST-EXP-001, MST-PRJ-003, MST-PRJ-006, MST-SITE-003, FIN-JE-003, FIN-AP-003, FIN-REP-007.
 
 ---
 
@@ -2965,6 +2981,7 @@ Related screens: MST-PRJ-006, MST-PRJ-007, MST-PRJ-003, MST-PRJ-004, FIN-REP-007
 | Connected workspace | The Edit / Manage page of a record where its profile and related records are managed in tabs |
 | Document workspace | The read-only View page of a purchase order, request, goods receipt, supplier bill or customer invoice that shows the document with everything related to it (receipts, bills, journals, activity), each section by permission |
 | Draft | A saved document with no accounting or VAT effect yet |
+| Equipment cost record | A fuel log or maintenance record of an asset (EQP-003); operational until Finance posts it (Cash / Bank journal) or its supplier bill is posted — only then is it project cost |
 | GRN | Goods Receipt Note: the document that confirms goods arrived |
 | GRNI | Goods Received Not Invoiced, account 2150: the value of received goods whose supplier bill is not yet approved |
 | Input VAT / Output VAT | VAT paid on purchases (1300) / VAT charged on sales (2210) |
@@ -3002,8 +3019,8 @@ Areas that exist as menus, settings or plans but are not usable business functio
 | Area | Status | What exists |
 |---|---|---|
 | Site Expenses | AVAILABLE with configured masters/permissions/workflow | Responsive web entry, private receipt, sequential approvals, accounting/retry, reimbursement and linked Supplier Bill; see WF-018 |
-| Project Phase B: milestones / scheduling, labour costing beyond ledger payroll lines, equipment costing, budget approval runtime | PARTIAL | Phase A, Site Expense integration, Payroll → GL cost and the Detailed Budget / BOQ engine with Budget vs Actual (MST-PRJ-006, WF-023) are available; equipment actual cost is shown as NOT YET OPERATIONAL on the budget page; budget approval is a single Set as Current action |
-| Equipment & Vehicles | NOT YET OPERATIONAL | Menu placeholder and permission names only |
+| Project Phase B: milestones / scheduling, labour costing beyond ledger payroll lines, budget approval runtime | PARTIAL | Phase A, Site Expense integration, Payroll → GL cost, equipment fuel / maintenance cost (WF-024) and the Detailed Budget / BOQ engine with Budget vs Actual (MST-PRJ-006, WF-023) are available; budget approval is a single Set as Current action |
+| Live GPS / telematics for equipment (position, routes, speed, idle time, geofence events), utilization analytics, depreciation, spare-parts link | NOT YET OPERATIONAL | Equipment & Vehicles Phase 1 is AVAILABLE (register, assignment history, fuel, maintenance, documents, Finance posting, project cost — chapter 22, WF-024); tracker provider / device fields are stored only; readiness contract in `docs/equipment-gps-integration-readiness-2026-10-12.md` |
 | Native mobile app | NOT YET OPERATIONAL | Mobile Attendance (HR-ATT-004) is a responsive web page used in the phone browser; location-validated online check-in / check-out is AVAILABLE |
 | Offline attendance (check-in without connectivity, later sync) | NOT YET OPERATIONAL | Site flag stored only |
 | Device attestation / anti-spoofing for mobile attendance | NOT YET OPERATIONAL | Attendance is location-validated by the server, not tamper-proof |
@@ -3085,4 +3102,67 @@ Leads & Visits (WF-014), Visit Report (MKT-005), Customers (CUS-004).
 
 ---
 
+## 22. Equipment & Vehicles
+
+| | |
+|---|---|
+| **Chapter number** | 22 |
+| **Chapter name** | Equipment & Vehicles |
+| **Purpose** | Asset register for machinery and vehicles, project / site assignment with history, operator, fuel logs, maintenance records, private documents, Finance posting of fuel and maintenance cost into the project ledger, and the GPS readiness state. |
+| **Primary roles** | Site In-Charge / fleet supervisor (register, assignment, fuel, maintenance, documents), Finance Manager (posting, cost figures), Project Manager (project / site equipment panels) |
+| **Screens in this chapter** | EQP-001, EQP-002, EQP-003, EQP-004 |
+
+Status truth: Equipment / Vehicle master, project assignment, fuel, maintenance, documents and equipment project cost are **AVAILABLE** (Phase 1, 12 October 2026). **Live GPS tracking, routes, speed, idle time and geofence events are NOT YET OPERATIONAL**: the Tracking section shows "not connected" and nothing produces position data. Utilization analytics, depreciation and a spare-parts link to inventory are not built.
+
+### [EQP-001 … 004] Equipment & Vehicles
+
+Web address: `https://seera.tech-brit.co.uk/admin/equipment` (EQP-001) · `https://seera.tech-brit.co.uk/admin/equipment/create` (EQP-002) · `https://seera.tech-brit.co.uk/admin/equipment/{id}` (EQP-003) · `https://seera.tech-brit.co.uk/admin/equipment/{id}/edit` (EQP-004)
+
+Purpose:
+Register each equipment item or vehicle once, keep it assigned to the right project / site with its operator, record fuel and maintenance against it, hold its documents privately, and let Finance post the cost so it reaches the Project Cost Report and the project budget exactly once.
+
+Navigation:
+Operations → Equipment & Vehicles (register) → + Add Equipment / Vehicle; register → **View** (workspace) → sections; → **Edit** (profile). Project View → Equipment and Site View → Equipment show the assets currently assigned there with View Equipment / Assign links.
+
+Permission required:
+Equipment — view (register, workspace, private files); Equipment — create (new asset, fuel entry, maintenance record, document upload); Equipment — edit (profile, meter correction, complete / cancel maintenance); Equipment — process (Assign / Reassign / Release); Equipment — post (Post to accounting, Create supplier bill, Retry); Equipment — export (register CSV); Financial Reports — view (cost figures); Journal Entries — view / Accounts Payable — view (journal and bill links); Activity Logs — view (Activity section). A project- or site-scoped user sees only assets whose active assignment is in their project / site; unassigned assets and other projects' assets are not found.
+
+Asset fields (EQP-002 / 004):
+
+| Field | What to enter | Example | Required? | Notes |
+|---|---|---|---|---|
+| Asset code | Stable code | EXC-001 / TRK-014 | Yes | Unique; letters, digits, "-", "." or "/" |
+| Name, Type, Category | Description, Equipment or Vehicle, free category | Excavator CAT 320 / Equipment / Excavator | Name, Type | |
+| Make, Model, Year, Serial number | Manufacturer data | Caterpillar / 320 / 2022 / CAT0320XXXX | No | |
+| Registration / plate, Chassis / VIN, Registration expiry | Vehicles only | RUA 1234 / MR0… / 30-Jun-2027 | No | Cleared automatically on non-vehicle assets |
+| Insurance expiry | Date | 15-Jan-2027 | No | Register and workspace warn 60 days before expiry and after |
+| Ownership, Acquisition date / cost | Owned / Rented / Leased, date, SAR | Owned / 01-Mar-2022 / 480,000 | Ownership | Cost shown to Financial Reports viewers |
+| Meter, Meter reading | Odometer (km) / Hour meter (h) / No meter, current reading | Hour meter / 1,250.0 | Meter | The reading only moves forward; a lower value needs "Meter correction = Yes" and is logged |
+| Status | Available, Assigned, Under Maintenance, Out of Service, Retired | Assigned | Edit only | *Assigned* follows the assignment and cannot be typed; release the assignment before changing the status of an assigned asset |
+| Telematics provider, Tracker device ID | Readiness only | — | No | Stored for the future integration; nothing is polled |
+| Notes | | — | No | |
+
+Workspace (EQP-003) — persistent header: code, name, type / category, status, make / model, registration or serial, ownership, meter, current project, site, operator, next service, expiry warnings. Sections:
+
+1. **Overview** — profile, expiry states, meter rule, open maintenance count.
+2. **Current Assignment** — project, site, operator, since, meter at assignment; **Assign / Reassign** (project required; site must belong to the project; operator must be an active employee in scope; date not in the future; optional meter reading) and **Release from project**. Only one active assignment per asset; reassigning closes the previous one (until date, end meter, who) and keeps it; two users cannot assign one asset at the same moment (asset row lock).
+3. **Assignment History** — every assignment, paged; never deleted.
+4. **Fuel** — entries with number FUEL-YYYY-NNNN, date, project / site (from the assignment at the time), meter, quantity, rate, total, payment, category, accounting state, receipt; **Record Fuel** (quantity × rate calculated on the server, VAT 0 / 15 %, payment Cash / Bank with the account paid from, or Supplier Credit with the supplier, expense category, reference, receipt file).
+5. **Maintenance** — records MNT-YYYY-NNNN: Open → **Complete** (final cost, meter) or **Cancel**; type, description, workshop / supplier, next service date / meter, invoice file; "Take out of service" sets the asset *Under Maintenance* until completion; completed and cancelled records stay in the history.
+6. **Costs** (Financial Reports — view) — posted vs not-yet-posted fuel and maintenance for the asset, and where the cost counts.
+7. **Documents** — registration, insurance, inspection, permit, rental agreement, service invoice, fuel receipt, other; number, issue / expiry dates; private files (jpg, png, pdf up to 10 MB) served only through the authorized route; a registration or insurance upload with an expiry date updates the asset's expiry.
+8. **Tracking / GPS** — "Live GPS tracking is not connected to a telematics provider" with the stored tracker readiness fields; no position, route, speed, idle or geofence data exists.
+9. **Activity** — Created / Updated equipment, Assigned / Released, Corrected meter, Recorded fuel / maintenance, Completed / Cancelled maintenance, Uploaded document, Posted fuel / maintenance cost, Requested equipment cost bill, Supplier bill created.
+
+Accounting (Finance, Equipment — post): a fuel or maintenance record is operational until posted; nothing reaches the ledger from the Record action. **Post to accounting** on a Cash / Bank record creates one posted journal: Dr the expense category's account (project / site of the record, project cost center when configured), Dr Input VAT when any, Cr the Cash or Bank account chosen on the record. **Create supplier bill** on a Supplier Credit record creates one draft Supplier Bill (runtime approval) with the same amounts; the liability and the expense are recognised by that bill through the existing AP workflow, and the record shows *Supplier bill created — awaiting Finance* until the bill's journal is posted. Accounts are never hard-coded: the Expense Category's account and the Finance payment catalogue (1110 Cash in Hand / 1120 Bank Account) decide the posting; a category without an active expense account blocks with a readable message and Retry. Equipment journals and equipment-sourced bills cannot be edited or cancelled independently in Accounting. Maintenance is posted only after completion; cancelled records are never posted.
+
+Project cost: the Project Cost Report and the project budget (Budget vs Actual, Equipment category) read posted journal lines only, so a fuel or maintenance cost counts once — never from the operational totals, never twice through a bill plus a journal.
+
+Register (EQP-001): cards (assets in scope, assigned, under maintenance, available, documents expiring, service due), filters (search, type, status, project), expiry badges, **Export CSV** (Equipment — export; same scope and filters).
+
+Empty states: "No equipment or vehicles in your scope yet"; "This asset is not assigned to any project"; "No fuel entries have been recorded"; "No maintenance history exists yet"; "No equipment is currently assigned to this project" (Project / Site panels).
+
+Not in Phase 1: live GPS / telematics, route replay, speed / idle analytics, utilization and downtime dashboards, depreciation, rental billing, spare-parts consumption from inventory, notification jobs for expiries, mobile driver app. The provider integration contract is in `docs/equipment-gps-integration-readiness-2026-10-12.md`.
+
+---
 End of guide. Screen IDs are indexed in [SCREEN-INDEX.md](SCREEN-INDEX.md); workflows in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).

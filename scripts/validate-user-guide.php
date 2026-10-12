@@ -48,14 +48,14 @@ foreach ($documents as $file => $xpath) {
         $checked++;
     }
 }
-foreach (['WF-017', 'WF-018', 'WF-019', 'WF-020', 'WF-021', 'WF-022', 'WF-023'] as $id) {
+foreach (['WF-017', 'WF-018', 'WF-019', 'WF-020', 'WF-021', 'WF-022', 'WF-023', 'WF-024'] as $id) {
     if ($documents['WORKFLOW-INDEX.html']->query('//tr[td[1][normalize-space()="'.$id.'"]]')->length !== 1) {
         throw new RuntimeException($id.' must appear exactly once as a workflow table row.');
     }
 }
-foreach (['EXP-SE-001', 'EXP-SE-002', 'EXP-SE-003', 'EXP-SE-004', 'HR-ATT-004', 'HR-PAY-005', 'MST-PRJ-006'] as $id) {
+foreach (['EXP-SE-001', 'EXP-SE-002', 'EXP-SE-003', 'EXP-SE-004', 'HR-ATT-004', 'HR-PAY-005', 'MST-PRJ-006', 'EQP-003'] as $id) {
     if ($documents['SCREEN-INDEX.html']->query('//tr[td[1][normalize-space()="'.$id.'"]]')->length !== 1) {
         throw new RuntimeException($id.' must appear exactly once as a screen table row.');
     }
 }
-echo "PASS four guide pages; $checked internal links/anchors; stable Site Expense/approval IDs including WF-019, HR-ATT-004, WF-020, HR-PAY-005, WF-021, WF-022, MST-PRJ-006 and WF-023.\n";
+echo "PASS four guide pages; $checked internal links/anchors; stable Site Expense/approval IDs including WF-019, HR-ATT-004, WF-020, HR-PAY-005, WF-021, WF-022, MST-PRJ-006, WF-023, EQP-003 and WF-024.\n";
