@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Equipment\EquipmentCostService;
 use App\Services\SiteExpenses\SiteExpenseAccountingService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -43,7 +44,21 @@ class SupplierBill extends Model
             if ($bill->site_expense_id && $bill->wasChanged(['status', 'journal_entry_id'])) {
                 DB::afterCommit(fn () => app(SiteExpenseAccountingService::class)->sync($bill->site_expense_id));
             }
+            if ($bill->wasChanged(['status', 'journal_entry_id'])) {
+                // Equipment fuel / maintenance records billed through this bill follow its accounting state.
+                DB::afterCommit(function () use ($bill) {
+                    foreach (EquipmentCostService::recordsForBill($bill->id) as [$class, $id]) {
+                        app(EquipmentCostService::class)->sync($class, $id);
+                    }
+                });
+            }
         });
+    }
+
+    /** A bill generated from an equipment fuel / maintenance record keeps that record's snapshot; its values are not edited independently. */
+    public function isEquipmentSourced(): bool
+    {
+        return EquipmentCostService::recordsForBill($this->id) !== [];
     }
 
     public function isEditable(): bool

@@ -128,6 +128,7 @@ class AccountsPayableController extends Controller
     public function edit(SupplierBill $accounts_payable): View
     {
         abort_if($accounts_payable->site_expense_id, 403, 'Approved Site Expense values cannot be edited independently.');
+        abort_if($accounts_payable->isEquipmentSourced(), 403, 'This bill preserves an equipment fuel / maintenance record. Its values cannot be edited independently.');
         if (! $accounts_payable->isEditable()) {
             abort(403, 'An approved supplier bill can no longer be edited.');
         }
@@ -140,6 +141,7 @@ class AccountsPayableController extends Controller
     public function update(Request $request, SupplierBill $accounts_payable): RedirectResponse
     {
         abort_if($accounts_payable->site_expense_id, 403, 'This bill preserves an approved Site Expense snapshot. Its financial values cannot be edited independently.');
+        abort_if($accounts_payable->isEquipmentSourced(), 403, 'This bill preserves an equipment fuel / maintenance record. Its financial values cannot be edited independently.');
         if (! $accounts_payable->isEditable()) {
             return back()->withErrors(['bill' => 'An approved supplier bill can no longer be edited.']);
         }
@@ -174,6 +176,7 @@ class AccountsPayableController extends Controller
     public function destroy(Request $request, SupplierBill $accounts_payable): RedirectResponse
     {
         abort_if($accounts_payable->site_expense_id, 403, 'A Site Expense source bill must remain in the audit history.');
+        abort_if($accounts_payable->isEquipmentSourced(), 403, 'An equipment source bill must remain in the audit history.');
         if (! $accounts_payable->isEditable()) {
             return back()->withErrors(['bill' => 'An approved supplier bill cannot be deleted.']);
         }

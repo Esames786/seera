@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\DocumentNumberService;
+use App\Services\Equipment\EquipmentCostService;
 use App\Services\Payroll\PayrollAccountingService;
 use App\Services\SiteExpenses\SiteExpenseAccountingService;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,7 @@ class JournalEntry extends Model
 {
     public function isApprovalControlledSource(): bool
     {
-        return $this->isSiteExpenseSource() || $this->isPayrollSource() || ($this->source_module === 'Supplier Bill'
+        return $this->isSiteExpenseSource() || $this->isPayrollSource() || $this->isEquipmentSource() || ($this->source_module === 'Supplier Bill'
             && SupplierBill::withoutGlobalScopes()->whereKey($this->source_id)->where('approval_mode', 'runtime')->exists());
     }
 
@@ -21,6 +22,12 @@ class JournalEntry extends Model
     {
         return ($this->source_module === 'Payroll' && PayrollRun::whereKey($this->source_id)->exists())
             || ($this->source_module === 'Payroll Settlement' && PayrollSettlement::whereKey($this->source_id)->exists());
+    }
+
+    /** Equipment fuel / maintenance journals are corrected through Finance, never edited or cancelled here. */
+    public function isEquipmentSource(): bool
+    {
+        return in_array($this->source_module, [EquipmentFuelLog::SOURCE_MODULE, EquipmentMaintenanceRecord::SOURCE_MODULE], true);
     }
 
     public function isSiteExpenseSource(): bool
@@ -39,11 +46,18 @@ class JournalEntry extends Model
                 DB::afterCommit(fn () => app(PayrollAccountingService::class)->sync($entry->source_id));
             } elseif ($entry->source_module === 'Site Expense') {
                 DB::afterCommit(fn () => app(SiteExpenseAccountingService::class)->sync($entry->source_id));
+            } elseif ($entry->source_module === EquipmentFuelLog::SOURCE_MODULE) {
+                DB::afterCommit(fn () => app(EquipmentCostService::class)->sync(EquipmentFuelLog::class, $entry->source_id));
+            } elseif ($entry->source_module === EquipmentMaintenanceRecord::SOURCE_MODULE) {
+                DB::afterCommit(fn () => app(EquipmentCostService::class)->sync(EquipmentMaintenanceRecord::class, $entry->source_id));
             } elseif ($entry->source_module === 'Supplier Bill') {
                 DB::afterCommit(function () use ($entry) {
                     $id = SupplierBill::withoutGlobalScopes()->whereKey($entry->source_id)->value('site_expense_id');
                     if ($id) {
                         app(SiteExpenseAccountingService::class)->sync($id);
+                    }
+                    foreach (EquipmentCostService::recordsForBill((int) $entry->source_id) as [$class, $recordId]) {
+                        app(EquipmentCostService::class)->sync($class, $recordId);
                     }
                 });
             }
@@ -53,7 +67,7 @@ class JournalEntry extends Model
     public const STATUSES = ['draft', 'approved', 'posted', 'cancelled'];
 
     public const SOURCE_MODULES = [
-        'Manual', 'Payroll', 'Payroll Settlement', 'Site Expense', 'Site Expense Reimbursement', 'Inventory',
+        'Manual', 'Payroll', 'Payroll Settlement', 'Site Expense', 'Equipment Fuel', 'Equipment Maintenance', 'Site Expense Reimbursement', 'Inventory',
         'Supplier Bill', 'Supplier Payment', 'Customer Invoice', 'Customer Receipt',
     ];
 

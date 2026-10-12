@@ -269,7 +269,7 @@ class ProjectBudgetReportTest extends TestCase
         $this->assertEqualsWithDelta(32350 - 1650, $report['totals']['remaining'], 0.001);
         $this->assertFalse($report['totals']['over_budget']);
         $equipment = collect($report['categories'])->firstWhere('category', 'equipment');
-        $this->assertStringContainsString('NOT YET OPERATIONAL', $equipment['integration']);
+        $this->assertStringContainsString('posted fuel, maintenance', $equipment['integration']);
         $this->assertNull($equipment['actual']);
         $materials = collect($report['categories'])->firstWhere('category', 'materials');
         $this->assertEqualsWithDelta(1050, $materials['budget'], 0.001);

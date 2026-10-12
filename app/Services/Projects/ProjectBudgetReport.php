@@ -88,7 +88,7 @@ class ProjectBudgetReport
                 $hasActual ? array_sum(array_map(fn ($r) => $r['actual'] ?? 0.0, $categoryRows)) : null,
                 [], array_sum(array_column($categoryRows, 'lines')), []);
             $categories[$key]['integration'] = $key === 'equipment'
-                ? 'Equipment actual-cost integration is NOT YET OPERATIONAL; only cost posted to the mapped accounts is shown.'
+                ? 'Equipment actual = posted fuel, maintenance and other cost on the mapped accounts (operational equipment logs count only once Finance posts them; live GPS usage costing is not included).'
                 : null;
         }
 

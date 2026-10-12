@@ -6,6 +6,8 @@ use App\Models\AutomaticPostingRule;
 use App\Models\ChartOfAccount;
 use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
+use App\Models\EquipmentFuelLog;
+use App\Models\EquipmentMaintenanceRecord;
 use App\Models\GoodsReceipt;
 use App\Models\JournalEntry;
 use App\Models\JournalEntryLine;
@@ -93,6 +95,36 @@ class PostingService
             'description' => 'Payroll '.$run->code.' - '.$run->periodLabel(),
             'cost_center_id' => null,
         ], $lines, 'Payroll', 'Payroll Approved', $userId);
+    }
+
+    /**
+     * Equipment Phase 1: post a fuel log or maintenance record paid by Cash /
+     * Bank. Dr the expense category's account (assignment project / site /
+     * cost center), Dr input VAT when any, Cr the payment account. Posted
+     * immediately on the explicit Finance action; supplier-credit records go
+     * through a supplier bill instead and never reach this method.
+     */
+    public function postEquipmentCost(EquipmentFuelLog|EquipmentMaintenanceRecord $record, ChartOfAccount $debit, ChartOfAccount $credit, ?int $costCenterId, ?int $actorId): JournalEntry
+    {
+        if ($credit->account_type !== 'asset' || $credit->status !== 'active') {
+            $this->refuse('Equipment cost can only be paid from an active Cash or Bank (asset) account.');
+        }
+        $dimensions = ['project_id' => $record->project_id, 'site_id' => $record->site_id, 'cost_center_id' => $costCenterId];
+        $lines = [
+            $dimensions + ['chart_of_account_id' => $debit->id, 'description' => $record->description(), 'debit' => (float) $record->taxable_amount, 'credit' => 0],
+            $dimensions + ['chart_of_account_id' => $credit->id, 'description' => $record->number(), 'debit' => 0, 'credit' => (float) $record->total_amount],
+        ];
+        if ((float) $record->vat_amount > 0) {
+            $vat = $this->requireAccount(self::INPUT_VAT, 'Input VAT');
+            $lines[] = $dimensions + ['chart_of_account_id' => $vat->id, 'description' => 'Input VAT '.$record->number(), 'debit' => (float) $record->vat_amount, 'credit' => 0];
+        }
+        $entry = $this->createEntry(['journal_date' => $record->documentDate(), 'reference_number' => $record->number(),
+            'source_module' => $record::SOURCE_MODULE, 'source_id' => $record->id, 'description' => $record->description(), 'cost_center_id' => $costCenterId],
+            $lines, $record::SOURCE_MODULE, 'Equipment Cost Posted', $actorId, true);
+        $this->recordVat('input', $record->vat_amount, $record->taxable_amount, $record->vat_rate, $record->documentDate(), $record::SOURCE_MODULE, $record->id,
+            $record->reference_number ?? $record->number(), $record->supplier_id ? 'supplier' : 'equipment', $record->supplier_id ?? $record->equipment_asset_id, $record->supplier?->name ?? $record->asset?->label());
+
+        return $entry;
     }
 
     /**
