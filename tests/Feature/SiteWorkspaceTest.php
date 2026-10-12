@@ -49,7 +49,7 @@ class SiteWorkspaceTest extends TestCase
     private function actor(?array $modules = null, string $scope = 'Company Level'): User
     {
         $role = Role::create(['name' => 'Viewer', 'code' => uniqid(), 'status' => 'active', 'access_scope' => $scope]);
-        foreach ($modules ?? ['Sites', 'Projects', 'Customers', 'HR', 'Warehouses', 'Warehouse Stock', 'Stock Ledger', 'Purchase Requests', 'Purchase Orders', 'Goods Receipts', 'Stock Issues', 'Site Expenses', 'Attendance', 'Activity Logs'] as $module) {
+        foreach ($modules ?? ['Sites', 'Projects', 'Customers', 'HR', 'Warehouses', 'Warehouse Stock', 'Stock Ledger', 'Purchase Requests', 'Purchase Orders', 'Goods Receipts', 'Stock Issues', 'Site Expenses', 'Attendance', 'Equipment', 'Activity Logs'] as $module) {
             foreach (['view', 'edit', 'create'] as $action) {
                 $role->permissions()->attach(Permission::firstOrCreate(compact('module', 'action'))->id);
             }
