@@ -87,7 +87,7 @@ class MobileAttendanceController extends Controller
             'distance_meters' => $record->{$step.'_distance_meters'},
             'late_minutes' => $record->late_minutes,
             'attendance_status' => $record->status,
-            'message' => __($step === 'check_in' ? 'attendance.checked_in' : 'attendance.checked_out', ['time' => $record->{$step}]),
+            'message' => __($step === 'check_in' ? 'mobile_attendance.checked_in' : 'mobile_attendance.checked_out', ['time' => $record->{$step}]),
         ]);
     }
 }

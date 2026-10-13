@@ -15,7 +15,6 @@ use App\Models\User;
 use App\Services\Accounting\PostingService;
 use App\Services\DocumentNumberService;
 use App\Services\SiteExpenses\SiteExpenseAccountingService;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -40,7 +39,7 @@ class EquipmentCostService
     public function recordFuel(EquipmentAsset $asset, array $data, User $actor): EquipmentFuelLog
     {
         return DB::transaction(function () use ($asset, $data, $actor) {
-            $locked = EquipmentAsset::withoutGlobalScopes()->whereKey($asset->id)->lockForUpdate()->firstOrFail();
+            $locked = EquipmentAsset::whereKey($asset->id)->lockForUpdate()->firstOrFail();
             $date = $this->date($data['fuel_date'] ?? null, 'fuel_date');
             $quantity = $this->number($data['quantity'] ?? null);
             $rate = $this->number($data['rate'] ?? null);
@@ -72,7 +71,7 @@ class EquipmentCostService
     public function recordMaintenance(EquipmentAsset $asset, array $data, User $actor): EquipmentMaintenanceRecord
     {
         return DB::transaction(function () use ($asset, $data, $actor) {
-            $locked = EquipmentAsset::withoutGlobalScopes()->whereKey($asset->id)->lockForUpdate()->firstOrFail();
+            $locked = EquipmentAsset::whereKey($asset->id)->lockForUpdate()->firstOrFail();
             $date = $this->date($data['service_date'] ?? null, 'service_date');
             $type = (string) ($data['maintenance_type'] ?? 'repair');
             if (! array_key_exists($type, EquipmentMaintenanceRecord::TYPES)) {
@@ -87,7 +86,7 @@ class EquipmentCostService
                 $this->invalid('cost', 'The cost cannot be negative.');
             }
             $money = $this->money(round($cost, 2), $data);
-            $financial = $cost > 0 ? $this->financialFields($data) : ['payment_type' => $data['payment_type'] ?? 'Cash', 'payment_account_id' => null, 'supplier_id' => $this->optionalId($data['supplier_id'] ?? null), 'expense_category_id' => $this->optionalId($data['expense_category_id'] ?? null)];
+            $financial = $this->financialFields($data, $cost > 0);
             $nextMeter = $this->number($data['next_service_meter'] ?? null);
             $nextDate = ! empty($data['next_service_date']) ? Carbon::parse($data['next_service_date'])->toDateString() : null;
             $this->assignments->applyMeter($locked, $this->number($data['meter_reading'] ?? null), (bool) ($data['meter_correction'] ?? false), $actor, 'maintenance');
@@ -112,7 +111,7 @@ class EquipmentCostService
     public function completeMaintenance(EquipmentMaintenanceRecord $record, array $data, User $actor): void
     {
         DB::transaction(function () use ($record, $data, $actor) {
-            $locked = EquipmentAsset::withoutGlobalScopes()->whereKey($record->equipment_asset_id)->lockForUpdate()->firstOrFail();
+            $locked = EquipmentAsset::whereKey($record->equipment_asset_id)->lockForUpdate()->firstOrFail();
             $record = EquipmentMaintenanceRecord::withoutGlobalScopes()->whereKey($record->id)->lockForUpdate()->firstOrFail();
             if ($record->status !== 'open') {
                 $this->invalid('maintenance', 'Only an open maintenance record can be completed.');
@@ -125,12 +124,15 @@ class EquipmentCostService
                 }
                 $updates += $this->money(round($cost, 2), ['vat_rate' => $data['vat_rate'] ?? $record->vat_rate]);
             }
+            $updates += $this->financialFields(array_replace($record->only(['payment_type', 'payment_account_id', 'supplier_id', 'expense_category_id']),
+                array_intersect_key($data, array_flip(['payment_type', 'payment_account_id', 'supplier_id', 'expense_category_id']))),
+                (float) ($updates['taxable_amount'] ?? $record->taxable_amount) > 0);
             $this->assignments->applyMeter($locked, $this->number($data['meter_reading'] ?? null), (bool) ($data['meter_correction'] ?? false), $actor, 'maintenance completion');
             if ($this->number($data['meter_reading'] ?? null) !== null) {
                 $updates['meter_reading'] = $this->number($data['meter_reading']);
             }
             $record->update($updates);
-            if ($locked->status === 'under_maintenance') {
+            if ($locked->status === 'under_maintenance' && ! EquipmentMaintenanceRecord::where('equipment_asset_id', $locked->id)->where('status', 'open')->exists()) {
                 $locked->update(['status' => $locked->current_assignment_id ? 'assigned' : 'available']);
             }
             $this->assignments->log($locked, $actor, 'Completed maintenance', $record->maintenance_number.' · SAR '.number_format((float) $record->fresh()->total_amount, 2));
@@ -140,7 +142,7 @@ class EquipmentCostService
     public function cancelMaintenance(EquipmentMaintenanceRecord $record, User $actor): void
     {
         DB::transaction(function () use ($record, $actor) {
-            $locked = EquipmentAsset::withoutGlobalScopes()->whereKey($record->equipment_asset_id)->lockForUpdate()->firstOrFail();
+            $locked = EquipmentAsset::whereKey($record->equipment_asset_id)->lockForUpdate()->firstOrFail();
             $record = EquipmentMaintenanceRecord::withoutGlobalScopes()->whereKey($record->id)->lockForUpdate()->firstOrFail();
             if ($record->isFinanciallyLinked()) {
                 $this->invalid('maintenance', 'A posted or billed maintenance record cannot be cancelled; correct it through Finance.');
@@ -309,26 +311,26 @@ class EquipmentCostService
         return ['taxable_amount' => $taxable, 'vat_rate' => $vatRate, 'vat_amount' => $vat, 'total_amount' => round($taxable + $vat, 2)];
     }
 
-    /** @return array{payment_type: string, payment_account_id: ?int, supplier_id: ?int, expense_category_id: int} */
-    private function financialFields(array $data): array
+    /** @return array{payment_type: string, payment_account_id: ?int, supplier_id: ?int, expense_category_id: ?int} */
+    private function financialFields(array $data, bool $required = true): array
     {
         $type = (string) ($data['payment_type'] ?? 'Cash');
         if (! in_array($type, EquipmentFuelLog::PAYMENT_TYPES, true)) {
             $this->invalid('payment_type', 'Choose Cash, Bank or Supplier Credit.');
         }
         $categoryId = $this->optionalId($data['expense_category_id'] ?? null);
-        if (! $categoryId || ! ExpenseCategory::whereKey($categoryId)->where('status', 'active')->exists()) {
+        if (($required || $categoryId) && (! $categoryId || ! ExpenseCategory::whereKey($categoryId)->where('status', 'active')->exists())) {
             $this->invalid('expense_category_id', 'Choose an active expense category (its account decides the posting).');
         }
         $supplierId = $this->optionalId($data['supplier_id'] ?? null);
         $accountId = $this->optionalId($data['payment_account_id'] ?? null);
         if ($type === 'Supplier Credit') {
-            if (! $supplierId || ! Supplier::whereKey($supplierId)->where('status', 'active')->exists()) {
+            if (($required || $supplierId) && (! $supplierId || ! Supplier::whereKey($supplierId)->where('status', 'active')->exists())) {
                 $this->invalid('supplier_id', 'Choose the active supplier that will bill this cost.');
             }
             $accountId = null;
         } else {
-            if (! $accountId || ! SiteExpenseAccountingService::paymentAccounts($type)->whereKey($accountId)->exists()) {
+            if (($required || $accountId) && (! $accountId || ! SiteExpenseAccountingService::paymentAccounts($type)->whereKey($accountId)->exists())) {
                 $this->invalid('payment_account_id', 'Choose the active '.$type.' account the cost was paid from.');
             }
         }

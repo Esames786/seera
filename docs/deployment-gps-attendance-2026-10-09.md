@@ -48,6 +48,8 @@ Site configuration before employees use it: each site needs coordinates, a radiu
 flags (*Geofence enabled*, *Attendance inside only*) reviewed on MST-SITE-004. A site without
 coordinates blocks inside-only check-ins by design.
 
-Rollback: `git checkout bd3090f`, extract that commit's `public/build.zip` the same way, then
-`$PHP artisan optimize`. The migration can stay (nullable columns are harmless) or be reversed
-with `php artisan migrate:rollback --step=1` only if no GPS rows have been recorded yet.
+Rollback requires a verified private backup and review of the actual deployed HEAD. Keep the
+additive GPS evidence columns; do not routinely run `migrate:rollback --step=1`, which may erase
+evidence or target a later migration. Code rollback to `bd3090f` is only a candidate after checking
+subsequent changes and obtaining approval. Restore its matching asset bundle if applicable,
+preserve server configuration/uploads, clear/rebuild caches and smoke-test before bringing the app up.

@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\EquipmentAsset;
 use App\Models\EquipmentDocument;
-use App\Models\EquipmentFuelLog;
-use App\Models\EquipmentMaintenanceRecord;
 use App\Services\Equipment\EquipmentAssignmentService;
 use App\Services\Equipment\EquipmentCostService;
 use Illuminate\Http\RedirectResponse;
@@ -114,7 +112,9 @@ class EquipmentOperationsController extends Controller
     public function completeMaintenance(Request $request, EquipmentAsset $equipment, int $record): RedirectResponse
     {
         $row = $equipment->maintenanceRecords()->findOrFail($record);
-        $data = $request->validate(['cost' => ['nullable', 'numeric'], 'vat_rate' => ['nullable', 'numeric'], 'meter_reading' => ['nullable', 'numeric'], 'meter_correction' => ['nullable', 'boolean']]);
+        $data = $request->validate(['cost' => ['nullable', 'numeric'], 'vat_rate' => ['nullable', 'numeric'], 'meter_reading' => ['nullable', 'numeric'], 'meter_correction' => ['nullable', 'boolean'],
+            'payment_type' => ['sometimes', 'required', 'string'], 'payment_account_id' => ['sometimes', 'nullable', 'integer'],
+            'supplier_id' => ['sometimes', 'nullable', 'integer'], 'expense_category_id' => ['sometimes', 'nullable', 'integer']]);
         try {
             $this->costs->completeMaintenance($row, $data, $request->user());
         } catch (ValidationException $exception) {

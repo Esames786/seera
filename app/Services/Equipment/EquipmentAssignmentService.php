@@ -26,7 +26,7 @@ class EquipmentAssignmentService
     public function assign(EquipmentAsset $asset, array $data, User $actor): EquipmentAssignment
     {
         return DB::transaction(function () use ($asset, $data, $actor) {
-            $locked = EquipmentAsset::withoutGlobalScopes()->whereKey($asset->id)->lockForUpdate()->firstOrFail();
+            $locked = EquipmentAsset::whereKey($asset->id)->lockForUpdate()->firstOrFail();
             if (in_array($locked->status, ['retired', 'out_of_service'], true)) {
                 $this->invalid('equipment', 'A '.strtolower($locked->statusLabel()).' asset cannot be assigned. Change its status first.');
             }
@@ -73,7 +73,7 @@ class EquipmentAssignmentService
     public function release(EquipmentAsset $asset, array $data, User $actor): void
     {
         DB::transaction(function () use ($asset, $data, $actor) {
-            $locked = EquipmentAsset::withoutGlobalScopes()->whereKey($asset->id)->lockForUpdate()->firstOrFail();
+            $locked = EquipmentAsset::whereKey($asset->id)->lockForUpdate()->firstOrFail();
             $active = EquipmentAssignment::where('equipment_asset_id', $locked->id)->where('is_active', true)->lockForUpdate()->get();
             if ($active->isEmpty()) {
                 $this->invalid('equipment', 'This asset has no active assignment to release.');

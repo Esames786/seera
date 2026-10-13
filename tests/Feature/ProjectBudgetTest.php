@@ -13,10 +13,12 @@ use App\Models\Role;
 use App\Models\Site;
 use App\Models\Unit;
 use App\Models\User;
+use App\Services\Projects\ProjectBudgetService;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Testing\TestResponse;
+use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 /**
@@ -65,6 +67,21 @@ class ProjectBudgetTest extends TestCase
     }
 
     // ---------------------------------------------------------------- helpers
+
+    public function test_review_same_account_cannot_feed_different_category_groups_even_with_same_cost_code(): void
+    {
+        $budget = $this->draft();
+        $this->addLine($budget)->assertSessionHasNoErrors();
+        $this->addLine($budget, ['category' => 'equipment'])->assertSessionHasErrors('chart_of_account_id');
+        $this->assertSame(1, $budget->lines()->count());
+    }
+
+    public function test_review_service_rechecks_existing_draft_inside_project_lock(): void
+    {
+        $this->draft();
+        $this->expectException(ValidationException::class);
+        app(ProjectBudgetService::class)->createDraft($this->project, [], $this->admin->id);
+    }
 
     /** @param array<string, array<int, string>> $grants */
     protected function user(array $grants, ?Project $project = null, string $suffix = 'u'): User
@@ -327,7 +344,7 @@ class ProjectBudgetTest extends TestCase
         foreach (range(1, 30) as $i) {
             $budget->lines()->create(['sort_order' => $i, 'cost_code' => 'MAT-'.str_pad((string) $i, 3, '0', STR_PAD_LEFT), 'category' => 'materials', 'description' => 'Line '.$i, 'quantity' => $i, 'rate' => 10, 'amount' => $i * 10, 'chart_of_account_id' => $i === 1 ? $this->material->id : null, 'item_id' => $i % 2 ? $this->item->id : null]);
         }
-        app(\App\Services\Projects\ProjectBudgetService::class)->recalculate($budget);
+        app(ProjectBudgetService::class)->recalculate($budget);
 
         $writes = [];
         $queries = 0;

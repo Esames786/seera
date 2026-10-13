@@ -30,6 +30,12 @@ class ProjectBudgetService
     {
         return DB::transaction(function () use ($project, $data, $actorId) {
             $this->lockProject($project);
+            if (ProjectBudget::where('project_id', $project->id)->where('status', ProjectBudget::STATUS_DRAFT)->exists()) {
+                $this->invalid('budget', 'A draft version already exists for this project. Continue on that draft or discard it first.');
+            }
+            if (ProjectBudget::where('project_id', $project->id)->where('is_current', true)->exists()) {
+                $this->invalid('budget', 'This project already has a current budget. Create a revision of it instead of a new baseline.');
+            }
             $version = (int) ProjectBudget::where('project_id', $project->id)->max('version') + 1;
             $budget = ProjectBudget::create([
                 'project_id' => $project->id,
@@ -245,9 +251,10 @@ class ProjectBudgetService
                 $errors['chart_of_account_id'] = 'Map an active expense (cost) account, or leave the account empty for a planning-only line.';
             } else {
                 $other = ProjectBudgetLine::where('project_budget_id', $budget->id)->where('chart_of_account_id', $accountId)
-                    ->where('cost_code', '!=', $costCode)->when($ignoreLineId, fn ($q) => $q->whereKeyNot($ignoreLineId))->first();
+                    ->where(fn ($q) => $q->where('cost_code', '!=', $costCode)->orWhere('category', '!=', $category))
+                    ->when($ignoreLineId, fn ($q) => $q->whereKeyNot($ignoreLineId))->first();
                 if ($other) {
-                    $errors['chart_of_account_id'] = 'Account '.$account->label().' is already mapped to cost code '.$other->cost_code.' in this version. One account belongs to one cost code, so posted cost is never counted twice.';
+                    $errors['chart_of_account_id'] = 'Account '.$account->label().' is already mapped to cost code '.$other->cost_code.' ('.$other->category.') in this version. One account belongs to one category/cost-code group, so posted cost is never counted twice.';
                 }
             }
         }

@@ -234,6 +234,41 @@ class EquipmentCostTest extends TestCase
 
     // ---------------------------------------------------------------- maintenance
 
+    public function test_review_completion_requires_and_accepts_missing_payment_details(): void
+    {
+        $this->maintenance(['cost' => 0, 'expense_category_id' => null, 'payment_account_id' => null])->assertSessionHasNoErrors();
+        $record = EquipmentMaintenanceRecord::latest('id')->firstOrFail();
+        $url = route('admin.equipment.maintenance.complete', [$this->asset, $record->id]);
+        $this->actingAs($this->admin)->post($url, ['cost' => 250])->assertSessionHasErrors('expense_category_id');
+        $this->assertSame('open', $record->fresh()->status);
+        $this->actingAs($this->admin)->post($url, ['cost' => 250, 'expense_category_id' => $this->maintenanceCategory->id,
+            'payment_type' => 'Bank', 'payment_account_id' => $this->bank->id])->assertSessionHasNoErrors();
+        $this->actingAs($this->finance)->post(route('admin.equipment.maintenance.post', [$this->asset, $record->id]))->assertSessionHasNoErrors();
+        $this->assertSame(EquipmentMaintenanceRecord::ACC_POSTED, $record->fresh()->accounting_status);
+    }
+
+    public function test_review_completing_one_repair_does_not_release_other_open_repairs(): void
+    {
+        $this->maintenance(['take_out_of_service' => 1])->assertSessionHasNoErrors();
+        $first = EquipmentMaintenanceRecord::latest('id')->firstOrFail();
+        $this->maintenance(['take_out_of_service' => 1])->assertSessionHasNoErrors();
+        $second = EquipmentMaintenanceRecord::latest('id')->firstOrFail();
+        $this->actingAs($this->admin)->post(route('admin.equipment.maintenance.complete', [$this->asset, $first->id]))->assertSessionHasNoErrors();
+        $this->assertSame('under_maintenance', $this->asset->fresh()->status);
+        $this->actingAs($this->admin)->post(route('admin.equipment.maintenance.complete', [$this->asset, $second->id]))->assertSessionHasNoErrors();
+        $this->assertSame('assigned', $this->asset->fresh()->status);
+    }
+
+    public function test_review_initially_unknown_maintenance_cost_keeps_payment_mapping(): void
+    {
+        $this->maintenance(['cost' => 0])->assertSessionHasNoErrors();
+        $record = EquipmentMaintenanceRecord::latest('id')->firstOrFail();
+        $this->assertEquals($this->bank->id, $record->payment_account_id);
+        $this->actingAs($this->admin)->post(route('admin.equipment.maintenance.complete', [$this->asset, $record->id]), ['cost' => 250])->assertSessionHasNoErrors();
+        $this->actingAs($this->finance)->post(route('admin.equipment.maintenance.post', [$this->asset, $record->id]))->assertSessionHasNoErrors();
+        $this->assertSame(EquipmentMaintenanceRecord::ACC_POSTED, $record->fresh()->accounting_status);
+    }
+
     public function test_maintenance_lifecycle_history_next_service_and_posting_once(): void
     {
         $this->maintenance(['take_out_of_service' => 1, 'next_service_date' => '2026-10-20', 'next_service_meter' => 1500])->assertSessionHasNoErrors();

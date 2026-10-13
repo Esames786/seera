@@ -5,7 +5,7 @@
 |---|---|
 | **Version** | 1.14 |
 | **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 12 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Payroll Phase 2 (11 October 2026) adds the salary payment of a posted run from a bank / cash account (Dr payroll payable, Cr bank / cash) with replay protection and reversal, a generic bank transfer export frozen at generation, IBAN validation and masking (WF-022). The Project BOQ / Detailed Budget Engine Phase 1 (11 October 2026) adds budget versions and BOQ lines per project, Set as Current / revisions and Budget vs Actual on the posted ledger (MST-PRJ-006 / 007, WF-023). Equipment & Vehicles Phase 1 (12 October 2026) adds the asset register, project / site assignment history, fuel logs, maintenance records, private documents and Finance posting of equipment cost into the project ledger (EQP-001 … 004, WF-024). Offline attendance, an official Saudi WPS / Mudad file, GOSI, live GPS tracking, budget approval runtime and project scheduling remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
-| **Prepared** | 9 October 2026 |
+| **Prepared** | 12 October 2026; review corrections applied locally |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
 
@@ -1052,6 +1052,8 @@ Important:
 Create a new structure for a change; do not edit history. The employee profile amounts and the active structure are compared and Seera warns when they differ.
 
 ### [HR-PAY-001 … 005] Payroll
+
+Safety: Process, Edit, Delete and Approve require access to every stored employee row in the run, as do posting, reversal, settlement and bank export. An earlier open screen cannot overwrite approved payroll history: write actions recheck the current run under a lock. Salary settlement clears the payable identified in the original posted payroll journal, even if Finance changes the posting rule later.
 
 Web address: `https://seera.tech-brit.co.uk/admin/hr/payroll` (HR-PAY-001) · `https://seera.tech-brit.co.uk/admin/hr/payroll/create` (HR-PAY-002) · `https://seera.tech-brit.co.uk/admin/hr/payroll/{id}` (HR-PAY-003) · `https://seera.tech-brit.co.uk/admin/hr/payroll/{id}/edit` (HR-PAY-004) · `https://seera.tech-brit.co.uk/admin/hr/payroll/{id}/items/{item}/payslip` (HR-PAY-005)
 
@@ -2261,7 +2263,9 @@ Budget line fields:
 | Unit | Unit master | Tonne | No | |
 | Quantity, Rate | Planned quantity and unit rate | 100 × 2,850.00 | No | **Amount = quantity × rate, calculated on the server**; a submitted total is ignored |
 | Lump sum | Amount when there is no quantity × rate | 90,000.00 | Only without qty × rate | A lump-sum line stores no quantity or rate |
-| Cost account | Active expense account the line is compared with | 5200 Material Expense | No | Leave empty for a planning-only line (no actual shown). Within one version an account belongs to **one cost code**, so posted cost is never counted twice |
+| Cost account | Active expense account the line is compared with | 5200 Material Expense | No | Leave empty for a planning-only line (no actual shown). Within one version an account belongs to **one category/cost-code group**, so posted cost is never counted twice |
+
+Historical versions with ambiguous account mapping show a warning. The affected account's cost is included once in the unallocated totals instead of being repeated across groups. Correct a draft or create a revision; the system does not silently rewrite finalized versions. Concurrent Create Detailed Budget requests cannot create two draft baselines.
 | Notes | | — | No | |
 
 Buttons: **Create Detailed Budget** (first draft), **Add Line**, Edit / Copy / Remove (draft lines), **Set as Current Budget**, **Create Revision**, **Discard Draft**, **Export CSV**, Back to Project.
@@ -3081,12 +3085,12 @@ Daily: Dashboard (ADM-010), Users (USR-001), Roles and Permission Matrix (ROL-00
 3. Purchase Requests (INV-PR-001): approve site requests (WF-011).
 4. Project Cost Report (FIN-REP-007) and Project Material Consumption (INV-REP-004).
 5. Customer workspace (CUS-004) for the client's invoices and contacts.
-Use Project → Site Expenses for expense status and authorized totals. Not available yet: construction-progress dashboard, BOQ/budget lines and equipment.
+Use Project → Site Expenses for expense status and authorized totals; Budget / BOQ for versioned plans and Budget vs Actual; Equipment for assigned assets. Construction-progress scheduling and live equipment tracking remain unavailable.
 
 ### Site In-Charge / Site Supervisor
 
 Current usable screens: Purchase Requests (INV-PR-002) to ask for materials; Manual Attendance (HR-ATT-002) for the site's staff; Stock On Hand (INV-STK-001) for the site store; Locations (MST-SITE-003) to read the site details.
-Use Operations → Site Expenses → Add for responsive expense entry. Not available yet: mobile check-in/GPS, offline entry and equipment.
+Use Operations → Site Expenses → Add for responsive expense entry. Eligible linked employees can use online mobile check-in/check-out with the configured site geofence; Equipment & Vehicles is available with the required permissions. Offline entry and live equipment tracking remain unavailable.
 
 ### Warehouse Incharge
 
@@ -3148,7 +3152,7 @@ Workspace (EQP-003) — persistent header: code, name, type / category, status, 
 2. **Current Assignment** — project, site, operator, since, meter at assignment; **Assign / Reassign** (project required; site must belong to the project; operator must be an active employee in scope; date not in the future; optional meter reading) and **Release from project**. Only one active assignment per asset; reassigning closes the previous one (until date, end meter, who) and keeps it; two users cannot assign one asset at the same moment (asset row lock).
 3. **Assignment History** — every assignment, paged; never deleted.
 4. **Fuel** — entries with number FUEL-YYYY-NNNN, date, project / site (from the assignment at the time), meter, quantity, rate, total, payment, category, accounting state, receipt; **Record Fuel** (quantity × rate calculated on the server, VAT 0 / 15 %, payment Cash / Bank with the account paid from, or Supplier Credit with the supplier, expense category, reference, receipt file).
-5. **Maintenance** — records MNT-YYYY-NNNN: Open → **Complete** (final cost, meter) or **Cancel**; type, description, workshop / supplier, next service date / meter, invoice file; "Take out of service" sets the asset *Under Maintenance* until completion; completed and cancelled records stay in the history.
+5. **Maintenance** — records MNT-YYYY-NNNN: Open → **Complete** (final cost, meter, expandable Payment details) or **Cancel**; type, description, workshop / supplier, next service date / meter, invoice file. A repair may start with an unknown/zero cost; entered payment details are retained. A positive final cost requires a valid expense category and Cash/Bank account or credit supplier before completion. "Take out of service" keeps the asset *Under Maintenance* until no repair remains open; completing one of several repairs does not release the asset. Completed and cancelled records stay in the history.
 6. **Costs** (Financial Reports — view) — posted vs not-yet-posted fuel and maintenance for the asset, and where the cost counts.
 7. **Documents** — registration, insurance, inspection, permit, rental agreement, service invoice, fuel receipt, other; number, issue / expiry dates; private files (jpg, png, pdf up to 10 MB) served only through the authorized route; a registration or insurance upload with an expiry date updates the asset's expiry.
 8. **Tracking / GPS** — "Live GPS tracking is not connected to a telematics provider" with the stored tracker readiness fields; no position, route, speed, idle or geofence data exists.

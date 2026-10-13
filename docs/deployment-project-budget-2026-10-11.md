@@ -38,4 +38,4 @@ Post-release checks (read-only unless stated):
 4. Budget vs Actual for a project with posted stock issues / site expenses / payroll: the total actual equals the Project Cost Report posted cost for that project; cost on unmapped accounts is listed as "Other posted cost".
 5. `https://seera.tech-brit.co.uk/user-guide/` shows version 1.13; MST-PRJ-006 and WF-023 are present.
 
-Rollback: `git checkout 2dd9f8d` and `$PHP artisan optimize`. The migration can stay (the two new tables are unreferenced) or be reversed with `php artisan migrate:rollback --step=1`, which drops only the budget tables.
+Rollback requires a verified private backup and review of the actual deployed HEAD. Keep the additive budget tables: draft, current and superseded versions are business history. Do not run `migrate:rollback --step=1` routinely; it can delete that history or target a later migration. Code rollback to `2dd9f8d` is only a candidate after checking subsequent changes and obtaining approval. Preserve server configuration/uploads, use matching assets, clear/rebuild caches and smoke-test before bringing the application up.

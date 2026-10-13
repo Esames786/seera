@@ -208,7 +208,18 @@
                     <td>
                         <div class="actions">
                             @if ($row->status === 'open' && $canEdit)
-                                <form method="POST" action="{{ route('admin.equipment.maintenance.complete', [$asset, $row->id]) }}" style="display:flex;gap:4px;align-items:end">@csrf<input name="cost" type="number" step="0.01" min="0" class="input" style="width:110px" placeholder="final cost" value="{{ $row->taxable_amount > 0 ? $row->taxable_amount : '' }}"/><input name="meter_reading" type="number" step="0.1" min="0" class="input" style="width:100px" placeholder="meter"/><button type="submit" class="btn sm primary">Complete</button></form>
+                                <form method="POST" action="{{ route('admin.equipment.maintenance.complete', [$asset, $row->id]) }}" style="display:flex;gap:4px;align-items:end;flex-wrap:wrap">
+                                    @csrf
+                                    <input aria-label="{{ __('review.final_cost') }}" name="cost" type="number" step="0.01" min="0" class="input" style="width:110px" placeholder="{{ __('review.final_cost') }}" value="{{ $row->taxable_amount > 0 ? $row->taxable_amount : '' }}"/>
+                                    <input aria-label="{{ __('review.meter_reading') }}" name="meter_reading" type="number" step="0.1" min="0" class="input" style="width:100px" placeholder="{{ __('review.meter_reading') }}"/>
+                                    <details><summary>{{ __('review.payment_details') }}</summary>
+                                        <label>{{ __('workspace.payment_type') }}<select name="payment_type" class="select">@foreach (\App\Models\EquipmentMaintenanceRecord::PAYMENT_TYPES as $type)<option value="{{ $type }}" @selected($row->payment_type === $type)>{{ $type }}</option>@endforeach</select></label>
+                                        <label>{{ __('review.expense_category') }}<select name="expense_category_id" class="select"><option value="">{{ __('review.select_category') }}</option>@foreach ($categories as $category)<option value="{{ $category->id }}" @selected($row->expense_category_id == $category->id)>{{ $category->name }}</option>@endforeach</select></label>
+                                        <label>{{ __('review.paid_from') }}<select name="payment_account_id" class="select"><option value="">{{ __('review.select_account') }}</option>@foreach ($cashAccounts->merge($bankAccounts) as $account)<option value="{{ $account->id }}" @selected($row->payment_account_id == $account->id)>{{ $account->label() }}</option>@endforeach</select></label>
+                                        <label>{{ __('review.supplier') }}<select name="supplier_id" class="select"><option value="">{{ __('review.select_supplier') }}</option>@foreach ($suppliers as $supplier)<option value="{{ $supplier->id }}" @selected($row->supplier_id == $supplier->id)>{{ $supplier->name }}</option>@endforeach</select></label>
+                                    </details>
+                                    <button type="submit" class="btn sm primary">{{ __('review.complete') }}</button>
+                                </form>
                                 <form method="POST" action="{{ route('admin.equipment.maintenance.cancel', [$asset, $row->id]) }}" onsubmit="return confirm('Cancel {{ $row->maintenance_number }}? It stays in the history and is never posted.');">@csrf<button type="submit" class="btn sm outline">Cancel</button></form>
                             @endif
                             @if ($row->status === 'completed' && $canPost && ! $row->isFinanciallyLinked() && (float) $row->taxable_amount > 0)

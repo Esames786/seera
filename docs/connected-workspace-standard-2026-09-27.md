@@ -1,6 +1,12 @@
 # Connected Workspace Standard — suitability matrix and roadmap (27 September 2026)
 
-## Current update — 8 October 2026, Wave 2 Batch B — Items + Warehouses
+## Current update — 12 October 2026, post-handoff code review
+
+The continuation after `8103bdb` is implemented through `1b5d883` (40 commits): Wave 2 Batch C Customer Invoice workspace; Batch D Employee HR context; online GPS/geofence attendance; Payroll to GL and payslips; salary settlement and generic bank export; Project Budget/BOQ; Equipment & Vehicles Phase 1. The dated sections below describe each delivery. They supersede older statements that those modules were not started. Native/offline attendance, official WPS/Mudad, GOSI, live equipment telematics and construction scheduling remain outside those implementations.
+
+A separate review has reproduced and locally fixed payroll authorization/stale-write and settlement-account defects, equipment partial-save/maintenance defects, budget mapping/draft guards and mobile response localization. See [review findings and validation](fable-continuation-review-2026-10-12.md) for current evidence, remaining validation boundaries and release status. These review changes are not yet committed, pushed or deployed. Earlier recorded full-suite numbers are historical release evidence, not fresh certification of this review patch.
+
+## Historical update — 8 October 2026, Wave 2 Batch B — Items + Warehouses
 
 **Batch B implemented and development-verified:** read-only Item/Warehouse View and connected Manage now share the existing workspace kit, persistent identity, guarded master saves, permissioned lazy document panels and scoped stored-stock summaries. Warehouse quantities remain unit-wise. Item/Warehouse history-loss deletion paths are protected; existing warehouse Project/Site ownership is fixed, and new ownership is validated. No new inventory engine, StockService/valuation/GRNI/accounting/runtime change, migration or production seeder.
 

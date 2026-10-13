@@ -50,12 +50,30 @@ class ProjectBudgetReport
                 $mapped[$line->chart_of_account_id] = true;
             }
         }
+        // Older versions could map one account to the same code in different categories.
+        // Never allocate that posted cost twice or silently choose an arbitrary category.
+        $owners = [];
+        foreach ($groups as $key => $group) {
+            foreach (array_keys($group['accounts']) as $accountId) {
+                $owners[$accountId][] = $key;
+            }
+        }
+        $conflicts = array_filter($owners, fn ($keys) => count($keys) > 1);
+        foreach (array_keys($conflicts) as $accountId) {
+            unset($mapped[$accountId]);
+        }
         $rows = [];
         foreach ($groups as $group) {
+            $conflicted = array_intersect_key($group['accounts'], $conflicts);
+            $group['accounts'] = array_diff_key($group['accounts'], $conflicts);
             $hasAccounts = $group['accounts'] !== [];
             $groupActual = $hasAccounts ? array_sum(array_map(fn ($id) => $actual[$id] ?? 0.0, array_keys($group['accounts']))) : null;
             $groupCommitted = $hasAccounts ? array_sum(array_map(fn ($id) => $committed[$id] ?? 0.0, array_keys($group['accounts']))) : null;
-            $rows[] = $this->row($group['category'], $group['cost_code'], implode('; ', array_keys($group['descriptions'])), $group['budget'], $groupCommitted, $groupActual, array_values($group['accounts']), $group['lines'], array_values($group['sites']));
+            $row = $this->row($group['category'], $group['cost_code'], implode('; ', array_keys($group['descriptions'])), $group['budget'], $groupCommitted, $groupActual, array_values($group['accounts']), $group['lines'], array_values($group['sites']));
+            if ($conflicted !== []) {
+                $row['status'] = 'Ambiguous account mapping';
+            }
+            $rows[] = $row;
         }
         usort($rows, fn ($a, $b) => [array_search($a['category'], array_keys(ProjectBudgetLine::CATEGORIES)), $a['cost_code']] <=> [array_search($b['category'], array_keys(ProjectBudgetLine::CATEGORIES)), $b['cost_code']]);
 
@@ -100,6 +118,7 @@ class ProjectBudgetReport
             'budget' => $budget,
             'rows' => $rows,
             'categories' => array_values($categories),
+            'mapping_conflicts' => array_map(fn ($id) => $accounts[$id]?->label(), array_keys($conflicts)),
             'unmapped' => ['actual' => round($unmappedActual, 2), 'committed' => round($unmappedCommitted, 2), 'accounts' => array_values(array_filter($unmappedAccounts))],
             'totals' => [
                 'budget' => $totalBudget,

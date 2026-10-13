@@ -12,7 +12,9 @@ use App\Models\Project;
 use App\Models\Role;
 use App\Models\Site;
 use App\Models\User;
+use App\Services\Equipment\EquipmentAssignmentService;
 use Database\Seeders\DatabaseSeeder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -91,6 +93,19 @@ class EquipmentTest extends TestCase
 
     // ---------------------------------------------------------------- master
 
+    public function test_review_failed_meter_validation_does_not_partially_save_profile(): void
+    {
+        $asset = $this->asset();
+        $originalName = $asset->name;
+        $this->actingAs($this->admin)->put(route('admin.equipment.update', $asset), [
+            'asset_code' => $asset->asset_code, 'name' => 'Must not save', 'asset_type' => 'equipment',
+            'ownership_type' => 'rented', 'meter_type' => 'hours', 'status' => 'available', 'current_meter' => 900,
+        ])->assertSessionHasErrors('meter_reading');
+        $this->assertSame($originalName, $asset->fresh()->name);
+        $this->assertSame('owned', $asset->fresh()->ownership_type);
+        $this->assertEquals(1000, $asset->fresh()->current_meter);
+    }
+
     public function test_create_view_edit_unique_code_and_vehicle_fields(): void
     {
         $this->actingAs($this->admin)->post(route('admin.equipment.store'), ['asset_code' => 'trk-001', 'name' => 'Hilux pickup', 'asset_type' => 'vehicle', 'ownership_type' => 'owned', 'meter_type' => 'odometer', 'current_meter' => 25000,
@@ -128,6 +143,25 @@ class EquipmentTest extends TestCase
     }
 
     // ---------------------------------------------------------------- assignment
+
+    public function test_review_stale_asset_cannot_be_reassigned_after_moving_outside_actor_scope(): void
+    {
+        $asset = $this->asset();
+        $this->assign($asset)->assertSessionHasNoErrors();
+        $stale = $asset->fresh();
+        $this->assign($asset, ['project_id' => $this->projectB->id, 'site_id' => $this->siteB->id])->assertSessionHasNoErrors();
+        $scoped = $this->user(['Equipment' => ['view', 'process']], $this->projectA, 'stale-owner');
+        $this->actingAs($scoped);
+        try {
+            app(EquipmentAssignmentService::class)->assign($stale, ['project_id' => $this->projectA->id, 'site_id' => $this->siteA->id], $scoped);
+            $this->fail('An old route-bound asset must not authorize a write after reassignment outside scope.');
+        } catch (ModelNotFoundException) {
+            $fresh = EquipmentAsset::withoutGlobalScopes()->findOrFail($asset->id);
+            $this->assertEquals($this->projectB->id, $fresh->current_project_id);
+            $this->assertNotNull($fresh->current_assignment_id);
+            $this->assertSame(1, EquipmentAssignment::withoutGlobalScopes()->where('equipment_asset_id', $asset->id)->where('is_active', true)->count());
+        }
+    }
 
     public function test_assignment_validates_relations_keeps_history_and_one_active_assignment(): void
     {

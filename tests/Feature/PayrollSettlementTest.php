@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\Admin\Hr\PayrollRunController;
 use App\Models\AutomaticPostingRule;
 use App\Models\ChartOfAccount;
 use App\Models\CostCenter;
@@ -23,7 +24,9 @@ use App\Services\Payroll\PayrollSettlementService;
 use App\Support\ReportPeriod;
 use Carbon\CarbonImmutable;
 use Database\Seeders\DatabaseSeeder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
@@ -140,7 +143,7 @@ class PayrollSettlementTest extends TestCase
         ]);
     }
 
-    protected function settlementJournals(PayrollRun $run): \Illuminate\Database\Eloquent\Collection
+    protected function settlementJournals(PayrollRun $run): Collection
     {
         return JournalEntry::withoutGlobalScopes()->where('source_module', 'Payroll Settlement')
             ->whereIn('source_id', PayrollSettlement::where('payroll_run_id', $run->id)->pluck('id'))->get();
@@ -154,6 +157,66 @@ class PayrollSettlementTest extends TestCase
     }
 
     // ---------------------------------------------------------------- eligibility
+
+    public function test_review_partial_scope_cannot_approve_and_auto_post_whole_payroll(): void
+    {
+        $run = $this->makeRun(9, 'processed');
+        $scoped = $this->user(['Payroll' => ['view', 'approve']], $this->mine, 'partial-approver');
+        $this->actingAs($scoped)->post(route('admin.hr.payroll.approve', $run))->assertForbidden();
+        $this->assertSame('processed', $run->fresh()->status);
+        $this->assertNull($run->fresh()->journal_entry_id);
+    }
+
+    public function test_review_stale_payroll_process_cannot_overwrite_committed_approval(): void
+    {
+        $run = $this->makeRun(9, 'processed');
+        $stale = $run->fresh();
+        $this->actingAs($this->admin())->post(route('admin.hr.payroll.approve', $run))->assertSessionHasNoErrors();
+        $itemIds = $run->items()->pluck('id')->all();
+        $request = Request::create('/admin/hr/payroll/'.$run->id.'/process', 'POST');
+        $request->setUserResolver(fn () => $this->admin());
+        app(PayrollRunController::class)->process($request, $stale);
+        $this->assertSame('approved', $run->fresh()->status);
+        $this->assertSame($itemIds, $run->items()->pluck('id')->all());
+    }
+
+    public function test_review_stale_payroll_update_and_delete_preserve_approved_history(): void
+    {
+        $run = $this->makeRun(9, 'processed');
+        $stale = $run->fresh();
+        $this->actingAs($this->admin())->post(route('admin.hr.payroll.approve', $run))->assertSessionHasNoErrors();
+        $request = Request::create('/admin/hr/payroll/'.$run->id, 'PUT', ['payroll_month' => 8, 'payroll_year' => 2026]);
+        $request->setUserResolver(fn () => $this->admin());
+        $controller = app(PayrollRunController::class);
+        $controller->update($request, $stale);
+        $controller->destroy($request, $stale);
+        $this->assertSame('approved', $run->fresh()->status);
+        $this->assertEquals(9, $run->fresh()->payroll_month);
+        $this->assertNotNull($run->fresh()->journal_entry_id);
+    }
+
+    public function test_review_partial_scope_cannot_reprocess_edit_or_delete_whole_payroll(): void
+    {
+        $run = $this->makeRun(9, 'processed');
+        $scoped = $this->user(['Payroll' => ['view', 'process', 'edit', 'delete']], $this->mine, 'partial-writer');
+        $itemIds = $run->items()->pluck('id')->all();
+        $this->actingAs($scoped)->post(route('admin.hr.payroll.process', $run))->assertForbidden();
+        $this->put(route('admin.hr.payroll.update', $run), ['payroll_month' => 8, 'payroll_year' => 2026])->assertForbidden();
+        $this->delete(route('admin.hr.payroll.destroy', $run))->assertForbidden();
+        $this->actingAs($this->admin());
+        $this->assertSame($itemIds, $run->items()->pluck('id')->all());
+        $this->assertEquals(9, $run->fresh()->payroll_month);
+    }
+
+    public function test_review_settlement_uses_original_payable_when_rule_changes_to_deductions_account(): void
+    {
+        $run = $this->makeRun();
+        $this->rule()->update(['credit_account_id' => ChartOfAccount::where('account_code', '2320')->value('id')]);
+        $this->pay($run)->assertSessionHasNoErrors();
+        $journal = $this->settlementJournals($run)->sole();
+        $this->assertEqualsWithDelta(17200, $journal->lines()->where('chart_of_account_id', $this->payable->id)->sum('debit'), 0.01);
+        $this->assertEquals(0, $journal->lines()->where('chart_of_account_id', $this->rule()->deduction_account_id)->sum('debit'));
+    }
 
     public function test_only_a_posted_payroll_run_can_be_paid(): void
     {

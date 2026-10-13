@@ -49,6 +49,13 @@
         <a class="btn outline" href="{{ route('admin.master.projects.show', $project) }}">Back to Project</a>
     </x-admin.page-header>
 
+    @if ($canFinance && ! empty($report['mapping_conflicts']))
+        <div class="alert warning" role="alert">
+            <strong>{{ __('review.ambiguous_mapping') }}:</strong> {{ implode(', ', $report['mapping_conflicts']) }}.
+            {{ __('review.mapping_help') }}
+        </div>
+    @endif
+
     {{-- Persistent identity --}}
     <div class="card workspace-header" data-workspace-header>
         <div class="identity">

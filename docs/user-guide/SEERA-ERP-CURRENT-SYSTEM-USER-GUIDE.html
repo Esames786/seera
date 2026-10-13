@@ -54,7 +54,7 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 </tr>
 <tr>
 <td><strong>Prepared</strong></td>
-<td>9 October 2026</td>
+<td>12 October 2026; review corrections applied locally</td>
 </tr>
 <tr>
 <td><strong>Status</strong></td>
@@ -1919,6 +1919,7 @@ Effective-dated salary definition used by payroll.</p>
 <p>Important:
 Create a new structure for a change; do not edit history. The employee profile amounts and the active structure are compared and Seera warns when they differ.</p>
 <h3 id="hr-pay-001--005-payroll">[HR-PAY-001 … 005] Payroll</h3>
+<p>Safety: Process, Edit, Delete and Approve require access to every stored employee row in the run, as do posting, reversal, settlement and bank export. An earlier open screen cannot overwrite approved payroll history: write actions recheck the current run under a lock. Salary settlement clears the payable identified in the original posted payroll journal, even if Finance changes the posting rule later.</p>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/hr/payroll" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/hr/payroll</code></a> (HR-PAY-001) · <a class="url" href="https://seera.tech-brit.co.uk/admin/hr/payroll/create" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/hr/payroll/create</code></a> (HR-PAY-002) · <code>https://seera.tech-brit.co.uk/admin/hr/payroll/{id}</code> (HR-PAY-003) · <code>https://seera.tech-brit.co.uk/admin/hr/payroll/{id}/edit</code> (HR-PAY-004) · <code>https://seera.tech-brit.co.uk/admin/hr/payroll/{id}/items/{item}/payslip</code> (HR-PAY-005)</p>
 <p>Purpose:
 Calculate a month's pay for a set of employees, approve it, post it to accounting and print each employee's payslip.</p>
@@ -4223,17 +4224,12 @@ Projects — view (open the page, read budget figures); Projects — edit (Creat
 <td>Active expense account the line is compared with</td>
 <td>5200 Material Expense</td>
 <td>No</td>
-<td>Leave empty for a planning-only line (no actual shown). Within one version an account belongs to <strong>one cost code</strong>, so posted cost is never counted twice</td>
-</tr>
-<tr>
-<td>Notes</td>
-<td></td>
-<td>—</td>
-<td>No</td>
-<td></td>
+<td>Leave empty for a planning-only line (no actual shown). Within one version an account belongs to <strong>one category/cost-code group</strong>, so posted cost is never counted twice</td>
 </tr>
 </tbody>
 </table>
+<p>Historical versions with ambiguous account mapping show a warning. The affected account's cost is included once in the unallocated totals instead of being repeated across groups. Correct a draft or create a revision; the system does not silently rewrite finalized versions. Concurrent Create Detailed Budget requests cannot create two draft baselines.
+| Notes | | — | No | |</p>
 <p>Buttons: <strong>Create Detailed Budget</strong> (first draft), <strong>Add Line</strong>, Edit / Copy / Remove (draft lines), <strong>Set as Current Budget</strong>, <strong>Create Revision</strong>, <strong>Discard Draft</strong>, <strong>Export CSV</strong>, Back to Project.</p>
 <p>Version lifecycle: Draft (editable) → <strong>Current budget</strong> (read-only; the one version Budget vs Actual uses on the project pages) → Superseded (read-only history when a later revision becomes current). <strong>Create Revision</strong> copies every line of the current version into a new draft (one open draft per project); the current version stays unchanged until the draft is set as current. <strong>Discard Draft</strong> keeps the draft in the version list as read-only; version numbers are never reused and nothing is deleted. Set as Current re-validates every line (site ownership, active item, active expense account, one account per cost code) and refuses an empty draft. Exactly one version is current per project; two users finalizing at once leave one current version (project row lock).</p>
 <p>Budget vs Actual (Financial Reports — view): figures for the project and, when a site filter is applied, for that site only.</p>
@@ -5674,11 +5670,11 @@ Related screens: EQP-001, EQP-002, EQP-003, EQP-004, MST-EXP-001, MST-PRJ-003, M
 <li>Purchase Requests (INV-PR-001): approve site requests (WF-011).</li>
 <li>Project Cost Report (FIN-REP-007) and Project Material Consumption (INV-REP-004).</li>
 <li>Customer workspace (CUS-004) for the client's invoices and contacts.
-Use Project → Site Expenses for expense status and authorized totals. Not available yet: construction-progress dashboard, BOQ/budget lines and equipment.</li>
+Use Project → Site Expenses for expense status and authorized totals; Budget / BOQ for versioned plans and Budget vs Actual; Equipment for assigned assets. Construction-progress scheduling and live equipment tracking remain unavailable.</li>
 </ol>
 <h3 id="site-in-charge--site-supervisor">Site In-Charge / Site Supervisor</h3>
 <p>Current usable screens: Purchase Requests (INV-PR-002) to ask for materials; Manual Attendance (HR-ATT-002) for the site's staff; Stock On Hand (INV-STK-001) for the site store; Locations (MST-SITE-003) to read the site details.
-Use Operations → Site Expenses → Add for responsive expense entry. Not available yet: mobile check-in/GPS, offline entry and equipment.</p>
+Use Operations → Site Expenses → Add for responsive expense entry. Eligible linked employees can use online mobile check-in/check-out with the configured site geofence; Equipment &amp; Vehicles is available with the required permissions. Offline entry and live equipment tracking remain unavailable.</p>
 <h3 id="warehouse-incharge">Warehouse Incharge</h3>
 <p>Goods Receipt Notes (WF-002 steps 2), Stock Issues (WF-007), Stock Transfers (WF-006), Stock Adjustments (WF-013), Stock On Hand and Stock Ledger.</p>
 <h3 id="purchase-manager--assistant">Purchase Manager / Assistant</h3>
@@ -5816,7 +5812,7 @@ Equipment — view (register, workspace, private files); Equipment — create (n
 <li><strong>Current Assignment</strong> — project, site, operator, since, meter at assignment; <strong>Assign / Reassign</strong> (project required; site must belong to the project; operator must be an active employee in scope; date not in the future; optional meter reading) and <strong>Release from project</strong>. Only one active assignment per asset; reassigning closes the previous one (until date, end meter, who) and keeps it; two users cannot assign one asset at the same moment (asset row lock).</li>
 <li><strong>Assignment History</strong> — every assignment, paged; never deleted.</li>
 <li><strong>Fuel</strong> — entries with number FUEL-YYYY-NNNN, date, project / site (from the assignment at the time), meter, quantity, rate, total, payment, category, accounting state, receipt; <strong>Record Fuel</strong> (quantity × rate calculated on the server, VAT 0 / 15 %, payment Cash / Bank with the account paid from, or Supplier Credit with the supplier, expense category, reference, receipt file).</li>
-<li><strong>Maintenance</strong> — records MNT-YYYY-NNNN: Open → <strong>Complete</strong> (final cost, meter) or <strong>Cancel</strong>; type, description, workshop / supplier, next service date / meter, invoice file; &quot;Take out of service&quot; sets the asset <em>Under Maintenance</em> until completion; completed and cancelled records stay in the history.</li>
+<li><strong>Maintenance</strong> — records MNT-YYYY-NNNN: Open → <strong>Complete</strong> (final cost, meter, expandable Payment details) or <strong>Cancel</strong>; type, description, workshop / supplier, next service date / meter, invoice file. A repair may start with an unknown/zero cost; entered payment details are retained. A positive final cost requires a valid expense category and Cash/Bank account or credit supplier before completion. &quot;Take out of service&quot; keeps the asset <em>Under Maintenance</em> until no repair remains open; completing one of several repairs does not release the asset. Completed and cancelled records stay in the history.</li>
 <li><strong>Costs</strong> (Financial Reports — view) — posted vs not-yet-posted fuel and maintenance for the asset, and where the cost counts.</li>
 <li><strong>Documents</strong> — registration, insurance, inspection, permit, rental agreement, service invoice, fuel receipt, other; number, issue / expiry dates; private files (jpg, png, pdf up to 10 MB) served only through the authorized route; a registration or insurance upload with an expiry date updates the asset's expiry.</li>
 <li><strong>Tracking / GPS</strong> — &quot;Live GPS tracking is not connected to a telematics provider&quot; with the stored tracker readiness fields; no position, route, speed, idle or geofence data exists.</li>

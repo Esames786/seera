@@ -11,16 +11,16 @@ use App\Models\OvertimeRecord;
 use App\Models\PayrollRun;
 use App\Models\Project;
 use App\Models\SalaryStructure;
+use App\Services\DocumentNumberService;
+use App\Services\Payroll\PayrollAccountingService;
+use App\Services\Payroll\PayrollBankExportService;
+use App\Services\Payroll\PayrollSettlementService;
+use App\Support\SaveAction;
+use App\Support\Workspace\DocumentActivity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Services\Payroll\PayrollAccountingService;
-use App\Services\Payroll\PayrollBankExportService;
-use App\Services\Payroll\PayrollSettlementService;
-use App\Support\Iban;
-use App\Support\SaveAction;
-use App\Support\Workspace\DocumentActivity;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -95,11 +95,11 @@ class PayrollRunController extends Controller
             'run' => $payroll_run,
             'items' => $items,
             'totals' => $totals,
-            'canProcess' => ! $payroll_run->isApproved() && $user->hasPermission('Payroll', 'create'),
-            'canEdit' => ! $payroll_run->isApproved() && $user->hasPermission('Payroll', 'edit'),
-            'canApprove' => $payroll_run->status === 'processed' && $user->hasPermission('Payroll', 'approve'),
-            'canPost' => $payroll_run->isApproved() && ! $payroll_run->reversal_journal_id && $payroll_run->accounting_status !== PayrollRun::ACCOUNTING_POSTED && $user->hasPermission('Payroll', 'post'),
-            'canReverse' => $payroll_run->accounting_status === PayrollRun::ACCOUNTING_POSTED && $user->hasPermission('Payroll', 'post') && $user->hasPermission('Payroll', 'approve'),
+            'canProcess' => $wholeRun && ! $payroll_run->isApproved() && $user->hasPermission('Payroll', 'process'),
+            'canEdit' => $wholeRun && ! $payroll_run->isApproved() && $user->hasPermission('Payroll', 'edit'),
+            'canApprove' => $wholeRun && $payroll_run->status === 'processed' && $user->hasPermission('Payroll', 'approve'),
+            'canPost' => $wholeRun && $payroll_run->isApproved() && ! $payroll_run->reversal_journal_id && $payroll_run->accounting_status !== PayrollRun::ACCOUNTING_POSTED && $user->hasPermission('Payroll', 'post'),
+            'canReverse' => $wholeRun && $payroll_run->accounting_status === PayrollRun::ACCOUNTING_POSTED && $user->hasPermission('Payroll', 'post') && $user->hasPermission('Payroll', 'approve'),
             'canViewJournal' => $user->hasPermission('Journal Entries', 'view'),
             'canViewEmployee' => $user->hasPermission('HR', 'view'),
             'activity' => DocumentActivity::latest($user, [$payroll_run->code], ['Payroll', 'Accounting']),
@@ -260,31 +260,39 @@ class PayrollRunController extends Controller
 
     public function update(Request $request, PayrollRun $payroll_run): RedirectResponse
     {
-        if ($payroll_run->isApproved() || $payroll_run->isFinanciallyLocked()) {
-            return back()->withErrors(['payroll' => 'An approved payroll run can no longer be edited.']);
-        }
+        return DB::transaction(function () use ($request, $payroll_run) {
+            $payroll_run = PayrollRun::whereKey($payroll_run->id)->lockForUpdate()->firstOrFail();
+            abort_unless(PayrollSettlementService::coversWholeRun($request->user(), $payroll_run), 403);
+            if ($payroll_run->isApproved() || $payroll_run->isFinanciallyLocked()) {
+                return back()->withErrors(['payroll' => 'An approved payroll run can no longer be edited.']);
+            }
 
-        $payroll_run->update($this->validated($request));
+            $payroll_run->update($this->validated($request));
 
-        ActivityLog::record($request, 'Payroll', 'Updated payroll run', $payroll_run->code);
+            ActivityLog::record($request, 'Payroll', 'Updated payroll run', $payroll_run->code);
 
-        return redirect()->route('admin.hr.payroll.show', $payroll_run)
-            ->with('status', 'Payroll run updated successfully.');
+            return redirect()->route('admin.hr.payroll.show', $payroll_run)
+                ->with('status', 'Payroll run updated successfully.');
+        }, 3);
     }
 
     public function destroy(Request $request, PayrollRun $payroll_run): RedirectResponse
     {
-        if ($payroll_run->isApproved() || $payroll_run->isFinanciallyLocked()) {
-            return back()->withErrors(['payroll' => 'An approved payroll run cannot be deleted.']);
-        }
+        return DB::transaction(function () use ($request, $payroll_run) {
+            $payroll_run = PayrollRun::whereKey($payroll_run->id)->lockForUpdate()->firstOrFail();
+            abort_unless(PayrollSettlementService::coversWholeRun($request->user(), $payroll_run), 403);
+            if ($payroll_run->isApproved() || $payroll_run->isFinanciallyLocked()) {
+                return back()->withErrors(['payroll' => 'An approved payroll run cannot be deleted.']);
+            }
 
-        $code = $payroll_run->code;
-        $payroll_run->delete();
+            $code = $payroll_run->code;
+            $payroll_run->delete();
 
-        ActivityLog::record($request, 'Payroll', 'Deleted payroll run', $code);
+            ActivityLog::record($request, 'Payroll', 'Deleted payroll run', $code);
 
-        return redirect()->route('admin.hr.payroll.index')
-            ->with('status', 'Payroll run "'.$code.'" deleted successfully.');
+            return redirect()->route('admin.hr.payroll.index')
+                ->with('status', 'Payroll run "'.$code.'" deleted successfully.');
+        }, 3);
     }
 
     /**
@@ -292,20 +300,22 @@ class PayrollRunController extends Controller
      */
     public function process(Request $request, PayrollRun $payroll_run): RedirectResponse
     {
-        if ($payroll_run->isApproved() || $payroll_run->isFinanciallyLocked()) {
-            return back()->withErrors(['payroll' => 'An approved payroll run cannot be reprocessed.']);
-        }
+        return DB::transaction(function () use ($request, $payroll_run) {
+            $payroll_run = PayrollRun::whereKey($payroll_run->id)->lockForUpdate()->firstOrFail();
+            abort_unless(PayrollSettlementService::coversWholeRun($request->user(), $payroll_run), 403);
+            if ($payroll_run->isApproved() || $payroll_run->isFinanciallyLocked()) {
+                return back()->withErrors(['payroll' => 'An approved payroll run cannot be reprocessed.']);
+            }
 
-        $employees = Employee::where('status', 'active')
-            ->when($payroll_run->branch_id, fn ($q) => $q->where('branch_id', $payroll_run->branch_id))
-            ->when($payroll_run->project_id, fn ($q) => $q->where('project_id', $payroll_run->project_id))
-            ->get();
+            $employees = Employee::where('status', 'active')
+                ->when($payroll_run->branch_id, fn ($q) => $q->where('branch_id', $payroll_run->branch_id))
+                ->when($payroll_run->project_id, fn ($q) => $q->where('project_id', $payroll_run->project_id))
+                ->get();
 
-        if ($employees->isEmpty()) {
-            return back()->withErrors(['payroll' => 'No active employees match this payroll run scope.']);
-        }
+            if ($employees->isEmpty()) {
+                return back()->withErrors(['payroll' => 'No active employees match this payroll run scope.']);
+            }
 
-        DB::transaction(function () use ($payroll_run, $employees) {
             $payroll_run->items()->delete();
 
             $gross = 0.0;
@@ -330,12 +340,12 @@ class PayrollRunController extends Controller
                 'status' => 'processed',
                 'processed_at' => now(),
             ]);
-        });
 
-        ActivityLog::record($request, 'Payroll', 'Processed payroll run', $payroll_run->code.' - '.$employees->count().' employees');
+            ActivityLog::record($request, 'Payroll', 'Processed payroll run', $payroll_run->code.' - '.$employees->count().' employees');
 
-        return redirect()->route('admin.hr.payroll.show', $payroll_run)
-            ->with('status', 'Payroll processed for '.$employees->count().' employees.');
+            return redirect()->route('admin.hr.payroll.show', $payroll_run)
+                ->with('status', 'Payroll processed for '.$employees->count().' employees.');
+        }, 3);
     }
 
     public function approve(Request $request, PayrollRun $payroll_run): RedirectResponse
@@ -343,6 +353,7 @@ class PayrollRunController extends Controller
         $approved = DB::transaction(function () use ($request, $payroll_run) {
             // Re-check under lock: two Approve clicks or a race with Process cannot approve twice.
             $run = PayrollRun::whereKey($payroll_run->id)->lockForUpdate()->firstOrFail();
+            abort_unless(PayrollSettlementService::coversWholeRun($request->user(), $run), 403, 'This payroll run includes employees outside your scope; only a user authorized for the whole run can approve it.');
             if ($run->status !== 'processed') {
                 return false;
             }
@@ -415,7 +426,8 @@ class PayrollRunController extends Controller
     private function nextCode(int $year, int $month): string
     {
         $prefix = sprintf('PR-%04d%02d', $year, $month);
-        return app(\App\Services\DocumentNumberService::class)
+
+        return app(DocumentNumberService::class)
             ->next('payroll-'.$year.'-'.$month, $prefix.'-', 'payroll_runs', 'code', 2);
     }
 

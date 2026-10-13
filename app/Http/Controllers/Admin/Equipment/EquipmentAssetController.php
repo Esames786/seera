@@ -19,6 +19,7 @@ use App\Support\SaveAction;
 use App\Support\Workspace\DocumentActivity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -127,22 +128,27 @@ class EquipmentAssetController extends Controller
     public function update(Request $request, EquipmentAsset $equipment): RedirectResponse
     {
         $data = $this->validated($request, $equipment);
-        if (array_key_exists('status', $data)) {
-            if ($data['status'] === 'assigned' && ! $equipment->current_assignment_id) {
-                throw ValidationException::withMessages(['status' => 'Use Assign on the equipment page to put an asset on a project; the Assigned status follows the assignment.']);
+        $equipment = DB::transaction(function () use ($request, $equipment, $data) {
+            // Re-read assignment and meter state under the same mutex as operational actions.
+            $equipment = EquipmentAsset::whereKey($equipment->id)->lockForUpdate()->firstOrFail();
+            if (array_key_exists('status', $data)) {
+                if ($data['status'] === 'assigned' && ! $equipment->current_assignment_id) {
+                    throw ValidationException::withMessages(['status' => 'Use Assign on the equipment page to put an asset on a project; the Assigned status follows the assignment.']);
+                }
+                if ($data['status'] !== 'assigned' && $data['status'] !== 'under_maintenance' && $equipment->current_assignment_id && $data['status'] !== $equipment->status) {
+                    throw ValidationException::withMessages(['status' => 'Release the active assignment before changing the status of an assigned asset.']);
+                }
             }
-            if ($data['status'] !== 'assigned' && $data['status'] !== 'under_maintenance' && $equipment->current_assignment_id && $data['status'] !== $equipment->status) {
-                throw ValidationException::withMessages(['status' => 'Release the active assignment before changing the status of an assigned asset.']);
+            $meter = $data['current_meter'] ?? null;
+            unset($data['current_meter']);
+            $equipment->update($data);
+            if ($meter !== null) {
+                $this->assignments->applyMeter($equipment, (float) $meter, $request->boolean('meter_correction'), $request->user(), 'profile edit');
             }
-        }
-        $meter = $data['current_meter'] ?? null;
-        unset($data['current_meter']);
-        $equipment->update($data);
-        if ($meter !== null) {
-            $locked = EquipmentAsset::withoutGlobalScopes()->whereKey($equipment->id)->firstOrFail();
-            $this->assignments->applyMeter($locked, (float) $meter, $request->boolean('meter_correction'), $request->user(), 'profile edit');
-        }
-        ActivityLog::record($request, 'Equipment', 'Updated equipment', '[Equipment #'.$equipment->id.'] '.$equipment->asset_code.' · '.$equipment->name);
+            ActivityLog::record($request, 'Equipment', 'Updated equipment', '[Equipment #'.$equipment->id.'] '.$equipment->asset_code.' · '.$equipment->name);
+
+            return $equipment;
+        }, 3);
 
         return $this->saved($request, $equipment, 'Equipment '.$equipment->asset_code.' updated.');
     }

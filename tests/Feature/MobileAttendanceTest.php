@@ -111,6 +111,23 @@ class MobileAttendanceTest extends TestCase
 
     // ------------------------------------------------------------------ eligibility
 
+    public function test_review_recorded_messages_resolve_the_mobile_attendance_translation(): void
+    {
+        $response = $this->checkIn($this->position())->assertOk();
+        $response->assertJsonPath('message', __('mobile_attendance.checked_in', ['time' => $response->json('time')]));
+        $response = $this->checkOut($this->position())->assertOk();
+        $response->assertJsonPath('message', __('mobile_attendance.checked_out', ['time' => $response->json('time')]));
+    }
+
+    public function test_review_recorded_messages_use_arabic_for_arabic_user(): void
+    {
+        $this->worker->update(['language' => 'Arabic']);
+        $response = $this->checkIn($this->position())->assertOk();
+        $response->assertJsonPath('message', __('mobile_attendance.checked_in', ['time' => $response->json('time')], 'ar'));
+        $response = $this->checkOut($this->position())->assertOk();
+        $response->assertJsonPath('message', __('mobile_attendance.checked_out', ['time' => $response->json('time')], 'ar'));
+    }
+
     public function test_linked_active_employee_with_mobile_access_opens_the_mobile_page(): void
     {
         $this->actingAs($this->worker)->get(route('admin.hr.attendance.mobile'))->assertOk()

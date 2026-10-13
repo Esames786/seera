@@ -107,6 +107,22 @@ class ProjectBudgetReportTest extends TestCase
 
     // ---------------------------------------------------------------- fixtures
 
+    public function test_review_legacy_cross_category_mapping_does_not_double_count_actual(): void
+    {
+        // Historical data accepted before the validation fix: do not rewrite the frozen version.
+        $this->budget->lines()->create(['cost_code' => 'MAT-001', 'category' => 'equipment', 'description' => 'Legacy ambiguous mapping',
+            'amount' => 25, 'chart_of_account_id' => $this->material->id]);
+        $entry = JournalEntry::create(['journal_number' => 'REVIEW-BOQ', 'journal_date' => today(), 'source_module' => 'Manual', 'status' => 'posted', 'total_debit' => 100, 'total_credit' => 100]);
+        $entry->lines()->create(['chart_of_account_id' => $this->material->id, 'project_id' => $this->project->id, 'debit' => 100, 'credit' => 0]);
+        $entry->lines()->create(['chart_of_account_id' => ChartOfAccount::where('account_code', PostingService::CASH)->value('id'), 'project_id' => $this->project->id, 'debit' => 0, 'credit' => 100]);
+        $report = $this->report();
+        $this->assertCount(1, $report['mapping_conflicts']);
+        $this->assertEquals(100, $report['totals']['actual']);
+        $this->assertEquals(100, $report['unmapped']['actual']);
+        $this->assertEquals($report['totals']['actual'], array_sum(array_column($report['rows'], 'actual')) + $report['unmapped']['actual']);
+        $this->actingAs($this->admin)->get(route('admin.master.projects.budget.show', $this->project))->assertOk()->assertSee('Ambiguous account mapping');
+    }
+
     /** @param array<string, array<int, string>> $grants */
     protected function user(array $grants, ?Project $project = null, string $suffix = 'u'): User
     {

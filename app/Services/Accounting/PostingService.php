@@ -140,10 +140,14 @@ class PostingService
         if (! $original || $original->status !== 'posted') {
             $this->refuse('Salary payment needs the posted payroll journal of '.$run->code.'; it is '.($original?->status ?? 'missing').'.');
         }
-        $rule = AutomaticPostingRule::where('source_module', 'Payroll')->where('trigger_event', 'Payroll Approved')->first();
         $credits = $original->lines->filter(fn ($line) => (float) $line->credit > 0);
-        $payableLine = $credits->first(fn ($line) => $rule && (int) $line->chart_of_account_id === (int) $rule->credit_account_id)
-            ?? $credits->first(fn ($line) => abs((float) $line->credit - (float) $run->net_amount) < 0.01);
+        // The original immutable journal identifies the payable, not today's editable rule.
+        $payableLines = $credits->filter(fn ($line) => $line->description === 'Payroll payable '.$run->code.' ('.$run->periodLabel().')');
+        if ($payableLines->isEmpty()) {
+            // Compatibility with earlier journals: only an unambiguous amount match is safe.
+            $payableLines = $credits->filter(fn ($line) => abs((float) $line->credit - (float) $run->net_amount) < 0.01);
+        }
+        $payableLine = $payableLines->count() === 1 ? $payableLines->first() : null;
         if (! $payableLine) {
             $this->refuse('The payroll payable line of journal '.$original->journal_number.' could not be identified; Finance must review the payroll posting before paying.');
         }

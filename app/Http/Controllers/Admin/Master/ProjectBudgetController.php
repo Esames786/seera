@@ -88,7 +88,11 @@ class ProjectBudgetController extends Controller
         if ($project->budgets()->where('is_current', true)->exists()) {
             return back()->withErrors(['budget' => 'This project already has a current budget. Create a revision of it instead of a new baseline.']);
         }
-        $budget = $this->service->createDraft($project, $data, $request->user()->id);
+        try {
+            $budget = $this->service->createDraft($project, $data, $request->user()->id);
+        } catch (ValidationException $exception) {
+            return back()->withErrors($exception->errors())->withInput();
+        }
 
         return redirect()->to($this->budgetUrl($project, $budget, 'lines'))->with('status', 'Draft budget '.$budget->reference.' created. Add BOQ lines, then Set as Current.');
     }
