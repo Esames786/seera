@@ -26,8 +26,8 @@
     $stateLabel = __('mobile_attendance.state_'.$state);
     $stateClass = match ($state) { 'can_check_out' => 'ok', 'ineligible' => 'warn', default => '' };
 @endphp
-<div class="mobile-attendance" data-mobile-attendance
-     data-state="{{ $state }}"
+<div class="mobile-attendance" data-mobile-attendance data-offline-page="attendance"
+     data-state="{{ $state }}" data-site-id="{{ $site?->id }}" data-project-id="{{ $employee?->project_id }}"
      data-locate-url="{{ $eligible ? route('admin.hr.attendance.mobile.locate') : '' }}"
      data-check-in-url="{{ $eligible ? route('admin.hr.attendance.mobile.check-in') : '' }}"
      data-check-out-url="{{ $eligible ? route('admin.hr.attendance.mobile.check-out') : '' }}"
@@ -82,16 +82,21 @@
                 <div><strong>{{ __('mobile_attendance.position_result') }}:</strong> <span data-result-status>-</span></div>
             </div>
             <div class="alert" role="alert" data-error hidden></div>
+            <div class="alert" data-offline-note hidden></div>
             <div style="display:grid;gap:10px;margin-top:12px">
                 <button type="button" class="btn primary big-btn" data-action="locate">{{ $state === 'can_check_in' ? __('mobile_attendance.check_in') : __('mobile_attendance.check_out') }}</button>
                 <button type="button" class="btn primary big-btn" data-action="confirm" hidden>{{ $state === 'can_check_in' ? __('mobile_attendance.confirm_check_in') : __('mobile_attendance.confirm_check_out') }}</button>
+                <button type="button" class="btn warning big-btn" data-action="queue" hidden>{{ $state === 'can_check_in' ? __('offline_sync.queue_check_in') : __('offline_sync.queue_check_out') }}</button>
                 <button type="button" class="btn outline big-btn" data-action="cancel" hidden>{{ __('mobile_attendance.cancel') }}</button>
             </div>
         </div>
     @endif
 
+    <div class="card" data-pending-sync hidden></div>
+
     <div class="card">
         <p class="muted">{{ __('mobile_attendance.privacy') }}</p>
+        <p class="muted">{{ __('offline_sync.limits') }}</p>
         <p class="muted">{{ __('mobile_attendance.manual_note') }}</p>
     </div>
 </div>

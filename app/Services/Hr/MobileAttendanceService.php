@@ -207,10 +207,10 @@ final class MobileAttendanceService
         return max(0, $nowMinutes - $startMinutes);
     }
 
-    /** The shift assignment in force today, when there is one. */
-    public function shiftFor(Employee $employee): ?Shift
+    /** The shift assignment in force on a day (today by default), when there is one. */
+    public function shiftFor(Employee $employee, ?Carbon $on = null): ?Shift
     {
-        $today = Carbon::today()->toDateString();
+        $today = ($on ?? Carbon::today())->toDateString();
         $assignment = EmployeeShiftAssignment::withoutGlobalScopes()->where('employee_id', $employee->id)->where('status', 'active')
             ->whereDate('effective_from', '<=', $today)
             ->where(fn ($q) => $q->whereNull('effective_to')->orWhereDate('effective_to', '>=', $today))
@@ -227,8 +227,14 @@ final class MobileAttendanceService
 
     public function todayRecord(Employee $employee): ?AttendanceRecord
     {
+        return $this->recordOn($employee, Carbon::today()->toDateString());
+    }
+
+    /** The employee's record for one day (any source), outside browse scope. */
+    public function recordOn(Employee $employee, string $date, bool $lock = false): ?AttendanceRecord
+    {
         return AttendanceRecord::withoutGlobalScopes()->where('employee_id', $employee->id)
-            ->whereDate('attendance_date', Carbon::today()->toDateString())->first();
+            ->whereDate('attendance_date', $date)->when($lock, fn ($q) => $q->lockForUpdate())->first();
     }
 
     private function requireEligible(User $user): array
@@ -241,13 +247,13 @@ final class MobileAttendanceService
         return $context;
     }
 
-    private function blockedDescription(Employee $employee, Site $site, array $result): string
+    public function blockedDescription(Employee $employee, Site $site, array $result): string
     {
         return $employee->name.' - '.$site->name.': '.AttendanceRecord::geofenceLabel($result['status'])
             .($result['distance'] !== null ? ', '.number_format($result['distance']).' m from site (radius '.$result['radius'].' m)' : '');
     }
 
-    private function isDuplicateKey(QueryException $exception): bool
+    public function isDuplicateKey(QueryException $exception): bool
     {
         $message = strtolower($exception->getMessage());
 

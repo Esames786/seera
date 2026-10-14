@@ -84,7 +84,7 @@ class AttendanceController extends Controller
         if ($attendance_record->isGpsRecord()) {
             // A location-validated record keeps what the runtime captured: source, geofence status, employee, site
             // and the position evidence (never in the form). Other fields may be corrected; the correction is logged.
-            $request->merge(['source' => AttendanceRecord::SOURCE_GPS, 'geofence_status' => $attendance_record->geofence_status, 'employee_id' => $attendance_record->employee_id, 'site_id' => $attendance_record->site_id, 'project_id' => $attendance_record->project_id]);
+            $request->merge(['source' => $attendance_record->source, 'geofence_status' => $attendance_record->geofence_status, 'employee_id' => $attendance_record->employee_id, 'site_id' => $attendance_record->site_id, 'project_id' => $attendance_record->project_id]);
             $data = $this->validated($request, $attendance_record);
             unset($data['source'], $data['geofence_status'], $data['employee_id'], $data['site_id'], $data['project_id']);
             $changes = collect($data)->filter(fn ($value, $key) => (string) $attendance_record->{$key} !== (string) $value)->keys()->implode(', ');
@@ -149,7 +149,7 @@ class AttendanceController extends Controller
             'overtime_minutes' => ['required', 'integer', 'min:0', 'max:1440'],
             'status' => ['required', 'in:present,late,absent,leave,half day'],
             // A runtime (GPS) record keeps its captured source and geofence status; HR may only type the manual values.
-            'source' => ['required', $record?->isGpsRecord() ? 'in:'.AttendanceRecord::SOURCE_GPS : 'in:manual,mobile,offline'],
+            'source' => ['required', $record?->isGpsRecord() ? 'in:'.$record->source : 'in:manual,mobile,offline'],
             'geofence_status' => ['required', $record?->isGpsRecord() ? 'in:'.$record->geofence_status : 'in:inside,outside,unknown'],
             'remarks' => ['nullable', 'string'],
         ]);

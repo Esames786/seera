@@ -13,6 +13,11 @@ class AttendanceRecord extends Model
 
     public const SOURCE_GPS = 'gps';
 
+    /** Written by the offline sync runtime: captured on the device, validated and recorded by the server later. */
+    public const SOURCE_GPS_OFFLINE = 'gps_offline';
+
+    public const RUNTIME_SOURCES = [self::SOURCE_GPS, self::SOURCE_GPS_OFFLINE];
+
     /** Labels HR may type on a manual record. The runtime adds its own computed values below. */
     public const GEOFENCE_STATUSES = ['inside', 'outside', 'unknown'];
 
@@ -30,6 +35,7 @@ class AttendanceRecord extends Model
         'status', 'source', 'geofence_status', 'remarks',
         'check_in_latitude', 'check_in_longitude', 'check_in_accuracy_meters', 'check_in_distance_meters', 'check_in_geofence_status', 'check_in_recorded_at',
         'check_out_latitude', 'check_out_longitude', 'check_out_accuracy_meters', 'check_out_distance_meters', 'check_out_geofence_status', 'check_out_recorded_at',
+        'check_in_captured_at', 'check_in_client_uuid', 'check_out_captured_at', 'check_out_client_uuid',
     ];
 
     protected function casts(): array
@@ -38,13 +44,20 @@ class AttendanceRecord extends Model
             'attendance_date' => 'date',
             'check_in_recorded_at' => 'datetime',
             'check_out_recorded_at' => 'datetime',
+            'check_in_captured_at' => 'datetime',
+            'check_out_captured_at' => 'datetime',
         ];
     }
 
-    /** True for records written by the location-validated mobile runtime. */
+    /** True for records written by the location-validated mobile runtime (online or synced from offline). */
     public function isGpsRecord(): bool
     {
-        return $this->source === self::SOURCE_GPS;
+        return in_array($this->source, self::RUNTIME_SOURCES, true);
+    }
+
+    public function isOfflineSynced(): bool
+    {
+        return $this->source === self::SOURCE_GPS_OFFLINE;
     }
 
     public function isOpenForCheckOut(): bool
@@ -56,6 +69,7 @@ class AttendanceRecord extends Model
     {
         return match ($this->source) {
             self::SOURCE_GPS => 'GPS / Mobile',
+            self::SOURCE_GPS_OFFLINE => 'Offline GPS / Synchronized',
             'manual' => 'Manual',
             'mobile' => 'Mobile (typed)',
             'offline' => 'Offline (typed)',
