@@ -34,9 +34,9 @@ main a { color:var(--link); }
 main strong { color:#ffffff; }
 footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px solid var(--line); background:var(--panel); }
 @media (max-width: 900px) { .layout { grid-template-columns:1fr; } aside.toc { position:static; height:auto; max-height:40vh; } main { padding:18px 16px; } }
-@media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Screen Index · Version 1.14 · 12 October 2026 · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a class="l2" href="#sign-in-and-shell">Sign-in and shell</a><a class="l2" href="#users-roles-and-permissions">Users, roles and permissions</a><a class="l2" href="#master-setup">Master Setup</a><a class="l2" href="#suppliers">Suppliers</a><a class="l2" href="#customers">Customers</a><a class="l2" href="#hr--payroll">HR &amp; Payroll</a><a class="l2" href="#accounting--finance">Accounting &amp; Finance</a><a class="l2" href="#inventory--purchasing">Inventory &amp; Purchasing</a><a class="l2" href="#marketing">Marketing</a><a class="l2" href="#menu-items-that-are-placeholders">Menu items that are placeholders</a><a class="l2" href="#runtime-approvals">Runtime approvals</a><a class="l2" href="#site-expenses">Site Expenses</a></aside><main><h1 id="seera-erp--screen-index-current-system">SEERA ERP — Screen Index (Current System)</h1>
+@media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Screen Index · Version 1.14 · 12 October 2026 · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a class="l2" href="#sign-in-and-shell">Sign-in and shell</a><a class="l2" href="#users-roles-and-permissions">Users, roles and permissions</a><a class="l2" href="#master-setup">Master Setup</a><a class="l2" href="#suppliers">Suppliers</a><a class="l2" href="#customers">Customers</a><a class="l2" href="#hr--payroll">HR &amp; Payroll</a><a class="l2" href="#accounting--finance">Accounting &amp; Finance</a><a class="l2" href="#inventory--purchasing">Inventory &amp; Purchasing</a><a class="l2" href="#marketing">Marketing</a><a class="l2" href="#menu-items-that-are-placeholders">Menu items that are placeholders</a><a class="l2" href="#runtime-approvals">Runtime approvals</a><a class="l2" href="#site-expenses">Site Expenses</a><a class="l2" href="#mobile--offline-sync">Mobile &amp; Offline Sync</a></aside><main><h1 id="seera-erp--screen-index-current-system">SEERA ERP — Screen Index (Current System)</h1>
 <p>Master index of every screen in the current system. Screen IDs are permanent; use them when you refer to a page in training, support tickets or the <a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a>. Workflows are indexed in <a href="WORKFLOW-INDEX.html">WORKFLOW-INDEX.md</a>.</p>
-<p>Version 1.14 · Prepared 12 October 2026 · System state: current feature branch, runtime for Purchase Requests, Site Expenses and Supplier Bills; Project Phase B expenses integrated; Wave 2 workspaces; GPS attendance (online); Payroll → GL Phase 1 with payslips; Payroll Phase 2 salary payment and generic bank export; Project Detailed Budget / BOQ Phase 1; Equipment &amp; Vehicles Phase 1 · Status: current implemented system only; not a deployment claim.</p>
+<p>Version 1.15 · Prepared 15 October 2026 · System state: Offline Mobile Sync Phase 1 (MOB-001; offline capture on HR-ATT-004 and the EXP-SE-002 mobile shortcut); current feature branch, runtime for Purchase Requests, Site Expenses and Supplier Bills; Project Phase B expenses integrated; Wave 2 workspaces; GPS attendance (online); Payroll → GL Phase 1 with payslips; Payroll Phase 2 salary payment and generic bank export; Project Detailed Budget / BOQ Phase 1; Equipment &amp; Vehicles Phase 1 · Status: current implemented system only; not a deployment claim.</p>
 <p>How to read the columns:</p>
 <ul>
 <li><strong>Web address</strong> is the exact page address on the site. <code>{id}</code> is the number of the record shown in the browser's address bar when you open it from its list.</li>
@@ -1215,8 +1215,8 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 <td>—</td>
 <td>Attendance — mobile + Mobile Access + linked active employee with a site</td>
 <td>—</td>
-<td>Check in / Check out (location-validated on the server; online only)</td>
-<td>AVAILABLE (online; offline NOT YET OPERATIONAL)</td>
+<td>Check in / Check out (location-validated on the server); Save check-in / check-out on device when offline (synced and re-validated later, WF-025)</td>
+<td>AVAILABLE (online and offline capture; device attestation NOT YET OPERATIONAL)</td>
 <td><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html#6-hr--payroll">6</a></td>
 </tr>
 <tr>
@@ -2958,8 +2958,8 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 <td>Site Expenses create + view; mobile shortcut also Mobile Access flag</td>
 <td>—</td>
 <td>—</td>
-<td>Explicit Submit; never automatic from Save</td>
-<td>AVAILABLE (online responsive web)</td>
+<td>Explicit Submit; never automatic from Save; mobile shortcut can Save on device when offline (synced later as a draft, WF-025)</td>
+<td>AVAILABLE (online responsive web; offline capture on the mobile shortcut)</td>
 <td><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html#site-expenses">Expenses</a></td>
 </tr>
 <tr>
@@ -2993,4 +2993,39 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 </tbody>
 </table>
 <p>Project → Site Expenses uses the existing Project workspace panel route <code>/admin/master/projects/{id}/workspace/site-expenses</code>; it requires Projects view and Site Expenses view. It is a section of MST-PRJ-003/004, not a replacement Project screen. Receipt files use <code>/admin/site-expenses/{id}/receipts/{receipt}</code> with authenticated scoped authorization; private storage paths are never public links.</p>
+<h2 id="mobile--offline-sync">Mobile &amp; Offline Sync</h2>
+<table>
+<thead>
+<tr>
+<th>Screen ID</th>
+<th>Screen name</th>
+<th>Web address</th>
+<th>Module</th>
+<th>Navigation Path</th>
+<th>Typical users</th>
+<th>View permission</th>
+<th>Create permission</th>
+<th>Edit permission</th>
+<th>Actions</th>
+<th>Status</th>
+<th>Guide</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MOB-001</td>
+<td>Mobile Sync (Pending Sync)</td>
+<td><a class="url" href="https://seera.tech-brit.co.uk/admin/mobile-sync" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/mobile-sync</code></a></td>
+<td>Mobile &amp; Offline</td>
+<td>Main → Mobile Sync, or the Pending Sync box on HR-ATT-004 / EXP-SE-002 mobile</td>
+<td>Site In-Charge, Site Worker, Operator, any mobile user</td>
+<td>Attendance — mobile or Site Expenses — create</td>
+<td>—</td>
+<td>—</td>
+<td>Sync now; Retry / Discard (unaccepted records); Remove from device (synced); Clear offline data (typed confirmation; refused while unsynced records remain)</td>
+<td>AVAILABLE (Phase 1: GPS attendance + site expense entry; other modules online only)</td>
+<td><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html#23-mobile--offline-sync">23</a></td>
+</tr>
+</tbody>
+</table>
 </main></div><footer>Seera ERP — Current System User Guide, version 1.14, prepared 12 October 2026. Examples use fictional training data.</footer></body></html>

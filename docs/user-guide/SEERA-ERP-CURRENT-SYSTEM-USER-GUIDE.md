@@ -3,9 +3,9 @@
 
 | | |
 |---|---|
-| **Version** | 1.14 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 12 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Payroll Phase 2 (11 October 2026) adds the salary payment of a posted run from a bank / cash account (Dr payroll payable, Cr bank / cash) with replay protection and reversal, a generic bank transfer export frozen at generation, IBAN validation and masking (WF-022). The Project BOQ / Detailed Budget Engine Phase 1 (11 October 2026) adds budget versions and BOQ lines per project, Set as Current / revisions and Budget vs Actual on the posted ledger (MST-PRJ-006 / 007, WF-023). Equipment & Vehicles Phase 1 (12 October 2026) adds the asset register, project / site assignment history, fuel logs, maintenance records, private documents and Finance posting of equipment cost into the project ledger (EQP-001 … 004, WF-024). Offline attendance, an official Saudi WPS / Mudad file, GOSI, live GPS tracking, budget approval runtime and project scheduling remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
-| **Prepared** | 12 October 2026; review corrections applied locally |
+| **Version** | 1.15 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 15 October 2026. Offline Mobile Sync Foundation Phase 1 (chapter 23): GPS check-in / check-out and site expense entry can be captured without a connection and synchronised later through server-validated, replay-safe receipts (MOB-001, WF-025). Earlier state, 12 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Payroll Phase 2 (11 October 2026) adds the salary payment of a posted run from a bank / cash account (Dr payroll payable, Cr bank / cash) with replay protection and reversal, a generic bank transfer export frozen at generation, IBAN validation and masking (WF-022). The Project BOQ / Detailed Budget Engine Phase 1 (11 October 2026) adds budget versions and BOQ lines per project, Set as Current / revisions and Budget vs Actual on the posted ledger (MST-PRJ-006 / 007, WF-023). Equipment & Vehicles Phase 1 (12 October 2026) adds the asset register, project / site assignment history, fuel logs, maintenance records, private documents and Finance posting of equipment cost into the project ledger (EQP-001 … 004, WF-024). Offline attendance, an official Saudi WPS / Mudad file, GOSI, live GPS tracking, budget approval runtime and project scheduling remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
+| **Prepared** | 15 October 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
 
@@ -65,6 +65,7 @@ All examples in this guide use the same fictional data. None of it is real.
 20. [Current Limitations / Not Yet Operational](#20-current-limitations--not-yet-operational)
 21. [Quick Start by Role](#21-quick-start-by-role)
 22. [Equipment & Vehicles](#22-equipment--vehicles)
+23. [Mobile & Offline Sync](#23-mobile--offline-sync)
 
 ---
 
@@ -953,7 +954,7 @@ Web address: `https://seera.tech-brit.co.uk/admin/hr/attendance` (HR-ATT-001) ·
 Purpose:
 Record who was present, late or absent: by HR (manual entry) or by the employee from a phone (location-validated check-in / check-out).
 
-Status: **AVAILABLE** — manual entry (HR) and online mobile check-in / check-out with server-side geofence validation (HR-ATT-004). **Offline attendance is NOT YET OPERATIONAL.** Location-validated means the server compares the position the phone reports with the site's stored pin and radius; it is not tamper-proof (a compromised device can report a false position) and there is no device attestation.
+Status: **AVAILABLE** — manual entry (HR) and online mobile check-in / check-out with server-side geofence validation (HR-ATT-004). **Offline check-in / check-out with later synchronisation is AVAILABLE (Phase 1, chapter 23, WF-025).** Location-validated means the server compares the position the phone reports with the site's stored pin and radius; it is not tamper-proof (a compromised device can report a false position) and there is no device attestation.
 
 #### [HR-ATT-004] Mobile Attendance (Check In / Check Out)
 
@@ -978,6 +979,8 @@ Lateness and overtime: if a shift assignment is in force, check-in later than th
 Safeguards: one record per employee per day — a second check-in or a retry after a network error is answered "already checked in"; a second check-out is refused; two simultaneous requests from the same phone produce one record (verified on MySQL with row locks). The request can carry no employee, project or site: those come from your own record, and foreign ids are refused.
 
 Privacy: the position is captured only at the moment you check in or check out. There is no continuous tracking, route recording or background location.
+
+Offline (Phase 1, chapter 23): when the server cannot be reached, the page still requires a location fix, shows an *indicative* result from the last cached site policy and offers **Save check-in on device** / **Save check-out on device**. The action is queued on the phone with a durable identifier, the captured position and the captured time, and appears in Pending Sync. When the connection returns (or on **Sync now**) the server validates it again: eligibility, assignment, geofence from the captured coordinates, captured-time window, one record per day. A synced record shows source **Offline GPS / Synchronized** with its captured time and the server's received time kept separately.
 
 Errors you may see: location permission refused (allow it in the browser settings), location timed out (move to open sky, check location services are on), browser without location support (use a current mobile browser over HTTPS).
 
@@ -2186,7 +2189,7 @@ Screen IDs **EXP-SE-001** register, **EXP-SE-002** Add, **EXP-SE-003** View, **E
 
 Addresses: [Register](https://seera.tech-brit.co.uk/admin/site-expenses), [Add](https://seera.tech-brit.co.uk/admin/site-expenses/create), [Mobile entry](https://seera.tech-brit.co.uk/admin/site-expenses/mobile/create), `https://seera.tech-brit.co.uk/admin/site-expenses/{id}` and `https://seera.tech-brit.co.uk/admin/site-expenses/{id}/edit`.
 
-Navigation: Operations → Site Expenses, or Project → Site Expenses → Add / View. The mobile shortcut additionally requires the user's Mobile Access flag and Site Expenses create permission. It is online responsive web: no native app, GPS capture or offline entry.
+Navigation: Operations → Site Expenses, or Project → Site Expenses → Add / View. The mobile shortcut additionally requires the user's Mobile Access flag and Site Expenses create permission. It is responsive web, not a native app, and captures no GPS. The mobile shortcut can save the expense (with its receipt photo) on the device when there is no connection and synchronise it later as a normal draft (chapter 23, WF-025).
 
 | Field | Meaning and validation |
 |---|---|
@@ -2583,7 +2586,7 @@ Use the language switch in the top bar. The screen turns to Arabic (right-to-lef
 | **Chapter name** | End-to-End Workflows |
 | **Purpose** | The documented business flows WF-001 to WF-024. |
 | **Primary roles** | Super Admin, HR Manager, Finance Manager, Account Assistant, Purchase Manager, Warehouse Incharge, Site In-Charge, Marketing Manager |
-| **Workflows in this chapter** | WF-020, WF-021, WF-022, WF-023, WF-024, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
+| **Workflows in this chapter** | WF-020, WF-021, WF-022, WF-023, WF-024, WF-025, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
 
 Each workflow lists purpose, roles, prerequisites, navigation, steps, example input, the system result, statuses before and after, the audit trail, common errors and the related Screen IDs. The Workflow Index is in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).
 
@@ -2937,6 +2940,24 @@ Related screens: EQP-001, EQP-002, EQP-003, EQP-004, MST-EXP-001, MST-PRJ-003, M
 
 ---
 
+### WF-025 Offline capture and Mobile Sync: attendance and site expenses without a connection
+
+Purpose: let site staff record a GPS check-in / check-out or a site expense when the server cannot be reached, keep it safely on the phone, and have the server validate and record it later exactly as if it had been entered online.
+Roles involved: Employee with a linked login, Mobile Access and Attendance — mobile (attendance); any user with Site Expenses — create (expenses); HR Manager and Finance for the records that need attention.
+Prerequisites: the Mobile Attendance page or the mobile expense form was opened **once while online** on that phone (this caches the page and the reference data); location services on (attendance); the same account signs in again to sync.
+Navigation: Mobile Attendance (HR-ATT-004), Site Expenses → Add on the mobile shortcut, and Main → **Mobile Sync** (MOB-001).
+Steps and example input:
+1. Ahmed Hassan (EMP-0042) arrives at Riyadh Tower - Main Site at 06:58 with no signal. He opens Mobile Attendance (served from the phone's cache), taps **Check in**; the phone provides a position (accuracy 11 m). The page cannot reach the server, shows *Offline* with an indicative result (42 m, Inside) from the cached site policy and offers **Save check-in on device**. He taps it: the action is saved with a durable identifier, the captured position and the captured time 06:58, and Pending Sync shows *Pending: 1*.
+2. At 10:15 Ahmed buys diesel for the generator (SAR 250 + VAT). Still offline, he opens Site Expenses → Add, fills category Fuel, Cash, the cash account, amount 250, takes the receipt photo and taps **Save on device (offline)**. Pending Sync shows *Pending: 2*; the photo stays on the phone.
+3. At 16:40 Ahmed taps **Check out** at the gate: offline again, he saves the check-out on the device (Pending: 3).
+4. At 17:05 the connection returns. The page syncs automatically (or Ahmed taps **Sync now** on Mobile Sync). The server checks his login, re-derives his employee and site, recomputes 42 m against the site radius, checks the captured time against the window and records the check-in with time **06:58** (captured) and the received time 17:05 kept separately; then the check-out; then the expense as draft **SE-2026-000118** with its receipt. Each item turns *Synced*; the expense shows a link to open and submit it.
+5. A colleague, Sara, captured an offline check-in on a day HR had already entered manually: her item turns *Needs attention* ("HR recorded 2026-10-15 manually"). Another item captured at a site she was moved away from before syncing reads "Your site assignment changed"; HR reviews both in the Attendance register. Nothing is recorded twice and nothing is silently re-attached.
+Expected result: one attendance row per employee per day (source **Offline GPS / Synchronized**, captured and received times both stored); one draft site expense per captured entry, which then follows the normal approval and accounting flow (WF-018); exact retries never duplicate (same identifier → same outcome); a retry with different details under the same identifier is refused.
+Statuses: Pending → Syncing → Synced; or Needs attention (business conflict, stale reference, geofence refusal, clock drift, permission); or Failed (permanent validation refusal such as an impossible time or an invalid receipt).
+Audit trail: Offline check-in synchronized, Offline check-out synchronized, Blocked offline check-in / check-out, Created draft (offline sync); each receipt is listed on Mobile Sync with captured time, received time and sync delay.
+Common errors: no location fix (attendance cannot be saved offline without one); page never opened online on that phone; signed-in account changed ("Pending records belong to another signed-in account"); session expired ("Sign in to continue syncing"); captured time older than the sync window (72 hours by default) or ahead of the server clock; site assignment changed; already checked in online; category, supplier or payment account no longer available.
+Privacy: offline records (position, times, receipt photo) stay in the phone's browser storage for this site until synced, discarded or cleared; nothing is sent anywhere else.
+Related screens: MOB-001, HR-ATT-004, HR-ATT-001, HR-ATT-003, EXP-SE-002, EXP-SE-003, USR-003, MST-SITE-004.
 ## 18. Troubleshooting
 
 | | |
@@ -3025,10 +3046,10 @@ Areas that exist as menus, settings or plans but are not usable business functio
 | Site Expenses | AVAILABLE with configured masters/permissions/workflow | Responsive web entry, private receipt, sequential approvals, accounting/retry, reimbursement and linked Supplier Bill; see WF-018 |
 | Project Phase B: milestones / scheduling, labour costing beyond ledger payroll lines, budget approval runtime | PARTIAL | Phase A, Site Expense integration, Payroll → GL cost, equipment fuel / maintenance cost (WF-024) and the Detailed Budget / BOQ engine with Budget vs Actual (MST-PRJ-006, WF-023) are available; budget approval is a single Set as Current action |
 | Live GPS / telematics for equipment (position, routes, speed, idle time, geofence events), utilization analytics, depreciation, spare-parts link | NOT YET OPERATIONAL | Equipment & Vehicles Phase 1 is AVAILABLE (register, assignment history, fuel, maintenance, documents, Finance posting, project cost — chapter 22, WF-024); tracker provider / device fields are stored only; readiness contract in `docs/equipment-gps-integration-readiness-2026-10-12.md` |
-| Native mobile app | NOT YET OPERATIONAL | Mobile Attendance (HR-ATT-004) is a responsive web page used in the phone browser; location-validated online check-in / check-out is AVAILABLE |
-| Offline attendance (check-in without connectivity, later sync) | NOT YET OPERATIONAL | Site flag stored only |
-| Device attestation / anti-spoofing for mobile attendance | NOT YET OPERATIONAL | Attendance is location-validated by the server, not tamper-proof |
-| Offline entry and sync | NOT YET OPERATIONAL | Nothing |
+| Native mobile app | NOT YET OPERATIONAL | Mobile Attendance (HR-ATT-004), mobile site expense entry and Mobile Sync (MOB-001) are responsive web pages used in the phone browser; they can be added to the home screen (web app manifest) but are not a store app |
+| Offline attendance (check-in without connectivity, later sync) | AVAILABLE (Phase 1, WF-025) | Captured on the device with a location fix, synced later and re-validated by the server; needs a prior online page load; no guaranteed background sync; device storage can be cleared by the browser or OS |
+| Device attestation / anti-spoofing for mobile attendance | NOT YET OPERATIONAL | Attendance is location-validated by the server, not tamper-proof; offline capture does not change this |
+| Offline entry and sync (other modules) | AVAILABLE for GPS attendance and Site Expense entry only (WF-025) | Approvals, posting, payroll, inventory and finance screens remain online only |
 | Live ZATCA Phase-2 clearance, real QR, XML, signing | NOT YET OPERATIONAL (local records: FOUNDATION ONLY) | Chapter 14 |
 | Approval workflow execution (multi-step, all-required) | AVAILABLE for PR, Site Expenses and Supplier Bills; PARTIAL across other modules | Sequential required steps, runtime history and shared My Approvals; no parallel groups, thresholds, delegation, notification/escalation jobs or automatic parent expansion |
 | Official Saudi WPS / Mudad payroll file, GOSI, employee loans, attendance-based proration, partial salary payment, multi-step payroll approval | NOT YET OPERATIONAL | Payroll calculation, approval, Payroll → GL posting with Retry / Reverse, salary payment from bank / cash with reversal, a generic bank transfer CSV and payslips are AVAILABLE (WF-021, WF-022); GOSI readiness is documented in `docs/payroll-gosi-readiness-2026-10-11.md` |
@@ -3090,7 +3111,7 @@ Use Project → Site Expenses for expense status and authorized totals; Budget /
 ### Site In-Charge / Site Supervisor
 
 Current usable screens: Purchase Requests (INV-PR-002) to ask for materials; Manual Attendance (HR-ATT-002) for the site's staff; Stock On Hand (INV-STK-001) for the site store; Locations (MST-SITE-003) to read the site details.
-Use Operations → Site Expenses → Add for responsive expense entry. Eligible linked employees can use online mobile check-in/check-out with the configured site geofence; Equipment & Vehicles is available with the required permissions. Offline entry and live equipment tracking remain unavailable.
+Use Operations → Site Expenses → Add for responsive expense entry. Eligible linked employees can use mobile check-in/check-out with the configured site geofence; Equipment & Vehicles is available with the required permissions. Without a connection, attendance and site expenses can be saved on the phone and synced later from **Mobile Sync** (MOB-001, WF-025); live equipment tracking remains unavailable.
 
 ### Warehouse Incharge
 
@@ -3168,5 +3189,55 @@ Empty states: "No equipment or vehicles in your scope yet"; "This asset is not a
 
 Not in Phase 1: live GPS / telematics, route replay, speed / idle analytics, utilization and downtime dashboards, depreciation, rental billing, spare-parts consumption from inventory, notification jobs for expiries, mobile driver app. The provider integration contract is in `docs/equipment-gps-integration-readiness-2026-10-12.md`.
 
+## 23. Mobile & Offline Sync
+
+| | |
+|---|---|
+| **Screens in this chapter** | MOB-001 (plus the offline behaviour of HR-ATT-004 and EXP-SE-002) |
+| **Workflows in this chapter** | WF-025, WF-020, WF-018 |
+
+Offline Mobile Sync Foundation, Phase 1 (15 October 2026). One shared mechanism lets two mobile actions work without a connection: **GPS check-in / check-out** (HR-ATT-004) and **Site Expense entry** (EXP-SE-002 mobile shortcut). Everything else in Seera stays online only.
+
+The rule that governs all of it: **offline never bypasses the server.** The phone only captures what the user did, when, where, and (for expenses) what was typed and photographed. When the action reaches the server it is checked exactly as an online action is: the signed-in account, the linked employee, permissions, project and site assignment, the site's geofence policy, the expense category and payment references, workflow state and the one-record-per-day rule. The server, not the phone, decides whether a record exists.
+
+#### [MOB-001] Mobile Sync (Pending Sync)
+
+Web address: `https://seera.tech-brit.co.uk/admin/mobile-sync`
+
+Who uses it: anyone holding Attendance — mobile or Site Expenses — create. Opened from Main → **Mobile Sync**, or from the Pending Sync box on the mobile attendance page and the mobile expense form.
+
+What you see: the connection state (Online / Offline), the device queue with counts (Pending, Syncing, Synced, Needs attention, Failed), one row per captured action (type, captured time, status, the server's last message, attempts) with **Retry** and **Discard** for records the server has not accepted and **Remove from device** for synced ones, a **Sync now** button, the list of **Recent server receipts** for your account (captured time, received time, sync delay, outcome, link to the created expense) and **Clear offline data**.
+
+How it works:
+1. Open Mobile Attendance or the mobile expense form once while online. The page and its reference data (your site context, projects and sites in your scope, allowed categories, suppliers, payment accounts) are stored on the phone with the time they were fetched.
+2. Without a connection, the attendance page still asks the phone for a location (a fix is required: offline means no network, not no GPS), shows an indicative Inside / Outside result from the cached site policy and offers **Save check-in on device** / **Save check-out on device**. The expense form shows **Save on device (offline)** and keeps the receipt photo with the entry.
+3. Each saved action gets a durable identifier that never changes, even across retries. Actions keep their order: a check-in is always sent before the check-out of the same day.
+4. When the connection returns, the phone syncs automatically (on reconnect, when the page becomes visible, and periodically) and you can always tap **Sync now**. Items are sent in small batches (up to 20 attendance actions, up to 5 expenses with photos per request); each item receives its own answer, so one refused item never blocks the others.
+5. The server validates everything again and records the action. For attendance the **captured time** is the attendance time and the **received time** is kept separately with the sync delay; the source reads **Offline GPS / Synchronized** in the Attendance register, the Employee page and the Site workspace. A synced expense is a normal **draft**: open it to attach anything missing and **Submit for approval** (WF-018). Nothing is approved or posted by sync.
+6. An exact retry (same identifier, same details) returns the same outcome and creates nothing new. The same identifier with different details is refused ("already received with different details").
+
+Status meanings:
+
+| Status | Meaning | What to do |
+|---|---|---|
+| Pending | Saved on the device, not yet accepted by the server | Wait for the connection or tap Sync now |
+| Syncing | Being sent now | Nothing |
+| Synced | The server created the record | For an expense, open it and submit; Remove from device only clears the local copy |
+| Needs attention | The server refused it for a business reason: already checked in online, HR recorded the day manually, site assignment changed, outside the radius on an inside-only site, phone clock drift, category / supplier / account no longer available, permission missing | Read the message; ask HR or Finance; Retry after the cause is corrected, or Discard |
+| Failed | Permanent refusal: impossible or stale captured time, check-out earlier than the check-in, invalid receipt file, malformed data | Discard and record it again, or ask HR / Finance to record it manually |
+
+Captured time and clock trust: the server accepts a captured time up to 72 hours old (configurable) and refuses anything ahead of its own clock beyond a small tolerance; a phone clock that differs from the server by more than 30 minutes at sync time sends attendance to Needs attention. The server never replaces the captured time with the sync time and never invents attendance on another date.
+
+Geofence at sync: the server recomputes the distance from the **captured** coordinates against the site pin and radius **in force at sync time**; the phone's indicative result is ignored. If the site was re-pinned or the radius changed in between, the outcome follows the current policy and the message explains it.
+
+Sign-in and shared phones: the queue belongs to the account that captured it. If the session expired, the page says "Sign in to continue syncing" and keeps the queue; after signing in again, sync resumes. If a different account signs in on the same phone, its pages show "Pending records on this device belong to another signed-in account" and never send them; the original account must sign in to sync or discard them. Signing out with unsynced records warns you and keeps them on the device.
+
+Discard and Clear offline data: Discard is only offered while the server has not accepted the record and removes nothing on the server. Clear offline data removes every offline record and cached reference on the phone; it is refused while unsynced records of any account remain, and it asks you to type CLEAR.
+
+Privacy and device storage: offline records (captured position and times, the typed expense, the receipt photo) are kept in the phone browser's storage for this site only, until synced, discarded or cleared. No password or session is stored by Seera; clearing the browser data removes the queue. Finance screens, payslips, journals, bills, customer data and private documents are never cached for offline use; only the three mobile pages and the application assets are.
+
+Limitations (Phase 1): the page must have been opened online once on that phone; browser or system storage clean-up can delete unsynced records; background sync is not guaranteed on every browser, so open the page or tap Sync now; location is still required to record attendance; every record can still be refused by the server's rules; the device is not attested (a compromised phone can still report a false position); only attendance and site expense entry work offline.
+
+Permission required: Attendance — mobile (attendance sync) or Site Expenses — create (expense sync); the page opens for either.
 ---
 End of guide. Screen IDs are indexed in [SCREEN-INDEX.md](SCREEN-INDEX.md); workflows in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).

@@ -1,4 +1,6 @@
 # Deployment — Payroll Phase 2: salary settlement + bank transfer export, 11 October 2026
+
+> Historical note (15 October 2026): the `public/build.zip` size / hash recorded in this guide is the bundle **at that release**. The committed bundle was repackaged on 14 October (review fixes, `96740A01…`) and rebuilt on 15 October (offline sync, see `deployment-offline-sync-2026-10-15.md`). Always verify against the hash in the deployment guide of the release being deployed; this note does not alter the history below.
 Feature branch `feature/seera-connected-workspaces-2026-09-23`. Companion to [production-deployment-guide.md](production-deployment-guide.md) and [deployment-payroll-gl-2026-10-10.md](deployment-payroll-gl-2026-10-10.md).
 
 Brings the server from the Payroll → GL HEAD (`2aa453c`) to the Payroll Phase 2 HEAD. This release has
