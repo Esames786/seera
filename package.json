@@ -5,7 +5,8 @@
     "scripts": {
         "build": "vite build",
         "build:release": "npm run build && powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-build.ps1",
-        "dev": "vite"
+        "dev": "vite",
+        "test:js": "node --test tests/js/"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
