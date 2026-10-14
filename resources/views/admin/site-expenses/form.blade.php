@@ -12,8 +12,9 @@
 @endpush
 @section('content')
 <x-admin.page-header :title="$expense->exists ? 'Edit '.$expense->expense_number : 'Add Site Expense'" description="Record an expense and attach its receipt. Save a draft or send it for approval from this screen." />
-<form method="POST" enctype="multipart/form-data" action="{{ $formAction ?? ($expense->exists ? route('admin.site-expenses.update', $expense) : route('admin.site-expenses.store')) }}" data-se-form>
+<form method="POST" enctype="multipart/form-data" action="{{ $formAction ?? ($expense->exists ? route('admin.site-expenses.update', $expense) : route('admin.site-expenses.store')) }}" data-se-form @if($offline ?? false) data-offline-expense @endif>
     @csrf @if($expense->exists) @method('PUT') @endif
+    @if($offline ?? false)<div class="alert" data-offline-note hidden></div><div class="alert success" data-offline-flash hidden></div>@endif
     @if($origin = \App\Support\SaveAction::returnTo())<input type="hidden" name="_return_to" value="{{ $origin }}">@endif
     @isset($contextSite)
         <input type="hidden" name="project_id" value="{{ $contextSite->project_id }}">
@@ -48,7 +49,9 @@
         <button type="submit" class="btn outline" name="_save_action" value="new">Save &amp; new</button>
         <button class="btn outline" name="_save_action" value="close">Save &amp; close</button>
         <button class="btn primary" name="_intent" value="submit">{{ $expense->status === 'rejected' ? 'Resubmit for approval' : 'Submit for approval' }}</button>
+        @if($offline ?? false)<button type="button" class="btn warning" data-save-offline hidden>{{ __('offline_sync.save_offline') }}</button>@endif
     </div>
+    @if($offline ?? false)<div class="card" data-pending-sync style="padding:18px;margin-top:14px" hidden></div>@endif
 </form>
 <style>[data-se-form] .btn,[data-se-form] .input,[data-se-form] .select{min-height:44px}@media(max-width:640px){[data-se-form] .form-grid{grid-template-columns:1fr!important}[data-se-form] .form-actions{display:flex;flex-wrap:wrap;gap:10px}[data-se-form] .form-actions .btn{flex:1 1 45%}}</style>
 <script>

@@ -16,6 +16,7 @@ use App\Services\Approvals\ApprovalRuntimeService;
 use App\Services\Approvals\SiteExpenseApprovalSubject;
 use App\Services\DocumentNumberService;
 use App\Services\SiteExpenses\SiteExpenseAccountingService;
+use App\Services\SiteExpenses\SiteExpenseInput;
 use App\Support\SaveAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -57,7 +58,8 @@ class SiteExpenseController extends Controller
     {
         abort_unless($request->user()->mobile_access && $request->user()->hasPermission('Site Expenses', 'create'), 403);
 
-        return $this->create($request);
+        // Offline-enabled: the mobile form can queue the expense on the device when the server is unreachable.
+        return view('admin.site-expenses.form', $this->options($request) + ['expense' => new SiteExpense(['expense_date' => today()]), 'offline' => true]);
     }
 
     public function store(Request $request)
@@ -246,56 +248,15 @@ class SiteExpenseController extends Controller
 
     private function validated(Request $request, ?SiteExpense $expense = null): array
     {
-        $data = $request->validate([
-            'expense_date' => ['required', 'date'], 'project_id' => ['required', 'integer'], 'site_id' => ['required', 'integer'],
-            'expense_category_id' => ['required', 'integer'], 'supplier_id' => ['nullable', 'integer', 'exists:suppliers,id'],
-            'payment_type' => ['required', Rule::in(SiteExpense::PAYMENT_TYPES)], 'payment_account_id' => ['nullable', 'integer'],
-            'taxable_amount' => ['required', 'numeric', 'min:0.01', 'max:999999999.99'],
-            'vat_applicable' => ['required', 'boolean'], 'vat_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'description' => ['required', 'string', 'max:4000'], 'reference_number' => ['nullable', 'string', 'max:191'],
-            'notes' => ['nullable', 'string', 'max:4000'],
-            'receipt' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'extensions:jpg,jpeg,png,pdf', 'max:10240'],
-        ]);
-        Project::whereKey($data['project_id'])->firstOrFail();
-        Site::whereKey($data['site_id'])->where('project_id', $data['project_id'])->firstOrFail();
-        $category = ExpenseCategory::whereKey($data['expense_category_id'])->where('status', 'active')->firstOrFail();
-        if ($request->user()->mobile_access && ! $category->mobile_visible && ! $request->user()->hasPermission('Site Expenses', 'post')) {
+        // One rule set with the offline sync handler (SiteExpenseInput): a queued expense is validated exactly like a typed one.
+        $data = $request->validate(SiteExpenseInput::rules());
+        $normalized = app(SiteExpenseInput::class)->normalize($request->user(), $data, $request->boolean('vat_applicable'),
+            $request->filled('vat_rate') ? (string) $data['vat_rate'] : null, $expense);
+        if (app(SiteExpenseInput::class)->categoryHiddenFromMobile($request->user(), $normalized['category'])) {
             abort(403);
         }
-        if ($data['supplier_id'] ?? null) {
-            Supplier::whereKey($data['supplier_id'])->where('status', 'active')->firstOrFail();
-        }
-        if ($data['payment_type'] === 'Supplier Credit' && empty($data['supplier_id'])) {
-            throw ValidationException::withMessages(['supplier_id' => 'Choose a supplier for Supplier Credit.']);
-        }
-        if ($data['payment_type'] === 'Employee Reimbursement') {
-            $employeeId = $expense?->employee_id ?? Employee::where('user_id', $request->user()->id)->value('id');
-            if (! $employeeId) {
-                throw ValidationException::withMessages(['payment_type' => 'Link the submitting user to an employee before recording employee-paid expenses.']);
-            }
-        }
-        if (in_array($data['payment_type'], ['Cash', 'Bank'], true)) {
-            if (in_array($category->payment_type, ['Cash', 'Bank'], true) && $category->payment_type !== $data['payment_type']) {
-                throw ValidationException::withMessages(['payment_type' => 'This category does not permit this payment channel.']);
-            }
-            if (! SiteExpenseAccountingService::paymentAccounts($data['payment_type'])->whereKey($data['payment_account_id'] ?? 0)->exists()) {
-                throw ValidationException::withMessages(['payment_account_id' => 'Choose an active permitted payment account. Contact Finance if none is available.']);
-            }
-        } else {
-            $data['payment_account_id'] = null;
-        }
-        $defaultRate = $category->vat_treatment === 'VAT 15%' ? 15 : 0;
-        $rate = $request->boolean('vat_applicable') ? $defaultRate : 0;
-        if ($request->user()->hasPermission('Site Expenses', 'post') && $request->boolean('vat_applicable') && $request->filled('vat_rate')) {
-            $rate = (float) $data['vat_rate'];
-        }
-        $data['taxable_amount'] = round((float) $data['taxable_amount'], 2);
-        $data['vat_rate'] = round($rate, 2);
-        $data['vat_amount'] = round($data['taxable_amount'] * $data['vat_rate'] / 100, 2);
-        $data['total_amount'] = round($data['taxable_amount'] + $data['vat_amount'], 2);
-        unset($data['receipt'], $data['vat_applicable']);
 
-        return $data;
+        return $normalized['data'];
     }
 
     private function options(Request $request): array
