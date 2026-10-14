@@ -32,6 +32,7 @@ class SidebarMenu
                 'items' => [
                     static::link('admin.dashboard', 'admin.dashboard', '📊', 'Dashboard'),
                     static::anyLink('admin.my-approvals.index', ['admin.my-approvals.*'], '✅', 'My Approvals', ['Purchase Requests', 'Site Expenses', 'Accounts Payable']),
+                    static::mobileSync(),
                 ],
             ],
             [
@@ -232,6 +233,17 @@ class SidebarMenu
             'soon' => false,
             'badge' => null,
         ];
+    }
+
+    /** Mobile Sync (offline queue) for accounts holding either mobile capability. */
+    private static function mobileSync(): ?array
+    {
+        $user = auth()->user();
+        if (! $user || ! ($user->hasPermission('Attendance', 'mobile') || $user->hasPermission('Site Expenses', 'create'))) {
+            return null;
+        }
+
+        return ['url' => route('admin.mobile-sync.index'), 'active' => request()->routeIs('admin.mobile-sync.*'), 'icon' => '📴', 'label' => __('offline_sync.title'), 'soon' => false, 'badge' => null];
     }
 
     /**

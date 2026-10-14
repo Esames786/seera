@@ -470,3 +470,16 @@ tr:hover td { background: #fbfdff; }
 .workspace-header dl { display: grid; grid-template-columns: auto auto; gap: 2px 12px; margin: 0; font-size: 13px; }
 .workspace-header dt { color: #64748b; }
 .workspace-header dd { margin: 0; font-weight: 700; }
+
+/* Offline Mobile Sync: Pending Sync widget */
+.pending-sync[hidden]{display:none}
+.pending-sync-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.pending-sync-head h3{margin:0;font-size:16px}
+.pending-sync-status{font-size:13px;color:var(--muted);margin-bottom:8px}
+.pending-sync-list{display:grid;gap:8px}
+.pending-sync-item{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:6px}
+.pending-sync-item-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.pending-sync-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pending-sync-clear{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+#offline-logout{border:0;border-radius:12px;padding:20px;max-width:420px}
+#offline-logout::backdrop{background:rgb(0 0 0 / 45%)}

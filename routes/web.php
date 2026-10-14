@@ -73,6 +73,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\RoleHierarchyController;
 use App\Http\Controllers\Admin\Equipment\EquipmentAssetController;
 use App\Http\Controllers\Admin\Equipment\EquipmentOperationsController;
+use App\Http\Controllers\Admin\OfflineSyncController;
 use App\Http\Controllers\Admin\SiteExpenseController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserWorkspaceController;
@@ -134,6 +135,16 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::post('site-expenses/{site_expense}/'.$action, [SiteExpenseController::class, $action])->name('site-expenses.'.$action);
     }
     Route::resource('site-expenses', SiteExpenseController::class);
+
+    // Offline Mobile Sync (Phase 1): queued GPS attendance and site expenses are replayed through authenticated,
+    // idempotent, domain-specific endpoints. The sync page and reference data open for either mobile capability.
+    Route::prefix('mobile-sync')->name('mobile-sync.')->group(function () {
+        Route::get('/', [OfflineSyncController::class, 'index'])->name('index');
+        Route::get('session', [OfflineSyncController::class, 'session'])->name('session');
+        Route::get('reference', [OfflineSyncController::class, 'reference'])->name('reference');
+        Route::post('attendance', [OfflineSyncController::class, 'attendance'])->middleware('throttle:30,1')->name('attendance');
+        Route::post('site-expenses', [OfflineSyncController::class, 'siteExpenses'])->middleware('throttle:30,1')->name('site-expenses');
+    });
 
     // Equipment & Vehicles (Phase 1): register, workspace, assignment, fuel, maintenance, private documents, Finance posting.
     Route::get('equipment/export', [EquipmentAssetController::class, 'export'])->name('equipment.export');

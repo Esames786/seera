@@ -5,9 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>@yield('title', 'Dashboard') - {{ config('app.name') }}</title>
     @vite(['resources/css/erp.css', 'resources/js/app.js'])
+    <link rel="manifest" href="{{ url('/manifest.webmanifest') }}"/>
+    <meta name="theme-color" content="#0d65c5"/>
     @stack('styles')
 </head>
-<body>
+@php
+    // Offline Mobile Sync (Phase 1): the queue, sync manager and service worker mount only for accounts that hold a mobile capability.
+    $offlineCapable = auth()->check() && (auth()->user()->hasPermission('Attendance', 'mobile') || auth()->user()->hasPermission('Site Expenses', 'create'));
+@endphp
+<body @if($offlineCapable) data-offline-capable="1" data-user-id="{{ auth()->id() }}" data-user-name="{{ auth()->user()->name }}" data-csrf-token="{{ csrf_token() }}"
+      data-sync-url-attendance="{{ route('admin.mobile-sync.attendance') }}" data-sync-url-expenses="{{ route('admin.mobile-sync.site-expenses') }}"
+      data-sync-session-url="{{ route('admin.mobile-sync.session') }}" data-sync-reference-url="{{ route('admin.mobile-sync.reference') }}"
+      data-sync-page-url="{{ route('admin.mobile-sync.index') }}" data-login-url="{{ route('login') }}" data-sw-url="{{ url('/sw.js') }}"
+      data-offline-i18n="{{ json_encode(collect(__('offline_sync'))->except(['subtitle', 'privacy', 'limits'])->all(), JSON_UNESCAPED_UNICODE) }}" @endif>
 <div class="layout">
     <x-admin.sidebar/>
 

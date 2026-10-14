@@ -102,6 +102,19 @@ class EnsureUserHasPermission
             }
         }
 
+        if (str_starts_with($routeName, 'admin.mobile-sync.')) {
+            // Each sync endpoint carries the permission of the action it replays; the page, session and
+            // reference endpoints open for anyone holding either mobile capability.
+            $user = $request->user();
+            $allowed = match ($routeName) {
+                'admin.mobile-sync.attendance' => $user?->hasPermission('Attendance', 'mobile'),
+                'admin.mobile-sync.site-expenses' => $user?->hasPermission('Site Expenses', 'create'),
+                default => $user?->hasPermission('Attendance', 'mobile') || $user?->hasPermission('Site Expenses', 'create'),
+            };
+            abort_unless($allowed, 403, 'You do not have permission to perform this action.');
+
+            return $next($request);
+        }
         if (in_array($routeName, ['admin.site-expenses.submit', 'admin.site-expenses.edit', 'admin.site-expenses.update'], true)) {
             $user = $request->user();
             abort_unless($user && $user->hasPermission('Site Expenses', 'view')
@@ -172,6 +185,12 @@ class EnsureUserHasPermission
         }
         if (str_starts_with($routeName, 'admin.hr.attendance.mobile')) {
             return ['Attendance', 'mobile'];
+        }
+        if ($routeName === 'admin.mobile-sync.attendance') {
+            return ['Attendance', 'mobile'];
+        }
+        if ($routeName === 'admin.mobile-sync.site-expenses') {
+            return ['Site Expenses', 'create'];
         }
         if (str_starts_with($routeName, 'admin.equipment.')) {
             // Equipment: view (register, workspace, private files), create (asset, fuel, maintenance, documents), edit (asset,
