@@ -17,7 +17,11 @@ class Customer extends Model
         'name', 'code', 'type', 'rating', 'vat_number', 'cr_number', 'opening_receivable',
         'credit_limit', 'contact_person', 'phone', 'email', 'linked_account',
         'billing_address', 'status', 'allowed_payment_types',
+        'street', 'building_number', 'district', 'city', 'postal_code', 'country_code', 'buyer_id_scheme', 'buyer_id_value',
     ];
+
+    /** Buyer identification schemes accepted by BR-KSA-14 for buyers without a VAT registration. */
+    public const BUYER_ID_SCHEMES = ['TIN', 'CRN', 'MOM', 'MLS', '700', 'SAG', 'NAT', 'GCC', 'IQA', 'PAS', 'OTH'];
 
     protected function casts(): array
     {
