@@ -268,9 +268,9 @@ class CustomerWorkspaceTest extends TestCase
 
         $zatca = $this->panel($this->admin(), 'zatca')->assertOk()->json('html');
         $this->assertStringContainsString($invoice->zatcaRecord->uuid, $zatca);
-        $this->assertStringContainsString('Local ZATCA Record', $zatca);
-        $this->assertStringContainsString('not verified live', $zatca);
-        $this->assertStringContainsString('not yet operational', $zatca);
+        $this->assertStringContainsString('Not generated', $zatca);
+        $this->assertStringContainsString('Not verified by ZATCA', $zatca);
+        $this->assertStringContainsString('a local pass is not compliance', $zatca);
         $this->assertStringNotContainsString('Cleared by ZATCA', $zatca);
 
         $this->actingAs($this->admin())->put(route('admin.master.customers.update', $this->customer), $this->profile(['phone' => '+966 12']))->assertSessionHasNoErrors();

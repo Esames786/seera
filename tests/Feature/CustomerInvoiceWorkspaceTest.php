@@ -143,7 +143,7 @@ class CustomerInvoiceWorkspaceTest extends TestCase
         foreach (['information', 'lines', 'customer', 'project', 'vat', 'accounting', 'receipts', 'balance', 'zatca', 'activity'] as $anchor) {
             $page->assertSee('id="'.$anchor.'"', false);
         }
-        foreach (['Invoice Information', 'Invoice Lines', 'Project / Cost Center', 'Balance / Ageing', 'Local e-Invoice Record'] as $label) {
+        foreach (['Invoice Information', 'Invoice Lines', 'Project / Cost Center', 'Balance / Ageing', 'ZATCA E-Invoice'] as $label) {
             $page->assertSee($label);
         }
         // No editor, no save buttons and no form that writes this invoice or a receipt.
@@ -161,7 +161,7 @@ class CustomerInvoiceWorkspaceTest extends TestCase
         $page->assertSee($invoice->invoice_number)->assertSee($this->customer->name)->assertSee('Awaiting receipt')
             ->assertSee('SAR 1,150.00')->assertSee('SAR 0.00')->assertSee('Riyadh Commercial Tower')
             ->assertSee(route('admin.master.customers.show', $this->customer))->assertSee(route('admin.master.projects.show', $this->mine))
-            ->assertSee($invoice->journalEntry->journal_number)->assertSee('Local record pending; not sent to ZATCA, not verified live');
+            ->assertSee($invoice->journalEntry->journal_number)->assertSee('Not generated')->assertSee('Not verified by ZATCA');
 
         $this->receive($invoice, 150, 'ci-head-1')->assertSessionHasNoErrors();
         $this->open($this->reader(), $invoice)->assertOk()->assertSee('Partly received')->assertSee('SAR 150.00')->assertSee('SAR 1,000.00');
@@ -185,7 +185,7 @@ class CustomerInvoiceWorkspaceTest extends TestCase
             ->assertDontSee(route('admin.master.projects.show', $this->mine))
             ->assertDontSee(route('admin.accounting.journal-entries.show', $invoice->journalEntry))
             ->assertDontSee($invoice->zatcaRecord->uuid)
-            ->assertSee('Local record pending');
+            ->assertSee('Not generated');
 
         $manager = $this->user(['Accounts Receivable' => ['view'], 'Customers' => ['view', 'edit']], suffix: 'mgr');
         $this->open($manager, $invoice)->assertOk()->assertSee('View Customer')->assertSee('Manage Customer')->assertSee(route('admin.master.customers.edit', $this->customer));
@@ -398,12 +398,12 @@ class CustomerInvoiceWorkspaceTest extends TestCase
         $record = $invoice->zatcaRecord;
 
         $page = $this->open($this->reader(), $invoice)->assertOk();
-        $page->assertSee($record->uuid)->assertSee('Local e-Invoice Record')->assertSee('local record, not verified live')->assertSee('NOT YET OPERATIONAL')
-            ->assertSee('Local payload stored (not a ZATCA-issued QR)')->assertSee('file not generated')->assertSee('no certificate or real signing exists')
-            ->assertSee('Open Local Record')->assertSee(route('admin.accounting.zatca.show', $record))
-            ->assertDontSee('Cleared by ZATCA')->assertDontSee('ZATCA cleared');
+        $page->assertSee($record->uuid)->assertSee('ZATCA E-Invoice')->assertSee('Not generated')->assertSee('Not verified by ZATCA')
+            ->assertSee('Only a response from ZATCA makes an invoice cleared or reported')
+            ->assertSee('ZATCA Compliance Record')->assertSee(route('admin.accounting.zatca.show', $record))
+            ->assertDontSee('Cleared by ZATCA')->assertDontSee('Reported to ZATCA');
 
         $draft = $this->draftInvoice($this->mine);
-        $this->open($this->reader(), $draft)->assertOk()->assertSee('No local record yet')->assertSee('No local e-invoice record yet');
+        $this->open($this->reader(), $draft)->assertOk()->assertSee('No compliance record yet');
     }
 }

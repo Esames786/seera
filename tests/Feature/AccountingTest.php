@@ -372,7 +372,7 @@ class AccountingTest extends TestCase
 
         $invoice->refresh();
         $this->assertSame('unpaid', $invoice->payment_status);
-        $this->assertSame('pending_clearance', $invoice->zatca_status);
+        $this->assertSame('not_generated', $invoice->zatca_status);
         $this->assertNotNull($invoice->journal_entry_id);
 
         // Debit receivable, credit revenue + output VAT.
@@ -384,8 +384,9 @@ class AccountingTest extends TestCase
         $record = $invoice->zatcaRecord;
         $this->assertNotNull($record);
         $this->assertNotEmpty($record->uuid);
-        $this->assertNotEmpty($record->qr_code_data);
-        $this->assertNotEmpty($record->tamper_proof_hash);
+        $this->assertSame('not_generated', $record->status);
+        $this->assertNull($record->xml_path);
+        $this->assertNull($record->qr_code);
     }
 
     public function test_customer_receipt_posts_and_updates_invoice_status(): void
@@ -427,25 +428,28 @@ class AccountingTest extends TestCase
         $this->assertEqualsWithDelta($output, (float) $period->output_vat, 0.01);
     }
 
-    public function test_zatca_record_is_created_and_failed_record_can_be_retried(): void
+    public function test_legacy_zatca_records_are_not_generated_and_cannot_be_retried_without_a_stamp(): void
     {
+        // Seeded demo records keep their legacy labels but carry no XML, stamp or ZATCA response: Phase 2 reads them as not generated.
         $record = ZatcaInvoiceRecord::where('clearance_status', 'failed')->firstOrFail();
-        $before = $record->retry_count;
+        $this->assertSame('not_generated', $record->status);
+        $this->assertSame('not_generated', $record->customerInvoice->zatca_status);
 
         $this->actingAs($this->admin())
             ->post(route('admin.accounting.zatca.retry', $record))
-            ->assertRedirect();
+            ->assertRedirect(route('admin.accounting.zatca.show', $record))
+            ->assertSessionHasErrors('zatca');
 
         $record->refresh();
-        $this->assertSame('pending', $record->clearance_status);
-        $this->assertSame($before + 1, $record->retry_count);
-        $this->assertNull($record->failed_reason);
-        $this->assertSame('pending_clearance', $record->customerInvoice->zatca_status);
+        $this->assertSame('not_generated', $record->status);
+        $this->assertSame(0, $record->submission_attempts);
+        $this->assertNull($record->signed_xml_path);
     }
 
-    public function test_only_failed_zatca_records_can_be_retried(): void
+    public function test_only_stamped_zatca_records_can_be_retried(): void
     {
         $record = ZatcaInvoiceRecord::where('clearance_status', 'cleared')->firstOrFail();
+        $this->assertSame('not_generated', $record->status, 'a legacy "cleared" demo label is not a ZATCA result');
 
         $this->actingAs($this->admin())
             ->post(route('admin.accounting.zatca.retry', $record))

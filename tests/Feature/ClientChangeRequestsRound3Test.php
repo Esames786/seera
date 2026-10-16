@@ -659,13 +659,13 @@ class ClientChangeRequestsRound3Test extends TestCase
         $invoice->refresh();
         $this->assertSame('draft', $invoice->payment_status);
         $this->assertNull($invoice->journal_entry_id);
-        $this->assertSame('cancelled', $invoice->zatcaRecord->clearance_status);
+        $this->assertSame('cancelled', $invoice->zatcaRecord->status);
         $this->assertDatabaseMissing('vat_transactions', ['source_module' => 'Customer Invoice', 'source_id' => $invoice->id]);
 
         $this->actingAs($admin)->post(route('admin.accounting.accounts-receivable.approve', $invoice))->assertSessionHasNoErrors();
         $invoice->refresh();
         $this->assertSame('unpaid', $invoice->payment_status);
-        $this->assertSame('pending', $invoice->zatcaRecord->clearance_status);
+        $this->assertSame('not_generated', $invoice->zatcaRecord->status);
     }
 
     // NR-20 / NR-21 -----------------------------------------------------------
