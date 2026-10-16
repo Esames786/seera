@@ -3,9 +3,9 @@
 
 | | |
 |---|---|
-| **Version** | 1.15 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 15 October 2026. Offline Mobile Sync Foundation Phase 1 (chapter 23): GPS check-in / check-out and site expense entry can be captured without a connection and synchronised later through server-validated, replay-safe receipts (MOB-001, WF-025). Earlier state, 12 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Payroll Phase 2 (11 October 2026) adds the salary payment of a posted run from a bank / cash account (Dr payroll payable, Cr bank / cash) with replay protection and reversal, a generic bank transfer export frozen at generation, IBAN validation and masking (WF-022). The Project BOQ / Detailed Budget Engine Phase 1 (11 October 2026) adds budget versions and BOQ lines per project, Set as Current / revisions and Budget vs Actual on the posted ledger (MST-PRJ-006 / 007, WF-023). Equipment & Vehicles Phase 1 (12 October 2026) adds the asset register, project / site assignment history, fuel logs, maintenance records, private documents and Finance posting of equipment cost into the project ledger (EQP-001 … 004, WF-024). Offline attendance, an official Saudi WPS / Mudad file, GOSI, live GPS tracking, budget approval runtime and project scheduling remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
-| **Prepared** | 15 October 2026 |
+| **Version** | 1.16 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 17 October 2026. ZATCA e-invoicing Phase 2, sprint 1 (chapter 14): compliant UBL XML, local validation, cryptographic stamp, Phase-2 QR, hash chain, explicit sandbox / simulation / production environments, owner-controlled onboarding, clearance and reporting client with a truthful state machine (FIN-ZAT-001 … 003, WF-026); ZATCA sandbox submission, SDK validation and production onboarding NOT RUN / NOT YET OPERATIONAL. Earlier, 15 October 2026. Offline Mobile Sync Foundation Phase 1 (chapter 23): GPS check-in / check-out and site expense entry can be captured without a connection and synchronised later through server-validated, replay-safe receipts (MOB-001, WF-025). Earlier state, 12 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Payroll Phase 2 (11 October 2026) adds the salary payment of a posted run from a bank / cash account (Dr payroll payable, Cr bank / cash) with replay protection and reversal, a generic bank transfer export frozen at generation, IBAN validation and masking (WF-022). The Project BOQ / Detailed Budget Engine Phase 1 (11 October 2026) adds budget versions and BOQ lines per project, Set as Current / revisions and Budget vs Actual on the posted ledger (MST-PRJ-006 / 007, WF-023). Equipment & Vehicles Phase 1 (12 October 2026) adds the asset register, project / site assignment history, fuel logs, maintenance records, private documents and Finance posting of equipment cost into the project ledger (EQP-001 … 004, WF-024). Offline attendance, an official Saudi WPS / Mudad file, GOSI, live GPS tracking, budget approval runtime and project scheduling remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
+| **Prepared** | 17 October 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
 
@@ -56,7 +56,7 @@ All examples in this guide use the same fictional data. None of it is real.
 11. [Projects](#11-projects)
 12. [Marketing](#12-marketing)
 13. [Activity Logs / Audit](#13-activity-logs--audit)
-14. [Current ZATCA Foundation](#14-current-zatca-foundation)
+14. [ZATCA E-Invoicing (Phase 2)](#14-zatca-e-invoicing-phase-2)
 15. [Reports](#15-reports)
 16. [Common Tasks](#16-common-tasks)
 17. [End-to-End Workflows](#17-end-to-end-workflows)
@@ -87,7 +87,7 @@ What Seera covers today:
 - **Master Setup**: company profile, branches, departments, designations, projects, locations (sites), warehouses, expense categories, suppliers, customers.
 - **Equipment & Vehicles**: asset register, project / site assignment with history and operator, fuel and maintenance records, private documents, Finance posting into project cost (live GPS not connected).
 - **HR & Payroll**: employees with a connected workspace, documents and IQAMA register, shifts, attendance (manual entry and mobile check-in), leaves, overtime, salary structures, payroll runs with accounting posting and payslips, end of service.
-- **Accounting & Finance**: chart of accounts, journal entries, general ledger, accounts payable, accounts receivable, VAT periods, local ZATCA records, cost centers, posting rules, financial reports.
+- **Accounting & Finance**: chart of accounts, journal entries, general ledger, accounts payable, accounts receivable, VAT periods, ZATCA e-invoicing (Phase 2 records, onboarding), cost centers, posting rules, financial reports.
 - **Inventory & Purchasing**: items, categories, units, stock on hand, purchase requests, purchase orders, goods receipts, stock issues, transfers, adjustments, stock ledger, inventory reports.
 - **Marketing**: leads, visits, visit report, conversion to customer.
 
@@ -598,7 +598,7 @@ Fields:
 | Company Logo | Image file | logo.png | No | |
 | Email, Phone, Website | Contact details | info@example.sa | Email and Phone yes | |
 | CR Number, VAT Number | Registration numbers | 1010123456 / 300123456700003 | Yes | |
-| ZATCA Registration Number, Invoice Mode, Digital Certificate Status | Compliance labels | — | No | Labels only; no live ZATCA connection (chapter 14) |
+| ZATCA Registration Number, Invoice Mode, Digital Certificate Status | Legacy compliance labels | — | No | Labels only. The real ZATCA seller data is the national address and seller identification section below, read by ZATCA Settings (chapter 14) |
 | Default VAT Rate (%) | Standard rate | 15 | No | |
 | Country, City, Default Currency, Fiscal Year Start / End, Full Address | Location and fiscal settings | Saudi Arabia / Riyadh / SAR / 01-Jan / 31-Dec | No | |
 | Status | active / inactive | active | No | |
@@ -1149,7 +1149,7 @@ Customer
  ├─ Receipts & Balance
  ├─ Ageing
  ├─ Accounting
- ├─ Local ZATCA Records
+ ├─ ZATCA E-Invoices
  └─ Activity
 ```
 
@@ -1262,7 +1262,7 @@ Navigation:
 Customers → Edit / Manage.
 
 Permission required:
-Customers — edit. Each tab: Contacts and Notes (Customers), Projects (Projects — view), Invoices, Receipts & Balance, Ageing (Accounts Receivable — view), Accounting (Journal Entries — view), Local ZATCA Records (ZATCA Invoicing — view), Activity (Activity Logs — view). Tabs you may not view are not shown.
+Customers — edit. Each tab: Contacts and Notes (Customers), Projects (Projects — view), Invoices, Receipts & Balance, Ageing (Accounts Receivable — view), Accounting (Journal Entries — view), ZATCA E-Invoices (ZATCA Invoicing — view), Activity (Activity Logs — view). Tabs you may not view are not shown.
 
 What you see:
 The same header, then tabs. **Profile** is the customer form with Save, Save & new, Save & close and Cancel. The other tabs load when you click them.
@@ -1272,11 +1272,11 @@ The same header, then tabs. **Profile** is the customer form with Save, Save & n
 | Contacts | Add contact (Customers — create), Edit here (Customers — edit), Remove (Customers — delete). Site contacts pick a site of this customer's projects. |
 | Notes | Add note (Customers — create) with author and date; Remove (Customers — delete). |
 | Projects | See this customer's projects (code, name, manager, budget, status) and open them. Only projects in your scope are listed. |
-| Invoices | Invoice number, date, project, taxable, VAT, total, received, balance, status, local ZATCA status; View, Edit draft, Record receipt (links to the invoice pages). |
+| Invoices | Invoice number, date, project, taxable, VAT, total, received, balance, status, ZATCA state; View, Edit draft, Record receipt (links to the invoice pages). |
 | Receipts & Balance | Approved invoices, Received, Outstanding, Last receipt cards and the receipt list with journal links. Figures use only the invoices you may see. |
 | Ageing | Current-state ageing as of today (Current, 1–30, 31–60, 60+ days) of the open invoices you may see, plus the invoice rows with days late. Not a historical as-of report. |
 | Accounting | Linked receivable account and the journals created by this customer's invoices and receipts, with drill-through. |
-| Local ZATCA Records | UUID, QR, XML and local status per approved invoice. Clearance is not verified live. |
+| ZATCA E-Invoices | Invoice type, UUID, state (Not generated … Cleared / Reported), ZATCA status, attempts and last error per approved invoice; View record. Only a ZATCA response makes an invoice cleared or reported. |
 | Activity | Recent activity entries for this customer, paged. |
 
 Buttons on the page: View (read-only), Back to Customers.
@@ -1752,7 +1752,7 @@ View vs Edit: View (this page) has no save buttons. **Edit Draft** opens FIN-AR-
 
 Header (always visible): invoice number, status and payment state (Draft, not posted / Awaiting receipt / Overdue by n days / Partly received / Received in full), Customer with **View** (Customers — view) and **Manage** (Customers — edit) links, invoice and due dates, Project (link needs Projects — view) and cost center, local e-invoice state, **Total** with VAT, **Received**, **Outstanding**, Accounting (Posted with the journal link for Journal Entries — view, or Not posted yet).
 
-Section bar: Invoice Information · Invoice Lines · Customer · Project / Cost Center · VAT · Accounting · Receipts · Balance / Ageing · Local e-Invoice Record · Activity. A section is present only when your role may read it.
+Section bar: Invoice Information · Invoice Lines · Customer · Project / Cost Center · VAT · Accounting · Receipts · Balance / Ageing · ZATCA E-Invoice · Activity. A section is present only when your role may read it.
 
 | Section | What it shows | Needs |
 |---|---|---|
@@ -1764,7 +1764,7 @@ Section bar: Invoice Information · Invoice Lines · Customer · Project / Cost 
 | Accounting | The posted journal: accounts, project / cost center, debit, credit, journal number, date, status, View Journal. View only | Journal Entries — view |
 | Receipts | Receipts of this invoice only (date, account, method, amount, reference, journal), 10 per page, Record Receipt for open invoices | Accounts Receivable — view (Record Receipt needs process) |
 | Balance / Ageing | Invoice total, received with the receipt count, outstanding, due date, days overdue, ageing bucket (the shared Current / 1–30 / 31–60 / 60+ rule as of today), payment state | Accounts Receivable — view |
-| Local e-Invoice Record | UUID, local clearance status, QR payload, XML path reference, signature flag, local hash, retries, response, Open Local Record — every field labelled as local, not verified live | ZATCA Invoicing — view |
+| ZATCA E-Invoice | Invoice type, UUID, environment, state, local validation, stamp (time and ICV), submission (time, attempts), ZATCA status with cleared / reported time, warnings / errors, last error, lock notice; actions Generate & validate XML, Submit to ZATCA (post), Retry (retry), Download signed XML (export), ZATCA Compliance Record link | ZATCA Invoicing — view (actions: post / retry / export) |
 | Activity | Latest entries that name this invoice, limited to the users your role may see, with View all | Activity Logs — view |
 
 Buttons:
@@ -1780,7 +1780,7 @@ Buttons:
 
 Scope: a project-scoped user cannot open, edit or receive against an invoice of another project (not found), and the customer outstanding figure counts only the invoices that user may see.
 
-Local e-invoice truth: the local record is foundation data only. The system never contacts ZATCA; "pending" means a local record exists and has not been sent, "cleared" would only ever be a local flag. Live ZATCA Phase 2 clearance, real QR codes, XML files and digital signing are NOT YET OPERATIONAL (chapter 14).
+E-invoice truth: the ZATCA E-Invoice section shows the compliance record state. "Not generated", "Validated locally" and "Stamped" are Seera states; only "Cleared by ZATCA" or "Reported to ZATCA" come from a ZATCA response, and "Submission outcome unknown" means the answer never arrived and must be verified (chapter 14). Once an invoice is stamped or submitted it can no longer be edited or reopened.
 
 Record Customer Receipt (FIN-AR-005) fields: Receipt Date *, Received Into (Bank / Cash Account) * (only the channels the customer accepts), Payment Method * (must match the account: Cash for the cash account, Bank Transfer or Cheque for the bank), Received Amount (SAR) * (not more than the outstanding balance), Reference Number, Notes. Buttons: Record Receipt, Back / Back to Invoice, Cancel. Back, Cancel and a recorded receipt all return to the page you came from (the invoice, or the customer / project page). Repeated submissions are recognised and not added twice; a key sent against a different invoice is refused.
 
@@ -1822,7 +1822,7 @@ Important:
 
 Web address: `https://seera.tech-brit.co.uk/admin/accounting/zatca` (FIN-ZAT-001) · `https://seera.tech-brit.co.uk/admin/accounting/zatca/{id}` (FIN-ZAT-002)
 
-Status: **FOUNDATION ONLY**. See chapter 14.
+Status: **AVAILABLE (Phase 2, sprint 1)**. See chapter 14.
 
 ### [FIN-CC-001 … 004] Cost Centers
 
@@ -2165,7 +2165,7 @@ Every panel additionally requires Projects — view. Hidden panels reject direct
 | Project Purchases | PO number, supplier, date, total and current status/receiving state; billing state from visible posted receipt lines. View opens existing P2P workspace | Purchase Orders — view; Goods Receipts — view for billing state |
 | Goods Receipts | GRNs belonging through a visible PO of this Project, supplier/warehouse/date, stock and invoicing states | Goods Receipts — view |
 | Material Used | Posted Stock Issue ledger rows: issue/date/site/warehouse/item/unit/quantity/value. A warehouse receipt is NOT consumption | Stock Issues — view; Inventory Reports — view for report drill-through |
-| Customer Invoices | Project invoices, taxable/VAT/total/received/outstanding/status, local ZATCA state. Receipt action needs process permission and an unpaid/partially-paid invoice | Accounts Receivable — view/process |
+| Customer Invoices | Project invoices, taxable/VAT/total/received/outstanding/status, ZATCA state. Receipt action needs process permission and an unpaid/partially-paid invoice | Accounts Receivable — view/process |
 | Customer Receipts | Receipts whose invoice is visible and belongs to this Project, amount/date/method/reference | Accounts Receivable — view |
 | Financial / Cost Summary | Same calculation service as Project Cost Report, all dates; master budget next to the detailed current budget with committed and remaining; filtered report and Budget / BOQ drill-through | Financial Reports — view |
 | Activity | New Project and context-Site saves with an exact immutable Project entity token, further restricted by Activity Logs visibility | Activity Logs — view |
@@ -2436,48 +2436,101 @@ The Old Value and New Value columns are filled only for a few administrative ent
 
 ---
 
-## 14. Current ZATCA Foundation
+## 14. ZATCA E-Invoicing (Phase 2)
 
 | | |
 |---|---|
 | **Chapter number** | 14 |
-| **Chapter name** | Current ZATCA Foundation |
-| **Purpose** | What the local ZATCA records are and are not. |
-| **Primary roles** | Finance Manager |
-| **Screens in this chapter** | FIN-ZAT-001, FIN-ZAT-002 |
+| **Chapter name** | ZATCA E-Invoicing (Phase 2) |
+| **Purpose** | How an approved customer invoice becomes a ZATCA-compliant e-invoice, what each state means, how the solution unit is onboarded, and what is still not operational. |
+| **Primary roles** | Finance Manager (post / retry / export), Owner or Finance administrator (edit: settings and onboarding), Super Admin |
+| **Screens in this chapter** | FIN-ZAT-001, FIN-ZAT-002, FIN-ZAT-003 |
+| **Workflows in this chapter** | WF-026 |
 
-Status: **FOUNDATION ONLY**. Read this chapter before promising anything about e-invoicing to a customer or an auditor.
+Truth first. After sprint 1 (17 October 2026):
 
-What Seera does today when a customer invoice is approved:
+| Capability | Status |
+|---|---|
+| UBL 2.1 XML per the ZATCA XML Implementation Standard v1.2 and Data Dictionary (2023-05-19), built from the posted invoice and frozen seller / buyer snapshots | AVAILABLE |
+| Local validation (well-formed XML and a subset of the KSA rules: identifiers, national address, dates, codes, decimals, totals, VAT rounding) | AVAILABLE — a local pass is **not** compliance |
+| Cryptographic stamp (XAdES, ECDSA secp256k1, SHA-256), invoice hash, invoice counter (ICV) and previous-hash chain per solution unit | AVAILABLE |
+| Phase-2 QR (TLV tags 1–8, tag 9 for simplified documents) | AVAILABLE |
+| Environments sandbox / simulation / production, production disabled by default | AVAILABLE |
+| Onboarding (key pair, CSR, OTP, compliance CSID, compliance checks, production CSID) with encrypted credentials | AVAILABLE as a workflow; **not yet executed** against ZATCA |
+| Clearance (standard) and reporting (simplified) client with retry and "outcome unknown" handling | AVAILABLE; tested against a faked ZATCA only |
+| Validation with ZATCA's Compliance and Enablement Toolbox (SDK) | NOT RUN |
+| Live sandbox / simulation submission | NOT RUN (Developer Portal credentials and OTP required) |
+| Production integration (FATOORA) | NOT YET OPERATIONAL (owner onboarding, wave notification) |
+| Credit / debit notes, printable Arabic invoice | NOT YET OPERATIONAL |
 
-| Item | What exists | Status |
+Never say "ZATCA compliant", "cleared" or "reported" about an invoice unless its record shows **Cleared by ZATCA** or **Reported to ZATCA**: those two states are written only from a ZATCA response.
+
+### Invoice types and what ZATCA requires
+
+| Type | ZATCA document | Flow | What the invoice needs |
+|---|---|---|---|
+| Standard tax invoice (B2B) | code 388, transaction code 0100000 | **Clearance**: Seera submits the stamped XML, ZATCA validates, stamps it again and returns the cleared document and QR; only then is the invoice valid to share | Supply date; buyer legal name, street, city, country and either a VAT number (15 digits, 3…3) or another buyer identification (National ID, Iqama, CRN, TIN, …) |
+| Simplified tax invoice (B2C) | code 388, transaction code 0200000 | **Reporting**: Seera stamps and reports it within 24 hours of generation; ZATCA confirms or rejects | No buyer address or identification required; the Seera stamp and QR are mandatory |
+
+The seller (Company Profile) always needs: legal name (Arabic name recommended for the human-readable invoice), VAT number (15 digits starting and ending with 3), commercial registration (or another identification), street, building number (4 digits), district, city, postal code (5 digits), country code SA.
+
+### States of a compliance record
+
+| State | Meaning | Who sets it |
 |---|---|---|
-| Local ZATCA record | One record per approved invoice, linked to the invoice | FOUNDATION ONLY |
-| UUID | A unique identifier generated locally | FOUNDATION ONLY |
-| QR code | A locally built payload (customer, invoice number, date, total, VAT). It is not the ZATCA TLV format and carries no signature | FOUNDATION ONLY |
-| XML | A file reference is stored; the XML file itself is not generated | FOUNDATION ONLY |
-| Digital signature | Shown as "signed"; no certificate or real signing exists | FOUNDATION ONLY |
-| Tamper-proof hash | A local hash of the record; it is not chained to the previous invoice | FOUNDATION ONLY |
-| Clearance status | Local statuses draft, generated, pending, cleared, failed, cancelled. The system never sets "cleared" itself | FOUNDATION ONLY |
-| Retry | Changes a failed record back to pending and counts the retry. No message is sent anywhere | FOUNDATION ONLY |
-| Live Phase-2 clearance, ZATCA responses, production certificates | Do not exist | NOT YET OPERATIONAL |
+| Not generated | Approved invoice, UUID assigned, nothing built yet (also every record from before Phase 2) | Seera at approval |
+| XML generated / Validated locally | Unsigned XML built from the frozen snapshots and checked locally; nothing consumed | Generate & validate XML |
+| Local validation failed | A KSA rule or an arithmetic check failed; the rule id and message are kept | Generate & validate XML |
+| Stamped (signed) | ICV and previous hash assigned from the unit, XML signed, QR built; the invoice is now locked | Submit to ZATCA (stamp step) |
+| Submitted, awaiting response | Request in flight | Submit / Retry |
+| Cleared by ZATCA / Reported to ZATCA | ZATCA accepted the document (with or without warnings); cleared XML stored for standard invoices | ZATCA response |
+| Rejected by ZATCA | ZATCA returned errors; the ICV stays consumed, the chain continues | ZATCA response |
+| Failed (configuration / readiness) | Readiness or configuration error before any stamp | Seera |
+| Submission outcome unknown: verification required | The request timed out after being sent; ZATCA may or may not have it. Never treated as rejected. Retry sends the identical document; if ZATCA answers "duplicate", verify in the FATOORA portal | Seera |
+| Cancelled (invoice reopened) | The invoice was reopened before any stamp | Reopen |
 
-### [FIN-ZAT-001] ZATCA E-Invoicing (local records)
+### [FIN-ZAT-001] ZATCA E-Invoicing (register)
 
 Web address: `https://seera.tech-brit.co.uk/admin/accounting/zatca`
 
-Cards Cleared, Pending Clearance, Failed, Draft (local statuses); filters; table Invoice, UUID, Customer, Issue Date, QR, XML, Signature, Clearance, ZATCA Response, Retries; **View** and **Retry** (failed records; ZATCA Invoicing — retry). Permission: ZATCA Invoicing — view.
+Cards Cleared / Reported, Stamped / Validated, Rejected / Failed, Outcome unknown; the current environment and solution unit; filters by status and search; table Invoice, type, customer, issue date, environment, ICV, status (with "warnings" when accepted with warnings), ZATCA status, attempts; **View**. Permission: ZATCA Invoicing — view. ZATCA Settings button needs ZATCA Invoicing — edit.
 
-### [FIN-ZAT-002] ZATCA Record
+### [FIN-ZAT-002] ZATCA Compliance Record
 
 Web address: `https://seera.tech-brit.co.uk/admin/accounting/zatca/{id}`
 
-The record's fields, the QR payload and the local hash, with **Retry Clearance** and **Open Invoice**. Reopening an invoice cancels its local record.
+Cards Status, Local validation, Cryptographic stamp, Readiness. Actions by permission and state: **Generate & validate XML** (post; builds and validates, consumes nothing), **Submit to ZATCA** (post; stamps if needed, then clears or reports; disabled until readiness is green), **Retry submission** (retry; resends the identical stamped document after a transient failure, a rejection you want to resend unchanged, or an unknown outcome), **Regenerate after correction** (post; only for rejected / failed / unsent records: refreshes the seller and buyer snapshot from the corrected masters, keeps the UUID, starts over with a new ICV). Downloads (export): unsigned XML (with stamp placeholders), signed XML, cleared XML. Panels: record facts (type and transaction code, issue date and time, supply date, totals, UUID, environment and unit, ICV, invoice hash, previous hash, submission time and attempts, ZATCA status, cleared / reported time, reporting deadline for simplified documents, lock notice), Readiness (seller, buyer, invoice, unit; rule ids), Local validation (errors and warnings with rule ids), ZATCA errors / warnings, the Phase-2 QR payload, and the list of attempts (endpoint, HTTP status, outcome, ZATCA status, counts, timing). Permission: ZATCA Invoicing — view.
 
-In the Customer workspace the tab is called **Local ZATCA Records** and every status is marked "local, not verified live".
+### [FIN-ZAT-003] ZATCA Settings & Onboarding
 
----
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/zatca/settings`
 
+Who uses it: the owner or the Finance administrator (ZATCA Invoicing — edit). Shows the active environment and its base URL, the seller readiness read from the Company Profile, the solution unit form (unit name = certificate common name, document types as the four-digit TSCZ map such as `1100`, location in the national short-address format, industry, organisation unit) and, per unit, the onboarding state and actions:
+
+1. **Generate key pair & CSR** — creates an ECDSA secp256k1 key pair (stored encrypted) and the certificate signing request with the ZATCA subject fields; the CSR is shown for the portal.
+2. **Obtain an OTP** in the portal of the chosen environment (FATOORA portal for production, FATOORA simulation portal, or the Developer Portal sandbox); it is valid for one hour.
+3. **Request compliance CSID** — enter the six-digit OTP; Seera sends the CSR and stores the compliance certificate and secret encrypted. The OTP is used once and never stored or logged.
+4. **Run compliance checks** — Seera stamps and submits the sample documents ZATCA requires for the chosen document types (standard invoice, debit note, credit note; the simplified three when `S` is enabled) and records the outcome per document. These are onboarding test documents, not business invoices.
+5. **Request production CSID** — allowed only after the compliance checks passed; the production certificate and secret are stored encrypted and used for every submission in that environment.
+6. **Revoke credentials locally** — removes the credentials from Seera (revocation in the FATOORA portal is a separate manual step).
+
+Secrets (private key, CSID secrets) are never displayed. Environment is configuration (`ZATCA_ENVIRONMENT`, `ZATCA_PRODUCTION_ENABLED`), never inferred from the server mode; production stays off until the owner enables it after onboarding.
+
+### Rounding and VAT truth
+
+The XML always carries the posted invoice's own figures; Seera never calculates a second set. ZATCA rounds the VAT category amount on the document total (rule BR-S-09); Seera's invoice VAT is the sum of per-line rounded VAT. When the two differ (for example two lines of SAR 1.03), the local validator refuses the document and shows both figures. Finance keeps its figures; the decision to move invoice VAT to document-level rounding is a Finance policy change, not something ZATCA submission changes silently.
+
+### Corrections, reopening and notes
+
+An invoice that has been stamped or submitted cannot be edited or reopened. ZATCA corrections are credit or debit notes (codes 381 / 383), which Seera does not issue as business documents yet; the only note XML Seera produces is the onboarding compliance sample. Until an AR note module exists, correct such invoices outside Seera and record the outcome with Finance.
+
+### Arabic and the human-readable invoice
+
+ZATCA requires the human-readable invoice in Arabic (bilingual allowed). Seera has no printable or PDF invoice layout yet; the XML carries the legal data, and the readiness check warns when the Arabic company name is missing.
+
+### Security
+
+Private keys and CSID secrets are encrypted with the application key; XML artifacts live under the private storage disk and are served only through the export permission; attempts are logged without credentials, Authorization headers or OTPs; every ZATCA call uses HTTPS with certificate verification and bounded timeouts; the stored signed XML is re-hashed before every submission and refused if it changed.
 ## 15. Reports
 
 | | |
@@ -2562,7 +2615,7 @@ See WF-001.
 
 1. Open Master Setup → Customers.
 2. Click View for a read-only page, or Edit / Manage to work in the workspace.
-3. Use the tabs: Contacts, Notes, Projects, Invoices, Receipts & Balance, Ageing, Accounting, Local ZATCA Records, Activity.
+3. Use the tabs: Contacts, Notes, Projects, Invoices, Receipts & Balance, Ageing, Accounting, ZATCA E-Invoices, Activity.
 
 ### Post a manual journal
 
@@ -2586,7 +2639,7 @@ Use the language switch in the top bar. The screen turns to Arabic (right-to-lef
 | **Chapter name** | End-to-End Workflows |
 | **Purpose** | The documented business flows WF-001 to WF-024. |
 | **Primary roles** | Super Admin, HR Manager, Finance Manager, Account Assistant, Purchase Manager, Warehouse Incharge, Site In-Charge, Marketing Manager |
-| **Workflows in this chapter** | WF-020, WF-021, WF-022, WF-023, WF-024, WF-025, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
+| **Workflows in this chapter** | WF-020, WF-021, WF-022, WF-023, WF-024, WF-025, WF-026, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
 
 Each workflow lists purpose, roles, prerequisites, navigation, steps, example input, the system result, statuses before and after, the audit trail, common errors and the related Screen IDs. The Workflow Index is in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).
 
@@ -2755,7 +2808,7 @@ Related screens: INV-PR-002, INV-PR-003, INV-PO-002, INV-PO-003.
 
 Purpose: fix a wrong approved document without editing posted accounting.
 Roles involved: Super Admin.
-Prerequisites: the bill or invoice is unpaid with no payments or receipts; its VAT period is still open; for an invoice, the local ZATCA record is not cleared.
+Prerequisites: the bill or invoice is unpaid with no payments or receipts; its VAT period is still open; for an invoice, no e-invoice has been stamped or submitted to ZATCA (otherwise a credit note is required, which Seera does not issue yet).
 Navigation: Bill or Invoice Details → Reopen for Correction → enter the reason.
 Expected result: a reversing journal is posted (the original stays), the VAT row is withdrawn, matched receipt quantities are released, the document returns to draft with the reason in its notes. For a runtime Supplier Bill, its old approval remains historical; correct it and explicitly submit a NEW attempt before posting. Customer Invoices and unenrolled legacy bills retain their existing approval path.
 Audit trail: Reopened supplier bill / Reopened customer invoice with the reason.
@@ -2958,6 +3011,24 @@ Audit trail: Offline check-in synchronized, Offline check-out synchronized, Bloc
 Common errors: no location fix (attendance cannot be saved offline without one); page never opened online on that phone; signed-in account changed ("Pending records belong to another signed-in account"); session expired ("Sign in to continue syncing"); captured time older than the sync window (72 hours by default) or ahead of the server clock; site assignment changed; already checked in online; category, supplier or payment account no longer available.
 Privacy: offline records (position, times, receipt photo) stay in the phone's browser storage for this site until synced, discarded or cleared; nothing is sent anywhere else.
 Related screens: MOB-001, HR-ATT-004, HR-ATT-001, HR-ATT-003, EXP-SE-002, EXP-SE-003, USR-003, MST-SITE-004.
+### WF-026 ZATCA e-invoice: approve → readiness → XML → stamp → clearance or reporting → immutable record
+
+Purpose: turn an approved customer invoice into a ZATCA e-invoice through the official lifecycle, with a truthful state at every step.
+Roles involved: Finance (approve the invoice; ZATCA Invoicing — post / retry / export), Owner or Finance administrator (ZATCA Invoicing — edit for onboarding), Super Admin.
+Prerequisites: the solution unit is onboarded for the current environment (FIN-ZAT-003, production CSID); Company Profile seller data complete; customer data complete for standard invoices; the invoice approved with the right type and supply date.
+Navigation: Accounts Receivable → invoice → ZATCA E-Invoice section, or Finance → ZATCA E-Invoicing → View.
+Steps and example input:
+1. Finance approves invoice INV-2026-0042 (standard, customer Riyadh Developers LLC, supply date 2026-10-16, SAR 1,000 + 150 VAT). Approval posts the journal, records the issue time, freezes the seller and buyer snapshot and creates the compliance record **Not generated** with its UUID.
+2. Finance opens the record. Readiness is green (seller, buyer, invoice, unit). **Generate & validate XML** builds the UBL document from the frozen data and checks it locally: **Validated locally**; the unsigned XML can be downloaded.
+3. **Submit to ZATCA**: Seera takes the next counter value of the unit (ICV 12) and the previous document hash, signs the XML with the unit certificate, builds the QR, locks the invoice (**Stamped**), then calls the clearance API of the configured environment.
+4. ZATCA answers 200: the record becomes **Cleared by ZATCA** with the cleared XML and the ZATCA QR stored; the attempt is listed (endpoint, HTTP status, outcome, timing). A simplified invoice follows the same steps through the reporting API and becomes **Reported to ZATCA**.
+5. If ZATCA answers 400 with rule errors (for example BR-KSA-10 buyer street missing), the record is **Rejected by ZATCA** with the errors; Finance corrects the customer, uses **Regenerate after correction** (same UUID, new ICV) and submits again.
+6. If the request times out after being sent, the record is **Submission outcome unknown**; **Retry** sends the identical document. A "duplicate" answer keeps the record in verification required until the owner checks the FATOORA portal.
+Expected result: one compliance record per invoice; a ZATCA state only after a ZATCA response; no journal, VAT row or invoice figure changed by any ZATCA call; the invoice locked once stamped.
+Statuses: Not generated → Validated locally (or Local validation failed) → Stamped → Submitted → Cleared / Reported, Rejected, or Submission outcome unknown; Failed for readiness / configuration; Cancelled only by a reopen before any stamp.
+Audit trail: ZATCA XML generated and validated locally, ZATCA local validation failed, ZATCA invoice stamped, ZATCA invoice cleared / reported, ZATCA submission rejected / failed / outcome unknown, ZATCA record reset for regeneration; onboarding: Generated ZATCA CSR, Obtained ZATCA compliance / production CSID, ZATCA compliance checks passed / incomplete.
+Common errors: readiness messages naming the missing Company Profile or Customer field; VAT rounding mismatch on multi-line invoices; production disabled; environment mismatch between the record and the configuration; credentials refused (renew the CSID); rate limit or server error (retry later).
+Related screens: FIN-ZAT-001, FIN-ZAT-002, FIN-ZAT-003, FIN-AR-003, MST-CP-001, CUS-002.
 ## 18. Troubleshooting
 
 | | |
@@ -3011,7 +3082,9 @@ Related screens: MOB-001, HR-ATT-004, HR-ATT-001, HR-ATT-003, EXP-SE-002, EXP-SE
 | GRNI | Goods Received Not Invoiced, account 2150: the value of received goods whose supplier bill is not yet approved |
 | Input VAT / Output VAT | VAT paid on purchases (1300) / VAT charged on sales (2210) |
 | Journal entry | A balanced accounting entry; automatic ones come from documents, manual ones from FIN-JE-002 |
-| Local ZATCA record | Seera's own record of an approved invoice (UUID, QR payload, status); not a live ZATCA clearance |
+| ZATCA compliance record | Seera's record of an approved invoice's e-invoice: UUID, type, ICV, hashes, XML artifacts, QR, state and ZATCA outcome. Cleared / Reported only after a ZATCA response |
+| Cryptographic stamp (CSID) | The ZATCA-issued certificate of a solution unit (EGS); compliance CSID for onboarding checks, production CSID for live submissions |
+| ICV / PIH | Invoice counter value and previous invoice hash: the per-unit chain ZATCA verifies |
 | Matched line | A supplier bill line linked to a goods receipt line |
 | Outstanding (invoice) | The part of an approved customer invoice not yet received (invoice total minus received); kept on the invoice and refreshed by every receipt |
 | Outstanding payment | The part of an approved bill not yet paid (bill total minus paid) |
@@ -3050,7 +3123,12 @@ Areas that exist as menus, settings or plans but are not usable business functio
 | Offline attendance (check-in without connectivity, later sync) | AVAILABLE (Phase 1, WF-025) | Captured on the device with a location fix, synced later and re-validated by the server; needs a prior online page load; no guaranteed background sync; device storage can be cleared by the browser or OS |
 | Device attestation / anti-spoofing for mobile attendance | NOT YET OPERATIONAL | Attendance is location-validated by the server, not tamper-proof; offline capture does not change this |
 | Offline entry and sync (other modules) | AVAILABLE for GPS attendance and Site Expense entry only (WF-025) | Approvals, posting, payroll, inventory and finance screens remain online only |
-| Live ZATCA Phase-2 clearance, real QR, XML, signing | NOT YET OPERATIONAL (local records: FOUNDATION ONLY) | Chapter 14 |
+| ZATCA Phase 2: XML generation, local validation, stamp, QR, hash chain, environments, onboarding workflow, clearance / reporting client | AVAILABLE (sprint 1, tested against a faked ZATCA) | Chapter 14 |
+| ZATCA sandbox / simulation integration | NOT RUN (Developer Portal credentials and OTP required) | Chapter 14, WF-026 |
+| Official SDK (Compliance and Enablement Toolbox) validation | NOT RUN (JAR behind the Developer Portal login; no Java on the build machine) | Chapter 14 |
+| ZATCA production integration | NOT YET OPERATIONAL (production disabled; owner onboarding in the FATOORA portal required) | Chapter 14 |
+| Customer credit / debit notes | NOT YET OPERATIONAL (no AR note module; stamped invoices cannot be corrected in Seera) | Chapter 14 |
+| Printable / PDF Arabic invoice | NOT YET OPERATIONAL (XML carries the legal data; no human-readable layout) | Chapter 14 |
 | Approval workflow execution (multi-step, all-required) | AVAILABLE for PR, Site Expenses and Supplier Bills; PARTIAL across other modules | Sequential required steps, runtime history and shared My Approvals; no parallel groups, thresholds, delegation, notification/escalation jobs or automatic parent expansion |
 | Official Saudi WPS / Mudad payroll file, GOSI, employee loans, attendance-based proration, partial salary payment, multi-step payroll approval | NOT YET OPERATIONAL | Payroll calculation, approval, Payroll → GL posting with Retry / Reverse, salary payment from bank / cash with reversal, a generic bank transfer CSV and payslips are AVAILABLE (WF-021, WF-022); GOSI readiness is documented in `docs/payroll-gosi-readiness-2026-10-11.md` |
 | HR Reports menu (attendance register, payroll register) | NOT YET OPERATIONAL | HR Dashboard for today's figures |

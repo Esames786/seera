@@ -34,7 +34,7 @@ main a { color:var(--link); }
 main strong { color:#ffffff; }
 footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px solid var(--line); background:var(--panel); }
 @media (max-width: 900px) { .layout { grid-template-columns:1fr; } aside.toc { position:static; height:auto; max-height:40vh; } main { padding:18px 16px; } }
-@media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Current System User Guide · Version 1.14 · 12 October 2026 · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a class="l2" href="#training-dataset-used-in-the-examples">Training dataset used in the examples</a><a class="l2" href="#table-of-contents">Table of contents</a><a class="l2" href="#1-about-seera-erp">1. About Seera ERP</a><a class="l3" href="#the-three-ways-you-work-with-a-record">The three ways you work with a record</a><a class="l3" href="#the-save-buttons">The Save buttons</a><a class="l3" href="#unsaved-changes-protection">Unsaved changes protection</a><a class="l2" href="#2-login-and-navigation">2. Login and Navigation</a><a class="l3" href="#adm-001-login">[ADM-001] Login</a><a class="l3" href="#adm-002-forgot-password-and-adm-003-reset-password">[ADM-002] Forgot Password and [ADM-003] Reset Password</a><a class="l3" href="#adm-004-set-your-password-first-sign-in">[ADM-004] Set Your Password (first sign-in)</a><a class="l3" href="#navigation-basics">Navigation basics</a><a class="l2" href="#3-dashboard">3. Dashboard</a><a class="l3" href="#adm-010-dashboard">[ADM-010] Dashboard</a><a class="l2" href="#4-users-roles-and-permissions">4. Users, Roles and Permissions</a><a class="l3" href="#usr-001-users-list">[USR-001] Users List</a><a class="l3" href="#usr-002-add-user">[USR-002] Add User</a><a class="l3" href="#usr-003-user-details-and-usr-004-edit-user">[USR-003] User Details and [USR-004] Edit User</a><a class="l3" href="#rol-001-roles-list-rol-002-create-role-rol-003-role-details-rol-004-edit-role">[ROL-001] Roles List, [ROL-002] Create Role, [ROL-003] Role Details, [ROL-004] Edit Role</a><a class="l3" href="#rol-005-permission-matrix">[ROL-005] Permission Matrix</a><a class="l3" href="#rol-006-role-hierarchy">[ROL-006] Role Hierarchy</a><a class="l3" href="#rol-007-assign-users-to-role">[ROL-007] Assign Users to Role</a><a class="l3" href="#rol-008-approval-workflows-rol-009-create-rol-010-edit">[ROL-008] Approval Workflows, [ROL-009] Create, [ROL-010] Edit</a><a class="l3" href="#apr-001-my-approvals">[APR-001] My Approvals</a><a class="l3" href="#apr-002-embedded-approval-history-and-decisions">[APR-002] Embedded approval history and decisions</a><a class="l2" href="#5-master-setup">5. Master Setup</a><a class="l3" href="#mst-com-001-company-profile">[MST-COM-001] Company Profile</a><a class="l3" href="#mst-org-001-organization-structure">[MST-ORG-001] Organization Structure</a><a class="l3" href="#branches-mst-br-001--004-departments-mst-dep-001--004-designations-mst-des-001--004">Branches [MST-BR-001 … 004], Departments [MST-DEP-001 … 004], Designations [MST-DES-001 … 004]</a><a class="l3" href="#projects-mst-prj-001--005-and-locations-mst-site-001--004">Projects [MST-PRJ-001 … 005] and Locations [MST-SITE-001 … 004]</a><a class="l3" href="#warehouses-mst-wh-001--004">Warehouses [MST-WH-001 … 004]</a><a class="l3" href="#expense-categories-mst-exp-001--004">Expense Categories [MST-EXP-001 … 004]</a><a class="l3" href="#payment-terms-sup-005-and-project-classifications-mst-prj-005">Payment Terms [SUP-005] and Project Classifications [MST-PRJ-005]</a><a class="l2" href="#6-hr--payroll">6. HR &amp; Payroll</a><a class="l3" href="#hr-dash-001-hr-dashboard">[HR-DASH-001] HR Dashboard</a><a class="l3" href="#hr-emp-001-employees-list">[HR-EMP-001] Employees List</a><a class="l3" href="#hr-emp-002-add-employee">[HR-EMP-002] Add Employee</a><a class="l3" href="#hr-emp-003-employee-view-read-only">[HR-EMP-003] Employee View (read-only)</a><a class="l3" href="#hr-emp-004-employee-workspace-edit">[HR-EMP-004] Employee Workspace (Edit)</a><a class="l3" href="#hr-doc-001-employee-documents--iqama">[HR-DOC-001] Employee Documents / IQAMA</a><a class="l3" href="#hr-shf-001--003-shifts">[HR-SHF-001 … 003] Shifts</a><a class="l3" href="#hr-att-001--004-attendance">[HR-ATT-001 … 004] Attendance</a><a class="l3" href="#hr-lv-001--004-leaves">[HR-LV-001 … 004] Leaves</a><a class="l3" href="#hr-ot-001--003-overtime">[HR-OT-001 … 003] Overtime</a><a class="l3" href="#hr-sal-001--004-salary-structures">[HR-SAL-001 … 004] Salary Structures</a><a class="l3" href="#hr-pay-001--005-payroll">[HR-PAY-001 … 005] Payroll</a><a class="l3" href="#hr-eos-001--004-end-of-service">[HR-EOS-001 … 004] End of Service</a><a class="l2" href="#7-customers">7. Customers</a><a class="l3" href="#cus-001-customers-list">[CUS-001] Customers List</a><a class="l3" href="#cus-002-add-customer">[CUS-002] Add Customer</a><a class="l3" href="#cus-003-customer-view-read-only">[CUS-003] Customer View (read-only)</a><a class="l3" href="#cus-004-customer-workspace-edit--manage">[CUS-004] Customer Workspace (Edit / Manage)</a><a class="l2" href="#8-suppliers">8. Suppliers</a><a class="l3" href="#sup-001-suppliers-list">[SUP-001] Suppliers List</a><a class="l3" href="#sup-002-add-supplier">[SUP-002] Add Supplier</a><a class="l3" href="#sup-003-supplier-view-read-only">[SUP-003] Supplier View (read-only)</a><a class="l3" href="#sup-004-supplier-workspace-edit--manage">[SUP-004] Supplier Workspace (Edit / Manage)</a><a class="l2" href="#9-accounting--finance">9. Accounting &amp; Finance</a><a class="l3" href="#how-accounting-works-in-seera-read-this-first">How accounting works in Seera (read this first)</a><a class="l3" href="#fin-dash-001-accounting-dashboard">[FIN-DASH-001] Accounting Dashboard</a><a class="l3" href="#fin-coa-001--004-chart-of-accounts">[FIN-COA-001 … 004] Chart of Accounts</a><a class="l3" href="#fin-je-001--004-journal-entries">[FIN-JE-001 … 004] Journal Entries</a><a class="l3" href="#fin-gl-001-general-ledger">[FIN-GL-001] General Ledger</a><a class="l3" href="#fin-ap-001-accounts-payable-supplier-bills">[FIN-AP-001] Accounts Payable (Supplier Bills)</a><a class="l3" href="#fin-ap-002-add-supplier-bill-and-fin-ap-004-edit-supplier-bill">[FIN-AP-002] Add Supplier Bill and [FIN-AP-004] Edit Supplier Bill</a><a class="l3" href="#fin-ap-003-supplier-bill-details">[FIN-AP-003] Supplier Bill Details</a><a class="l3" href="#fin-ap-005-record-supplier-payment">[FIN-AP-005] Record Supplier Payment</a><a class="l3" href="#fin-ar-001--005-accounts-receivable-customer-invoices-and-receipts">[FIN-AR-001 … 005] Accounts Receivable (Customer Invoices and Receipts)</a><a class="l3" href="#fin-vat-001-vat-management-and-fin-vat-002-vat-period">[FIN-VAT-001] VAT Management and [FIN-VAT-002] VAT Period</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-and-fin-zat-002-zatca-record">[FIN-ZAT-001] ZATCA E-Invoicing and [FIN-ZAT-002] ZATCA Record</a><a class="l3" href="#fin-cc-001--004-cost-centers">[FIN-CC-001 … 004] Cost Centers</a><a class="l3" href="#fin-pr-001--004-automatic-posting-rules">[FIN-PR-001 … 004] Automatic Posting Rules</a><a class="l2" href="#10-inventory--purchasing">10. Inventory &amp; Purchasing</a><a class="l3" href="#how-stock-works-in-seera">How stock works in Seera</a><a class="l3" href="#inv-dash-001-inventory-dashboard">[INV-DASH-001] Inventory Dashboard</a><a class="l3" href="#inv-item-001--004-materials--items">[INV-ITEM-001 … 004] Materials / Items</a><a class="l3" href="#inv-cat-001--003-item-categories-and-inv-unit-001--003-units">[INV-CAT-001 … 003] Item Categories and [INV-UNIT-001 … 003] Units</a><a class="l3" href="#inv-stk-001-stock-on-hand-and-inv-led-001-stock-ledger">[INV-STK-001] Stock On Hand and [INV-LED-001] Stock Ledger</a><a class="l3" href="#inv-pr-001--004-purchase-requests">[INV-PR-001 … 004] Purchase Requests</a><a class="l3" href="#inv-po-001--004-purchase-orders">[INV-PO-001 … 004] Purchase Orders</a><a class="l3" href="#inv-grn-001--004-goods-receipt-notes">[INV-GRN-001 … 004] Goods Receipt Notes</a><a class="l3" href="#inv-iss-001--004-stock-issues">[INV-ISS-001 … 004] Stock Issues</a><a class="l3" href="#inv-trf-001--004-stock-transfers">[INV-TRF-001 … 004] Stock Transfers</a><a class="l3" href="#inv-adj-001--004-stock-adjustments">[INV-ADJ-001 … 004] Stock Adjustments</a><a class="l3" href="#inv-rep-001--005-inventory-reports">[INV-REP-001 … 005] Inventory Reports</a><a class="l2" href="#11-projects">11. Projects</a><a class="l3" href="#mst-prj-001--004-projects">[MST-PRJ-001 … 004] Projects</a><a class="l3" href="#site-expenses">Site Expenses</a><a class="l3" href="#mst-prj-006--007-project-budget--boq">[MST-PRJ-006 … 007] Project Budget / BOQ</a><a class="l3" href="#mst-site-001--004-locations-sites">[MST-SITE-001 … 004] Locations (Sites)</a><a class="l3" href="#where-project-figures-are-today">Where project figures are today</a><a class="l2" href="#12-marketing">12. Marketing</a><a class="l3" href="#mkt-001-leads--visits-mkt-002-new-lead-mkt-004-edit-lead">[MKT-001] Leads &amp; Visits, [MKT-002] New Lead, [MKT-004] Edit Lead</a><a class="l3" href="#mkt-003-lead-details-visits-convert">[MKT-003] Lead (details, visits, convert)</a><a class="l3" href="#mkt-005-visit-report">[MKT-005] Visit Report</a><a class="l2" href="#13-activity-logs--audit">13. Activity Logs / Audit</a><a class="l3" href="#adm-020-activity-logs">[ADM-020] Activity Logs</a><a class="l2" href="#14-current-zatca-foundation">14. Current ZATCA Foundation</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-local-records">[FIN-ZAT-001] ZATCA E-Invoicing (local records)</a><a class="l3" href="#fin-zat-002-zatca-record">[FIN-ZAT-002] ZATCA Record</a><a class="l2" href="#15-reports">15. Reports</a><a class="l2" href="#16-common-tasks">16. Common Tasks</a><a class="l3" href="#create-a-supplier">Create a supplier</a><a class="l3" href="#enter-and-approve-a-supplier-bill-for-goods-you-received">Enter and approve a supplier bill for goods you received</a><a class="l3" href="#record-a-customer-receipt">Record a customer receipt</a><a class="l3" href="#add-an-employee-and-give-them-a-login">Add an employee and give them a login</a><a class="l3" href="#find-everything-about-one-customer">Find everything about one customer</a><a class="l3" href="#post-a-manual-journal">Post a manual journal</a><a class="l3" href="#close-a-vat-quarter">Close a VAT quarter</a><a class="l3" href="#switch-language">Switch language</a><a class="l2" href="#17-end-to-end-workflows">17. End-to-End Workflows</a><a class="l3" href="#wf-001-create-employee-and-user-access">WF-001 Create Employee and User Access</a><a class="l3" href="#wf-002-supplier--purchase-order--goods-receipt--supplier-bill--payment">WF-002 Supplier → Purchase Order → Goods Receipt → Supplier Bill → Payment</a><a class="l3" href="#wf-003-customer--invoice--receipt">WF-003 Customer → Invoice → Receipt</a><a class="l3" href="#wf-004-manual-journal--general-ledger">WF-004 Manual Journal → General Ledger</a><a class="l3" href="#wf-005-vat-period-review-and-finalize">WF-005 VAT Period Review and Finalize</a><a class="l3" href="#wf-006-inventory-transfer-between-warehouses">WF-006 Inventory Transfer between Warehouses</a><a class="l3" href="#wf-007-stock-issue-to-a-project">WF-007 Stock Issue to a Project</a><a class="l3" href="#wf-008-payroll-run">WF-008 Payroll Run</a><a class="l3" href="#wf-009-leave-request-lifecycle">WF-009 Leave Request lifecycle</a><a class="l3" href="#wf-010-supplier-f04-grni-accounting-flow">WF-010 Supplier F04 GRNI accounting flow</a><a class="l3" href="#wf-011-purchase-request--purchase-order">WF-011 Purchase Request → Purchase Order</a><a class="l3" href="#wf-012-correct-an-approved-bill-or-invoice-reopen">WF-012 Correct an approved bill or invoice (Reopen)</a><a class="l3" href="#wf-013-stock-adjustment-after-a-physical-count">WF-013 Stock Adjustment after a physical count</a><a class="l3" href="#wf-014-marketing-lead--visit--customer">WF-014 Marketing Lead → Visit → Customer</a><a class="l3" href="#wf-015-end-of-service-settlement">WF-015 End of Service settlement</a><a class="l3" href="#wf-016-project-operational-context">WF-016 Project operational context</a><a class="l3" href="#wf-017-purchase-request-runtime-approval">WF-017 Purchase Request runtime approval</a><a class="l3" href="#wf-018-site-expense-lifecycle">WF-018 Site Expense lifecycle</a><a class="l3" href="#wf-019-supplier-bill-approval-and-payment">WF-019 Supplier Bill Approval and Payment</a><a class="l3" href="#wf-020-mobile-attendance-location-validated-check-in-and-check-out">WF-020 Mobile Attendance: location-validated Check In and Check Out</a><a class="l3" href="#wf-021-payroll--accounting-posting-and-payslip">WF-021 Payroll → Accounting posting and payslip</a><a class="l3" href="#wf-022-salary-payment-and-bank-export">WF-022 Salary Payment and Bank Export</a><a class="l3" href="#wf-023-project-budget--boq-and-budget-vs-actual">WF-023 Project Budget / BOQ and Budget vs Actual</a><a class="l3" href="#wf-024-equipment-register--assign--fuel--maintenance--finance-posting--project-cost">WF-024 Equipment: register → assign → fuel / maintenance → Finance posting → project cost</a><a class="l3" href="#wf-025-offline-capture-and-mobile-sync-attendance-and-site-expenses-without-a-connection">WF-025 Offline capture and Mobile Sync: attendance and site expenses without a connection</a><a class="l2" href="#18-troubleshooting">18. Troubleshooting</a><a class="l2" href="#19-glossary">19. Glossary</a><a class="l2" href="#20-current-limitations--not-yet-operational">20. Current Limitations / Not Yet Operational</a><a class="l2" href="#21-quick-start-by-role">21. Quick Start by Role</a><a class="l3" href="#super-admin">Super Admin</a><a class="l3" href="#finance-manager">Finance Manager</a><a class="l3" href="#hr-manager">HR Manager</a><a class="l3" href="#project-manager">Project Manager</a><a class="l3" href="#site-in-charge--site-supervisor">Site In-Charge / Site Supervisor</a><a class="l3" href="#warehouse-incharge">Warehouse Incharge</a><a class="l3" href="#purchase-manager--assistant">Purchase Manager / Assistant</a><a class="l3" href="#marketing-manager">Marketing Manager</a><a class="l2" href="#22-equipment--vehicles">22. Equipment &amp; Vehicles</a><a class="l3" href="#eqp-001--004-equipment--vehicles">[EQP-001 … 004] Equipment &amp; Vehicles</a><a class="l2" href="#23-mobile--offline-sync">23. Mobile &amp; Offline Sync</a><a class="l2" href="#permission-required-attendance--mobile-attendance-sync-or-site-expenses--create-expense-sync-the-page-opens-for-either">Permission required: Attendance — mobile (attendance sync) or Site Expenses — create (expense sync); the page opens for either.</a></aside><main><h1 id="seera-erp">SEERA ERP</h1>
+@media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Current System User Guide · Version 1.14 · 12 October 2026 · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a class="l2" href="#training-dataset-used-in-the-examples">Training dataset used in the examples</a><a class="l2" href="#table-of-contents">Table of contents</a><a class="l2" href="#1-about-seera-erp">1. About Seera ERP</a><a class="l3" href="#the-three-ways-you-work-with-a-record">The three ways you work with a record</a><a class="l3" href="#the-save-buttons">The Save buttons</a><a class="l3" href="#unsaved-changes-protection">Unsaved changes protection</a><a class="l2" href="#2-login-and-navigation">2. Login and Navigation</a><a class="l3" href="#adm-001-login">[ADM-001] Login</a><a class="l3" href="#adm-002-forgot-password-and-adm-003-reset-password">[ADM-002] Forgot Password and [ADM-003] Reset Password</a><a class="l3" href="#adm-004-set-your-password-first-sign-in">[ADM-004] Set Your Password (first sign-in)</a><a class="l3" href="#navigation-basics">Navigation basics</a><a class="l2" href="#3-dashboard">3. Dashboard</a><a class="l3" href="#adm-010-dashboard">[ADM-010] Dashboard</a><a class="l2" href="#4-users-roles-and-permissions">4. Users, Roles and Permissions</a><a class="l3" href="#usr-001-users-list">[USR-001] Users List</a><a class="l3" href="#usr-002-add-user">[USR-002] Add User</a><a class="l3" href="#usr-003-user-details-and-usr-004-edit-user">[USR-003] User Details and [USR-004] Edit User</a><a class="l3" href="#rol-001-roles-list-rol-002-create-role-rol-003-role-details-rol-004-edit-role">[ROL-001] Roles List, [ROL-002] Create Role, [ROL-003] Role Details, [ROL-004] Edit Role</a><a class="l3" href="#rol-005-permission-matrix">[ROL-005] Permission Matrix</a><a class="l3" href="#rol-006-role-hierarchy">[ROL-006] Role Hierarchy</a><a class="l3" href="#rol-007-assign-users-to-role">[ROL-007] Assign Users to Role</a><a class="l3" href="#rol-008-approval-workflows-rol-009-create-rol-010-edit">[ROL-008] Approval Workflows, [ROL-009] Create, [ROL-010] Edit</a><a class="l3" href="#apr-001-my-approvals">[APR-001] My Approvals</a><a class="l3" href="#apr-002-embedded-approval-history-and-decisions">[APR-002] Embedded approval history and decisions</a><a class="l2" href="#5-master-setup">5. Master Setup</a><a class="l3" href="#mst-com-001-company-profile">[MST-COM-001] Company Profile</a><a class="l3" href="#mst-org-001-organization-structure">[MST-ORG-001] Organization Structure</a><a class="l3" href="#branches-mst-br-001--004-departments-mst-dep-001--004-designations-mst-des-001--004">Branches [MST-BR-001 … 004], Departments [MST-DEP-001 … 004], Designations [MST-DES-001 … 004]</a><a class="l3" href="#projects-mst-prj-001--005-and-locations-mst-site-001--004">Projects [MST-PRJ-001 … 005] and Locations [MST-SITE-001 … 004]</a><a class="l3" href="#warehouses-mst-wh-001--004">Warehouses [MST-WH-001 … 004]</a><a class="l3" href="#expense-categories-mst-exp-001--004">Expense Categories [MST-EXP-001 … 004]</a><a class="l3" href="#payment-terms-sup-005-and-project-classifications-mst-prj-005">Payment Terms [SUP-005] and Project Classifications [MST-PRJ-005]</a><a class="l2" href="#6-hr--payroll">6. HR &amp; Payroll</a><a class="l3" href="#hr-dash-001-hr-dashboard">[HR-DASH-001] HR Dashboard</a><a class="l3" href="#hr-emp-001-employees-list">[HR-EMP-001] Employees List</a><a class="l3" href="#hr-emp-002-add-employee">[HR-EMP-002] Add Employee</a><a class="l3" href="#hr-emp-003-employee-view-read-only">[HR-EMP-003] Employee View (read-only)</a><a class="l3" href="#hr-emp-004-employee-workspace-edit">[HR-EMP-004] Employee Workspace (Edit)</a><a class="l3" href="#hr-doc-001-employee-documents--iqama">[HR-DOC-001] Employee Documents / IQAMA</a><a class="l3" href="#hr-shf-001--003-shifts">[HR-SHF-001 … 003] Shifts</a><a class="l3" href="#hr-att-001--004-attendance">[HR-ATT-001 … 004] Attendance</a><a class="l3" href="#hr-lv-001--004-leaves">[HR-LV-001 … 004] Leaves</a><a class="l3" href="#hr-ot-001--003-overtime">[HR-OT-001 … 003] Overtime</a><a class="l3" href="#hr-sal-001--004-salary-structures">[HR-SAL-001 … 004] Salary Structures</a><a class="l3" href="#hr-pay-001--005-payroll">[HR-PAY-001 … 005] Payroll</a><a class="l3" href="#hr-eos-001--004-end-of-service">[HR-EOS-001 … 004] End of Service</a><a class="l2" href="#7-customers">7. Customers</a><a class="l3" href="#cus-001-customers-list">[CUS-001] Customers List</a><a class="l3" href="#cus-002-add-customer">[CUS-002] Add Customer</a><a class="l3" href="#cus-003-customer-view-read-only">[CUS-003] Customer View (read-only)</a><a class="l3" href="#cus-004-customer-workspace-edit--manage">[CUS-004] Customer Workspace (Edit / Manage)</a><a class="l2" href="#8-suppliers">8. Suppliers</a><a class="l3" href="#sup-001-suppliers-list">[SUP-001] Suppliers List</a><a class="l3" href="#sup-002-add-supplier">[SUP-002] Add Supplier</a><a class="l3" href="#sup-003-supplier-view-read-only">[SUP-003] Supplier View (read-only)</a><a class="l3" href="#sup-004-supplier-workspace-edit--manage">[SUP-004] Supplier Workspace (Edit / Manage)</a><a class="l2" href="#9-accounting--finance">9. Accounting &amp; Finance</a><a class="l3" href="#how-accounting-works-in-seera-read-this-first">How accounting works in Seera (read this first)</a><a class="l3" href="#fin-dash-001-accounting-dashboard">[FIN-DASH-001] Accounting Dashboard</a><a class="l3" href="#fin-coa-001--004-chart-of-accounts">[FIN-COA-001 … 004] Chart of Accounts</a><a class="l3" href="#fin-je-001--004-journal-entries">[FIN-JE-001 … 004] Journal Entries</a><a class="l3" href="#fin-gl-001-general-ledger">[FIN-GL-001] General Ledger</a><a class="l3" href="#fin-ap-001-accounts-payable-supplier-bills">[FIN-AP-001] Accounts Payable (Supplier Bills)</a><a class="l3" href="#fin-ap-002-add-supplier-bill-and-fin-ap-004-edit-supplier-bill">[FIN-AP-002] Add Supplier Bill and [FIN-AP-004] Edit Supplier Bill</a><a class="l3" href="#fin-ap-003-supplier-bill-details">[FIN-AP-003] Supplier Bill Details</a><a class="l3" href="#fin-ap-005-record-supplier-payment">[FIN-AP-005] Record Supplier Payment</a><a class="l3" href="#fin-ar-001--005-accounts-receivable-customer-invoices-and-receipts">[FIN-AR-001 … 005] Accounts Receivable (Customer Invoices and Receipts)</a><a class="l3" href="#fin-vat-001-vat-management-and-fin-vat-002-vat-period">[FIN-VAT-001] VAT Management and [FIN-VAT-002] VAT Period</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-and-fin-zat-002-zatca-record">[FIN-ZAT-001] ZATCA E-Invoicing and [FIN-ZAT-002] ZATCA Record</a><a class="l3" href="#fin-cc-001--004-cost-centers">[FIN-CC-001 … 004] Cost Centers</a><a class="l3" href="#fin-pr-001--004-automatic-posting-rules">[FIN-PR-001 … 004] Automatic Posting Rules</a><a class="l2" href="#10-inventory--purchasing">10. Inventory &amp; Purchasing</a><a class="l3" href="#how-stock-works-in-seera">How stock works in Seera</a><a class="l3" href="#inv-dash-001-inventory-dashboard">[INV-DASH-001] Inventory Dashboard</a><a class="l3" href="#inv-item-001--004-materials--items">[INV-ITEM-001 … 004] Materials / Items</a><a class="l3" href="#inv-cat-001--003-item-categories-and-inv-unit-001--003-units">[INV-CAT-001 … 003] Item Categories and [INV-UNIT-001 … 003] Units</a><a class="l3" href="#inv-stk-001-stock-on-hand-and-inv-led-001-stock-ledger">[INV-STK-001] Stock On Hand and [INV-LED-001] Stock Ledger</a><a class="l3" href="#inv-pr-001--004-purchase-requests">[INV-PR-001 … 004] Purchase Requests</a><a class="l3" href="#inv-po-001--004-purchase-orders">[INV-PO-001 … 004] Purchase Orders</a><a class="l3" href="#inv-grn-001--004-goods-receipt-notes">[INV-GRN-001 … 004] Goods Receipt Notes</a><a class="l3" href="#inv-iss-001--004-stock-issues">[INV-ISS-001 … 004] Stock Issues</a><a class="l3" href="#inv-trf-001--004-stock-transfers">[INV-TRF-001 … 004] Stock Transfers</a><a class="l3" href="#inv-adj-001--004-stock-adjustments">[INV-ADJ-001 … 004] Stock Adjustments</a><a class="l3" href="#inv-rep-001--005-inventory-reports">[INV-REP-001 … 005] Inventory Reports</a><a class="l2" href="#11-projects">11. Projects</a><a class="l3" href="#mst-prj-001--004-projects">[MST-PRJ-001 … 004] Projects</a><a class="l3" href="#site-expenses">Site Expenses</a><a class="l3" href="#mst-prj-006--007-project-budget--boq">[MST-PRJ-006 … 007] Project Budget / BOQ</a><a class="l3" href="#mst-site-001--004-locations-sites">[MST-SITE-001 … 004] Locations (Sites)</a><a class="l3" href="#where-project-figures-are-today">Where project figures are today</a><a class="l2" href="#12-marketing">12. Marketing</a><a class="l3" href="#mkt-001-leads--visits-mkt-002-new-lead-mkt-004-edit-lead">[MKT-001] Leads &amp; Visits, [MKT-002] New Lead, [MKT-004] Edit Lead</a><a class="l3" href="#mkt-003-lead-details-visits-convert">[MKT-003] Lead (details, visits, convert)</a><a class="l3" href="#mkt-005-visit-report">[MKT-005] Visit Report</a><a class="l2" href="#13-activity-logs--audit">13. Activity Logs / Audit</a><a class="l3" href="#adm-020-activity-logs">[ADM-020] Activity Logs</a><a class="l2" href="#14-zatca-e-invoicing-phase-2">14. ZATCA E-Invoicing (Phase 2)</a><a class="l3" href="#invoice-types-and-what-zatca-requires">Invoice types and what ZATCA requires</a><a class="l3" href="#states-of-a-compliance-record">States of a compliance record</a><a class="l3" href="#fin-zat-001-zatca-e-invoicing-register">[FIN-ZAT-001] ZATCA E-Invoicing (register)</a><a class="l3" href="#fin-zat-002-zatca-compliance-record">[FIN-ZAT-002] ZATCA Compliance Record</a><a class="l3" href="#fin-zat-003-zatca-settings--onboarding">[FIN-ZAT-003] ZATCA Settings &amp; Onboarding</a><a class="l3" href="#rounding-and-vat-truth">Rounding and VAT truth</a><a class="l3" href="#corrections-reopening-and-notes">Corrections, reopening and notes</a><a class="l3" href="#arabic-and-the-human-readable-invoice">Arabic and the human-readable invoice</a><a class="l3" href="#security">Security</a><a class="l2" href="#15-reports">15. Reports</a><a class="l2" href="#16-common-tasks">16. Common Tasks</a><a class="l3" href="#create-a-supplier">Create a supplier</a><a class="l3" href="#enter-and-approve-a-supplier-bill-for-goods-you-received">Enter and approve a supplier bill for goods you received</a><a class="l3" href="#record-a-customer-receipt">Record a customer receipt</a><a class="l3" href="#add-an-employee-and-give-them-a-login">Add an employee and give them a login</a><a class="l3" href="#find-everything-about-one-customer">Find everything about one customer</a><a class="l3" href="#post-a-manual-journal">Post a manual journal</a><a class="l3" href="#close-a-vat-quarter">Close a VAT quarter</a><a class="l3" href="#switch-language">Switch language</a><a class="l2" href="#17-end-to-end-workflows">17. End-to-End Workflows</a><a class="l3" href="#wf-001-create-employee-and-user-access">WF-001 Create Employee and User Access</a><a class="l3" href="#wf-002-supplier--purchase-order--goods-receipt--supplier-bill--payment">WF-002 Supplier → Purchase Order → Goods Receipt → Supplier Bill → Payment</a><a class="l3" href="#wf-003-customer--invoice--receipt">WF-003 Customer → Invoice → Receipt</a><a class="l3" href="#wf-004-manual-journal--general-ledger">WF-004 Manual Journal → General Ledger</a><a class="l3" href="#wf-005-vat-period-review-and-finalize">WF-005 VAT Period Review and Finalize</a><a class="l3" href="#wf-006-inventory-transfer-between-warehouses">WF-006 Inventory Transfer between Warehouses</a><a class="l3" href="#wf-007-stock-issue-to-a-project">WF-007 Stock Issue to a Project</a><a class="l3" href="#wf-008-payroll-run">WF-008 Payroll Run</a><a class="l3" href="#wf-009-leave-request-lifecycle">WF-009 Leave Request lifecycle</a><a class="l3" href="#wf-010-supplier-f04-grni-accounting-flow">WF-010 Supplier F04 GRNI accounting flow</a><a class="l3" href="#wf-011-purchase-request--purchase-order">WF-011 Purchase Request → Purchase Order</a><a class="l3" href="#wf-012-correct-an-approved-bill-or-invoice-reopen">WF-012 Correct an approved bill or invoice (Reopen)</a><a class="l3" href="#wf-013-stock-adjustment-after-a-physical-count">WF-013 Stock Adjustment after a physical count</a><a class="l3" href="#wf-014-marketing-lead--visit--customer">WF-014 Marketing Lead → Visit → Customer</a><a class="l3" href="#wf-015-end-of-service-settlement">WF-015 End of Service settlement</a><a class="l3" href="#wf-016-project-operational-context">WF-016 Project operational context</a><a class="l3" href="#wf-017-purchase-request-runtime-approval">WF-017 Purchase Request runtime approval</a><a class="l3" href="#wf-018-site-expense-lifecycle">WF-018 Site Expense lifecycle</a><a class="l3" href="#wf-019-supplier-bill-approval-and-payment">WF-019 Supplier Bill Approval and Payment</a><a class="l3" href="#wf-020-mobile-attendance-location-validated-check-in-and-check-out">WF-020 Mobile Attendance: location-validated Check In and Check Out</a><a class="l3" href="#wf-021-payroll--accounting-posting-and-payslip">WF-021 Payroll → Accounting posting and payslip</a><a class="l3" href="#wf-022-salary-payment-and-bank-export">WF-022 Salary Payment and Bank Export</a><a class="l3" href="#wf-023-project-budget--boq-and-budget-vs-actual">WF-023 Project Budget / BOQ and Budget vs Actual</a><a class="l3" href="#wf-024-equipment-register--assign--fuel--maintenance--finance-posting--project-cost">WF-024 Equipment: register → assign → fuel / maintenance → Finance posting → project cost</a><a class="l3" href="#wf-025-offline-capture-and-mobile-sync-attendance-and-site-expenses-without-a-connection">WF-025 Offline capture and Mobile Sync: attendance and site expenses without a connection</a><a class="l3" href="#wf-026-zatca-e-invoice-approve--readiness--xml--stamp--clearance-or-reporting--immutable-record">WF-026 ZATCA e-invoice: approve → readiness → XML → stamp → clearance or reporting → immutable record</a><a class="l2" href="#18-troubleshooting">18. Troubleshooting</a><a class="l2" href="#19-glossary">19. Glossary</a><a class="l2" href="#20-current-limitations--not-yet-operational">20. Current Limitations / Not Yet Operational</a><a class="l2" href="#21-quick-start-by-role">21. Quick Start by Role</a><a class="l3" href="#super-admin">Super Admin</a><a class="l3" href="#finance-manager">Finance Manager</a><a class="l3" href="#hr-manager">HR Manager</a><a class="l3" href="#project-manager">Project Manager</a><a class="l3" href="#site-in-charge--site-supervisor">Site In-Charge / Site Supervisor</a><a class="l3" href="#warehouse-incharge">Warehouse Incharge</a><a class="l3" href="#purchase-manager--assistant">Purchase Manager / Assistant</a><a class="l3" href="#marketing-manager">Marketing Manager</a><a class="l2" href="#22-equipment--vehicles">22. Equipment &amp; Vehicles</a><a class="l3" href="#eqp-001--004-equipment--vehicles">[EQP-001 … 004] Equipment &amp; Vehicles</a><a class="l2" href="#23-mobile--offline-sync">23. Mobile &amp; Offline Sync</a><a class="l2" href="#permission-required-attendance--mobile-attendance-sync-or-site-expenses--create-expense-sync-the-page-opens-for-either">Permission required: Attendance — mobile (attendance sync) or Site Expenses — create (expense sync); the page opens for either.</a></aside><main><h1 id="seera-erp">SEERA ERP</h1>
 <h1 id="current-system-user-guide">Current System User Guide</h1>
 <table>
 <thead>
@@ -46,15 +46,15 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 <tbody>
 <tr>
 <td><strong>Version</strong></td>
-<td>1.15</td>
+<td>1.16</td>
 </tr>
 <tr>
 <td><strong>System state</strong></td>
-<td>Feature branch <code>feature/seera-connected-workspaces-2026-09-23</code>, 15 October 2026. Offline Mobile Sync Foundation Phase 1 (chapter 23): GPS check-in / check-out and site expense entry can be captured without a connection and synchronised later through server-validated, replay-safe receipts (MOB-001, WF-025). Earlier state, 12 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Payroll Phase 2 (11 October 2026) adds the salary payment of a posted run from a bank / cash account (Dr payroll payable, Cr bank / cash) with replay protection and reversal, a generic bank transfer export frozen at generation, IBAN validation and masking (WF-022). The Project BOQ / Detailed Budget Engine Phase 1 (11 October 2026) adds budget versions and BOQ lines per project, Set as Current / revisions and Budget vs Actual on the posted ledger (MST-PRJ-006 / 007, WF-023). Equipment &amp; Vehicles Phase 1 (12 October 2026) adds the asset register, project / site assignment history, fuel logs, maintenance records, private documents and Finance posting of equipment cost into the project ledger (EQP-001 … 004, WF-024). Offline attendance, an official Saudi WPS / Mudad file, GOSI, live GPS tracking, budget approval runtime and project scheduling remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment.</td>
+<td>Feature branch <code>feature/seera-connected-workspaces-2026-09-23</code>, 17 October 2026. ZATCA e-invoicing Phase 2, sprint 1 (chapter 14): compliant UBL XML, local validation, cryptographic stamp, Phase-2 QR, hash chain, explicit sandbox / simulation / production environments, owner-controlled onboarding, clearance and reporting client with a truthful state machine (FIN-ZAT-001 … 003, WF-026); ZATCA sandbox submission, SDK validation and production onboarding NOT RUN / NOT YET OPERATIONAL. Earlier, 15 October 2026. Offline Mobile Sync Foundation Phase 1 (chapter 23): GPS check-in / check-out and site expense entry can be captured without a connection and synchronised later through server-validated, replay-safe receipts (MOB-001, WF-025). Earlier state, 12 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Payroll Phase 2 (11 October 2026) adds the salary payment of a posted run from a bank / cash account (Dr payroll payable, Cr bank / cash) with replay protection and reversal, a generic bank transfer export frozen at generation, IBAN validation and masking (WF-022). The Project BOQ / Detailed Budget Engine Phase 1 (11 October 2026) adds budget versions and BOQ lines per project, Set as Current / revisions and Budget vs Actual on the posted ledger (MST-PRJ-006 / 007, WF-023). Equipment &amp; Vehicles Phase 1 (12 October 2026) adds the asset register, project / site assignment history, fuel logs, maintenance records, private documents and Finance posting of equipment cost into the project ledger (EQP-001 … 004, WF-024). Offline attendance, an official Saudi WPS / Mudad file, GOSI, live GPS tracking, budget approval runtime and project scheduling remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment.</td>
 </tr>
 <tr>
 <td><strong>Prepared</strong></td>
-<td>15 October 2026</td>
+<td>17 October 2026</td>
 </tr>
 <tr>
 <td><strong>Status</strong></td>
@@ -177,7 +177,7 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 <li><a href="#11-projects">Projects</a></li>
 <li><a href="#12-marketing">Marketing</a></li>
 <li><a href="#13-activity-logs--audit">Activity Logs / Audit</a></li>
-<li><a href="#14-current-zatca-foundation">Current ZATCA Foundation</a></li>
+<li><a href="#14-zatca-e-invoicing-phase-2">ZATCA E-Invoicing (Phase 2)</a></li>
 <li><a href="#15-reports">Reports</a></li>
 <li><a href="#16-common-tasks">Common Tasks</a></li>
 <li><a href="#17-end-to-end-workflows">End-to-End Workflows</a></li>
@@ -227,7 +227,7 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 <li><strong>Master Setup</strong>: company profile, branches, departments, designations, projects, locations (sites), warehouses, expense categories, suppliers, customers.</li>
 <li><strong>Equipment &amp; Vehicles</strong>: asset register, project / site assignment with history and operator, fuel and maintenance records, private documents, Finance posting into project cost (live GPS not connected).</li>
 <li><strong>HR &amp; Payroll</strong>: employees with a connected workspace, documents and IQAMA register, shifts, attendance (manual entry and mobile check-in), leaves, overtime, salary structures, payroll runs with accounting posting and payslips, end of service.</li>
-<li><strong>Accounting &amp; Finance</strong>: chart of accounts, journal entries, general ledger, accounts payable, accounts receivable, VAT periods, local ZATCA records, cost centers, posting rules, financial reports.</li>
+<li><strong>Accounting &amp; Finance</strong>: chart of accounts, journal entries, general ledger, accounts payable, accounts receivable, VAT periods, ZATCA e-invoicing (Phase 2 records, onboarding), cost centers, posting rules, financial reports.</li>
 <li><strong>Inventory &amp; Purchasing</strong>: items, categories, units, stock on hand, purchase requests, purchase orders, goods receipts, stock issues, transfers, adjustments, stock ledger, inventory reports.</li>
 <li><strong>Marketing</strong>: leads, visits, visit report, conversion to customer.</li>
 </ul>
@@ -1117,10 +1117,10 @@ Sections Basic Company Information, Saudi Compliance &amp; ZATCA, Address &amp; 
 </tr>
 <tr>
 <td>ZATCA Registration Number, Invoice Mode, Digital Certificate Status</td>
-<td>Compliance labels</td>
+<td>Legacy compliance labels</td>
 <td>—</td>
 <td>No</td>
-<td>Labels only; no live ZATCA connection (chapter 14)</td>
+<td>Labels only. The real ZATCA seller data is the national address and seller identification section below, read by ZATCA Settings (chapter 14)</td>
 </tr>
 <tr>
 <td>Default VAT Rate (%)</td>
@@ -2065,7 +2065,7 @@ Calculate the end-of-service benefit (Saudi Labour Law bands) and approve the se
  ├─ Receipts &amp; Balance
  ├─ Ageing
  ├─ Accounting
- ├─ Local ZATCA Records
+ ├─ ZATCA E-Invoices
  └─ Activity
 </code></pre>
 <h3 id="cus-001-customers-list">[CUS-001] Customers List</h3>
@@ -2261,7 +2261,7 @@ Marketing Manager, Finance Manager.</p>
 <p>Navigation:
 Customers → Edit / Manage.</p>
 <p>Permission required:
-Customers — edit. Each tab: Contacts and Notes (Customers), Projects (Projects — view), Invoices, Receipts &amp; Balance, Ageing (Accounts Receivable — view), Accounting (Journal Entries — view), Local ZATCA Records (ZATCA Invoicing — view), Activity (Activity Logs — view). Tabs you may not view are not shown.</p>
+Customers — edit. Each tab: Contacts and Notes (Customers), Projects (Projects — view), Invoices, Receipts &amp; Balance, Ageing (Accounts Receivable — view), Accounting (Journal Entries — view), ZATCA E-Invoices (ZATCA Invoicing — view), Activity (Activity Logs — view). Tabs you may not view are not shown.</p>
 <p>What you see:
 The same header, then tabs. <strong>Profile</strong> is the customer form with Save, Save &amp; new, Save &amp; close and Cancel. The other tabs load when you click them.</p>
 <table>
@@ -2286,7 +2286,7 @@ The same header, then tabs. <strong>Profile</strong> is the customer form with S
 </tr>
 <tr>
 <td>Invoices</td>
-<td>Invoice number, date, project, taxable, VAT, total, received, balance, status, local ZATCA status; View, Edit draft, Record receipt (links to the invoice pages).</td>
+<td>Invoice number, date, project, taxable, VAT, total, received, balance, status, ZATCA state; View, Edit draft, Record receipt (links to the invoice pages).</td>
 </tr>
 <tr>
 <td>Receipts &amp; Balance</td>
@@ -2301,8 +2301,8 @@ The same header, then tabs. <strong>Profile</strong> is the customer form with S
 <td>Linked receivable account and the journals created by this customer's invoices and receipts, with drill-through.</td>
 </tr>
 <tr>
-<td>Local ZATCA Records</td>
-<td>UUID, QR, XML and local status per approved invoice. Clearance is not verified live.</td>
+<td>ZATCA E-Invoices</td>
+<td>Invoice type, UUID, state (Not generated … Cleared / Reported), ZATCA status, attempts and last error per approved invoice; View record. Only a ZATCA response makes an invoice cleared or reported.</td>
 </tr>
 <tr>
 <td>Activity</td>
@@ -3185,7 +3185,7 @@ A journal Dr Accounts Payable / Cr Cash or Bank is posted, the bill's paid and b
 <p>Lifecycle: Save creates a <em>draft</em> (no accounting, no VAT, no local e-invoice record). <strong>Approve &amp; Post</strong> posts Dr 1200 Accounts Receivable / Cr revenue per line / Cr 2210 Output VAT, records the output VAT row and creates the local e-invoice record; the invoice becomes <em>unpaid</em>. Each <strong>Record Receipt</strong> posts Dr cash or bank / Cr 1200 and moves the invoice to <em>partially_paid</em> or <em>paid</em>. <strong>Reopen for Correction</strong> (Super Admin only; unpaid, no receipts, local record not cleared) reverses the journal, withdraws the VAT row, cancels the local record and returns the invoice to <em>draft</em>. Statuses: draft → unpaid → partially_paid → paid.</p>
 <p>View vs Edit: View (this page) has no save buttons. <strong>Edit Draft</strong> opens FIN-AR-004 only while the invoice is a draft and only with Accounts Receivable — edit; an approved invoice can no longer be edited or deleted.</p>
 <p>Header (always visible): invoice number, status and payment state (Draft, not posted / Awaiting receipt / Overdue by n days / Partly received / Received in full), Customer with <strong>View</strong> (Customers — view) and <strong>Manage</strong> (Customers — edit) links, invoice and due dates, Project (link needs Projects — view) and cost center, local e-invoice state, <strong>Total</strong> with VAT, <strong>Received</strong>, <strong>Outstanding</strong>, Accounting (Posted with the journal link for Journal Entries — view, or Not posted yet).</p>
-<p>Section bar: Invoice Information · Invoice Lines · Customer · Project / Cost Center · VAT · Accounting · Receipts · Balance / Ageing · Local e-Invoice Record · Activity. A section is present only when your role may read it.</p>
+<p>Section bar: Invoice Information · Invoice Lines · Customer · Project / Cost Center · VAT · Accounting · Receipts · Balance / Ageing · ZATCA E-Invoice · Activity. A section is present only when your role may read it.</p>
 <table>
 <thead>
 <tr>
@@ -3236,9 +3236,9 @@ A journal Dr Accounts Payable / Cr Cash or Bank is posted, the bill's paid and b
 <td>Accounts Receivable — view</td>
 </tr>
 <tr>
-<td>Local e-Invoice Record</td>
-<td>UUID, local clearance status, QR payload, XML path reference, signature flag, local hash, retries, response, Open Local Record — every field labelled as local, not verified live</td>
-<td>ZATCA Invoicing — view</td>
+<td>ZATCA E-Invoice</td>
+<td>Invoice type, UUID, environment, state, local validation, stamp (time and ICV), submission (time, attempts), ZATCA status with cleared / reported time, warnings / errors, last error, lock notice; actions Generate &amp; validate XML, Submit to ZATCA (post), Retry (retry), Download signed XML (export), ZATCA Compliance Record link</td>
+<td>ZATCA Invoicing — view (actions: post / retry / export)</td>
 </tr>
 <tr>
 <td>Activity</td>
@@ -3283,7 +3283,7 @@ A journal Dr Accounts Payable / Cr Cash or Bank is posted, the bill's paid and b
 </tbody>
 </table>
 <p>Scope: a project-scoped user cannot open, edit or receive against an invoice of another project (not found), and the customer outstanding figure counts only the invoices that user may see.</p>
-<p>Local e-invoice truth: the local record is foundation data only. The system never contacts ZATCA; &quot;pending&quot; means a local record exists and has not been sent, &quot;cleared&quot; would only ever be a local flag. Live ZATCA Phase 2 clearance, real QR codes, XML files and digital signing are NOT YET OPERATIONAL (chapter 14).</p>
+<p>E-invoice truth: the ZATCA E-Invoice section shows the compliance record state. &quot;Not generated&quot;, &quot;Validated locally&quot; and &quot;Stamped&quot; are Seera states; only &quot;Cleared by ZATCA&quot; or &quot;Reported to ZATCA&quot; come from a ZATCA response, and &quot;Submission outcome unknown&quot; means the answer never arrived and must be verified (chapter 14). Once an invoice is stamped or submitted it can no longer be edited or reopened.</p>
 <p>Record Customer Receipt (FIN-AR-005) fields: Receipt Date *, Received Into (Bank / Cash Account) * (only the channels the customer accepts), Payment Method * (must match the account: Cash for the cash account, Bank Transfer or Cheque for the bank), Received Amount (SAR) * (not more than the outstanding balance), Reference Number, Notes. Buttons: Record Receipt, Back / Back to Invoice, Cancel. Back, Cancel and a recorded receipt all return to the page you came from (the invoice, or the customer / project page). Repeated submissions are recognised and not added twice; a key sent against a different invoice is refused.</p>
 <p>Statuses: draft → unpaid → partially_paid → paid.</p>
 <h3 id="fin-vat-001-vat-management-and-fin-vat-002-vat-period">[FIN-VAT-001] VAT Management and [FIN-VAT-002] VAT Period</h3>
@@ -3329,7 +3329,7 @@ Cards Output VAT (Sales), Input VAT (Purchases), VAT Payable, VAT Exceptions (ro
 </ul>
 <h3 id="fin-zat-001-zatca-e-invoicing-and-fin-zat-002-zatca-record">[FIN-ZAT-001] ZATCA E-Invoicing and [FIN-ZAT-002] ZATCA Record</h3>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/accounting/zatca" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/accounting/zatca</code></a> (FIN-ZAT-001) · <code>https://seera.tech-brit.co.uk/admin/accounting/zatca/{id}</code> (FIN-ZAT-002)</p>
-<p>Status: <strong>FOUNDATION ONLY</strong>. See chapter 14.</p>
+<p>Status: <strong>AVAILABLE (Phase 2, sprint 1)</strong>. See chapter 14.</p>
 <h3 id="fin-cc-001--004-cost-centers">[FIN-CC-001 … 004] Cost Centers</h3>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/accounting/cost-centers" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/accounting/cost-centers</code></a> (FIN-CC-001) · <a class="url" href="https://seera.tech-brit.co.uk/admin/accounting/cost-centers/create" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/accounting/cost-centers/create</code></a> (FIN-CC-002) · <code>https://seera.tech-brit.co.uk/admin/accounting/cost-centers/{id}</code> (FIN-CC-003) · <code>https://seera.tech-brit.co.uk/admin/accounting/cost-centers/{id}/edit</code> (FIN-CC-004)</p>
 <p>Purpose:
@@ -3994,7 +3994,7 @@ The on-hand quantity becomes the counted quantity (re-read at posting time); a l
 </tr>
 <tr>
 <td>Customer Invoices</td>
-<td>Project invoices, taxable/VAT/total/received/outstanding/status, local ZATCA state. Receipt action needs process permission and an unpaid/partially-paid invoice</td>
+<td>Project invoices, taxable/VAT/total/received/outstanding/status, ZATCA state. Receipt action needs process permission and an unpaid/partially-paid invoice</td>
 <td>Accounts Receivable — view/process</td>
 </tr>
 <tr>
@@ -4571,7 +4571,7 @@ Filters (search, user, module, dates) and the table Date &amp; Time, User, Modul
 <p>Important:
 The Old Value and New Value columns are filled only for a few administrative entries; for business documents the log records the action and the document number, not the field-level change. Activity for one supplier or customer is also shown inside its workspace (Activity tab).</p>
 <hr />
-<h2 id="14-current-zatca-foundation">14. Current ZATCA Foundation</h2>
+<h2 id="14-zatca-e-invoicing-phase-2">14. ZATCA E-Invoicing (Phase 2)</h2>
 <table>
 <thead>
 <tr>
@@ -4586,88 +4586,196 @@ The Old Value and New Value columns are filled only for a few administrative ent
 </tr>
 <tr>
 <td><strong>Chapter name</strong></td>
-<td>Current ZATCA Foundation</td>
+<td>ZATCA E-Invoicing (Phase 2)</td>
 </tr>
 <tr>
 <td><strong>Purpose</strong></td>
-<td>What the local ZATCA records are and are not.</td>
+<td>How an approved customer invoice becomes a ZATCA-compliant e-invoice, what each state means, how the solution unit is onboarded, and what is still not operational.</td>
 </tr>
 <tr>
 <td><strong>Primary roles</strong></td>
-<td>Finance Manager</td>
+<td>Finance Manager (post / retry / export), Owner or Finance administrator (edit: settings and onboarding), Super Admin</td>
 </tr>
 <tr>
 <td><strong>Screens in this chapter</strong></td>
-<td>FIN-ZAT-001, FIN-ZAT-002</td>
+<td>FIN-ZAT-001, FIN-ZAT-002, FIN-ZAT-003</td>
+</tr>
+<tr>
+<td><strong>Workflows in this chapter</strong></td>
+<td>WF-026</td>
 </tr>
 </tbody>
 </table>
-<p>Status: <strong>FOUNDATION ONLY</strong>. Read this chapter before promising anything about e-invoicing to a customer or an auditor.</p>
-<p>What Seera does today when a customer invoice is approved:</p>
+<p>Truth first. After sprint 1 (17 October 2026):</p>
 <table>
 <thead>
 <tr>
-<th>Item</th>
-<th>What exists</th>
+<th>Capability</th>
 <th>Status</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Local ZATCA record</td>
-<td>One record per approved invoice, linked to the invoice</td>
-<td>FOUNDATION ONLY</td>
+<td>UBL 2.1 XML per the ZATCA XML Implementation Standard v1.2 and Data Dictionary (2023-05-19), built from the posted invoice and frozen seller / buyer snapshots</td>
+<td>AVAILABLE</td>
 </tr>
 <tr>
-<td>UUID</td>
-<td>A unique identifier generated locally</td>
-<td>FOUNDATION ONLY</td>
+<td>Local validation (well-formed XML and a subset of the KSA rules: identifiers, national address, dates, codes, decimals, totals, VAT rounding)</td>
+<td>AVAILABLE — a local pass is <strong>not</strong> compliance</td>
 </tr>
 <tr>
-<td>QR code</td>
-<td>A locally built payload (customer, invoice number, date, total, VAT). It is not the ZATCA TLV format and carries no signature</td>
-<td>FOUNDATION ONLY</td>
+<td>Cryptographic stamp (XAdES, ECDSA secp256k1, SHA-256), invoice hash, invoice counter (ICV) and previous-hash chain per solution unit</td>
+<td>AVAILABLE</td>
 </tr>
 <tr>
-<td>XML</td>
-<td>A file reference is stored; the XML file itself is not generated</td>
-<td>FOUNDATION ONLY</td>
+<td>Phase-2 QR (TLV tags 1–8, tag 9 for simplified documents)</td>
+<td>AVAILABLE</td>
 </tr>
 <tr>
-<td>Digital signature</td>
-<td>Shown as &quot;signed&quot;; no certificate or real signing exists</td>
-<td>FOUNDATION ONLY</td>
+<td>Environments sandbox / simulation / production, production disabled by default</td>
+<td>AVAILABLE</td>
 </tr>
 <tr>
-<td>Tamper-proof hash</td>
-<td>A local hash of the record; it is not chained to the previous invoice</td>
-<td>FOUNDATION ONLY</td>
+<td>Onboarding (key pair, CSR, OTP, compliance CSID, compliance checks, production CSID) with encrypted credentials</td>
+<td>AVAILABLE as a workflow; <strong>not yet executed</strong> against ZATCA</td>
 </tr>
 <tr>
-<td>Clearance status</td>
-<td>Local statuses draft, generated, pending, cleared, failed, cancelled. The system never sets &quot;cleared&quot; itself</td>
-<td>FOUNDATION ONLY</td>
+<td>Clearance (standard) and reporting (simplified) client with retry and &quot;outcome unknown&quot; handling</td>
+<td>AVAILABLE; tested against a faked ZATCA only</td>
 </tr>
 <tr>
-<td>Retry</td>
-<td>Changes a failed record back to pending and counts the retry. No message is sent anywhere</td>
-<td>FOUNDATION ONLY</td>
+<td>Validation with ZATCA's Compliance and Enablement Toolbox (SDK)</td>
+<td>NOT RUN</td>
 </tr>
 <tr>
-<td>Live Phase-2 clearance, ZATCA responses, production certificates</td>
-<td>Do not exist</td>
+<td>Live sandbox / simulation submission</td>
+<td>NOT RUN (Developer Portal credentials and OTP required)</td>
+</tr>
+<tr>
+<td>Production integration (FATOORA)</td>
+<td>NOT YET OPERATIONAL (owner onboarding, wave notification)</td>
+</tr>
+<tr>
+<td>Credit / debit notes, printable Arabic invoice</td>
 <td>NOT YET OPERATIONAL</td>
 </tr>
 </tbody>
 </table>
-<h3 id="fin-zat-001-zatca-e-invoicing-local-records">[FIN-ZAT-001] ZATCA E-Invoicing (local records)</h3>
+<p>Never say &quot;ZATCA compliant&quot;, &quot;cleared&quot; or &quot;reported&quot; about an invoice unless its record shows <strong>Cleared by ZATCA</strong> or <strong>Reported to ZATCA</strong>: those two states are written only from a ZATCA response.</p>
+<h3 id="invoice-types-and-what-zatca-requires">Invoice types and what ZATCA requires</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>ZATCA document</th>
+<th>Flow</th>
+<th>What the invoice needs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standard tax invoice (B2B)</td>
+<td>code 388, transaction code 0100000</td>
+<td><strong>Clearance</strong>: Seera submits the stamped XML, ZATCA validates, stamps it again and returns the cleared document and QR; only then is the invoice valid to share</td>
+<td>Supply date; buyer legal name, street, city, country and either a VAT number (15 digits, 3…3) or another buyer identification (National ID, Iqama, CRN, TIN, …)</td>
+</tr>
+<tr>
+<td>Simplified tax invoice (B2C)</td>
+<td>code 388, transaction code 0200000</td>
+<td><strong>Reporting</strong>: Seera stamps and reports it within 24 hours of generation; ZATCA confirms or rejects</td>
+<td>No buyer address or identification required; the Seera stamp and QR are mandatory</td>
+</tr>
+</tbody>
+</table>
+<p>The seller (Company Profile) always needs: legal name (Arabic name recommended for the human-readable invoice), VAT number (15 digits starting and ending with 3), commercial registration (or another identification), street, building number (4 digits), district, city, postal code (5 digits), country code SA.</p>
+<h3 id="states-of-a-compliance-record">States of a compliance record</h3>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Meaning</th>
+<th>Who sets it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Not generated</td>
+<td>Approved invoice, UUID assigned, nothing built yet (also every record from before Phase 2)</td>
+<td>Seera at approval</td>
+</tr>
+<tr>
+<td>XML generated / Validated locally</td>
+<td>Unsigned XML built from the frozen snapshots and checked locally; nothing consumed</td>
+<td>Generate &amp; validate XML</td>
+</tr>
+<tr>
+<td>Local validation failed</td>
+<td>A KSA rule or an arithmetic check failed; the rule id and message are kept</td>
+<td>Generate &amp; validate XML</td>
+</tr>
+<tr>
+<td>Stamped (signed)</td>
+<td>ICV and previous hash assigned from the unit, XML signed, QR built; the invoice is now locked</td>
+<td>Submit to ZATCA (stamp step)</td>
+</tr>
+<tr>
+<td>Submitted, awaiting response</td>
+<td>Request in flight</td>
+<td>Submit / Retry</td>
+</tr>
+<tr>
+<td>Cleared by ZATCA / Reported to ZATCA</td>
+<td>ZATCA accepted the document (with or without warnings); cleared XML stored for standard invoices</td>
+<td>ZATCA response</td>
+</tr>
+<tr>
+<td>Rejected by ZATCA</td>
+<td>ZATCA returned errors; the ICV stays consumed, the chain continues</td>
+<td>ZATCA response</td>
+</tr>
+<tr>
+<td>Failed (configuration / readiness)</td>
+<td>Readiness or configuration error before any stamp</td>
+<td>Seera</td>
+</tr>
+<tr>
+<td>Submission outcome unknown: verification required</td>
+<td>The request timed out after being sent; ZATCA may or may not have it. Never treated as rejected. Retry sends the identical document; if ZATCA answers &quot;duplicate&quot;, verify in the FATOORA portal</td>
+<td>Seera</td>
+</tr>
+<tr>
+<td>Cancelled (invoice reopened)</td>
+<td>The invoice was reopened before any stamp</td>
+<td>Reopen</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fin-zat-001-zatca-e-invoicing-register">[FIN-ZAT-001] ZATCA E-Invoicing (register)</h3>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/accounting/zatca" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/accounting/zatca</code></a></p>
-<p>Cards Cleared, Pending Clearance, Failed, Draft (local statuses); filters; table Invoice, UUID, Customer, Issue Date, QR, XML, Signature, Clearance, ZATCA Response, Retries; <strong>View</strong> and <strong>Retry</strong> (failed records; ZATCA Invoicing — retry). Permission: ZATCA Invoicing — view.</p>
-<h3 id="fin-zat-002-zatca-record">[FIN-ZAT-002] ZATCA Record</h3>
+<p>Cards Cleared / Reported, Stamped / Validated, Rejected / Failed, Outcome unknown; the current environment and solution unit; filters by status and search; table Invoice, type, customer, issue date, environment, ICV, status (with &quot;warnings&quot; when accepted with warnings), ZATCA status, attempts; <strong>View</strong>. Permission: ZATCA Invoicing — view. ZATCA Settings button needs ZATCA Invoicing — edit.</p>
+<h3 id="fin-zat-002-zatca-compliance-record">[FIN-ZAT-002] ZATCA Compliance Record</h3>
 <p>Web address: <code>https://seera.tech-brit.co.uk/admin/accounting/zatca/{id}</code></p>
-<p>The record's fields, the QR payload and the local hash, with <strong>Retry Clearance</strong> and <strong>Open Invoice</strong>. Reopening an invoice cancels its local record.</p>
-<p>In the Customer workspace the tab is called <strong>Local ZATCA Records</strong> and every status is marked &quot;local, not verified live&quot;.</p>
-<hr />
+<p>Cards Status, Local validation, Cryptographic stamp, Readiness. Actions by permission and state: <strong>Generate &amp; validate XML</strong> (post; builds and validates, consumes nothing), <strong>Submit to ZATCA</strong> (post; stamps if needed, then clears or reports; disabled until readiness is green), <strong>Retry submission</strong> (retry; resends the identical stamped document after a transient failure, a rejection you want to resend unchanged, or an unknown outcome), <strong>Regenerate after correction</strong> (post; only for rejected / failed / unsent records: refreshes the seller and buyer snapshot from the corrected masters, keeps the UUID, starts over with a new ICV). Downloads (export): unsigned XML (with stamp placeholders), signed XML, cleared XML. Panels: record facts (type and transaction code, issue date and time, supply date, totals, UUID, environment and unit, ICV, invoice hash, previous hash, submission time and attempts, ZATCA status, cleared / reported time, reporting deadline for simplified documents, lock notice), Readiness (seller, buyer, invoice, unit; rule ids), Local validation (errors and warnings with rule ids), ZATCA errors / warnings, the Phase-2 QR payload, and the list of attempts (endpoint, HTTP status, outcome, ZATCA status, counts, timing). Permission: ZATCA Invoicing — view.</p>
+<h3 id="fin-zat-003-zatca-settings--onboarding">[FIN-ZAT-003] ZATCA Settings &amp; Onboarding</h3>
+<p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/accounting/zatca/settings" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/accounting/zatca/settings</code></a></p>
+<p>Who uses it: the owner or the Finance administrator (ZATCA Invoicing — edit). Shows the active environment and its base URL, the seller readiness read from the Company Profile, the solution unit form (unit name = certificate common name, document types as the four-digit TSCZ map such as <code>1100</code>, location in the national short-address format, industry, organisation unit) and, per unit, the onboarding state and actions:</p>
+<ol>
+<li><strong>Generate key pair &amp; CSR</strong> — creates an ECDSA secp256k1 key pair (stored encrypted) and the certificate signing request with the ZATCA subject fields; the CSR is shown for the portal.</li>
+<li><strong>Obtain an OTP</strong> in the portal of the chosen environment (FATOORA portal for production, FATOORA simulation portal, or the Developer Portal sandbox); it is valid for one hour.</li>
+<li><strong>Request compliance CSID</strong> — enter the six-digit OTP; Seera sends the CSR and stores the compliance certificate and secret encrypted. The OTP is used once and never stored or logged.</li>
+<li><strong>Run compliance checks</strong> — Seera stamps and submits the sample documents ZATCA requires for the chosen document types (standard invoice, debit note, credit note; the simplified three when <code>S</code> is enabled) and records the outcome per document. These are onboarding test documents, not business invoices.</li>
+<li><strong>Request production CSID</strong> — allowed only after the compliance checks passed; the production certificate and secret are stored encrypted and used for every submission in that environment.</li>
+<li><strong>Revoke credentials locally</strong> — removes the credentials from Seera (revocation in the FATOORA portal is a separate manual step).</li>
+</ol>
+<p>Secrets (private key, CSID secrets) are never displayed. Environment is configuration (<code>ZATCA_ENVIRONMENT</code>, <code>ZATCA_PRODUCTION_ENABLED</code>), never inferred from the server mode; production stays off until the owner enables it after onboarding.</p>
+<h3 id="rounding-and-vat-truth">Rounding and VAT truth</h3>
+<p>The XML always carries the posted invoice's own figures; Seera never calculates a second set. ZATCA rounds the VAT category amount on the document total (rule BR-S-09); Seera's invoice VAT is the sum of per-line rounded VAT. When the two differ (for example two lines of SAR 1.03), the local validator refuses the document and shows both figures. Finance keeps its figures; the decision to move invoice VAT to document-level rounding is a Finance policy change, not something ZATCA submission changes silently.</p>
+<h3 id="corrections-reopening-and-notes">Corrections, reopening and notes</h3>
+<p>An invoice that has been stamped or submitted cannot be edited or reopened. ZATCA corrections are credit or debit notes (codes 381 / 383), which Seera does not issue as business documents yet; the only note XML Seera produces is the onboarding compliance sample. Until an AR note module exists, correct such invoices outside Seera and record the outcome with Finance.</p>
+<h3 id="arabic-and-the-human-readable-invoice">Arabic and the human-readable invoice</h3>
+<p>ZATCA requires the human-readable invoice in Arabic (bilingual allowed). Seera has no printable or PDF invoice layout yet; the XML carries the legal data, and the readiness check warns when the Arabic company name is missing.</p>
+<h3 id="security">Security</h3>
+<p>Private keys and CSID secrets are encrypted with the application key; XML artifacts live under the private storage disk and are served only through the export permission; attempts are logged without credentials, Authorization headers or OTPs; every ZATCA call uses HTTPS with certificate verification and bounded timeouts; the stored signed XML is re-hashed before every submission and refused if it changed.</p>
 <h2 id="15-reports">15. Reports</h2>
 <table>
 <thead>
@@ -4850,7 +4958,7 @@ Next common action: Record Payment when the bill is paid.</p>
 <ol>
 <li>Open Master Setup → Customers.</li>
 <li>Click View for a read-only page, or Edit / Manage to work in the workspace.</li>
-<li>Use the tabs: Contacts, Notes, Projects, Invoices, Receipts &amp; Balance, Ageing, Accounting, Local ZATCA Records, Activity.</li>
+<li>Use the tabs: Contacts, Notes, Projects, Invoices, Receipts &amp; Balance, Ageing, Accounting, ZATCA E-Invoices, Activity.</li>
 </ol>
 <h3 id="post-a-manual-journal">Post a manual journal</h3>
 <p>See WF-004.</p>
@@ -4886,7 +4994,7 @@ Next common action: Record Payment when the bill is paid.</p>
 </tr>
 <tr>
 <td><strong>Workflows in this chapter</strong></td>
-<td>WF-020, WF-021, WF-022, WF-023, WF-024, WF-025, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015</td>
+<td>WF-020, WF-021, WF-022, WF-023, WF-024, WF-025, WF-026, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015</td>
 </tr>
 </tbody>
 </table>
@@ -5043,7 +5151,7 @@ Related screens: INV-PR-002, INV-PR-003, INV-PO-002, INV-PO-003.</p>
 <h3 id="wf-012-correct-an-approved-bill-or-invoice-reopen">WF-012 Correct an approved bill or invoice (Reopen)</h3>
 <p>Purpose: fix a wrong approved document without editing posted accounting.
 Roles involved: Super Admin.
-Prerequisites: the bill or invoice is unpaid with no payments or receipts; its VAT period is still open; for an invoice, the local ZATCA record is not cleared.
+Prerequisites: the bill or invoice is unpaid with no payments or receipts; its VAT period is still open; for an invoice, no e-invoice has been stamped or submitted to ZATCA (otherwise a credit note is required, which Seera does not issue yet).
 Navigation: Bill or Invoice Details → Reopen for Correction → enter the reason.
 Expected result: a reversing journal is posted (the original stays), the VAT row is withdrawn, matched receipt quantities are released, the document returns to draft with the reason in its notes. For a runtime Supplier Bill, its old approval remains historical; correct it and explicitly submit a NEW attempt before posting. Customer Invoices and unenrolled legacy bills retain their existing approval path.
 Audit trail: Reopened supplier bill / Reopened customer invoice with the reason.
@@ -5217,6 +5325,25 @@ Audit trail: Offline check-in synchronized, Offline check-out synchronized, Bloc
 Common errors: no location fix (attendance cannot be saved offline without one); page never opened online on that phone; signed-in account changed (&quot;Pending records belong to another signed-in account&quot;); session expired (&quot;Sign in to continue syncing&quot;); captured time older than the sync window (72 hours by default) or ahead of the server clock; site assignment changed; already checked in online; category, supplier or payment account no longer available.
 Privacy: offline records (position, times, receipt photo) stay in the phone's browser storage for this site until synced, discarded or cleared; nothing is sent anywhere else.
 Related screens: MOB-001, HR-ATT-004, HR-ATT-001, HR-ATT-003, EXP-SE-002, EXP-SE-003, USR-003, MST-SITE-004.</li>
+</ol>
+<h3 id="wf-026-zatca-e-invoice-approve--readiness--xml--stamp--clearance-or-reporting--immutable-record">WF-026 ZATCA e-invoice: approve → readiness → XML → stamp → clearance or reporting → immutable record</h3>
+<p>Purpose: turn an approved customer invoice into a ZATCA e-invoice through the official lifecycle, with a truthful state at every step.
+Roles involved: Finance (approve the invoice; ZATCA Invoicing — post / retry / export), Owner or Finance administrator (ZATCA Invoicing — edit for onboarding), Super Admin.
+Prerequisites: the solution unit is onboarded for the current environment (FIN-ZAT-003, production CSID); Company Profile seller data complete; customer data complete for standard invoices; the invoice approved with the right type and supply date.
+Navigation: Accounts Receivable → invoice → ZATCA E-Invoice section, or Finance → ZATCA E-Invoicing → View.
+Steps and example input:</p>
+<ol>
+<li>Finance approves invoice INV-2026-0042 (standard, customer Riyadh Developers LLC, supply date 2026-10-16, SAR 1,000 + 150 VAT). Approval posts the journal, records the issue time, freezes the seller and buyer snapshot and creates the compliance record <strong>Not generated</strong> with its UUID.</li>
+<li>Finance opens the record. Readiness is green (seller, buyer, invoice, unit). <strong>Generate &amp; validate XML</strong> builds the UBL document from the frozen data and checks it locally: <strong>Validated locally</strong>; the unsigned XML can be downloaded.</li>
+<li><strong>Submit to ZATCA</strong>: Seera takes the next counter value of the unit (ICV 12) and the previous document hash, signs the XML with the unit certificate, builds the QR, locks the invoice (<strong>Stamped</strong>), then calls the clearance API of the configured environment.</li>
+<li>ZATCA answers 200: the record becomes <strong>Cleared by ZATCA</strong> with the cleared XML and the ZATCA QR stored; the attempt is listed (endpoint, HTTP status, outcome, timing). A simplified invoice follows the same steps through the reporting API and becomes <strong>Reported to ZATCA</strong>.</li>
+<li>If ZATCA answers 400 with rule errors (for example BR-KSA-10 buyer street missing), the record is <strong>Rejected by ZATCA</strong> with the errors; Finance corrects the customer, uses <strong>Regenerate after correction</strong> (same UUID, new ICV) and submits again.</li>
+<li>If the request times out after being sent, the record is <strong>Submission outcome unknown</strong>; <strong>Retry</strong> sends the identical document. A &quot;duplicate&quot; answer keeps the record in verification required until the owner checks the FATOORA portal.
+Expected result: one compliance record per invoice; a ZATCA state only after a ZATCA response; no journal, VAT row or invoice figure changed by any ZATCA call; the invoice locked once stamped.
+Statuses: Not generated → Validated locally (or Local validation failed) → Stamped → Submitted → Cleared / Reported, Rejected, or Submission outcome unknown; Failed for readiness / configuration; Cancelled only by a reopen before any stamp.
+Audit trail: ZATCA XML generated and validated locally, ZATCA local validation failed, ZATCA invoice stamped, ZATCA invoice cleared / reported, ZATCA submission rejected / failed / outcome unknown, ZATCA record reset for regeneration; onboarding: Generated ZATCA CSR, Obtained ZATCA compliance / production CSID, ZATCA compliance checks passed / incomplete.
+Common errors: readiness messages naming the missing Company Profile or Customer field; VAT rounding mismatch on multi-line invoices; production disabled; environment mismatch between the record and the configuration; credentials refused (renew the CSID); rate limit or server error (retry later).
+Related screens: FIN-ZAT-001, FIN-ZAT-002, FIN-ZAT-003, FIN-AR-003, MST-CP-001, CUS-002.</li>
 </ol>
 <h2 id="18-troubleshooting">18. Troubleshooting</h2>
 <table>
@@ -5418,8 +5545,16 @@ Related screens: MOB-001, HR-ATT-004, HR-ATT-001, HR-ATT-003, EXP-SE-002, EXP-SE
 <td>A balanced accounting entry; automatic ones come from documents, manual ones from FIN-JE-002</td>
 </tr>
 <tr>
-<td>Local ZATCA record</td>
-<td>Seera's own record of an approved invoice (UUID, QR payload, status); not a live ZATCA clearance</td>
+<td>ZATCA compliance record</td>
+<td>Seera's record of an approved invoice's e-invoice: UUID, type, ICV, hashes, XML artifacts, QR, state and ZATCA outcome. Cleared / Reported only after a ZATCA response</td>
+</tr>
+<tr>
+<td>Cryptographic stamp (CSID)</td>
+<td>The ZATCA-issued certificate of a solution unit (EGS); compliance CSID for onboarding checks, production CSID for live submissions</td>
+</tr>
+<tr>
+<td>ICV / PIH</td>
+<td>Invoice counter value and previous invoice hash: the per-unit chain ZATCA verifies</td>
 </tr>
 <tr>
 <td>Matched line</td>
@@ -5557,8 +5692,33 @@ Related screens: MOB-001, HR-ATT-004, HR-ATT-001, HR-ATT-003, EXP-SE-002, EXP-SE
 <td>Approvals, posting, payroll, inventory and finance screens remain online only</td>
 </tr>
 <tr>
-<td>Live ZATCA Phase-2 clearance, real QR, XML, signing</td>
-<td>NOT YET OPERATIONAL (local records: FOUNDATION ONLY)</td>
+<td>ZATCA Phase 2: XML generation, local validation, stamp, QR, hash chain, environments, onboarding workflow, clearance / reporting client</td>
+<td>AVAILABLE (sprint 1, tested against a faked ZATCA)</td>
+<td>Chapter 14</td>
+</tr>
+<tr>
+<td>ZATCA sandbox / simulation integration</td>
+<td>NOT RUN (Developer Portal credentials and OTP required)</td>
+<td>Chapter 14, WF-026</td>
+</tr>
+<tr>
+<td>Official SDK (Compliance and Enablement Toolbox) validation</td>
+<td>NOT RUN (JAR behind the Developer Portal login; no Java on the build machine)</td>
+<td>Chapter 14</td>
+</tr>
+<tr>
+<td>ZATCA production integration</td>
+<td>NOT YET OPERATIONAL (production disabled; owner onboarding in the FATOORA portal required)</td>
+<td>Chapter 14</td>
+</tr>
+<tr>
+<td>Customer credit / debit notes</td>
+<td>NOT YET OPERATIONAL (no AR note module; stamped invoices cannot be corrected in Seera)</td>
+<td>Chapter 14</td>
+</tr>
+<tr>
+<td>Printable / PDF Arabic invoice</td>
+<td>NOT YET OPERATIONAL (XML carries the legal data; no human-readable layout)</td>
 <td>Chapter 14</td>
 </tr>
 <tr>
