@@ -210,7 +210,14 @@ class CustomerController extends Controller
             'linked_account' => ['nullable', 'string', 'max:255'],
             'billing_address' => ['nullable', 'string'],
             'status' => ['required', 'in:active,inactive'],
+            // ZATCA buyer fields (BR-KSA-10 / BR-KSA-14): optional on the master, validated per invoice type at issuance.
+            'street' => ['nullable', 'string', 'max:191'], 'building_number' => ['nullable', 'regex:/^\d{4}$/'], 'district' => ['nullable', 'string', 'max:191'],
+            'city' => ['nullable', 'string', 'max:100'], 'postal_code' => ['nullable', 'regex:/^\d{5}$/'], 'country_code' => ['nullable', 'regex:/^[A-Za-z]{2}$/'],
+            'buyer_id_scheme' => ['nullable', Rule::in(Customer::BUYER_ID_SCHEMES)], 'buyer_id_value' => ['nullable', 'string', 'max:60', 'regex:/^[A-Za-z0-9]+$/'],
         ]);
+        if (isset($data['country_code'])) {
+            $data['country_code'] = strtoupper($data['country_code']);
+        }
 
         // The quick-create dialog leaves the code blank; the full form still asks for it.
         if (blank($data['code'] ?? null)) {

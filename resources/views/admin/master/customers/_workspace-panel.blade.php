@@ -134,7 +134,7 @@
                             <td>{{ $money($invoice->received_amount) }}</td>
                             <td>{{ $money($invoice->balance_amount) }}</td>
                             <td><x-admin.status-badge :status="$invoice->payment_status"/></td>
-                            <td>@if ($invoice->zatcaRecord)<span class="small">{{ $invoice->zatcaRecord->clearance_status }} (local record)</span>@else <span class="small">-</span>@endif</td>
+                            <td>@if ($invoice->zatcaRecord)<span class="badge {{ $invoice->zatcaRecord->statusColor() }}">{{ $invoice->zatcaRecord->statusLabel() }}</span>@else <span class="small">-</span>@endif</td>
                             <td>
                                 <a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.show', ['accounts_receivable' => $invoice, 'return_to' => $invoiceOrigin]) }}">View</a>
                                 @if ($canEditInvoice && $invoice->isEditable())<a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.edit', ['accounts_receivable' => $invoice, 'return_to' => $invoiceOrigin]) }}">Edit draft</a>@endif
@@ -229,23 +229,23 @@
             @break
 
         @case('zatca')
-            <p class="help-box">{{ __('Local ZATCA Record: the ERP keeps a UUID, a QR payload, a local XML reference and a local status for each approved invoice. Clearance is not verified live; the ZATCA Phase-2 integration is not yet operational.') }}</p>
+            <p class="help-box">{{ __('zatca.sdk_note') }}</p>
             <div class="table-wrap"><table>
-                <thead><tr><th>Invoice</th><th>UUID</th><th>QR</th><th>XML</th><th>Local status</th><th>Retries</th><th>Last message</th><th>{{ __('Actions') }}</th></tr></thead>
+                <thead><tr><th>Invoice</th><th>{{ __('zatca.invoice_type') }}</th><th>{{ __('zatca.uuid') }}</th><th>Status</th><th>{{ __('zatca.zatca_reference') }}</th><th>{{ __('zatca.attempts') }}</th><th>{{ __('zatca.last_error') }}</th><th>{{ __('Actions') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $record)
                         <tr>
                             <td>{{ $record->customerInvoice?->invoice_number ?? '-' }}</td>
+                            <td class="small">{{ $record->invoice_type ? __('zatca.type_'.$record->invoice_type) : '-' }}</td>
                             <td><span class="small">{{ $record->uuid }}</span></td>
-                            <td>{{ $record->qrStatus() }}</td>
-                            <td>{{ $record->xmlStatus() }}</td>
-                            <td><x-admin.status-badge :status="$record->clearance_status"/> <span class="small">(local, not verified live)</span></td>
-                            <td>{{ $record->retry_count }}</td>
-                            <td>{{ $record->zatca_response_message ?? $record->failed_reason ?? '-' }}</td>
+                            <td><span class="badge {{ $record->statusColor() }}">{{ $record->statusLabel() }}</span></td>
+                            <td class="small">{{ $record->zatca_status ?? __('zatca.not_verified') }}</td>
+                            <td>{{ $record->submission_attempts }}</td>
+                            <td class="small">{{ $record->last_error_message ?? '-' }}</td>
                             <td><a class="btn sm outline" href="{{ route('admin.accounting.zatca.show', $record) }}">View record</a></td>
                         </tr>
                     @empty
-                        <tr><td colspan="8" class="table-empty">{{ __('No local ZATCA records for this customer in your scope.') }}</td></tr>
+                        <tr><td colspan="8" class="table-empty">{{ __('No ZATCA records for this customer in your scope.') }}</td></tr>
                     @endforelse
                 </tbody>
             </table></div>

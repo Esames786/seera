@@ -31,7 +31,7 @@
             <form method="POST" action="{{ route('admin.accounting.accounts-receivable.reopen', $invoice) }}" onsubmit="var reason = prompt('Reason for reopening this invoice (kept on the record):'); if (!reason) return false; this.reason.value = reason;">
                 @csrf
                 <input type="hidden" name="reason" value=""/>
-                <button type="submit" class="btn danger" title="Reverse the posting, cancel the local e-invoice record and return the invoice to draft">Reopen for Correction</button>
+                <button type="submit" class="btn danger" title="Reverse the posting, cancel the e-invoice record (only before any stamp) and return the invoice to draft">Reopen for Correction</button>
             </form>
         @endif
         @if ($returnTo)
@@ -270,32 +270,43 @@
         </tbody>
     </x-admin.data-table>
 
-    {{-- 9. Local e-invoice record --}}
+    {{-- 9. ZATCA e-invoice --}}
     @if (isset($sections['zatca']))
-        <x-admin.data-table :title="__('workspace.inv_zatca')" :subtitle="__('workspace.inv_zatca_help')" class="detail-table" id="zatca">
+        <x-admin.data-table :title="__('zatca.section')" :subtitle="__('workspace.inv_zatca_help')" class="detail-table" id="zatca">
             @if ($record)
                 <tbody>
-                    <tr><th>UUID</th><td class="small">{{ $record->uuid }}</td></tr>
-                    <tr><th>Local clearance status</th><td><x-admin.status-badge :status="$record->clearance_status"/> <span class="small">local record, not verified live</span></td></tr>
-                    <tr><th>QR payload</th><td>{{ $record->qr_code_data ? 'Local payload stored (not a ZATCA-issued QR)' : 'Not generated' }}</td></tr>
-                    <tr><th>XML</th><td>{{ $record->xml_file_path ? 'Path reference only: '.$record->xml_file_path.' (file not generated)' : 'Not generated' }}</td></tr>
-                    <tr><th>Digital signature</th><td>{{ $record->digital_signature_status === 'signed' ? 'Marked "signed" locally; no certificate or real signing exists' : ucfirst($record->digital_signature_status) }}</td></tr>
-                    <tr><th>Local hash</th><td class="small">{{ $record->tamper_proof_hash ?? '-' }}</td></tr>
-                    <tr><th>Retries</th><td>{{ $record->retry_count }}</td></tr>
-                    <tr><th>Response</th><td>{{ $record->zatca_response_code ?? '-' }} {{ $record->zatca_response_message ?? '' }}</td></tr>
-                    <tr><th>Failed reason</th><td>{{ $record->failed_reason ?? '-' }}</td></tr>
+                    <tr><th>{{ __('zatca.invoice_type') }}</th><td>{{ __('zatca.type_'.$invoice->invoice_type) }}</td></tr>
+                    <tr><th>{{ __('zatca.uuid') }}</th><td class="small">{{ $record->uuid }}</td></tr>
+                    <tr><th>{{ __('zatca.environment') }}</th><td>{{ $record->environment ? __('zatca.env_'.$record->environment) : '-' }}</td></tr>
+                    <tr><th>Status</th><td><span class="badge {{ $record->statusColor() }}">{{ $record->statusLabel() }}</span>@if ($record->accepted_with_warnings) <span class="small">({{ __('zatca.warnings') }})</span>@endif @if (! $record->isAccepted())<span class="small">· {{ __('zatca.not_verified') }}</span>@endif</td></tr>
+                    <tr><th>{{ __('zatca.validation') }}</th><td>{{ $record->validation_status ? ucfirst($record->validation_status) : '-' }}@if ($record->validated_at) <span class="small">({{ $record->validated_at->format('Y-m-d H:i') }})</span>@endif</td></tr>
+                    <tr><th>{{ __('zatca.signature') }}</th><td>{{ $record->signed_at ? $record->signed_at->format('Y-m-d H:i').' · ICV '.$record->icv : '-' }}</td></tr>
+                    <tr><th>{{ __('zatca.submission') }}</th><td>{{ $record->submitted_at?->format('Y-m-d H:i') ?? '-' }} · {{ __('zatca.attempts') }}: {{ $record->submission_attempts }}</td></tr>
+                    <tr><th>{{ __('zatca.zatca_reference') }}</th><td>{{ $record->zatca_status ?? '-' }} {{ $record->cleared_at ? '· '.__('zatca.cleared_at').' '.$record->cleared_at->format('Y-m-d H:i') : '' }}{{ $record->reported_at ? '· '.__('zatca.reported_at').' '.$record->reported_at->format('Y-m-d H:i') : '' }}</td></tr>
+                    <tr><th>{{ __('zatca.warnings') }} / {{ __('zatca.errors') }}</th><td>{{ count($record->response_warnings ?? []) }} / {{ count($record->response_errors ?? []) }}</td></tr>
+                    @if ($record->last_error_message && ! $record->isAccepted())<tr><th>{{ __('zatca.last_error') }}</th><td>{{ $record->last_error_message }}</td></tr>@endif
+                    @if ($invoice->zatca_locked_at)<tr><th>Locked</th><td class="small">{{ __('zatca.locked') }}</td></tr>@endif
                 </tbody>
                 <x-slot:footer>
-                    <a class="btn sm outline" href="{{ route('admin.accounting.zatca.show', $record) }}">Open Local Record</a>
+                    <a class="btn sm outline" href="{{ route('admin.accounting.zatca.show', $record) }}">{{ __('zatca.record_title') }}</a>
+                    @if (($canPostZatca ?? false) && ! $record->isAccepted() && ! $record->isLocked())
+                        <form method="POST" action="{{ route('admin.accounting.zatca.generate', $record) }}" style="display:inline">@csrf<button class="btn sm outline">{{ __('zatca.generate') }}</button></form>
+                        <form method="POST" action="{{ route('admin.accounting.zatca.submit', $record) }}" style="display:inline">@csrf<button class="btn sm primary">{{ __('zatca.submit') }}</button></form>
+                    @endif
+                    @if (($canRetryZatca ?? false) && in_array($record->status, ['signed', 'submission_pending', 'rejected', 'outcome_unknown'], true))
+                        <form method="POST" action="{{ route('admin.accounting.zatca.retry', $record) }}" style="display:inline">@csrf<button class="btn sm warning">{{ __('zatca.retry') }}</button></form>
+                    @endif
+                    @if (($canExportZatca ?? false) && $record->signed_xml_path)
+                        <a class="btn sm outline" href="{{ route('admin.accounting.zatca.xml', [$record, 'signed']) }}">{{ __('zatca.download_signed') }}</a>
+                    @endif
                 </x-slot:footer>
             @else
                 <tbody>
-                    <tr><td class="table-empty">{{ __('workspace.inv_no_zatca') }}</td></tr>
+                    <tr><td class="table-empty">{{ __('zatca.no_record') }}</td></tr>
                 </tbody>
             @endif
         </x-admin.data-table>
     @endif
-
     {{-- 10. Activity --}}
     @if ($activity !== null)
         <x-admin.data-table :title="__('workspace.activity')" :subtitle="__('workspace.inv_activity_help')" id="activity">

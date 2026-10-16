@@ -11,6 +11,8 @@ use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
 use App\Models\Project;
 use App\Services\Accounting\PostingService;
+use App\Services\Zatca\ZatcaSnapshot;
+use App\Services\Zatca\ZatcaSubmissionService;
 use App\Support\SaveAction;
 use App\Support\SettlementReplay;
 use App\Support\Workspace\CustomerInvoiceWorkspace;
@@ -189,7 +191,11 @@ class AccountsReceivableController extends Controller
                 'journal_entry_id' => $entry->id,
             ]);
 
-            return [$entry, $this->posting->createZatcaRecord($accounts_receivable)];
+            // Issuance: the issue time, the frozen seller / buyer snapshots and the compliance record (UUID) are fixed now.
+            $accounts_receivable->forceFill(['issue_time' => $accounts_receivable->issue_time ?: now()->format('H:i:s')])->save();
+            app(ZatcaSnapshot::class)->freeze($accounts_receivable);
+
+            return [$entry, app(ZatcaSubmissionService::class)->ensureRecord($accounts_receivable)];
         });
 
         ActivityLog::record($request, 'Accounting', 'Approved customer invoice', $accounts_receivable->invoice_number);
@@ -218,8 +224,8 @@ class AccountsReceivableController extends Controller
                 throw ValidationException::withMessages(['invoice' => 'Only an approved invoice with no receipts can be reopened.']);
             }
 
-            if ($invoice->zatcaRecord && in_array($invoice->zatcaRecord->clearance_status, ['cleared', 'reported'], true)) {
-                throw ValidationException::withMessages(['invoice' => 'This invoice has already been cleared by ZATCA and cannot be changed. Issue a credit note instead.']);
+            if ($invoice->isZatcaLocked() || ($invoice->zatcaRecord && $invoice->zatcaRecord->isLocked())) {
+                throw ValidationException::withMessages(['invoice' => __('zatca.err_reopen_locked')]);
             }
 
             $this->posting->withdrawVat('Customer Invoice', $invoice->id);
@@ -228,11 +234,13 @@ class AccountsReceivableController extends Controller
                 ? $this->posting->reverseEntry($invoice->journalEntry, 'Reopened invoice '.$invoice->invoice_number.': '.$data['reason'], $request->user()->id)
                 : null;
 
-            $invoice->zatcaRecord?->update(['clearance_status' => 'cancelled', 'failed_reason' => 'Invoice reopened for correction: '.$data['reason']]);
+            $invoice->zatcaRecord?->update(['clearance_status' => 'cancelled', 'status' => 'cancelled', 'failed_reason' => 'Invoice reopened for correction: '.$data['reason']]);
 
             $invoice->update([
                 'payment_status' => 'draft',
                 'zatca_status' => 'not_generated',
+                'seller_snapshot' => null,
+                'buyer_snapshot' => null,
                 'journal_entry_id' => null,
                 'received_amount' => 0,
                 'balance_amount' => $invoice->total_amount,
@@ -358,6 +366,8 @@ class AccountsReceivableController extends Controller
             'customer_id' => ['required', 'exists:customers,id'],
             'invoice_number' => ['nullable', 'string', 'max:100', 'unique:customer_invoices,invoice_number'.($invoice ? ','.$invoice->id : '')],
             'invoice_date' => ['required', 'date', 'before_or_equal:today'],
+            'invoice_type' => ['nullable', Rule::in(CustomerInvoice::TYPES)],
+            'supply_date' => ['nullable', 'date'],
             'due_date' => ['nullable', 'date', 'after_or_equal:invoice_date'],
             'project_id' => ['nullable', 'exists:projects,id'],
             'cost_center_id' => ['nullable', 'exists:cost_centers,id'],
@@ -410,6 +420,12 @@ class AccountsReceivableController extends Controller
         $data['invoice_number'] = $data['invoice_number']
             ?? $invoice?->invoice_number
             ?? CustomerInvoice::nextNumber((int) date('Y', strtotime($data['invoice_date'])));
+
+        // Existing callers (and older forms) omit the type: a standard tax invoice is the default.
+        $data['invoice_type'] = $data['invoice_type'] ?? $invoice?->invoice_type ?? CustomerInvoice::TYPE_STANDARD;
+        if (empty($data['supply_date']) && $data['invoice_type'] === CustomerInvoice::TYPE_STANDARD) {
+            $data['supply_date'] = $data['invoice_date'];
+        }
 
         $data += [
             'taxable_amount' => $taxable,

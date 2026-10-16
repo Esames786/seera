@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Accounting\JournalEntryController;
 use App\Http\Controllers\Admin\Accounting\SupplierBillApprovalController;
 use App\Http\Controllers\Admin\Accounting\VatController;
 use App\Http\Controllers\Admin\Accounting\ZatcaInvoiceController;
+use App\Http\Controllers\Admin\Accounting\ZatcaSettingsController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\ApprovalWorkflowController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -338,9 +339,21 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::post('vat/{vat}/recalculate', [VatController::class, 'recalculate'])->name('vat.recalculate');
         Route::post('vat/{vat}/finalize', [VatController::class, 'finalize'])->name('vat.finalize');
 
+        // ZATCA e-invoicing Phase 2: register, settings / onboarding (edit), record actions (post / retry / export).
         Route::get('zatca', [ZatcaInvoiceController::class, 'index'])->name('zatca.index');
+        Route::get('zatca/settings', [ZatcaSettingsController::class, 'index'])->name('zatca.settings.index');
+        Route::post('zatca/settings', [ZatcaSettingsController::class, 'store'])->name('zatca.settings.store');
+        Route::post('zatca/settings/{unit}/csr', [ZatcaSettingsController::class, 'csr'])->name('zatca.settings.csr');
+        Route::post('zatca/settings/{unit}/compliance', [ZatcaSettingsController::class, 'compliance'])->name('zatca.settings.compliance');
+        Route::post('zatca/settings/{unit}/checks', [ZatcaSettingsController::class, 'checks'])->name('zatca.settings.checks');
+        Route::post('zatca/settings/{unit}/production', [ZatcaSettingsController::class, 'production'])->name('zatca.settings.production');
+        Route::post('zatca/settings/{unit}/revoke', [ZatcaSettingsController::class, 'revoke'])->name('zatca.settings.revoke');
         Route::get('zatca/{zatca}', [ZatcaInvoiceController::class, 'show'])->name('zatca.show');
+        Route::get('zatca/{zatca}/xml/{kind}', [ZatcaInvoiceController::class, 'xml'])->name('zatca.xml');
+        Route::post('zatca/{zatca}/generate', [ZatcaInvoiceController::class, 'generate'])->name('zatca.generate');
+        Route::post('zatca/{zatca}/submit', [ZatcaInvoiceController::class, 'submit'])->name('zatca.submit');
         Route::post('zatca/{zatca}/retry', [ZatcaInvoiceController::class, 'retry'])->name('zatca.retry');
+        Route::post('zatca/{zatca}/regenerate', [ZatcaInvoiceController::class, 'regenerate'])->name('zatca.regenerate');
 
         // Report routes are static, so they must be registered before any wildcard.
         Route::get('reports', [FinancialReportController::class, 'index'])->name('reports.index');

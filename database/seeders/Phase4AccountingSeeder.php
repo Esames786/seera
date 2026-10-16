@@ -365,35 +365,16 @@ class Phase4AccountingSeeder extends Seeder
 
     private function applyZatcaOutcome($record, CustomerInvoice $invoice, string $outcome, Carbon $invoiceDate): void
     {
+        // Demo data never claims a ZATCA result: no XML, stamp or response exists. The legacy columns
+        // keep the old demo narrative; the Phase 2 state is the truth (not_generated).
         match ($outcome) {
-            'cleared' => tap($record)->update([
-                'clearance_status' => 'cleared',
-                'zatca_response_code' => '200',
-                'zatca_response_message' => 'Invoice cleared successfully.',
-                'cleared_at' => $invoiceDate->copy()->addHours(2),
-            ]),
-            'failed' => tap($record)->update([
-                'clearance_status' => 'failed',
-                'zatca_response_code' => '400',
-                'zatca_response_message' => 'Invalid VAT registration number on the buyer record.',
-                'failed_reason' => 'Buyer VAT number failed schema validation.',
-                'retry_count' => 1,
-            ]),
-            default => tap($record)->update([
-                'clearance_status' => 'pending',
-                'zatca_response_message' => 'Awaiting clearance response.',
-            ]),
+            'cleared' => tap($record)->update(['clearance_status' => 'cleared', 'status' => 'not_generated', 'zatca_response_message' => 'Legacy demo value; no ZATCA response exists.']),
+            'failed' => tap($record)->update(['clearance_status' => 'failed', 'status' => 'not_generated', 'zatca_response_message' => 'Legacy demo value; no ZATCA response exists.', 'retry_count' => 1]),
+            default => tap($record)->update(['clearance_status' => 'pending', 'status' => 'not_generated']),
         };
 
-        $invoice->update([
-            'zatca_status' => match ($outcome) {
-                'cleared' => 'cleared',
-                'failed' => 'failed',
-                default => 'pending_clearance',
-            },
-        ]);
+        $invoice->update(['zatca_status' => 'not_generated']);
     }
-
     /**
      * Mirror the Phase 3 payroll run into accounting so the ledger has a
      * salary expense entry, exactly as the payroll posting rule describes.

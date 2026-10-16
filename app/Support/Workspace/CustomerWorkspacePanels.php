@@ -37,7 +37,7 @@ class CustomerWorkspacePanels implements WorkspacePanels
             'receipts' => new PanelDefinition('receipts', 'Receipts & Balance', 'Accounts Receivable'),
             'ageing' => new PanelDefinition('ageing', 'Ageing', 'Accounts Receivable'),
             'accounting' => new PanelDefinition('accounting', 'Accounting', 'Journal Entries'),
-            'zatca' => new PanelDefinition('zatca', 'Local ZATCA Records', 'ZATCA Invoicing'),
+            'zatca' => new PanelDefinition('zatca', 'ZATCA E-Invoices', 'ZATCA Invoicing'),
             'activity' => new PanelDefinition('activity', 'Activity', 'Activity Logs'),
         ];
     }

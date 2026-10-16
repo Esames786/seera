@@ -46,6 +46,14 @@
                 <option value="inactive" @selected(old('status', $customer?->status) === 'inactive')>Inactive</option>
             </select>
         </div>
+        <div><label for="buyer_id_scheme">Buyer ID type (if no VAT number)</label><select id="buyer_id_scheme" name="buyer_id_scheme" class="select"><option value="">None</option>@foreach (\App\Models\Customer::BUYER_ID_SCHEMES as $scheme)<option value="{{ $scheme }}" @selected(old('buyer_id_scheme', $customer?->buyer_id_scheme) === $scheme)>{{ $scheme }}</option>@endforeach</select></div>
+        <div><label for="buyer_id_value">Buyer ID value</label><input id="buyer_id_value" name="buyer_id_value" class="input" maxlength="60" value="{{ old('buyer_id_value', $customer?->buyer_id_value) }}" placeholder="National ID / Iqama / CRN"/></div>
+        <div><label for="street">Street (national address)</label><input id="street" name="street" class="input" maxlength="191" value="{{ old('street', $customer?->street) }}"/></div>
+        <div><label for="building_number">Building number (4 digits)</label><input id="building_number" name="building_number" class="input" maxlength="10" value="{{ old('building_number', $customer?->building_number) }}"/></div>
+        <div><label for="district">District</label><input id="district" name="district" class="input" maxlength="191" value="{{ old('district', $customer?->district) }}"/></div>
+        <div><label for="city">City</label><input id="city" name="city" class="input" maxlength="100" value="{{ old('city', $customer?->city) }}"/></div>
+        <div><label for="postal_code">Postal code (5 digits)</label><input id="postal_code" name="postal_code" class="input" maxlength="10" value="{{ old('postal_code', $customer?->postal_code) }}"/></div>
+        <div><label for="country_code">Country code</label><input id="country_code" name="country_code" class="input" maxlength="2" value="{{ old('country_code', $customer?->country_code ?? 'SA') }}"/></div>
         <div class="full"><label for="billing_address">Billing Address</label><textarea id="billing_address" name="billing_address" class="textarea" placeholder="Customer billing address for ZATCA invoices...">{{ old('billing_address', $customer?->billing_address) }}</textarea></div>
     </x-admin.form-section>
 

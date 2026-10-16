@@ -192,6 +192,19 @@ class EnsureUserHasPermission
         if ($routeName === 'admin.mobile-sync.site-expenses') {
             return ['Site Expenses', 'create'];
         }
+        if (str_starts_with($routeName, 'admin.accounting.zatca.')) {
+            // ZATCA: view (register, record, response), edit (settings and onboarding incl. credentials), post (generate,
+            // stamp + submit, regenerate), retry (resubmit the same document), export (private XML downloads).
+            $action = str($routeName)->afterLast('.')->toString();
+
+            return ['ZATCA Invoicing', match (true) {
+                str_starts_with($routeName, 'admin.accounting.zatca.settings') => 'edit',
+                in_array($action, ['generate', 'submit', 'regenerate'], true) => 'post',
+                $action === 'retry' => 'retry',
+                $action === 'xml' => 'export',
+                default => 'view',
+            }];
+        }
         if (str_starts_with($routeName, 'admin.equipment.')) {
             // Equipment: view (register, workspace, private files), create (asset, fuel, maintenance, documents), edit (asset,
             // complete / cancel maintenance), process (assign / release), post (accounting), export (CSV).

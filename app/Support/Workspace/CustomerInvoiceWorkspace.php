@@ -36,12 +36,16 @@ final class CustomerInvoiceWorkspace
                 && $user->isSuperAdmin()
                 && $user->hasPermission('Accounts Receivable', 'approve')
                 && ! $invoice->receipts()->exists()
-                && ! in_array($invoice->zatcaRecord?->clearance_status, ['cleared', 'reported'], true),
+                && ! $invoice->isZatcaLocked()
+                && ! ($invoice->zatcaRecord?->isLocked() ?? false),
             'canViewCustomer' => $user->hasPermission('Customers', 'view'),
             'canManageCustomer' => $user->hasPermission('Customers', 'edit'),
             'canViewProject' => $invoice->project !== null && $user->hasPermission('Projects', 'view'),
             'canViewJournals' => $user->hasPermission('Journal Entries', 'view'),
             'canViewZatca' => $user->hasPermission('ZATCA Invoicing', 'view'),
+            'canPostZatca' => $user->hasPermission('ZATCA Invoicing', 'post'),
+            'canRetryZatca' => $user->hasPermission('ZATCA Invoicing', 'retry'),
+            'canExportZatca' => $user->hasPermission('ZATCA Invoicing', 'export'),
         ];
 
         $sections = ['information' => __('workspace.inv_information'), 'lines' => __('workspace.inv_lines')];
@@ -57,9 +61,9 @@ final class CustomerInvoiceWorkspace
         }
         $sections += ['receipts' => __('workspace.inv_receipts'), 'balance' => __('workspace.inv_balance')];
         if ($flags['canViewZatca']) {
-            $sections['zatca'] = __('workspace.inv_zatca');
+            $sections['zatca'] = __('zatca.section');
         }
-        $activity = DocumentActivity::latest($user, [$invoice->invoice_number], ['Accounting']);
+        $activity = DocumentActivity::latest($user, [$invoice->invoice_number], ['Accounting', 'ZATCA']);
         if ($activity !== null) {
             $sections['activity'] = __('workspace.activity');
         }
@@ -99,21 +103,19 @@ final class CustomerInvoiceWorkspace
     }
 
     /**
-     * Truthful wording for the invoice's local e-invoice column. The system never
-     * talks to ZATCA: every status is a local record state, not a clearance result.
+     * Truthful wording for the invoice's e-invoice column: the compliance
+     * record state, never a ZATCA result unless ZATCA returned one.
      */
     public static function eInvoiceState(CustomerInvoice $invoice): string
     {
-        return match ($invoice->zatca_status) {
-            'draft', 'not_generated', null, '' => __('workspace.inv_einv_none'),
-            'generated' => __('workspace.inv_einv_generated'),
-            'pending_clearance' => __('workspace.inv_einv_pending'),
-            'cleared' => __('workspace.inv_einv_cleared_local'),
-            'failed' => __('workspace.inv_einv_failed'),
-            default => __('workspace.inv_einv_other', ['status' => str_replace('_', ' ', (string) $invoice->zatca_status)]),
-        };
-    }
+        $record = $invoice->zatcaRecord;
+        if (! $record) {
+            return __('workspace.inv_einv_none');
+        }
+        $label = $record->statusLabel();
 
+        return $record->isAccepted() ? $label : $label.' · '.__('zatca.not_verified');
+    }
     /** The shared ageing rule applied to this one invoice. */
     private static function bucket(CustomerInvoice $invoice): string
     {

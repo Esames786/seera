@@ -39,7 +39,14 @@ class CompanyProfileController extends Controller
             'fiscal_year_end' => ['nullable', 'string', 'max:30'],
             'address' => ['nullable', 'string'],
             'status' => ['required', 'in:active,inactive'],
+            // ZATCA seller address (BR-KSA-09, 4-digit building, 5-digit postal code) and identification scheme (BR-KSA-08).
+            'street' => ['nullable', 'string', 'max:191'], 'building_number' => ['nullable', 'regex:/^\d{4}$/'], 'additional_number' => ['nullable', 'regex:/^\d{4}$/'],
+            'district' => ['nullable', 'string', 'max:191'], 'postal_code' => ['nullable', 'regex:/^\d{5}$/'], 'country_code' => ['nullable', 'regex:/^[A-Za-z]{2}$/'],
+            'seller_id_scheme' => ['nullable', 'in:'.implode(',', CompanyProfile::SELLER_ID_SCHEMES)],
         ]);
+        if (isset($data['country_code'])) {
+            $data['country_code'] = strtoupper($data['country_code']);
+        }
 
         $company = CompanyProfile::firstOrNew();
         $company->fill($data)->save();

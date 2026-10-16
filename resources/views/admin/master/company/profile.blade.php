@@ -58,6 +58,16 @@
             <div class="full"><label for="address">Full Address</label><textarea id="address" name="address" class="textarea">{{ old('address', $company->address) }}</textarea></div>
         </x-admin.form-section>
 
+        <x-admin.form-section title="ZATCA national address and seller identification" columns="3">
+            <div><label for="street">Street *</label><input id="street" name="street" class="input" maxlength="191" value="{{ old('street', $company->street) }}"/></div>
+            <div><label for="building_number">Building number (4 digits) *</label><input id="building_number" name="building_number" class="input" maxlength="4" value="{{ old('building_number', $company->building_number) }}"/></div>
+            <div><label for="additional_number">Additional number</label><input id="additional_number" name="additional_number" class="input" maxlength="4" value="{{ old('additional_number', $company->additional_number) }}"/></div>
+            <div><label for="district">District *</label><input id="district" name="district" class="input" maxlength="191" value="{{ old('district', $company->district) }}"/></div>
+            <div><label for="postal_code">Postal code (5 digits) *</label><input id="postal_code" name="postal_code" class="input" maxlength="5" value="{{ old('postal_code', $company->postal_code) }}"/></div>
+            <div><label for="country_code">Country code (ISO) *</label><input id="country_code" name="country_code" class="input" maxlength="2" value="{{ old('country_code', $company->country_code ?? 'SA') }}"/></div>
+            <div><label for="seller_id_scheme">Seller identification scheme</label><select id="seller_id_scheme" name="seller_id_scheme" class="select">@foreach (\App\Models\CompanyProfile::SELLER_ID_SCHEMES as $scheme)<option value="{{ $scheme }}" @selected(old('seller_id_scheme', $company->seller_id_scheme ?? 'CRN') === $scheme)>{{ $scheme }}</option>@endforeach</select><small>The CR Number above is used as the identification value.</small></div>
+        </x-admin.form-section>
+
         <div class="form-actions">
             <a class="btn outline" href="{{ route('admin.dashboard') }}">Cancel</a>
             <button type="submit" class="btn primary">Save Company Profile</button>

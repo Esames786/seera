@@ -107,11 +107,11 @@
                 <a class="btn sm primary" href="{{ route('admin.accounting.zatca.index') }}">Open ZATCA</a>
             </x-slot:headerActions>
             <thead>
-                <tr><th>Clearance Status</th><th>Invoices</th></tr>
+                <tr><th>ZATCA status</th><th>Invoices</th></tr>
             </thead>
             <tbody>
                 @forelse ($zatcaSummary as $status => $count)
-                    <tr><td><x-admin.status-badge :status="$status"/></td><td>{{ $count }}</td></tr>
+                    <tr><td>{{ __('zatca.status_'.$status) }}</td><td>{{ $count }}</td></tr>
                 @empty
                     <tr><td colspan="2" class="table-empty">No ZATCA records yet.</td></tr>
                 @endforelse

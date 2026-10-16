@@ -36,15 +36,15 @@ class AccountingDashboardController extends Controller
             'outputVat' => round($outputVat, 2),
             'inputVat' => round($inputVat, 2),
             'unpostedJournals' => JournalEntry::whereIn('status', ['draft', 'approved'])->count(),
-            'zatcaFailed' => ZatcaInvoiceRecord::where('clearance_status', 'failed')->count(),
+            'zatcaFailed' => ZatcaInvoiceRecord::whereIn('status', ['rejected', 'failed', 'validation_failed', 'outcome_unknown'])->count(),
             'monthlyRevenue' => $this->monthlyMovement('revenue'),
             'monthlyExpenses' => $this->monthlyMovement('expense'),
             'payableAging' => $this->aging(SupplierBill::class, 'due_date', ['unpaid', 'partially_paid', 'approved']),
             'receivableAging' => $this->aging(CustomerInvoice::class, 'due_date', ['unpaid', 'partially_paid'], 'payment_status'),
             'recentJournals' => JournalEntry::with('costCenter')->latest('journal_date')->latest('id')->limit(8)->get(),
-            'zatcaSummary' => ZatcaInvoiceRecord::selectRaw('clearance_status, COUNT(*) as total')
-                ->groupBy('clearance_status')
-                ->pluck('total', 'clearance_status')
+            'zatcaSummary' => ZatcaInvoiceRecord::selectRaw('status, COUNT(*) as total')
+                ->groupBy('status')
+                ->pluck('total', 'status')
                 ->all(),
             'draftBills' => SupplierBill::where('status', 'draft')->count(),
             'draftInvoices' => CustomerInvoice::where('payment_status', 'draft')->count(),

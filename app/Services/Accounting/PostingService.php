@@ -613,41 +613,11 @@ class PostingService
         ], $lines, 'Inventory', 'Stock Adjusted', $userId);
     }
 
-    /**
-     * ZATCA foundation only: UUID, QR payload, XML path and a tamper-proof hash
-     * are generated locally. Production clearance happens in the ZATCA phase.
-     */
+    /** Compliance record (UUID, not generated) for an approved invoice; the Phase 2 service owns the lifecycle. */
     public function createZatcaRecord(CustomerInvoice $invoice): ZatcaInvoiceRecord
     {
-        $invoice->loadMissing('customer');
-        $uuid = (string) Str::uuid();
-
-        $qr = base64_encode(implode('|', [
-            $invoice->customer->name,
-            $invoice->invoice_number,
-            $invoice->invoice_date?->toDateString(),
-            (string) $invoice->total_amount,
-            (string) $invoice->vat_amount,
-        ]));
-
-        $record = ZatcaInvoiceRecord::updateOrCreate(
-            ['customer_invoice_id' => $invoice->id],
-            [
-                'uuid' => $invoice->zatcaRecord?->uuid ?? $uuid,
-                'qr_code_data' => $qr,
-                'xml_file_path' => 'zatca/xml/'.$invoice->invoice_number.'.xml',
-                'digital_signature_status' => 'signed',
-                'clearance_status' => 'pending',
-                'retry_count' => 0,
-                'tamper_proof_hash' => hash('sha256', $uuid.$invoice->invoice_number.$invoice->total_amount),
-            ]
-        );
-
-        $invoice->update(['zatca_status' => 'pending_clearance']);
-
-        return $record;
+        return app(\App\Services\Zatca\ZatcaSubmissionService::class)->ensureRecord($invoice);
     }
-
     public function recordVat(
         string $type,
         float|string $vatAmount,

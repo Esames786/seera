@@ -29,6 +29,8 @@
         <div><label for="vat_rate">VAT Rate (%) *</label><input id="vat_rate" name="vat_rate" type="number" step="0.01" min="0" max="100" class="input" value="{{ old('vat_rate', $invoice?->vat_rate ?? 15) }}" required/></div>
         <div><label for="invoice_date">Invoice Date *</label><input id="invoice_date" name="invoice_date" type="date" class="input" value="{{ old('invoice_date', $invoice?->invoice_date?->toDateString() ?? now()->toDateString()) }}" required/></div>
         <div><label for="due_date">Due Date</label><input id="due_date" name="due_date" type="date" class="input" value="{{ old('due_date', $invoice?->due_date?->toDateString() ?? now()->addDays(30)->toDateString()) }}"/></div>
+        <div><label for="invoice_type">{{ __('zatca.invoice_type') }} *</label><select id="invoice_type" name="invoice_type" class="select" required>@foreach (\App\Models\CustomerInvoice::TYPES as $type)<option value="{{ $type }}" @selected(old('invoice_type', $invoice?->invoice_type ?? 'standard') === $type)>{{ __('zatca.type_'.$type) }}</option>@endforeach</select></div>
+        <div><label for="supply_date">{{ __('zatca.supply_date') }}</label><input id="supply_date" name="supply_date" type="date" class="input" value="{{ old('supply_date', $invoice?->supply_date?->toDateString() ?? $invoice?->invoice_date?->toDateString() ?? now()->toDateString()) }}"/><small>Required for a standard tax invoice (KSA-5).</small></div>
         <div>
             <label for="project_id">Project</label>
             <select id="project_id" name="project_id" class="select">
