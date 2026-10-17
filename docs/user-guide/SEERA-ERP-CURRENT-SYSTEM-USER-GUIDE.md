@@ -3,7 +3,7 @@
 
 | | |
 |---|---|
-| **Version** | 1.16 |
+| **Version** | 1.17 |
 | **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 17 October 2026. ZATCA e-invoicing Phase 2, sprint 1 (chapter 14): compliant UBL XML, local validation, cryptographic stamp, Phase-2 QR, hash chain, explicit sandbox / simulation / production environments, owner-controlled onboarding, clearance and reporting client with a truthful state machine (FIN-ZAT-001 … 003, WF-026); ZATCA sandbox submission, SDK validation and production onboarding NOT RUN / NOT YET OPERATIONAL. Earlier, 15 October 2026. Offline Mobile Sync Foundation Phase 1 (chapter 23): GPS check-in / check-out and site expense entry can be captured without a connection and synchronised later through server-validated, replay-safe receipts (MOB-001, WF-025). Earlier state, 12 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Payroll Phase 2 (11 October 2026) adds the salary payment of a posted run from a bank / cash account (Dr payroll payable, Cr bank / cash) with replay protection and reversal, a generic bank transfer export frozen at generation, IBAN validation and masking (WF-022). The Project BOQ / Detailed Budget Engine Phase 1 (11 October 2026) adds budget versions and BOQ lines per project, Set as Current / revisions and Budget vs Actual on the posted ledger (MST-PRJ-006 / 007, WF-023). Equipment & Vehicles Phase 1 (12 October 2026) adds the asset register, project / site assignment history, fuel logs, maintenance records, private documents and Finance posting of equipment cost into the project ledger (EQP-001 … 004, WF-024). Offline attendance, an official Saudi WPS / Mudad file, GOSI, live GPS tracking, budget approval runtime and project scheduling remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
 | **Prepared** | 17 October 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
@@ -2447,21 +2447,23 @@ The Old Value and New Value columns are filled only for a few administrative ent
 | **Screens in this chapter** | FIN-ZAT-001, FIN-ZAT-002, FIN-ZAT-003 |
 | **Workflows in this chapter** | WF-026 |
 
-Truth first. After sprint 1 (17 October 2026):
+Truth first. After sprint 1 and the official-validation gate (both 17 October 2026). Status words: **SOURCE IMPLEMENTED** (code and automated tests), **SDK VERIFIED** (ZATCA's Compliance and Enablement Toolbox was run — none yet), **SANDBOX VERIFIED** (the ZATCA Developer Portal sandbox accepted it), **PRODUCTION ONBOARDED** (none). Details and rule ids: `docs/zatca-sandbox-validation-evidence-2026-10-17.md`.
 
 | Capability | Status |
 |---|---|
-| UBL 2.1 XML per the ZATCA XML Implementation Standard v1.2 and Data Dictionary (2023-05-19), built from the posted invoice and frozen seller / buyer snapshots | AVAILABLE |
+| UBL 2.1 XML per the ZATCA XML Implementation Standard v1.2 and Data Dictionary (2023-05-19), built from the posted invoice and frozen seller / buyer snapshots | SOURCE IMPLEMENTED · SANDBOX VERIFIED (standard and simplified invoices, note samples, Arabic text, multi-line) |
 | Local validation (well-formed XML and a subset of the KSA rules: identifiers, national address, dates, codes, decimals, totals, VAT rounding) | AVAILABLE — a local pass is **not** compliance |
-| Cryptographic stamp (XAdES, ECDSA secp256k1, SHA-256), invoice hash, invoice counter (ICV) and previous-hash chain per solution unit | AVAILABLE |
-| Phase-2 QR (TLV tags 1–8, tag 9 for simplified documents) | AVAILABLE |
+| Cryptographic stamp (XAdES, ECDSA secp256k1, SHA-256), invoice hash, invoice counter (ICV) and previous-hash chain per solution unit | SOURCE IMPLEMENTED · SANDBOX VERIFIED (the SignedProperties digest and the certificate serial / issuer were corrected on sandbox evidence) |
+| Phase-2 QR (TLV tags 1–8, tag 9 for simplified documents) | SOURCE IMPLEMENTED · SANDBOX VERIFIED (timestamp format corrected) |
 | Environments sandbox / simulation / production, production disabled by default | AVAILABLE |
-| Onboarding (key pair, CSR, OTP, compliance CSID, compliance checks, production CSID) with encrypted credentials | AVAILABLE as a workflow; **not yet executed** against ZATCA |
-| Clearance (standard) and reporting (simplified) client with retry and "outcome unknown" handling | AVAILABLE; tested against a faked ZATCA only |
-| Validation with ZATCA's Compliance and Enablement Toolbox (SDK) | NOT RUN |
-| Live sandbox / simulation submission | NOT RUN (Developer Portal credentials and OTP required) |
+| Onboarding (key pair, CSR, OTP, compliance CSID, compliance checks, production CSID) with encrypted credentials | SANDBOX VERIFIED: compliance CSID issued for a Seera CSR, all six compliance documents accepted, sandbox production CSID issued. Simulation and production: **NOT ONBOARDED** (company OTP required) |
+| Clearance (standard) and reporting (simplified) client with retry and "outcome unknown" handling | SANDBOX VERIFIED: a standard invoice **Cleared** and a simplified invoice **Reported** on the Developer Portal sandbox; negative cases mapped to Validation error / Authentication error / Rejected / Retryable / Outcome unknown. Simulation and production: NOT RUN |
+| Validation with ZATCA's Compliance and Enablement Toolbox (SDK) | NOT RUN — the official download is behind the Developer Portal login; the JDK 11 runtime and the commands are documented for the owner |
+| Live sandbox / simulation submission | Sandbox: VERIFIED (17 October 2026). Simulation: NOT RUN (company VAT and OTP required) |
 | Production integration (FATOORA) | NOT YET OPERATIONAL (owner onboarding, wave notification) |
-| Credit / debit notes, printable Arabic invoice | NOT YET OPERATIONAL |
+| Credit / debit notes | NOT BUILT — **production blocker**: a cleared or reported document can only be corrected by a note |
+| Printable Arabic (bilingual) invoice / PDF/A-3 | NOT BUILT — pre-production item for invoices shared with buyers |
+| VAT rounding policy (per-line vs document-level) | DECISION PENDING with Finance (options in the evidence document); mismatching invoices are blocked locally meanwhile |
 
 Never say "ZATCA compliant", "cleared" or "reported" about an invoice unless its record shows **Cleared by ZATCA** or **Reported to ZATCA**: those two states are written only from a ZATCA response.
 
@@ -2488,6 +2490,8 @@ The seller (Company Profile) always needs: legal name (Arabic name recommended f
 | Failed (configuration / readiness) | Readiness or configuration error before any stamp | Seera |
 | Submission outcome unknown: verification required | The request timed out after being sent; ZATCA may or may not have it. Never treated as rejected. Retry sends the identical document; if ZATCA answers "duplicate", verify in the FATOORA portal | Seera |
 | Cancelled (invoice reopened) | The invoice was reopened before any stamp | Reopen |
+
+Sandbox evidence (17 October 2026): the Developer Portal sandbox accepted a re-submission of the same document identity, so the duplicate guard is Seera's own, and ZATCA publishes no API to query a document's status; an outcome-unknown attempt is therefore verified by a person in the FATOORA portal before anything else is done.
 
 ### [FIN-ZAT-001] ZATCA E-Invoicing (register)
 
@@ -2526,7 +2530,7 @@ An invoice that has been stamped or submitted cannot be edited or reopened. ZATC
 
 ### Arabic and the human-readable invoice
 
-ZATCA requires the human-readable invoice in Arabic (bilingual allowed). Seera has no printable or PDF invoice layout yet; the XML carries the legal data, and the readiness check warns when the Arabic company name is missing.
+ZATCA requires the human-readable invoice in Arabic (bilingual allowed) and the invoice to be generated as XML or PDF/A-3 with embedded XML; a simplified invoice is handed to the customer printed, or electronically by agreement. Seera has no printable or PDF invoice layout yet; the XML carries the legal data, and the readiness check warns when the Arabic company name is missing. This is a pre-production item for invoices shared with buyers.
 
 ### Security
 

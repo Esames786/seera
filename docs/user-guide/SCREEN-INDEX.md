@@ -2,7 +2,7 @@
 
 Master index of every screen in the current system. Screen IDs are permanent; use them when you refer to a page in training, support tickets or the [User Guide](SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md). Workflows are indexed in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).
 
-Version 1.16 · Prepared 17 October 2026 · System state: ZATCA e-invoicing Phase 2 sprint 1 (FIN-ZAT-001 … 003; sandbox / production NOT RUN / NOT YET OPERATIONAL); Offline Mobile Sync Phase 1 (MOB-001; offline capture on HR-ATT-004 and the EXP-SE-002 mobile shortcut); current feature branch, runtime for Purchase Requests, Site Expenses and Supplier Bills; Project Phase B expenses integrated; Wave 2 workspaces; GPS attendance (online); Payroll → GL Phase 1 with payslips; Payroll Phase 2 salary payment and generic bank export; Project Detailed Budget / BOQ Phase 1; Equipment & Vehicles Phase 1 · Status: current implemented system only; not a deployment claim.
+Version 1.17 · Prepared 17 October 2026 · System state: ZATCA e-invoicing Phase 2 sprint 1 + official-validation gate (FIN-ZAT-001 … 003; SANDBOX VERIFIED 17 Oct 2026, SDK NOT RUN, simulation / production NOT ONBOARDED); Offline Mobile Sync Phase 1 (MOB-001; offline capture on HR-ATT-004 and the EXP-SE-002 mobile shortcut); current feature branch, runtime for Purchase Requests, Site Expenses and Supplier Bills; Project Phase B expenses integrated; Wave 2 workspaces; GPS attendance (online); Payroll → GL Phase 1 with payslips; Payroll Phase 2 salary payment and generic bank export; Project Detailed Budget / BOQ Phase 1; Equipment & Vehicles Phase 1 · Status: current implemented system only; not a deployment claim.
 
 How to read the columns:
 

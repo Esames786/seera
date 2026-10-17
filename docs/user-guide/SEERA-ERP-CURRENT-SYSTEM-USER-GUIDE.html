@@ -46,7 +46,7 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 <tbody>
 <tr>
 <td><strong>Version</strong></td>
-<td>1.16</td>
+<td>1.17</td>
 </tr>
 <tr>
 <td><strong>System state</strong></td>
@@ -4606,7 +4606,7 @@ The Old Value and New Value columns are filled only for a few administrative ent
 </tr>
 </tbody>
 </table>
-<p>Truth first. After sprint 1 (17 October 2026):</p>
+<p>Truth first. After sprint 1 and the official-validation gate (both 17 October 2026). Status words: <strong>SOURCE IMPLEMENTED</strong> (code and automated tests), <strong>SDK VERIFIED</strong> (ZATCA's Compliance and Enablement Toolbox was run — none yet), <strong>SANDBOX VERIFIED</strong> (the ZATCA Developer Portal sandbox accepted it), <strong>PRODUCTION ONBOARDED</strong> (none). Details and rule ids: <code>docs/zatca-sandbox-validation-evidence-2026-10-17.md</code>.</p>
 <table>
 <thead>
 <tr>
@@ -4617,7 +4617,7 @@ The Old Value and New Value columns are filled only for a few administrative ent
 <tbody>
 <tr>
 <td>UBL 2.1 XML per the ZATCA XML Implementation Standard v1.2 and Data Dictionary (2023-05-19), built from the posted invoice and frozen seller / buyer snapshots</td>
-<td>AVAILABLE</td>
+<td>SOURCE IMPLEMENTED · SANDBOX VERIFIED (standard and simplified invoices, note samples, Arabic text, multi-line)</td>
 </tr>
 <tr>
 <td>Local validation (well-formed XML and a subset of the KSA rules: identifiers, national address, dates, codes, decimals, totals, VAT rounding)</td>
@@ -4625,11 +4625,11 @@ The Old Value and New Value columns are filled only for a few administrative ent
 </tr>
 <tr>
 <td>Cryptographic stamp (XAdES, ECDSA secp256k1, SHA-256), invoice hash, invoice counter (ICV) and previous-hash chain per solution unit</td>
-<td>AVAILABLE</td>
+<td>SOURCE IMPLEMENTED · SANDBOX VERIFIED (the SignedProperties digest and the certificate serial / issuer were corrected on sandbox evidence)</td>
 </tr>
 <tr>
 <td>Phase-2 QR (TLV tags 1–8, tag 9 for simplified documents)</td>
-<td>AVAILABLE</td>
+<td>SOURCE IMPLEMENTED · SANDBOX VERIFIED (timestamp format corrected)</td>
 </tr>
 <tr>
 <td>Environments sandbox / simulation / production, production disabled by default</td>
@@ -4637,27 +4637,35 @@ The Old Value and New Value columns are filled only for a few administrative ent
 </tr>
 <tr>
 <td>Onboarding (key pair, CSR, OTP, compliance CSID, compliance checks, production CSID) with encrypted credentials</td>
-<td>AVAILABLE as a workflow; <strong>not yet executed</strong> against ZATCA</td>
+<td>SANDBOX VERIFIED: compliance CSID issued for a Seera CSR, all six compliance documents accepted, sandbox production CSID issued. Simulation and production: <strong>NOT ONBOARDED</strong> (company OTP required)</td>
 </tr>
 <tr>
 <td>Clearance (standard) and reporting (simplified) client with retry and &quot;outcome unknown&quot; handling</td>
-<td>AVAILABLE; tested against a faked ZATCA only</td>
+<td>SANDBOX VERIFIED: a standard invoice <strong>Cleared</strong> and a simplified invoice <strong>Reported</strong> on the Developer Portal sandbox; negative cases mapped to Validation error / Authentication error / Rejected / Retryable / Outcome unknown. Simulation and production: NOT RUN</td>
 </tr>
 <tr>
 <td>Validation with ZATCA's Compliance and Enablement Toolbox (SDK)</td>
-<td>NOT RUN</td>
+<td>NOT RUN — the official download is behind the Developer Portal login; the JDK 11 runtime and the commands are documented for the owner</td>
 </tr>
 <tr>
 <td>Live sandbox / simulation submission</td>
-<td>NOT RUN (Developer Portal credentials and OTP required)</td>
+<td>Sandbox: VERIFIED (17 October 2026). Simulation: NOT RUN (company VAT and OTP required)</td>
 </tr>
 <tr>
 <td>Production integration (FATOORA)</td>
 <td>NOT YET OPERATIONAL (owner onboarding, wave notification)</td>
 </tr>
 <tr>
-<td>Credit / debit notes, printable Arabic invoice</td>
-<td>NOT YET OPERATIONAL</td>
+<td>Credit / debit notes</td>
+<td>NOT BUILT — <strong>production blocker</strong>: a cleared or reported document can only be corrected by a note</td>
+</tr>
+<tr>
+<td>Printable Arabic (bilingual) invoice / PDF/A-3</td>
+<td>NOT BUILT — pre-production item for invoices shared with buyers</td>
+</tr>
+<tr>
+<td>VAT rounding policy (per-line vs document-level)</td>
+<td>DECISION PENDING with Finance (options in the evidence document); mismatching invoices are blocked locally meanwhile</td>
 </tr>
 </tbody>
 </table>
@@ -4750,6 +4758,7 @@ The Old Value and New Value columns are filled only for a few administrative ent
 </tr>
 </tbody>
 </table>
+<p>Sandbox evidence (17 October 2026): the Developer Portal sandbox accepted a re-submission of the same document identity, so the duplicate guard is Seera's own, and ZATCA publishes no API to query a document's status; an outcome-unknown attempt is therefore verified by a person in the FATOORA portal before anything else is done.</p>
 <h3 id="fin-zat-001-zatca-e-invoicing-register">[FIN-ZAT-001] ZATCA E-Invoicing (register)</h3>
 <p>Web address: <a class="url" href="https://seera.tech-brit.co.uk/admin/accounting/zatca" target="_blank" rel="noopener"><code>https://seera.tech-brit.co.uk/admin/accounting/zatca</code></a></p>
 <p>Cards Cleared / Reported, Stamped / Validated, Rejected / Failed, Outcome unknown; the current environment and solution unit; filters by status and search; table Invoice, type, customer, issue date, environment, ICV, status (with &quot;warnings&quot; when accepted with warnings), ZATCA status, attempts; <strong>View</strong>. Permission: ZATCA Invoicing — view. ZATCA Settings button needs ZATCA Invoicing — edit.</p>
@@ -4773,7 +4782,7 @@ The Old Value and New Value columns are filled only for a few administrative ent
 <h3 id="corrections-reopening-and-notes">Corrections, reopening and notes</h3>
 <p>An invoice that has been stamped or submitted cannot be edited or reopened. ZATCA corrections are credit or debit notes (codes 381 / 383), which Seera does not issue as business documents yet; the only note XML Seera produces is the onboarding compliance sample. Until an AR note module exists, correct such invoices outside Seera and record the outcome with Finance.</p>
 <h3 id="arabic-and-the-human-readable-invoice">Arabic and the human-readable invoice</h3>
-<p>ZATCA requires the human-readable invoice in Arabic (bilingual allowed). Seera has no printable or PDF invoice layout yet; the XML carries the legal data, and the readiness check warns when the Arabic company name is missing.</p>
+<p>ZATCA requires the human-readable invoice in Arabic (bilingual allowed) and the invoice to be generated as XML or PDF/A-3 with embedded XML; a simplified invoice is handed to the customer printed, or electronically by agreement. Seera has no printable or PDF invoice layout yet; the XML carries the legal data, and the readiness check warns when the Arabic company name is missing. This is a pre-production item for invoices shared with buyers.</p>
 <h3 id="security">Security</h3>
 <p>Private keys and CSID secrets are encrypted with the application key; XML artifacts live under the private storage disk and are served only through the export permission; attempts are logged without credentials, Authorization headers or OTPs; every ZATCA call uses HTTPS with certificate verification and bounded timeouts; the stored signed XML is re-hashed before every submission and refused if it changed.</p>
 <h2 id="15-reports">15. Reports</h2>
