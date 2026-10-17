@@ -40,6 +40,13 @@ final class ZatcaComplianceSamples
         return $docs;
     }
 
+    /**
+     * Buyer VAT numbers for the sample documents. ZATCA rejects a document whose buyer VAT equals the seller VAT
+     * (BR-CUSTOM-VALIDATION-01, observed on the Developer Portal sandbox on 17 Oct 2026), so the sample buyer takes
+     * whichever of the two valid dummy numbers differs from the unit seller.
+     */
+    public const SAMPLE_BUYER_VATS = ['399999999800003', '399999999900003'];
+
     /** @param array<string, mixed> $seller */
     private function document(string $type, string $typeCode, string $number, array $seller, ?string $billingReference = null, ?string $reason = null): array
     {
@@ -58,7 +65,7 @@ final class ZatcaComplianceSamples
             'previous_hash' => ZatcaEgsUnit::FIRST_PREVIOUS_HASH,
             'seller' => $seller,
             'buyer' => [
-                'name' => 'Sample Buyer for ZATCA compliance checks', 'type' => 'Company', 'vat_number' => '399999999900003',
+                'name' => 'Sample Buyer for ZATCA compliance checks', 'type' => 'Company', 'vat_number' => $this->sampleBuyerVat((string) ($seller['vat_number'] ?? '')),
                 'id_scheme' => 'CRN', 'id_value' => '1010000000', 'street' => 'King Fahd Road', 'building_number' => '1234',
                 'district' => 'Al Olaya', 'city' => 'Riyadh', 'postal_code' => '12211', 'country_code' => 'SA',
             ],
@@ -73,5 +80,16 @@ final class ZatcaComplianceSamples
             'totals' => ['line_extension' => '100.00', 'tax_exclusive' => '100.00', 'vat' => '15.00', 'tax_inclusive' => '115.00', 'allowance' => '0.00', 'prepaid' => '0.00', 'payable' => '115.00',
                 'vat_breakdown' => [['category' => 'S', 'rate' => '15.00', 'taxable' => '100.00', 'vat' => '15.00']]],
         ];
+    }
+
+    public function sampleBuyerVat(string $sellerVat): string
+    {
+        foreach (self::SAMPLE_BUYER_VATS as $vat) {
+            if ($vat !== $sellerVat) {
+                return $vat;
+            }
+        }
+
+        return self::SAMPLE_BUYER_VATS[0];
     }
 }

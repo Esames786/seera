@@ -21,6 +21,7 @@ use App\Services\Zatca\ZatcaException;
 use App\Services\Zatca\ZatcaHashService;
 use App\Services\Zatca\ZatcaOnboardingService;
 use App\Services\Zatca\ZatcaQrService;
+use App\Services\Zatca\ZatcaSignatureService;
 use App\Services\Zatca\ZatcaSubmissionService;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -362,7 +363,7 @@ class ZatcaPhase2Test extends TestCase
         $tags = app(ZatcaQrService::class)->decode($record->qr_code);
         $this->assertSame('Seera Construction Co.', $tags[1]);
         $this->assertSame('300123456700003', $tags[2]);
-        $this->assertSame($invoice->invoice_date->toDateString().'T'.$invoice->issue_time.'Z', $tags[3]);
+        $this->assertSame($invoice->invoice_date->toDateString().'T'.$invoice->issue_time, $tags[3]);
         $this->assertSame('1150.00', $tags[4]);
         $this->assertSame('150.00', $tags[5]);
         $this->assertSame($record->invoice_hash, $tags[6]);
@@ -748,6 +749,44 @@ class ZatcaPhase2Test extends TestCase
         $this->assertSame('production-secret', $unit->secret('production_secret_encrypted'));
         $this->assertNotNull($unit->certificate_expires_at);
         Http::assertSent(fn (ClientRequest $r) => $r->url() === self::SANDBOX.'/production/csids' && $r->data()['compliance_request_id'] === '1234567890123');
+    }
+
+    public function test_signed_properties_digest_uses_the_standalone_serialisation_and_hex_then_base64(): void
+    {
+        // Developer Portal sandbox reporting/single, 17 Oct 2026: the only construction REPORTED (see ZatcaSignatureService::signedPropertiesForDigest).
+        $record = $this->service()->sign($this->invoice(), $this->admin());
+        $xml = $this->signedXml($record);
+        $this->assertSame(1, preg_match('/<xades:SignedProperties Id="xadesSignedProperties">.*?<\/xades:SignedProperties>/s', $xml, $block), 'the embedded block carries no namespace declarations');
+        $this->assertSame(1, preg_match('/URI="#xadesSignedProperties">\s*<ds:DigestMethod[^>]*\/>\s*<ds:DigestValue>([^<]+)</', $xml, $digest));
+        $decorated = ZatcaSignatureService::signedPropertiesForDigest($block[0]);
+        $this->assertStringContainsString('<xades:SignedProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="xadesSignedProperties">', $decorated);
+        $this->assertSame(4, substr_count($decorated, 'xmlns:ds="http://www.w3.org/2000/09/xmldsig#"'));
+        $this->assertSame(base64_encode(hash('sha256', $decorated)), $digest[1]);
+        $this->assertNotSame(base64_encode(hash('sha256', $block[0], true)), $digest[1]);
+    }
+
+    public function test_certificate_serial_and_issuer_follow_the_production_ca_format(): void
+    {
+        // Developer Portal sandbox, 17 Oct 2026: the production CA issues 19-byte serials that openssl_x509_parse() reports as
+        // `0x…`; X509SerialNumber is an xs:integer (XSD_ZATCA_INVALID otherwise) and the issuer is RFC 2253 with the DCs reversed.
+        $this->assertSame('379112742831380471835263969587287663520528387', ZatcaCrypto::serialDecimal('0x1100003803C5F74023B3FC5C5F000100003803', '1100003803C5F74023B3FC5C5F000100003803'));
+        $this->assertSame('1792223678885', ZatcaCrypto::serialDecimal('1792223678885', '01A148DB11A5'));
+        $this->assertSame('49', ZatcaCrypto::serialDecimal('', '31'));
+        $this->assertSame('CN=PRZEINVOICESCA4-CA, DC=extgazt, DC=gov, DC=local', ZatcaCrypto::issuerName(['DC' => ['local', 'gov', 'extgazt'], 'CN' => 'PRZEINVOICESCA4-CA']));
+        $this->assertSame('CN=eInvoicing', ZatcaCrypto::issuerName(['CN' => 'eInvoicing']));
+    }
+
+    public function test_compliance_sample_buyer_vat_never_equals_the_seller_vat(): void
+    {
+        // Developer Portal sandbox, 17 Oct 2026: BR-CUSTOM-VALIDATION-01 rejects a document whose buyer VAT equals the seller VAT.
+        $samples = app(\App\Services\Zatca\ZatcaComplianceSamples::class);
+        $unit = new ZatcaEgsUnit(['invoice_types' => '1100']);
+        foreach (['300123456700003', '399999999900003', '399999999800003'] as $sellerVat) {
+            foreach ($samples->documents($unit, ['name' => 'Seller', 'vat_number' => $sellerVat]) as $doc) {
+                $this->assertNotSame($sellerVat, $doc['buyer']['vat_number'], $doc['number']);
+                $this->assertMatchesRegularExpression('/^3\d{13}3$/', $doc['buyer']['vat_number']);
+            }
+        }
     }
 
     public function test_settings_page_and_unit_form_for_the_configurer(): void

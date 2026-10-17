@@ -47,7 +47,7 @@ final class ZatcaStampService
             $signingUnit = $credentialKind === 'compliance' ? $this->complianceView($locked) : $locked;
             $signed = $this->signer->sign($unsigned, $signingUnit, [
                 'seller_name' => $doc['seller']['name'], 'vat_number' => $doc['seller']['vat_number'],
-                'timestamp' => $doc['issue_date'].'T'.$doc['issue_time'].'Z', 'total_with_vat' => $doc['totals']['tax_inclusive'], 'vat_total' => $doc['totals']['vat'],
+                'timestamp' => $doc['issue_date'].'T'.$doc['issue_time'], 'total_with_vat' => $doc['totals']['tax_inclusive'], 'vat_total' => $doc['totals']['vat'],
             ], $doc['type'] === 'simplified');
             $locked->forceFill(['icv_counter' => $doc['icv'], 'last_invoice_hash' => $signed['invoice_hash']])->save();
             $unit->icv_counter = $locked->icv_counter;

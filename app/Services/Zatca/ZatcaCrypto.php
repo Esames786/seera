@@ -95,8 +95,8 @@ final class ZatcaCrypto
         }
 
         return [
-            'issuer_name' => $this->rfc2253($parsed['issuer']),
-            'serial_number' => (string) ($parsed['serialNumber'] ?? $this->hexToDecimal($parsed['serialNumberHex'] ?? '0')),
+            'issuer_name' => self::issuerName($parsed['issuer']),
+            'serial_number' => self::serialDecimal((string) ($parsed['serialNumber'] ?? ''), (string) ($parsed['serialNumberHex'] ?? '')),
             'public_key_der' => $this->pemToDer($publicDetails['key']),
             'signature_der' => $this->certificateSignature(base64_decode(preg_replace('/\s+/', '', $certificateBase64), true) ?: ''),
             'not_after' => (int) ($parsed['validTo_time_t'] ?? 0),
@@ -104,17 +104,45 @@ final class ZatcaCrypto
         ];
     }
 
-    /** Issuer DN in RFC 2253 order (most specific first), as X509IssuerName expects. */
-    private function rfc2253(array $issuer): string
+    /**
+     * Issuer DN in RFC 2253 order (most specific first), as X509IssuerName expects.
+     * A multi-valued attribute (the ZATCA CA issuer is `DC=local, DC=gov, DC=extgazt, CN=PRZEINVOICESCA4-CA`)
+     * is reversed as well, giving `CN=PRZEINVOICESCA4-CA, DC=extgazt, DC=gov, DC=local`.
+     *
+     * @param  array<string, string|array<int, string>>  $issuer  as returned by openssl_x509_parse()
+     */
+    public static function issuerName(array $issuer): string
     {
         $parts = [];
         foreach (array_reverse($issuer, true) as $key => $value) {
-            foreach ((array) $value as $item) {
+            foreach (array_reverse((array) $value) as $item) {
                 $parts[] = $key.'='.$item;
             }
         }
 
         return implode(', ', $parts);
+    }
+
+    /**
+     * X509SerialNumber is an xs:integer. openssl_x509_parse() returns `serialNumber` in decimal only while it fits a
+     * machine word and as `0x…` beyond that (the ZATCA production CA uses 19-byte serials), so anything that is not
+     * plain digits is rebuilt from the hex form. Observed on the Developer Portal sandbox, 17 Oct 2026.
+     */
+    public static function serialDecimal(string $serialNumber, string $serialHex): string
+    {
+        if ($serialNumber !== '' && ctype_digit($serialNumber)) {
+            return ltrim($serialNumber, '0') ?: '0';
+        }
+        $hex = preg_replace('/^0x/i', '', $serialHex !== '' ? $serialHex : $serialNumber);
+        $dec = '0';
+        foreach (str_split(strtolower($hex)) as $digit) {
+            if (! ctype_xdigit($digit)) {
+                throw ZatcaException::configuration('invalid_certificate', __('zatca.err_openssl', ['detail' => 'serial number']));
+            }
+            $dec = bcadd(bcmul($dec, '16'), (string) hexdec($digit));
+        }
+
+        return $dec;
     }
 
     private function pemToDer(string $pem): string
@@ -165,16 +193,6 @@ final class ZatcaCrypto
         }
 
         return [$tag, $length, 2 + $bytes];
-    }
-
-    private function hexToDecimal(string $hex): string
-    {
-        $dec = '0';
-        foreach (str_split(strtolower($hex)) as $digit) {
-            $dec = bcadd(bcmul($dec, '16'), (string) hexdec($digit));
-        }
-
-        return $dec;
     }
 
     public function sha256Base64(string $bytes): string

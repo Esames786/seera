@@ -16,9 +16,9 @@ use Illuminate\Support\Carbon;
  *  5. the ds:Signature with both References, SignatureValue, KeyInfo,
  *  6. the QR (ZatcaQrService) placed in AdditionalDocumentReference "QR" and
  *     the cac:Signature element.
- * The exact serialisation of the SignedProperties block matters because its
- * digest is computed over the block as embedded; the block below keeps the
- * fixed layout the official toolbox uses.
+ * The exact serialisation of the SignedProperties block matters: ZATCA hashes
+ * the block as it serialises it standalone (see signedPropertiesForDigest()),
+ * so the block below keeps the fixed layout the official toolbox uses.
  */
 final class ZatcaSignatureService
 {
@@ -43,7 +43,7 @@ final class ZatcaSignatureService
         $details = $this->crypto->certificateDetails($certificate);
         $certificateDigest = base64_encode(hash('sha256', $certificate));
         $signedProperties = $this->signedProperties($signedAt->format('Y-m-d\TH:i:s\Z'), $certificateDigest, $details['issuer_name'], $details['serial_number']);
-        $signedPropertiesDigest = base64_encode(hash('sha256', $signedProperties, true));
+        $signedPropertiesDigest = base64_encode(hash('sha256', self::signedPropertiesForDigest($signedProperties)));
 
         $extension = $this->extension($invoiceHash, $signedPropertiesDigest, $signature, $certificate, $signedProperties);
         $qr = $this->qr->encode($qrFields + [
@@ -52,6 +52,27 @@ final class ZatcaSignatureService
         ], $simplified);
 
         return ['xml' => $this->embed($unsignedXml, $extension, $qr), 'invoice_hash' => $invoiceHash, 'signature' => $signature, 'qr' => $qr, 'signed_at' => $signedAt];
+    }
+
+    /**
+     * The bytes ZATCA hashes for the SignedProperties reference. The platform serialises the
+     * `xades:SignedProperties` element on its own, which declares `xmlns:xades` on the element
+     * and `xmlns:ds` on every ds:* child, takes SHA-256 as lowercase hex and base64-encodes that
+     * hex (the same hex-then-base64 shape as the certificate digest). The document keeps the
+     * undecorated block: embedding the declarations is refused as well.
+     *
+     * Evidence: Developer Portal sandbox `invoices/reporting/single`, 17 Oct 2026 — the raw block,
+     * C14N (inclusive / exclusive), minified and binary-digest constructions are all refused with
+     * `signed-properties-hashing`; this one is REPORTED. `compliance/invoices` does not apply the rule.
+     */
+    public static function signedPropertiesForDigest(string $signedProperties): string
+    {
+        return str_replace(
+            ['<xades:SignedProperties Id=', '<ds:DigestMethod ', '<ds:DigestValue>', '<ds:X509IssuerName>', '<ds:X509SerialNumber>'],
+            ['<xades:SignedProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id=', '<ds:DigestMethod xmlns:ds="http://www.w3.org/2000/09/xmldsig#" ', '<ds:DigestValue xmlns:ds="http://www.w3.org/2000/09/xmldsig#">',
+                '<ds:X509IssuerName xmlns:ds="http://www.w3.org/2000/09/xmldsig#">', '<ds:X509SerialNumber xmlns:ds="http://www.w3.org/2000/09/xmldsig#">'],
+            $signedProperties,
+        );
     }
 
     private function signedProperties(string $time, string $certDigest, string $issuer, string $serial): string
