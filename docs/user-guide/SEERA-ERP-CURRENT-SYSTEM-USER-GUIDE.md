@@ -3,8 +3,8 @@
 
 | | |
 |---|---|
-| **Version** | 1.17 |
-| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 17 October 2026. ZATCA e-invoicing Phase 2, sprint 1 (chapter 14): compliant UBL XML, local validation, cryptographic stamp, Phase-2 QR, hash chain, explicit sandbox / simulation / production environments, owner-controlled onboarding, clearance and reporting client with a truthful state machine (FIN-ZAT-001 … 003, WF-026); ZATCA sandbox submission, SDK validation and production onboarding NOT RUN / NOT YET OPERATIONAL. Earlier, 15 October 2026. Offline Mobile Sync Foundation Phase 1 (chapter 23): GPS check-in / check-out and site expense entry can be captured without a connection and synchronised later through server-validated, replay-safe receipts (MOB-001, WF-025). Earlier state, 12 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Payroll Phase 2 (11 October 2026) adds the salary payment of a posted run from a bank / cash account (Dr payroll payable, Cr bank / cash) with replay protection and reversal, a generic bank transfer export frozen at generation, IBAN validation and masking (WF-022). The Project BOQ / Detailed Budget Engine Phase 1 (11 October 2026) adds budget versions and BOQ lines per project, Set as Current / revisions and Budget vs Actual on the posted ledger (MST-PRJ-006 / 007, WF-023). Equipment & Vehicles Phase 1 (12 October 2026) adds the asset register, project / site assignment history, fuel logs, maintenance records, private documents and Finance posting of equipment cost into the project ledger (EQP-001 … 004, WF-024). Offline attendance, an official Saudi WPS / Mudad file, GOSI, live GPS tracking, budget approval runtime and project scheduling remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
+| **Version** | 1.18 |
+| **System state** | Feature branch `feature/seera-connected-workspaces-2026-09-23`, 22 October 2026. Customer Credit / Debit Notes Phase 1 (chapter 9, FIN-AR-006 … 009, WF-027): AR correction documents against posted customer invoices with their own journal, signed VAT correction, balance application, immutable snapshots, bilingual print view and ZATCA 381 / 383 e-documents on the shared chain; standard and simplified credit and debit notes CLEARED / REPORTED on the ZATCA Developer Portal sandbox on 22 October 2026 (SDK still NOT RUN, production NOT ONBOARDED). Earlier, 17 October 2026. ZATCA e-invoicing Phase 2, sprint 1 and official-validation gate (chapter 14): compliant UBL XML, local validation, cryptographic stamp, Phase-2 QR, hash chain, explicit sandbox / simulation / production environments, owner-controlled onboarding, clearance and reporting client with a truthful state machine (FIN-ZAT-001 … 003, WF-026); ZATCA sandbox submission, SDK validation and production onboarding NOT RUN / NOT YET OPERATIONAL. Earlier, 15 October 2026. Offline Mobile Sync Foundation Phase 1 (chapter 23): GPS check-in / check-out and site expense entry can be captured without a connection and synchronised later through server-validated, replay-safe receipts (MOB-001, WF-025). Earlier state, 12 October 2026: Wave 2 Batches A/B add connected User, Site, Item and Warehouse View/Manage workspaces; Batch C makes the Customer Invoice View a read-only finance document workspace (customer, project, VAT, accounting, receipts, balance / ageing, local e-invoice record, activity, return-to-context); Batch D makes the Employee View an employee-centred HR context page (contract / IQAMA summary, attendance, leave balance, overtime, salary, payroll and activity, each by permission, with register links and return-to-context). GPS Attendance + Geofence Runtime Phase 1 (online mobile web) adds location-validated check-in / check-out for the signed-in employee's own site (HR-ATT-004, WF-020). Payroll → GL Phase 1 (10 October 2026) posts approved payroll runs through the Finance-configured Payroll posting rule (salary expense per employee, payroll payable, deductions), adds the accounting state with Post / Retry / Reverse on the run and a printable payslip (HR-PAY-005, WF-021). Payroll Phase 2 (11 October 2026) adds the salary payment of a posted run from a bank / cash account (Dr payroll payable, Cr bank / cash) with replay protection and reversal, a generic bank transfer export frozen at generation, IBAN validation and masking (WF-022). The Project BOQ / Detailed Budget Engine Phase 1 (11 October 2026) adds budget versions and BOQ lines per project, Set as Current / revisions and Budget vs Actual on the posted ledger (MST-PRJ-006 / 007, WF-023). Equipment & Vehicles Phase 1 (12 October 2026) adds the asset register, project / site assignment history, fuel logs, maintenance records, private documents and Finance posting of equipment cost into the project ledger (EQP-001 … 004, WF-024). Offline attendance, an official Saudi WPS / Mudad file, GOSI, live GPS tracking, budget approval runtime and project scheduling remain NOT YET OPERATIONAL. Approval Runtime supports Purchase Requests, Site Expenses and Supplier Bills. Project Phase B remains PARTIAL beyond expenses. Other modules retain their existing approval behavior. This describes code, not production deployment. |
 | **Prepared** | 17 October 2026 |
 | **Status** | Current implemented system only. Planned features are not described as available. |
 | **Companion files** | [Screen Index](SCREEN-INDEX.md) · [Workflow Index](WORKFLOW-INDEX.md) |
@@ -1732,7 +1732,7 @@ Buttons: Record Payment, Back (Back to Bill), Cancel. Back and Cancel return to 
 What happens after Record Payment:
 A journal Dr Accounts Payable / Cr Cash or Bank is posted, the bill's paid and balance amounts update and the status moves to partially_paid or paid. If the same payment is submitted twice (double click, browser retry) the second one is recognised and nothing is added.
 
-### [FIN-AR-001 … 005] Accounts Receivable (Customer Invoices and Receipts)
+### [FIN-AR-001 … 009] Accounts Receivable (Customer Invoices, Receipts and Credit / Debit Notes)
 
 Web address: `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable` (FIN-AR-001) · `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/create` (FIN-AR-002) · `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/{id}` (FIN-AR-003) · `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/{id}/edit` (FIN-AR-004) · `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/{id}/receipt` (FIN-AR-005)
 
@@ -1849,6 +1849,27 @@ Fields: Source Module *, Trigger Event *, Cost Center Rule *, Debit Account, Cre
 
 ---
 
+#### Customer Credit / Debit Notes (FIN-AR-006 … 009) — correcting a posted invoice
+
+Web address: `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable/notes` (FIN-AR-006 register) · `…/notes/create?invoice={id}&type=credit|debit` (FIN-AR-007 draft form) · `…/notes/{id}` (FIN-AR-008 note workspace) · `…/notes/{id}/print` (FIN-AR-009 print view)
+
+A posted customer invoice is never edited to represent a correction, and once it is stamped or submitted to ZATCA it cannot be reopened at all. The lawful correction is a **credit note** (the customer owes less: returned goods, cancelled or reduced supply, price reduction, overcharge) or a **debit note** (the customer owes more: additional charge, quantity or price increase). Both are AR business documents of their own, always issued **against one posted invoice** (status unpaid, partially paid or paid) and always for that invoice's customer and project; the server derives both and refuses a request that claims otherwise.
+
+**When to use which.** Credit note: the supply was cancelled or suspended wholly or partially, an essential change in the supply reduced the VAT due, the agreed value was reduced, goods or services were returned. Debit note: the agreed value was increased or a charge was added, an essential change increased the VAT due. Either note may also be used for a change in the seller's or buyer's information. These are the five reasons the VAT Implementing Regulations allow (Article 40(1), Article 54(3)); the form asks for the reason category and a free-text reason that is written into the e-note.
+
+**Create (FIN-AR-007).** From the invoice workspace → Adjustments / Notes → **Create Credit Note** or **Create Debit Note** (Accounts Receivable — create). The form lists the original invoice lines; enter the quantity and unit price to credit (or the additional quantity / price for a debit note; a debit note may also add a charge that is not on the original invoice). Zero rows are ignored. The VAT rate is the original invoice's; taxable, VAT and total are calculated by the server from quantity × unit price — figures typed into totals are ignored. **Partial correction is normal** (2 of 10 units); the cumulative credit per original line, counting every posted credit note, can never exceed the original line amount (checked when saving and again under lock when posting). Save creates a **draft** with its own number (CN-YYYY-NNNN / DN-YYYY-NNNN): no journal, no VAT, no ZATCA record.
+
+**Post (FIN-AR-008 → Post Note, Accounts Receivable — approve).** One transaction, the original invoice locked first: the journal is posted (credit note: debit revenue per line and Output VAT, credit Accounts Receivable; debit note: debit Accounts Receivable, credit revenue and Output VAT — accounts taken from the original invoice lines, never hard-coded), a signed VAT correction row is recorded (negative for a credit note; a finalized or submitted VAT period refuses the note date), the note is applied to the original invoice balance, the seller / buyer snapshots are frozen, the issue time is fixed and the ZATCA record is opened. Posting twice is harmless: one journal, one VAT row, one application. The original invoice's journal and VAT row are never changed.
+
+**Balance, receipts and ageing.** Outstanding = invoice total + posted debit notes − credit applied − receipts, kept on the invoice and used by every AR card, the ageing buckets, the customer summary and the Project Cost Report (invoiced figure net of notes; the ledger revenue carries them by itself). A credit note on an invoice that is already paid cannot make the balance negative: the part that is still open is applied and the rest is kept on the note as **customer credit awaiting Finance** (shown on the note, the invoice and the register). Refunds and allocation of that credit to another invoice are **not automated** in Phase 1; Finance settles them outside Seera and records the outcome.
+
+**ZATCA.** The note inherits the original document's class: a note against a standard tax invoice is a standard note (381 / 383, clearance); a note against a simplified invoice is a simplified note (reporting). The e-note carries the original invoice number (BillingReference), the reason (InstructionNote) and the original supply date, takes the next counter value on the same EGS chain, and follows the same states and actions as an invoice (Generate & validate, Submit, Retry, Regenerate, XML downloads) from the note workspace or FIN-ZAT-002. Only a ZATCA response makes a note Cleared or Reported. On the Developer Portal sandbox (22 October 2026) standard credit and debit notes were Cleared and simplified credit and debit notes Reported with no warnings; production submission stays NOT OPERATIONAL until production ZATCA is enabled.
+
+**Immutability.** A posted note cannot be edited or reversed in Phase 1; once stamped or submitted it is locked like an invoice. A wrong note is corrected by another note in the opposite direction, subject to the same cumulative limit. ZATCA artifacts are never deleted.
+
+**Print (FIN-AR-009).** A bilingual Arabic / English print view (seller, buyer, original invoice, reason, lines, totals, ZATCA QR and UUID when stamped) for the browser's print dialog. It is a human-readable copy; the e-note is the XML. PDF/A-3 is not produced.
+
+**Scope and permissions.** Notes follow the invoice's project: project-scoped users see and correct only invoices of their projects. Register and note: Accounts Receivable — view; draft: create / edit; Post Note: approve; ZATCA actions: ZATCA Invoicing post / retry / export. The customer workspace lists a customer's notes (Credit / Debit Notes panel) and their journals; it never posts.
 ## 10. Inventory & Purchasing
 
 | | |
@@ -2461,7 +2482,7 @@ Truth first. After sprint 1 and the official-validation gate (both 17 October 20
 | Validation with ZATCA's Compliance and Enablement Toolbox (SDK) | NOT RUN — the official download is behind the Developer Portal login; the JDK 11 runtime and the commands are documented for the owner |
 | Live sandbox / simulation submission | Sandbox: VERIFIED (17 October 2026). Simulation: NOT RUN (company VAT and OTP required) |
 | Production integration (FATOORA) | NOT YET OPERATIONAL (owner onboarding, wave notification) |
-| Credit / debit notes | NOT BUILT — **production blocker**: a cleared or reported document can only be corrected by a note |
+| Credit / debit notes (381 / 383) as AR business documents | AVAILABLE (22 October 2026, chapter 9 FIN-AR-006 … 009, WF-027) · SANDBOX VERIFIED: standard credit / debit Cleared, simplified credit / debit Reported |
 | Printable Arabic (bilingual) invoice / PDF/A-3 | NOT BUILT — pre-production item for invoices shared with buyers |
 | VAT rounding policy (per-line vs document-level) | DECISION PENDING with Finance (options in the evidence document); mismatching invoices are blocked locally meanwhile |
 
@@ -2526,7 +2547,7 @@ The XML always carries the posted invoice's own figures; Seera never calculates 
 
 ### Corrections, reopening and notes
 
-An invoice that has been stamped or submitted cannot be edited or reopened. ZATCA corrections are credit or debit notes (codes 381 / 383), which Seera does not issue as business documents yet; the only note XML Seera produces is the onboarding compliance sample. Until an AR note module exists, correct such invoices outside Seera and record the outcome with Finance.
+An invoice that has been stamped or submitted cannot be edited or reopened. ZATCA corrections are credit or debit notes (codes 381 / 383): issue them from the invoice workspace (Adjustments / Notes → Create Credit Note / Create Debit Note, chapter 9, WF-027). A note is its own AR document with its own journal, VAT correction and e-document on the same chain; the original invoice stays exactly as cleared or reported.
 
 ### Arabic and the human-readable invoice
 
@@ -2643,7 +2664,7 @@ Use the language switch in the top bar. The screen turns to Arabic (right-to-lef
 | **Chapter name** | End-to-End Workflows |
 | **Purpose** | The documented business flows WF-001 to WF-024. |
 | **Primary roles** | Super Admin, HR Manager, Finance Manager, Account Assistant, Purchase Manager, Warehouse Incharge, Site In-Charge, Marketing Manager |
-| **Workflows in this chapter** | WF-020, WF-021, WF-022, WF-023, WF-024, WF-025, WF-026, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
+| **Workflows in this chapter** | WF-020, WF-021, WF-022, WF-023, WF-024, WF-025, WF-026, WF-027, WF-001, WF-002, WF-003, WF-004, WF-005, WF-006, WF-007, WF-008, WF-009, WF-010, WF-011, WF-012, WF-013, WF-014, WF-015 |
 
 Each workflow lists purpose, roles, prerequisites, navigation, steps, example input, the system result, statuses before and after, the audit trail, common errors and the related Screen IDs. The Workflow Index is in [WORKFLOW-INDEX.md](WORKFLOW-INDEX.md).
 
@@ -3159,6 +3180,19 @@ Areas that exist as menus, settings or plans but are not usable business functio
 | **Purpose** | The screens each role uses daily. |
 | **Primary roles** | All users |
 | **Screens in this chapter** | — (no screens; reference chapter) |
+
+### WF-027: Customer credit / debit note (posted invoice → draft note → post → ZATCA → immutable correction)
+
+1. Open the posted customer invoice (FIN-AR-003) and read Adjustments / Notes: existing notes, credited / debited totals and the adjusted outstanding amount.
+2. Click **Create Credit Note** (customer owes less) or **Create Debit Note** (customer owes more). The form (FIN-AR-007) starts from the invoice's own lines; choose the reason category, write the reason, enter the quantity and unit price per line (zero rows are ignored; a debit note may add a new charge).
+3. Save Draft: the note gets its number (CN- / DN-YYYY-NNNN); nothing is posted. Edit the draft as needed.
+4. Review on the note workspace (FIN-AR-008): summary, original invoice, lines, VAT.
+5. **Post Note** (Accounts Receivable — approve): journal, signed VAT correction, balance application, frozen snapshots, ZATCA record. A credit beyond the open balance stays as customer credit awaiting Finance.
+6. ZATCA section → **Submit to ZATCA** (or from FIN-ZAT-002): the note is stamped on the shared chain and cleared (standard) or reported (simplified); only a ZATCA response changes the state.
+7. Print the bilingual copy (FIN-AR-009) for the customer if needed.
+
+Expected result: the invoice shows the note and its adjusted balance; the customer's outstanding, ageing and the ledger agree; the original invoice, its journal and its e-invoice are unchanged; the note is immutable once stamped.
+Next common action: record a receipt for the adjusted balance, or issue another note for a further correction.
 
 ### Super Admin
 

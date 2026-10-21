@@ -143,3 +143,20 @@ Assessment: a bilingual human-readable layout (printable, later PDF/A-3 with the
 - The platform's `XML-INVOICE-ERROR` for a standard document on the reporting endpoint is classified as Rejected by error code; the documented 303 handling stays in the client for simulation / production.
 - SDK-side comparison of `generatehash` and `generate -x` output against Seera's values is open until the SDK can be downloaded with the owner's account.
 - Simulation (`PREZATCA-Code-Signing`, company VAT) has not been exercised; it is the next environment before any production step.
+
+## 14. Addendum, 22 October 2026 — customer credit / debit notes on the sandbox
+
+Same environment, hygiene and status vocabulary as sections 1–2; a new throw-away identity was created for the run (compliance CSID issued for a fresh Seera CSR, six compliance documents PASS, sandbox production CSID issued) and deleted afterwards. Documents were built by Seera's business layer: a posted customer invoice, then a credit note and a debit note created and posted through `CustomerNoteService` (journal + VAT correction + balance application), then submitted through `ZatcaSubmissionService` as 381 / 383 documents on the same EGS chain.
+
+| # | Document | Type / transaction code | Endpoint | Result | ICV / PIH |
+| --- | --- | --- | --- | --- | --- |
+| N-1 | Standard tax invoice, two lines (10 × 100.00; 5 × 200.00), Arabic text | 388 / 0100000 | clearance | HTTP 200 **CLEARED**, 0 warnings | 1 / first-document hash |
+| N-2 | Standard credit note against N-1: 2 × 100.00 of line 1, reason "Return of goods" (BillingReference = N-1, InstructionNote = reason) | 381 / 0100000 | clearance | HTTP 200 **CLEARED**, 0 warnings | 2 / hash of N-1 |
+| N-3 | Standard debit note against N-1: new charge 3 × 150.00, reason "Agreed additional charge" | 383 / 0100000 | clearance | HTTP 200 **CLEARED**, 0 warnings | 3 / hash of N-2 |
+| N-4 | Simplified tax invoice, same lines | 388 / 0200000 | reporting | HTTP 200 **REPORTED**, 0 warnings | 4 / hash of N-3 |
+| N-5 | Simplified credit note against N-4 | 381 / 0200000 | reporting | HTTP 200 **REPORTED**, 0 warnings | 5 / hash of N-4 |
+| N-6 | Simplified debit note against N-4 | 383 / 0200000 | reporting | HTTP 200 **REPORTED**, 0 warnings | 6 / hash of N-5 |
+
+Observations: the note inherits the original document's class (standard → clearance, simplified → reporting), as XML Implementation Standard §5.2 requires; the sandbox accepted the billing reference as the original invoice number alone (no `cbc:IssueDate` inside `InvoiceDocumentReference`), positive note amounts with the type code carrying the meaning, the free-text reason (KSA-10) and the original supply date as `ActualDeliveryDate`. No source change was needed for the notes beyond the business layer; the stamp, hash, QR and SignedProperties constructions corrected in section 7 held for 381 / 383. Business effect recorded during the run: credit note 230.00 applied to the invoice (balance 2,300.00 → 2,070.00), debit note 517.50 added (→ 2,587.50), journals JV-…-0001 … 0004 balanced.
+
+Statuses after this run: ZATCA NOTE XML — SOURCE IMPLEMENTED · SANDBOX VERIFIED; STANDARD CREDIT / DEBIT NOTE SANDBOX — VERIFIED; SIMPLIFIED CREDIT / DEBIT NOTE SANDBOX — VERIFIED; official SDK — still NOT RUN; production — NOT ONBOARDED.
