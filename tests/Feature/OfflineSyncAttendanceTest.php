@@ -308,6 +308,18 @@ class OfflineSyncAttendanceTest extends TestCase
 
     public function test_offline_check_out_syncs_and_the_batch_runs_check_in_before_check_out(): void
     {
+        // Frozen clock: the attendance day is the captured UTC date, so "now minus nine hours" must stay on the same
+        // day whatever the wall-clock hour the suite runs at (it failed before 09:00 UTC).
+        Carbon::setTestNow('2026-10-15 17:00:00');
+        try {
+            $this->runCheckOutBatch();
+        } finally {
+            Carbon::setTestNow();
+        }
+    }
+
+    private function runCheckOutBatch(): void
+    {
         $checkIn = $this->item('check_in', [], ['captured_at' => Carbon::now()->subHours(9)->toIso8601String()]);
         $checkOut = $this->item('check_out', ['longitude' => self::SITE_LNG], ['captured_at' => Carbon::now()->subMinutes(5)->toIso8601String()]);
         // Deliberately out of order: the server orders by captured time and action.
