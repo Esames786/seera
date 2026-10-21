@@ -2,6 +2,7 @@
 
 namespace App\Services\Zatca;
 
+use App\Contracts\ZatcaDocument;
 use App\Models\ActivityLog;
 use App\Models\CustomerInvoice;
 use App\Models\User;
@@ -14,7 +15,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
- * The invoice-level lifecycle: record creation at approval, readiness,
+ * The document-level lifecycle (customer invoices and credit / debit notes
+ * alike, through the ZatcaDocument contract): record creation at approval, readiness,
  * generate (preview build + local validation), sign (chain assignment and
  * stamp, which locks the invoice), submit (clearance for standard documents,
  * reporting for simplified ones), retry with the same signed document, and
@@ -37,13 +39,13 @@ final class ZatcaSubmissionService
     ) {}
 
     /** Called at approval: the UUID is assigned once and survives everything except a reopen before any stamp. */
-    public function ensureRecord(CustomerInvoice $invoice): ZatcaInvoiceRecord
+    public function ensureRecord(ZatcaDocument $invoice): ZatcaInvoiceRecord
     {
         $record = $invoice->zatcaRecord;
         if ($record && $record->status !== ZatcaInvoiceRecord::STATUS_CANCELLED) {
             return $record;
         }
-        $record = ZatcaInvoiceRecord::updateOrCreate(['customer_invoice_id' => $invoice->id], [
+        $record = ZatcaInvoiceRecord::updateOrCreate($invoice->zatcaRecordKey(), $invoice->zatcaRecordAttributes() + [
             'uuid' => $record?->uuid ?? (string) Str::uuid(), 'status' => ZatcaInvoiceRecord::STATUS_NOT_GENERATED, 'clearance_status' => 'draft',
             'invoice_type' => $invoice->invoice_type, 'environment' => $this->environment->current(), 'digital_signature_status' => 'pending',
             'retry_count' => 0, 'qr_code_data' => null, 'xml_file_path' => null, 'tamper_proof_hash' => null, 'failed_reason' => null,
@@ -65,7 +67,7 @@ final class ZatcaSubmissionService
     }
 
     /** @return array{errors: array<int, array<string, mixed>>, warnings: array<int, array<string, mixed>>, seller: array<string, mixed>, buyer: array<string, mixed>, unit: ?ZatcaEgsUnit} */
-    public function readiness(CustomerInvoice $invoice): array
+    public function readiness(ZatcaDocument $invoice): array
     {
         $invoice->loadMissing('customer');
         $seller = $invoice->seller_snapshot ?: $this->snapshot->seller();
@@ -75,7 +77,7 @@ final class ZatcaSubmissionService
         $unit = $this->unit();
 
         return [
-            'errors' => array_merge($this->readiness->invoice($invoice), $sellerCheck['errors'], $buyerCheck['errors'], $this->readiness->unit($unit, (string) $invoice->invoice_type)),
+            'errors' => array_merge($this->readiness->document($invoice), $sellerCheck['errors'], $buyerCheck['errors'], $this->readiness->unit($unit, (string) $invoice->invoice_type)),
             'warnings' => array_merge($sellerCheck['warnings'], $buyerCheck['warnings']),
             'seller' => $seller, 'buyer' => $buyer, 'unit' => $unit,
         ];
@@ -86,7 +88,7 @@ final class ZatcaSubmissionService
      * the next stamp would use, validate locally and store the unsigned XML.
      * Nothing is consumed; the status becomes validated or validation_failed.
      */
-    public function generate(CustomerInvoice $invoice, User $actor): ZatcaInvoiceRecord
+    public function generate(ZatcaDocument $invoice, User $actor): ZatcaInvoiceRecord
     {
         $record = $this->ensureRecord($invoice);
         $this->assertNotAccepted($record);
@@ -100,7 +102,7 @@ final class ZatcaSubmissionService
         }
         $this->snapshot->freeze($invoice);
         $unit = $readiness['unit'];
-        $doc = $this->factory->fromInvoice($invoice->fresh(['lines']), $record, (int) $unit->icv_counter + 1, $unit->last_invoice_hash ?: ZatcaEgsUnit::FIRST_PREVIOUS_HASH);
+        $doc = $this->factory->fromDocument($invoice->fresh(['lines']), $record, (int) $unit->icv_counter + 1, $unit->last_invoice_hash ?: ZatcaEgsUnit::FIRST_PREVIOUS_HASH);
         $xml = $this->builder->build($doc);
         $validation = $this->validator->validate($doc, $xml);
         $path = $this->store($record, 'unsigned', $xml);
@@ -121,7 +123,7 @@ final class ZatcaSubmissionService
             'last_error_category' => $passed ? null : ZatcaException::LOCAL_VALIDATION, 'last_error_code' => $passed ? null : $validation['errors'][0]['code'],
             'last_error_message' => $passed ? null : $validation['errors'][0]['message'],
             ])->save();
-            CustomerInvoice::whereKey($invoice->id)->update(['zatca_status' => $locked->status]);
+            $this->mirror($invoice, ['zatca_status' => $locked->status]);
 
             return $locked;
         }, 1);
@@ -131,7 +133,7 @@ final class ZatcaSubmissionService
     }
 
     /** Stamp: consumes the ICV, extends the chain, signs, stores the signed XML and locks the invoice. */
-    public function sign(CustomerInvoice $invoice, User $actor): ZatcaInvoiceRecord
+    public function sign(ZatcaDocument $invoice, User $actor): ZatcaInvoiceRecord
     {
         $record = $this->generate($invoice, $actor);
         if ($record->status !== ZatcaInvoiceRecord::STATUS_VALIDATED) {
@@ -139,7 +141,7 @@ final class ZatcaSubmissionService
         }
         $unit = $record->unit;
         $this->environment->assertUsable();
-        $doc = $this->factory->fromInvoice($invoice->fresh(['lines']), $record, 0, ZatcaEgsUnit::FIRST_PREVIOUS_HASH);
+        $doc = $this->factory->fromDocument($invoice->fresh(['lines']), $record, 0, ZatcaEgsUnit::FIRST_PREVIOUS_HASH);
 
         return DB::transaction(function () use ($record, $invoice, $unit, $doc, $actor) {
             ZatcaEgsUnit::whereKey($unit->id)->lockForUpdate()->firstOrFail(); // unit first, then record (same order as generate)
@@ -154,7 +156,7 @@ final class ZatcaSubmissionService
                 'signed_xml_path' => $path, 'qr_code' => $stamped['qr'], 'signed_at' => $stamped['signed_at'], 'digital_signature_status' => 'signed',
                 'validation_warnings' => $stamped['warnings'], 'last_error_category' => null, 'last_error_code' => null, 'last_error_message' => null,
             ])->save();
-            CustomerInvoice::whereKey($invoice->id)->update(['zatca_status' => ZatcaInvoiceRecord::STATUS_SIGNED, 'zatca_locked_at' => now()]);
+            $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_SIGNED, 'zatca_locked_at' => now()]);
             $this->log($actor, 'ZATCA invoice stamped', $invoice, 'success', 'ICV '.$stamped['icv']);
 
             return $locked;
@@ -162,7 +164,7 @@ final class ZatcaSubmissionService
     }
 
     /** Submit the signed document: clearance for standard, reporting for simplified. A retry resubmits the identical XML. */
-    public function submit(CustomerInvoice $invoice, User $actor): ZatcaInvoiceRecord
+    public function submit(ZatcaDocument $invoice, User $actor): ZatcaInvoiceRecord
     {
         $record = $invoice->zatcaRecord ?? $this->ensureRecord($invoice);
         $this->assertNotAccepted($record);
@@ -191,7 +193,7 @@ final class ZatcaSubmissionService
             throw ZatcaException::state('submission_in_progress', __('zatca.err_submission_in_progress'));
         }
         $record->refresh();
-        $invoice->update(['zatca_status' => ZatcaInvoiceRecord::STATUS_SUBMISSION_PENDING]);
+        $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_SUBMISSION_PENDING]);
 
         $simplified = $record->invoice_type === CustomerInvoice::TYPE_SIMPLIFIED;
         $result = $simplified
@@ -220,7 +222,7 @@ final class ZatcaSubmissionService
                 }
             }
             $record->forceFill($changes)->save();
-            $invoice->update(['zatca_status' => $record->status, 'zatca_locked_at' => $invoice->zatca_locked_at ?? now()]);
+            $this->mirror($invoice, ['zatca_status' => $record->status, 'zatca_locked_at' => $invoice->zatca_locked_at ?? now()]);
             $this->log($actor, $simplified ? 'ZATCA invoice reported' : 'ZATCA invoice cleared', $invoice, 'success', ($result->warnings !== [] ? count($result->warnings).' warning(s)' : 'no warnings'));
 
             return $record->fresh();
@@ -229,7 +231,7 @@ final class ZatcaSubmissionService
         if ($result->uncertain()) {
             $record->forceFill(['status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN, 'outcome_unknown_at' => now(), 'last_error_category' => ZatcaException::OUTCOME_UNKNOWN,
                 'last_error_code' => $result->errorCode, 'last_error_message' => $result->errorMessage])->save();
-            $invoice->update(['zatca_status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN]);
+            $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN]);
             $this->log($actor, 'ZATCA submission outcome unknown', $invoice, 'failed', $result->errorMessage);
 
             return $record->fresh();
@@ -241,7 +243,7 @@ final class ZatcaSubmissionService
                 // ZATCA already holds a document with this identity from the uncertain attempt: do not mark rejected, keep verification required.
                 $record->forceFill(['status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN, 'last_error_category' => ZatcaException::OUTCOME_UNKNOWN, 'last_error_code' => 'duplicate_on_retry',
                     'last_error_message' => __('zatca.err_duplicate_on_retry'), 'response_errors' => $result->errors])->save();
-                $invoice->update(['zatca_status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN]);
+                $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN]);
                 $this->log($actor, 'ZATCA retry answered duplicate; verification required', $invoice, 'failed');
 
                 return $record->fresh();
@@ -249,7 +251,7 @@ final class ZatcaSubmissionService
             $record->forceFill(['status' => ZatcaInvoiceRecord::STATUS_REJECTED, 'zatca_status' => $result->zatcaStatus, 'response_errors' => $result->errors, 'response_warnings' => $result->warnings,
                 'last_error_category' => ZatcaException::BUSINESS_REJECTION, 'last_error_code' => $result->errorCode, 'last_error_message' => $result->errorMessage,
                 'zatca_response_code' => (string) $result->httpStatus, 'zatca_response_message' => $result->summary()])->save();
-            $invoice->update(['zatca_status' => ZatcaInvoiceRecord::STATUS_REJECTED]);
+            $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_REJECTED]);
             $this->log($actor, 'ZATCA submission rejected', $invoice, 'failed', $result->summary());
 
             return $record->fresh();
@@ -260,14 +262,14 @@ final class ZatcaSubmissionService
             ZatcaSubmission::OUTCOME_AUTH_ERROR => ZatcaException::AUTH, ZatcaSubmission::OUTCOME_RATE_LIMITED => ZatcaException::RATE_LIMIT,
             ZatcaSubmission::OUTCOME_NETWORK_ERROR => ZatcaException::NETWORK, default => ZatcaException::SERVER_ERROR,
         }, 'last_error_code' => $result->errorCode, 'last_error_message' => $result->errorMessage])->save();
-        $invoice->update(['zatca_status' => ZatcaInvoiceRecord::STATUS_SIGNED]);
+        $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_SIGNED]);
         $this->log($actor, 'ZATCA submission failed ('.$result->outcome.')', $invoice, 'failed', $result->errorMessage);
 
         return $record->fresh();
     }
 
     /** Generate, stamp and submit in one go (the "Submit to ZATCA" action). */
-    public function process(CustomerInvoice $invoice, User $actor): ZatcaInvoiceRecord
+    public function process(ZatcaDocument $invoice, User $actor): ZatcaInvoiceRecord
     {
         $record = $invoice->zatcaRecord ?? $this->ensureRecord($invoice);
         if (! $record->isLocked()) {
@@ -283,7 +285,7 @@ final class ZatcaSubmissionService
      * not_generated with the same UUID. Consumed ICVs stay consumed; the
      * invoice stays locked if it was ever stamped.
      */
-    public function regenerate(CustomerInvoice $invoice, User $actor): ZatcaInvoiceRecord
+    public function regenerate(ZatcaDocument $invoice, User $actor): ZatcaInvoiceRecord
     {
         $record = $invoice->zatcaRecord ?? $this->ensureRecord($invoice);
         if (! in_array($record->status, [ZatcaInvoiceRecord::STATUS_REJECTED, ZatcaInvoiceRecord::STATUS_FAILED, ZatcaInvoiceRecord::STATUS_VALIDATION_FAILED, ZatcaInvoiceRecord::STATUS_VALIDATED, ZatcaInvoiceRecord::STATUS_GENERATED], true)) {
@@ -298,7 +300,7 @@ final class ZatcaSubmissionService
             'invoice_hash' => null, 'icv' => null, 'previous_hash' => null, 'validation_status' => null, 'validation_errors' => null, 'validation_warnings' => null,
             'generated_at' => null, 'validated_at' => null, 'signed_at' => null, 'response_errors' => null, 'response_warnings' => null, 'zatca_status' => null,
             'last_error_category' => null, 'last_error_code' => null, 'last_error_message' => null, 'digital_signature_status' => 'pending'])->save();
-        $invoice->update(['zatca_status' => ZatcaInvoiceRecord::STATUS_NOT_GENERATED]);
+        $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_NOT_GENERATED]);
         $this->log($actor, 'ZATCA record reset for regeneration', $invoice);
 
         return $record->fresh();
@@ -315,13 +317,13 @@ final class ZatcaSubmissionService
     }
 
     /** File name per XML Implementation Standard §14: VAT_yyyymmddThhmmss_number.xml */
-    public function fileName(CustomerInvoice $invoice, ZatcaInvoiceRecord $record, string $kind): string
+    public function fileName(ZatcaDocument $invoice, ZatcaInvoiceRecord $record, string $kind): string
     {
         $seller = $invoice->seller_snapshot['vat_number'] ?? 'seller';
         $time = str_replace(':', '', (string) ($invoice->issue_time ?: '000000'));
-        $number = preg_replace('/[^A-Za-z0-9]+/', '-', (string) $invoice->invoice_number);
+        $number = preg_replace('/[^A-Za-z0-9]+/', '-', $invoice->zatcaNumber());
 
-        return $seller.'_'.$invoice->invoice_date->format('Ymd').'T'.$time.'_'.$number.($kind === 'signed' ? '' : '-'.$kind).'.xml';
+        return $seller.'_'.$invoice->zatcaIssueDate()->format('Ymd').'T'.$time.'_'.$number.($kind === 'signed' ? '' : '-'.$kind).'.xml';
     }
 
     private function store(ZatcaInvoiceRecord $record, string $kind, string $xml): string
@@ -354,15 +356,22 @@ final class ZatcaSubmissionService
         }
     }
 
-    private function fail(ZatcaInvoiceRecord $record, CustomerInvoice $invoice, string $status, string $category, string $code, string $message, array $details = []): void
+    private function fail(ZatcaInvoiceRecord $record, ZatcaDocument $invoice, string $status, string $category, string $code, string $message, array $details = []): void
     {
         $record->forceFill(['status' => $status, 'last_error_category' => $category, 'last_error_code' => $code, 'last_error_message' => $message, 'validation_errors' => $details['readiness'] ?? $record->validation_errors])->save();
-        $invoice->update(['zatca_status' => $status]);
+        $this->mirror($invoice, ['zatca_status' => $status]);
     }
 
-    private function log(User $actor, string $action, CustomerInvoice $invoice, string $status = 'success', ?string $detail = null): void
+    /** Write the mirror columns on the business document without scopes, model events or a stale in-memory copy. */
+    private function mirror(ZatcaDocument $document, array $changes): void
+    {
+        $document->newQueryWithoutScopes()->whereKey($document->getKey())->update($changes + ['updated_at' => now()]);
+        $document->forceFill($changes)->syncOriginalAttributes(array_keys($changes));
+    }
+
+    private function log(User $actor, string $action, ZatcaDocument $invoice, string $status = 'success', ?string $detail = null): void
     {
         ActivityLog::create(['user_id' => $actor->id, 'user_name' => $actor->name, 'module' => 'ZATCA', 'action' => $action, 'status' => $status,
-            'description' => $invoice->invoice_number.($detail ? ' · '.mb_substr($detail, 0, 300) : '')]);
+            'description' => $invoice->zatcaNumber().($detail ? ' · '.mb_substr($detail, 0, 300) : '')]);
     }
 }

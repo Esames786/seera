@@ -9,9 +9,11 @@
         $deadline = $record->reportingDeadline();
     @endphp
     <x-admin.page-header
-        :title="__('zatca.record_title').': '.($invoice?->invoice_number ?? $record->uuid)"
-        :description="$record->statusLabel().' · '.__('zatca.env_'.($record->environment ?: $environment)).' · '.($record->invoice_type ? __('zatca.type_'.$record->invoice_type) : '')">
-        @if ($invoice)
+        :title="__('zatca.record_title').': '.($invoice?->zatcaNumber() ?? $record->uuid)"
+        :description="$record->statusLabel().' · '.__('zatca.env_'.($record->environment ?: $environment)).' · '.($record->invoice_type ? $record->documentTypeLabel() : '')">
+        @if ($invoice && $record->isNote())
+            <a class="btn outline" href="{{ route('admin.accounting.accounts-receivable.notes.show', $invoice) }}">Open Note</a>
+        @elseif ($invoice)
             <a class="btn outline" href="{{ route('admin.accounting.accounts-receivable.show', $invoice) }}">Open Invoice</a>
         @endif
         <a class="btn outline" href="{{ route('admin.accounting.zatca.index') }}">Back to register</a>
@@ -55,10 +57,11 @@
     <div class="split even">
         <x-admin.data-table :title="__('zatca.record_title')" class="detail-table">
             <tbody>
-                <tr><th>Invoice</th><td>{{ $invoice?->invoice_number ?? '-' }}</td></tr>
+                <tr><th>{{ __('zatca.document_kind') }}</th><td>{{ $invoice?->zatcaNumber() ?? '-' }}@if ($record->isNote() && $record->customerInvoice) <span class="small">· {{ __('customer_notes.original_invoice') }} {{ $record->customerInvoice->invoice_number }}</span>@endif</td></tr>
                 <tr><th>Customer</th><td>{{ $invoice?->customer?->name ?? '-' }}</td></tr>
-                <tr><th>{{ __('zatca.invoice_type') }}</th><td>{{ $record->invoice_type ? __('zatca.type_'.$record->invoice_type) : ($invoice ? __('zatca.type_'.$invoice->invoice_type) : '-') }} @if ($record->transaction_code)<span class="small">({{ $record->invoice_type_code }} / {{ $record->transaction_code }})</span>@endif</td></tr>
-                <tr><th>Issue date / {{ __('zatca.issue_time') }}</th><td>{{ $invoice?->invoice_date?->toDateString() ?? '-' }} {{ $invoice?->issue_time ?? '' }}</td></tr>
+                <tr><th>{{ __('zatca.invoice_type') }}</th><td>{{ $record->invoice_type ? $record->documentTypeLabel() : ($invoice ? __('zatca.type_'.$invoice->invoice_type) : '-') }} @if ($record->transaction_code)<span class="small">({{ $record->invoice_type_code }} / {{ $record->transaction_code }})</span>@endif</td></tr>
+                @if ($record->isNote() && $invoice)<tr><th>{{ __('customer_notes.reason') }}</th><td class="small">{{ $invoice->zatcaNoteReason() }}</td></tr>@endif
+                <tr><th>Issue date / {{ __('zatca.issue_time') }}</th><td>{{ $invoice?->zatcaIssueDate()?->toDateString() ?? '-' }} {{ $invoice?->issue_time ?? '' }}</td></tr>
                 <tr><th>{{ __('zatca.supply_date') }}</th><td>{{ $invoice?->supply_date?->toDateString() ?? '-' }}</td></tr>
                 <tr><th>Total / VAT</th><td>SAR {{ number_format((float) ($invoice?->total_amount ?? 0), 2) }} / SAR {{ number_format((float) ($invoice?->vat_amount ?? 0), 2) }}</td></tr>
                 <tr><th>{{ __('zatca.uuid') }}</th><td class="small">{{ $record->uuid }}</td></tr>

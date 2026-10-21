@@ -2,6 +2,7 @@
 
 namespace App\Services\Zatca;
 
+use App\Contracts\ZatcaDocument;
 use App\Models\CompanyProfile;
 use App\Models\Customer;
 use App\Models\CustomerInvoice;
@@ -53,8 +54,8 @@ final class ZatcaSnapshot
         ];
     }
 
-    /** Freeze both snapshots on the invoice unless they already exist (or $force for an unaccepted record). */
-    public function freeze(CustomerInvoice $invoice, bool $force = false): CustomerInvoice
+    /** Freeze both snapshots on the document (invoice or note) unless they already exist (or $force for an unaccepted record). */
+    public function freeze(ZatcaDocument $invoice, bool $force = false): ZatcaDocument
     {
         $invoice->loadMissing('customer');
         $changes = [];

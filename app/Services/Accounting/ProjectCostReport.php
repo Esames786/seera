@@ -3,6 +3,7 @@
 namespace App\Services\Accounting;
 
 use App\Models\ChartOfAccount;
+use App\Models\CustomerAdjustmentNote;
 use App\Models\CustomerInvoice;
 use App\Models\JournalEntryLine;
 use App\Models\Project;
@@ -33,6 +34,12 @@ class ProjectCostReport
             ->groupBy('project_id')->selectRaw('project_id, COALESCE(SUM(total_amount), 0) as total')->pluck('total', 'project_id');
         $invoices = $inRange(CustomerInvoice::whereIn('project_id', $projects->modelKeys())->where('payment_status', '!=', 'draft'), 'invoice_date')
             ->groupBy('project_id')->selectRaw('project_id, COALESCE(SUM(total_amount), 0) as total')->pluck('total', 'project_id');
+        // Posted credit notes reduce and debit notes increase the invoiced figure once, in the note's own period (the GL revenue figure already carries them).
+        $notes = $inRange(CustomerAdjustmentNote::whereIn('project_id', $projects->modelKeys())->where('status', CustomerAdjustmentNote::STATUS_POSTED), 'note_date')
+            ->groupBy('project_id')->selectRaw("project_id, COALESCE(SUM(CASE WHEN note_type = 'credit' THEN -total_amount ELSE total_amount END), 0) as total")->pluck('total', 'project_id');
+        foreach ($notes as $projectId => $total) {
+            $invoices[$projectId] = (float) ($invoices[$projectId] ?? 0) + (float) $total;
+        }
 
         return $projects->map(function (Project $project) use ($costs, $revenues, $bills, $invoices) {
             $cost = (float) ($costs[$project->id] ?? 0);

@@ -104,6 +104,7 @@ class SidebarMenu
                     static::link('admin.accounting.general-ledger', 'admin.accounting.general-ledger', '📚', 'General Ledger'),
                     static::link('admin.accounting.accounts-payable.index', 'admin.accounting.accounts-payable.*', '📤', 'Accounts Payable'),
                     static::link('admin.accounting.accounts-receivable.index', 'admin.accounting.accounts-receivable.*', '📥', 'Accounts Receivable'),
+                    static::link('admin.accounting.accounts-receivable.notes.index', 'admin.accounting.accounts-receivable.notes.*', '↩️', 'Credit / Debit Notes'),
                     static::link('admin.accounting.vat.index', 'admin.accounting.vat.*', '🧮', 'VAT Management'),
                     static::link('admin.accounting.zatca.index', 'admin.accounting.zatca.*', '🧾', 'ZATCA E-Invoicing'),
                     static::link('admin.accounting.cost-centers.index', 'admin.accounting.cost-centers.*', '🎯', 'Cost Centers'),

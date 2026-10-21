@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Accounting\AccountingDashboardController;
 use App\Http\Controllers\Admin\Accounting\AccountsPayableController;
 use App\Http\Controllers\Admin\Accounting\AccountsReceivableController;
+use App\Http\Controllers\Admin\Accounting\CustomerAdjustmentNoteController;
 use App\Http\Controllers\Admin\Accounting\AutoPostingRuleController;
 use App\Http\Controllers\Admin\Accounting\ChartOfAccountController;
 use App\Http\Controllers\Admin\Accounting\CostCenterController;
@@ -327,6 +328,16 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::get('accounts-payable/{accounts_payable}/payment', [AccountsPayableController::class, 'paymentForm'])->name('accounts-payable.payment');
         Route::post('accounts-payable/{accounts_payable}/payment', [AccountsPayableController::class, 'storePayment'])->name('accounts-payable.payment.store');
         Route::resource('accounts-payable', AccountsPayableController::class);
+
+        // Customer credit / debit notes (AR correction documents; Accounts Receivable permissions by route suffix).
+        Route::get('accounts-receivable/notes', [CustomerAdjustmentNoteController::class, 'index'])->name('accounts-receivable.notes.index');
+        Route::get('accounts-receivable/notes/create', [CustomerAdjustmentNoteController::class, 'create'])->name('accounts-receivable.notes.create');
+        Route::post('accounts-receivable/notes', [CustomerAdjustmentNoteController::class, 'store'])->name('accounts-receivable.notes.store');
+        Route::get('accounts-receivable/notes/{note}', [CustomerAdjustmentNoteController::class, 'show'])->name('accounts-receivable.notes.show');
+        Route::get('accounts-receivable/notes/{note}/edit', [CustomerAdjustmentNoteController::class, 'edit'])->name('accounts-receivable.notes.edit');
+        Route::put('accounts-receivable/notes/{note}', [CustomerAdjustmentNoteController::class, 'update'])->name('accounts-receivable.notes.update');
+        Route::post('accounts-receivable/notes/{note}/approve', [CustomerAdjustmentNoteController::class, 'approve'])->name('accounts-receivable.notes.approve');
+        Route::get('accounts-receivable/notes/{note}/print', [CustomerAdjustmentNoteController::class, 'print'])->name('accounts-receivable.notes.print');
 
         Route::post('accounts-receivable/{accounts_receivable}/approve', [AccountsReceivableController::class, 'approve'])->name('accounts-receivable.approve');
         Route::post('accounts-receivable/{accounts_receivable}/reopen', [AccountsReceivableController::class, 'reopen'])->name('accounts-receivable.reopen');

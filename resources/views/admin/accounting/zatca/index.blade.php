@@ -21,7 +21,7 @@
     <br/>
 
     <x-admin.filter-bar>
-        <input class="input" style="width:260px" type="search" name="search" value="{{ request('search') }}" placeholder="UUID or invoice number..."/>
+        <input class="input" style="width:260px" type="search" name="search" value="{{ request('search') }}" placeholder="UUID, invoice or note number..."/>
         <select class="select" style="width:230px" name="status">
             <option value="">All statuses</option>
             @foreach ($statuses as $status)
@@ -36,23 +36,27 @@
     <x-admin.data-table :title="__('zatca.record_title')">
         <thead>
             <tr>
-                <th>Invoice</th><th>{{ __('zatca.invoice_type') }}</th><th>Customer</th><th>Issue date</th>
+                <th>{{ __('zatca.document_kind') }}</th><th>{{ __('zatca.invoice_type') }}</th><th>Customer</th><th>Issue date</th>
                 <th>{{ __('zatca.environment') }}</th><th>{{ __('zatca.icv') }}</th><th>Status</th><th>{{ __('zatca.zatca_reference') }}</th><th>{{ __('zatca.attempts') }}</th><th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @forelse ($records as $record)
                 <tr>
+                    @php($document = $record->document())
                     <td>
-                        @if ($record->customerInvoice)
+                        @if ($record->isNote() && $record->adjustmentNote)
+                            <a href="{{ route('admin.accounting.accounts-receivable.notes.show', $record->adjustmentNote) }}" style="color:var(--blue);font-weight:700">{{ $record->adjustmentNote->note_number }}</a>
+                            <span class="small">· {{ $record->customerInvoice?->invoice_number }}</span>
+                        @elseif ($record->customerInvoice)
                             <a href="{{ route('admin.accounting.accounts-receivable.show', $record->customerInvoice) }}" style="color:var(--blue);font-weight:700">{{ $record->customerInvoice->invoice_number }}</a>
                         @else
                             -
                         @endif
                     </td>
-                    <td class="small">{{ $record->invoice_type ? __('zatca.type_'.$record->invoice_type) : '-' }}</td>
+                    <td class="small">{{ $record->invoice_type ? $record->documentTypeLabel() : '-' }}</td>
                     <td>{{ $record->customerInvoice?->customer?->name ?? '-' }}</td>
-                    <td>{{ $record->customerInvoice?->invoice_date?->toDateString() ?? '-' }}</td>
+                    <td>{{ $document?->zatcaIssueDate()?->toDateString() ?? '-' }}</td>
                     <td class="small">{{ $record->environment ? __('zatca.env_'.$record->environment) : '-' }}</td>
                     <td>{{ $record->icv ?? '-' }}</td>
                     <td><span class="badge {{ $record->statusColor() }}">{{ $record->statusLabel() }}</span>@if ($record->accepted_with_warnings) <span class="small">({{ __('zatca.warnings') }})</span>@endif</td>

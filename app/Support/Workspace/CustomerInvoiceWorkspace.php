@@ -46,6 +46,7 @@ final class CustomerInvoiceWorkspace
             'canPostZatca' => $user->hasPermission('ZATCA Invoicing', 'post'),
             'canRetryZatca' => $user->hasPermission('ZATCA Invoicing', 'retry'),
             'canExportZatca' => $user->hasPermission('ZATCA Invoicing', 'export'),
+            'canCreateNote' => $invoice->isCorrectable() && $user->hasPermission('Accounts Receivable', 'create'),
         ];
 
         $sections = ['information' => __('workspace.inv_information'), 'lines' => __('workspace.inv_lines')];
@@ -59,7 +60,7 @@ final class CustomerInvoiceWorkspace
         if ($flags['canViewJournals']) {
             $sections['accounting'] = __('workspace.inv_accounting');
         }
-        $sections += ['receipts' => __('workspace.inv_receipts'), 'balance' => __('workspace.inv_balance')];
+        $sections += ['receipts' => __('workspace.inv_receipts'), 'balance' => __('workspace.inv_balance'), 'adjustments' => __('customer_notes.adjustments')];
         if ($flags['canViewZatca']) {
             $sections['zatca'] = __('zatca.section');
         }
@@ -87,6 +88,8 @@ final class CustomerInvoiceWorkspace
                 ->latest('receipt_date')->latest('id')
                 ->paginate(10, ['*'], 'page_receipts', $receiptsPage)->fragment('receipts'),
             'activity' => $activity,
+            'adjustmentNotes' => $invoice->adjustmentNotes()->with('zatcaRecord')->latest('note_date')->latest('id')->get(),
+            'adjustments' => $invoice->postedAdjustments(),
         ];
     }
 

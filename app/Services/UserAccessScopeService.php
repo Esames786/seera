@@ -134,7 +134,7 @@ class UserAccessScopeService
             $query->whereRaw('1 = 0');
         } elseif ($table === 'projects') {
             $query->whereKey($projectIds);
-        } elseif (in_array($table, ['sites', 'warehouses', 'employees', 'journal_entry_lines', 'supplier_bills', 'customer_invoices', 'purchase_requests', 'purchase_orders', 'stock_issues', 'stock_ledger_entries'], true)) {
+        } elseif (in_array($table, ['sites', 'warehouses', 'employees', 'journal_entry_lines', 'supplier_bills', 'customer_invoices', 'customer_adjustment_notes', 'purchase_requests', 'purchase_orders', 'stock_issues', 'stock_ledger_entries'], true)) {
             $query->whereIn($table.'.project_id', $projectIds);
         } elseif (in_array($table, ['goods_receipts', 'stock_adjustments', 'warehouse_stocks'], true)) {
             $query->whereHas('warehouse', fn ($warehouse) => $warehouse->whereIn('project_id', $projectIds));
@@ -157,8 +157,8 @@ class UserAccessScopeService
             $query->whereHas('warehouse', fn ($warehouse) => $warehouse->where('site_id', $user->site_id));
         } elseif ($table === 'stock_transfers') {
             $query->whereHas('fromWarehouse', fn ($warehouse) => $warehouse->where('site_id', $user->site_id));
-        } elseif ($table === 'customer_invoices') {
-            $query->whereIn('project_id', $this->projectIdsFor($user) ?: [0]);
+        } elseif (in_array($table, ['customer_invoices', 'customer_adjustment_notes'], true)) {
+            $query->whereIn($table.'.project_id', $this->projectIdsFor($user) ?: [0]);
         }
     }
 

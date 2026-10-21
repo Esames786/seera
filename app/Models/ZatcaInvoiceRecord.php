@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * The compliance record of one customer invoice: UUID (KSA-1), type and
+ * The compliance record of one customer invoice or credit / debit note: UUID (KSA-1), type and
  * transaction code, the ICV / PIH / hash chain values assigned by the EGS
  * unit, the private XML artifacts, the Phase-2 QR, validation and ZATCA
  * outcomes. `status` is an explicit state machine; nothing here is a
@@ -64,9 +64,44 @@ class ZatcaInvoiceRecord extends Model
         ];
     }
 
+    /** The customer invoice: the document itself for an invoice record, the original invoice for a note record. */
     public function customerInvoice()
     {
         return $this->belongsTo(CustomerInvoice::class);
+    }
+
+    public function adjustmentNote()
+    {
+        return $this->belongsTo(CustomerAdjustmentNote::class, 'customer_adjustment_note_id');
+    }
+
+    /** The business document this record belongs to (invoice or credit / debit note). */
+    public function document(): ?\App\Contracts\ZatcaDocument
+    {
+        return $this->customer_adjustment_note_id ? $this->adjustmentNote : $this->customerInvoice;
+    }
+
+    public function isNote(): bool
+    {
+        return $this->customer_adjustment_note_id !== null;
+    }
+
+    /** Document number shown on the register (note number for a note, invoice number otherwise). */
+    public function documentNumber(): ?string
+    {
+        return $this->document()?->zatcaNumber();
+    }
+
+    /** Human label of the ZATCA document kind: standard / simplified tax invoice, credit note or debit note. */
+    public function documentTypeLabel(): string
+    {
+        $base = __('zatca.type_'.($this->invoice_type ?: 'standard'));
+
+        return match ($this->document_type) {
+            'credit_note' => __('zatca.doc_credit_note', ['type' => $base]),
+            'debit_note' => __('zatca.doc_debit_note', ['type' => $base]),
+            default => $base,
+        };
     }
 
     public function unit()

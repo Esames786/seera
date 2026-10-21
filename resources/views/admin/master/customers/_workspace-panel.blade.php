@@ -149,6 +149,29 @@
             <p class="small">{{ __('Approve, reopen and receipts are done on the invoice itself; the customer profile never posts accounting.') }}</p>
             @break
 
+        @case('adjustments')
+            <div class="table-wrap"><table>
+                <thead><tr><th>Note</th><th>Type</th><th>Date</th><th>Original invoice</th><th>Total</th><th>Status</th><th>Local ZATCA</th><th>{{ __('Actions') }}</th></tr></thead>
+                <tbody>
+                    @forelse ($rows as $note)
+                        <tr>
+                            <td>{{ $note->note_number }}</td>
+                            <td>{{ $note->typeLabel() }}</td>
+                            <td>{{ $note->note_date?->toDateString() }}</td>
+                            <td>{{ $note->invoice?->invoice_number ?? '-' }}</td>
+                            <td>{{ $money($note->total_amount) }}</td>
+                            <td><x-admin.status-badge :status="$note->status"/></td>
+                            <td>@if ($note->zatcaRecord)<span class="badge {{ $note->zatcaRecord->statusColor() }}">{{ $note->zatcaRecord->statusLabel() }}</span>@else <span class="small">-</span>@endif</td>
+                            <td><a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.notes.show', ['note' => $note, 'return_to' => $invoiceOrigin]) }}">View</a></td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="8" class="table-empty">{{ __('No credit or debit notes for this customer in your scope.') }}</td></tr>
+                    @endforelse
+                </tbody>
+            </table></div>
+            <p class="small">{{ __('Notes are created from the original invoice workspace and posted there; the customer profile never posts accounting.') }}</p>
+            @break
+
         @case('receipts')
             @if ($summary)
                 <div class="card-grid">

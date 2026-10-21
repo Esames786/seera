@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+use App\Contracts\ZatcaDocument;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
-class CustomerInvoice extends Model
+class CustomerInvoice extends Model implements ZatcaDocument
 {
     public const PAYMENT_STATUSES = ['draft', 'unpaid', 'partially_paid', 'paid', 'cancelled'];
 
@@ -58,6 +62,12 @@ class CustomerInvoice extends Model
         return $this->invoice_type === self::TYPE_SIMPLIFIED;
     }
 
+    /** Posted, so a credit or debit note may correct it (draft and cancelled invoices are edited or reopened instead). */
+    public function isCorrectable(): bool
+    {
+        return in_array($this->payment_status, CustomerAdjustmentNote::CORRECTABLE_INVOICE_STATUSES, true);
+    }
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);
@@ -78,7 +88,7 @@ class CustomerInvoice extends Model
         return $this->belongsTo(JournalEntry::class);
     }
 
-    public function lines()
+    public function lines(): HasMany
     {
         return $this->hasMany(CustomerInvoiceLine::class);
     }
@@ -88,11 +98,44 @@ class CustomerInvoice extends Model
         return $this->hasMany(CustomerReceipt::class);
     }
 
-    public function zatcaRecord()
+    /** Credit and debit notes issued against this invoice (any status). */
+    public function adjustmentNotes()
     {
-        return $this->hasOne(ZatcaInvoiceRecord::class);
+        return $this->hasMany(CustomerAdjustmentNote::class, 'customer_invoice_id');
     }
 
+    /** The invoice's own compliance record (a note's record points at the invoice too, but carries the note key). */
+    public function zatcaRecord(): HasOne
+    {
+        return $this->hasOne(ZatcaInvoiceRecord::class)->whereNull('customer_adjustment_note_id');
+    }
+
+    /**
+     * Posted correction totals: the credit applied to this invoice's balance (never
+     * more than was open), the credit that could not be applied (customer credit
+     * awaiting Finance), and the debit added to the receivable.
+     *
+     * @return array{credited: float, credit_applied: float, credit_unapplied: float, debited: float}
+     */
+    public function postedAdjustments(): array
+    {
+        $posted = $this->adjustmentNotes()->withoutGlobalScopes()->where('status', CustomerAdjustmentNote::STATUS_POSTED)->get(['note_type', 'total_amount', 'applied_amount', 'unapplied_amount']);
+        $credits = $posted->where('note_type', CustomerAdjustmentNote::TYPE_CREDIT);
+        $debits = $posted->where('note_type', CustomerAdjustmentNote::TYPE_DEBIT);
+
+        return [
+            'credited' => round((float) $credits->sum('total_amount'), 2),
+            'credit_applied' => round((float) $credits->sum('applied_amount'), 2),
+            'credit_unapplied' => round((float) $credits->sum('unapplied_amount'), 2),
+            'debited' => round((float) $debits->sum('total_amount'), 2),
+        ];
+    }
+
+    /**
+     * The outstanding amount is the posted total plus posted debit notes, less the
+     * credit applied by posted credit notes, less receipts. Paid means that amount
+     * is settled; the stored columns stay the single source for every AR figure.
+     */
     public function refreshPaymentStatus(): void
     {
         if (in_array($this->payment_status, ['draft', 'cancelled'], true)) {
@@ -100,14 +143,16 @@ class CustomerInvoice extends Model
         }
 
         $received = (float) $this->receipts()->sum('amount');
-        $total = (float) $this->total_amount;
+        $adjustments = $this->postedAdjustments();
+        $owed = round((float) $this->total_amount + $adjustments['debited'] - $adjustments['credit_applied'], 2);
+        $balance = round($owed - $received, 2);
 
         $this->update([
             'received_amount' => round($received, 2),
-            'balance_amount' => round($total - $received, 2),
+            'balance_amount' => max($balance, 0),
             'payment_status' => match (true) {
+                $balance <= 0.009 && ($received > 0 || $adjustments['credit_applied'] > 0) => 'paid',
                 $received <= 0 => 'unpaid',
-                $received + 0.01 >= $total => 'paid',
                 default => 'partially_paid',
             },
         ]);
@@ -118,5 +163,62 @@ class CustomerInvoice extends Model
         $prefix = 'INV-'.$year.'-';
         return app(\App\Services\DocumentNumberService::class)
             ->next('invoice-'.$year, $prefix, 'customer_invoices', 'invoice_number');
+    }
+
+    // ------------------------------------------------------------ ZatcaDocument
+
+    public function zatcaNumber(): string
+    {
+        return (string) $this->invoice_number;
+    }
+
+    public function zatcaIssueDate(): Carbon
+    {
+        return $this->invoice_date;
+    }
+
+    public function zatcaTypeCode(): string
+    {
+        return self::TYPE_CODE_INVOICE;
+    }
+
+    public function zatcaBillingReference(): ?string
+    {
+        return null;
+    }
+
+    public function zatcaNoteReason(): ?string
+    {
+        return null;
+    }
+
+    public function zatcaFreeNote(): ?string
+    {
+        return $this->notes ? mb_substr(trim(preg_replace('/\s+/', ' ', $this->notes)), 0, 1000) : null;
+    }
+
+    public function zatcaAmounts(): array
+    {
+        return ['taxable_amount' => $this->taxable_amount, 'vat_rate' => $this->vat_rate, 'vat_amount' => $this->vat_amount, 'total_amount' => $this->total_amount];
+    }
+
+    public function zatcaRecordKey(): array
+    {
+        return ['customer_invoice_id' => $this->id, 'customer_adjustment_note_id' => null];
+    }
+
+    public function zatcaRecordAttributes(): array
+    {
+        return ['document_type' => 'invoice'];
+    }
+
+    public function isPostedForZatca(): bool
+    {
+        return in_array($this->payment_status, ['unpaid', 'partially_paid', 'paid'], true);
+    }
+
+    public function zatcaActivityModules(): array
+    {
+        return ['Accounting', 'ZATCA'];
     }
 }

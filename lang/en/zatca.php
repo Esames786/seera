@@ -47,6 +47,9 @@ return [
     'not_ready' => 'Not ready',
     'invoice_type' => 'Invoice type',
     'type_standard' => 'Standard tax invoice (B2B, clearance)',
+    'doc_credit_note' => 'Credit note · :type',
+    'doc_debit_note' => 'Debit note · :type',
+    'document_kind' => 'Document',
     'type_simplified' => 'Simplified tax invoice (B2C, reporting)',
     'supply_date' => 'Supply date',
     'issue_time' => 'Issue time',
@@ -74,7 +77,7 @@ return [
     'buyer_readiness' => 'Buyer readiness',
     'seller_readiness' => 'Seller readiness',
     'unit_readiness' => 'Solution unit',
-    'locked' => 'This invoice has been stamped or submitted: it can no longer be edited or reopened. Corrections need a credit or debit note, which Seera does not issue yet.',
+    'locked' => 'This invoice has been stamped or submitted: it can no longer be edited or reopened. Corrections need a credit or debit note, issued from the invoice workspace.',
     'arabic_note' => 'The human-readable invoice must be in Arabic (bilingual allowed). Seera has no printable invoice layout yet; the XML carries the legal data.',
 
     // Settings page
@@ -215,5 +218,5 @@ return [
     'err_duplicate_on_retry' => 'ZATCA reports this document as already received. The earlier attempt reached ZATCA; verify the outcome in the FATOORA portal before any further action.',
     'err_submission_in_progress' => 'Another submission of this document is in progress or has just been decided. Reload the record.',
     'err_cannot_regenerate' => 'Only a rejected, failed or unsent record can be regenerated.',
-    'err_reopen_locked' => 'This invoice has a stamped or submitted e-invoice and cannot be reopened. Issue a credit note (not yet available in Seera) instead.',
+    'err_reopen_locked' => 'This invoice has a stamped or submitted e-invoice and cannot be reopened. Issue a credit note instead.',
 ];

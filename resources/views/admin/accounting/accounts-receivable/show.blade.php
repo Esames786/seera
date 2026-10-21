@@ -270,6 +270,39 @@
         </tbody>
     </x-admin.data-table>
 
+    {{-- 8b. Adjustments: credit / debit notes --}}
+    <x-admin.data-table :title="__('customer_notes.adjustments')" :subtitle="__('customer_notes.adjustments_help')" id="adjustments">
+        <thead><tr><th>Note</th><th>Type</th><th>Date</th><th>Reason</th><th>Taxable</th><th>VAT</th><th>Total</th><th>Status</th><th>ZATCA</th><th>Actions</th></tr></thead>
+        <tbody>
+            @forelse ($adjustmentNotes as $note)
+                <tr>
+                    <td>{{ $note->note_number }}</td>
+                    <td>{{ $note->typeLabel() }}</td>
+                    <td>{{ $note->note_date->toDateString() }}</td>
+                    <td class="small">{{ $note->reasonLabel() }}</td>
+                    <td>{{ $money($note->taxable_amount) }}</td>
+                    <td>{{ $money($note->vat_amount) }}</td>
+                    <td>{{ $money($note->total_amount) }}</td>
+                    <td><x-admin.status-badge :status="$note->status"/></td>
+                    <td>@if ($note->zatcaRecord)<span class="badge {{ $note->zatcaRecord->statusColor() }}">{{ $note->zatcaRecord->statusLabel() }}</span>@else <span class="small">-</span>@endif</td>
+                    <td><a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.notes.show', ['note' => $note, 'return_to' => $selfUrl]) }}">{{ __('workspace.view') }}</a></td>
+                </tr>
+            @empty
+                <tr><td colspan="10" class="table-empty">{{ $invoice->isCorrectable() ? __('customer_notes.no_notes') : __('customer_notes.not_correctable') }}</td></tr>
+            @endforelse
+        </tbody>
+        <tfoot>
+            <tr><th colspan="4">{{ __('customer_notes.credited') }} / {{ __('customer_notes.debited') }}</th><td colspan="3">{{ $money($adjustments['credited']) }} / {{ $money($adjustments['debited']) }}</td><td colspan="3">@if ($adjustments['credit_unapplied'] > 0)<span class="badge yellow">{{ __('customer_notes.unapplied') }}: {{ $money($adjustments['credit_unapplied']) }}</span>@endif</td></tr>
+            <tr><th colspan="4">{{ __('customer_notes.adjusted_balance') }}</th><td colspan="6"><strong>{{ $money($invoice->balance_amount) }}</strong> <span class="small">= {{ $money($invoice->total_amount) }} + {{ $money($adjustments['debited']) }} − {{ $money($adjustments['credit_applied']) }} − {{ $money($invoice->received_amount) }}</span></td></tr>
+        </tfoot>
+        @if ($canCreateNote)
+            <x-slot:footer>
+                <a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.notes.create', ['invoice' => $invoice->id, 'type' => 'credit', 'return_to' => $selfUrl]) }}">{{ __('customer_notes.new_credit') }}</a>
+                <a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.notes.create', ['invoice' => $invoice->id, 'type' => 'debit', 'return_to' => $selfUrl]) }}">{{ __('customer_notes.new_debit') }}</a>
+            </x-slot:footer>
+        @endif
+    </x-admin.data-table>
+
     {{-- 9. ZATCA e-invoice --}}
     @if (isset($sections['zatca']))
         <x-admin.data-table :title="__('zatca.section')" :subtitle="__('workspace.inv_zatca_help')" class="detail-table" id="zatca">

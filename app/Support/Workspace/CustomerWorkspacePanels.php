@@ -4,6 +4,7 @@ namespace App\Support\Workspace;
 
 use App\Models\ActivityLog;
 use App\Models\Customer;
+use App\Models\CustomerAdjustmentNote;
 use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
 use App\Models\JournalEntry;
@@ -35,6 +36,7 @@ class CustomerWorkspacePanels implements WorkspacePanels
             'projects' => new PanelDefinition('projects', 'Projects', 'Projects'),
             'invoices' => new PanelDefinition('invoices', 'Invoices', 'Accounts Receivable'),
             'receipts' => new PanelDefinition('receipts', 'Receipts & Balance', 'Accounts Receivable'),
+            'adjustments' => new PanelDefinition('adjustments', 'Credit / Debit Notes', 'Accounts Receivable'),
             'ageing' => new PanelDefinition('ageing', 'Ageing', 'Accounts Receivable'),
             'accounting' => new PanelDefinition('accounting', 'Accounting', 'Journal Entries'),
             'zatca' => new PanelDefinition('zatca', 'ZATCA E-Invoices', 'ZATCA Invoicing'),
@@ -51,9 +53,12 @@ class CustomerWorkspacePanels implements WorkspacePanels
             'invoices', 'ageing' => self::invoices($customer)->with(['project', 'zatcaRecord'])->latest('invoice_date')->latest('id'),
             'receipts' => CustomerReceipt::query()->where('customer_id', $customer->id)
                 ->with(['invoice', 'receiptAccount', 'journalEntry'])->latest('receipt_date')->latest('id'),
+            'adjustments' => CustomerAdjustmentNote::query()->where('customer_id', $customer->id)->with(['invoice', 'zatcaRecord'])->latest('note_date')->latest('id'),
             'accounting' => JournalEntry::query()
                 ->where(fn ($q) => $q
                     ->where(fn ($inv) => $inv->where('source_module', 'Customer Invoice')->whereIn('source_id', self::invoices($customer)->select('id')))
+                    ->orWhere(fn ($note) => $note->whereIn('source_module', ['Customer Credit Note', 'Customer Debit Note'])
+                        ->whereIn('source_id', CustomerAdjustmentNote::query()->where('customer_id', $customer->id)->select('id')))
                     ->orWhere(fn ($rcpt) => $rcpt->where('source_module', 'Customer Receipt')
                         ->whereIn('source_id', CustomerReceipt::query()->where('customer_id', $customer->id)->select('id'))))
                 ->latest('journal_date')->latest('id'),
@@ -90,6 +95,8 @@ class CustomerWorkspacePanels implements WorkspacePanels
             'outstanding' => round((float) (clone $open)->sum('balance_amount'), 2),
             'open_invoices' => (clone $open)->count(),
             'draft_invoices' => (clone $invoices)->where('payment_status', 'draft')->count(),
+            'credited' => round((float) CustomerAdjustmentNote::query()->where('customer_id', $customer->id)->where('status', CustomerAdjustmentNote::STATUS_POSTED)->where('note_type', CustomerAdjustmentNote::TYPE_CREDIT)->sum('total_amount'), 2),
+            'debited' => round((float) CustomerAdjustmentNote::query()->where('customer_id', $customer->id)->where('status', CustomerAdjustmentNote::STATUS_POSTED)->where('note_type', CustomerAdjustmentNote::TYPE_DEBIT)->sum('total_amount'), 2),
             'ageing' => AgeingBuckets::fromRows((clone $open)->get(['id', 'due_date', 'balance_amount'])),
             'last_receipt' => CustomerReceipt::query()->where('customer_id', $customer->id)->latest('receipt_date')->latest('id')->first(),
         ];
@@ -149,6 +156,7 @@ class CustomerWorkspacePanels implements WorkspacePanels
     {
         return match ($panel) {
             'invoices', 'receipts', 'ageing' => route('admin.accounting.accounts-receivable.index', ['customer' => $customer->id]),
+            'adjustments' => route('admin.accounting.accounts-receivable.notes.index', ['customer' => $customer->id]),
             'accounting' => route('admin.accounting.journal-entries.index', ['search' => $customer->name]),
             'zatca' => route('admin.accounting.zatca.index'),
             'activity' => route('admin.activity-logs.index', ['search' => $customer->name]),

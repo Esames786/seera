@@ -2,6 +2,7 @@
 
 namespace App\Services\Zatca;
 
+use App\Contracts\ZatcaDocument;
 use App\Models\CustomerInvoice;
 use App\Models\ZatcaEgsUnit;
 
@@ -116,20 +117,29 @@ final class ZatcaReadiness
     /** @return array<int, array{code: string, message: string, rule: string}> */
     public function invoice(CustomerInvoice $invoice): array
     {
+        return $this->document($invoice);
+    }
+
+    /** @return array<int, array{code: string, message: string, rule: string}> */
+    public function document(ZatcaDocument $invoice): array
+    {
         $errors = [];
-        if (! in_array($invoice->payment_status, ['unpaid', 'partially_paid', 'paid'], true)) {
+        if (! $invoice->isPostedForZatca()) {
             $errors[] = ['code' => 'invoice_not_posted', 'rule' => 'Seera', 'message' => __('zatca.ready_invoice_not_posted')];
+        }
+        if ($invoice->zatcaTypeCode() !== ZatcaDocument::TYPE_CODE_INVOICE && ($invoice->zatcaBillingReference() === null || $invoice->zatcaNoteReason() === null)) {
+            $errors[] = ['code' => 'note_reference_missing', 'rule' => 'BR-KSA-17 / BT-25', 'message' => __('zatca.val_note_reference_missing')];
         }
         if (! in_array($invoice->invoice_type, CustomerInvoice::TYPES, true)) {
             $errors[] = ['code' => 'invoice_type_invalid', 'rule' => 'BT-3 / KSA-2', 'message' => __('zatca.ready_invoice_type_invalid')];
         }
-        if ($invoice->invoice_type === CustomerInvoice::TYPE_STANDARD && ! $invoice->supply_date) {
+        if ($invoice->invoice_type === CustomerInvoice::TYPE_STANDARD && $invoice->zatcaTypeCode() === ZatcaDocument::TYPE_CODE_INVOICE && ! $invoice->supply_date) {
             $errors[] = ['code' => 'supply_date_missing', 'rule' => 'BR-KSA-15 (KSA-5)', 'message' => __('zatca.ready_supply_date_missing')];
         }
         if ($invoice->lines()->count() === 0) {
             $errors[] = ['code' => 'no_lines', 'rule' => 'BG-25', 'message' => __('zatca.ready_no_lines')];
         }
-        if ($invoice->invoice_date && $invoice->invoice_date->isFuture()) {
+        if ($invoice->zatcaIssueDate()->isFuture()) {
             $errors[] = ['code' => 'issue_date_future', 'rule' => 'BR-KSA-04', 'message' => __('zatca.ready_issue_date_future')];
         }
 

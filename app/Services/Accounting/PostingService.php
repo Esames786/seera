@@ -4,6 +4,7 @@ namespace App\Services\Accounting;
 
 use App\Models\AutomaticPostingRule;
 use App\Models\ChartOfAccount;
+use App\Models\CustomerAdjustmentNote;
 use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
 use App\Models\EquipmentFuelLog;
@@ -613,8 +614,131 @@ class PostingService
         ], $lines, 'Inventory', 'Stock Adjusted', $userId);
     }
 
+    /**
+     * Credit note: debit revenue (per corrected line) and Output VAT, credit
+     * accounts receivable. Accounts come from the note lines, which default to
+     * the original invoice lines' revenue accounts; nothing is hard-coded by id.
+     */
+    public function postCustomerCreditNote(CustomerAdjustmentNote $note, ?int $userId = null): JournalEntry
+    {
+        return $this->postCustomerNote($note, $userId);
+    }
+
+    /** Debit note: debit accounts receivable, credit revenue (per line) and Output VAT. */
+    public function postCustomerDebitNote(CustomerAdjustmentNote $note, ?int $userId = null): JournalEntry
+    {
+        return $this->postCustomerNote($note, $userId);
+    }
+
+    private function postCustomerNote(CustomerAdjustmentNote $note, ?int $userId): JournalEntry
+    {
+        $note->loadMissing('lines.invoiceLine', 'customer');
+        $credit = $note->isCredit();
+        $module = $credit ? 'Customer Credit Note' : 'Customer Debit Note';
+        $receivable = $this->requireAccount(self::RECEIVABLE, 'Accounts Receivable');
+        $outputVat = (float) $note->vat_amount > 0 ? $this->requireAccount(self::OUTPUT_VAT, 'Output VAT') : null;
+        $dimensions = ['project_id' => $note->project_id];
+        $side = fn (float $amount) => $credit ? ['debit' => 0, 'credit' => $amount] : ['debit' => $amount, 'credit' => 0];
+        $otherSide = fn (float $amount) => $credit ? ['debit' => $amount, 'credit' => 0] : ['debit' => 0, 'credit' => $amount];
+
+        $lines = [[
+            'chart_of_account_id' => $receivable->id,
+            'description' => $note->customer->name.' - '.$note->note_number,
+            'cost_center_id' => $note->cost_center_id,
+        ] + $side((float) $note->total_amount) + $dimensions];
+
+        foreach ($note->lines as $line) {
+            $account = $this->lineAccount($line->revenue_account_id ?? $line->invoiceLine?->revenue_account_id, self::REVENUE, 'revenue account on note line "'.$line->description.'"');
+            $lines[] = [
+                'chart_of_account_id' => $account->id,
+                'description' => $line->description,
+                'cost_center_id' => $line->cost_center_id ?? $line->invoiceLine?->cost_center_id ?? $note->cost_center_id,
+            ] + $otherSide((float) $line->taxable_amount) + $dimensions;
+        }
+
+        if ($outputVat) {
+            $lines[] = [
+                'chart_of_account_id' => $outputVat->id,
+                'description' => 'Output VAT on '.$note->note_number,
+                'cost_center_id' => $note->cost_center_id,
+            ] + $otherSide((float) $note->vat_amount) + $dimensions;
+        }
+
+        $entry = $this->createEntry([
+            'journal_date' => $note->note_date,
+            'reference_number' => $note->note_number,
+            'source_module' => $module,
+            'source_id' => $note->id,
+            'description' => ($credit ? 'Customer credit note ' : 'Customer debit note ').$note->note_number.' - '.$note->customer->name,
+            'cost_center_id' => $note->cost_center_id,
+        ], $lines, $module, 'Note Posted', $userId, $this->notePostingMode($module));
+
+        $sign = $credit ? -1 : 1;
+        $this->recordVatCorrection(
+            'output', $sign * (float) $note->vat_amount, $sign * (float) $note->taxable_amount, $note->vat_rate,
+            $note->note_date, $module, $note->id, $note->note_number,
+            'customer', $note->customer_id, $note->customer->name
+        );
+
+        return $entry;
+    }
+
+    /**
+     * A note journal follows its own posting rule when one exists, otherwise the
+     * customer invoice rule (review mode applies to both), otherwise it posts.
+     */
+    private function notePostingMode(string $module): bool
+    {
+        $rule = AutomaticPostingRule::where('source_module', $module)->where('trigger_event', 'Note Posted')->where('status', 'active')->first()
+            ?? AutomaticPostingRule::where('source_module', 'Customer Invoice')->where('trigger_event', 'Invoice Approved')->where('status', 'active')->first();
+
+        return $rule ? (bool) $rule->auto_post : true;
+    }
+
+    /**
+     * A VAT correction row: negative for a credit note (it reduces the output VAT
+     * of its period), positive for a debit note. Same period lock as recordVat();
+     * the original invoice row is never touched.
+     */
+    public function recordVatCorrection(
+        string $type,
+        float $vatAmount,
+        float $taxableAmount,
+        float|string $vatRate,
+        $date,
+        string $sourceModule,
+        ?int $sourceId,
+        ?string $reference,
+        string $partyType,
+        ?int $partyId,
+        ?string $partyName
+    ): ?VatTransaction {
+        if (abs($vatAmount) < 0.005) {
+            return null;
+        }
+
+        return DB::transaction(function () use ($type, $vatAmount, $taxableAmount, $vatRate, $date, $sourceModule, $sourceId, $reference, $partyType, $partyId, $partyName) {
+            $period = $this->assertVatPeriodOpen($date, $sourceModule.' '.($reference ?? ''));
+
+            return VatTransaction::create([
+                'transaction_date' => $date,
+                'source_module' => $sourceModule,
+                'source_id' => $sourceId,
+                'source_reference' => $reference,
+                'party_type' => $partyType,
+                'party_id' => $partyId,
+                'party_name' => $partyName,
+                'taxable_amount' => round($taxableAmount, 2),
+                'vat_rate' => $vatRate,
+                'vat_amount' => round($vatAmount, 2),
+                'vat_type' => $type,
+                'vat_period_id' => $period?->id,
+                'status' => 'active',
+            ]);
+        });
+    }
     /** Compliance record (UUID, not generated) for an approved invoice; the Phase 2 service owns the lifecycle. */
-    public function createZatcaRecord(CustomerInvoice $invoice): ZatcaInvoiceRecord
+    public function createZatcaRecord(\App\Contracts\ZatcaDocument $invoice): ZatcaInvoiceRecord
     {
         return app(\App\Services\Zatca\ZatcaSubmissionService::class)->ensureRecord($invoice);
     }
