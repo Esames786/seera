@@ -156,6 +156,24 @@ class CustomerAdjustmentNote extends Model implements ZatcaDocument
         return $this->hasOne(ZatcaInvoiceRecord::class, 'customer_adjustment_note_id');
     }
 
+    /** Credit applied from this note to other invoices (active and reversed rows). */
+    public function creditAllocations()
+    {
+        return $this->hasMany(CustomerCreditAllocation::class, 'customer_adjustment_note_id');
+    }
+
+    /** Refunds of this note's credit (active and reversed rows). */
+    public function creditRefunds()
+    {
+        return $this->hasMany(CustomerCreditRefund::class, 'customer_adjustment_note_id');
+    }
+
+    /** Posted credit note with credit beyond the original invoice balance: the only source of customer credit. */
+    public function hasUnappliedCredit(): bool
+    {
+        return $this->isCredit() && $this->isPosted() && (float) $this->unapplied_amount > 0;
+    }
+
     public static function nextNumber(string $type, int $year): string
     {
         $prefix = ($type === self::TYPE_CREDIT ? 'CN-' : 'DN-').$year.'-';

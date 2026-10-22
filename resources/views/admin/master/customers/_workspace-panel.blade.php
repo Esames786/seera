@@ -177,9 +177,11 @@
                 <div class="card-grid">
                     <x-admin.metric-card color="blue" :value="$money($summary['approved'])" label="Approved invoices"/>
                     <x-admin.metric-card color="green" :value="$money($summary['received'])" label="Received"/>
-                    <x-admin.metric-card color="yellow" :value="$money($summary['outstanding'])" label="Outstanding"/>
-                    <x-admin.metric-card color="cyan" :value="$summary['last_receipt'] ? $summary['last_receipt']->receipt_date->toDateString() : '-'" label="Last receipt"/>
+                    <x-admin.metric-card color="yellow" :value="$money($summary['outstanding'])" label="Open invoices"/>
+                    <x-admin.metric-card color="purple" :value="$money($summary['available_credit'])" :label="__('customer_notes.available_credit')"/>
+                    <x-admin.metric-card :color="$summary['net_position'] < 0 ? 'purple' : 'cyan'" :value="$summary['net_position'] < 0 ? __('customer_notes.net_customer_credit', ['amount' => $money(-$summary['net_position'])]) : $money($summary['net_position'])" :label="__('customer_notes.net_position')"/>
                 </div>
+                <p class="small">{{ __('customer_notes.net_position_help') }} {{ $summary['last_receipt'] ? __('Last receipt').': '.$summary['last_receipt']->receipt_date->toDateString() : '' }}</p>
             @endif
             <div class="table-wrap"><table>
                 <thead><tr><th>Date</th><th>Invoice</th><th>Account</th><th>Method</th><th>Amount</th><th>Reference</th><th>Journal</th></tr></thead>

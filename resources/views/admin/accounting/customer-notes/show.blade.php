@@ -32,6 +32,10 @@
         @endif
     </x-admin.page-header>
 
+    @if ($errors->any())
+        <div class="alert flash"><ul style="margin:0;padding-left:18px">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>
+    @endif
+
     <div class="card workspace-header" data-workspace-header>
         <div class="identity">
             <h2>{{ $note->note_number }}</h2>
@@ -132,6 +136,113 @@
             </tbody>
             @if ($note->journalEntry)
                 <x-slot:footer><span class="small">{{ $note->journalEntry->journal_number }} · {{ $note->journalEntry->status }}</span></x-slot:footer>
+            @endif
+        </x-admin.data-table>
+    @endif
+
+    {{-- 5b. Credit resolution: what happened to the unapplied credit --}}
+    @if (isset($sections['resolution']) && $credit)
+        <x-admin.data-table :title="__('customer_notes.sec_resolution')" :subtitle="__('customer_notes.credits_help')" class="detail-table" id="resolution">
+            <tbody>
+                <tr><th>{{ __('customer_notes.credit_amount') }}</th><td>{{ $money($credit['credit']) }} <span class="small">{{ __('customer_notes.unapplied_help') }}</span></td></tr>
+                <tr><th>{{ __('customer_notes.applied_to_invoices') }}</th><td>{{ $money($credit['applied']) }}</td></tr>
+                <tr><th>{{ __('customer_notes.refunded') }}</th><td>{{ $money($credit['refunded']) }}</td></tr>
+                <tr><th>{{ __('customer_notes.available') }}</th><td><strong>{{ $money($credit['available']) }}</strong> <span class="badge {{ $credit['status'] === 'fully_used' ? 'gray' : ($credit['status'] === 'partially_used' ? 'yellow' : 'purple') }}">{{ __('customer_notes.credit_status_'.$credit['status']) }}</span></td></tr>
+            </tbody>
+        </x-admin.data-table>
+
+        <x-admin.data-table :title="__('customer_notes.applications')" :subtitle="__('customer_notes.apply_credit_help')" id="applications">
+            <thead><tr><th>{{ __('customer_notes.target_invoice') }}</th><th>Date</th><th>Amount</th><th>Reference</th><th>By</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+                @forelse ($allocations as $allocation)
+                    <tr>
+                        <td>@if ($allocation->invoice)<a href="{{ route('admin.accounting.accounts-receivable.show', ['accounts_receivable' => $allocation->invoice, 'return_to' => $selfUrl]) }}">{{ $allocation->invoice->invoice_number }}</a>@else - @endif</td>
+                        <td>{{ $allocation->allocation_date->toDateString() }}</td>
+                        <td>{{ $money($allocation->amount) }}</td>
+                        <td>{{ $allocation->reference ?? '-' }}</td>
+                        <td>{{ $allocation->createdBy?->name ?? '-' }}</td>
+                        <td>@if ($allocation->isReversed())<span class="badge gray">{{ __('customer_notes.reversed') }}</span> <span class="small">{{ $allocation->reversal_reason }}</span>@else <span class="badge green">{{ __('customer_notes.applied') }}</span>@endif</td>
+                        <td>
+                            @if ($canReverseCredit && ! $allocation->isReversed())
+                                <form method="POST" action="{{ route('admin.accounting.accounts-receivable.credits.allocations.reverse', [$note, $allocation]) }}" style="display:inline" onsubmit="var r = prompt(@json(__('customer_notes.reverse_allocation_prompt'))); if (!r) return false; this.reason.value = r;">
+                                    @csrf<input type="hidden" name="reason" value=""/><button class="btn sm danger">{{ __('customer_notes.reverse') }}</button>
+                                </form>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="7" class="table-empty">{{ __('customer_notes.no_allocations') }}</td></tr>
+                @endforelse
+            </tbody>
+            @if ($canAllocateCredit && $credit['available'] > 0)
+                <x-slot:footer>
+                    <form method="POST" action="{{ route('admin.accounting.accounts-receivable.credits.allocate', $note) }}" style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+                        @csrf
+                        <input type="hidden" name="idempotency_key" value="{{ old('idempotency_key', (string) \Illuminate\Support\Str::uuid()) }}"/>
+                        <div><label class="small">{{ __('customer_notes.target_invoice') }}</label>
+                            <select name="customer_invoice_id" class="select" required>
+                                @forelse ($eligibleTargets as $target)
+                                    <option value="{{ $target->id }}">{{ $target->invoice_number }} · {{ __('customer_notes.unapplied') === '' ? '' : '' }}{{ 'SAR '.number_format($target->balance_amount, 2) }} open</option>
+                                @empty
+                                    <option value="">{{ __('customer_notes.no_targets') }}</option>
+                                @endforelse
+                            </select></div>
+                        <div><label class="small">Amount</label><input name="amount" type="number" step="0.01" min="0.01" max="{{ $credit['available'] }}" class="input" value="{{ old('amount', $credit['available']) }}" required/></div>
+                        <div><label class="small">{{ __('customer_notes.allocation_date') }}</label><input name="allocation_date" type="date" class="input" max="{{ now()->toDateString() }}" value="{{ old('allocation_date', now()->toDateString()) }}" required/></div>
+                        <div><label class="small">Reference</label><input name="reference" class="input" value="{{ old('reference') }}"/></div>
+                        <button class="btn sm primary" @disabled($eligibleTargets->isEmpty())>{{ __('customer_notes.apply_credit') }}</button>
+                    </form>
+                </x-slot:footer>
+            @endif
+        </x-admin.data-table>
+
+        <x-admin.data-table :title="__('customer_notes.refunds')" :subtitle="__('customer_notes.refund_help')" id="refunds">
+            <thead><tr><th>{{ __('customer_notes.payment_date') }}</th><th>Account</th><th>Method</th><th>Amount</th><th>Reference</th><th>Journal</th><th>By</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+                @forelse ($refunds as $refund)
+                    <tr>
+                        <td>{{ $refund->payment_date->toDateString() }}</td>
+                        <td>{{ $refund->paymentAccount?->label() ?? '-' }}</td>
+                        <td>{{ $refund->payment_method ?? '-' }}</td>
+                        <td>{{ $money($refund->amount) }}</td>
+                        <td>{{ $refund->reference ?? '-' }}</td>
+                        <td class="small">{{ $refund->journalEntry?->journal_number ?? '-' }}@if ($refund->reversalJournal) / {{ $refund->reversalJournal->journal_number }}@endif</td>
+                        <td>{{ $refund->createdBy?->name ?? '-' }}</td>
+                        <td>@if ($refund->isReversed())<span class="badge gray">{{ __('customer_notes.reversed') }}</span> <span class="small">{{ $refund->reversal_reason }}</span>@else <span class="badge green">{{ __('customer_notes.refunded') }}</span>@endif</td>
+                        <td>
+                            @if ($canReverseCredit && ! $refund->isReversed())
+                                <form method="POST" action="{{ route('admin.accounting.accounts-receivable.credits.refunds.reverse', [$note, $refund]) }}" style="display:inline" onsubmit="var r = prompt(@json(__('customer_notes.reverse_refund_prompt'))); if (!r) return false; this.reason.value = r;">
+                                    @csrf<input type="hidden" name="reason" value=""/><button class="btn sm danger">{{ __('customer_notes.reverse') }}</button>
+                                </form>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="9" class="table-empty">{{ __('customer_notes.no_refunds') }}</td></tr>
+                @endforelse
+            </tbody>
+            @if ($canRefundCredit && $credit['available'] > 0)
+                <x-slot:footer>
+                    <form method="POST" action="{{ route('admin.accounting.accounts-receivable.credits.refund', $note) }}" style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+                        @csrf
+                        <input type="hidden" name="idempotency_key" value="{{ old('idempotency_key', (string) \Illuminate\Support\Str::uuid()) }}"/>
+                        <div><label class="small">{{ __('customer_notes.payment_account') }}</label>
+                            <select name="payment_account_id" class="select" required>
+                                @foreach ($refundAccounts as $account)
+                                    <option value="{{ $account->id }}">{{ $account->label() }}</option>
+                                @endforeach
+                            </select></div>
+                        <div><label class="small">Method</label>
+                            <select name="payment_method" class="select">
+                                <option value="">Follows the account</option>
+                                @foreach (\App\Models\CustomerCreditRefund::METHODS as $method)<option value="{{ $method }}">{{ $method }}</option>@endforeach
+                            </select></div>
+                        <div><label class="small">Amount</label><input name="amount" type="number" step="0.01" min="0.01" max="{{ $credit['available'] }}" class="input" value="{{ old('amount', $credit['available']) }}" required/></div>
+                        <div><label class="small">{{ __('customer_notes.payment_date') }}</label><input name="payment_date" type="date" class="input" max="{{ now()->toDateString() }}" value="{{ old('payment_date', now()->toDateString()) }}" required/></div>
+                        <div><label class="small">Reference</label><input name="reference" class="input" value="{{ old('reference') }}" placeholder="Transfer / cheque number"/></div>
+                        <button class="btn sm primary" @disabled($refundAccounts->isEmpty())>{{ __('customer_notes.refund_customer') }}</button>
+                    </form>
+                </x-slot:footer>
             @endif
         </x-admin.data-table>
     @endif

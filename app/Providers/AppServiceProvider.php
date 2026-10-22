@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Models\AttendanceRecord;
 use App\Models\CustomerAdjustmentNote;
+use App\Models\CustomerCreditAllocation;
+use App\Models\CustomerCreditRefund;
 use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
 use App\Models\Employee;
@@ -75,7 +77,7 @@ class AppServiceProvider extends ServiceProvider
             OvertimeRecord::class, SalaryStructure::class,
             EndOfServiceRecord::class, PayrollRunItem::class,
             JournalEntry::class, JournalEntryLine::class, SupplierBill::class,
-            SupplierPayment::class, CustomerInvoice::class, CustomerAdjustmentNote::class,
+            SupplierPayment::class, CustomerInvoice::class, CustomerAdjustmentNote::class, CustomerCreditAllocation::class, CustomerCreditRefund::class,
             CustomerReceipt::class, ZatcaInvoiceRecord::class,
             PurchaseRequest::class, PurchaseRequestLine::class,
             PurchaseOrder::class, PurchaseOrderLine::class,

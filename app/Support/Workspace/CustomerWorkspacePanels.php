@@ -99,6 +99,8 @@ class CustomerWorkspacePanels implements WorkspacePanels
             'debited' => round((float) CustomerAdjustmentNote::query()->where('customer_id', $customer->id)->where('status', CustomerAdjustmentNote::STATUS_POSTED)->where('note_type', CustomerAdjustmentNote::TYPE_DEBIT)->sum('total_amount'), 2),
             'ageing' => AgeingBuckets::fromRows((clone $open)->get(['id', 'due_date', 'balance_amount'])),
             'last_receipt' => CustomerReceipt::query()->where('customer_id', $customer->id)->latest('receipt_date')->latest('id')->first(),
+            'available_credit' => $availableCredit = app(\App\Services\Accounting\CustomerCreditResolutionService::class)->customerAvailableCredit($customer),
+            'net_position' => round((float) (clone $open)->sum('balance_amount') - $availableCredit, 2),
         ];
     }
 
@@ -155,7 +157,8 @@ class CustomerWorkspacePanels implements WorkspacePanels
     public static function viewAllUrl(Customer $customer, string $panel): ?string
     {
         return match ($panel) {
-            'invoices', 'receipts', 'ageing' => route('admin.accounting.accounts-receivable.index', ['customer' => $customer->id]),
+            'invoices', 'ageing' => route('admin.accounting.accounts-receivable.index', ['customer' => $customer->id]),
+            'receipts' => route('admin.accounting.accounts-receivable.credits.index', ['customer' => $customer->id]),
             'adjustments' => route('admin.accounting.accounts-receivable.notes.index', ['customer' => $customer->id]),
             'accounting' => route('admin.accounting.journal-entries.index', ['search' => $customer->name]),
             'zatca' => route('admin.accounting.zatca.index'),

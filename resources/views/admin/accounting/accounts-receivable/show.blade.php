@@ -259,7 +259,8 @@
     <x-admin.data-table :title="__('workspace.inv_balance')" class="detail-table" id="balance">
         <tbody>
             <tr><th>Invoice Total</th><td>{{ $money($invoice->total_amount) }}</td></tr>
-            <tr><th>Received</th><td>{{ $money($invoice->received_amount) }} <span class="small">({{ $receipts->total() }} receipt{{ $receipts->total() === 1 ? '' : 's' }})</span></td></tr>
+            <tr><th>{{ __('customer_notes.cash_received') }}</th><td>{{ $money($invoice->received_amount) }} <span class="small">({{ $receipts->total() }} receipt{{ $receipts->total() === 1 ? '' : 's' }})</span></td></tr>
+            <tr><th>{{ __('customer_notes.credit_applied_to_invoice') }}</th><td>{{ $money($creditAllocated) }} <span class="small">{{ __('customer_notes.credit_applied_help') }}</span></td></tr>
             <tr><th>Outstanding</th><td><strong>{{ $money($invoice->balance_amount) }}</strong></td></tr>
             <tr><th>Due Date</th><td>{{ $invoice->due_date?->toDateString() ?? '-' }}</td></tr>
             <tr><th>{{ __('workspace.inv_days_overdue') }}</th><td>@if ($overdueDays > 0)<span class="badge red">{{ $overdueDays }}</span>@else 0 @endif</td></tr>
@@ -293,8 +294,27 @@
         </tbody>
         <tfoot>
             <tr><th colspan="4">{{ __('customer_notes.credited') }} / {{ __('customer_notes.debited') }}</th><td colspan="3">{{ $money($adjustments['credited']) }} / {{ $money($adjustments['debited']) }}</td><td colspan="3">@if ($adjustments['credit_unapplied'] > 0)<span class="badge yellow">{{ __('customer_notes.unapplied') }}: {{ $money($adjustments['credit_unapplied']) }}</span>@endif</td></tr>
-            <tr><th colspan="4">{{ __('customer_notes.adjusted_balance') }}</th><td colspan="6"><strong>{{ $money($invoice->balance_amount) }}</strong> <span class="small">= {{ $money($invoice->total_amount) }} + {{ $money($adjustments['debited']) }} − {{ $money($adjustments['credit_applied']) }} − {{ $money($invoice->received_amount) }}</span></td></tr>
+            <tr><th colspan="4">{{ __('customer_notes.adjusted_balance') }}</th><td colspan="6"><strong>{{ $money($invoice->balance_amount) }}</strong> <span class="small">= {{ $money($invoice->total_amount) }} + {{ $money($adjustments['debited']) }} − {{ $money($adjustments['credit_applied']) }} − {{ $money($creditAllocated) }} ({{ __('customer_notes.credit_applied_to_invoice') }}) − {{ $money($invoice->received_amount) }}</span></td></tr>
         </tfoot>
+    </x-admin.data-table>
+
+    {{-- 8c. Customer credit applied from other credit notes --}}
+    <x-admin.data-table :title="__('customer_notes.applied_credits')" :subtitle="__('customer_notes.applied_credits_help')" id="applied-credits">
+        <thead><tr><th>{{ __('customer_notes.type_credit') }}</th><th>Date</th><th>Amount</th><th>Reference</th><th>By</th><th>Status</th></tr></thead>
+        <tbody>
+            @forelse ($creditAllocations as $allocation)
+                <tr>
+                    <td><a href="{{ route('admin.accounting.accounts-receivable.notes.show', ['note' => $allocation->note, 'return_to' => $selfUrl]) }}">{{ $allocation->note?->note_number }}</a></td>
+                    <td>{{ $allocation->allocation_date->toDateString() }}</td>
+                    <td>{{ $money($allocation->amount) }}</td>
+                    <td>{{ $allocation->reference ?? '-' }}</td>
+                    <td>{{ $allocation->createdBy?->name ?? '-' }}</td>
+                    <td>@if ($allocation->isReversed())<span class="badge gray">{{ __('customer_notes.reversed') }}</span> <span class="small">{{ $allocation->reversal_reason }}</span>@else <span class="badge green">{{ __('customer_notes.applied') }}</span>@endif</td>
+                </tr>
+            @empty
+                <tr><td colspan="6" class="table-empty">{{ __('customer_notes.no_applied_credits') }}</td></tr>
+            @endforelse
+        </tbody>
         @if ($canCreateNote)
             <x-slot:footer>
                 <a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.notes.create', ['invoice' => $invoice->id, 'type' => 'credit', 'return_to' => $selfUrl]) }}">{{ __('customer_notes.new_credit') }}</a>

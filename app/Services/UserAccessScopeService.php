@@ -85,6 +85,11 @@ class UserAccessScopeService
 
             return;
         }
+        if (in_array($table, ['customer_credit_allocations', 'customer_credit_refunds'], true)) {
+            $query->whereHas('note');
+
+            return;
+        }
 
         // A journal header is visible when at least one of its (scoped) lines is (F07).
         if ($table === 'journal_entries') {

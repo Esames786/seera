@@ -15,6 +15,7 @@ final class CustomerAdjustmentNoteWorkspace
     /** @return array<string, mixed> */
     public static function data(CustomerAdjustmentNote $note, User $user, ?string $returnTo): array
     {
+        $credits = app(\App\Services\Accounting\CustomerCreditResolutionService::class);
         $flags = [
             'canEdit' => $note->isEditable() && $user->hasPermission('Accounts Receivable', 'edit'),
             'canPost' => $note->isDraft() && $user->hasPermission('Accounts Receivable', 'approve'),
@@ -26,11 +27,17 @@ final class CustomerAdjustmentNoteWorkspace
             'canPostZatca' => $user->hasPermission('ZATCA Invoicing', 'post'),
             'canRetryZatca' => $user->hasPermission('ZATCA Invoicing', 'retry'),
             'canExportZatca' => $user->hasPermission('ZATCA Invoicing', 'export'),
+            'canAllocateCredit' => $note->hasUnappliedCredit() && $user->hasPermission('Accounts Receivable', 'process'),
+            'canRefundCredit' => $note->hasUnappliedCredit() && $user->hasPermission('Accounts Receivable', 'approve'),
+            'canReverseCredit' => $note->hasUnappliedCredit() && $user->hasPermission('Accounts Receivable', 'approve'),
         ];
 
         $sections = ['summary' => __('customer_notes.sec_summary'), 'invoice' => __('customer_notes.sec_invoice'), 'lines' => __('customer_notes.sec_lines'), 'vat' => __('customer_notes.sec_vat')];
         if ($flags['canViewJournals']) {
             $sections['accounting'] = __('customer_notes.sec_accounting');
+        }
+        if ($note->hasUnappliedCredit()) {
+            $sections['resolution'] = __('customer_notes.sec_resolution');
         }
         if ($flags['canViewZatca']) {
             $sections['zatca'] = __('zatca.section');
@@ -49,6 +56,11 @@ final class CustomerAdjustmentNoteWorkspace
             'state' => self::state($note),
             'eInvoiceState' => self::eInvoiceState($note),
             'activity' => $activity,
+            'credit' => $note->hasUnappliedCredit() ? $credits->summary($note) : null,
+            'allocations' => $note->hasUnappliedCredit() ? $note->creditAllocations()->with(['invoice', 'createdBy'])->latest('allocation_date')->latest('id')->get() : collect(),
+            'refunds' => $note->hasUnappliedCredit() ? $note->creditRefunds()->with(['paymentAccount', 'journalEntry', 'reversalJournal', 'createdBy'])->latest('payment_date')->latest('id')->get() : collect(),
+            'eligibleTargets' => $flags['canAllocateCredit'] ? $credits->eligibleTargets($note) : collect(),
+            'refundAccounts' => $flags['canRefundCredit'] ? \App\Models\ChartOfAccount::where('status', 'active')->whereIn('account_code', [\App\Services\Accounting\PostingService::CASH, \App\Services\Accounting\PostingService::BANK])->whereIn('account_code', $note->customer->allowedPaymentAccountCodes())->orderBy('account_code')->get() : collect(),
         ];
     }
 

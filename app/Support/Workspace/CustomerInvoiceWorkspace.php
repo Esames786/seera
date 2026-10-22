@@ -90,6 +90,8 @@ final class CustomerInvoiceWorkspace
             'activity' => $activity,
             'adjustmentNotes' => $invoice->adjustmentNotes()->with('zatcaRecord')->latest('note_date')->latest('id')->get(),
             'adjustments' => $invoice->postedAdjustments(),
+            'creditAllocations' => $invoice->creditAllocations()->with(['note', 'createdBy'])->latest('allocation_date')->latest('id')->get(),
+            'creditAllocated' => $invoice->creditAllocatedAmount(),
         ];
     }
 

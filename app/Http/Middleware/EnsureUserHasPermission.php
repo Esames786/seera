@@ -192,6 +192,14 @@ class EnsureUserHasPermission
         if ($routeName === 'admin.mobile-sync.site-expenses') {
             return ['Site Expenses', 'create'];
         }
+        if (str_starts_with($routeName, 'admin.accounting.accounts-receivable.credits.')) {
+            // Customer credit resolution: view (register), process (apply credit to an invoice), approve (refund, reversals).
+            return ['Accounts Receivable', match (str($routeName)->afterLast('.')->toString()) {
+                'allocate' => 'process',
+                'refund', 'reverse' => 'approve',
+                default => 'view',
+            }];
+        }
         if (str_starts_with($routeName, 'admin.accounting.zatca.')) {
             // ZATCA: view (register, record, response), edit (settings and onboarding incl. credentials), post (generate,
             // stamp + submit, regenerate), retry (resubmit the same document), export (private XML downloads).

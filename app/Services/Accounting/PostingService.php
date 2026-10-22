@@ -5,6 +5,7 @@ namespace App\Services\Accounting;
 use App\Models\AutomaticPostingRule;
 use App\Models\ChartOfAccount;
 use App\Models\CustomerAdjustmentNote;
+use App\Models\CustomerCreditRefund;
 use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
 use App\Models\EquipmentFuelLog;
@@ -681,6 +682,40 @@ class PostingService
         );
 
         return $entry;
+    }
+
+    /**
+     * Customer credit refund: debit Accounts Receivable (the customer's credit
+     * balance leaves the sub-ledger), credit the bank / cash account the money
+     * left from. No revenue, no VAT: the credit note already corrected both.
+     */
+    public function postCustomerCreditRefund(CustomerCreditRefund $refund, ?int $userId = null): JournalEntry
+    {
+        $refund->loadMissing('customer', 'note');
+        $receivable = $this->requireAccount(self::RECEIVABLE, 'Accounts Receivable');
+        $paymentAccount = $this->activeOrRefuse(ChartOfAccount::find($refund->payment_account_id), 'refund account');
+        $dimensions = ['project_id' => $refund->note?->project_id];
+        $description = 'Refund to '.$refund->customer->name.' - '.$refund->note?->note_number;
+
+        return $this->createEntry([
+            'journal_date' => $refund->payment_date,
+            'reference_number' => $refund->note?->note_number,
+            'source_module' => 'Customer Credit Refund',
+            'source_id' => $refund->id,
+            'description' => $description,
+        ], [
+            ['chart_of_account_id' => $receivable->id, 'description' => $description, 'debit' => (float) $refund->amount, 'credit' => 0] + $dimensions,
+            ['chart_of_account_id' => $paymentAccount->id, 'description' => $description, 'debit' => 0, 'credit' => (float) $refund->amount] + $dimensions,
+        ], 'Customer Credit Refund', 'Refund Recorded', $userId, $this->refundPostingMode());
+    }
+
+    /** A refund journal follows its own rule, else the Customer Receipt rule, else it posts. */
+    private function refundPostingMode(): bool
+    {
+        $rule = AutomaticPostingRule::where('source_module', 'Customer Credit Refund')->where('trigger_event', 'Refund Recorded')->where('status', 'active')->first()
+            ?? AutomaticPostingRule::where('source_module', 'Customer Receipt')->where('trigger_event', 'Receipt Recorded')->where('status', 'active')->first();
+
+        return $rule ? (bool) $rule->auto_post : true;
     }
 
     /**

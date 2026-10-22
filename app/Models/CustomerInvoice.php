@@ -104,6 +104,18 @@ class CustomerInvoice extends Model implements ZatcaDocument
         return $this->hasMany(CustomerAdjustmentNote::class, 'customer_invoice_id');
     }
 
+    /** Customer credit applied to this invoice from credit notes of other invoices (active and reversed rows). */
+    public function creditAllocations()
+    {
+        return $this->hasMany(CustomerCreditAllocation::class, 'customer_invoice_id');
+    }
+
+    /** Active credit applied to this invoice from other credit notes (not cash: shown apart from receipts). */
+    public function creditAllocatedAmount(): float
+    {
+        return round((float) $this->creditAllocations()->withoutGlobalScopes()->whereNull('reversed_at')->sum('amount'), 2);
+    }
+
     /** The invoice's own compliance record (a note's record points at the invoice too, but carries the note key). */
     public function zatcaRecord(): HasOne
     {
@@ -133,8 +145,11 @@ class CustomerInvoice extends Model implements ZatcaDocument
 
     /**
      * The outstanding amount is the posted total plus posted debit notes, less the
-     * credit applied by posted credit notes, less receipts. Paid means that amount
-     * is settled; the stored columns stay the single source for every AR figure.
+     * credit applied by this invoice's own credit notes, less customer credit
+     * allocated from other credit notes, less cash / bank receipts. Paid means
+     * that amount is settled; received_amount stays cash only, so credit applied
+     * is always distinguishable from money received. The stored columns stay the
+     * single source for every AR figure.
      */
     public function refreshPaymentStatus(): void
     {
@@ -144,15 +159,16 @@ class CustomerInvoice extends Model implements ZatcaDocument
 
         $received = (float) $this->receipts()->sum('amount');
         $adjustments = $this->postedAdjustments();
-        $owed = round((float) $this->total_amount + $adjustments['debited'] - $adjustments['credit_applied'], 2);
+        $allocated = $this->creditAllocatedAmount();
+        $owed = round((float) $this->total_amount + $adjustments['debited'] - $adjustments['credit_applied'] - $allocated, 2);
         $balance = round($owed - $received, 2);
 
         $this->update([
             'received_amount' => round($received, 2),
             'balance_amount' => max($balance, 0),
             'payment_status' => match (true) {
-                $balance <= 0.009 && ($received > 0 || $adjustments['credit_applied'] > 0) => 'paid',
-                $received <= 0 => 'unpaid',
+                $balance <= 0.009 && ($received > 0 || $adjustments['credit_applied'] > 0 || $allocated > 0) => 'paid',
+                $received <= 0 && $allocated <= 0 => 'unpaid',
                 default => 'partially_paid',
             },
         ]);

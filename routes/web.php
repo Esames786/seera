@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Accounting\AccountingDashboardController;
 use App\Http\Controllers\Admin\Accounting\AccountsPayableController;
 use App\Http\Controllers\Admin\Accounting\AccountsReceivableController;
 use App\Http\Controllers\Admin\Accounting\CustomerAdjustmentNoteController;
+use App\Http\Controllers\Admin\Accounting\CustomerCreditController;
 use App\Http\Controllers\Admin\Accounting\AutoPostingRuleController;
 use App\Http\Controllers\Admin\Accounting\ChartOfAccountController;
 use App\Http\Controllers\Admin\Accounting\CostCenterController;
@@ -338,6 +339,12 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
         Route::put('accounts-receivable/notes/{note}', [CustomerAdjustmentNoteController::class, 'update'])->name('accounts-receivable.notes.update');
         Route::post('accounts-receivable/notes/{note}/approve', [CustomerAdjustmentNoteController::class, 'approve'])->name('accounts-receivable.notes.approve');
         Route::get('accounts-receivable/notes/{note}/print', [CustomerAdjustmentNoteController::class, 'print'])->name('accounts-receivable.notes.print');
+        // Customer credit resolution: register (view), apply credit (process), refund and reversals (approve).
+        Route::get('accounts-receivable/credits', [CustomerCreditController::class, 'index'])->name('accounts-receivable.credits.index');
+        Route::post('accounts-receivable/notes/{note}/credit/allocate', [CustomerCreditController::class, 'allocate'])->name('accounts-receivable.credits.allocate');
+        Route::post('accounts-receivable/notes/{note}/credit/allocations/{allocation}/reverse', [CustomerCreditController::class, 'reverseAllocation'])->name('accounts-receivable.credits.allocations.reverse');
+        Route::post('accounts-receivable/notes/{note}/credit/refund', [CustomerCreditController::class, 'refund'])->name('accounts-receivable.credits.refund');
+        Route::post('accounts-receivable/notes/{note}/credit/refunds/{refund}/reverse', [CustomerCreditController::class, 'reverseRefund'])->name('accounts-receivable.credits.refunds.reverse');
 
         Route::post('accounts-receivable/{accounts_receivable}/approve', [AccountsReceivableController::class, 'approve'])->name('accounts-receivable.approve');
         Route::post('accounts-receivable/{accounts_receivable}/reopen', [AccountsReceivableController::class, 'reopen'])->name('accounts-receivable.reopen');

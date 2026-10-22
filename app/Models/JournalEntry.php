@@ -68,7 +68,7 @@ class JournalEntry extends Model
 
     public const SOURCE_MODULES = [
         'Manual', 'Payroll', 'Payroll Settlement', 'Site Expense', 'Equipment Fuel', 'Equipment Maintenance', 'Site Expense Reimbursement', 'Inventory',
-        'Supplier Bill', 'Supplier Payment', 'Customer Invoice', 'Customer Receipt', 'Customer Credit Note', 'Customer Debit Note',
+        'Supplier Bill', 'Supplier Payment', 'Customer Invoice', 'Customer Receipt', 'Customer Credit Note', 'Customer Debit Note', 'Customer Credit Refund',
     ];
 
     protected $fillable = [
