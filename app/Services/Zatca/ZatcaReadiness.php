@@ -168,6 +168,10 @@ final class ZatcaReadiness
         if ($unit->status === ZatcaEgsUnit::STATUS_REVOKED) {
             $errors[] = ['code' => 'unit_revoked', 'rule' => 'Onboarding', 'message' => __('zatca.ready_unit_revoked')];
         }
+        // The production CSID certificate has an expiry (Detailed Technical Guidelines v2 §3.2.2: renew before it lapses); a lapsed one must not sign.
+        if ($unit->certificate_expires_at && $unit->certificate_expires_at->isPast()) {
+            $errors[] = ['code' => 'unit_certificate_expired', 'rule' => 'CSID renewal', 'message' => __('zatca.ready_unit_certificate_expired', ['date' => $unit->certificate_expires_at->toDateString()])];
+        }
 
         return $errors;
     }

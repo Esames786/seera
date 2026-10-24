@@ -143,6 +143,7 @@ return [
     'ready_unit_no_production_csid' => 'The solution unit has no production CSID for this environment. Complete onboarding in ZATCA Settings.',
     'ready_unit_no_standard' => 'The solution unit was onboarded without standard (T) documents.',
     'ready_unit_no_simplified' => 'The solution unit was onboarded without simplified (S) documents.',
+    'ready_unit_certificate_expired' => 'The unit\'s production certificate expired on :date. Renew the CSID in ZATCA Settings before signing.',
     'ready_unit_revoked' => 'The solution unit credentials were revoked.',
 
     // Validation messages (rule ids are shown next to them)
