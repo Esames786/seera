@@ -47,6 +47,7 @@ final class CustomerInvoiceWorkspace
             'canRetryZatca' => $user->hasPermission('ZATCA Invoicing', 'retry'),
             'canExportZatca' => $user->hasPermission('ZATCA Invoicing', 'export'),
             'canCreateNote' => $invoice->isCorrectable() && $user->hasPermission('Accounts Receivable', 'create'),
+            'canPrint' => $invoice->payment_status !== 'draft' && $user->hasPermission('Accounts Receivable', 'view'),
         ];
 
         $sections = ['information' => __('workspace.inv_information'), 'lines' => __('workspace.inv_lines')];

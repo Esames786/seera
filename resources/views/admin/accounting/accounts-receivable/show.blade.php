@@ -24,6 +24,9 @@
         @if ($canReceive)
             <a class="btn primary" href="{{ route('admin.accounting.accounts-receivable.receipt', ['accounts_receivable' => $invoice, 'return_to' => $origin]) }}">{{ __('workspace.inv_record_receipt') }}</a>
         @endif
+        @if ($canPrint)
+            <a class="btn outline" href="{{ route('admin.accounting.accounts-receivable.print', ['accounts_receivable' => $invoice, 'return_to' => $selfUrl]) }}" target="_blank" rel="noopener">{{ __('workspace.inv_print') }}</a>
+        @endif
         @if ($canViewJournals && $invoice->journalEntry)
             <a class="btn outline" href="{{ route('admin.accounting.journal-entries.show', $invoice->journalEntry) }}">{{ __('workspace.inv_view_journal') }}</a>
         @endif

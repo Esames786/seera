@@ -117,5 +117,6 @@ return [
     'err_exceeds_outstanding' => 'The target invoice has only SAR :outstanding outstanding.',
     'err_payment_account' => 'Choose an active cash or bank account this customer accepts.',
     'err_method_account' => 'The payment method must match the selected cash or bank account.',
+    'print_disclaimer_invoice' => 'Printed from Seera from the values issued at approval. The e-invoice is the XML document; the ZATCA status shown is the record state at print time.',
     'print_disclaimer' => 'Printed from Seera. The e-note is the XML document; this copy is for the customer.',
 ];

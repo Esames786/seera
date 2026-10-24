@@ -258,6 +258,24 @@ class AccountsReceivableController extends Controller
             ->with('status', 'Invoice reopened as a draft'.($reversal ? '; reversing entry '.$reversal->journal_number.' posted' : '').'. Correct it and approve again.');
     }
 
+    /**
+     * Bilingual print-friendly invoice (browser print / save as PDF). Read-only: nothing is
+     * written, the issued snapshots are shown, the QR is the stored one. Drafts have no issued
+     * values and are refused.
+     */
+    public function print(Request $request, CustomerInvoice $accounts_receivable): View
+    {
+        abort_if($accounts_receivable->payment_status === 'draft', 404, 'Only an approved invoice can be printed.');
+        $accounts_receivable->load(['customer', 'project', 'lines', 'zatcaRecord']);
+
+        return view('admin.accounting.accounts-receivable.print', [
+            'invoice' => $accounts_receivable,
+            'logo' => \App\Support\CompanyLogo::url(),
+            'zatcaState' => CustomerInvoiceWorkspace::eInvoiceState($accounts_receivable),
+            'returnTo' => SaveAction::returnTo($request) ?? route('admin.accounting.accounts-receivable.show', $accounts_receivable, false),
+        ]);
+    }
+
     public function receiptForm(Request $request, CustomerInvoice $accounts_receivable): View
     {
         $accounts_receivable->load(['customer', 'receipts']);

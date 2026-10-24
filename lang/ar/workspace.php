@@ -183,6 +183,7 @@ return [
     'inv_view_project' => 'عرض المشروع',
     'inv_view_journal' => 'عرض القيد',
     'inv_record_receipt' => 'تسجيل سند قبض',
+    'inv_print' => 'طباعة الفاتورة',
     'inv_edit_draft' => 'تعديل المسودة',
     'inv_back_origin' => 'العودة إلى المصدر',
     'inv_back_list' => 'العودة إلى الذمم المدينة',

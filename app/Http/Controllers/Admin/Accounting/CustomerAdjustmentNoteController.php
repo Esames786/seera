@@ -131,7 +131,7 @@ class CustomerAdjustmentNoteController extends Controller
     {
         $note->load(['customer', 'invoice', 'lines', 'zatcaRecord']);
 
-        return view('admin.accounting.customer-notes.print', ['note' => $note, 'company' => \App\Models\CompanyProfile::first()]);
+        return view('admin.accounting.customer-notes.print', ['note' => $note, 'company' => \App\Models\CompanyProfile::first(), 'logo' => \App\Support\CompanyLogo::url()]);
     }
 
     /** @return array<string, mixed> */

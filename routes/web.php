@@ -348,6 +348,7 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
 
         Route::post('accounts-receivable/{accounts_receivable}/approve', [AccountsReceivableController::class, 'approve'])->name('accounts-receivable.approve');
         Route::post('accounts-receivable/{accounts_receivable}/reopen', [AccountsReceivableController::class, 'reopen'])->name('accounts-receivable.reopen');
+        Route::get('accounts-receivable/{accounts_receivable}/print', [AccountsReceivableController::class, 'print'])->name('accounts-receivable.print');
         Route::get('accounts-receivable/{accounts_receivable}/receipt', [AccountsReceivableController::class, 'receiptForm'])->name('accounts-receivable.receipt');
         Route::post('accounts-receivable/{accounts_receivable}/receipt', [AccountsReceivableController::class, 'storeReceipt'])->name('accounts-receivable.receipt.store');
         Route::resource('accounts-receivable', AccountsReceivableController::class);

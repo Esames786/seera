@@ -183,6 +183,7 @@ return [
     'inv_view_project' => 'View Project',
     'inv_view_journal' => 'View Journal',
     'inv_record_receipt' => 'Record Receipt',
+    'inv_print' => 'Print Invoice',
     'inv_edit_draft' => 'Edit Draft',
     'inv_back_origin' => 'Back to origin',
     'inv_back_list' => 'Back to Accounts Receivable',
