@@ -1,6 +1,10 @@
 # Connected Workspace Standard — suitability matrix and roadmap (27 September 2026)
 
-## Current update — 12 October 2026, post-handoff code review
+## Current update — 24 October 2026, finance documents
+
+Customer Invoice (FIN-AR-003) gained **Print Invoice** (read-only GET, approved invoices only, scope and permission checked, opens FIN-AR-011 in a new tab) and the sections Adjustments / Notes and Applied Customer Credits; Credit / Debit Note (FIN-AR-008) is a read-only document workspace with explicit Post Note, Apply Credit, Refund Customer and the ZATCA actions; customer-facing print views (invoice and notes) share one bilingual print layout and never recalculate issued values. The rule stands: workspaces read, explicit actions write, no Save-All.
+
+## Historical update — 12 October 2026, post-handoff code review
 
 The continuation after `8103bdb` is implemented through `1b5d883` (40 commits): Wave 2 Batch C Customer Invoice workspace; Batch D Employee HR context; online GPS/geofence attendance; Payroll to GL and payslips; salary settlement and generic bank export; Project Budget/BOQ; Equipment & Vehicles Phase 1. The dated sections below describe each delivery. They supersede older statements that those modules were not started. Native/offline attendance, official WPS/Mudad, GOSI, live equipment telematics and construction scheduling remain outside those implementations.
 
