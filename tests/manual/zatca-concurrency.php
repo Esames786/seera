@@ -63,7 +63,7 @@ $service = app(ZatcaSubmissionService::class);
 // Every ZATCA call is faked: the first call per worker answers "cleared", a 500 variant is selected by the scenario.
 Http::fake(function ($request) {
     return str_contains((string) getenv('ZATCA_PROBE_FAIL'), '1') ? Http::response(['message' => 'boom'], 500)
-        : Http::response(['validationResults' => ['warningMessages' => [], 'errorMessages' => [], 'status' => 'PASS'], 'clearanceStatus' => 'CLEARED'], 200);
+        : Http::response(['validationResults' => ['warningMessages' => [], 'errorMessages' => [], 'status' => 'PASS'], 'clearanceStatus' => 'CLEARED', 'clearedInvoice' => $request->data()['invoice']], 200);
 });
 
 if ($action !== 'parent') {
@@ -256,5 +256,33 @@ $retried = $service->submit($d->fresh(['zatcaRecord']), $user);
 checkZatcaProbe($retried->status === 'cleared' && $retried->icv === 4 && $retried->submission_attempts === 2, 'Retry after failure wrong: '.$retried->status);
 echo "PASS failed request keeps the chain: ICV 4 kept, ICV 5 chains to it, retry cleared with the same identity\n";
 
+// A genuinely fresh worker enters after the first request has committed its
+// pending claim and while its HTTP response is still outstanding.
+app()->forgetInstance(\Illuminate\Http\Client\Factory::class);
+Http::clearResolvedInstances();
+$overlapInvoice = $makeInvoice(6);
+$service->sign($overlapInvoice, $user);
+$overlapCalls = 0;
+Http::fake(function ($request) use (&$overlapCalls, $server, $address, $expected, $database, $user, $overlapInvoice) {
+    $overlapCalls++;
+    $pipes = [];
+    $process = proc_open([PHP_BINARY, __FILE__, $expected, 'retry', $database, $address, json_encode(['user' => $user->id, 'invoice' => $overlapInvoice->id])], [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes, dirname(__DIR__, 2));
+    $signal = stream_socket_accept($server, 30);
+    checkZatcaProbe(is_resource($signal), 'Overlap worker did not connect');
+    try {
+        stream_set_blocking($signal, false);
+        stream_set_blocking($pipes[2], false);
+        $output = waitZatcaProbe($process, $signal, $pipes, 'RESULT ');
+        checkZatcaProbe(str_contains($output, 'ZatcaException') && str_contains($output, 'in progress'), 'Fresh pending caller was not refused: '.$output);
+    } finally {
+        fclose($signal);
+        foreach ($pipes as $pipe) { fclose($pipe); }
+        proc_close($process);
+    }
+    return Http::response(['validationResults' => ['status' => 'PASS'], 'clearanceStatus' => 'CLEARED', 'clearedInvoice' => $request->data()['invoice']], 200);
+});
+$overlapResult = $service->submit($overlapInvoice->fresh(['zatcaRecord']), $user);
+checkZatcaProbe($overlapCalls === 1 && $overlapResult->status === 'cleared' && (int) $overlapResult->submission_attempts === 1, 'Overlap lost its accepted result');
+echo "PASS fresh worker during in-flight HTTP is refused; one attempt and one accepted result\n";
 fclose($server);
-echo 'PASS 4 MySQL ZATCA hash-chain concurrency scenarios ('.DB::selectOne('SELECT @@transaction_isolation AS level')->level.") in $database\n";
+echo 'PASS 5 MySQL ZATCA hash-chain/concurrency scenarios ('.DB::selectOne('SELECT @@transaction_isolation AS level')->level.") in $database\n";

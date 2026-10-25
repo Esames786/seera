@@ -42,12 +42,12 @@ final class ZatcaApiResult
 
     public function uncertain(): bool
     {
-        return $this->outcome === ZatcaSubmission::OUTCOME_TIMEOUT;
+        return in_array($this->outcome, [ZatcaSubmission::OUTCOME_TIMEOUT, ZatcaSubmission::OUTCOME_UNKNOWN], true);
     }
 
     public function retryable(): bool
     {
-        return in_array($this->outcome, [ZatcaSubmission::OUTCOME_NETWORK_ERROR, ZatcaSubmission::OUTCOME_SERVER_ERROR, ZatcaSubmission::OUTCOME_RATE_LIMITED, ZatcaSubmission::OUTCOME_TIMEOUT], true);
+        return in_array($this->outcome, [ZatcaSubmission::OUTCOME_NETWORK_ERROR, ZatcaSubmission::OUTCOME_SERVER_ERROR, ZatcaSubmission::OUTCOME_RATE_LIMITED, ZatcaSubmission::OUTCOME_TIMEOUT, ZatcaSubmission::OUTCOME_UNKNOWN], true);
     }
 
     /** First human message for the UI. */

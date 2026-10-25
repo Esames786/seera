@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'err_refund_not_posted' => 'A posted payment journal is required to record, replay or reverse this refund. Finance must review the journal and applicable posting rule before retrying. This action saved no changes.',
+    'err_credit_journal_not_posted' => 'Post the credit note accounting journal before applying or refunding its credit.',
     'title' => 'Customer Credit / Debit Notes',
     'register_help' => 'Correction documents against posted customer invoices. A credit note reduces what the customer owes; a debit note increases it. Both post their own journal and VAT correction and become their own ZATCA document.',
     'type_credit' => 'Credit note',

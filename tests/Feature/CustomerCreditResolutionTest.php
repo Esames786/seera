@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\AutomaticPostingRule;
 use App\Models\ChartOfAccount;
 use App\Models\CompanyProfile;
 use App\Models\Customer;
@@ -140,6 +141,106 @@ class CustomerCreditResolutionTest extends TestCase
     private function refund(CustomerAdjustmentNote $note, float $amount, string $code = '1120', array $extra = []): CustomerCreditRefund
     {
         return $this->credits()->refund($note, $extra + ['amount' => $amount, 'payment_date' => now()->toDateString(), 'payment_account_id' => $this->account($code)->id], $this->admin())[0];
+    }
+
+    public function test_review_mode_refunds_roll_back_and_retry_without_consuming_credit(): void
+    {
+        $note = $this->creditNote();
+        $key = (string) Str::uuid();
+        $journals = JournalEntry::count();
+        $rule = AutomaticPostingRule::where('source_module', 'Customer Receipt')->firstOrFail();
+        $rule->update(['auto_post' => false]);
+        foreach ([false, true] as $ownRule) {
+            if ($ownRule) {
+                AutomaticPostingRule::create(['source_module' => 'Customer Credit Refund', 'trigger_event' => 'Refund Recorded', 'auto_post' => false, 'status' => 'active']);
+                $rule->update(['auto_post' => true]);
+            }
+            try {
+                $this->refund($note, 100, '1120', ['idempotency_key' => $key]);
+                $this->fail('Draft journal must not finalize a refund');
+            } catch (ValidationException $e) {
+                $this->assertArrayHasKey('payment_account_id', $e->errors());
+            }
+            $this->assertSame(230.0, $this->credits()->availableCredit($note));
+            $this->assertSame(0, CustomerCreditRefund::count());
+            $this->assertSame($journals, JournalEntry::count());
+            $this->assertArReconciled('after refused review-mode refund');
+        }
+        AutomaticPostingRule::where('source_module', 'Customer Credit Refund')->update(['auto_post' => true]);
+        $refund = $this->refund($note, 100, '1120', ['idempotency_key' => $key]);
+        $this->assertSame('posted', $refund->journalEntry->status);
+        $this->assertSame(130.0, $this->credits()->availableCredit($note));
+        $this->assertSame($refund->id, $this->refund($note, 100, '1120', ['idempotency_key' => $key])->id);
+        $this->credits()->reverseRefund($refund, 'Test reversal', $this->admin());
+        $this->assertSame(230.0, $this->credits()->availableCredit($note));
+        $this->assertArReconciled('after review-mode retry and reversal');
+    }
+
+    public function test_legacy_draft_refund_cannot_be_replayed_or_reversed_as_a_posted_payment(): void
+    {
+        $note = $this->creditNote();
+        $key = (string) Str::uuid();
+        $refund = $this->refund($note, 100, '1120', ['idempotency_key' => $key]);
+        $refund->journalEntry->update(['status' => 'draft']);
+        $journals = JournalEntry::count();
+        foreach (['replay', 'reverse'] as $operation) {
+            try {
+                if ($operation === 'replay') {
+                    $this->refund($note, 100, '1120', ['idempotency_key' => $key]);
+                } else {
+                    $this->credits()->reverseRefund($refund, 'Legacy inconsistency', $this->admin());
+                }
+                $this->fail('Legacy draft refund must require Finance review');
+            } catch (ValidationException $e) {
+                $this->assertNotEmpty($e->errors());
+            }
+        }
+        $this->assertSame($journals, JournalEntry::count());
+        $this->assertFalse($refund->fresh()->isReversed());
+        $this->assertSame(130.0, $this->credits()->availableCredit($note));
+    }
+
+    public function test_credit_resolution_requires_the_source_journal_to_be_posted(): void
+    {
+        $note = $this->creditNote();
+        $target = $this->invoice();
+        $note->journalEntry->update(['status' => 'draft']); // legacy review-mode source
+        foreach (['allocate', 'refund'] as $action) {
+            try {
+                $action === 'allocate' ? $this->allocate($note, $target, 100) : $this->refund($note, 100);
+                $this->fail('Unposted source must not be spent');
+            } catch (ValidationException $e) {
+                $this->assertArrayHasKey('note', $e->errors());
+            }
+        }
+        $this->assertSame(0, CustomerCreditAllocation::count());
+        $this->assertSame(0, CustomerCreditRefund::count());
+    }
+
+    public function test_credit_register_filters_before_pagination_and_totals_all_scoped_matches(): void
+    {
+        $first = $this->creditNote();
+        // Register-only fixtures: 16 more posted credit documents sharing the test masters.
+        for ($i = 0; $i < 16; $i++) {
+            $copy = $first->replicate();
+            $copy->note_number = 'CN-PAGE-'.$i;
+            $copy->save();
+        }
+        $this->refund($first, 230); // only oldest row is fully used, beyond page 1 without SQL filtering
+        $response = $this->actingAs($this->admin())->get(route('admin.accounting.accounts-receivable.credits.index', ['status' => 'fully_used']))->assertOk();
+        $this->assertSame(1, $response->viewData('notes')->total());
+        $this->assertSame($first->id, $response->viewData('rows')->first()['note']->id);
+        $this->assertSame(230.0, $response->viewData('totals')['refunded']);
+        $response = $this->get(route('admin.accounting.accounts-receivable.credits.index', ['status' => 'available']))->assertOk();
+        $this->assertSame(16, $response->viewData('notes')->total());
+        $this->assertSame(3680.0, $response->viewData('totals')['available']);
+        $response = $this->get(route('admin.accounting.accounts-receivable.credits.index', ['status' => 'available', 'page' => 2]))->assertOk();
+        $this->assertCount(1, $response->viewData('rows'));
+        $this->assertSame(3680.0, $response->viewData('totals')['available']);
+        $other = $this->user(['Accounts Receivable' => ['view']], $this->otherProject);
+        $response = $this->actingAs($other)->get(route('admin.accounting.accounts-receivable.credits.index'))->assertOk();
+        $this->assertSame(0, $response->viewData('notes')->total());
+        $this->assertSame(0.0, $response->viewData('totals')['available']);
     }
 
     // --------------------------------------------------------- available credit (1-3)

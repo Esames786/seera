@@ -2,6 +2,8 @@
 
 // ZATCA e-invoicing Phase 2. English.
 return [
+    'err_unverified_response' => 'The response does not prove clearance or reporting. Verify the outcome in FATOORA before retrying the same document. Do not regenerate it.',
+    'err_submission_abandoned' => 'The earlier submission did not finish locally. Its outcome is unknown. Verify it in FATOORA before deliberately retrying the same signed document.',
     'title' => 'ZATCA E-Invoicing',
     'settings_title' => 'ZATCA Settings & Onboarding',
     'record_title' => 'ZATCA Compliance Record',

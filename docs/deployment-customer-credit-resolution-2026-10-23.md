@@ -17,6 +17,8 @@ Brings the server from the Customer Notes HEAD (`fef2152`) to the Credit Resolut
 
 ## Deploy, one command at a time
 
+**Superseded release warning (26 October):** use the cumulative 25 October guide and its corrective-release evidence before deploying. The original release permitted refunds backed only by draft journals. The correction refuses and rolls back new review-mode refunds, requires a posted source-note journal, and blocks replay/reversal of inconsistent existing refunds. It does not change Finance posting rules or repair historical rows automatically. Existing affected data needs a scoped Finance reconciliation before any repair.
+
 ```bash
 cd ~/seera
 PHP=/opt/cpanel/ea-php83/root/usr/bin/php

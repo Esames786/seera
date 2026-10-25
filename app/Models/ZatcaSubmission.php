@@ -28,6 +28,8 @@ class ZatcaSubmission extends Model
 
     public const OUTCOME_TIMEOUT = 'timeout';
 
+    public const OUTCOME_UNKNOWN = 'outcome_unknown';
+
     protected $guarded = ['id'];
 
     protected function casts(): array

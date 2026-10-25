@@ -167,6 +167,9 @@ final class CustomerCreditResolutionService
                     SettlementReplay::assertMatches($existing, [
                         'customer_adjustment_note_id' => $source->id, 'payment_account_id' => (int) $data['payment_account_id'], 'amount' => $amount, 'payment_date' => $data['payment_date'],
                     ], 'payment_date');
+                    if (! $existing->isReversed() && ! $existing->journalEntry()->withoutGlobalScopes()->where('status', 'posted')->exists()) {
+                        throw ValidationException::withMessages(['payment_account_id' => __('customer_notes.err_refund_not_posted')]);
+                    }
 
                     return [$existing, true];
                 }
@@ -187,8 +190,12 @@ final class CustomerCreditResolutionService
                 'payment_method' => $method, 'amount' => $amount, 'reference' => $data['reference'] ?? null, 'notes' => $data['notes'] ?? null,
                 'idempotency_key' => $data['idempotency_key'] ?? null, 'created_by' => $actor->id,
             ]);
-            // A refund without its journal is refused and rolled back together.
+            // Review-mode journals are not payments. Roll back the refund and draft
+            // together instead of consuming credit before Finance has posted money.
             $entry = $this->posting->postCustomerCreditRefund($refund, $actor->id);
+            if ($entry->status !== 'posted') {
+                throw ValidationException::withMessages(['payment_account_id' => __('customer_notes.err_refund_not_posted')]);
+            }
             $refund->forceFill(['journal_entry_id' => $entry->id])->save();
             $this->log($actor, 'Customer refund recorded', $source->note_number.' · SAR '.number_format($amount, 2).' · '.$account->account_code.($refund->reference ? ' · '.$refund->reference : ''));
 
@@ -210,6 +217,9 @@ final class CustomerCreditResolutionService
                 return $locked; // already reversed
             }
             $entry = $locked->journalEntry()->withoutGlobalScopes()->firstOrFail();
+            if ($entry->status !== 'posted') {
+                throw ValidationException::withMessages(['refund' => __('customer_notes.err_refund_not_posted')]);
+            }
             $reversal = $this->posting->reverseEntry($entry, 'Reversed customer refund '.$source->note_number.': '.$reason, $actor->id);
             $locked->forceFill(['reversed_at' => now(), 'reversed_by' => $actor->id, 'reversal_reason' => $reason, 'reversal_journal_id' => $reversal->id])->save();
             $this->log($actor, 'Customer refund reversed', $source->note_number.' · SAR '.number_format((float) $locked->amount, 2).' · '.$reason);
@@ -229,6 +239,9 @@ final class CustomerCreditResolutionService
     {
         if (! $note->isCredit() || ! $note->isPosted()) {
             throw ValidationException::withMessages(['note' => __('customer_notes.err_not_credit_source')]);
+        }
+        if (! $note->journalEntry()->withoutGlobalScopes()->where('status', 'posted')->exists()) {
+            throw ValidationException::withMessages(['note' => __('customer_notes.err_credit_journal_not_posted')]);
         }
     }
 

@@ -116,12 +116,12 @@ final class ZatcaSubmissionService
                 throw ZatcaException::state('already_signed', __('zatca.err_already_signed'));
             }
             $locked->forceFill([
-            'status' => $passed ? ZatcaInvoiceRecord::STATUS_VALIDATED : ZatcaInvoiceRecord::STATUS_VALIDATION_FAILED,
-            'environment' => $unit->environment, 'zatca_egs_unit_id' => $unit->id, 'invoice_type' => $invoice->invoice_type, 'invoice_type_code' => $doc['type_code'],
-            'transaction_code' => $doc['transaction_code'], 'xml_path' => $path, 'generated_at' => now(), 'validated_at' => now(),
-            'validation_status' => $passed ? 'passed' : 'failed', 'validation_errors' => $validation['errors'], 'validation_warnings' => array_merge($readiness['warnings'], $validation['warnings']),
-            'last_error_category' => $passed ? null : ZatcaException::LOCAL_VALIDATION, 'last_error_code' => $passed ? null : $validation['errors'][0]['code'],
-            'last_error_message' => $passed ? null : $validation['errors'][0]['message'],
+                'status' => $passed ? ZatcaInvoiceRecord::STATUS_VALIDATED : ZatcaInvoiceRecord::STATUS_VALIDATION_FAILED,
+                'environment' => $unit->environment, 'zatca_egs_unit_id' => $unit->id, 'invoice_type' => $invoice->invoice_type, 'invoice_type_code' => $doc['type_code'],
+                'transaction_code' => $doc['transaction_code'], 'xml_path' => $path, 'generated_at' => now(), 'validated_at' => now(),
+                'validation_status' => $passed ? 'passed' : 'failed', 'validation_errors' => $validation['errors'], 'validation_warnings' => array_merge($readiness['warnings'], $validation['warnings']),
+                'last_error_category' => $passed ? null : ZatcaException::LOCAL_VALIDATION, 'last_error_code' => $passed ? null : $validation['errors'][0]['code'],
+                'last_error_message' => $passed ? null : $validation['errors'][0]['message'],
             ])->save();
             $this->mirror($invoice, ['zatca_status' => $locked->status]);
 
@@ -167,8 +167,12 @@ final class ZatcaSubmissionService
     public function submit(ZatcaDocument $invoice, User $actor): ZatcaInvoiceRecord
     {
         $record = $invoice->zatcaRecord ?? $this->ensureRecord($invoice);
+        $record = $record->fresh();
         $this->assertNotAccepted($record);
-        if (! in_array($record->status, [ZatcaInvoiceRecord::STATUS_SIGNED, ZatcaInvoiceRecord::STATUS_SUBMISSION_PENDING, ZatcaInvoiceRecord::STATUS_REJECTED, ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN], true)) {
+        if ($record->status === ZatcaInvoiceRecord::STATUS_SUBMISSION_PENDING) {
+            return $this->recoverAbandonedSubmission($record, $invoice, $actor);
+        }
+        if (! in_array($record->status, [ZatcaInvoiceRecord::STATUS_SIGNED, ZatcaInvoiceRecord::STATUS_REJECTED, ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN], true)) {
             throw ZatcaException::state('not_signed', __('zatca.err_not_signed'));
         }
         $environment = $this->environment->assertUsable();
@@ -187,85 +191,119 @@ final class ZatcaSubmissionService
         $attempt = $record->submission_attempts + 1;
         $wasUnknown = $record->status === ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN;
         // Claim: only one submission of a document may be in flight; a concurrent caller finds the row already claimed (or already decided) and stops.
-        $claimed = ZatcaInvoiceRecord::whereKey($record->id)->where('status', $record->status)->where('submission_attempts', $record->submission_attempts)
-            ->update(['status' => ZatcaInvoiceRecord::STATUS_SUBMISSION_PENDING, 'submission_attempts' => $attempt, 'submitted_at' => now(), 'updated_at' => now()]);
-        if ($claimed !== 1) {
-            throw ZatcaException::state('submission_in_progress', __('zatca.err_submission_in_progress'));
-        }
-        $record->refresh();
-        $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_SUBMISSION_PENDING]);
+        $record = DB::transaction(function () use ($record, $invoice, $attempt) {
+            $claimed = ZatcaInvoiceRecord::whereKey($record->id)->where('status', $record->status)->where('submission_attempts', $record->submission_attempts)
+                ->where('invoice_hash', $record->invoice_hash)
+                ->update(['status' => ZatcaInvoiceRecord::STATUS_SUBMISSION_PENDING, 'submission_attempts' => $attempt, 'submitted_at' => now(), 'updated_at' => now()]);
+            if ($claimed !== 1) {
+                throw ZatcaException::state('submission_in_progress', __('zatca.err_submission_in_progress'));
+            }
+            $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_SUBMISSION_PENDING]);
+
+            return $record->fresh();
+        });
 
         $simplified = $record->invoice_type === CustomerInvoice::TYPE_SIMPLIFIED;
         $result = $simplified
             ? $this->client->reporting($credential['token'], $credential['secret'], $record->invoice_hash, $record->uuid, $xml, $environment)
             : $this->client->clearance($credential['token'], $credential['secret'], $record->invoice_hash, $record->uuid, $xml, $environment);
 
-        ZatcaSubmission::create(['zatca_invoice_record_id' => $record->id, 'zatca_egs_unit_id' => $unit->id, 'attempt' => $attempt, 'environment' => $environment,
-            'endpoint' => $simplified ? 'invoices/reporting/single' : 'invoices/clearance/single', 'invoice_hash' => $record->invoice_hash, 'http_status' => $result->httpStatus,
-            'outcome' => $result->outcome, 'zatca_status' => $result->zatcaStatus, 'warnings' => $result->warnings, 'errors' => $result->errors, 'response_excerpt' => $result->excerpt,
-            'duration_ms' => $result->durationMs, 'user_id' => $actor->id]);
+        // The network call is outside the transaction. Lock and fence the result
+        // by its attempt: delayed responses cannot overwrite recovery or a newer result.
+        return DB::transaction(function () use ($record, $invoice, $actor, $unit, $attempt, $environment, $simplified, $wasUnknown, $result) {
+            $record = ZatcaInvoiceRecord::whereKey($record->id)->lockForUpdate()->firstOrFail();
+            ZatcaSubmission::create(['zatca_invoice_record_id' => $record->id, 'zatca_egs_unit_id' => $unit->id, 'attempt' => $attempt, 'environment' => $environment,
+                'endpoint' => $simplified ? 'invoices/reporting/single' : 'invoices/clearance/single', 'invoice_hash' => $record->invoice_hash, 'http_status' => $result->httpStatus,
+                'outcome' => $result->outcome, 'zatca_status' => $result->zatcaStatus, 'warnings' => $result->warnings, 'errors' => $result->errors, 'response_excerpt' => $result->excerpt,
+                'duration_ms' => $result->durationMs, 'user_id' => $actor->id]);
 
-        if ($result->accepted()) {
-            $changes = ['status' => $simplified ? ZatcaInvoiceRecord::STATUS_REPORTED : ZatcaInvoiceRecord::STATUS_CLEARED, 'zatca_status' => $result->zatcaStatus,
-                'accepted_with_warnings' => $result->warnings !== [], 'response_warnings' => $result->warnings, 'response_errors' => [], 'outcome_unknown_at' => null,
-                'last_error_category' => null, 'last_error_code' => null, 'last_error_message' => null, 'zatca_response_code' => (string) $result->httpStatus, 'zatca_response_message' => $result->summary()];
-            if ($simplified) {
-                $changes['reported_at'] = now();
-            } else {
-                $changes['cleared_at'] = now();
-                if ($result->clearedInvoiceXml) {
-                    $changes['cleared_xml_path'] = $this->store($record, 'cleared', $result->clearedInvoiceXml);
-                    $qr = $this->qrFrom($result->clearedInvoiceXml);
-                    if ($qr) {
-                        $changes['qr_code'] = $qr;
+            if ($record->status !== ZatcaInvoiceRecord::STATUS_SUBMISSION_PENDING || (int) $record->submission_attempts !== $attempt) {
+                return $record; // retain late attempt evidence without changing the authoritative state
+            }
+
+            if ($result->accepted()) {
+                $changes = ['status' => $simplified ? ZatcaInvoiceRecord::STATUS_REPORTED : ZatcaInvoiceRecord::STATUS_CLEARED, 'zatca_status' => $result->zatcaStatus,
+                    'accepted_with_warnings' => $result->warnings !== [], 'response_warnings' => $result->warnings, 'response_errors' => [], 'outcome_unknown_at' => null,
+                    'last_error_category' => null, 'last_error_code' => null, 'last_error_message' => null, 'zatca_response_code' => (string) $result->httpStatus, 'zatca_response_message' => $result->summary()];
+                if ($simplified) {
+                    $changes['reported_at'] = now();
+                } else {
+                    $changes['cleared_at'] = now();
+                    if ($result->clearedInvoiceXml) {
+                        $changes['cleared_xml_path'] = $this->store($record, 'cleared', $result->clearedInvoiceXml);
+                        $qr = $this->qrFrom($result->clearedInvoiceXml);
+                        if ($qr) {
+                            $changes['qr_code'] = $qr;
+                        }
                     }
                 }
-            }
-            $record->forceFill($changes)->save();
-            $this->mirror($invoice, ['zatca_status' => $record->status, 'zatca_locked_at' => $invoice->zatca_locked_at ?? now()]);
-            $this->log($actor, $simplified ? 'ZATCA invoice reported' : 'ZATCA invoice cleared', $invoice, 'success', ($result->warnings !== [] ? count($result->warnings).' warning(s)' : 'no warnings'));
-
-            return $record->fresh();
-        }
-
-        if ($result->uncertain()) {
-            $record->forceFill(['status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN, 'outcome_unknown_at' => now(), 'last_error_category' => ZatcaException::OUTCOME_UNKNOWN,
-                'last_error_code' => $result->errorCode, 'last_error_message' => $result->errorMessage])->save();
-            $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN]);
-            $this->log($actor, 'ZATCA submission outcome unknown', $invoice, 'failed', $result->errorMessage);
-
-            return $record->fresh();
-        }
-
-        if ($result->rejected()) {
-            $duplicate = collect($result->errors)->contains(fn ($e) => Str::contains(strtolower(($e['code'] ?? '').' '.($e['message'] ?? '')), ['duplicate', 'already']));
-            if ($duplicate && $wasUnknown) {
-                // ZATCA already holds a document with this identity from the uncertain attempt: do not mark rejected, keep verification required.
-                $record->forceFill(['status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN, 'last_error_category' => ZatcaException::OUTCOME_UNKNOWN, 'last_error_code' => 'duplicate_on_retry',
-                    'last_error_message' => __('zatca.err_duplicate_on_retry'), 'response_errors' => $result->errors])->save();
-                $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN]);
-                $this->log($actor, 'ZATCA retry answered duplicate; verification required', $invoice, 'failed');
+                $record->forceFill($changes)->save();
+                $this->mirror($invoice, ['zatca_status' => $record->status, 'zatca_locked_at' => $invoice->zatca_locked_at ?? now()]);
+                $this->log($actor, $simplified ? 'ZATCA invoice reported' : 'ZATCA invoice cleared', $invoice, 'success', ($result->warnings !== [] ? count($result->warnings).' warning(s)' : 'no warnings'));
 
                 return $record->fresh();
             }
-            $record->forceFill(['status' => ZatcaInvoiceRecord::STATUS_REJECTED, 'zatca_status' => $result->zatcaStatus, 'response_errors' => $result->errors, 'response_warnings' => $result->warnings,
-                'last_error_category' => ZatcaException::BUSINESS_REJECTION, 'last_error_code' => $result->errorCode, 'last_error_message' => $result->errorMessage,
-                'zatca_response_code' => (string) $result->httpStatus, 'zatca_response_message' => $result->summary()])->save();
-            $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_REJECTED]);
-            $this->log($actor, 'ZATCA submission rejected', $invoice, 'failed', $result->summary());
+
+            if ($result->uncertain()) {
+                $record->forceFill(['status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN, 'outcome_unknown_at' => now(), 'last_error_category' => ZatcaException::OUTCOME_UNKNOWN,
+                    'last_error_code' => $result->errorCode, 'last_error_message' => $result->errorMessage])->save();
+                $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN]);
+                $this->log($actor, 'ZATCA submission outcome unknown', $invoice, 'failed', $result->errorMessage);
+
+                return $record->fresh();
+            }
+
+            if ($result->rejected()) {
+                $duplicate = collect($result->errors)->contains(fn ($e) => Str::contains(strtolower(($e['code'] ?? '').' '.($e['message'] ?? '')), ['duplicate', 'already']));
+                if ($duplicate && $wasUnknown) {
+                    // ZATCA already holds a document with this identity from the uncertain attempt: do not mark rejected, keep verification required.
+                    $record->forceFill(['status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN, 'last_error_category' => ZatcaException::OUTCOME_UNKNOWN, 'last_error_code' => 'duplicate_on_retry',
+                        'last_error_message' => __('zatca.err_duplicate_on_retry'), 'response_errors' => $result->errors])->save();
+                    $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN]);
+                    $this->log($actor, 'ZATCA retry answered duplicate; verification required', $invoice, 'failed');
+
+                    return $record->fresh();
+                }
+                $record->forceFill(['status' => ZatcaInvoiceRecord::STATUS_REJECTED, 'zatca_status' => $result->zatcaStatus, 'response_errors' => $result->errors, 'response_warnings' => $result->warnings,
+                    'last_error_category' => ZatcaException::BUSINESS_REJECTION, 'last_error_code' => $result->errorCode, 'last_error_message' => $result->errorMessage,
+                    'zatca_response_code' => (string) $result->httpStatus, 'zatca_response_message' => $result->summary()])->save();
+                $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_REJECTED]);
+                $this->log($actor, 'ZATCA submission rejected', $invoice, 'failed', $result->summary());
+
+                return $record->fresh();
+            }
+
+            // Auth, rate limit, server or network error: the document is unchanged and can be retried; auth needs a person first.
+            $record->forceFill(['status' => ZatcaInvoiceRecord::STATUS_SIGNED, 'last_error_category' => match ($result->outcome) {
+                ZatcaSubmission::OUTCOME_AUTH_ERROR => ZatcaException::AUTH, ZatcaSubmission::OUTCOME_RATE_LIMITED => ZatcaException::RATE_LIMIT,
+                ZatcaSubmission::OUTCOME_NETWORK_ERROR => ZatcaException::NETWORK, default => ZatcaException::SERVER_ERROR,
+            }, 'last_error_code' => $result->errorCode, 'last_error_message' => $result->errorMessage])->save();
+            $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_SIGNED]);
+            $this->log($actor, 'ZATCA submission failed ('.$result->outcome.')', $invoice, 'failed', $result->errorMessage);
 
             return $record->fresh();
-        }
+        });
+    }
 
-        // Auth, rate limit, server or network error: the document is unchanged and can be retried; auth needs a person first.
-        $record->forceFill(['status' => ZatcaInvoiceRecord::STATUS_SIGNED, 'last_error_category' => match ($result->outcome) {
-            ZatcaSubmission::OUTCOME_AUTH_ERROR => ZatcaException::AUTH, ZatcaSubmission::OUTCOME_RATE_LIMITED => ZatcaException::RATE_LIMIT,
-            ZatcaSubmission::OUTCOME_NETWORK_ERROR => ZatcaException::NETWORK, default => ZatcaException::SERVER_ERROR,
-        }, 'last_error_code' => $result->errorCode, 'last_error_message' => $result->errorMessage])->save();
-        $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_SIGNED]);
-        $this->log($actor, 'ZATCA submission failed ('.$result->outcome.')', $invoice, 'failed', $result->errorMessage);
+    /** Recovery is a separate human retry step; never reclaim an active HTTP call. */
+    private function recoverAbandonedSubmission(ZatcaInvoiceRecord $record, ZatcaDocument $invoice, User $actor): ZatcaInvoiceRecord
+    {
+        return DB::transaction(function () use ($record, $invoice, $actor) {
+            $locked = ZatcaInvoiceRecord::whereKey($record->id)->lockForUpdate()->firstOrFail();
+            // At least five minutes and safely beyond the configured HTTP timeout.
+            $leaseSeconds = max(300, (int) config('zatca.http.timeout_seconds', 30) * 2 + 60);
+            if ($locked->status !== ZatcaInvoiceRecord::STATUS_SUBMISSION_PENDING
+                || ! $locked->submitted_at || $locked->submitted_at->gt(now()->subSeconds($leaseSeconds))) {
+                throw ZatcaException::state('submission_in_progress', __('zatca.err_submission_in_progress'));
+            }
+            $locked->forceFill(['status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN, 'outcome_unknown_at' => now(),
+                'last_error_category' => ZatcaException::OUTCOME_UNKNOWN, 'last_error_code' => 'submission_abandoned',
+                'last_error_message' => __('zatca.err_submission_abandoned')])->save();
+            $this->mirror($invoice, ['zatca_status' => ZatcaInvoiceRecord::STATUS_OUTCOME_UNKNOWN]);
+            $this->log($actor, 'Abandoned ZATCA submission requires verification', $invoice, 'failed');
 
-        return $record->fresh();
+            return $locked;
+        });
     }
 
     /** Generate, stamp and submit in one go (the "Submit to ZATCA" action). */

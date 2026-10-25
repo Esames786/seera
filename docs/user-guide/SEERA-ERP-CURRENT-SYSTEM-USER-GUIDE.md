@@ -1891,6 +1891,8 @@ Web address: `https://seera.tech-brit.co.uk/admin/accounting/accounts-receivable
 
 **Register (FIN-AR-010).** Every credit note with unapplied credit: customer, note, original invoice, date, credit amount, applied, refunded, available and a usage status (Available / Partially used / Fully used — a register label, not an accounting state).
 
+**26 October corrections.** Applications and refunds require the source credit note's journal to be posted. A refund must also produce a posted payment journal: when the applicable Automatic Posting Rule requires review, Seera refuses the refund and rolls back both the refund and its draft journal, leaving credit unchanged. Finance must authorise the applicable posting configuration before retrying; the application does not override review rules. Existing refunds with draft or missing journals require separate Finance investigation, not an automatic data repair. Credit-register usage filters run before pagination, and summary cards include all matching records within the user's permitted scope, not just the displayed page.
+
 **Not available.** Transferring credit to another customer; a general AR allocation engine (receipts still settle one invoice each); a printed customer statement (the customer workspace panels are the statement for now: invoices, receipts, credit / debit notes, applied credits and refunds are listed there and in the journals).
 ## 10. Inventory & Purchasing
 
@@ -2532,12 +2534,14 @@ The seller (Company Profile) always needs: legal name (Arabic name recommended f
 | Cleared by ZATCA / Reported to ZATCA | ZATCA accepted the document (with or without warnings); cleared XML stored for standard invoices | ZATCA response |
 | Rejected by ZATCA | ZATCA returned errors; the ICV stays consumed, the chain continues | ZATCA response |
 | Failed (configuration / readiness) | Readiness or configuration error before any stamp | Seera |
-| Submission outcome unknown: verification required | The request timed out after being sent; ZATCA may or may not have it. Never treated as rejected. Retry sends the identical document; if ZATCA answers "duplicate", verify in the FATOORA portal | Seera |
+| Submission outcome unknown: verification required | The request timed out, was abandoned, or returned incomplete/conflicting success evidence; ZATCA may or may not have it. Retry sends the identical document; if ZATCA answers "duplicate", verify in the FATOORA portal. Regeneration is blocked | Seera |
 | Cancelled (invoice reopened) | The invoice was reopened before any stamp | Reopen |
 
 Sandbox evidence (17 October 2026): the Developer Portal sandbox accepted a re-submission of the same document identity, so the duplicate guard is Seera's own, and ZATCA publishes no API to query a document's status; an outcome-unknown attempt is therefore verified by a person in the FATOORA portal before anything else is done.
 
 ### [FIN-ZAT-001] ZATCA E-Invoicing (register)
+
+**Submission protection (26 October).** A second request cannot reclaim an active submission. If a request remains pending for at least five minutes (or twice the configured HTTP timeout plus one minute, whichever is longer), Retry first marks it **Outcome unknown**, without sending anything. Review the evidence before a separate retry of the same signed identity. Late responses stay in the attempt history and cannot overwrite a newer result. HTTP 200/202 alone is not acceptance: standard clearance requires CLEARED plus XML matching the submitted UUID and invoice hash; simplified reporting requires REPORTED. Conflicting validation errors prevent acceptance.
 
 Web address: `https://seera.tech-brit.co.uk/admin/accounting/zatca`
 

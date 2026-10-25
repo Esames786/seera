@@ -3,18 +3,18 @@
 namespace Tests\Feature;
 
 use App\Models\ActivityLog;
+use App\Models\ChartOfAccount;
 use App\Models\CompanyProfile;
 use App\Models\Customer;
 use App\Models\CustomerInvoice;
 use App\Models\JournalEntry;
-use App\Models\Permission;
 use App\Models\Project;
-use App\Models\Role;
-use App\Models\User;
 use App\Models\VatTransaction;
 use App\Models\ZatcaEgsUnit;
 use App\Models\ZatcaInvoiceRecord;
 use App\Models\ZatcaSubmission;
+use App\Services\Accounting\PostingService;
+use App\Services\Zatca\ZatcaComplianceSamples;
 use App\Services\Zatca\ZatcaCrypto;
 use App\Services\Zatca\ZatcaEnvironment;
 use App\Services\Zatca\ZatcaException;
@@ -85,6 +85,127 @@ class ZatcaPhase2Test extends TestCase
     private function service(): ZatcaSubmissionService
     {
         return app(ZatcaSubmissionService::class);
+    }
+
+    public function test_inflight_submission_is_not_reclaimed_and_abandoned_attempt_needs_separate_retry(): void
+    {
+        $invoice = $this->invoice();
+        $record = $this->service()->sign($invoice, $this->admin());
+        $this->fakeZatca();
+        $record->update(['status' => 'submission_pending', 'submission_attempts' => 1, 'submitted_at' => now()]);
+        try {
+            $this->service()->submit($invoice->fresh(['zatcaRecord']), $this->admin());
+            $this->fail('Active pending request must not be reclaimed');
+        } catch (ZatcaException $e) {
+            $this->assertSame('submission_in_progress', $e->errorCode);
+        }
+        Http::assertNothingSent();
+        $record->update(['submitted_at' => now()->subMinutes(6)]);
+        $recovered = $this->service()->submit($invoice->fresh(['zatcaRecord']), $this->admin());
+        $this->assertSame('outcome_unknown', $recovered->status);
+        $this->assertSame('submission_abandoned', $recovered->last_error_code);
+        Http::assertNothingSent();
+        $accepted = $this->service()->submit($invoice->fresh(['zatcaRecord']), $this->admin());
+        $this->assertSame('cleared', $accepted->status);
+        $this->assertSame(2, (int) $accepted->submission_attempts);
+        $this->assertSame($record->uuid, $accepted->uuid);
+        $this->assertSame($record->invoice_hash, $accepted->invoice_hash);
+    }
+
+    public function test_new_pending_caller_is_refused_while_first_http_request_is_inflight(): void
+    {
+        $invoice = $this->invoice();
+        $this->service()->sign($invoice, $this->admin());
+        $calls = 0;
+        $this->fake([self::SANDBOX.'/invoices/clearance/single' => function (ClientRequest $request) use ($invoice, &$calls) {
+            $calls++;
+            if ($calls === 1) {
+                try {
+                    $this->service()->submit($invoice->fresh(['zatcaRecord']), $this->admin());
+                    $this->fail('Second fresh caller entered an active submission');
+                } catch (ZatcaException $e) {
+                    $this->assertSame('submission_in_progress', $e->errorCode);
+                }
+            }
+
+            return Http::response(['clearanceStatus' => 'CLEARED', 'clearedInvoice' => base64_encode($this->clearedXml($request))], 200);
+        }]);
+        $record = $this->service()->submit($invoice->fresh(['zatcaRecord']), $this->admin());
+        $this->assertSame(1, $calls);
+        $this->assertSame('cleared', $record->status);
+    }
+
+    public function test_late_response_is_fenced_after_recovery_and_a_new_accepted_attempt(): void
+    {
+        $invoice = $this->invoice();
+        $this->service()->sign($invoice, $this->admin());
+        $calls = 0;
+        $this->fake([self::SANDBOX.'/invoices/clearance/single' => function (ClientRequest $request) use ($invoice, &$calls) {
+            $calls++;
+            if ($calls === 1) {
+                // Deterministic paused-worker interleaving: recover, retry, then receive the old error.
+                $this->travel(6)->minutes();
+                $unknown = $this->service()->submit($invoice->fresh(['zatcaRecord']), $this->admin());
+                $this->assertSame('outcome_unknown', $unknown->status);
+                $new = $this->service()->submit($invoice->fresh(['zatcaRecord']), $this->admin());
+                $this->assertSame('cleared', $new->status);
+
+                return Http::response(['clearanceStatus' => 'NOT_CLEARED'], 400);
+            }
+
+            return Http::response(['clearanceStatus' => 'CLEARED', 'clearedInvoice' => base64_encode($this->clearedXml($request))], 200);
+        }]);
+        try {
+            $record = $this->service()->submit($invoice->fresh(['zatcaRecord']), $this->admin());
+            $this->assertSame('cleared', $record->status);
+            $this->assertSame('cleared', $invoice->fresh()->zatca_status);
+            $this->assertSame(2, (int) $record->submission_attempts);
+            $this->assertSame(2, ZatcaSubmission::where('zatca_invoice_record_id', $record->id)->count());
+        } finally {
+            $this->travelBack();
+        }
+    }
+
+    public function test_incomplete_or_conflicting_success_evidence_is_unknown_and_cannot_be_regenerated(): void
+    {
+        foreach ([
+            ['message' => 'proxy response'],
+            ['clearanceStatus' => 'CLEARED'],
+            ['clearanceStatus' => 'CLEARED', 'clearedInvoice' => base64_encode('<not-an-invoice/>')],
+            ['clearanceStatus' => 'CLEARED', 'validationResults' => ['status' => 'ERROR', 'errorMessages' => [['code' => 'INVALID', 'message' => 'Invalid invoice']]]],
+        ] as $body) {
+            $invoice = $this->invoice();
+            $this->fake([self::SANDBOX.'/invoices/clearance/single' => Http::response($body, 200)]);
+            $record = $this->service()->process($invoice, $this->admin());
+            $this->assertSame('outcome_unknown', $record->status);
+            $this->assertNull($record->cleared_at);
+            $this->assertNull($record->cleared_xml_path);
+            try {
+                $this->service()->regenerate($invoice->fresh(['zatcaRecord']), $this->admin());
+                $this->fail('Unknown response cannot be regenerated');
+            } catch (ZatcaException $e) {
+                $this->assertSame('cannot_regenerate', $e->errorCode);
+            }
+        }
+        $invoice = $this->invoice(['invoice_type' => 'simplified']);
+        $this->fake([self::SANDBOX.'/invoices/reporting/single' => Http::response(['status' => 'PASS'], 202)]);
+        $this->assertSame('outcome_unknown', $this->service()->process($invoice, $this->admin())->status);
+    }
+
+    public function test_cleared_xml_must_match_the_submitted_uuid_and_hash(): void
+    {
+        foreach (['uuid', 'amount'] as $tamper) {
+            $invoice = $this->invoice();
+            $this->fake([self::SANDBOX.'/invoices/clearance/single' => function (ClientRequest $request) use ($tamper) {
+                $xml = $this->clearedXml($request);
+                $xml = $tamper === 'uuid'
+                    ? str_replace($request->data()['uuid'], 'different-document', $xml)
+                    : str_replace('1000.00', '2000.00', $xml);
+
+                return Http::response(['clearanceStatus' => 'CLEARED', 'clearedInvoice' => base64_encode($xml)], 200);
+            }]);
+            $this->assertSame('outcome_unknown', $this->service()->process($invoice, $this->admin())->status);
+        }
     }
 
     // ---------------------------------------------------------- readiness
@@ -588,7 +709,7 @@ class ZatcaPhase2Test extends TestCase
         $this->fakeZatca();
         $invoice = $this->invoice();
         $this->service()->process($invoice, $this->admin());
-        $bank = \App\Models\ChartOfAccount::where('account_code', \App\Services\Accounting\PostingService::BANK)->value('id');
+        $bank = ChartOfAccount::where('account_code', PostingService::BANK)->value('id');
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-receivable.receipt.store', $invoice), ['receipt_date' => now()->toDateString(), 'amount' => 1150, 'payment_method' => 'Bank Transfer', 'receipt_account_id' => $bank, 'idempotency_key' => 'ZATCA-RCPT-1'])->assertSessionHasNoErrors();
         $this->assertSame('paid', $invoice->fresh()->payment_status);
         $this->assertSame('cleared', $invoice->fresh()->zatca_status);
@@ -701,7 +822,7 @@ class ZatcaPhase2Test extends TestCase
     public function test_compliance_sample_buyer_vat_never_equals_the_seller_vat(): void
     {
         // Developer Portal sandbox, 17 Oct 2026: BR-CUSTOM-VALIDATION-01 rejects a document whose buyer VAT equals the seller VAT.
-        $samples = app(\App\Services\Zatca\ZatcaComplianceSamples::class);
+        $samples = app(ZatcaComplianceSamples::class);
         $unit = new ZatcaEgsUnit(['invoice_types' => '1100']);
         foreach (['300123456700003', '399999999900003', '399999999800003'] as $sellerVat) {
             foreach ($samples->documents($unit, ['name' => 'Seller', 'vat_number' => $sellerVat]) as $doc) {

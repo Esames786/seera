@@ -13,6 +13,7 @@ use App\Services\Accounting\PostingService;
 use App\Support\SaveAction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -29,17 +30,29 @@ class CustomerCreditController extends Controller
 
     public function index(Request $request): View
     {
-        $notes = CustomerAdjustmentNote::query()->where('note_type', CustomerAdjustmentNote::TYPE_CREDIT)->where('status', CustomerAdjustmentNote::STATUS_POSTED)
+        $base = CustomerAdjustmentNote::query()->select('customer_adjustment_notes.*')->where('note_type', CustomerAdjustmentNote::TYPE_CREDIT)->where('status', CustomerAdjustmentNote::STATUS_POSTED)
             ->where('unapplied_amount', '>', 0)->with(['customer', 'invoice'])
             ->when($request->filled('customer'), fn ($q) => $q->where('customer_id', $request->integer('customer')))
             ->when($request->filled('search'), fn ($q) => $q->where(fn ($qq) => $qq->where('note_number', 'like', '%'.$request->string('search').'%')
                 ->orWhereHas('customer', fn ($c) => $c->where('name', 'like', '%'.$request->string('search').'%'))))
-            ->orderByDesc('note_date')->orderByDesc('id')->paginate(15)->withQueryString();
+            ->withSum(['creditAllocations as active_allocated' => fn ($q) => $q->withoutGlobalScopes()->whereNull('reversed_at')], 'amount')
+            ->withSum(['creditRefunds as active_refunded' => fn ($q) => $q->withoutGlobalScopes()->whereNull('reversed_at')], 'amount');
+        // Filter the complete scoped set BEFORE pagination; cards summarize that
+        // same filtered set, not just the fifteen records visible on this page.
+        $remaining = '(unapplied_amount - COALESCE(active_allocated, 0) - COALESCE(active_refunded, 0))';
+        $used = '(COALESCE(active_allocated, 0) + COALESCE(active_refunded, 0))';
+        $filtered = DB::query()->fromSub($base->toBase(), 'credits');
+        match ($request->string('status')->toString()) {
+            'fully_used' => $filtered->whereRaw($remaining.' <= 0.004'),
+            'partially_used' => $filtered->whereRaw($remaining.' > 0.004')->whereRaw($used.' > 0.004'),
+            'available' => $filtered->whereRaw($remaining.' > 0.004')->whereRaw($used.' <= 0.004'),
+            default => null,
+        };
+        $sums = (clone $filtered)->selectRaw('COALESCE(SUM(CASE WHEN '.$remaining.' > 0 THEN '.$remaining.' ELSE 0 END), 0) AS available, COALESCE(SUM(active_allocated), 0) AS applied, COALESCE(SUM(active_refunded), 0) AS refunded')->first();
+        $totals = array_map(fn ($value) => round((float) $value, 2), (array) $sums);
+        $notes = CustomerAdjustmentNote::query()->whereIn('id', (clone $filtered)->select('id'))
+            ->with(['customer', 'invoice'])->orderByDesc('note_date')->orderByDesc('id')->paginate(15)->withQueryString();
         $rows = $notes->getCollection()->map(fn (CustomerAdjustmentNote $note) => ['note' => $note] + $this->credits->summary($note));
-        if ($request->filled('status')) {
-            $rows = $rows->filter(fn ($row) => $row['status'] === $request->string('status')->toString())->values();
-        }
-        $totals = ['available' => round($rows->sum('available'), 2), 'applied' => round($rows->sum('applied'), 2), 'refunded' => round($rows->sum('refunded'), 2)];
 
         return view('admin.accounting.customer-notes.credits', [
             'notes' => $notes, 'rows' => $rows, 'totals' => $totals,

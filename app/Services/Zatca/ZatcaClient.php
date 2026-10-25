@@ -82,13 +82,14 @@ final class ZatcaClient
                 ['exception' => class_basename($exception)], $duration, $timedOut ? 'timeout' : 'network', $timedOut ? __('zatca.err_timeout') : __('zatca.err_network'));
         }
 
-        return $this->classify($response, (int) ((microtime(true) - $started) * 1000));
+        return $this->classify($response, (int) ((microtime(true) - $started) * 1000), $path, $uuid, $invoiceHash);
     }
 
-    private function classify(Response $response, int $durationMs): ZatcaApiResult
+    private function classify(Response $response, int $durationMs, string $path, string $uuid, string $invoiceHash): ZatcaApiResult
     {
         $status = $response->status();
-        $json = $response->json() ?? [];
+        $json = $response->json();
+        $json = is_array($json) ? $json : [];
         $results = is_array($json['validationResults'] ?? null) ? $json['validationResults'] : [];
         $warnings = $this->messages($results['warningMessages'] ?? $json['warnings'] ?? []);
         $errors = $this->messages($results['errorMessages'] ?? $json['errors'] ?? []);
@@ -101,7 +102,7 @@ final class ZatcaClient
         $outcome = match (true) {
             $status === 200 => $warnings === [] ? ZatcaSubmission::OUTCOME_ACCEPTED : ZatcaSubmission::OUTCOME_ACCEPTED_WITH_WARNINGS,
             $status === 202 => ZatcaSubmission::OUTCOME_ACCEPTED_WITH_WARNINGS,
-            $status === 400 || $status === 303 || $status === 303 => ZatcaSubmission::OUTCOME_REJECTED,
+            $status === 400 || $status === 303 => ZatcaSubmission::OUTCOME_REJECTED,
             $status === 401 || $status === 403 => ZatcaSubmission::OUTCOME_AUTH_ERROR,
             $status === 429 => ZatcaSubmission::OUTCOME_RATE_LIMITED,
             $status >= 500 => ZatcaSubmission::OUTCOME_SERVER_ERROR,
@@ -111,11 +112,29 @@ final class ZatcaClient
         if (is_string($zatcaStatus) && Str::startsWith(strtoupper($zatcaStatus), 'NOT_') && $outcome !== ZatcaSubmission::OUTCOME_REJECTED && $status < 500) {
             $outcome = ZatcaSubmission::OUTCOME_REJECTED;
         }
+        if (in_array($status, [200, 202], true)) {
+            $validationStatus = $results['status'] ?? '';
+            $validationFailed = $errors !== [] || ! is_string($validationStatus)
+                || in_array(strtoupper($validationStatus), ['ERROR', 'FAIL', 'FAILED'], true);
+            $positive = match ($path) {
+                '/invoices/clearance/single' => ($json['clearanceStatus'] ?? null) === 'CLEARED'
+                    && $this->matchesClearedDocument($cleared, $uuid, $invoiceHash),
+                '/invoices/reporting/single' => ($json['reportingStatus'] ?? null) === 'REPORTED',
+                '/compliance/invoices' => in_array($results['status'] ?? null, ['PASS', 'WARNING'], true),
+                default => false,
+            };
+            // An HTTP success is not proof of issuance. Conflicting, incomplete or
+            // malformed evidence is unknown, never success and never safe to regenerate.
+            if ($validationFailed || ! $positive) {
+                $outcome = ZatcaSubmission::OUTCOME_UNKNOWN;
+            }
+        }
         $errorCode = match ($outcome) {
             ZatcaSubmission::OUTCOME_REJECTED => $status === 303 ? 'wrong_endpoint' : ($errors[0]['code'] ?? 'rejected'),
             ZatcaSubmission::OUTCOME_AUTH_ERROR => 'auth_'.$status,
             ZatcaSubmission::OUTCOME_RATE_LIMITED => 'rate_limited',
             ZatcaSubmission::OUTCOME_SERVER_ERROR => 'http_'.$status,
+            ZatcaSubmission::OUTCOME_UNKNOWN => 'unverified_response',
             default => null,
         };
         $errorMessage = match ($outcome) {
@@ -123,10 +142,33 @@ final class ZatcaClient
             ZatcaSubmission::OUTCOME_RATE_LIMITED => __('zatca.err_rate_limited'),
             ZatcaSubmission::OUTCOME_SERVER_ERROR => __('zatca.err_server', ['status' => $status]),
             ZatcaSubmission::OUTCOME_REJECTED => $status === 303 ? __('zatca.err_wrong_endpoint') : ($errors[0]['message'] ?? __('zatca.err_rejected')),
+            ZatcaSubmission::OUTCOME_UNKNOWN => __('zatca.err_unverified_response'),
             default => null,
         };
 
         return new ZatcaApiResult($outcome, $status, is_string($zatcaStatus) ? $zatcaStatus : null, $warnings, $errors, $info, $cleared, $excerpt, $durationMs, $errorCode, $errorMessage);
+    }
+
+    private function matchesClearedDocument(?string $xml, string $uuid, string $invoiceHash): bool
+    {
+        if (! $xml || stripos($xml, '<!DOCTYPE') !== false) {
+            return false;
+        }
+        try {
+            $hashes = app(ZatcaHashService::class);
+            $dom = $hashes->load($xml);
+            if ($dom->documentElement?->namespaceURI !== ZatcaHashService::UBL_NS || $dom->documentElement?->localName !== 'Invoice') {
+                return false;
+            }
+            $xpath = new \DOMXPath($dom);
+            $xpath->registerNamespace('cbc', ZatcaHashService::CBC_NS);
+            $ids = $xpath->query('/*/cbc:UUID');
+
+            return $ids->length === 1 && trim($ids->item(0)->textContent) === $uuid
+                && hash_equals($invoiceHash, $hashes->hash($xml)['hash']);
+        } catch (ZatcaException) {
+            return false;
+        }
     }
 
     /** @return array<int, array{type: ?string, code: ?string, category: ?string, message: ?string, status: ?string}> */
