@@ -3,6 +3,7 @@
     $order = $order ?? null;
     $sourceRequest = $sourceRequest ?? null;
     $vatRate = old('vat_rate', $order?->vat_rate ?? 15);
+    $isVatOverrideAdmin = auth()->user()?->isSuperAdmin() ?? false;
     $prefill = $sourceRequest?->lines->map(fn ($line) => [
         'item_id' => $line->item_id,
         'description' => null,
@@ -67,7 +68,19 @@
                 @endforeach
             </select>
         </div>
-        <div><label for="vat_rate">Default VAT Rate (%) *</label><input id="vat_rate" name="vat_rate" type="number" step="0.01" min="0" max="100" class="input" value="{{ $vatRate }}" required/></div>
+        <div>
+            <label for="vat_rate">Default VAT Rate (%) *</label>
+            <input id="vat_rate" name="vat_rate" type="number" step="0.01" min="0" max="100" class="input" value="{{ $vatRate }}" required @unless($isVatOverrideAdmin) readonly @endunless/>
+            @error('vat_rate')<div class="field-error">{{ $message }}</div>@enderror
+            @unless($isVatOverrideAdmin)<div class="small">Standard 15% VAT. Nonstandard tax rates require Super Admin review.</div>@endunless
+        </div>
+        @if($isVatOverrideAdmin)
+            <div class="full">
+                <label for="vat_override_reason">Reason for nonstandard VAT rate (required when overriding 15%)</label>
+                <textarea id="vat_override_reason" name="vat_override_reason" class="textarea" maxlength="500" rows="2">{{ old('vat_override_reason') }}</textarea>
+                @error('vat_override_reason')<div class="field-error">{{ $message }}</div>@enderror
+            </div>
+        @endif
         <div>
             <label for="project_id">Project</label>
             <select id="project_id" name="project_id" class="select">
@@ -107,7 +120,7 @@
                 </thead>
                 <tbody id="po-lines-body">
                     @for ($i = 0; $i < $rows; $i++)
-                        @include('admin.inventory.purchase-orders._line-row', ['i' => $i, 'line' => $lineData[$i] ?? [], 'items' => $items, 'vatRate' => $vatRate])
+                        @include('admin.inventory.purchase-orders._line-row', ['i' => $i, 'line' => $lineData[$i] ?? [], 'items' => $items, 'vatRate' => $vatRate, 'isVatOverrideAdmin' => $isVatOverrideAdmin])
                     @endfor
                 </tbody>
             </table>
