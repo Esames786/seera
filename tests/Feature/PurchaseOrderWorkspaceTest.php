@@ -557,4 +557,56 @@ class PurchaseOrderWorkspaceTest extends TestCase
 
         $this->open($this->reader(), $order)->assertOk()->assertSee('Showing the latest 5 of 6')->assertSee('page_goods-receipts=2');
     }
+
+    /** Server-side tax policy, including forged fields and line-level overrides. */
+    public function test_purchase_order_nonstandard_vat_requires_super_admin_and_reason(): void
+    {
+        $buyer = $this->user(['Purchase Orders' => ['view', 'create']], suffix: 'vat-buyer');
+        $payload = [
+            'supplier_id' => $this->supplier->id,
+            'po_date' => now()->toDateString(),
+            'warehouse_id' => $this->myStore->id,
+            'vat_rate' => 5,
+            'lines' => [[
+                'item_id' => $this->item->id, 'quantity' => 2, 'unit_price' => 100,
+                'vat_rate' => 5,
+            ]],
+        ];
+        $before = PurchaseOrder::count();
+
+        $this->actingAs($buyer)
+            ->post(route('admin.inventory.purchase-orders.store'), $payload)
+            ->assertSessionHasErrors('vat_rate');
+        $this->assertSame($before, PurchaseOrder::count());
+
+        $this->actingAs($buyer)
+            ->post(route('admin.inventory.purchase-orders.store'), array_replace($payload, [
+                'vat_rate' => 15,
+                'lines' => [[
+                    'item_id' => $this->item->id, 'quantity' => 2, 'unit_price' => 100,
+                    'vat_rate' => 5,
+                ]],
+            ]))
+            ->assertSessionHasErrors('lines.0.vat_rate');
+        $this->assertSame($before, PurchaseOrder::count());
+
+        $this->actingAs($this->admin())
+            ->post(route('admin.inventory.purchase-orders.store'), $payload)
+            ->assertSessionHasErrors('vat_override_reason');
+        $this->assertSame($before, PurchaseOrder::count());
+
+        $this->actingAs($this->admin())
+            ->post(route('admin.inventory.purchase-orders.store'), $payload + [
+                'vat_override_reason' => 'Supplier invoice requires review of its tax classification.',
+            ])
+            ->assertSessionHasNoErrors();
+        $this->assertSame($before + 1, PurchaseOrder::count());
+        $order = PurchaseOrder::latest('id')->firstOrFail();
+        $this->assertEquals(5.0, (float) $order->vat_rate);
+        $this->assertEquals(10.0, (float) $order->vat_amount);
+        $this->assertDatabaseHas('activity_logs', [
+            'module' => 'Inventory',
+            'action' => 'Purchase order VAT override',
+        ]);
+    }
 }
