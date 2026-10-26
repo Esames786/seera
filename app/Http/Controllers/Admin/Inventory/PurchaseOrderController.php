@@ -60,7 +60,7 @@ class PurchaseOrderController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        [$data, $lines] = $this->validated($request);
+        [$data, $lines, $vatOverrideDetails] = $this->validated($request);
         $this->validateQuotations($request);
         $storedPaths = [];
 
@@ -86,6 +86,9 @@ class PurchaseOrderController extends Controller
         }
 
         ActivityLog::record($request, 'Inventory', 'Created purchase order', $order->po_number);
+        if ($vatOverrideDetails !== null) {
+            ActivityLog::record($request, 'Inventory', 'Purchase order VAT override', $order->po_number.': '.$vatOverrideDetails);
+        }
 
         return redirect()->route('admin.inventory.purchase-orders.show', $order)
             ->with('status', 'Purchase order "'.$order->po_number.'" created successfully.');
@@ -141,7 +144,7 @@ class PurchaseOrderController extends Controller
             return back()->withErrors(['po' => 'An approved purchase order can no longer be edited.']);
         }
 
-        [$data, $lines] = $this->validated($request);
+        [$data, $lines, $vatOverrideDetails] = $this->validated($request);
         $this->validateQuotations($request);
         $storedPaths = [];
 
@@ -158,6 +161,9 @@ class PurchaseOrderController extends Controller
         }
 
         ActivityLog::record($request, 'Inventory', 'Updated purchase order', $purchase_order->po_number);
+        if ($vatOverrideDetails !== null) {
+            ActivityLog::record($request, 'Inventory', 'Purchase order VAT override', $purchase_order->po_number.': '.$vatOverrideDetails);
+        }
 
         return redirect()->route('admin.inventory.purchase-orders.show', $purchase_order)
             ->with('status', 'Purchase order updated successfully.');
@@ -290,7 +296,7 @@ class PurchaseOrderController extends Controller
     }
 
     /**
-     * @return array{0: array, 1: array} Header data and normalized line rows.
+     * @return array{0: array, 1: array, 2: ?string} Header, normalized lines, and optional override audit detail.
      */
     private function validated(Request $request): array
     {
@@ -303,6 +309,7 @@ class PurchaseOrderController extends Controller
             'site_id' => ['nullable', 'exists:sites,id'],
             'warehouse_id' => ['required', 'exists:warehouses,id'],
             'vat_rate' => ['required', 'numeric', 'min:0', 'max:100'],
+            'vat_override_reason' => ['nullable', 'string', 'max:500'],
             'notes' => ['nullable', 'string'],
             'lines' => ['required', 'array', 'min:1'],
             'lines.*.item_id' => ['nullable', 'exists:items,id'],
@@ -344,6 +351,38 @@ class PurchaseOrderController extends Controller
             throw ValidationException::withMessages(['lines' => 'Add at least one line with an item and a quantity.']);
         }
 
+        // Enforce the agreed purchasing VAT policy on the server, for both
+        // create and update. No PO line currently has an explicit zero/exempt
+        // tax classification; such exceptions need Super Admin review.
+        $overrideErrors = [];
+        if (round($vatRate, 2) !== 15.0) {
+            $overrideErrors['vat_rate'] = 'Only Super Admin can override the standard 15% purchase VAT rate.';
+        }
+        foreach ($lines as $index => $line) {
+            if (round((float) $line['vat_rate'], 2) !== 15.0) {
+                $overrideErrors['lines.'.$index.'.vat_rate'] = 'Only Super Admin can override the standard 15% line VAT rate.';
+            }
+        }
+
+        $vatOverrideDetails = null;
+        if ($overrideErrors !== []) {
+            if (! $request->user()?->isSuperAdmin()) {
+                throw ValidationException::withMessages($overrideErrors);
+            }
+
+            $reason = trim((string) ($data['vat_override_reason'] ?? ''));
+            if (mb_strlen($reason) < 10) {
+                throw ValidationException::withMessages([
+                    'vat_override_reason' => 'Give a reason of at least 10 characters for the Super Admin VAT override.',
+                ]);
+            }
+
+            $rates = array_unique(array_map(fn ($line) => number_format((float) $line['vat_rate'], 2, '.', ''), $lines));
+            $vatOverrideDetails = 'Default VAT '.number_format($vatRate, 2).'% / Line VAT '.implode(', ', $rates).'% / Reason: '.$reason;
+        }
+        // The reason is audit-only; Purchase Orders have no override-reason column.
+        unset($data['vat_override_reason']);
+
         $taxable = round(array_sum(array_column($lines, 'taxable_amount')), 2);
         $discount = round(array_sum(array_column($lines, 'discount_amount')), 2);
         $vat = round(array_sum(array_column($lines, 'vat_amount')), 2);
@@ -358,7 +397,7 @@ class PurchaseOrderController extends Controller
             'status' => 'draft',
         ];
 
-        return [$data, $lines];
+        return [$data, $lines, $vatOverrideDetails];
     }
 
     private function formOptions(): array
