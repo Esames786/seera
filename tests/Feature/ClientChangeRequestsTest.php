@@ -372,6 +372,7 @@ class ClientChangeRequestsTest extends TestCase
         $supplier = Supplier::firstOrFail();
         $warehouse = Warehouse::firstOrFail();
         [$machine, $cable] = Item::take(2)->get()->all();
+        $cable->update(['vat_applicable' => false]); // Configured non-VAT, not an unauthorised typed override.
 
         $this->actingAs($this->admin())
             ->post(route('admin.inventory.purchase-orders.store'), [

@@ -16,6 +16,7 @@
         $canReopen = $bill->isPayable() && $bill->status === 'unpaid' && $bill->payments->isEmpty() && $user->isSuperAdmin() && $user->hasPermission('Accounts Payable', 'approve');
         $canViewSupplier = $user->hasPermission('Suppliers', 'view');
         $matches = $bill->lines->map(fn ($line) => $line->grnMatch)->filter()->values();
+        $vatRates = $matches->isNotEmpty() ? $bill->lines->pluck('vat_rate')->unique()->map(fn ($rate) => number_format($rate, 2).'%')->implode(', ') : number_format($bill->vat_rate, 2).'%';
         $matchedReceipts = $matches->pluck('goodsReceipt')->filter()->unique('id')->values();
         $matchedOrders = $matchedReceipts->pluck('purchaseOrder')->filter()->unique('id')->values();
         $paymentState = match ($bill->status) {
@@ -122,7 +123,7 @@
             <tr><th>Due Date</th><td>{{ $bill->due_date?->toDateString() ?? '-' }}</td></tr>
             <tr><th>Project / Site</th><td>{{ $bill->project?->name ?? '-' }}@if($bill->site) / {{ $bill->site->name }}@endif</td></tr>
             <tr><th>Cost Center</th><td>{{ $bill->costCenter ? $bill->costCenter->code.' - '.$bill->costCenter->name : '-' }}</td></tr>
-            <tr><th>VAT Rate</th><td>{{ number_format($bill->vat_rate, 2) }}%</td></tr>
+            <tr><th>VAT Rate</th><td>{{ $vatRates }}</td></tr>
             <tr><th>Paid Amount</th><td>SAR {{ number_format($bill->paid_amount, 2) }}</td></tr>
             <tr><th>Status</th><td><x-admin.status-badge :status="$bill->status"/> <span class="small">{{ $paymentState }}</span></td></tr>
             <tr><th>Notes</th><td>{{ $bill->notes ?? '-' }}</td></tr>
@@ -185,7 +186,7 @@
 
     <x-admin.data-table title="VAT" class="detail-table" id="vat">
         <tbody>
-            <tr><th>VAT Rate</th><td>{{ number_format($bill->vat_rate, 2) }}%</td></tr>
+            <tr><th>VAT Rate</th><td>{{ $vatRates }}</td></tr>
             <tr><th>Taxable Amount</th><td>SAR {{ number_format($bill->taxable_amount, 2) }}</td></tr>
             <tr><th>Input VAT</th><td>SAR {{ number_format($bill->vat_amount, 2) }}</td></tr>
             <tr><th>Total incl. VAT</th><td>SAR {{ number_format($bill->total_amount, 2) }}</td></tr>

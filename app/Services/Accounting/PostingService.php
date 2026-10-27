@@ -321,11 +321,18 @@ class PostingService
             'cost_center_id' => $bill->cost_center_id,
         ], $lines, 'Supplier Bill', 'Bill Approved', $userId);
 
-        $this->recordVat(
-            'input', $bill->vat_amount, $bill->taxable_amount, $bill->vat_rate,
-            $bill->bill_date, 'Supplier Bill', $bill->id, $bill->bill_number,
-            'supplier', $bill->supplier_id, $bill->supplier->name
-        );
+        // Preserve the actual source rates on mixed-tax purchases. A single
+        // header rate would mislabel the VAT register despite a balanced GL.
+        $taxGroups = $bill->grnMatches()->exists()
+            ? $bill->lines->groupBy('vat_rate')->map(fn ($taxLines, $rate) => ['rate' => $rate, 'vat' => round($taxLines->sum('vat_amount'), 2), 'taxable' => round($taxLines->sum('taxable_amount'), 2)])
+            : collect([['rate' => $bill->vat_rate, 'vat' => $bill->vat_amount, 'taxable' => $bill->taxable_amount]]);
+        foreach ($taxGroups as $group) {
+            $this->recordVat(
+                'input', $group['vat'], $group['taxable'], $group['rate'],
+                $bill->bill_date, 'Supplier Bill', $bill->id, $bill->bill_number,
+                'supplier', $bill->supplier_id, $bill->supplier->name
+            );
+        }
 
         return $entry;
     }

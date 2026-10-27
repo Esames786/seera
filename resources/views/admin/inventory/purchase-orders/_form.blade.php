@@ -27,6 +27,15 @@
     @csrf
     @if ($order) @method('PUT') @endif
 
+    @if (auth()->user()->isSuperAdmin())
+        <div class="form-section section-body">
+            <label for="vat_override_reason">{{ __('VAT override reason') }}</label>
+            <input id="vat_override_reason" name="vat_override_reason" class="input" maxlength="500" value="{{ old('vat_override_reason') }}"/>
+            <p class="small">{{ __('Required when overriding the configured purchase VAT rate. The reason is saved in the activity log.') }}</p>
+            @error('vat_override_reason')<div class="field-error">{{ $message }}</div>@enderror
+        </div>
+    @endif
+
     <x-admin.form-section title="Order Information" columns="3">
         <div>
             <div class="label-row">
@@ -67,7 +76,7 @@
                 @endforeach
             </select>
         </div>
-        <div><label for="vat_rate">Default VAT Rate (%) *</label><input id="vat_rate" name="vat_rate" type="number" step="0.01" min="0" max="100" class="input" value="{{ $vatRate }}" required/></div>
+        <div><label for="vat_rate">Default VAT Rate (%) *</label><input id="vat_rate" name="vat_rate" @readonly(!auth()->user()->isSuperAdmin()) type="number" step="0.01" min="0" max="100" class="input" value="{{ $vatRate }}" required/></div>
         <div>
             <label for="project_id">Project</label>
             <select id="project_id" name="project_id" class="select">
@@ -90,7 +99,7 @@
     </x-admin.form-section>
 
     <x-admin.form-section title="Order Lines">
-        <div class="small" style="margin-bottom:10px">Prices are excluding VAT (SAR). Discount is a percentage of the line. Leave VAT % blank to use the order default.</div>
+        <div class="small" style="margin-bottom:10px">{{ __('Purchase prices exclude VAT. Non-VAT items use zero; other blank line rates follow the order default. Only a Super Admin can override the configured rate, with a reason.') }}</div>
         <div class="table-wrap">
             <table>
                 <thead>
@@ -181,8 +190,10 @@
                 var price = num(row.querySelector('[data-field=unit_price]'));
                 var disc = num(row.querySelector('[data-field=discount_percent]'));
                 var vatInput = row.querySelector('[data-field=vat_rate]');
-                if (vatInput) vatInput.placeholder = headerVat.value;
-                var rate = vatInput && vatInput.value !== '' ? num(vatInput) : defaultVat;
+                var item = row.querySelector('[data-field=item_id] option:checked');
+                var configured = item && item.dataset.vatApplicable === '0' ? 0 : defaultVat;
+                if (vatInput) vatInput.placeholder = configured;
+                var rate = vatInput && vatInput.value !== '' ? num(vatInput) : configured;
 
                 var g = round2(quantity * price);
                 var d = round2(g * disc / 100);
@@ -203,7 +214,13 @@
         }
 
         body.addEventListener('input', recalc);
-        body.addEventListener('change', recalc);
+        body.addEventListener('change', function (event) {
+            if (event.target.matches('[data-field=item_id]')) {
+                var rate = event.target.closest('tr').querySelector('[data-field=vat_rate]');
+                if (rate && rate.readOnly) rate.value = '';
+            }
+            recalc();
+        });
         body.addEventListener('seera:rows-changed', recalc);
         headerVat.addEventListener('input', recalc);
         recalc();

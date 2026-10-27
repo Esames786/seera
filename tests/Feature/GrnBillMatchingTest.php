@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\ApprovalWorkflow;
 use App\Models\ChartOfAccount;
 use App\Models\GoodsReceipt;
 use App\Models\Item;
@@ -54,6 +55,50 @@ class GrnBillMatchingTest extends TestCase
     }
 
     // ---------------------------------------------------------------- helpers
+
+    public function test_authorized_mixed_po_vat_survives_receiving_billing_and_gl_without_header_forgery(): void
+    {
+        $standard = $this->newItem('VAT-STANDARD');
+        $nonVat = $this->newItem('VAT-NONVAT');
+        $nonVat->update(['vat_applicable' => false]);
+        $this->actingAs($this->admin())->post(route('admin.inventory.purchase-orders.store'), [
+            'supplier_id' => $this->supplier->id, 'warehouse_id' => $this->warehouse->id, 'po_date' => today()->toDateString(),
+            'vat_rate' => 15, 'vat_override_reason' => 'Approved supplier correction',
+            'lines' => [
+                ['item_id' => $this->item->id, 'quantity' => 1, 'unit_price' => 100, 'vat_rate' => 5],
+                ['item_id' => $standard->id, 'quantity' => 1, 'unit_price' => 100],
+                ['item_id' => $nonVat->id, 'quantity' => 1, 'unit_price' => 100],
+            ],
+        ])->assertSessionHasNoErrors();
+        $order = PurchaseOrder::latest('id')->firstOrFail();
+        $this->post(route('admin.inventory.purchase-orders.approve', $order))->assertSessionHasNoErrors();
+        $this->post(route('admin.inventory.goods-receipts.store'), [
+            'purchase_order_id' => $order->id, 'supplier_id' => $this->supplier->id, 'warehouse_id' => $this->warehouse->id,
+            'received_date' => today()->toDateString(), 'vat_rate' => 0,
+            'lines' => $order->lines->map(fn ($line) => ['item_id' => $line->item_id, 'purchase_order_line_id' => $line->id,
+                'received_quantity' => 1, 'accepted_quantity' => 1, 'unit_cost' => 100, 'vat_rate' => 0])->all(),
+        ])->assertSessionHasNoErrors();
+        $grn = GoodsReceipt::latest('id')->firstOrFail();
+        $this->assertEquals(20, $grn->vat_amount);
+        $this->post(route('admin.inventory.goods-receipts.post-stock', $grn))->assertSessionHasNoErrors();
+        $this->assertDatabaseMissing('vat_transactions', ['source_module' => 'Goods Receipt', 'source_id' => $grn->id]);
+        $this->storeBill($grn->lines->map(fn ($line) => ['description' => 'Matched item', 'goods_receipt_line_id' => $line->id,
+            'matched_quantity' => 1, 'quantity' => 1, 'unit_price' => 100, 'vat_rate' => 99])->all(), ['vat_rate' => 0])->assertSessionHasNoErrors();
+        $bill = $this->lastBill();
+        $this->assertEquals([5, 15, 0], $bill->lines->pluck('vat_rate')->map(fn ($v) => (float) $v)->all());
+        $this->assertEquals(320, $bill->total_amount);
+        $this->approve($bill)->assertSessionHasNoErrors();
+        $this->assertEquals(20, $bill->fresh()->journalEntry->lines->where('chart_of_account_id', $this->account(PostingService::INPUT_VAT)->id)->sum('debit'));
+        $entry = $bill->fresh()->journalEntry;
+        $this->assertEquals($entry->lines->sum('debit'), $entry->lines->sum('credit'));
+        $vat = VatTransaction::where('source_module', 'Supplier Bill')->where('source_id', $bill->id)->orderBy('vat_rate')->get();
+        $this->assertEquals([5, 15], $vat->pluck('vat_rate')->map(fn ($v) => (float) $v)->all());
+        $this->assertEquals(20, $vat->sum('vat_amount'));
+        $snapshot = $order->fresh()->getAttributes();
+        $this->approve($bill)->assertSessionHasErrors();
+        $this->assertEquals(2, VatTransaction::where('source_module', 'Supplier Bill')->where('source_id', $bill->id)->count());
+        $this->assertEquals($snapshot, $order->fresh()->getAttributes());
+    }
 
     private function admin(): User
     {
@@ -169,6 +214,70 @@ class GrnBillMatchingTest extends TestCase
     }
 
     // ------------------------------------------------------------------ tests
+
+    /** Real receipt posting, runtime approvals and HTTP payments on one synthetic chain. */
+    public function test_uat_received_goods_runtime_approval_and_partial_full_payment_reconcile(): void
+    {
+        $before = JournalEntry::max('id') ?? 0;
+        $grn = $this->postedReceipt($this->approvedOrder(10, 100), 6);
+        $this->storeBill([$this->matched($grn, 6)])->assertSessionHasNoErrors();
+        // Do not use lastBill(): the older F04 fixtures deliberately switch to legacy approval.
+        $bill = SupplierBill::where('bill_number', 'BILL-F04-'.$this->billSeq)->firstOrFail();
+        $this->assertSame('runtime', $bill->approval_mode);
+
+        $reviewers = collect(['Store review', 'Finance review'])->map(function ($name, $index) {
+            $role = Role::create(['code' => 'UAT-REVIEW-'.$index, 'name' => $name, 'level' => 3, 'access_scope' => 'Company Level', 'status' => 'active']);
+            $role->permissions()->attach(Permission::where('module', 'Accounts Payable')->whereIn('action', ['view', 'approve', 'process'])->pluck('id'));
+            $user = User::factory()->create(['status' => 'active']);
+            $user->roles()->attach($role, ['is_primary' => true]);
+
+            return $user;
+        });
+        $workflow = ApprovalWorkflow::create(['name' => 'UAT received goods approval', 'module' => 'Supplier Bill', 'trigger_action' => 'Bill Submitted', 'scope' => 'All Company', 'auto_posting' => 'Create Accounting Entry', 'status' => 'active']);
+        foreach ($reviewers as $index => $reviewer) {
+            $workflow->steps()->create(['step_no' => $index + 1, 'approver_role_id' => $reviewer->roles()->first()->id, 'is_required' => true, 'can_reject' => true]);
+        }
+        $this->actingAs($this->admin())->post(route('admin.accounting.accounts-payable.submit-approval', $bill), ['workflow_id' => $workflow->id])->assertSessionHasNoErrors();
+        $instance = $bill->approvals()->latest('id')->firstOrFail()->load('steps');
+        foreach ($reviewers as $index => $reviewer) {
+            $this->actingAs($reviewer)->post(route('admin.accounting.accounts-payable.runtime.approve', $bill), [
+                'instance_id' => $instance->id, 'step_id' => $instance->steps[$index]->id,
+            ])->assertSessionHasNoErrors()->assertRedirect();
+            if ($index === 0) {
+                $this->assertSame('draft', $bill->fresh()->status);
+                $this->assertNull($bill->fresh()->journal_entry_id);
+                $this->assertEquals(0, $grn->lines[0]->fresh()->invoiced_quantity);
+            }
+        }
+        $bill->refresh();
+        $this->assertSame('approved', $instance->fresh()->status);
+        $this->assertSame('posted', $bill->journalEntry->status);
+        $this->assertSame(['1300' => [90.0, 0.0], '2100' => [0.0, 690.0], '2150' => [600.0, 0.0]], $this->linesOf($bill->journalEntry));
+        foreach ([200, 490] as $index => $amount) {
+            $payload = ['payment_date' => today()->toDateString(), 'payment_account_id' => $this->account('1120')->id,
+                'payment_method' => 'Bank Transfer', 'amount' => $amount, 'idempotency_key' => 'UAT-GRN-PAY-'.$index];
+            $this->actingAs($reviewers->last())->post(route('admin.accounting.accounts-payable.payment.store', $bill), $payload)->assertSessionHasNoErrors();
+            $this->post(route('admin.accounting.accounts-payable.payment.store', $bill), $payload)->assertSessionHasNoErrors();
+            $this->assertEquals($index === 0 ? 490 : 0, $bill->fresh()->balance_amount);
+        }
+        $this->assertSame('paid', $bill->fresh()->status);
+        $this->assertEquals(6, $grn->lines[0]->fresh()->invoiced_quantity);
+        $this->assertSame(1, StockLedgerEntry::where('reference_number', $grn->grn_number)->count());
+        $this->assertSame(0, $this->vatRowsFor('Goods Receipt', $grn->id));
+        $this->assertSame(1, $this->vatRowsFor('Supplier Bill', $bill->id));
+        $entries = JournalEntry::where('id', '>', $before)->with('lines.account')->get();
+        $this->assertCount(4, $entries, 'GRN, bill and two payments only; retries create nothing');
+        $net = [];
+        foreach ($entries as $entry) {
+            $this->assertSame('posted', $entry->status);
+            $this->assertEqualsWithDelta($entry->lines->sum('debit'), $entry->lines->sum('credit'), 0.001);
+            foreach ($this->linesOf($entry) as $code => [$debit, $credit]) {
+                $net[$code] = round(($net[$code] ?? 0) + $debit - $credit, 2);
+            }
+        }
+        ksort($net);
+        $this->assertSame([1120 => -690.0, 1300 => 90.0, 1400 => 600.0, 2100 => 0.0, 2150 => 0.0], $net);
+    }
 
     public function test_receipt_against_an_order_accrues_inventory_to_grni_without_vat_or_payable(): void
     {

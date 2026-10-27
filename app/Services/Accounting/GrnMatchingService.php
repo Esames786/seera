@@ -71,7 +71,7 @@ class GrnMatchingService
 
         $ids = array_values(array_unique(array_map(fn ($r) => (int) $r['goods_receipt_line_id'], $requests)));
         // The global access scope applies here: an out-of-scope receipt is simply not found.
-        $grnLines = GoodsReceiptLine::with(['goodsReceipt', 'item'])->whereIn('id', $ids)->get()->keyBy('id');
+        $grnLines = GoodsReceiptLine::with(['goodsReceipt', 'item', 'purchaseOrderLine'])->whereIn('id', $ids)->get()->keyBy('id');
 
         $resolved = [];
         $requestedPerLine = [];
@@ -113,6 +113,7 @@ class GrnMatchingService
                 'matched_quantity' => $quantity,
                 'matched_taxable_amount' => round($quantity * (float) $grnLine->unit_cost, 2),
                 'unit_cost' => (float) $grnLine->unit_cost,
+                'vat_rate' => app(PurchaseVatPolicy::class)->receiptRate($grnLine),
                 'item_label' => $grnLine->item?->label(),
                 'grn_number' => $grn->grn_number,
             ];

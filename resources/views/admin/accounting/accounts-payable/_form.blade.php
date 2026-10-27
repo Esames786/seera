@@ -136,7 +136,7 @@
             </table>
         </div>
         <div class="small" style="margin-top:10px">
-            Taxable amount, VAT and total are calculated from quantity × unit price and the bill VAT rate. Rows without a description or unit price are ignored.
+            Taxable amount is calculated from quantity × unit price. Matched goods use the approved purchase order line VAT rate (or the saved receipt rate for a receipt without an order); the bill default applies only to unmatched lines. Rows without a description or unit price are ignored.
             A line matched to received goods clears the receipt's accrual (Goods Received Not Invoiced) instead of posting an expense; input VAT and the supplier payable are recorded on this bill only.
         </div>
     </x-admin.form-section>

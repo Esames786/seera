@@ -13,6 +13,7 @@ use App\Models\PurchaseRequest;
 use App\Models\Site;
 use App\Models\Supplier;
 use App\Models\Warehouse;
+use App\Services\Accounting\PurchaseVatPolicy;
 use App\Support\Workspace\PurchaseOrderWorkspacePanels as Panels;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -70,6 +71,7 @@ class PurchaseOrderController extends Controller
                     'po_number' => PurchaseOrder::nextNumber((int) date('Y', strtotime($data['po_date']))),
                 ]);
                 $order->lines()->createMany($lines);
+                app(PurchaseVatPolicy::class)->record($request, $order->po_number);
                 $this->storeQuotations($request, $order, $storedPaths);
 
                 if ($order->purchase_request_id) {
@@ -147,9 +149,14 @@ class PurchaseOrderController extends Controller
 
         try {
             DB::transaction(function () use ($request, $purchase_order, $data, $lines, &$storedPaths) {
+                $purchase_order = PurchaseOrder::whereKey($purchase_order->id)->lockForUpdate()->firstOrFail();
+                if (! $purchase_order->isEditable()) {
+                    throw ValidationException::withMessages(['po' => 'An approved purchase order can no longer be edited.']);
+                }
                 $purchase_order->update($data);
                 $purchase_order->lines()->delete();
                 $purchase_order->lines()->createMany($lines);
+                app(PurchaseVatPolicy::class)->record($request, $purchase_order->po_number);
                 $this->storeQuotations($request, $purchase_order, $storedPaths);
             });
         } catch (Throwable $exception) {
@@ -186,11 +193,15 @@ class PurchaseOrderController extends Controller
             return back()->withErrors(['po' => 'Only a draft purchase order can be approved.']);
         }
 
-        $purchase_order->update([
+        $approved = PurchaseOrder::whereKey($purchase_order->id)->where('status', 'draft')->update([
             'status' => 'approved',
             'approved_by' => $request->user()->id,
             'approved_at' => now(),
         ]);
+
+        if (! $approved) {
+            return back()->withErrors(['po' => 'Only a draft purchase order can be approved.']);
+        }
 
         ActivityLog::record($request, 'Inventory', 'Approved purchase order', $purchase_order->po_number);
 
@@ -302,7 +313,7 @@ class PurchaseOrderController extends Controller
             'project_id' => ['nullable', 'exists:projects,id'],
             'site_id' => ['nullable', 'exists:sites,id'],
             'warehouse_id' => ['required', 'exists:warehouses,id'],
-            'vat_rate' => ['required', 'numeric', 'min:0', 'max:100'],
+            'vat_rate' => ['nullable', 'numeric', 'decimal:0,2', 'min:0', 'max:100'],
             'notes' => ['nullable', 'string'],
             'lines' => ['required', 'array', 'min:1'],
             'lines.*.item_id' => ['nullable', 'exists:items,id'],
@@ -310,19 +321,26 @@ class PurchaseOrderController extends Controller
             'lines.*.quantity' => ['nullable', 'numeric', 'min:0'],
             'lines.*.unit_price' => ['nullable', 'numeric', 'min:0'],
             'lines.*.discount_percent' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'lines.*.vat_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'lines.*.vat_rate' => ['nullable', 'numeric', 'decimal:0,2', 'min:0', 'max:100'],
         ], ['lines.required' => 'Add at least one order line.']);
 
-        $vatRate = (float) $data['vat_rate'];
+        $vatRate = (float) ($data['vat_rate'] ?? PurchaseVatPolicy::STANDARD_RATE);
+        $data['vat_rate'] = $vatRate;
+        $policy = app(PurchaseVatPolicy::class);
+        $items = Item::whereIn('id', collect($data['lines'])->pluck('item_id')->filter())->get()->keyBy('id');
+        $allNonVat = $items->isNotEmpty() && $items->every(fn ($item) => ! $item->vat_applicable);
+        $policy->authorize($request, $vatRate, $allNonVat && $vatRate === 0.0 ? 0.0 : PurchaseVatPolicy::STANDARD_RATE, 'vat_rate');
 
         $lines = collect($data['lines'])
             ->filter(fn ($line) => filled($line['item_id'] ?? null) && (float) ($line['quantity'] ?? 0) > 0)
-            ->map(function ($line) use ($vatRate) {
+            ->map(function ($line, $index) use ($vatRate, $policy, $request, $items) {
                 $quantity = (float) $line['quantity'];
                 $price = (float) ($line['unit_price'] ?? 0);
                 $discount = (float) ($line['discount_percent'] ?? 0);
                 // A blank line VAT rate follows the order default.
-                $lineVat = filled($line['vat_rate'] ?? null) ? (float) $line['vat_rate'] : $vatRate;
+                $configured = $policy->itemRate($items->get($line['item_id']));
+                $lineVat = filled($line['vat_rate'] ?? null) ? (float) $line['vat_rate'] : ($configured === 0.0 ? 0.0 : $vatRate);
+                $policy->authorize($request, $lineVat, $configured, "lines.$index.vat_rate");
                 $money = PurchaseOrderLine::calculate($quantity, $price, $discount, $lineVat);
 
                 return [

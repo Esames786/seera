@@ -133,6 +133,10 @@ class GoodsReceiptController extends Controller
         [$data, $lines] = $this->validated($request);
 
         DB::transaction(function () use ($goods_receipt, $data, $lines) {
+            $goods_receipt = GoodsReceipt::whereKey($goods_receipt->id)->lockForUpdate()->firstOrFail();
+            if (! $goods_receipt->isEditable()) {
+                throw ValidationException::withMessages(['grn' => 'A posted goods receipt is read-only.']);
+            }
             $goods_receipt->update($data);
             $goods_receipt->lines()->delete();
             $goods_receipt->lines()->createMany($lines);
@@ -313,6 +317,10 @@ class GoodsReceiptController extends Controller
 
         $taxable = round(array_sum(array_column($lines, 'total_cost')), 2);
         $vat = round($taxable * $vatRate / 100, 2);
+        if (! empty($data['purchase_order_id'])) {
+            $rates = PurchaseOrderLine::where('purchase_order_id', $data['purchase_order_id'])->pluck('vat_rate', 'id');
+            $vat = round(array_sum(array_map(fn ($line) => round($line['total_cost'] * (float) $rates[$line['purchase_order_line_id']] / 100, 2), $lines)), 2);
+        }
 
         unset($data['lines']);
 

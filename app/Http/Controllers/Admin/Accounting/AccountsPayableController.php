@@ -425,6 +425,9 @@ class AccountsPayableController extends Controller
             })
             ->filter(fn ($line) => filled($line['description'] ?? null) && (float) ($line['unit_price'] ?? 0) > 0)
             ->map(function ($line) use ($vatRate) {
+                // Matched lines inherit the approved source treatment, not a forged
+                // header or line rate. Unmatched service lines retain bill treatment.
+                $vatRate = (float) ($line['_match']['vat_rate'] ?? $vatRate);
                 $taxable = round((float) ($line['quantity'] ?? 1) * (float) ($line['unit_price'] ?? 0), 2);
                 $vat = round($taxable * $vatRate / 100, 2);
 
