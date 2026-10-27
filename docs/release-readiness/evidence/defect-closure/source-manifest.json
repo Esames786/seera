@@ -1,0 +1,186 @@
+﻿[
+    {
+        "path":  "app/Http/Controllers/Admin/Accounting/AccountsPayableController.php",
+        "sha256":  "9821E958FC6417D8E7FF21EB5A00BF31FAC18CFC6859062B9BCE2480B5E33DB0"
+    },
+    {
+        "path":  "app/Http/Controllers/Admin/Hr/EmployeeController.php",
+        "sha256":  "72F51764F0C4CF1669C5993BCA8F84FA794A1774529FEB052C9B4556B5415B67"
+    },
+    {
+        "path":  "app/Http/Controllers/Admin/Inventory/GoodsReceiptController.php",
+        "sha256":  "B4AA6F35EBDF09F2B2459D97466A6D3995A182498644C63405E0C679211B2D56"
+    },
+    {
+        "path":  "app/Http/Controllers/Admin/Inventory/PurchaseOrderController.php",
+        "sha256":  "E6173FD6335F46770DC6C3EFA07E08FE7F55ABDB11FD115435C0F28C977166CD"
+    },
+    {
+        "path":  "app/Http/Controllers/Admin/Master/CustomerController.php",
+        "sha256":  "212E16555A73DC4FCF0417103D5B6913F54359C2306C738FFFB06A34431CE4A0"
+    },
+    {
+        "path":  "app/Services/Accounting/GrnMatchingService.php",
+        "sha256":  "4146C0643A1EAEFB3C080DB6819E04D1771CCB149758AEE6BB5A17C5211DEF77"
+    },
+    {
+        "path":  "app/Services/Accounting/PostingService.php",
+        "sha256":  "9EFEFA6B15DF488978EB4BD5919AC2A70D47679AD8A75D88D156164443779711"
+    },
+    {
+        "path":  "app/Services/Accounting/PurchaseVatPolicy.php",
+        "sha256":  "E6428DA9827AA06185EF0090A3938B92521878A6975D75686BBCB43D651F7FD5"
+    },
+    {
+        "path":  "lang/ar.json",
+        "sha256":  "9A41FF55A2212AF3B53907FA7CD0DCF119C2C45D01004E7E62744CF443A695DB"
+    },
+    {
+        "path":  "lang/ar/validation.php",
+        "sha256":  "51D2DD69BBCE815B37A16534A59C5FD916B9574049918F871D65EA83253BCF2E"
+    },
+    {
+        "path":  "resources/css/erp.css",
+        "sha256":  "1A17F631918D5A6343F5920D6FBA4D5C8322C6529C1B31BDFF5E3BCAC9AC9CCA"
+    },
+    {
+        "path":  "resources/views/admin/accounting/accounts-payable/_form.blade.php",
+        "sha256":  "BCFBCE2C6D9976B069931148FC5DEE3A56AE418455C6D5FE858E3E343E1F106B"
+    },
+    {
+        "path":  "resources/views/admin/accounting/accounts-payable/show.blade.php",
+        "sha256":  "EA5E62BA2B9B119CA1ED64BA329685122242E192FC5B5BAF1190CCE56FF08F33"
+    },
+    {
+        "path":  "resources/views/admin/dashboard.blade.php",
+        "sha256":  "50D708E078F158BC04A0894F39E5787052330D486E71B68ED0D317A1897E5397"
+    },
+    {
+        "path":  "resources/views/admin/hr/employees/_document-row.blade.php",
+        "sha256":  "0B60CC7B6AADDB87B846A6FB1A6A49D75E9FF332255223FCF5259AED56B8F711"
+    },
+    {
+        "path":  "resources/views/admin/hr/employees/_form.blade.php",
+        "sha256":  "4C115410476AF6F562DAAB307EFAAB472D1119BE25ED321BF33C610328EF0B5E"
+    },
+    {
+        "path":  "resources/views/admin/hr/employees/_master-dialogs.blade.php",
+        "sha256":  "19AD53662341997D8D3A74A3B335784FD8A424778A916F449DF50B5EF677F985"
+    },
+    {
+        "path":  "resources/views/admin/hr/employees/create.blade.php",
+        "sha256":  "40C3E9A59BAECF051737D482A67D6712190E1739D636690C3AFEC1B58F63796D"
+    },
+    {
+        "path":  "resources/views/admin/hr/employees/edit.blade.php",
+        "sha256":  "43371F21F37277BB152920A1024C4F768A6AFCB9CEA095BD259263DCCFD2412E"
+    },
+    {
+        "path":  "resources/views/admin/hr/employees/index.blade.php",
+        "sha256":  "6ACBE75000A1F2B108EC06A8093D9622C31676DD59D5567273214DAA4BB0E65E"
+    },
+    {
+        "path":  "resources/views/admin/hr/employees/show.blade.php",
+        "sha256":  "DF1F7C8D9418B90384208C7753880D9CFD56BDC17E77902C1694E7FD8AEBD6CB"
+    },
+    {
+        "path":  "resources/views/admin/inventory/purchase-orders/_form.blade.php",
+        "sha256":  "D4CFD12BA3545E08A0513A5015AA1B62B61D32CC9C4967C7D6080350D8FD0E0C"
+    },
+    {
+        "path":  "resources/views/admin/inventory/purchase-orders/_line-row.blade.php",
+        "sha256":  "0A555CEC290CB960EB83F8A20174051141ECABA6376338841EE75772BE9D80F1"
+    },
+    {
+        "path":  "resources/views/admin/master/customers/_form.blade.php",
+        "sha256":  "017C4DF9F42C68A92DB724E494D0859F83784BB3F2D4BA18CD895AB4BFC168E2"
+    },
+    {
+        "path":  "resources/views/admin/master/customers/_workspace-header.blade.php",
+        "sha256":  "69D00A3A387E10CB0092270678617D21EBF61570FB03531AD8D9B80FD0944858"
+    },
+    {
+        "path":  "resources/views/admin/master/customers/_workspace-panel.blade.php",
+        "sha256":  "824A392125AA99B03F268D99B1B8A0B1A65108AC18C9D033DA3E0DE0CA3E18F4"
+    },
+    {
+        "path":  "resources/views/admin/master/customers/create.blade.php",
+        "sha256":  "5D5663B2FB87EB96C6C8CBAEA7239A2F40357F58C8FC6E64EA9CE39D335DEB2C"
+    },
+    {
+        "path":  "resources/views/admin/master/customers/edit.blade.php",
+        "sha256":  "210064631A6A4A0B76E3387B0864DA6AD5F9E29B784360079486316CADD79005"
+    },
+    {
+        "path":  "resources/views/admin/master/customers/index.blade.php",
+        "sha256":  "41917DB3CF4756243F8A82C205DC2CAC37BA2F7E6EE872887A10710A29D2AE7E"
+    },
+    {
+        "path":  "resources/views/admin/master/customers/show.blade.php",
+        "sha256":  "9374185FAAC554A0F35FA313A4ED7640C74E7A689BCBDE9550A26EC7D493721B"
+    },
+    {
+        "path":  "resources/views/components/admin/data-table.blade.php",
+        "sha256":  "A05FCB275888EBD845165D0C55DE22EE0CFF914CDE3A40EA52339903FF47AECC"
+    },
+    {
+        "path":  "resources/views/components/admin/delete-modal.blade.php",
+        "sha256":  "552F4201B00D7A71F912925BD8C6418F3379424F99F143FDC693AF4C11B647C9"
+    },
+    {
+        "path":  "resources/views/components/admin/form-section.blade.php",
+        "sha256":  "4DF86F92516F4687ECB2B65EF4B2E9D2AFA9BDB377EC7A293C150EEE46939397"
+    },
+    {
+        "path":  "resources/views/components/admin/metric-card.blade.php",
+        "sha256":  "96758106B0B7F0EF75A72FE109D9DD871A481B4BD469A695F8EA514012609648"
+    },
+    {
+        "path":  "resources/views/components/admin/page-header.blade.php",
+        "sha256":  "43C308702C03B7A6DB4B0F4504698BF59245C7BCCBBD1EA8F2D12F25E8D0A339"
+    },
+    {
+        "path":  "resources/views/components/admin/quick-create.blade.php",
+        "sha256":  "E70F99806889F81D029AB59816AE7E754918D885F6AB354A2C1D7B4A9C0878AD"
+    },
+    {
+        "path":  "resources/views/components/admin/sidebar.blade.php",
+        "sha256":  "60D50CD1E97E823D389FA40FBC0D355AF4B460D4C9B04C999663B201BE334A04"
+    },
+    {
+        "path":  "resources/views/components/admin/status-badge.blade.php",
+        "sha256":  "16FBCC6095637BEEB555588ED26F91675E6192B90D2FA61C196FFBB3C5DFFB64"
+    },
+    {
+        "path":  "resources/views/components/admin/topbar.blade.php",
+        "sha256":  "908F40E30BCFA4034FF9DD84331856CBE4C94D2408A12264946B32225B8BAD1F"
+    },
+    {
+        "path":  "resources/views/layouts/admin.blade.php",
+        "sha256":  "CA3C28B0DE0BC1A41B8D24B48C573DFC5040384753B4B7DCB45DB128BAFD9CB5"
+    },
+    {
+        "path":  "tests/Feature/ClientChangeRequestsTest.php",
+        "sha256":  "AFCE19D6AE40A7466649DF1A805145802B44F528F480CB8B3F268F955875F79C"
+    },
+    {
+        "path":  "tests/Feature/GrnBillMatchingTest.php",
+        "sha256":  "48D451E5086C5EDD5C3136D9701DA84A386F0E2FC066E9D80A04F235BD9AB1CA"
+    },
+    {
+        "path":  "tests/Feature/PurchaseVatAuthorizationTest.php",
+        "sha256":  "4510EE32F88B2D5C4CF115249F46A6BC19BA083D3E44C97CC443A07D82FDF32B"
+    },
+    {
+        "path":  "tests/Feature/ReleaseArabicUiTest.php",
+        "sha256":  "F5DE69E669B022E4F8F6456ACDD2612FB0B7B4B784FBEE7496CFB2AD7B0E9343"
+    },
+    {
+        "path":  "tests/manual/release-defects-browser.cjs",
+        "sha256":  "302CE8753E00C8E4813DA04A36A9AC69338871FBB43513A7C23D91633A08B536"
+    },
+    {
+        "path":  "tests/manual/RequirementGapReviewTest.php",
+        "sha256":  "E07C2AD672BA769094E613874B919C89FA586BF3EB3188379E2A859F99A45A93"
+    }
+]

@@ -1,0 +1,359 @@
+{
+  "base": "http://127.0.0.1:18769",
+  "results": [
+    {
+      "id": "dashboard-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "employee-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "customer-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "dashboard-ar-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "employee-ar-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "customer-ar-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "dashboard-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "employee-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "customer-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "dashboard-ar-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "employee-ar-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "customer-ar-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "dashboard-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "employee-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "customer-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "employee-section-#personal",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "employee-section-#employment",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "employee-section-#payroll",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "employee-section-#documents",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "employee-section-#access",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "employee-section-#salary",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "employee-section-#attendance",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "employee-section-#leaves",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "employee-section-#overtime",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "employee-section-#shifts",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "employee-section-#eosb",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "employee-section-#payroll-history",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "employee-section-#account",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "customer-section-#profile",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "customer-section-#contacts",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "customer-section-#notes",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "customer-section-#projects",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "customer-section-#invoices",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "customer-section-#receipts",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "customer-section-#adjustments",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "customer-section-#ageing",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "customer-section-#accounting",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "customer-section-#zatca",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "customer-section-#activity",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "customer-long-content-and-unsaved-back",
+      "status": "PASS"
+    },
+    {
+      "id": "employee-leave-master-dialog-ar-320",
+      "status": "PASS"
+    },
+    {
+      "id": "dashboard-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "employee-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "customer-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "no-script-errors",
+      "status": "PASS"
+    },
+    {
+      "id": "no-failed-resources",
+      "status": "PASS"
+    }
+  ],
+  "errors": [],
+  "failedResources": []
+}

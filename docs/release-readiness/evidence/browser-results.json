@@ -1,0 +1,142 @@
+{
+  "base": "http://127.0.0.1:18769",
+  "results": [
+    {
+      "id": "synthetic-admin-login",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/dashboard",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/users",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/roles",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/hr/employees",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/hr/payroll",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/master/customers",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/master/suppliers",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/master/projects",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/master/sites",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/master/warehouses",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/inventory/items",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/inventory/purchase-orders",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/inventory/goods-receipts",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/accounting/accounts-payable",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/accounting/accounts-receivable",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/accounting/accounts-receivable/credits",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/accounting/journal-entries",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/site-expenses",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/equipment",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /admin/accounting/zatca",
+      "status": "PASS"
+    },
+    {
+      "id": "GET /user-guide",
+      "status": "PASS"
+    },
+    {
+      "id": "workspace /admin/hr/employees/1/edit",
+      "status": "PASS"
+    },
+    {
+      "id": "workspace /admin/master/customers/1/edit",
+      "status": "PASS"
+    },
+    {
+      "id": "workspace /admin/master/suppliers/1/edit",
+      "status": "PASS"
+    },
+    {
+      "id": "workspace /admin/master/projects/1/edit",
+      "status": "PASS"
+    },
+    {
+      "id": "customer dirty guard keep/discard",
+      "status": "PASS"
+    },
+    {
+      "id": "Arabic locale and RTL shell",
+      "status": "PASS"
+    },
+    {
+      "id": "mobile Arabic /admin/dashboard",
+      "status": "FAIL",
+      "detail": "page overflow: {\"viewport\":390,\"document\":463}"
+    },
+    {
+      "id": "mobile Arabic /admin/hr/employees/1/edit",
+      "status": "FAIL",
+      "detail": "page overflow: {\"viewport\":390,\"document\":446}"
+    },
+    {
+      "id": "mobile Arabic /admin/master/customers/1/edit",
+      "status": "FAIL",
+      "detail": "page overflow: {\"viewport\":390,\"document\":447}"
+    },
+    {
+      "id": "no browser script exceptions",
+      "status": "PASS"
+    },
+    {
+      "id": "no failed same-origin resources",
+      "status": "PASS"
+    }
+  ],
+  "errors": [],
+  "failedAssets": []
+}
