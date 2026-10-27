@@ -3,11 +3,11 @@
         <a href="{{ route('admin.dashboard') }}">{{ __('Home') }}</a> / {{ $slot }}
     </div>
     <div class="topbar-right">
-        <span title="Search">🔎</span>
-        <span title="Notifications">🔔</span>
-        <span title="Settings">⚙️</span>
+        <span title="{{ __('Search') }}">🔎</span>
+        <span title="{{ __('Notifications') }}">🔔</span>
+        <span title="{{ __('Settings') }}">⚙️</span>
         @auth
-            <a class="btn sm outline" href="{{ route('user-guide') }}" target="_blank" rel="noopener" title="Current System User Guide">{{ __('User Guide') }}</a>
+            <a class="btn sm outline" href="{{ route('user-guide') }}" target="_blank" rel="noopener" title="{{ __('Current System User Guide') }}">{{ __('User Guide') }}</a>
             <form method="POST" action="{{ route('admin.locale.update') }}" class="locale-switch" data-no-dirty-guard>
                 @csrf
                 <label for="interface-locale" class="sr-only">{{ __('ui.language') }}</label>

@@ -71,7 +71,7 @@ class CustomerController extends Controller
             return response()->json(['id' => $customer->id, 'label' => $customer->name, 'code' => $customer->code], 201);
         }
 
-        return $this->savedResponse($request, $customer, 'Customer "'.$customer->name.'" created successfully.');
+        return $this->savedResponse($request, $customer, __('Customer ":name" created successfully.', ['name' => $customer->name]));
     }
 
     /** Read-only connected view: identity, authorized figures and the related panels, no forms. */
@@ -114,7 +114,7 @@ class CustomerController extends Controller
 
         ActivityLog::record($request, 'Customers', 'Updated customer', $customer->name);
 
-        return $this->savedResponse($request, $customer, 'Customer "'.$customer->name.'" updated successfully.');
+        return $this->savedResponse($request, $customer, __('Customer ":name" updated successfully.', ['name' => $customer->name]));
     }
 
     public function destroy(Request $request, Customer $customer): RedirectResponse

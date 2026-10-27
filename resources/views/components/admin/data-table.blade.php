@@ -3,7 +3,7 @@
 <div class="table-card">
     @if ($title)
         <div class="table-title">
-            <span>{{ $title }} @if($subtitle)<span class="small">{{ $subtitle }}</span>@endif</span>
+            <span>{{ __($title) }} @if($subtitle)<span class="small">{{ __($subtitle) }}</span>@endif</span>
             {{ $headerActions ?? '' }}
         </div>
     @endif

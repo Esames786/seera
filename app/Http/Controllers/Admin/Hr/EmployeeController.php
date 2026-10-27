@@ -102,8 +102,8 @@ class EmployeeController extends Controller
         ActivityLog::record($request, 'HR', 'Created employee', $employee->name);
 
         return $this->savedDestination($request, $employee)
-            ->with('status', 'Employee "'.$employee->name.'" created with code '.$employee->employee_code.'.'
-                .($structure ? ' Their salary structure was created from the payroll information, effective '.$structure->effective_from->toDateString().'.' : ''));
+            ->with('status', __('Employee ":name" created with code :code.', ['name' => $employee->name, 'code' => $employee->employee_code])
+                .($structure ? ' '.__('Salary structure created from payroll information, effective :date.', ['date' => $structure->effective_from->toDateString()]) : ''));
     }
 
     /**
@@ -161,12 +161,12 @@ class EmployeeController extends Controller
 
         ActivityLog::record($request, 'HR', 'Updated employee', $employee->name);
 
-        $message = 'Employee "'.$employee->name.'" updated successfully.';
+        $message = __('Employee ":name" updated successfully.', ['name' => $employee->name]);
 
         if ($structure) {
-            $message .= ' Their salary structure was created from the payroll information, effective '.$structure->effective_from->toDateString().'.';
+            $message .= ' '.__('Salary structure created from payroll information, effective :date.', ['date' => $structure->effective_from->toDateString()]);
         } elseif ($employee->load('activeSalaryStructure')->salaryStructureOutOfDate()) {
-            $message .= ' The payroll information no longer matches their active salary structure; open the employee to raise a new structure from the new figures.';
+            $message .= ' '.__('Payroll information differs from the active salary structure. Create a new structure from the employee workspace.');
         }
 
         return $this->savedDestination($request, $employee)->with('status', $message);
@@ -205,7 +205,7 @@ class EmployeeController extends Controller
         ActivityLog::record($request, 'HR', 'Deactivated employee', $employee->name);
 
         return redirect()->route('admin.hr.employees.index')
-            ->with('status', 'Employee "'.$employee->name.'" deactivated. Historical records are kept.');
+            ->with('status', __('Employee ":name" deactivated. Historical records are kept.', ['name' => $employee->name]));
     }
 
     /**

@@ -54,7 +54,7 @@
         <div class="alert flash">{{ $alert }}</div>
     @endforeach
 
-    <nav class="tabs workspace-nav" aria-label="Employee sections">
+    <nav class="tabs workspace-nav" aria-label="{{ __('Employee sections') }}">
         @foreach ($sections as $key => $label)
             <a class="tab" href="#{{ $key }}">{{ $label }}</a>
         @endforeach
@@ -62,49 +62,49 @@
 
     {{-- Overview --}}
     <div class="split even" id="overview">
-        <x-admin.data-table title="Employment Information" class="detail-table">
+        <x-admin.data-table :title="__('Employment Information')" class="detail-table">
             <tbody>
-                <tr><th>Employee Code</th><td>{{ $employee->employee_code }}</td></tr>
-                <tr><th>Department</th><td>{{ $employee->department?->name ?? '-' }}</td></tr>
-                <tr><th>Designation</th><td>{{ $employee->designation?->name ?? '-' }}</td></tr>
-                <tr><th>Branch</th><td>{{ $employee->branch?->name ?? '-' }}</td></tr>
-                <tr><th>Project / Site</th><td>{{ $employee->project?->name ?? 'Head Office' }}@if($employee->site) / {{ $employee->site->name }}@endif</td></tr>
-                <tr><th>Manager</th><td>{{ $employee->manager?->name ?? '-' }}</td></tr>
-                <tr><th>Joining Date</th><td>{{ $employee->joining_date?->toDateString() ?? '-' }}</td></tr>
-                <tr><th>Classification</th><td><span class="badge blue">{{ $employee->employee_classification }}</span></td></tr>
-                <tr><th>Contract</th><td>{{ $employee->contract_type }} ({{ $contract['contract_start'] ?? '-' }} → {{ $contract['contract_end'] ?? 'Open' }}) <x-admin.status-badge :status="$contract['contract_status']"/></td></tr>
-                <tr><th>Annual Leave Entitlement</th><td>{{ $leaveBalance['entitlement'] }} days</td></tr>
+                <tr><th>{{ __('Employee Code') }}</th><td>{{ $employee->employee_code }}</td></tr>
+                <tr><th>{{ __('Department') }}</th><td>{{ $employee->department?->name ?? '-' }}</td></tr>
+                <tr><th>{{ __('Designation') }}</th><td>{{ $employee->designation?->name ?? '-' }}</td></tr>
+                <tr><th>{{ __('Branch') }}</th><td>{{ $employee->branch?->name ?? '-' }}</td></tr>
+                <tr><th>{{ __('Project / Site') }}</th><td>{{ $employee->project?->name ?? 'Head Office' }}@if($employee->site) / {{ $employee->site->name }}@endif</td></tr>
+                <tr><th>{{ __('Manager') }}</th><td>{{ $employee->manager?->name ?? '-' }}</td></tr>
+                <tr><th>{{ __('Joining Date') }}</th><td>{{ $employee->joining_date?->toDateString() ?? '-' }}</td></tr>
+                <tr><th>{{ __('Classification') }}</th><td><span class="badge blue">{{ $employee->employee_classification }}</span></td></tr>
+                <tr><th>{{ __('Contract') }}</th><td>{{ $employee->contract_type }} ({{ $contract['contract_start'] ?? '-' }} → {{ $contract['contract_end'] ?? 'Open' }}) <x-admin.status-badge :status="$contract['contract_status']"/></td></tr>
+                <tr><th>{{ __('Annual Leave Entitlement') }}</th><td>{{ $leaveBalance['entitlement'] }} days</td></tr>
             </tbody>
         </x-admin.data-table>
 
         <div>
             <x-admin.data-table :title="__('workspace.hr_contract')" class="detail-table">
                 <tbody>
-                    <tr><th>Email</th><td>{{ $employee->email ?? '-' }}</td></tr>
-                    <tr><th>Phone</th><td>{{ $employee->phone ?? '-' }}</td></tr>
-                    <tr><th>Emergency Contact</th><td>{{ $employee->emergency_contact ?? '-' }}</td></tr>
-                    <tr><th>Nationality</th><td>{{ $employee->nationality ?? '-' }}</td></tr>
-                    <tr><th>IQAMA Number</th><td>{{ $employee->iqama_number ?? '-' }}</td></tr>
-                    <tr><th>IQAMA Expiry</th><td>{{ $employee->iqama_expiry_date?->toDateString() ?? '-' }} <x-admin.status-badge :status="$contract['iqama_status']"/></td></tr>
-                    <tr><th>Passport</th><td>{{ $employee->passport_number ?? '-' }} · {{ $employee->passport_expiry_date?->toDateString() ?? '-' }} <x-admin.status-badge :status="$contract['passport_status']"/></td></tr>
-                    <tr><th>Medical Insurance</th><td>{{ $employee->insurance_number ?? '-' }} · {{ $employee->insurance_expiry_date?->toDateString() ?? '-' }} <x-admin.status-badge :status="$contract['insurance_status']"/></td></tr>
-                    <tr><th>Driving License</th><td>{{ $employee->driving_license_number ?? '-' }} · {{ $employee->driving_license_expiry_date?->toDateString() ?? '-' }}</td></tr>
+                    <tr><th>{{ __('Email') }}</th><td>{{ $employee->email ?? '-' }}</td></tr>
+                    <tr><th>{{ __('Phone') }}</th><td>{{ $employee->phone ?? '-' }}</td></tr>
+                    <tr><th>{{ __('Emergency Contact') }}</th><td>{{ $employee->emergency_contact ?? '-' }}</td></tr>
+                    <tr><th>{{ __('Nationality') }}</th><td>{{ $employee->nationality ?? '-' }}</td></tr>
+                    <tr><th>{{ __('IQAMA Number') }}</th><td>{{ $employee->iqama_number ?? '-' }}</td></tr>
+                    <tr><th>{{ __('IQAMA Expiry') }}</th><td>{{ $employee->iqama_expiry_date?->toDateString() ?? '-' }} <x-admin.status-badge :status="$contract['iqama_status']"/></td></tr>
+                    <tr><th>{{ __('Passport') }}</th><td>{{ $employee->passport_number ?? '-' }} · {{ $employee->passport_expiry_date?->toDateString() ?? '-' }} <x-admin.status-badge :status="$contract['passport_status']"/></td></tr>
+                    <tr><th>{{ __('Medical Insurance') }}</th><td>{{ $employee->insurance_number ?? '-' }} · {{ $employee->insurance_expiry_date?->toDateString() ?? '-' }} <x-admin.status-badge :status="$contract['insurance_status']"/></td></tr>
+                    <tr><th>{{ __('Driving License') }}</th><td>{{ $employee->driving_license_number ?? '-' }} · {{ $employee->driving_license_expiry_date?->toDateString() ?? '-' }}</td></tr>
                     <tr><th>{{ __('workspace.hr_documents_summary') }}</th><td>{{ __('workspace.hr_documents_counts', ['total' => $contract['documents_total'], 'expiring' => $contract['documents_expiring'], 'expired' => $contract['documents_expired']]) }}</td></tr>
                 </tbody>
             </x-admin.data-table>
 
             @if($canViewPayroll)
-                <x-admin.data-table title="Payroll Information" class="detail-table">
+                <x-admin.data-table :title="__('Payroll Information')" class="detail-table">
                     <tbody>
-                        <tr><th>Basic Salary</th><td>{{ $money($employee->basic_salary) }}</td></tr>
-                        <tr><th>Housing Allowance</th><td>{{ $money($employee->housing_allowance) }}</td></tr>
-                        <tr><th>Transport Allowance</th><td>{{ $money($employee->transport_allowance) }}</td></tr>
-                        <tr><th>Food Allowance</th><td>{{ $money($employee->food_allowance) }}</td></tr>
-                        <tr><th>Fuel Allowance</th><td>{{ $money($employee->fuel_allowance) }}</td></tr>
-                        <tr><th>Other Allowance</th><td>{{ $money($employee->other_allowance) }}</td></tr>
-                        <tr><th>Payment Method</th><td>{{ $employee->payment_method }}</td></tr>
-                        <tr><th>Bank Name</th><td>{{ $employee->bank_name ?? '-' }}</td></tr>
-                        <tr><th>IBAN</th><td>{{ \App\Support\Iban::mask($employee->iban) ?? '-' }}@if ($employee->iban && ! \App\Support\Iban::isValid($employee->iban)) <span class="badge red">Invalid format</span>@endif</td></tr>
+                        <tr><th>{{ __('Basic Salary') }}</th><td>{{ $money($employee->basic_salary) }}</td></tr>
+                        <tr><th>{{ __('Housing Allowance') }}</th><td>{{ $money($employee->housing_allowance) }}</td></tr>
+                        <tr><th>{{ __('Transport Allowance') }}</th><td>{{ $money($employee->transport_allowance) }}</td></tr>
+                        <tr><th>{{ __('Food Allowance') }}</th><td>{{ $money($employee->food_allowance) }}</td></tr>
+                        <tr><th>{{ __('Fuel Allowance') }}</th><td>{{ $money($employee->fuel_allowance) }}</td></tr>
+                        <tr><th>{{ __('Other Allowance') }}</th><td>{{ $money($employee->other_allowance) }}</td></tr>
+                        <tr><th>{{ __('Payment Method') }}</th><td>{{ $employee->payment_method }}</td></tr>
+                        <tr><th>{{ __('Bank Name') }}</th><td>{{ $employee->bank_name ?? '-' }}</td></tr>
+                        <tr><th>{{ __('IBAN') }}</th><td>{{ \App\Support\Iban::mask($employee->iban) ?? '-' }}@if ($employee->iban && ! \App\Support\Iban::isValid($employee->iban)) <span class="badge red">{{ __('Invalid format') }}</span>@endif</td></tr>
                     </tbody>
                 </x-admin.data-table>
             @endif
@@ -118,7 +118,7 @@
             <a class="btn sm outline" href="{{ $links['documents_all'] }}">{{ __('workspace.hr_view_register') }}</a>
         </x-slot:headerActions>
         <thead>
-            <tr><th>Type</th><th>Number</th><th>Issue</th><th>Expiry</th><th>Validity</th><th>File</th></tr>
+            <tr><th>{{ __('Type') }}</th><th>{{ __('Number') }}</th><th>{{ __('Issue') }}</th><th>{{ __('Expiry') }}</th><th>{{ __('Validity') }}</th><th>{{ __('File') }}</th></tr>
         </thead>
         <tbody>
             @forelse ($employee->documents as $document)
@@ -130,11 +130,11 @@
                     <td><x-admin.status-badge :status="$document->validityStatus()"/></td>
                     <td>
                         @if ($document->file_path)
-                            <a href="{{ route('admin.hr.documents.view', $document) }}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">View</a>
+                            <a href="{{ route('admin.hr.documents.view', $document) }}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">{{ __('View') }}</a>
                             <span class="small">·</span>
-                            <a href="{{ route('admin.hr.documents.download', $document) }}" style="color:var(--blue);font-weight:700">Download</a>
+                            <a href="{{ route('admin.hr.documents.download', $document) }}" style="color:var(--blue);font-weight:700">{{ __('Download') }}</a>
                         @else
-                            <span class="small">Not uploaded</span>
+                            <span class="small">{{ __('Not uploaded') }}</span>
                         @endif
                     </td>
                 </tr>
@@ -152,7 +152,7 @@
                 <a class="btn sm outline" href="{{ $links['attendance_all'] }}">{{ __('workspace.hr_view_register') }}</a>
             </x-slot:headerActions>
             <thead>
-                <tr><th>Date</th><th>Check In</th><th>Check Out</th><th>Shift</th><th>Status</th><th>Late</th><th>Overtime</th><th>Project</th><th>Site</th><th>Source</th><th>Geo-Fence</th><th></th></tr>
+                <tr><th>{{ __('Date') }}</th><th>{{ __('Check In') }}</th><th>{{ __('Check Out') }}</th><th>{{ __('Shift') }}</th><th>{{ __('Status') }}</th><th>{{ __('Late') }}</th><th>{{ __('Overtime') }}</th><th>{{ __('Project') }}</th><th>{{ __('Site') }}</th><th>{{ __('Source') }}</th><th>{{ __('Geo-Fence') }}</th><th></th></tr>
             </thead>
             <tbody>
                 @forelse ($attendance as $record)
@@ -198,10 +198,10 @@
                 <td><strong style="color:{{ $leaveBalance['remaining'] < 0 ? 'var(--red)' : 'var(--green)' }}">{{ $days($leaveBalance['remaining']) }}</strong> days</td>
                 <td colspan="4"></td>
             </tr>
-            <tr><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Status</th><th>Reason</th><th>Decided by</th><th></th></tr>
+            <tr><th>{{ __('Type') }}</th><th>{{ __('From') }}</th><th>{{ __('To') }}</th><th>{{ __('Days') }}</th><th>{{ __('Status') }}</th><th>{{ __('Reason') }}</th><th>{{ __('Decided by') }}</th><th></th></tr>
             @forelse ($leaves as $leave)
                 <tr>
-                    <td>{{ $leave->leaveType?->name ?? '-' }}@if($leave->attachment_path) <a href="{{ route('admin.hr.leaves.attachment', $leave) }}" title="Supporting document" style="color:var(--blue)">📎</a>@endif</td>
+                    <td>{{ $leave->leaveType?->name ?? '-' }}@if($leave->attachment_path) <a href="{{ route('admin.hr.leaves.attachment', $leave) }}" title="{{ __('Supporting document') }}" style="color:var(--blue)">📎</a>@endif</td>
                     <td>{{ $leave->start_date->toDateString() }}</td>
                     <td>{{ $leave->end_date->toDateString() }}</td>
                     <td>{{ $days($leave->total_days) }}</td>
@@ -231,7 +231,7 @@
                 <a class="btn sm outline" href="{{ $links['overtime_all'] }}">{{ __('workspace.hr_view_register') }}</a>
             </x-slot:headerActions>
             <thead>
-                <tr><th>Date</th><th>Hours</th><th>Rate</th><th>Amount</th><th>Attendance</th><th>Status</th><th>Reason</th><th></th></tr>
+                <tr><th>{{ __('Date') }}</th><th>{{ __('Hours') }}</th><th>{{ __('Rate') }}</th><th>{{ __('Amount') }}</th><th>{{ __('Attendance') }}</th><th>{{ __('Status') }}</th><th>{{ __('Reason') }}</th><th></th></tr>
             </thead>
             <tbody>
                 @forelse ($overtime as $record)
@@ -260,7 +260,7 @@
     @if($canViewPayroll)
         @if ($employee->salaryStructureOutOfDate())
             <div class="alert flash" id="salary-mismatch">
-                <strong>Payroll information and salary structure differ.</strong>
+                <strong>{{ __('Payroll information and salary structure differ.') }}</strong>
                 The profile now shows basic SAR {{ number_format($employee->basic_salary, 2) }} and allowances SAR {{ number_format($employee->defaultAllowanceTotal(), 2) }},
                 while the active structure carries basic SAR {{ number_format($employee->activeSalaryStructure->basic_salary, 2) }} and allowances SAR {{ number_format($employee->activeSalaryStructure->totalAllowances(), 2) }}.
                 Payroll uses the structure. Raise a new structure from the new figures rather than editing the old one, so past payroll stays as it was run.
@@ -273,7 +273,7 @@
                 <a class="btn sm outline" href="{{ $links['salary_all'] }}">{{ __('workspace.hr_view_register') }}</a>
             </x-slot:headerActions>
             <thead>
-                <tr><th>Effective From</th><th>Effective To</th><th>Basic</th><th>Allowances</th><th>Deductions</th><th>Net</th><th>Status</th></tr>
+                <tr><th>{{ __('Effective From') }}</th><th>{{ __('Effective To') }}</th><th>{{ __('Basic') }}</th><th>{{ __('Allowances') }}</th><th>{{ __('Deductions') }}</th><th>{{ __('Net') }}</th><th>{{ __('Status') }}</th></tr>
             </thead>
             <tbody>
                 @forelse ($employee->salaryStructures as $structure)
@@ -298,7 +298,7 @@
                 <a class="btn sm outline" href="{{ $links['payroll_all'] }}">{{ __('workspace.hr_view_register') }}</a>
             </x-slot:headerActions>
             <thead>
-                <tr><th>Payroll Run</th><th>Period</th><th>Basic</th><th>Allowances</th><th>Overtime</th><th>Deductions</th><th>Net</th><th>Present / Leave days</th><th>Run Status</th><th>Accounting</th><th>{{ __('workspace.hr_payment') }}</th><th></th></tr>
+                <tr><th>{{ __('Payroll Run') }}</th><th>{{ __('Period') }}</th><th>{{ __('Basic') }}</th><th>{{ __('Allowances') }}</th><th>{{ __('Overtime') }}</th><th>{{ __('Deductions') }}</th><th>{{ __('Net') }}</th><th>{{ __('Present / Leave days') }}</th><th>{{ __('Run Status') }}</th><th>{{ __('Accounting') }}</th><th>{{ __('workspace.hr_payment') }}</th><th></th></tr>
             </thead>
             <tbody>
                 @forelse ($payrollItems as $item)
@@ -330,7 +330,7 @@
     {{-- Activity --}}
     @if ($activity !== null)
         <x-admin.data-table :title="__('workspace.activity')" :subtitle="__('workspace.hr_activity_help')" id="activity">
-            <thead><tr><th>When</th><th>User</th><th>Module</th><th>Action</th><th>Details</th></tr></thead>
+            <thead><tr><th>{{ __('When') }}</th><th>{{ __('User') }}</th><th>{{ __('Module') }}</th><th>{{ __('Action') }}</th><th>{{ __('Details') }}</th></tr></thead>
             <tbody>
                 @forelse ($activity as $log)
                     <tr>

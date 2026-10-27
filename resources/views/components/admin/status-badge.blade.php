@@ -20,4 +20,4 @@
     };
 @endphp
 
-<span {{ $attributes->merge(['class' => 'badge '.$color]) }}>{{ ucfirst($key) }}</span>
+<span {{ $attributes->merge(['class' => 'badge '.$color]) }}>{{ __(ucfirst($key)) }}</span>

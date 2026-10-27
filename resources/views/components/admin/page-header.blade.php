@@ -2,9 +2,9 @@
 
 <div class="page-header">
     <div>
-        <h1 class="page-title">{{ $title }}</h1>
+        <h1 class="page-title">{{ __($title) }}</h1>
         @if ($description)
-            <p class="page-desc">{{ $description }}</p>
+            <p class="page-desc">{{ __($description) }}</p>
         @endif
     </div>
     <div class="page-actions">{{ $slot }}</div>

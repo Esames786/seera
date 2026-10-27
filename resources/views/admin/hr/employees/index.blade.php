@@ -4,7 +4,7 @@
 @section('breadcrumb', 'HR & Payroll / Employees')
 
 @section('content')
-    <x-admin.page-header title="Employee Management" description="Central HR employee profiles linked to departments, designations, projects, sites and payroll">
+    <x-admin.page-header :title="__('Employee Management')" description="Central HR employee profiles linked to departments, designations, projects, sites and payroll">
         <a class="btn primary" href="{{ route('admin.hr.employees.create') }}">+ Add Employee</a>
     </x-admin.page-header>
 
@@ -18,64 +18,64 @@
     <x-admin.filter-bar>
         <input class="input" style="width:220px" type="search" name="search" value="{{ request('search') }}" placeholder="Code, name or IQAMA..."/>
         <select class="select" style="width:160px" name="department">
-            <option value="">All Departments</option>
+            <option value="">{{ __('All Departments') }}</option>
             @foreach ($departments as $department)
                 <option value="{{ $department->id }}" @selected(request('department') == $department->id)>{{ $department->name }}</option>
             @endforeach
         </select>
         <select class="select" style="width:160px" name="designation">
-            <option value="">All Designations</option>
+            <option value="">{{ __('All Designations') }}</option>
             @foreach ($designations as $designation)
                 <option value="{{ $designation->id }}" @selected(request('designation') == $designation->id)>{{ $designation->name }}</option>
             @endforeach
         </select>
         <select class="select" style="width:150px" name="branch">
-            <option value="">All Branches</option>
+            <option value="">{{ __('All Branches') }}</option>
             @foreach ($branches as $branch)
                 <option value="{{ $branch->id }}" @selected(request('branch') == $branch->id)>{{ $branch->name }}</option>
             @endforeach
         </select>
         <select class="select" style="width:150px" name="project">
-            <option value="">All Projects</option>
+            <option value="">{{ __('All Projects') }}</option>
             @foreach ($projects as $project)
                 <option value="{{ $project->id }}" @selected(request('project') == $project->id)>{{ $project->name }}</option>
             @endforeach
         </select>
         <select class="select" style="width:140px" name="site">
-            <option value="">All Sites</option>
+            <option value="">{{ __('All Sites') }}</option>
             @foreach ($sites as $site)
                 <option value="{{ $site->id }}" @selected(request('site') == $site->id)>{{ $site->name }}</option>
             @endforeach
         </select>
         <select class="select" style="width:130px" name="status">
-            <option value="">All Status</option>
+            <option value="">{{ __('All Status') }}</option>
             @foreach (['active', 'inactive', 'on leave', 'terminated'] as $status)
                 <option value="{{ $status }}" @selected(request('status') === $status)>{{ ucfirst($status) }}</option>
             @endforeach
         </select>
         <select class="select" style="width:160px" name="doc_type">
-            <option value="">Any document</option>
+            <option value="">{{ __('Any document') }}</option>
             @foreach ($documentTypes as $type)
                 <option value="{{ $type }}" @selected(request('doc_type') === $type)>{{ $type }}</option>
             @endforeach
         </select>
         <select class="select" style="width:170px" name="doc_status">
-            <option value="">Document validity</option>
-            <option value="expired" @selected(request('doc_status') === 'expired')>Expired</option>
-            <option value="expiring" @selected(request('doc_status') === 'expiring')>Expiring in 60 days</option>
-            <option value="valid" @selected(request('doc_status') === 'valid')>Valid</option>
+            <option value="">{{ __('Document validity') }}</option>
+            <option value="expired" @selected(request('doc_status') === 'expired')>{{ __('Expired') }}</option>
+            <option value="expiring" @selected(request('doc_status') === 'expiring')>{{ __('Expiring in 60 days') }}</option>
+            <option value="valid" @selected(request('doc_status') === 'valid')>{{ __('Valid') }}</option>
         </select>
         <x-slot:actions>
-            <a class="btn outline" href="{{ route('admin.hr.employees.index') }}">Reset</a>
+            <a class="btn outline" href="{{ route('admin.hr.employees.index') }}">{{ __('Reset') }}</a>
         </x-slot:actions>
     </x-admin.filter-bar>
 
-    <x-admin.data-table title="Employee Listing">
+    <x-admin.data-table :title="__('Employee Listing')">
         <thead>
             <tr>
-                <th>Code</th><th>Name</th><th>Department</th><th>Designation</th>
-                <th>Project / Site</th><th>Classification</th><th>IQAMA Expiry</th><th>Basic Salary</th>
-                <th>Mobile</th><th>Status</th><th>Actions</th>
+                <th>{{ __('Code') }}</th><th>{{ __('Name') }}</th><th>{{ __('Department') }}</th><th>{{ __('Designation') }}</th>
+                <th>{{ __('Project / Site') }}</th><th>{{ __('Classification') }}</th><th>{{ __('IQAMA Expiry') }}</th><th>{{ __('Basic Salary') }}</th>
+                <th>{{ __('Mobile') }}</th><th>{{ __('Status') }}</th><th>{{ __('Actions') }}</th>
             </tr>
         </thead>
         <tbody>

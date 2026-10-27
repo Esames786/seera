@@ -4,7 +4,7 @@
 @section('breadcrumb', 'HR & Payroll / Employees / Add Employee')
 
 @section('content')
-    <x-admin.page-header title="Add Employee" description="Create an HR employee profile with employment, document, payroll and access details"/>
+    <x-admin.page-header :title="__('Add Employee')" description="Create an HR employee profile with employment, document, payroll and access details"/>
 
     @include('admin.hr.employees._form')
 @endsection

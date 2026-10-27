@@ -4,7 +4,7 @@
 @section('breadcrumb', 'Master Setup / Customers')
 
 @section('content')
-    <x-admin.page-header title="Customer / Client Management" description="Used by project contracts, receivables, sales invoices, VAT, and ZATCA e-invoicing">
+    <x-admin.page-header :title="__('Customer / Client Management')" description="Used by project contracts, receivables, sales invoices, VAT, and ZATCA e-invoicing">
         <a class="btn primary" href="{{ route('admin.master.customers.create') }}">+ Add Customer</a>
     </x-admin.page-header>
 
@@ -18,26 +18,26 @@
     <x-admin.filter-bar>
         <input class="input" style="width:240px" type="search" name="search" value="{{ request('search') }}" placeholder="Search name, code, VAT number..."/>
         <select class="select" style="width:160px" name="type">
-            <option value="">All Types</option>
+            <option value="">{{ __('All Types') }}</option>
             @foreach ($customerTypes as $type)
                 <option value="{{ $type }}" @selected(request('type') === $type)>{{ in_array($type, ['Company', 'Individual'], true) ? __($type) : $type }}</option>
             @endforeach
         </select>
         <select class="select" style="width:140px" name="status">
-            <option value="">All Status</option>
-            <option value="active" @selected(request('status') === 'active')>Active</option>
-            <option value="inactive" @selected(request('status') === 'inactive')>Inactive</option>
+            <option value="">{{ __('All Status') }}</option>
+            <option value="active" @selected(request('status') === 'active')>{{ __('Active') }}</option>
+            <option value="inactive" @selected(request('status') === 'inactive')>{{ __('Inactive') }}</option>
         </select>
         <x-slot:actions>
             <a class="btn primary" href="{{ route('admin.master.customers.create') }}">+ Add Customer</a>
         </x-slot:actions>
     </x-admin.filter-bar>
 
-    <x-admin.data-table title="Customers Listing">
+    <x-admin.data-table :title="__('Customers Listing')">
         <thead>
             <tr>
-                <th>Customer Code</th><th>Customer Name</th><th>Rating</th><th>Overdue</th><th>Contact Person</th>
-                <th>Total Projects</th><th>Receivable</th><th>Status</th><th>Actions</th>
+                <th>{{ __('Customer Code') }}</th><th>{{ __('Customer Name') }}</th><th>{{ __('Rating') }}</th><th>{{ __('Overdue') }}</th><th>{{ __('Contact Person') }}</th>
+                <th>{{ __('Total Projects') }}</th><th>{{ __('Receivable') }}</th><th>{{ __('Status') }}</th><th>{{ __('Actions') }}</th>
             </tr>
         </thead>
         <tbody>

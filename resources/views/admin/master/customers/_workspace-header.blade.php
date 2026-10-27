@@ -7,8 +7,7 @@
 @endphp
 @if ($overdue && $overdue['days'] > 0)
     <div class="alert flash">
-        <strong>Payment overdue:</strong> the oldest unpaid invoice is {{ $overdue['days'] }} days past its agreed due date.
-        {{ $overdue['count'] }} invoice(s) still open, SAR {{ number_format($overdue['amount'], 2) }} outstanding.
+        <strong>{{ __('Payment overdue:') }}</strong> {{ __('The oldest unpaid invoice is :days days overdue. :count invoice(s) remain open, SAR :amount outstanding.', ['days' => $overdue['days'], 'count' => $overdue['count'], 'amount' => number_format($overdue['amount'], 2)]) }}
         <a href="{{ route('admin.accounting.accounts-receivable.index', ['customer' => $customer->id]) }}" style="font-weight:700">Open receivables</a>.
     </div>
 @endif
@@ -18,26 +17,26 @@
         <div>
             <x-admin.status-badge :status="$customer->status"/>
             @if ($customer->type)
-                <span class="small">· {{ $customer->type }}</span>
+                <span class="small">· {{ __($customer->type) }}</span>
             @endif
             @if ($customer->rating)
-                <span class="badge {{ match ($customer->rating) { 'Green' => 'green', 'Amber' => 'yellow', default => 'red' } }}">{{ $customer->rating }}</span>
+                <span class="badge {{ match ($customer->rating) { 'Green' => 'green', 'Amber' => 'yellow', default => 'red' } }}">{{ __('ui.'.strtolower($customer->rating)) }}</span>
             @endif
         </div>
     </div>
     <dl>
-        <dt>VAT number</dt><dd>{{ $customer->vat_number ?? '-' }}</dd>
-        <dt>CR number</dt><dd>{{ $customer->cr_number ?? '-' }}</dd>
-        <dt>Contact</dt><dd>{{ $customer->contact_person ?? '-' }}@if($customer->phone) · {{ $customer->phone }}@endif</dd>
-        <dt>Payment channel</dt><dd>{{ __('ui.'.strtolower($customer->allowed_payment_types ?? 'Both')) }}@if((float) $customer->credit_limit > 0) · limit SAR {{ number_format($customer->credit_limit, 2) }}@endif</dd>
+        <dt>{{ __('VAT number') }}</dt><dd>{{ $customer->vat_number ?? '-' }}</dd>
+        <dt>{{ __('CR number') }}</dt><dd>{{ $customer->cr_number ?? '-' }}</dd>
+        <dt>{{ __('Contact') }}</dt><dd>{{ $customer->contact_person ?? '-' }}@if($customer->phone) · {{ $customer->phone }}@endif</dd>
+        <dt>{{ __('Payment channel') }}</dt><dd>{{ __('ui.'.strtolower($customer->allowed_payment_types ?? 'Both')) }}@if((float) $customer->credit_limit > 0) · {{ __('Credit Limit') }} SAR {{ number_format($customer->credit_limit, 2) }}@endif</dd>
     </dl>
     <dl>
-        <dt>Receivable account</dt><dd>{{ $customer->linked_account ?? '-' }}</dd>
-        <dt>Projects</dt><dd>{{ $customer->projects()->count() }}</dd>
+        <dt>{{ __('Receivable account') }}</dt><dd>{{ $customer->linked_account ?? '-' }}</dd>
+        <dt>{{ __('Projects') }}</dt><dd>{{ $customer->projects()->count() }}</dd>
         @if ($summary)
-            <dt>Outstanding receivable</dt><dd>SAR {{ number_format($summary['outstanding'], 2) }} <span class="small">({{ $summary['open_invoices'] }} open invoice{{ $summary['open_invoices'] === 1 ? '' : 's' }})</span></dd>
-            <dt>Received to date</dt><dd>SAR {{ number_format($summary['received'], 2) }}</dd>
-            <dt>Overdue</dt><dd>{{ $overdue['days'] > 0 ? $overdue['days'].' days · SAR '.number_format($overdue['amount'], 2) : 'None' }}</dd>
+            <dt>{{ __('Outstanding receivable') }}</dt><dd>SAR {{ number_format($summary['outstanding'], 2) }} <span class="small">({{ __('Open invoices') }}: {{ $summary['open_invoices'] }})</span></dd>
+            <dt>{{ __('Received to date') }}</dt><dd>SAR {{ number_format($summary['received'], 2) }}</dd>
+            <dt>{{ __('Overdue') }}</dt><dd>{{ $overdue['days'] > 0 ? $overdue['days'].' '.__('days').' · SAR '.number_format($overdue['amount'], 2) : __('None') }}</dd>
         @endif
     </dl>
 </div>

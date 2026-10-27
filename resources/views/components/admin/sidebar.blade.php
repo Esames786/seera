@@ -16,7 +16,7 @@
             <div class="avatar">{{ $user->initials() }}</div>
             <div>
                 <div style="color:#fff;font-weight:800">{{ $user->name }}</div>
-                <div class="small" style="color:#94a3b8">{{ $user->primaryRole()?->name ?? 'User' }}</div>
+                <div class="small" style="color:#94a3b8">{{ __($user->primaryRole()?->name ?? 'User') }}</div>
             </div>
         </div>
     @endif

@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard')
-@section('breadcrumb', 'Administration / Dashboard')
+@section('title', __('Dashboard'))
+@section('breadcrumb', __('Administration / Dashboard'))
 
 @section('content')
     <x-admin.page-header title="Dashboard" description="Overview of users, roles, projects and recent activity"/>
@@ -23,10 +23,10 @@
     <div class="split even">
         <x-admin.data-table title="Active Projects">
             <x-slot:headerActions>
-                <a class="btn sm primary" href="{{ route('admin.master.projects.index') }}">View All</a>
+                <a class="btn sm primary" href="{{ route('admin.master.projects.index') }}">{{ __('View All') }}</a>
             </x-slot:headerActions>
             <thead>
-                <tr><th>Code</th><th>Project</th><th>Client</th><th>Manager</th><th>Budget</th><th>Status</th></tr>
+                <tr><th>{{ __('Code') }}</th><th>{{ __('Project') }}</th><th>{{ __('Client') }}</th><th>{{ __('Manager') }}</th><th>{{ __('Budget') }}</th><th>{{ __('Status') }}</th></tr>
             </thead>
             <tbody>
                 @forelse ($projects as $project)
@@ -46,10 +46,10 @@
 
         <x-admin.data-table title="Recent Activity">
             <x-slot:headerActions>
-                <a class="btn sm primary" href="{{ route('admin.activity-logs.index') }}">Open Activity Logs</a>
+                <a class="btn sm primary" href="{{ route('admin.activity-logs.index') }}">{{ __('Open Activity Logs') }}</a>
             </x-slot:headerActions>
             <thead>
-                <tr><th>Time</th><th>User</th><th>Module</th><th>Activity</th><th>Status</th></tr>
+                <tr><th>{{ __('Time') }}</th><th>{{ __('User') }}</th><th>{{ __('Module') }}</th><th>{{ __('Activity') }}</th><th>{{ __('Status') }}</th></tr>
             </thead>
             <tbody>
                 @forelse ($recentLogs as $log)

@@ -472,6 +472,27 @@ tr:hover td { background: #fbfdff; }
 .workspace-header dd { margin: 0; font-weight: 700; }
 
 /* Offline Mobile Sync: Pending Sync widget */
+/* Keep intrinsic table/input widths inside their workspace, including RTL. */
+.content, .page-header > div, .split > *, .form-grid > *, .workspace-header > * { min-width: 0; }
+.page-title, .page-desc, .workspace-header, [data-panel-content] h2 { overflow-wrap: anywhere; }
+.workspace-header .identity { min-width: min(220px, 100%); max-width: 100%; }
+.workspace-header dl { grid-template-columns: minmax(0, auto) minmax(0, 1fr); max-width: 100%; }
+.form-actions, .page-actions, .table-title { flex-wrap: wrap; }
+.input, .select, .textarea { min-width: 0; max-width: 100%; }
+@media (max-width: 1000px) {
+  .topbar { height: auto; min-height: 60px; flex-wrap: wrap; gap: 10px; padding-block: 12px; }
+  .topbar-right { flex-wrap: wrap; min-width: 0; max-width: 100%; }
+  .breadcrumb { min-width: 0; overflow-wrap: anywhere; }
+  .form-grid, .form-grid.three, .form-grid.four, .split, .split.even { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 430px) {
+  .page { padding-inline: 12px; }
+  .topbar { padding-inline: 12px; }
+  .topbar-right { gap: 8px; }
+  .form-actions .btn, .page-actions .btn { max-width: 100%; white-space: normal; }
+  .label-row { flex-wrap: wrap; }
+}
+
 .pending-sync[hidden]{display:none}
 .pending-sync-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
 .pending-sync-head h3{margin:0;font-size:16px}

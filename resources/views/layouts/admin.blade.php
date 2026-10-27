@@ -66,9 +66,9 @@
             if (trigger) {
                 event.preventDefault();
                 form.action = trigger.dataset.deleteUrl;
-                message.textContent = 'Are you sure you want to delete "' + (trigger.dataset.deleteName || 'this record') + '"?';
+                message.textContent = @json(__('Are you sure you want to delete ":name"?')).replace(':name', trigger.dataset.deleteName || @json(__('this record')));
                 const deactivate = trigger.dataset.deactivate === '1';
-                title.textContent = submit.textContent = deactivate ? overlay.dataset.deactivateTitle : 'Confirm Delete';
+                title.textContent = submit.textContent = deactivate ? overlay.dataset.deactivateTitle : @json(__('Confirm Delete'));
                 help.textContent = deactivate ? (trigger.dataset.deactivateHelp || overlay.dataset.deactivateHelp) : deleteHelp;
                 if (deactivate) message.textContent = overlay.dataset.deactivateMessage.replace(':name', trigger.dataset.deleteName || '');
                 overlay.classList.add('open');

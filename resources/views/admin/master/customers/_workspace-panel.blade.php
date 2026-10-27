@@ -59,7 +59,7 @@
                 <tbody>
                     @forelse ($rows as $contact)
                         <tr>
-                            <td><span class="badge {{ $contact->location_type === 'office' ? 'blue' : 'purple' }}">{{ ucfirst($contact->location_type) }}</span>@if($contact->site)<div class="small">{{ $contact->site->name }}</div>@endif</td>
+                            <td><span class="badge {{ $contact->location_type === 'office' ? 'blue' : 'purple' }}">{{ __(ucfirst($contact->location_type)) }}</span>@if($contact->site)<div class="small">{{ $contact->site->name }}</div>@endif</td>
                             <td>{{ $contact->name }}@if($contact->title)<div class="small">{{ $contact->title }}</div>@endif</td>
                             <td><bdi>{{ $contact->phone ?? '-' }}</bdi></td>
                             <td><bdi>{{ $contact->email ?? '-' }}</bdi></td>
@@ -101,7 +101,7 @@
 
         @case('projects')
             <div class="table-wrap"><table>
-                <thead><tr><th>Code</th><th>Project</th><th>Manager</th><th>Budget</th><th>Status</th><th>{{ __('Actions') }}</th></tr></thead>
+                <thead><tr><th>{{ __('Code') }}</th><th>{{ __('Project') }}</th><th>{{ __('Manager') }}</th><th>{{ __('Budget') }}</th><th>{{ __('Status') }}</th><th>{{ __('Actions') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $project)
                         <tr>
@@ -110,7 +110,7 @@
                             <td>{{ $project->manager?->name ?? '-' }}</td>
                             <td>{{ $money($project->budget) }}</td>
                             <td><x-admin.status-badge :status="$project->status"/></td>
-                            <td>@if ($canViewProjects)<a class="btn sm outline" href="{{ route('admin.master.projects.show', $project) }}">View project</a>@endif</td>
+                            <td>@if ($canViewProjects)<a class="btn sm outline" href="{{ route('admin.master.projects.show', $project) }}">{{ __('View project') }}</a>@endif</td>
                         </tr>
                     @empty
                         <tr><td colspan="6" class="table-empty">{{ __('No projects for this customer in your scope.') }}</td></tr>
@@ -121,7 +121,7 @@
 
         @case('invoices')
             <div class="table-wrap"><table>
-                <thead><tr><th>Invoice</th><th>Date</th><th>Project</th><th>Taxable</th><th>VAT</th><th>Total</th><th>Received</th><th>Balance</th><th>Status</th><th>Local ZATCA</th><th>{{ __('Actions') }}</th></tr></thead>
+                <thead><tr><th>{{ __('Invoice') }}</th><th>{{ __('Date') }}</th><th>{{ __('Project') }}</th><th>{{ __('Taxable') }}</th><th>{{ __('VAT') }}</th><th>{{ __('Total') }}</th><th>{{ __('Received') }}</th><th>{{ __('Balance') }}</th><th>{{ __('Status') }}</th><th>{{ __('Local ZATCA') }}</th><th>{{ __('Actions') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $invoice)
                         <tr>
@@ -136,7 +136,7 @@
                             <td><x-admin.status-badge :status="$invoice->payment_status"/></td>
                             <td>@if ($invoice->zatcaRecord)<span class="badge {{ $invoice->zatcaRecord->statusColor() }}">{{ $invoice->zatcaRecord->statusLabel() }}</span>@else <span class="small">-</span>@endif</td>
                             <td>
-                                <a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.show', ['accounts_receivable' => $invoice, 'return_to' => $invoiceOrigin]) }}">View</a>
+                                <a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.show', ['accounts_receivable' => $invoice, 'return_to' => $invoiceOrigin]) }}">{{ __('View') }}</a>
                                 @if ($canEditInvoice && $invoice->isEditable())<a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.edit', ['accounts_receivable' => $invoice, 'return_to' => $invoiceOrigin]) }}">Edit draft</a>@endif
                                 @if ($canReceive && in_array($invoice->payment_status, \App\Support\Workspace\CustomerWorkspacePanels::OPEN_INVOICE_STATUSES, true))<a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.receipt', ['accounts_receivable' => $invoice, 'return_to' => $invoiceOrigin]) }}">Record receipt</a>@endif
                             </td>
@@ -151,7 +151,7 @@
 
         @case('adjustments')
             <div class="table-wrap"><table>
-                <thead><tr><th>Note</th><th>Type</th><th>Date</th><th>Original invoice</th><th>Total</th><th>Status</th><th>Local ZATCA</th><th>{{ __('Actions') }}</th></tr></thead>
+                <thead><tr><th>{{ __('Note') }}</th><th>{{ __('Type') }}</th><th>{{ __('Date') }}</th><th>{{ __('Original invoice') }}</th><th>{{ __('Total') }}</th><th>{{ __('Status') }}</th><th>{{ __('Local ZATCA') }}</th><th>{{ __('Actions') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $note)
                         <tr>
@@ -162,7 +162,7 @@
                             <td>{{ $money($note->total_amount) }}</td>
                             <td><x-admin.status-badge :status="$note->status"/></td>
                             <td>@if ($note->zatcaRecord)<span class="badge {{ $note->zatcaRecord->statusColor() }}">{{ $note->zatcaRecord->statusLabel() }}</span>@else <span class="small">-</span>@endif</td>
-                            <td><a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.notes.show', ['note' => $note, 'return_to' => $invoiceOrigin]) }}">View</a></td>
+                            <td><a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.notes.show', ['note' => $note, 'return_to' => $invoiceOrigin]) }}">{{ __('View') }}</a></td>
                         </tr>
                     @empty
                         <tr><td colspan="8" class="table-empty">{{ __('No credit or debit notes for this customer in your scope.') }}</td></tr>
@@ -184,7 +184,7 @@
                 <p class="small">{{ __('customer_notes.net_position_help') }} {{ $summary['last_receipt'] ? __('Last receipt').': '.$summary['last_receipt']->receipt_date->toDateString() : '' }}</p>
             @endif
             <div class="table-wrap"><table>
-                <thead><tr><th>Date</th><th>Invoice</th><th>Account</th><th>Method</th><th>Amount</th><th>Reference</th><th>Journal</th></tr></thead>
+                <thead><tr><th>{{ __('Date') }}</th><th>{{ __('Invoice') }}</th><th>{{ __('Account') }}</th><th>{{ __('Method') }}</th><th>{{ __('Amount') }}</th><th>{{ __('Reference') }}</th><th>{{ __('Journal') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $receipt)
                         <tr>
@@ -214,7 +214,7 @@
                 </div>
             @endif
             <div class="table-wrap"><table>
-                <thead><tr><th>Invoice</th><th>Due date</th><th>Days late</th><th>Balance</th><th>Status</th></tr></thead>
+                <thead><tr><th>{{ __('Invoice') }}</th><th>{{ __('Due date') }}</th><th>{{ __('Days late') }}</th><th>{{ __('Balance') }}</th><th>{{ __('Status') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $invoice)
                         @php $late = $invoice->due_date ? max($invoice->due_date->diffInDays(today(), false), 0) : 0; @endphp
@@ -235,7 +235,7 @@
         @case('accounting')
             <p><strong>{{ __('Linked receivable account') }}:</strong> {{ $linkedAccount ?? __('Accounts Receivable control account') }} <span class="small">({{ __('invoices post to the receivable control account 1200') }})</span></p>
             <div class="table-wrap"><table>
-                <thead><tr><th>Journal</th><th>Date</th><th>Source</th><th>Description</th><th>Amount</th><th>Status</th></tr></thead>
+                <thead><tr><th>{{ __('Journal') }}</th><th>{{ __('Date') }}</th><th>{{ __('Source') }}</th><th>{{ __('Description') }}</th><th>{{ __('Amount') }}</th><th>{{ __('Status') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $entry)
                         <tr>
@@ -256,7 +256,7 @@
         @case('zatca')
             <p class="help-box">{{ __('zatca.sdk_note') }}</p>
             <div class="table-wrap"><table>
-                <thead><tr><th>Invoice</th><th>{{ __('zatca.invoice_type') }}</th><th>{{ __('zatca.uuid') }}</th><th>Status</th><th>{{ __('zatca.zatca_reference') }}</th><th>{{ __('zatca.attempts') }}</th><th>{{ __('zatca.last_error') }}</th><th>{{ __('Actions') }}</th></tr></thead>
+                <thead><tr><th>{{ __('Invoice') }}</th><th>{{ __('zatca.invoice_type') }}</th><th>{{ __('zatca.uuid') }}</th><th>{{ __('Status') }}</th><th>{{ __('zatca.zatca_reference') }}</th><th>{{ __('zatca.attempts') }}</th><th>{{ __('zatca.last_error') }}</th><th>{{ __('Actions') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $record)
                         <tr>
@@ -267,7 +267,7 @@
                             <td class="small">{{ $record->zatca_status ?? __('zatca.not_verified') }}</td>
                             <td>{{ $record->submission_attempts }}</td>
                             <td class="small">{{ $record->last_error_message ?? '-' }}</td>
-                            <td><a class="btn sm outline" href="{{ route('admin.accounting.zatca.show', $record) }}">View record</a></td>
+                            <td><a class="btn sm outline" href="{{ route('admin.accounting.zatca.show', $record) }}">{{ __('View record') }}</a></td>
                         </tr>
                     @empty
                         <tr><td colspan="8" class="table-empty">{{ __('No ZATCA records for this customer in your scope.') }}</td></tr>
@@ -278,7 +278,7 @@
 
         @case('activity')
             <div class="table-wrap"><table>
-                <thead><tr><th>When</th><th>User</th><th>Module</th><th>Action</th><th>Details</th></tr></thead>
+                <thead><tr><th>{{ __('When') }}</th><th>{{ __('User') }}</th><th>{{ __('Module') }}</th><th>{{ __('Action') }}</th><th>{{ __('Details') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $log)
                         <tr>

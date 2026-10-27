@@ -26,7 +26,13 @@
     (client change request NR-25): fields with data-edit-from="label" are
     filled from the option text and the form is sent as PUT.
 --}}
-@php $allowed = auth()->check() && auth()->user()->hasPermission($permission, 'create'); @endphp
+@php
+    $allowed = auth()->check() && auth()->user()->hasPermission($permission, 'create');
+    $title = __($title);
+    $label = __($label);
+    $submit = __($submit);
+    $editLabel = __($editLabel);
+@endphp
 
 @if ($allowed)
     @if($renderTrigger)
@@ -42,8 +48,8 @@
         <div class="modal-overlay quick-create-modal" id="{{ $id }}" data-target="{{ $target }}" @if($targetSelector) data-target-selector="{{ $targetSelector }}" @endif @if($parentTarget) data-parent-target="{{ $parentTarget }}" @endif data-url="{{ $url }}" @if($editUrl) data-edit-url="{{ $editUrl }}" @endif>
             <div class="modal-card {{ $wide ? 'wide' : '' }}">
                 <div class="modal-head">
-                    <span><span class="qc-mode-label">New</span> {{ $title }}</span>
-                    <button type="button" class="modal-close js-qc-close" aria-label="Close">&times;</button>
+                    <span><span class="qc-mode-label">{{ __('New') }}</span> {{ $title }}</span>
+                    <button type="button" class="modal-close js-qc-close" aria-label="{{ __('Close') }}">&times;</button>
                 </div>
                 <form class="quick-create-form" method="POST" action="{{ $url }}" novalidate>
                     @csrf
@@ -52,7 +58,7 @@
                         <div class="form-grid">{{ $slot }}</div>
                     </div>
                     <div class="modal-foot">
-                        <button type="button" class="btn outline js-qc-close">Cancel</button>
+                        <button type="button" class="btn outline js-qc-close">{{ __('Cancel') }}</button>
                         <button type="submit" class="btn primary">{{ $submit }}</button>
                     </div>
                 </form>
@@ -114,13 +120,13 @@
                     delete form.dataset.editId;
 
                     var modeLabel = modal.querySelector('.qc-mode-label');
-                    if (modeLabel) modeLabel.textContent = mode === 'edit' ? 'Edit' : 'New';
+                    if (modeLabel) modeLabel.textContent = mode === 'edit' ? @json(__('Edit')) : @json(__('New'));
 
                     if (mode === 'edit') {
                         var select = firstTarget(modal);
                         var option = select && select.value ? select.options[select.selectedIndex] : null;
                         if (!option) {
-                            showErrors(modal, { message: 'Choose an entry in the dropdown first, then press Edit.' });
+                            showErrors(modal, { message: @json(__('Choose an entry in the dropdown first, then press Edit.')) });
                             modal.classList.add('open');
                             return;
                         }
@@ -161,7 +167,7 @@
 
                 function showErrors(modal, payload) {
                     var box = modal.querySelector('.qc-error');
-                    box.textContent = payload.message || 'Please correct the highlighted fields.';
+                    box.textContent = payload.message || @json(__('Please correct the highlighted fields.'));
                     box.hidden = false;
                     Object.keys(payload.errors || {}).forEach(function (name) {
                         var field = modal.querySelector('[name="' + name + '"]');
@@ -284,7 +290,7 @@
                                 return;
                             }
                             if (!response.ok || !payload.id) {
-                                showErrors(modal, { message: payload.message || ('The record could not be saved (' + response.status + ').') });
+                                showErrors(modal, { message: payload.message || (@json(__('The record could not be saved.')) + ' (' + response.status + ')') });
                                 return;
                             }
                             var repeated = !!modal.dataset.targetSelector;
@@ -315,7 +321,7 @@
                             close(modal);
                         });
                     }).catch(function () {
-                        showErrors(modal, { message: 'Network error. Please try again.' });
+                        showErrors(modal, { message: @json(__('Network error. Please try again.')) });
                     }).finally(function () {
                         controls.forEach(function (field) { field.disabled = false; });
                         delete form.dataset.saving;
