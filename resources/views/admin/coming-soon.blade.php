@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', $module.' - Coming Soon')
-@section('breadcrumb', $module)
+@section('title', __($module).' — '.__('ui.coming_soon_title'))
+@section('breadcrumb', __($module))
 
 @section('content')
     <x-admin.coming-soon :module="$module"/>
