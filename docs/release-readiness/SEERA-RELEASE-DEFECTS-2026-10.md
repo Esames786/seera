@@ -6,7 +6,7 @@ See [release defects closure](SEERA-DEFECT-CLOSURE-2026-10-27.md) for the candid
 
 | ID | Local candidate status |
 | --- | --- |
-| GAP-01 / R22-02 | Fixed: central Super Admin-only manual PO VAT override with reason and transactional audit; configured non-VAT retained; approved source rates carried to receiving/matched billing and grouped VAT register |
+| GAP-01 / R22-02 | Fixed (purchase, 27 Oct): central Super Admin-only manual PO VAT override with reason and transactional audit; configured non-VAT retained; approved source rates carried to receiving/matched billing and grouped VAT register. Fixed (sales, 28 Oct, branch `feature/seera-sales-vat-authorization-2026-10-28`): `SalesVatPolicy` on customer invoice create / update — 15 % default, Super Admin override with logged reason, forged line rates refused, posted invoices immutable, notes inherit the rate. Open: sales has no zero-rated / exempt classification model (Finance decision) |
 | UI-01 | Fixed: targeted wrap/shrink rules, all three screens at 320/375/390/430/768px; 46 focused browser checks passed; no global overflow hiding |
 | GAP-02 | Priority Dashboard/Employee/Customer scope fixed, including shared controls, related panels and common validation. Wider Finance/Equipment translation and client language review remain separate |
 | GATE-01 / GATE-02 | Unchanged external gates; this sprint does not enable production ZATCA, perform client sign-off or run production operations |
