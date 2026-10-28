@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Equipment View')
-@section('breadcrumb', 'Operations / Equipment & Vehicles / View')
+@section('title', __('Equipment View'))
+@section('breadcrumb', __('Operations / Equipment & Vehicles / View'))
 
 @section('content')
     @php
@@ -12,14 +12,14 @@
         $ins = \App\Models\EquipmentAsset::expiryState($asset->insurance_expiry_date);
         $expiryClass = fn ($s) => $s === 'expired' ? 'red' : ($s === 'expiring' ? 'yellow' : 'gray');
         $serviceDue = $nextService && (($nextService->next_service_date && $nextService->next_service_date->lte(today()->addDays(30))) || ($nextService->next_service_meter !== null && (float) $asset->current_meter >= (float) $nextService->next_service_meter - 50));
-        $sections = ['overview' => 'Overview', 'assignment' => 'Current Assignment', 'history' => 'Assignment History', 'fuel' => 'Fuel', 'maintenance' => 'Maintenance', 'costs' => 'Costs', 'documents' => 'Documents', 'tracking' => 'Tracking / GPS'];
-        if ($activity !== null) $sections['activity'] = 'Activity';
+        $sections = ['overview' => __('Overview'), 'assignment' => __('Current Assignment'), 'history' => __('Assignment History'), 'fuel' => __('Fuel'), 'maintenance' => __('Maintenance'), 'costs' => __('Costs'), 'documents' => __('Documents'), 'tracking' => __('Tracking / GPS')];
+        if ($activity !== null) $sections['activity'] = __('Activity');
         $accClass = fn ($s) => $s === 'posted' ? 'green' : ($s === 'failed' ? 'red' : ($s === 'bill_pending' ? 'yellow' : 'gray'));
     @endphp
 
-    <x-admin.page-header :title="$asset->asset_code.' — '.$asset->name" description="Read-only equipment view. Assign / Release, Fuel, Maintenance, Documents and Finance posting are explicit actions in their sections.">
-        @if ($canEdit)<a class="btn primary" href="{{ route('admin.equipment.edit', [$asset, 'return_to' => route('admin.equipment.show', $asset, false)]) }}">Edit Profile</a>@endif
-        <a class="btn outline" href="{{ \App\Support\SaveAction::cancelUrl(route('admin.equipment.index')) }}">Back to Equipment</a>
+    <x-admin.page-header :title="$asset->asset_code.' — '.$asset->name"  :description="__('Read-only equipment view. Assign / Release, Fuel, Maintenance, Documents and Finance posting are explicit actions in their sections.')">
+        @if ($canEdit)<a class="btn primary" href="{{ route('admin.equipment.edit', [$asset, 'return_to' => route('admin.equipment.show', $asset, false)]) }}">{{ __('Edit Profile') }}</a>@endif
+        <a class="btn outline" href="{{ \App\Support\SaveAction::cancelUrl(route('admin.equipment.index')) }}">{{ __('Back to Equipment') }}</a>
     </x-admin.page-header>
 
     {{-- Persistent identity header --}}
@@ -28,22 +28,22 @@
             <h2>{{ $asset->asset_code }} — {{ $asset->name }}</h2>
             <div>
                 <x-admin.status-badge :status="$asset->status"/>
-                <span class="badge blue">{{ $asset->typeLabel() }}{{ $asset->category ? ' · '.$asset->category : '' }}</span>
-                @if ($serviceDue)<span class="badge yellow">Service due</span>@endif
-                @if ($reg === 'expired' || $ins === 'expired')<span class="badge red">Document expired</span>@elseif ($reg === 'expiring' || $ins === 'expiring')<span class="badge yellow">Document expiring</span>@endif
+                <span class="badge blue">{{ __($asset->typeLabel()) }}{{ $asset->category ? ' · '.$asset->category : '' }}</span>
+                @if ($serviceDue)<span class="badge yellow">{{ __('Service due') }}</span>@endif
+                @if ($reg === 'expired' || $ins === 'expired')<span class="badge red">{{ __('Document expired') }}</span>@elseif ($reg === 'expiring' || $ins === 'expiring')<span class="badge yellow">{{ __('Document expiring') }}</span>@endif
             </div>
         </div>
         <dl>
-            <dt>Make / Model</dt><dd>{{ trim(($asset->make ?? '').' '.($asset->model ?? '')) ?: '-' }}{{ $asset->year ? ' · '.$asset->year : '' }}</dd>
+            <dt>{{ __('Make / Model') }}</dt><dd>{{ trim(($asset->make ?? '').' '.($asset->model ?? '')) ?: '-' }}{{ $asset->year ? ' · '.$asset->year : '' }}</dd>
             <dt>{{ $asset->isVehicle() ? 'Registration / Chassis' : 'Serial number' }}</dt><dd>{{ $asset->isVehicle() ? (($asset->registration_number ?? '-').' / '.($asset->chassis_number ?? '-')) : ($asset->serial_number ?? '-') }}</dd>
-            <dt>Ownership</dt><dd>{{ \App\Models\EquipmentAsset::OWNERSHIP[$asset->ownership_type] ?? $asset->ownership_type }}</dd>
-            <dt>Meter</dt><dd>{{ $asset->meterLabel() }}</dd>
+            <dt>{{ __('Ownership') }}</dt><dd>{{ \App\Models\EquipmentAsset::OWNERSHIP[$asset->ownership_type] ?? $asset->ownership_type }}</dd>
+            <dt>{{ __('Meter') }}</dt><dd>{{ $asset->meterLabel() }}</dd>
         </dl>
         <dl>
-            <dt>Current project</dt><dd>{{ $asset->project ? $asset->project->code.' · '.$asset->project->name : 'Not assigned' }}</dd>
-            <dt>Current site</dt><dd>{{ $asset->site?->name ?? '-' }}</dd>
-            <dt>Operator / driver</dt><dd>{{ $asset->operator?->name ?? '-' }}</dd>
-            <dt>Next service</dt><dd>{{ $nextService ? trim(($nextService->next_service_date?->toDateString() ?? '').($nextService->next_service_meter !== null ? ' · at '.number_format((float) $nextService->next_service_meter, 1).' '.$asset->meterUnit() : '')) : 'No service plan recorded' }}</dd>
+            <dt>{{ __('Current project') }}</dt><dd>{{ $asset->project ? $asset->project->code.' · '.$asset->project->name : __('Not assigned') }}</dd>
+            <dt>{{ __('Current site') }}</dt><dd>{{ $asset->site?->name ?? '-' }}</dd>
+            <dt>{{ __('Operator / driver') }}</dt><dd>{{ $asset->operator?->name ?? '-' }}</dd>
+            <dt>{{ __('Next service') }}</dt><dd>{{ $nextService ? trim(($nextService->next_service_date?->toDateString() ?? '').($nextService->next_service_meter !== null ? ' · at '.number_format((float) $nextService->next_service_meter, 1).' '.$asset->meterUnit() : '')) : __('No service plan recorded') }}</dd>
         </dl>
     </div>
 
@@ -54,35 +54,35 @@
     @if ($errors->any())<div class="alert">{{ $errors->first() }}</div>@endif
 
     {{-- Overview --}}
-    <x-admin.data-table title="Overview" class="detail-table" id="overview">
+    <x-admin.data-table :title="__('Overview')" class="detail-table" id="overview">
         <tbody>
-            <tr><th>Asset code / name</th><td>{{ $asset->asset_code }} · {{ $asset->name }}</td></tr>
-            <tr><th>Type / category</th><td>{{ $asset->typeLabel() }} / {{ $asset->category ?? '-' }}</td></tr>
-            <tr><th>Make / model / year</th><td>{{ $asset->make ?? '-' }} / {{ $asset->model ?? '-' }} / {{ $asset->year ?? '-' }}</td></tr>
+            <tr><th>{{ __('Asset code / name') }}</th><td>{{ $asset->asset_code }} · {{ $asset->name }}</td></tr>
+            <tr><th>{{ __('Type / category') }}</th><td>{{ $asset->typeLabel() }} / {{ $asset->category ?? '-' }}</td></tr>
+            <tr><th>{{ __('Make / model / year') }}</th><td>{{ $asset->make ?? '-' }} / {{ $asset->model ?? '-' }} / {{ $asset->year ?? '-' }}</td></tr>
             @if ($asset->isVehicle())
-                <tr><th>Registration number</th><td>{{ $asset->registration_number ?? '-' }} · expiry <span class="badge {{ $expiryClass($reg) }}">{{ $asset->registration_expiry_date?->toDateString() ?? 'unknown' }}</span></td></tr>
-                <tr><th>Chassis / VIN</th><td>{{ $asset->chassis_number ?? '-' }}</td></tr>
+                <tr><th>{{ __('Registration number') }}</th><td>{{ $asset->registration_number ?? '-' }} · expiry <span class="badge {{ $expiryClass($reg) }}">{{ $asset->registration_expiry_date?->toDateString() ?? 'unknown' }}</span></td></tr>
+                <tr><th>{{ __('Chassis / VIN') }}</th><td>{{ $asset->chassis_number ?? '-' }}</td></tr>
             @else
-                <tr><th>Serial number</th><td>{{ $asset->serial_number ?? '-' }}</td></tr>
+                <tr><th>{{ __('Serial number') }}</th><td>{{ $asset->serial_number ?? '-' }}</td></tr>
             @endif
-            <tr><th>Insurance expiry</th><td><span class="badge {{ $expiryClass($ins) }}">{{ $asset->insurance_expiry_date?->toDateString() ?? 'unknown' }}</span></td></tr>
-            <tr><th>Ownership / acquisition</th><td>{{ \App\Models\EquipmentAsset::OWNERSHIP[$asset->ownership_type] ?? $asset->ownership_type }} · {{ $asset->acquisition_date?->toDateString() ?? '-' }}{{ $canFinance && $asset->acquisition_cost !== null ? ' · '.$money($asset->acquisition_cost) : '' }}</td></tr>
-            <tr><th>Status</th><td><x-admin.status-badge :status="$asset->status"/>{{ $openMaintenance ? ' · '.$openMaintenance.' open maintenance record(s)' : '' }}</td></tr>
-            <tr><th>Meter</th><td>{{ $asset->meterLabel() }} ({{ \App\Models\EquipmentAsset::METER_TYPES[$asset->meter_type] ?? $asset->meter_type }}). Readings from assignments, fuel and maintenance only move it forward; a lower reading needs a logged correction.</td></tr>
-            <tr><th>Notes</th><td>{{ $asset->notes ?? '-' }}</td></tr>
-            <tr><th>Created</th><td>{{ $asset->created_at?->format('Y-m-d H:i') }} · {{ $asset->creator?->name ?? '-' }}</td></tr>
+            <tr><th>{{ __('Insurance expiry') }}</th><td><span class="badge {{ $expiryClass($ins) }}">{{ $asset->insurance_expiry_date?->toDateString() ?? 'unknown' }}</span></td></tr>
+            <tr><th>{{ __('Ownership / acquisition') }}</th><td>{{ \App\Models\EquipmentAsset::OWNERSHIP[$asset->ownership_type] ?? $asset->ownership_type }} · {{ $asset->acquisition_date?->toDateString() ?? '-' }}{{ $canFinance && $asset->acquisition_cost !== null ? ' · '.$money($asset->acquisition_cost) : '' }}</td></tr>
+            <tr><th>{{ __('Status') }}</th><td><x-admin.status-badge :status="$asset->status"/>{{ $openMaintenance ? ' · '.$openMaintenance.' open maintenance record(s)' : '' }}</td></tr>
+            <tr><th>{{ __('Meter') }}</th><td>{{ $asset->meterLabel() }} ({{ \App\Models\EquipmentAsset::METER_TYPES[$asset->meter_type] ?? $asset->meter_type }}). Readings from assignments, fuel and maintenance only move it forward; a lower reading needs a logged correction.</td></tr>
+            <tr><th>{{ __('Notes') }}</th><td>{{ $asset->notes ?? '-' }}</td></tr>
+            <tr><th>{{ __('Created') }}</th><td>{{ $asset->created_at?->format('Y-m-d H:i') }} · {{ $asset->creator?->name ?? '-' }}</td></tr>
         </tbody>
     </x-admin.data-table>
 
     {{-- Current Assignment --}}
-    <x-admin.data-table title="Current Assignment" subtitle="One active assignment per asset. Reassigning closes the current one and keeps it in the history." class="detail-table" id="assignment">
+    <x-admin.data-table :title="__('Current Assignment')" subtitle="One active assignment per asset. Reassigning closes the current one and keeps it in the history." class="detail-table" id="assignment">
         <tbody>
             @if ($active)
-                <tr><th>Project</th><td>{{ $active->project?->code }} · {{ $active->project?->name }}</td></tr>
-                <tr><th>Site</th><td>{{ $active->site?->name ?? 'Whole project' }}</td></tr>
-                <tr><th>Operator / driver</th><td>{{ $active->operator?->name ?? '-' }}</td></tr>
-                <tr><th>Since</th><td>{{ $active->assigned_from->toDateString() }} · meter at assignment {{ $active->start_meter !== null ? number_format((float) $active->start_meter, 1).' '.$asset->meterUnit() : '-' }} · by {{ $active->assigner?->name ?? '-' }}</td></tr>
-                @if ($active->notes)<tr><th>Notes</th><td>{{ $active->notes }}</td></tr>@endif
+                <tr><th>{{ __('Project') }}</th><td>{{ $active->project?->code }} · {{ $active->project?->name }}</td></tr>
+                <tr><th>{{ __('Site') }}</th><td>{{ $active->site?->name ?? 'Whole project' }}</td></tr>
+                <tr><th>{{ __('Operator / driver') }}</th><td>{{ $active->operator?->name ?? '-' }}</td></tr>
+                <tr><th>{{ __('Since') }}</th><td>{{ $active->assigned_from->toDateString() }} · meter at assignment {{ $active->start_meter !== null ? number_format((float) $active->start_meter, 1).' '.$asset->meterUnit() : '-' }} · by {{ $active->assigner?->name ?? '-' }}</td></tr>
+                @if ($active->notes)<tr><th>{{ __('Notes') }}</th><td>{{ $active->notes }}</td></tr>@endif
             @else
                 <tr><td colspan="2" class="table-empty">This asset is not assigned to any project.{{ $canAssign ? ' Use the form below to assign it.' : '' }}</td></tr>
             @endif
@@ -116,8 +116,8 @@
     </x-admin.data-table>
 
     {{-- Assignment History --}}
-    <x-admin.data-table title="Assignment History" subtitle="Every assignment ever recorded; closed rows are never deleted" id="history">
-        <thead><tr><th>Project</th><th>Site</th><th>Operator</th><th>From</th><th>Until</th><th>Meter start → end</th><th>Assigned by</th><th>Notes</th><th>State</th></tr></thead>
+    <x-admin.data-table :title="__('Assignment History')" subtitle="Every assignment ever recorded; closed rows are never deleted" id="history">
+        <thead><tr><th>{{ __('Project') }}</th><th>{{ __('Site') }}</th><th>Operator</th><th>From</th><th>Until</th><th>Meter start → end</th><th>Assigned by</th><th>{{ __('Notes') }}</th><th>State</th></tr></thead>
         <tbody>
             @forelse ($assignmentHistory as $row)
                 <tr>
@@ -135,8 +135,8 @@
     </x-admin.data-table>
 
     {{-- Fuel --}}
-    <x-admin.data-table title="Fuel" subtitle="Total = quantity × rate (server-calculated). A fuel entry becomes project cost only when Finance posts it (Cash / Bank journal) or the supplier bill it creates is posted." id="fuel">
-        <thead><tr><th>Number</th><th>Date</th><th>Project / Site</th><th>Meter</th><th>Quantity</th><th>Rate</th><th>Total</th><th>Payment</th><th>Category</th><th>Accounting</th><th>Receipt</th><th></th></tr></thead>
+    <x-admin.data-table :title="__('Fuel')" subtitle="Total = quantity × rate (server-calculated). A fuel entry becomes project cost only when Finance posts it (Cash / Bank journal) or the supplier bill it creates is posted." id="fuel">
+        <thead><tr><th>Number</th><th>Date</th><th>Project / Site</th><th>{{ __('Meter') }}</th><th>Quantity</th><th>Rate</th><th>Total</th><th>Payment</th><th>Category</th><th>Accounting</th><th>Receipt</th><th></th></tr></thead>
         <tbody>
             @forelse ($fuelLogs as $log)
                 <tr>
@@ -188,8 +188,8 @@
     @endif
 
     {{-- Maintenance --}}
-    <x-admin.data-table title="Maintenance" subtitle="Open → Completed (or Cancelled). Completed records stay in the history; cost is posted by Finance after completion." id="maintenance">
-        <thead><tr><th>Number</th><th>Date</th><th>Type</th><th>Description</th><th>Workshop / supplier</th><th>Meter</th><th>Cost</th><th>Next service</th><th>Status</th><th>Accounting</th><th>Invoice</th><th></th></tr></thead>
+    <x-admin.data-table :title="__('Maintenance')" subtitle="Open → Completed (or Cancelled). Completed records stay in the history; cost is posted by Finance after completion." id="maintenance">
+        <thead><tr><th>Number</th><th>Date</th><th>Type</th><th>Description</th><th>Workshop / supplier</th><th>{{ __('Meter') }}</th><th>Cost</th><th>{{ __('Next service') }}</th><th>{{ __('Status') }}</th><th>Accounting</th><th>Invoice</th><th></th></tr></thead>
         <tbody>
             @forelse ($maintenance as $row)
                 <tr>
@@ -264,7 +264,7 @@
     @endif
 
     {{-- Costs --}}
-    <x-admin.data-table title="Costs" subtitle="Equipment cost reaches the Project Cost Report and the project budget only through posted accounting (Cash / Bank journal or the posted supplier bill), never from the operational totals below." class="detail-table" id="costs">
+    <x-admin.data-table :title="__('Costs')" subtitle="Equipment cost reaches the Project Cost Report and the project budget only through posted accounting (Cash / Bank journal or the posted supplier bill), never from the operational totals below." class="detail-table" id="costs">
         <tbody>
             @if ($canFinance && $costs)
                 <tr><th>Fuel — posted</th><td>{{ $money($costs['fuel']->posted) }}</td></tr>
@@ -280,8 +280,8 @@
     </x-admin.data-table>
 
     {{-- Documents --}}
-    <x-admin.data-table title="Documents" subtitle="Private files (registration, insurance, inspection, permits, invoices, receipts). Served only to authorized users; no public links." id="documents">
-        <thead><tr><th>Type</th><th>Number</th><th>Issued</th><th>Expiry</th><th>File</th><th>Uploaded</th><th>Notes</th></tr></thead>
+    <x-admin.data-table :title="__('Documents')" subtitle="Private files (registration, insurance, inspection, permits, invoices, receipts). Served only to authorized users; no public links." id="documents">
+        <thead><tr><th>Type</th><th>Number</th><th>Issued</th><th>Expiry</th><th>File</th><th>Uploaded</th><th>{{ __('Notes') }}</th></tr></thead>
         <tbody>
             @forelse ($documents as $doc)
                 @php $state = $doc->expiryState(); @endphp
@@ -312,7 +312,7 @@
     </x-admin.data-table>
 
     {{-- Tracking / GPS --}}
-    <x-admin.data-table title="Tracking / GPS" class="detail-table" id="tracking">
+    <x-admin.data-table :title="__('Tracking / GPS')" class="detail-table" id="tracking">
         <tbody>
             <tr><th>Live tracking</th><td><span class="badge gray">Not connected</span> Live GPS tracking is not connected to a telematics provider. No position, route, speed, idle time or geofence event is recorded or shown for this asset.</td></tr>
             <tr><th>Tracker readiness</th><td>{{ $asset->tracker_device_id ? ($asset->tracker_provider ?: 'Provider not set').' · device '.$asset->tracker_device_id.' (stored for the future integration; not polled)' : 'No tracker device recorded.' }}</td></tr>
