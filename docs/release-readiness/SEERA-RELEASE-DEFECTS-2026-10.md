@@ -11,6 +11,15 @@ See [release defects closure](SEERA-DEFECT-CLOSURE-2026-10-27.md) for the candid
 | GAP-02 | Priority Dashboard/Employee/Customer scope fixed, including shared controls, related panels and common validation. Wider Finance/Equipment translation and client language review remain separate |
 | GATE-01 / GATE-02 | Unchanged external gates; this sprint does not enable production ZATCA, perform client sign-off or run production operations |
 
+### Integrated-branch QA — 28 October 2026
+
+See [integrated branch QA](SEERA-INTEGRATION-QA-2026-10-28.md) (branch `feature/seera-release-integration-2026-10-28`).
+
+| ID | Status |
+| --- | --- |
+| INT-01 | Found and fixed (`5b5ec29`): the Arabic Coming Soon page heading and breadcrumb showed the title-cased slug ("Hr Reports") in English while the sidebar entry was translated; the route now resolves the sidebar's own label so both locales use one dictionary key |
+| GAP-02 (integration) | Equipment register / add / edit / view and My Approvals: labels, headings, buttons and table headers translated; form field names, option values and permissions unchanged (verified in the browser). Remaining English: long help paragraphs on the Equipment asset page and the pre-existing Customer Invoice form labels (Customer, Invoice Number, Invoice Date, Due Date, Project, Cost Center, Notes, line headers), which were outside this integration |
+
 Affected tests: 112 passed / 1,283 assertions. JavaScript: 12 passed. Complete Laravel suite on the final sources: 768 tests, 9,344 assertions, 0 failures (a double-escaped ampersand regression found by the first full run was fixed and re-verified). Committed as `cc0e5f9` and `7106173`; production stays at the owner's reported baseline `aca78ee` until the owner deploys.
 
 ## Original findings

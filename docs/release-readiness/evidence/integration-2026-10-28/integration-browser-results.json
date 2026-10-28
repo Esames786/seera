@@ -1,0 +1,1601 @@
+{
+  "generated_at": "2026-10-28T15:57:03.108Z",
+  "fixture": "seera-uat-20261026-f4b174e2450e4af9a3a47f9bf40c31b5",
+  "base": "http://127.0.0.1:18769",
+  "asset_code": "QA-EQ-490472",
+  "totals": {
+    "checks": 145,
+    "pass": 145,
+    "fail": 0,
+    "page_errors": 0,
+    "failed_resources": 3
+  },
+  "results": [
+    {
+      "id": "topbar-admin-en-approvals-link-no-decorative-icons",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "locale-switch-ar-persists",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "locale-switch-back-to-en",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "equipment-add-en-creates-asset",
+      "status": "PASS",
+      "detail": "/admin/equipment/3"
+    },
+    {
+      "id": "equipment-edit-en-holds-entered-values",
+      "status": "PASS",
+      "detail": "22 fields"
+    },
+    {
+      "id": "equipment-view-en-sections",
+      "status": "PASS",
+      "detail": {
+        "document_type": [
+          "registration",
+          "insurance",
+          "inspection",
+          "permit",
+          "rental_agreement",
+          "service_invoice",
+          "fuel_receipt",
+          "other"
+        ],
+        "maintenance_type": [
+          "preventive",
+          "repair",
+          "inspection",
+          "other"
+        ]
+      }
+    },
+    {
+      "id": "equipment-register-en-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "equipment-register-en-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "equipment-register-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "equipment-register-en-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "equipment-register-en-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "equipment-register-en-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "equipment-add-en-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "equipment-add-en-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "equipment-add-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "equipment-add-en-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "equipment-add-en-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "equipment-add-en-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "equipment-edit-en-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "equipment-edit-en-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "equipment-edit-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "equipment-edit-en-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "equipment-edit-en-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "equipment-edit-en-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "equipment-view-en-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "equipment-view-en-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "equipment-view-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "equipment-view-en-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "equipment-view-en-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "equipment-view-en-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "equipment-edit-ar-same-values-and-option-values",
+      "status": "PASS",
+      "detail": "22 fields identical"
+    },
+    {
+      "id": "equipment-view-ar-sections-gps-not-connected-same-option-values",
+      "status": "PASS",
+      "detail": "التتبع المباشر\tغير متصل Live GPS tracking is not connected to a telematics provider. No position, route, speed, idle tim"
+    },
+    {
+      "id": "equipment-ar-fuel-and-maintenance-forms-submit-values-unchanged",
+      "status": "PASS",
+      "detail": [
+        "_token",
+        "cost",
+        "description",
+        "expense_category_id",
+        "fuel_date",
+        "invoice",
+        "maintenance_type",
+        "meter_correction",
+        "meter_reading",
+        "next_service_date",
+        "next_service_meter",
+        "notes",
+        "payment_account_id",
+        "payment_type",
+        "quantity",
+        "rate",
+        "receipt",
+        "reference_number",
+        "service_date",
+        "supplier_id",
+        "take_out_of_service",
+        "unit",
+        "vat_rate"
+      ]
+    },
+    {
+      "id": "equipment-register-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "equipment-register-ar-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "equipment-register-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "equipment-register-ar-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "equipment-register-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "equipment-register-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "equipment-add-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "equipment-add-ar-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "equipment-add-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "equipment-add-ar-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "equipment-add-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "equipment-add-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "equipment-edit-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "equipment-edit-ar-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "equipment-edit-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "equipment-edit-ar-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "equipment-edit-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "equipment-edit-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "equipment-view-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "equipment-view-ar-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "equipment-view-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "equipment-view-ar-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "equipment-view-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "equipment-view-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "equipment-assign-to-project-3-site-4",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "equipment-restricted-site-user-sees-only-scoped-asset",
+      "status": "PASS",
+      "detail": {
+        "nabeelStatus": 403
+      }
+    },
+    {
+      "id": "approvals-submit-pr-7-for-runtime-approval",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "approvals-admin-project-filter-lists-all-three",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "approvals-nabeel-en-scoped-project-filter-and-action-links",
+      "status": "PASS",
+      "detail": [
+        [
+          "PR-2026-0007",
+          "/admin/inventory/purchase-requests/7"
+        ],
+        [
+          "View",
+          "/admin/inventory/purchase-requests/7"
+        ],
+        [
+          "Review & approve",
+          "/admin/inventory/purchase-requests/7"
+        ],
+        [
+          "Review & reject",
+          "/admin/inventory/purchase-requests/7"
+        ]
+      ]
+    },
+    {
+      "id": "approvals-nabeel-filter-by-module-and-project",
+      "status": "PASS",
+      "detail": {
+        "forgedStatus": 200
+      }
+    },
+    {
+      "id": "my-approvals-en-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "my-approvals-en-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "my-approvals-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "my-approvals-en-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "my-approvals-en-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "my-approvals-en-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "approvals-nabeel-ar-labels-and-same-submit-values",
+      "status": "PASS",
+      "detail": [
+        "PR-2026-0007",
+        "عرض",
+        "مراجعة واعتماد",
+        "مراجعة ورفض"
+      ]
+    },
+    {
+      "id": "my-approvals-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "my-approvals-ar-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "my-approvals-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "my-approvals-ar-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "my-approvals-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "my-approvals-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "approvals-zafar-site-user-sees-only-project-3-and-no-task",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "topbar-hr-user-without-approval-modules-has-no-shortcut",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "coming-soon-hr-reports-en",
+      "status": "PASS",
+      "detail": "🚧"
+    },
+    {
+      "id": "coming-soon-hr-reports-en-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "coming-soon-hr-reports-en-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "coming-soon-hr-reports-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "coming-soon-hr-reports-en-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "coming-soon-hr-reports-en-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "coming-soon-hr-reports-en-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "coming-soon-hr-reports-ar",
+      "status": "PASS",
+      "detail": "🚧"
+    },
+    {
+      "id": "coming-soon-hr-reports-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "coming-soon-hr-reports-ar-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "coming-soon-hr-reports-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "coming-soon-hr-reports-ar-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "coming-soon-hr-reports-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "coming-soon-hr-reports-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "coming-soon-project-reports-en",
+      "status": "PASS",
+      "detail": "🚧"
+    },
+    {
+      "id": "coming-soon-project-reports-en-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "coming-soon-project-reports-en-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "coming-soon-project-reports-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "coming-soon-project-reports-en-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "coming-soon-project-reports-en-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "coming-soon-project-reports-en-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "coming-soon-project-reports-ar",
+      "status": "PASS",
+      "detail": "🚧"
+    },
+    {
+      "id": "coming-soon-project-reports-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "coming-soon-project-reports-ar-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "coming-soon-project-reports-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "coming-soon-project-reports-ar-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "coming-soon-project-reports-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "coming-soon-project-reports-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "coming-soon-settings-en",
+      "status": "PASS",
+      "detail": "🚧"
+    },
+    {
+      "id": "coming-soon-settings-en-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "coming-soon-settings-en-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "coming-soon-settings-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "coming-soon-settings-en-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "coming-soon-settings-en-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "coming-soon-settings-en-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "coming-soon-settings-ar",
+      "status": "PASS",
+      "detail": "🚧"
+    },
+    {
+      "id": "coming-soon-settings-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "coming-soon-settings-ar-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "coming-soon-settings-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "coming-soon-settings-ar-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "coming-soon-settings-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "coming-soon-settings-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "sales-vat-superadmin-en-controls",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "sales-vat-superadmin-override-without-reason-refused",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "sales-vat-superadmin-override-with-reason-saved",
+      "status": "PASS",
+      "detail": "http://127.0.0.1:18769/admin/accounting/accounts-receivable"
+    },
+    {
+      "id": "sales-vat-accounts-manager-rate-readonly-no-reason-field",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "sales-vat-accounts-manager-forged-5pct-refused-server-side",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "sales-vat-accounts-manager-standard-15-saves",
+      "status": "PASS",
+      "detail": "http://127.0.0.1:18769/admin/accounting/accounts-receivable"
+    },
+    {
+      "id": "sales-vat-ar-labels-and-forged-refusal-arabic",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "sales-invoice-create-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "sales-invoice-create-ar-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "sales-invoice-create-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "sales-invoice-create-ar-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "sales-invoice-create-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "sales-invoice-create-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "sales-invoice-create-en-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "sales-invoice-create-en-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "sales-invoice-create-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "sales-invoice-create-en-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "sales-invoice-create-en-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "sales-invoice-create-en-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "sales-invoice-create-superadmin-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "sales-invoice-create-superadmin-ar-375",
+      "status": "PASS",
+      "detail": {
+        "viewport": 375,
+        "document": 375
+      }
+    },
+    {
+      "id": "sales-invoice-create-superadmin-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "sales-invoice-create-superadmin-ar-430",
+      "status": "PASS",
+      "detail": {
+        "viewport": 430,
+        "document": 430
+      }
+    },
+    {
+      "id": "sales-invoice-create-superadmin-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "sales-invoice-create-superadmin-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    }
+  ],
+  "page_errors": [],
+  "failed_resources": [
+    {
+      "user": "nabeel@example.com",
+      "url": "http://127.0.0.1:18769/admin/equipment",
+      "status": 403
+    },
+    {
+      "user": "nabeel@example.com",
+      "url": "http://127.0.0.1:18769/admin/equipment",
+      "status": 403
+    },
+    {
+      "user": "waleed@example.com",
+      "url": "http://127.0.0.1:18769/admin/my-approvals",
+      "status": 403
+    }
+  ],
+  "untranslated_text_by_screen": {
+    "equipment-register-ar-320": [
+      "a: S Seera",
+      "div: QA Integration Excavator"
+    ],
+    "equipment-register-ar-375": [
+      "a: S Seera",
+      "div: QA Integration Excavator"
+    ],
+    "equipment-register-ar-390": [
+      "a: S Seera",
+      "div: QA Integration Excavator"
+    ],
+    "equipment-register-ar-430": [
+      "a: S Seera",
+      "div: QA Integration Excavator"
+    ],
+    "equipment-register-ar-768": [
+      "a: S Seera",
+      "div: QA Integration Excavator"
+    ],
+    "equipment-register-ar-1440": [
+      "a: S Seera",
+      "div: QA Integration Excavator"
+    ],
+    "equipment-add-ar-320": [
+      "a: S Seera"
+    ],
+    "equipment-add-ar-375": [
+      "a: S Seera"
+    ],
+    "equipment-add-ar-390": [
+      "a: S Seera"
+    ],
+    "equipment-add-ar-430": [
+      "a: S Seera"
+    ],
+    "equipment-add-ar-768": [
+      "a: S Seera"
+    ],
+    "equipment-add-ar-1440": [
+      "a: S Seera"
+    ],
+    "equipment-edit-ar-320": [
+      "a: S Seera",
+      "h1: Edit: QA-EQ-490472 — QA Integration Excavator"
+    ],
+    "equipment-edit-ar-375": [
+      "a: S Seera",
+      "h1: Edit: QA-EQ-490472 — QA Integration Excavator"
+    ],
+    "equipment-edit-ar-390": [
+      "a: S Seera",
+      "h1: Edit: QA-EQ-490472 — QA Integration Excavator"
+    ],
+    "equipment-edit-ar-430": [
+      "a: S Seera",
+      "h1: Edit: QA-EQ-490472 — QA Integration Excavator"
+    ],
+    "equipment-edit-ar-768": [
+      "a: S Seera",
+      "h1: Edit: QA-EQ-490472 — QA Integration Excavator"
+    ],
+    "equipment-edit-ar-1440": [
+      "a: S Seera",
+      "h1: Edit: QA-EQ-490472 — QA Integration Excavator"
+    ],
+    "equipment-view-ar-320": [
+      "a: S Seera",
+      "h1: QA-EQ-490472 — QA Integration Excavator",
+      "h2: QA-EQ-490472 — QA Integration Excavator",
+      "span: Total = quantity × rate (server-calculated). A fuel entry becomes project cost only when Finance posts it (Cash / Bank journal) or the supplier bill it creates is posted.",
+      "p: Project and site come from the active assignment at the time of the entry. The expense category's account decides the posting; Cash / Bank needs the account paid from, Supplier Credit needs the supplier and creates a draft supplier bill when Finance posts.",
+      "span: Open → Completed (or Cancelled). Completed records stay in the history; cost is posted by Finance after completion.",
+      "span: Equipment cost reaches the Project Cost Report and the project budget only through posted accounting (Cash / Bank journal or the posted supplier bill), never from the operational totals below.",
+      "td: Each posted journal carries the project / site of the assignment at the time of the entry, so the Project Cost Report and Budget vs Actual (Equipment category, mapped accounts) count it once. Supplier-credit records count through their supplier bill, never twice.",
+      "span: Private files (registration, insurance, inspection, permits, invoices, receipts). Served only to authorized users; no public links.",
+      "td: Project / site assignment, operator, meter readings from assignments, fuel and maintenance, and the site geofence settings used by mobile attendance. The provider integration contract is documented for the next phase.",
+      "span: Latest entries for this asset, limited to the users your role may see"
+    ],
+    "equipment-view-ar-375": [
+      "a: S Seera",
+      "h1: QA-EQ-490472 — QA Integration Excavator",
+      "h2: QA-EQ-490472 — QA Integration Excavator",
+      "span: Total = quantity × rate (server-calculated). A fuel entry becomes project cost only when Finance posts it (Cash / Bank journal) or the supplier bill it creates is posted.",
+      "p: Project and site come from the active assignment at the time of the entry. The expense category's account decides the posting; Cash / Bank needs the account paid from, Supplier Credit needs the supplier and creates a draft supplier bill when Finance posts.",
+      "span: Open → Completed (or Cancelled). Completed records stay in the history; cost is posted by Finance after completion.",
+      "span: Equipment cost reaches the Project Cost Report and the project budget only through posted accounting (Cash / Bank journal or the posted supplier bill), never from the operational totals below.",
+      "td: Each posted journal carries the project / site of the assignment at the time of the entry, so the Project Cost Report and Budget vs Actual (Equipment category, mapped accounts) count it once. Supplier-credit records count through their supplier bill, never twice.",
+      "span: Private files (registration, insurance, inspection, permits, invoices, receipts). Served only to authorized users; no public links.",
+      "td: Project / site assignment, operator, meter readings from assignments, fuel and maintenance, and the site geofence settings used by mobile attendance. The provider integration contract is documented for the next phase.",
+      "span: Latest entries for this asset, limited to the users your role may see"
+    ],
+    "equipment-view-ar-390": [
+      "a: S Seera",
+      "h1: QA-EQ-490472 — QA Integration Excavator",
+      "h2: QA-EQ-490472 — QA Integration Excavator",
+      "span: Total = quantity × rate (server-calculated). A fuel entry becomes project cost only when Finance posts it (Cash / Bank journal) or the supplier bill it creates is posted.",
+      "p: Project and site come from the active assignment at the time of the entry. The expense category's account decides the posting; Cash / Bank needs the account paid from, Supplier Credit needs the supplier and creates a draft supplier bill when Finance posts.",
+      "span: Open → Completed (or Cancelled). Completed records stay in the history; cost is posted by Finance after completion.",
+      "span: Equipment cost reaches the Project Cost Report and the project budget only through posted accounting (Cash / Bank journal or the posted supplier bill), never from the operational totals below.",
+      "td: Each posted journal carries the project / site of the assignment at the time of the entry, so the Project Cost Report and Budget vs Actual (Equipment category, mapped accounts) count it once. Supplier-credit records count through their supplier bill, never twice.",
+      "span: Private files (registration, insurance, inspection, permits, invoices, receipts). Served only to authorized users; no public links.",
+      "td: Project / site assignment, operator, meter readings from assignments, fuel and maintenance, and the site geofence settings used by mobile attendance. The provider integration contract is documented for the next phase.",
+      "span: Latest entries for this asset, limited to the users your role may see"
+    ],
+    "equipment-view-ar-430": [
+      "a: S Seera",
+      "h1: QA-EQ-490472 — QA Integration Excavator",
+      "h2: QA-EQ-490472 — QA Integration Excavator",
+      "span: Total = quantity × rate (server-calculated). A fuel entry becomes project cost only when Finance posts it (Cash / Bank journal) or the supplier bill it creates is posted.",
+      "p: Project and site come from the active assignment at the time of the entry. The expense category's account decides the posting; Cash / Bank needs the account paid from, Supplier Credit needs the supplier and creates a draft supplier bill when Finance posts.",
+      "span: Open → Completed (or Cancelled). Completed records stay in the history; cost is posted by Finance after completion.",
+      "span: Equipment cost reaches the Project Cost Report and the project budget only through posted accounting (Cash / Bank journal or the posted supplier bill), never from the operational totals below.",
+      "td: Each posted journal carries the project / site of the assignment at the time of the entry, so the Project Cost Report and Budget vs Actual (Equipment category, mapped accounts) count it once. Supplier-credit records count through their supplier bill, never twice.",
+      "span: Private files (registration, insurance, inspection, permits, invoices, receipts). Served only to authorized users; no public links.",
+      "td: Project / site assignment, operator, meter readings from assignments, fuel and maintenance, and the site geofence settings used by mobile attendance. The provider integration contract is documented for the next phase.",
+      "span: Latest entries for this asset, limited to the users your role may see"
+    ],
+    "equipment-view-ar-768": [
+      "a: S Seera",
+      "h1: QA-EQ-490472 — QA Integration Excavator",
+      "h2: QA-EQ-490472 — QA Integration Excavator",
+      "span: Total = quantity × rate (server-calculated). A fuel entry becomes project cost only when Finance posts it (Cash / Bank journal) or the supplier bill it creates is posted.",
+      "p: Project and site come from the active assignment at the time of the entry. The expense category's account decides the posting; Cash / Bank needs the account paid from, Supplier Credit needs the supplier and creates a draft supplier bill when Finance posts.",
+      "span: Open → Completed (or Cancelled). Completed records stay in the history; cost is posted by Finance after completion.",
+      "span: Equipment cost reaches the Project Cost Report and the project budget only through posted accounting (Cash / Bank journal or the posted supplier bill), never from the operational totals below.",
+      "td: Each posted journal carries the project / site of the assignment at the time of the entry, so the Project Cost Report and Budget vs Actual (Equipment category, mapped accounts) count it once. Supplier-credit records count through their supplier bill, never twice.",
+      "span: Private files (registration, insurance, inspection, permits, invoices, receipts). Served only to authorized users; no public links.",
+      "td: Project / site assignment, operator, meter readings from assignments, fuel and maintenance, and the site geofence settings used by mobile attendance. The provider integration contract is documented for the next phase.",
+      "span: Latest entries for this asset, limited to the users your role may see"
+    ],
+    "equipment-view-ar-1440": [
+      "a: S Seera",
+      "h1: QA-EQ-490472 — QA Integration Excavator",
+      "h2: QA-EQ-490472 — QA Integration Excavator",
+      "span: Total = quantity × rate (server-calculated). A fuel entry becomes project cost only when Finance posts it (Cash / Bank journal) or the supplier bill it creates is posted.",
+      "p: Project and site come from the active assignment at the time of the entry. The expense category's account decides the posting; Cash / Bank needs the account paid from, Supplier Credit needs the supplier and creates a draft supplier bill when Finance posts.",
+      "span: Open → Completed (or Cancelled). Completed records stay in the history; cost is posted by Finance after completion.",
+      "span: Equipment cost reaches the Project Cost Report and the project budget only through posted accounting (Cash / Bank journal or the posted supplier bill), never from the operational totals below.",
+      "td: Each posted journal carries the project / site of the assignment at the time of the entry, so the Project Cost Report and Budget vs Actual (Equipment category, mapped accounts) count it once. Supplier-credit records count through their supplier bill, never twice.",
+      "span: Private files (registration, insurance, inspection, permits, invoices, receipts). Served only to authorized users; no public links.",
+      "td: Project / site assignment, operator, meter readings from assignments, fuel and maintenance, and the site geofence settings used by mobile attendance. The provider integration contract is documented for the next phase.",
+      "span: Latest entries for this asset, limited to the users your role may see"
+    ],
+    "my-approvals-ar-320": [
+      "a: S Seera"
+    ],
+    "my-approvals-ar-375": [
+      "a: S Seera"
+    ],
+    "my-approvals-ar-390": [
+      "a: S Seera"
+    ],
+    "my-approvals-ar-430": [
+      "a: S Seera"
+    ],
+    "my-approvals-ar-768": [
+      "a: S Seera"
+    ],
+    "my-approvals-ar-1440": [
+      "a: S Seera"
+    ],
+    "coming-soon-hr-reports-ar-320": [
+      "a: S Seera"
+    ],
+    "coming-soon-hr-reports-ar-375": [
+      "a: S Seera"
+    ],
+    "coming-soon-hr-reports-ar-390": [
+      "a: S Seera"
+    ],
+    "coming-soon-hr-reports-ar-430": [
+      "a: S Seera"
+    ],
+    "coming-soon-hr-reports-ar-768": [
+      "a: S Seera"
+    ],
+    "coming-soon-hr-reports-ar-1440": [
+      "a: S Seera"
+    ],
+    "coming-soon-project-reports-ar-320": [
+      "a: S Seera"
+    ],
+    "coming-soon-project-reports-ar-375": [
+      "a: S Seera"
+    ],
+    "coming-soon-project-reports-ar-390": [
+      "a: S Seera"
+    ],
+    "coming-soon-project-reports-ar-430": [
+      "a: S Seera"
+    ],
+    "coming-soon-project-reports-ar-768": [
+      "a: S Seera"
+    ],
+    "coming-soon-project-reports-ar-1440": [
+      "a: S Seera"
+    ],
+    "coming-soon-settings-ar-320": [
+      "a: S Seera"
+    ],
+    "coming-soon-settings-ar-375": [
+      "a: S Seera"
+    ],
+    "coming-soon-settings-ar-390": [
+      "a: S Seera"
+    ],
+    "coming-soon-settings-ar-430": [
+      "a: S Seera"
+    ],
+    "coming-soon-settings-ar-768": [
+      "a: S Seera"
+    ],
+    "coming-soon-settings-ar-1440": [
+      "a: S Seera"
+    ],
+    "sales-invoice-create-ar-320": [
+      "a: S Seera",
+      "h1: Add Customer Invoice",
+      "p: Record a customer invoice. Approving it posts receivable, revenue and output VAT, and creates the ZATCA record.",
+      "label: Customer *",
+      "label: Invoice Number",
+      "label: Invoice Date *",
+      "label: Due Date",
+      "label: Project",
+      "label: Cost Center",
+      "label: Notes",
+      "th: Item / Description *",
+      "th: Qty",
+      "th: Unit Price",
+      "th: Revenue Account",
+      "th: Cost Center",
+      "div: Taxable amount, VAT and total are calculated from quantity × unit price and the invoice VAT rate. Rows without a description or unit price are ignored."
+    ],
+    "sales-invoice-create-ar-375": [
+      "a: S Seera",
+      "h1: Add Customer Invoice",
+      "p: Record a customer invoice. Approving it posts receivable, revenue and output VAT, and creates the ZATCA record.",
+      "label: Customer *",
+      "label: Invoice Number",
+      "label: Invoice Date *",
+      "label: Due Date",
+      "label: Project",
+      "label: Cost Center",
+      "label: Notes",
+      "th: Item / Description *",
+      "th: Qty",
+      "th: Unit Price",
+      "th: Revenue Account",
+      "th: Cost Center",
+      "div: Taxable amount, VAT and total are calculated from quantity × unit price and the invoice VAT rate. Rows without a description or unit price are ignored."
+    ],
+    "sales-invoice-create-ar-390": [
+      "a: S Seera",
+      "h1: Add Customer Invoice",
+      "p: Record a customer invoice. Approving it posts receivable, revenue and output VAT, and creates the ZATCA record.",
+      "label: Customer *",
+      "label: Invoice Number",
+      "label: Invoice Date *",
+      "label: Due Date",
+      "label: Project",
+      "label: Cost Center",
+      "label: Notes",
+      "th: Item / Description *",
+      "th: Qty",
+      "th: Unit Price",
+      "th: Revenue Account",
+      "th: Cost Center",
+      "div: Taxable amount, VAT and total are calculated from quantity × unit price and the invoice VAT rate. Rows without a description or unit price are ignored."
+    ],
+    "sales-invoice-create-ar-430": [
+      "a: S Seera",
+      "h1: Add Customer Invoice",
+      "p: Record a customer invoice. Approving it posts receivable, revenue and output VAT, and creates the ZATCA record.",
+      "label: Customer *",
+      "label: Invoice Number",
+      "label: Invoice Date *",
+      "label: Due Date",
+      "label: Project",
+      "label: Cost Center",
+      "label: Notes",
+      "th: Item / Description *",
+      "th: Qty",
+      "th: Unit Price",
+      "th: Revenue Account",
+      "th: Cost Center",
+      "div: Taxable amount, VAT and total are calculated from quantity × unit price and the invoice VAT rate. Rows without a description or unit price are ignored."
+    ],
+    "sales-invoice-create-ar-768": [
+      "a: S Seera",
+      "h1: Add Customer Invoice",
+      "p: Record a customer invoice. Approving it posts receivable, revenue and output VAT, and creates the ZATCA record.",
+      "label: Customer *",
+      "label: Invoice Number",
+      "label: Invoice Date *",
+      "label: Due Date",
+      "label: Project",
+      "label: Cost Center",
+      "label: Notes",
+      "th: Item / Description *",
+      "th: Qty",
+      "th: Unit Price",
+      "th: Revenue Account",
+      "th: Cost Center",
+      "div: Taxable amount, VAT and total are calculated from quantity × unit price and the invoice VAT rate. Rows without a description or unit price are ignored."
+    ],
+    "sales-invoice-create-ar-1440": [
+      "a: S Seera",
+      "h1: Add Customer Invoice",
+      "p: Record a customer invoice. Approving it posts receivable, revenue and output VAT, and creates the ZATCA record.",
+      "label: Customer *",
+      "label: Invoice Number",
+      "label: Invoice Date *",
+      "label: Due Date",
+      "label: Project",
+      "label: Cost Center",
+      "label: Notes",
+      "th: Item / Description *",
+      "th: Qty",
+      "th: Unit Price",
+      "th: Revenue Account",
+      "th: Cost Center",
+      "div: Taxable amount, VAT and total are calculated from quantity × unit price and the invoice VAT rate. Rows without a description or unit price are ignored."
+    ],
+    "sales-invoice-create-superadmin-ar-320": [
+      "a: S Seera",
+      "h1: Add Customer Invoice",
+      "p: Record a customer invoice. Approving it posts receivable, revenue and output VAT, and creates the ZATCA record.",
+      "label: Customer *",
+      "label: Invoice Number",
+      "label: Invoice Date *",
+      "label: Due Date",
+      "label: Project",
+      "label: Cost Center",
+      "label: Notes",
+      "th: Item / Description *",
+      "th: Qty",
+      "th: Unit Price",
+      "th: Revenue Account",
+      "th: Cost Center",
+      "div: Taxable amount, VAT and total are calculated from quantity × unit price and the invoice VAT rate. Rows without a description or unit price are ignored."
+    ],
+    "sales-invoice-create-superadmin-ar-375": [
+      "a: S Seera",
+      "h1: Add Customer Invoice",
+      "p: Record a customer invoice. Approving it posts receivable, revenue and output VAT, and creates the ZATCA record.",
+      "label: Customer *",
+      "label: Invoice Number",
+      "label: Invoice Date *",
+      "label: Due Date",
+      "label: Project",
+      "label: Cost Center",
+      "label: Notes",
+      "th: Item / Description *",
+      "th: Qty",
+      "th: Unit Price",
+      "th: Revenue Account",
+      "th: Cost Center",
+      "div: Taxable amount, VAT and total are calculated from quantity × unit price and the invoice VAT rate. Rows without a description or unit price are ignored."
+    ],
+    "sales-invoice-create-superadmin-ar-390": [
+      "a: S Seera",
+      "h1: Add Customer Invoice",
+      "p: Record a customer invoice. Approving it posts receivable, revenue and output VAT, and creates the ZATCA record.",
+      "label: Customer *",
+      "label: Invoice Number",
+      "label: Invoice Date *",
+      "label: Due Date",
+      "label: Project",
+      "label: Cost Center",
+      "label: Notes",
+      "th: Item / Description *",
+      "th: Qty",
+      "th: Unit Price",
+      "th: Revenue Account",
+      "th: Cost Center",
+      "div: Taxable amount, VAT and total are calculated from quantity × unit price and the invoice VAT rate. Rows without a description or unit price are ignored."
+    ],
+    "sales-invoice-create-superadmin-ar-430": [
+      "a: S Seera",
+      "h1: Add Customer Invoice",
+      "p: Record a customer invoice. Approving it posts receivable, revenue and output VAT, and creates the ZATCA record.",
+      "label: Customer *",
+      "label: Invoice Number",
+      "label: Invoice Date *",
+      "label: Due Date",
+      "label: Project",
+      "label: Cost Center",
+      "label: Notes",
+      "th: Item / Description *",
+      "th: Qty",
+      "th: Unit Price",
+      "th: Revenue Account",
+      "th: Cost Center",
+      "div: Taxable amount, VAT and total are calculated from quantity × unit price and the invoice VAT rate. Rows without a description or unit price are ignored."
+    ],
+    "sales-invoice-create-superadmin-ar-768": [
+      "a: S Seera",
+      "h1: Add Customer Invoice",
+      "p: Record a customer invoice. Approving it posts receivable, revenue and output VAT, and creates the ZATCA record.",
+      "label: Customer *",
+      "label: Invoice Number",
+      "label: Invoice Date *",
+      "label: Due Date",
+      "label: Project",
+      "label: Cost Center",
+      "label: Notes",
+      "th: Item / Description *",
+      "th: Qty",
+      "th: Unit Price",
+      "th: Revenue Account",
+      "th: Cost Center",
+      "div: Taxable amount, VAT and total are calculated from quantity × unit price and the invoice VAT rate. Rows without a description or unit price are ignored."
+    ],
+    "sales-invoice-create-superadmin-ar-1440": [
+      "a: S Seera",
+      "h1: Add Customer Invoice",
+      "p: Record a customer invoice. Approving it posts receivable, revenue and output VAT, and creates the ZATCA record.",
+      "label: Customer *",
+      "label: Invoice Number",
+      "label: Invoice Date *",
+      "label: Due Date",
+      "label: Project",
+      "label: Cost Center",
+      "label: Notes",
+      "th: Item / Description *",
+      "th: Qty",
+      "th: Unit Price",
+      "th: Revenue Account",
+      "th: Cost Center",
+      "div: Taxable amount, VAT and total are calculated from quantity × unit price and the invoice VAT rate. Rows without a description or unit price are ignored."
+    ]
+  }
+}
