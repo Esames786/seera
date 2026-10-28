@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ApprovalInstance;
 use App\Models\Project;
+use App\Services\UserAccessScopeService;
 use App\Services\Approvals\ApprovalRuntimeService;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -12,6 +13,15 @@ use Illuminate\View\View;
 
 class MyApprovalController extends Controller
 {
+    /** Restrict filter options to projects visible to this actor; task queries remain independently scoped. */
+    private function visibleProjects(\App\Models\User $actor)
+    {
+        $query = Project::query();
+        app(UserAccessScopeService::class)->apply($query, $query->getModel(), $actor);
+
+        return $query->orderBy('name')->get();
+    }
+
     public function index(Request $request, ApprovalRuntimeService $runtime): View
     {
         $filters = $request->validate([
@@ -61,7 +71,7 @@ class MyApprovalController extends Controller
         return view('admin.approvals.index', [
             'tasks' => new LengthAwarePaginator($tasks->forPage($page, 15)->values(), $tasks->count(), 15, $page,
                 ['path' => $request->url(), 'query' => $request->query()]),
-            'projects' => Project::orderBy('name')->get(),
+            'projects' => $this->visibleProjects($actor),
         ]);
     }
 }
