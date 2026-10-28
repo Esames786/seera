@@ -11,6 +11,7 @@ use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
 use App\Models\Project;
 use App\Services\Accounting\PostingService;
+use App\Services\Accounting\SalesVatPolicy;
 use App\Services\Zatca\ZatcaSnapshot;
 use App\Services\Zatca\ZatcaSubmissionService;
 use App\Support\SaveAction;
@@ -64,9 +65,10 @@ class AccountsReceivableController extends Controller
     {
         [$data, $lines] = $this->validated($request);
 
-        $invoice = DB::transaction(function () use ($data, $lines) {
+        $invoice = DB::transaction(function () use ($request, $data, $lines) {
             $invoice = CustomerInvoice::create($data);
             $invoice->lines()->createMany($lines);
+            app(SalesVatPolicy::class)->record($request, $invoice->invoice_number);
 
             return $invoice;
         });
@@ -124,7 +126,7 @@ class AccountsReceivableController extends Controller
 
         [$data, $lines] = $this->validated($request, $accounts_receivable);
 
-        DB::transaction(function () use ($accounts_receivable, $data, $lines) {
+        DB::transaction(function () use ($request, $accounts_receivable, $data, $lines) {
             // Re-check under lock: an approval that landed since the form was opened wins (F11).
             $invoice = CustomerInvoice::whereKey($accounts_receivable->id)->lockForUpdate()->firstOrFail();
             if (! $invoice->isEditable()) {
@@ -134,6 +136,7 @@ class AccountsReceivableController extends Controller
             $invoice->update($data);
             $invoice->lines()->delete();
             $invoice->lines()->createMany($lines);
+            app(SalesVatPolicy::class)->record($request, $invoice->invoice_number);
         });
 
         ActivityLog::record($request, 'Accounting', 'Updated customer invoice', $accounts_receivable->invoice_number);
@@ -389,9 +392,11 @@ class AccountsReceivableController extends Controller
             'due_date' => ['nullable', 'date', 'after_or_equal:invoice_date'],
             'project_id' => ['nullable', 'exists:projects,id'],
             'cost_center_id' => ['nullable', 'exists:cost_centers,id'],
-            'vat_rate' => ['required', 'numeric', 'min:0', 'max:100'],
+            'vat_rate' => ['nullable', 'numeric', 'decimal:0,2', 'min:0', 'max:100'],
+            'vat_override_reason' => ['nullable', 'string', 'max:500'],
             'notes' => ['nullable', 'string'],
             'lines' => ['required', 'array', 'min:1'],
+            'lines.*.vat_rate' => ['nullable', 'numeric', 'decimal:0,2', 'min:0', 'max:100'],
             'lines.*.description' => ['nullable', 'string', 'max:255'],
             'lines.*.quantity' => ['nullable', 'numeric', 'min:0'],
             'lines.*.unit_price' => ['nullable', 'numeric', 'min:0'],
@@ -401,7 +406,13 @@ class AccountsReceivableController extends Controller
             'lines.required' => 'Add at least one invoice line.',
         ]);
 
-        $vatRate = (float) $data['vat_rate'];
+        // Sales VAT policy: 15 % unless a Super Admin overrides it with a reason; line rates can only repeat the header.
+        $vatRate = (float) ($data['vat_rate'] ?? SalesVatPolicy::STANDARD_RATE);
+        $data['vat_rate'] = $vatRate;
+        $policy = app(SalesVatPolicy::class);
+        $policy->assertLinesFollowHeader($data['lines'], $vatRate);
+        $policy->authorize($request, $vatRate);
+        unset($data['vat_override_reason']);
 
         $lines = collect($data['lines'])
             ->filter(fn ($line) => filled($line['description'] ?? null) && (float) ($line['unit_price'] ?? 0) > 0)

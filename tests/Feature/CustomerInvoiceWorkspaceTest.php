@@ -85,6 +85,8 @@ class CustomerInvoiceWorkspaceTest extends TestCase
         $this->actingAs($this->admin())->post(route('admin.accounting.accounts-receivable.store'), $extra + [
             'customer_id' => $this->customer->id, 'invoice_date' => now()->toDateString(), 'project_id' => $project->id,
             'due_date' => now()->addDays(30)->toDateString(), 'vat_rate' => $vatRate,
+            // A nonstandard rate is a Super Admin override and needs a reason (SalesVatPolicy); the admin fixture is a Super Admin.
+            'vat_override_reason' => $vatRate == 15 ? null : 'Test fixture override',
             'lines' => [['description' => 'Progress claim 3', 'quantity' => 2, 'unit_price' => $net / 2]],
         ])->assertSessionHasNoErrors();
 

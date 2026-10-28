@@ -26,7 +26,16 @@
             </select>
         </div>
         <div><label for="invoice_number">Invoice Number</label><input id="invoice_number" name="invoice_number" class="input" value="{{ old('invoice_number', $invoice?->invoice_number) }}" placeholder="Auto-generated if left blank"/></div>
-        <div><label for="vat_rate">VAT Rate (%) *</label><input id="vat_rate" name="vat_rate" type="number" step="0.01" min="0" max="100" class="input" value="{{ old('vat_rate', $invoice?->vat_rate ?? 15) }}" required/></div>
+        @php $canOverrideVat = (bool) (auth()->user()?->isSuperAdmin() ?? false); @endphp
+        <div>
+            <label for="vat_rate">{{ __('VAT Rate (%)') }} *</label>
+            <input id="vat_rate" name="vat_rate" type="number" step="0.01" min="0" max="100" class="input" value="{{ old('vat_rate', $invoice?->vat_rate ?? \App\Services\Accounting\SalesVatPolicy::STANDARD_RATE) }}" required @readonly(! $canOverrideVat)/>
+            <div class="small">{{ $canOverrideVat ? __('Standard rate 15%. A different rate is a manual override and needs a reason; it is logged.') : __('Standard rate 15%. Only a Super Admin can override it.') }}</div>
+            @error('vat_rate')<div class="field-error">{{ $message }}</div>@enderror
+        </div>
+        @if ($canOverrideVat)
+            <div class="full"><label for="vat_override_reason">{{ __('VAT override reason (Super Admin, required for a nonstandard rate)') }}</label><input id="vat_override_reason" name="vat_override_reason" class="input" maxlength="500" value="{{ old('vat_override_reason') }}"/>@error('vat_override_reason')<div class="field-error">{{ $message }}</div>@enderror</div>
+        @endif
         <div><label for="invoice_date">Invoice Date *</label><input id="invoice_date" name="invoice_date" type="date" class="input" value="{{ old('invoice_date', $invoice?->invoice_date?->toDateString() ?? now()->toDateString()) }}" required/></div>
         <div><label for="due_date">Due Date</label><input id="due_date" name="due_date" type="date" class="input" value="{{ old('due_date', $invoice?->due_date?->toDateString() ?? now()->addDays(30)->toDateString()) }}"/></div>
         <div><label for="invoice_type">{{ __('zatca.invoice_type') }} *</label><select id="invoice_type" name="invoice_type" class="select" required>@foreach (\App\Models\CustomerInvoice::TYPES as $type)<option value="{{ $type }}" @selected(old('invoice_type', $invoice?->invoice_type ?? 'standard') === $type)>{{ __('zatca.type_'.$type) }}</option>@endforeach</select></div>
