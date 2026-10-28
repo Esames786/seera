@@ -444,8 +444,16 @@ Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])
 
     // Future modules (Phase 5, 7+) render a Coming Soon page.
     Route::get('coming-soon/{module}', function (string $module) {
+        // Use the sidebar's own label so the page title translates through the same dictionary key
+        // (a title-cased slug such as "Hr Reports" has no translation and would stay English in Arabic).
+        $labels = [
+            'inventory-reports' => 'Inventory Reports', 'hr-reports' => 'HR Reports', 'project-reports' => 'Project Reports',
+            'settings' => 'System Settings', 'materials' => 'Materials', 'stock-in' => 'Stock In', 'stock-out' => 'Stock Out',
+            'stock-transfers' => 'Stock Transfers', 'low-stock-alerts' => 'Low Stock Alerts',
+        ];
+
         return view('admin.coming-soon', [
-            'module' => (string) Str::of($module)->replace('-', ' ')->title()->replace('Zatca', 'ZATCA'),
+            'module' => $labels[$module] ?? (string) Str::of($module)->replace('-', ' ')->title()->replace('Zatca', 'ZATCA'),
         ]);
     })->where('module', '[a-z0-9\-]+')->name('coming-soon');
 });

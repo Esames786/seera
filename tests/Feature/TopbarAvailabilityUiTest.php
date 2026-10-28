@@ -37,8 +37,15 @@ class TopbarAvailabilityUiTest extends TestCase
         $this->actingAs($admin)->get(route('admin.coming-soon', 'hr-reports'))->assertOk()
             ->assertSee('dir="rtl"', false)
             ->assertSee('غير متاح بعد')
+            ->assertSee('تقارير الموارد البشرية — غير متاح بعد')
             ->assertSee('العودة إلى لوحة التحكم')
+            ->assertDontSee('Hr Reports')
             ->assertDontSee('The current release covers Phase 1', false);
+
+        // Every sidebar "soon" module resolves to the sidebar's own (translated) label, never a title-cased slug.
+        foreach (['project-reports' => 'تقارير المشاريع', 'settings' => 'إعدادات النظام', 'inventory-reports' => 'تقارير المخزون'] as $slug => $label) {
+            $this->get(route('admin.coming-soon', $slug))->assertOk()->assertSee($label.' — غير متاح بعد');
+        }
     }
 
     public function test_english_coming_soon_keeps_fallback_without_claiming_eta(): void
@@ -47,7 +54,8 @@ class TopbarAvailabilityUiTest extends TestCase
         $admin->update(['language' => 'English']);
 
         $this->actingAs($admin)->get(route('admin.coming-soon', 'hr-reports'))->assertOk()
-            ->assertSee('Coming Soon')
+            ->assertSee('HR Reports — Coming Soon')
+            ->assertDontSee('Hr Reports')
             ->assertDontSee('The current release covers Phase 1', false);
     }
 

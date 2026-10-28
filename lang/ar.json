@@ -707,5 +707,9 @@
     "No tracker device recorded.": "لم يتم تسجيل جهاز تتبع.",
     "Provider not set": "مزود الخدمة غير محدد",
     "This asset is not assigned to any project.": "هذا الأصل غير مخصص لأي مشروع.",
-    " Use the form below to assign it.": " استخدم النموذج أدناه لتخصيصه."
+    " Use the form below to assign it.": " استخدم النموذج أدناه لتخصيصه.",
+    "Materials": "المواد",
+    "Stock In": "إدخال مخزون",
+    "Stock Out": "إخراج مخزون",
+    "Low Stock Alerts": "تنبيهات انخفاض المخزون"
 }
