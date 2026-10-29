@@ -67,7 +67,7 @@
             @endif
             <tr><th>{{ __('Insurance expiry') }}</th><td><span class="badge {{ $expiryClass($ins) }}">{{ $asset->insurance_expiry_date?->toDateString() ?? __('unknown') }}</span></td></tr>
             <tr><th>{{ __('Ownership / acquisition') }}</th><td>{{ __(\App\Models\EquipmentAsset::OWNERSHIP[$asset->ownership_type] ?? $asset->ownership_type) }} · {{ $asset->acquisition_date?->toDateString() ?? '-' }}{{ $canFinance && $asset->acquisition_cost !== null ? ' · '.$money($asset->acquisition_cost) : '' }}</td></tr>
-            <tr><th>{{ __('Status') }}</th><td><x-admin.status-badge :status="$asset->status"/>{{ $openMaintenance ? ' · '.$openMaintenance.' open maintenance record(s)' : '' }}</td></tr>
+            <tr><th>{{ __('Status') }}</th><td><x-admin.status-badge :status="$asset->status"/>{{ $openMaintenance ? ' · '.$openMaintenance.' '.__('open maintenance record(s)') : '' }}</td></tr>
             <tr><th>{{ __('Meter') }}</th><td>{{ $asset->meterLabel() }} ({{ __(\App\Models\EquipmentAsset::METER_TYPES[$asset->meter_type] ?? $asset->meter_type) }}). {{ __('Readings from assignments, fuel and maintenance only move it forward; a lower reading needs a logged correction.') }}</td></tr>
             <tr><th>{{ __('Notes') }}</th><td>{{ $asset->notes ?? '-' }}</td></tr>
             <tr><th>{{ __('Created') }}</th><td>{{ $asset->created_at?->format('Y-m-d H:i') }} · {{ $asset->creator?->name ?? '-' }}</td></tr>
@@ -84,7 +84,7 @@
                 <tr><th>{{ __('Since') }}</th><td>{{ $active->assigned_from->toDateString() }} · meter at assignment {{ $active->start_meter !== null ? number_format((float) $active->start_meter, 1).' '.$asset->meterUnit() : '-' }} · by {{ $active->assigner?->name ?? '-' }}</td></tr>
                 @if ($active->notes)<tr><th>{{ __('Notes') }}</th><td>{{ $active->notes }}</td></tr>@endif
             @else
-                <tr><td colspan="2" class="table-empty">This asset is not assigned to any project.{{ $canAssign ? ' Use the form below to assign it.' : '' }}</td></tr>
+                <tr><td colspan="2" class="table-empty">{{ __('This asset is not assigned to any project.') }}{{ $canAssign ? ' '.__('Use the form below to assign it.') : '' }}</td></tr>
             @endif
         </tbody>
         @if ($canAssign && $asset->status !== 'retired')
@@ -128,7 +128,7 @@
                     <td><span class="badge {{ $row->is_active ? 'green' : 'gray' }}">{{ __($row->is_active ? 'Active' : 'Closed') }}</span></td>
                 </tr>
             @empty
-                <tr><td colspan="9" class="table-empty">No assignment history yet.</td></tr>
+                <tr><td colspan="9" class="table-empty">{{ __('No assignment history yet.') }}</td></tr>
             @endforelse
         </tbody>
         <x-slot:footer><span class="small">{{ __('Showing :from-:to of :total', ['from' => $assignmentHistory->firstItem() ?? 0, 'to' => $assignmentHistory->lastItem() ?? 0, 'total' => $assignmentHistory->total()]) }}</span>@if ($assignmentHistory->hasPages()){{ $assignmentHistory->links() }}@endif</x-slot:footer>
@@ -149,13 +149,13 @@
                     <td class="small">{{ $log->category?->name ?? '-' }}</td>
                     <td><span class="badge {{ $accClass($log->accounting_status) }}">{{ __($log->accountingLabel()) }}</span>
                         @if ($log->journalEntry && $canViewJournal)<div class="small"><a href="{{ route('admin.accounting.journal-entries.show', $log->journalEntry) }}">{{ $log->journalEntry->journal_number }}</a></div>@endif
-                        @if ($log->supplierBill && $canViewBill)<div class="small"><a href="{{ route('admin.accounting.accounts-payable.show', $log->supplierBill) }}">Bill {{ $log->supplierBill->bill_number }}</a></div>@endif
+                        @if ($log->supplierBill && $canViewBill)<div class="small"><a href="{{ route('admin.accounting.accounts-payable.show', $log->supplierBill) }}">{{ __('Bill') }} {{ $log->supplierBill->bill_number }}</a></div>@endif
                         @if ($log->posting_error)<div class="small" style="color:var(--red)">{{ $log->posting_error }}</div>@endif</td>
-                    <td>@if ($log->document)<a class="btn sm outline" href="{{ route('admin.equipment.documents.file', [$asset, $log->document->id]) }}">Receipt</a>@else -@endif</td>
+                    <td>@if ($log->document)<a class="btn sm outline" href="{{ route('admin.equipment.documents.file', [$asset, $log->document->id]) }}">{{ __('Receipt') }}</a>@else -@endif</td>
                     <td>@if ($canPost && ! $log->isFinanciallyLinked())<form method="POST" action="{{ route('admin.equipment.fuel.post', [$asset, $log->id]) }}">@csrf<button type="submit" class="btn sm primary">{{ __($log->accounting_status === 'failed' ? 'Retry posting' : ($log->payment_type === 'Supplier Credit' ? 'Create supplier bill' : 'Post to accounting')) }}</button></form>@endif</td>
                 </tr>
             @empty
-                <tr><td colspan="12" class="table-empty">No fuel entries have been recorded.{{ $canRecord ? ' Use the form below.' : '' }}</td></tr>
+                <tr><td colspan="12" class="table-empty">{{ __('No fuel entries have been recorded.') }}{{ $canRecord ? ' '.__('Use the form below.') : '' }}</td></tr>
             @endforelse
         </tbody>
         <x-slot:footer>
@@ -201,10 +201,10 @@
                     <td><x-admin.status-badge :status="$row->status"/></td>
                     <td>@if ($row->status !== 'cancelled')<span class="badge {{ $accClass($row->accounting_status) }}">{{ __($row->accountingLabel()) }}</span>
                         @if ($row->journalEntry && $canViewJournal)<div class="small"><a href="{{ route('admin.accounting.journal-entries.show', $row->journalEntry) }}">{{ $row->journalEntry->journal_number }}</a></div>@endif
-                        @if ($row->supplierBill && $canViewBill)<div class="small"><a href="{{ route('admin.accounting.accounts-payable.show', $row->supplierBill) }}">Bill {{ $row->supplierBill->bill_number }}</a></div>@endif
+                        @if ($row->supplierBill && $canViewBill)<div class="small"><a href="{{ route('admin.accounting.accounts-payable.show', $row->supplierBill) }}">{{ __('Bill') }} {{ $row->supplierBill->bill_number }}</a></div>@endif
                         @if ($row->posting_error)<div class="small" style="color:var(--red)">{{ $row->posting_error }}</div>@endif
                         @else -@endif</td>
-                    <td>@if ($row->document)<a class="btn sm outline" href="{{ route('admin.equipment.documents.file', [$asset, $row->document->id]) }}">Invoice</a>@else -@endif</td>
+                    <td>@if ($row->document)<a class="btn sm outline" href="{{ route('admin.equipment.documents.file', [$asset, $row->document->id]) }}">{{ __('Invoice') }}</a>@else -@endif</td>
                     <td>
                         <div class="actions">
                             @if ($row->status === 'open' && $canEdit)
@@ -229,7 +229,7 @@
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="12" class="table-empty">No maintenance history exists yet.{{ $canRecord ? ' Use the form below to record a service or repair.' : '' }}</td></tr>
+                <tr><td colspan="12" class="table-empty">{{ __('No maintenance history exists yet.') }}{{ $canRecord ? ' '.__('Use the form below to record a service or repair.') : '' }}</td></tr>
             @endforelse
         </tbody>
         <x-slot:footer>
@@ -270,7 +270,7 @@
                 <tr><th>{{ __('Fuel — posted') }}</th><td>{{ $money($costs['fuel']->posted) }}</td></tr>
                 <tr><th>{{ __('Fuel — recorded, not yet posted') }}</th><td>{{ $money($costs['fuel']->unposted) }} ({{ $costs['fuel']->entries }} entries in total)</td></tr>
                 <tr><th>{{ __('Maintenance — posted') }}</th><td>{{ $money($costs['maintenance']->posted) }}</td></tr>
-                <tr><th>{{ __('Maintenance — recorded, not yet posted') }}</th><td>{{ $money($costs['maintenance']->unposted) }} ({{ $costs['maintenance']->entries }} records, cancelled excluded)</td></tr>
+                <tr><th>{{ __('Maintenance — recorded, not yet posted') }}</th><td>{{ $money($costs['maintenance']->unposted) }} ({{ $costs['maintenance']->entries }} {{ __('records, cancelled excluded') }})</td></tr>
                 <tr><th>{{ __('Posted equipment cost (this asset)') }}</th><td><strong>{{ $money($costs['fuel']->posted + $costs['maintenance']->posted) }}</strong></td></tr>
                 <tr><th>{{ __('Where it counts') }}</th><td class="small">{{ __('Each posted journal carries the project / site of the assignment at the time of the entry, so the Project Cost Report and Budget vs Actual (Equipment category, mapped accounts) count it once. Supplier-credit records count through their supplier bill, never twice.') }}</td></tr>
             @else
@@ -287,12 +287,12 @@
                 @php $state = $doc->expiryState(); @endphp
                 <tr>
                     <td>{{ __($doc->typeLabel()) }}</td><td>{{ $doc->document_number ?? '-' }}</td><td>{{ $doc->issue_date?->toDateString() ?? '-' }}</td>
-                    <td>@if ($doc->expiry_date)<span class="badge {{ $expiryClass($state) }}">{{ $doc->expiry_date->toDateString() }}{{ $state === 'expired' ? ' · expired' : ($state === 'expiring' ? ' · expiring' : '') }}</span>@else -@endif</td>
-                    <td><a class="btn sm outline" href="{{ route('admin.equipment.documents.file', [$asset, $doc->id]) }}">{{ $doc->original_filename }}</a> <a class="btn sm outline" href="{{ route('admin.equipment.documents.file', [$asset, $doc->id, 'download' => 1]) }}">Download</a></td>
+                    <td>@if ($doc->expiry_date)<span class="badge {{ $expiryClass($state) }}">{{ $doc->expiry_date->toDateString() }}{{ $state === 'expired' ? ' · '.__('expired') : ($state === 'expiring' ? ' · '.__('expiring') : '') }}</span>@else -@endif</td>
+                    <td><a class="btn sm outline" href="{{ route('admin.equipment.documents.file', [$asset, $doc->id]) }}">{{ $doc->original_filename }}</a> <a class="btn sm outline" href="{{ route('admin.equipment.documents.file', [$asset, $doc->id, 'download' => 1]) }}">{{ __('Download') }}</a></td>
                     <td class="small">{{ $doc->created_at?->format('Y-m-d') }} · {{ $doc->uploader?->name ?? '-' }}</td><td class="small">{{ $doc->notes ?? '-' }}</td>
                 </tr>
             @empty
-                <tr><td colspan="7" class="table-empty">No documents uploaded yet.</td></tr>
+                <tr><td colspan="7" class="table-empty">{{ __('No documents uploaded yet.') }}</td></tr>
             @endforelse
         </tbody>
         @if ($canRecord)
@@ -315,7 +315,7 @@
     <x-admin.data-table :title="__('Tracking / GPS')" class="detail-table" id="tracking">
         <tbody>
             <tr><th>{{ __('Live tracking') }}</th><td><span class="badge gray">{{ __('Not connected') }}</span> {{ __('Live GPS tracking is not connected to a telematics provider. No position, route, speed, idle time or geofence event is recorded or shown for this asset.') }}</td></tr>
-            <tr><th>{{ __('Tracker readiness') }}</th><td>{{ $asset->tracker_device_id ? ($asset->tracker_provider ?: 'Provider not set').' · device '.$asset->tracker_device_id.' (stored for the future integration; not polled)' : 'No tracker device recorded.' }}</td></tr>
+            <tr><th>{{ __('Tracker readiness') }}</th><td>{{ $asset->tracker_device_id ? ($asset->tracker_provider ?: __('Provider not set')).' · '.__('device').' '.$asset->tracker_device_id.' '.__('(stored for the future integration; not polled)') : __('No tracker device recorded.') }}</td></tr>
             <tr><th>{{ __('What exists today') }}</th><td class="small">{{ __('Project / site assignment, operator, meter readings from assignments, fuel and maintenance, and the site geofence settings used by mobile attendance. The provider integration contract is documented for the next phase.') }}</td></tr>
         </tbody>
     </x-admin.data-table>
@@ -328,7 +328,7 @@
                 @forelse ($activity as $log)
                     <tr><td>{{ $log->created_at?->format('Y-m-d H:i') }}</td><td>{{ $log->user_name }}</td><td>{{ $log->action }}</td><td>{{ $log->description }}</td></tr>
                 @empty
-                    <tr><td colspan="4" class="table-empty">No activity recorded for this asset yet.</td></tr>
+                    <tr><td colspan="4" class="table-empty">{{ __('No activity recorded for this asset yet.') }}</td></tr>
                 @endforelse
             </tbody>
         </x-admin.data-table>
