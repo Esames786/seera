@@ -60,6 +60,8 @@ return [
     'issue_time' => 'Issue time',
     'uuid' => 'UUID',
     'environment' => 'Environment',
+    'validation_passed' => 'Passed',
+    'validation_failed' => 'Failed',
     'validation' => 'Local validation',
     'signature' => 'Cryptographic stamp',
     'submission' => 'Submission',
