@@ -839,5 +839,20 @@
     "Confirm invoice reopening": "تأكيد إعادة فتح الفاتورة",
     "A reason is required and will be preserved in the invoice audit history.": "يجب إدخال سبب وسيُحفظ في سجل تدقيق الفاتورة.",
     "Reason for reopening this invoice (kept on the record):": "سبب إعادة فتح هذه الفاتورة (يُحفظ في السجل):",
-    "Enter a reopening reason before continuing.": "أدخل سبب إعادة الفتح قبل المتابعة."
+    "Enter a reopening reason before continuing.": "أدخل سبب إعادة الفتح قبل المتابعة.",
+    "Reports / Project Reports": "التقارير / تقارير المشاريع",
+    "Read-only project portfolio from permitted project records. Financial cost and margin remain in the posted-ledger report.": "عرض محفظة المشاريع المسموح بها للقراءة فقط؛ تبقى التكاليف والهامش المالي في تقرير القيود المحاسبية المرحلة.",
+    "Projects in scope": "المشاريع ضمن الصلاحية",
+    "Active projects in scope": "المشاريع النشطة ضمن الصلاحية",
+    "Project code or name...": "رمز المشروع أو اسمه...",
+    "Project portfolio": "محفظة المشاريع",
+    "Project Code": "رمز المشروع",
+    "Project Manager": "مدير المشروع",
+    "Start": "البداية",
+    "End": "النهاية",
+    "Sites": "المواقع",
+    "No projects match your access scope and selected filters.": "لا توجد مشاريع تطابق صلاحياتك وعوامل التصفية.",
+    "Financial cost, revenue and margin are calculated from posted journals in the existing Project Cost Report, not from this operational listing.": "تُحسب التكلفة والإيرادات والهامش المالي من القيود المرحلة في تقرير تكاليف المشروع الحالي، وليس من هذه القائمة التشغيلية.",
+    "Open Project Cost Report": "فتح تقرير تكاليف المشروع",
+    "Financial figures are hidden because you do not have Financial Reports permission.": "الأرقام المالية مخفية لعدم توفر صلاحية عرض التقارير المالية."
 }
