@@ -73,6 +73,7 @@ use App\Http\Controllers\Admin\MyApprovalController;
 use App\Http\Controllers\Admin\PasswordChangeController;
 use App\Http\Controllers\Admin\PermissionMatrixController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\Reports\ProjectReportController;
 use App\Http\Controllers\Admin\RoleHierarchyController;
 use App\Http\Controllers\Admin\Equipment\EquipmentAssetController;
 use App\Http\Controllers\Admin\Equipment\EquipmentOperationsController;
@@ -132,6 +133,7 @@ Route::middleware(['auth', 'active'])->group(function () {
 Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/my-approvals', [MyApprovalController::class, 'index'])->name('my-approvals.index');
+    Route::get('reports/projects', [ProjectReportController::class, 'index'])->name('reports.projects.index');
     Route::get('site-expenses/mobile/create', [SiteExpenseController::class, 'mobile'])->name('site-expenses.mobile');
     Route::get('site-expenses/{site_expense}/receipts/{receipt}', [SiteExpenseController::class, 'receiptFile'])->name('site-expenses.receipt-file');
     foreach (['submit', 'approve', 'reject', 'retry', 'settle', 'reverse'] as $action) {
