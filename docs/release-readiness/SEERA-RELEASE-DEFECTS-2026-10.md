@@ -44,6 +44,15 @@ See [AR register Arabic verification](SEERA-AR-REGISTER-ARABIC-QA-2026-10-29.md)
 | AR-04 | Found and fixed (`5fb0a8b`): shared "Filter" / "View" / "Edit" / "Delete" controls, ZATCA status option labels, "Both" and the receipt count stayed English in Arabic |
 | GAP-02 (remaining) | Activity log entries stored in English, the reopen `prompt()` question, raw ZATCA validation status; the wider client language review |
 
+### Invoice reopening dialog verification — 29 October 2026
+
+See [invoice reopen verification](SEERA-INVOICE-REOPEN-QA-2026-10-29.md) (branch `feature/seera-invoice-localization-final-2026-10-29`, verified HEAD `81e9178`, no source fix needed).
+
+| ID | Status |
+| --- | --- |
+| GAP-02 (reopen dialog, ZATCA validation) | The browser `prompt()` is replaced by a bilingual in-page dialog (Cancel / Escape / empty reason / keyboard verified at 320–1440); local ZATCA validation states translate without changing stored values; Super Admin-only visibility, server refusals (403, ZATCA lock) and the accounting reversal / audit trail verified unchanged |
+| GAP-02 (remaining) | Reopen server messages (flash, 403, validation rule texts), activity log and reversal journal descriptions stored in English; the wider client language review |
+
 ## Original findings
 
 Baseline `aca78ee`. This register distinguishes missing requirements, policy decisions and reproduced UI defects from accounting failures. No new production code fix or data repair was made in this review.

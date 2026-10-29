@@ -1,0 +1,224 @@
+{
+  "run_at": "2026-10-29T13:19:08.280Z",
+  "branch": "feature/seera-invoice-localization-final-2026-10-29",
+  "fixture": "private synthetic UAT fixture (not client data)",
+  "widths": [
+    320,
+    390,
+    768,
+    1440
+  ],
+  "checks": 27,
+  "passed": 27,
+  "failed": [],
+  "page_errors": [],
+  "failed_resources": [
+    {
+      "user": "zubair@example.com",
+      "url": "http://127.0.0.1:18769/admin/accounting/accounts-receivable/7/reopen",
+      "status": 403
+    },
+    {
+      "user": "zubair@example.com",
+      "url": "http://127.0.0.1:18769/admin/accounting/accounts-receivable/7/reopen",
+      "status": 403
+    }
+  ],
+  "results": [
+    {
+      "id": "zatca-validation-label-ar-passed-and-failed",
+      "status": "PASS",
+      "detail": {
+        "row1": "التحقق المحلي\tاجتاز التحقق (2026-10-29 09:00)",
+        "row2": "التحقق المحلي\tفشل التحقق (2026-10-29 09:00)"
+      }
+    },
+    {
+      "id": "zatca-validation-label-en-passed-and-failed",
+      "status": "PASS",
+      "detail": {
+        "row1": "Local validation\tPassed (2026-10-29 09:00)",
+        "row2": "Local validation\tFailed (2026-10-29 09:00)"
+      }
+    },
+    {
+      "id": "dialog-ar-9-closed-by-default-and-button-translated",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "dialog-ar-9-opens-focused-translated-within-viewport",
+      "status": "PASS",
+      "detail": {
+        "x": 480,
+        "y": 305.5,
+        "width": 480,
+        "height": 289
+      }
+    },
+    {
+      "id": "dialog-ar-9-escape-closes-without-submit",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "dialog-ar-9-cancel-closes-without-submit",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "dialog-ar-9-empty-reason-refused-client-side",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "dialog-ar-9-keyboard-tab-order-and-enter-confirms",
+      "status": "PASS",
+      "detail": {
+        "flash": "Invoice reopened as a draft; reversing entry JV-2026-0031 posted. Correct it and approve again."
+      }
+    },
+    {
+      "id": "dialog-en-8-closed-by-default-and-button-translated",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "dialog-en-8-opens-focused-translated-within-viewport",
+      "status": "PASS",
+      "detail": {
+        "x": 16,
+        "y": 298.5,
+        "width": 358,
+        "height": 303
+      }
+    },
+    {
+      "id": "dialog-en-8-escape-closes-without-submit",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "dialog-en-8-cancel-closes-without-submit",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "dialog-en-8-empty-reason-refused-client-side",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "dialog-en-8-keyboard-tab-order-and-enter-confirms",
+      "status": "PASS",
+      "detail": {
+        "flash": "Invoice reopened as a draft; reversing entry JV-2026-0032 posted. Correct it and approve again."
+      }
+    },
+    {
+      "id": "dialog-open-ar-320",
+      "status": "PASS",
+      "detail": {
+        "x": 16,
+        "y": 305.5,
+        "width": 288,
+        "height": 289
+      }
+    },
+    {
+      "id": "dialog-open-ar-390",
+      "status": "PASS",
+      "detail": {
+        "x": 16,
+        "y": 305.5,
+        "width": 358,
+        "height": 289
+      }
+    },
+    {
+      "id": "dialog-open-ar-768",
+      "status": "PASS",
+      "detail": {
+        "x": 144,
+        "y": 305.5,
+        "width": 480,
+        "height": 289
+      }
+    },
+    {
+      "id": "dialog-open-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "x": 480,
+        "y": 305.5,
+        "width": 480,
+        "height": 289
+      }
+    },
+    {
+      "id": "dialog-open-en-320",
+      "status": "PASS",
+      "detail": {
+        "x": 16,
+        "y": 256,
+        "width": 288,
+        "height": 388
+      }
+    },
+    {
+      "id": "dialog-open-en-390",
+      "status": "PASS",
+      "detail": {
+        "x": 16,
+        "y": 298.5,
+        "width": 358,
+        "height": 303
+      }
+    },
+    {
+      "id": "dialog-open-en-768",
+      "status": "PASS",
+      "detail": {
+        "x": 144,
+        "y": 305.5,
+        "width": 480,
+        "height": 289
+      }
+    },
+    {
+      "id": "dialog-open-en-1440",
+      "status": "PASS",
+      "detail": {
+        "x": 480,
+        "y": 305.5,
+        "width": 480,
+        "height": 289
+      }
+    },
+    {
+      "id": "non-super-admin-ar-no-action-and-forged-post-403",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "non-super-admin-en-no-action-and-forged-post-403",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "invoice-7-still-unpaid-after-forged-attempt",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "zatca-locked-ar-action-hidden-and-server-refuses",
+      "status": "PASS",
+      "detail": "لهذه الفاتورة فاتورة إلكترونية مختومة أو مرسلة ولا يمكن إعادة فتحها. أصدر إشعاراً دائناً بدلاً من ذلك."
+    },
+    {
+      "id": "zatca-locked-en-action-hidden-and-server-refuses",
+      "status": "PASS",
+      "detail": "This invoice has a stamped or submitted e-invoice and cannot be reopened. Issue a credit note instead."
+    }
+  ]
+}
