@@ -835,5 +835,9 @@
     "Outcome unknown": "النتيجة غير معروفة",
     "Both": "كلاهما",
     "Delete": "حذف",
-    ":count receipt|:count receipts": "{0} :count مقبوضات|{1} :count مقبوض|[2,*] :count مقبوضات"
+    ":count receipt|:count receipts": "{0} :count مقبوضات|{1} :count مقبوض|[2,*] :count مقبوضات",
+    "Confirm invoice reopening": "تأكيد إعادة فتح الفاتورة",
+    "A reason is required and will be preserved in the invoice audit history.": "يجب إدخال سبب وسيُحفظ في سجل تدقيق الفاتورة.",
+    "Reason for reopening this invoice (kept on the record):": "سبب إعادة فتح هذه الفاتورة (يُحفظ في السجل):",
+    "Enter a reopening reason before continuing.": "أدخل سبب إعادة الفتح قبل المتابعة."
 }
