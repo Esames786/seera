@@ -31,11 +31,23 @@
             <a class="btn outline" href="{{ route('admin.accounting.journal-entries.show', $invoice->journalEntry) }}">{{ __('workspace.inv_view_journal') }}</a>
         @endif
         @if ($canReopen)
-            <form method="POST" action="{{ route('admin.accounting.accounts-receivable.reopen', $invoice) }}" onsubmit="var reason = prompt('Reason for reopening this invoice (kept on the record):'); if (!reason) return false; this.reason.value = reason;">
+            <form method="POST" action="{{ route('admin.accounting.accounts-receivable.reopen', $invoice) }}" data-invoice-reopen-form>
                 @csrf
                 <input type="hidden" name="reason" value=""/>
                 <button type="submit" class="btn danger" title="{{ __('Reverse the posting, cancel the e-invoice record (only before any stamp) and return the invoice to draft') }}">{{ __('Reopen for Correction') }}</button>
             </form>
+        @endif
+        @if ($canReopen)
+            <dialog id="invoice-reopen-dialog" aria-labelledby="invoice-reopen-title" style="width:min(480px, calc(100vw - 32px)); max-width:calc(100vw - 32px); border:1px solid var(--line); border-radius:10px; padding:20px;">
+                <h2 id="invoice-reopen-title" style="margin:0 0 10px">{{ __('Confirm invoice reopening') }}</h2>
+                <p class="small">{{ __('A reason is required and will be preserved in the invoice audit history.') }}</p>
+                <label for="invoice-reopen-reason">{{ __('Reason for reopening this invoice (kept on the record):') }}</label>
+                <textarea id="invoice-reopen-reason" class="textarea" rows="3" maxlength="500" required style="width:100%" data-required-message="{{ __('Enter a reopening reason before continuing.') }}"></textarea>
+                <div class="form-actions" style="margin-top:12px">
+                    <button type="button" class="btn outline" data-invoice-reopen-cancel>{{ __('Cancel') }}</button>
+                    <button type="button" class="btn danger" data-invoice-reopen-confirm>{{ __('Reopen for Correction') }}</button>
+                </div>
+            </dialog>
         @endif
         @if ($returnTo)
             <a class="btn outline" href="{{ $returnTo }}">{{ __('workspace.inv_back_origin') }}</a>
@@ -335,7 +347,7 @@
                     <tr><th>{{ __('zatca.uuid') }}</th><td class="small">{{ $record->uuid }}</td></tr>
                     <tr><th>{{ __('zatca.environment') }}</th><td>{{ $record->environment ? __('zatca.env_'.$record->environment) : '-' }}</td></tr>
                     <tr><th>{{ __('Status') }}</th><td><span class="badge {{ $record->statusColor() }}">{{ $record->statusLabel() }}</span>@if ($record->accepted_with_warnings) <span class="small">({{ __('zatca.warnings') }})</span>@endif @if (! $record->isAccepted())<span class="small">· {{ __('zatca.not_verified') }}</span>@endif</td></tr>
-                    <tr><th>{{ __('zatca.validation') }}</th><td>{{ $record->validation_status ? ucfirst($record->validation_status) : '-' }}@if ($record->validated_at) <span class="small">({{ $record->validated_at->format('Y-m-d H:i') }})</span>@endif</td></tr>
+                    <tr><th>{{ __('zatca.validation') }}</th><td>{{ $record->validation_status ? match ($record->validation_status) { 'passed' => __('zatca.validation_passed'), 'failed' => __('zatca.validation_failed'), default => ucfirst($record->validation_status) } : '-' }}@if ($record->validated_at) <span class="small">({{ $record->validated_at->format('Y-m-d H:i') }})</span>@endif</td></tr>
                     <tr><th>{{ __('zatca.signature') }}</th><td>{{ $record->signed_at ? $record->signed_at->format('Y-m-d H:i').' · ICV '.$record->icv : '-' }}</td></tr>
                     <tr><th>{{ __('zatca.submission') }}</th><td>{{ $record->submitted_at?->format('Y-m-d H:i') ?? '-' }} · {{ __('zatca.attempts') }}: {{ $record->submission_attempts }}</td></tr>
                     <tr><th>{{ __('zatca.zatca_reference') }}</th><td>{{ $record->zatca_status ?? '-' }} {{ $record->cleared_at ? '· '.__('zatca.cleared_at').' '.$record->cleared_at->format('Y-m-d H:i') : '' }}{{ $record->reported_at ? '· '.__('zatca.reported_at').' '.$record->reported_at->format('Y-m-d H:i') : '' }}</td></tr>
@@ -385,4 +397,39 @@
             </x-slot:footer>
         </x-admin.data-table>
     @endif
+
+@if ($canReopen)
+    @push('scripts')
+        <script>
+            (function () {
+                const form = document.querySelector('[data-invoice-reopen-form]');
+                const dialog = document.getElementById('invoice-reopen-dialog');
+                if (!form || !dialog) return;
+                const reason = document.getElementById('invoice-reopen-reason');
+                const confirm = dialog.querySelector('[data-invoice-reopen-confirm]');
+                const cancel = dialog.querySelector('[data-invoice-reopen-cancel]');
+                form.addEventListener('submit', function (event) {
+                    if (form.dataset.reopenConfirmed === '1') return;
+                    event.preventDefault();
+                    dialog.showModal();
+                    reason.focus();
+                });
+                reason.addEventListener('input', function () { reason.setCustomValidity(''); });
+                cancel.addEventListener('click', function () { dialog.close(); });
+                confirm.addEventListener('click', function () {
+                    const value = reason.value.trim();
+                    if (!value) {
+                        reason.setCustomValidity(reason.dataset.requiredMessage);
+                        reason.reportValidity();
+                        return;
+                    }
+                    form.querySelector('input[name="reason"]').value = value;
+                    dialog.close();
+                    form.dataset.reopenConfirmed = '1';
+                    form.requestSubmit();
+                });
+            })();
+        </script>
+    @endpush
+@endif
 @endsection
