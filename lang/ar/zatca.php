@@ -55,6 +55,8 @@ return [
     'issue_time' => 'وقت الإصدار',
     'uuid' => 'المعرّف الفريد UUID',
     'environment' => 'البيئة',
+    'validation_passed' => 'اجتاز التحقق',
+    'validation_failed' => 'فشل التحقق',
     'validation' => 'التحقق المحلي',
     'signature' => 'الختم التشفيري',
     'submission' => 'الإرسال',
