@@ -22,6 +22,17 @@ See [integrated branch QA](SEERA-INTEGRATION-QA-2026-10-28.md) (branch `feature/
 
 Affected tests: 112 passed / 1,283 assertions. JavaScript: 12 passed. Complete Laravel suite on the final sources: 768 tests, 9,344 assertions, 0 failures (a double-escaped ampersand regression found by the first full run was fixed and re-verified). Committed as `cc0e5f9` and `7106173`; production stays at the owner's reported baseline `aca78ee` until the owner deploys.
 
+### Arabic GAP-02 verification — 28/29 October 2026
+
+See [Arabic GAP-02 verification](SEERA-ARABIC-GAP02-QA-2026-10-28.md) (branch `feature/seera-arabic-gap02-2026-10-28`, verified HEAD `78b0252`, fix `b7c4dcf`).
+
+| ID | Status |
+| --- | --- |
+| GAP-02 (Customer Invoice form, Equipment asset page) | Fields, line headers, section titles, placeholders, tooltips and help text translated by the sprint and verified in the browser at 320 / 390 / 768 / 1440 in both locales; English fallback, field names, option values, VAT authorization and equipment permissions unchanged |
+| AR-01 | Found and fixed (`b7c4dcf`): invoice create / edit page heading, description, breadcrumb and the "View Details" action stayed English in Arabic |
+| AR-02 | Found and fixed (`b7c4dcf`): equipment asset page empty-state rows, tracker readiness line, "Bill" / "Receipt" / "Invoice" / "Download" links, expiry suffixes and document / maintenance type labels stayed English in Arabic |
+| GAP-02 (remaining) | Accounts Receivable index / detail pages and the wider client language review are outside this sprint |
+
 ## Original findings
 
 Baseline `aca78ee`. This register distinguishes missing requirements, policy decisions and reproduced UI defects from accounting failures. No new production code fix or data repair was made in this review.
