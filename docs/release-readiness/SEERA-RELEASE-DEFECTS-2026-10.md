@@ -33,6 +33,17 @@ See [Arabic GAP-02 verification](SEERA-ARABIC-GAP02-QA-2026-10-28.md) (branch `f
 | AR-02 | Found and fixed (`b7c4dcf`): equipment asset page empty-state rows, tracker readiness line, "Bill" / "Receipt" / "Invoice" / "Download" links, expiry suffixes and document / maintenance type labels stayed English in Arabic |
 | GAP-02 (remaining) | Accounts Receivable index / detail pages and the wider client language review are outside this sprint |
 
+### Accounts Receivable register Arabic verification — 29 October 2026
+
+See [AR register Arabic verification](SEERA-AR-REGISTER-ARABIC-QA-2026-10-29.md) (branch `feature/seera-ar-register-arabic-2026-10-29`, verified HEAD `982447a`, fix `5fb0a8b`).
+
+| ID | Status |
+| --- | --- |
+| GAP-02 (AR register, invoice detail) | Navigation, filters, metric cards, table headers, read-only labels, VAT / balance sections and the posting note translated; amounts, filter values, actions and permissions identical between locales; approval posting verified through the Arabic UI |
+| AR-03 | Found and fixed (`5fb0a8b`): `__('ZATCA')` resolved to the `zatca` lang group on a case-insensitive filesystem and both pages failed with HTTP 500 (18 focused tests red); replaced by `zatca.label` |
+| AR-04 | Found and fixed (`5fb0a8b`): shared "Filter" / "View" / "Edit" / "Delete" controls, ZATCA status option labels, "Both" and the receipt count stayed English in Arabic |
+| GAP-02 (remaining) | Activity log entries stored in English, the reopen `prompt()` question, raw ZATCA validation status; the wider client language review |
+
 ## Original findings
 
 Baseline `aca78ee`. This register distinguishes missing requirements, policy decisions and reproduced UI defects from accounting failures. No new production code fix or data repair was made in this review.

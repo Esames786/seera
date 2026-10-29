@@ -1,0 +1,595 @@
+{
+  "run_at": "2026-10-29T08:41:28.762Z",
+  "branch": "feature/seera-ar-register-arabic-2026-10-29",
+  "fixture": "private synthetic UAT fixture (not client data)",
+  "widths": [
+    320,
+    390,
+    768,
+    1440
+  ],
+  "checks": 47,
+  "passed": 47,
+  "failed": [],
+  "page_errors": [],
+  "failed_resources": [
+    {
+      "user": "waleed@example.com",
+      "url": "http://127.0.0.1:18769/admin/accounting/accounts-receivable",
+      "status": 403
+    }
+  ],
+  "untranslated_text_in_arabic_ui": {
+    "register-admin-ar-320": [
+      "a: S Seera",
+      "option: ABC Holdings",
+      "option: Najd Development",
+      "option: XYZ Trading"
+    ],
+    "register-admin-ar-390": [
+      "a: S Seera",
+      "option: ABC Holdings",
+      "option: Najd Development",
+      "option: XYZ Trading"
+    ],
+    "register-admin-ar-768": [
+      "a: S Seera",
+      "option: ABC Holdings",
+      "option: Najd Development",
+      "option: XYZ Trading"
+    ],
+    "register-admin-ar-1440": [
+      "a: S Seera",
+      "option: ABC Holdings",
+      "option: Najd Development",
+      "option: XYZ Trading"
+    ],
+    "detail-rich-admin-ar-320": [
+      "a: S Seera",
+      "td: Jeddah Warehouse / CC-PRJ-002"
+    ],
+    "detail-rich-admin-ar-390": [
+      "a: S Seera",
+      "td: Jeddah Warehouse / CC-PRJ-002"
+    ],
+    "detail-rich-admin-ar-768": [
+      "a: S Seera",
+      "td: Jeddah Warehouse / CC-PRJ-002"
+    ],
+    "detail-rich-admin-ar-1440": [
+      "a: S Seera",
+      "td: Jeddah Warehouse / CC-PRJ-002"
+    ],
+    "detail-draft-admin-ar-320": [
+      "a: S Seera"
+    ],
+    "detail-draft-admin-ar-390": [
+      "a: S Seera"
+    ],
+    "detail-draft-admin-ar-768": [
+      "a: S Seera"
+    ],
+    "detail-draft-admin-ar-1440": [
+      "a: S Seera"
+    ],
+    "register-zubair-ar-320": [
+      "a: S Seera",
+      "option: ABC Holdings",
+      "option: Najd Development",
+      "option: XYZ Trading"
+    ],
+    "register-zubair-ar-390": [
+      "a: S Seera",
+      "option: ABC Holdings",
+      "option: Najd Development",
+      "option: XYZ Trading"
+    ],
+    "register-zubair-ar-768": [
+      "a: S Seera",
+      "option: ABC Holdings",
+      "option: Najd Development",
+      "option: XYZ Trading"
+    ],
+    "register-zubair-ar-1440": [
+      "a: S Seera",
+      "option: ABC Holdings",
+      "option: Najd Development",
+      "option: XYZ Trading"
+    ],
+    "detail-rich-zubair-ar-320": [
+      "a: S Seera",
+      "td: Jeddah Warehouse / CC-PRJ-002"
+    ],
+    "detail-rich-zubair-ar-390": [
+      "a: S Seera",
+      "td: Jeddah Warehouse / CC-PRJ-002"
+    ],
+    "detail-rich-zubair-ar-768": [
+      "a: S Seera",
+      "td: Jeddah Warehouse / CC-PRJ-002"
+    ],
+    "detail-rich-zubair-ar-1440": [
+      "a: S Seera",
+      "td: Jeddah Warehouse / CC-PRJ-002"
+    ]
+  },
+  "results": [
+    {
+      "id": "register-en-fallback-unchanged",
+      "status": "PASS",
+      "detail": {
+        "rows": 9,
+        "metrics": [
+          "400660.00",
+          "1",
+          "4",
+          "82800.00"
+        ]
+      }
+    },
+    {
+      "id": "register-ar-navigation-filters-tables-note-translated",
+      "status": "PASS",
+      "detail": {
+        "headers": [
+          "الفاتورة",
+          "العميل",
+          "تاريخ الفاتورة",
+          "تاريخ الاستحقاق",
+          "الخاضع للضريبة",
+          "ضريبة القيمة المضافة",
+          "الإجمالي",
+          "المحصّل",
+          "الرصيد",
+          "زاتكا",
+          "الدفع",
+          "الإجراءات"
+        ],
+        "statusLabels": 18
+      }
+    },
+    {
+      "id": "register-ar-amounts-filters-actions-identical-to-en",
+      "status": "PASS",
+      "detail": {
+        "rows": 9,
+        "forms": 5,
+        "links": 28
+      }
+    },
+    {
+      "id": "register-filters-same-results-in-both-locales",
+      "status": "PASS",
+      "detail": {
+        "?status=draft": 4,
+        "?status=unpaid": 3,
+        "?zatca=not_generated": 5,
+        "?search=INV-2026-0003": 1,
+        "?status=forged-value": 0,
+        "?customer=1&status=draft": 4
+      }
+    },
+    {
+      "id": "register-admin-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "register-admin-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "register-admin-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "register-admin-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "register-admin-en-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "register-admin-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "register-admin-en-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "register-admin-en-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "detail-rich-en-fallback-unchanged",
+      "status": "PASS",
+      "detail": {
+        "tables": 12,
+        "forms": 2
+      }
+    },
+    {
+      "id": "detail-draft-en-fallback-unchanged",
+      "status": "PASS",
+      "detail": {
+        "tables": 11,
+        "forms": 3
+      }
+    },
+    {
+      "id": "detail-rich-ar-labels-translated",
+      "status": "PASS",
+      "detail": {
+        "labels": 91,
+        "tabs": [
+          "بيانات الفاتورة",
+          "بنود الفاتورة",
+          "العميل",
+          "المشروع / مركز التكلفة",
+          "ضريبة القيمة المضافة",
+          "المحاسبة",
+          "سندات القبض",
+          "الرصيد / أعمار الديون",
+          "التعديلات / الإشعارات",
+          "الفاتورة الإلكترونية (زاتكا)",
+          "النشاط"
+        ]
+      }
+    },
+    {
+      "id": "detail-rich-ar-amounts-actions-identical-to-en",
+      "status": "PASS",
+      "detail": {
+        "forms": [
+          "http://127.0.0.1:18769/admin/accounting/zatca/2/generate",
+          "http://127.0.0.1:18769/admin/accounting/zatca/2/submit"
+        ],
+        "links": 14
+      }
+    },
+    {
+      "id": "detail-draft-ar-labels-translated",
+      "status": "PASS",
+      "detail": {
+        "labels": 86,
+        "tabs": [
+          "بيانات الفاتورة",
+          "بنود الفاتورة",
+          "العميل",
+          "ضريبة القيمة المضافة",
+          "المحاسبة",
+          "سندات القبض",
+          "الرصيد / أعمار الديون",
+          "التعديلات / الإشعارات",
+          "الفاتورة الإلكترونية (زاتكا)",
+          "النشاط"
+        ]
+      }
+    },
+    {
+      "id": "detail-draft-ar-amounts-actions-identical-to-en",
+      "status": "PASS",
+      "detail": {
+        "forms": [
+          "/8/reopen",
+          "http://127.0.0.1:18769/admin/accounting/zatca/5/generate",
+          "http://127.0.0.1:18769/admin/accounting/zatca/5/submit"
+        ],
+        "links": 12
+      }
+    },
+    {
+      "id": "detail-rich-admin-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "detail-rich-admin-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "detail-rich-admin-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "detail-rich-admin-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "detail-draft-admin-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "detail-draft-admin-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "detail-draft-admin-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "detail-draft-admin-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "detail-rich-admin-en-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "detail-rich-admin-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "detail-rich-admin-en-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "detail-rich-admin-en-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "detail-draft-admin-en-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "detail-draft-admin-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "detail-draft-admin-en-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "detail-draft-admin-en-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "approve-post-draft-9-in-arabic-posts-balanced-journal",
+      "status": "PASS",
+      "detail": {
+        "vat": [
+          [
+            "15.00"
+          ],
+          [
+            "200.00"
+          ],
+          [
+            "30.00"
+          ],
+          [
+            "230.00"
+          ],
+          [
+            "2210"
+          ],
+          [
+            ""
+          ]
+        ],
+        "accounting": [
+          [
+            "1200",
+            "",
+            "230.00",
+            ""
+          ],
+          [
+            "4100",
+            "",
+            "",
+            "200.00"
+          ],
+          [
+            "2210",
+            "",
+            "",
+            "30.00"
+          ],
+          [
+            "-2026 -0030 2026 -10 -28",
+            "",
+            "230.00",
+            "230.00"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "register-after-posting-draft-count-and-receivable-moved",
+      "status": "PASS",
+      "detail": {
+        "before": [
+          "400660.00",
+          "1",
+          "4",
+          "82800.00"
+        ],
+        "after": [
+          "400890.00",
+          "1",
+          "3",
+          "82800.00"
+        ]
+      }
+    },
+    {
+      "id": "detail-rich-accounts-manager-en-actions",
+      "status": "PASS",
+      "detail": {
+        "forms": 0,
+        "links": 10
+      }
+    },
+    {
+      "id": "detail-rich-accounts-manager-ar-same-actions-and-amounts",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "register-zubair-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "register-zubair-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "register-zubair-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "register-zubair-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "detail-rich-zubair-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "detail-rich-zubair-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "detail-rich-zubair-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "detail-rich-zubair-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "detail-forbidden-without-ar-permission-unchanged",
+      "status": "PASS",
+      "detail": null
+    }
+  ]
+}
