@@ -3,7 +3,7 @@
 <form method="GET" @if($action) action="{{ $action }}" @endif class="toolbar">
     <div class="toolbar-left">{{ $slot }}</div>
     <div class="toolbar-right">
-        <button type="submit" class="btn outline">Filter</button>
+        <button type="submit" class="btn outline">{{ __('Filter') }}</button>
         {{ $actions ?? '' }}
     </div>
 </form>

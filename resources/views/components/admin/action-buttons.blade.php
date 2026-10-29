@@ -2,13 +2,13 @@
 
 <div class="actions">
     @if ($view)
-        <a class="btn sm primary" href="{{ $view }}">View</a>
+        <a class="btn sm primary" href="{{ $view }}">{{ __('View') }}</a>
     @endif
     @if ($edit)
-        <a class="btn sm" href="{{ $edit }}">{{ $editLabel }}</a>
+        <a class="btn sm" href="{{ $edit }}">{{ __($editLabel) }}</a>
     @endif
     @if ($delete)
-        <button type="button" class="btn sm danger js-delete" data-delete-url="{{ $delete }}" data-delete-name="{{ $name }}" @if($deactivate) data-deactivate="1" @endif @if($deactivateHelp) data-deactivate-help="{{ $deactivateHelp }}" @endif>{{ $deleteLabel }}</button>
+        <button type="button" class="btn sm danger js-delete" data-delete-url="{{ $delete }}" data-delete-name="{{ __($name) }}" @if($deactivate) data-deactivate="1" @endif @if($deactivateHelp) data-deactivate-help="{{ __($deactivateHelp) }}" @endif>{{ __($deleteLabel) }}</button>
     @endif
     {{ $slot }}
 </div>

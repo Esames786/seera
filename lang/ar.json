@@ -823,5 +823,17 @@
     "Credit": "دائن",
     "Invoice Total": "إجمالي الفاتورة",
     "Payment state": "حالة الدفع",
-    "By": "بواسطة"
+    "By": "بواسطة",
+    "Not generated": "لم يُنشأ",
+    "Generated": "تم الإنشاء",
+    "Validated": "تم التحقق",
+    "Signed": "مختوم",
+    "Submission pending": "بانتظار الرد",
+    "Cleared": "معتمدة من زاتكا",
+    "Reported": "مُبلغ عنها لزاتكا",
+    "Failed": "فشل",
+    "Outcome unknown": "النتيجة غير معروفة",
+    "Both": "كلاهما",
+    "Delete": "حذف",
+    ":count receipt|:count receipts": "{0} :count مقبوضات|{1} :count مقبوض|[2,*] :count مقبوضات"
 }

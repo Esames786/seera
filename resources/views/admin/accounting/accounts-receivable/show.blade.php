@@ -262,7 +262,7 @@
     <x-admin.data-table :title="__('workspace.inv_balance')" class="detail-table" id="balance">
         <tbody>
             <tr><th>{{ __('Invoice Total') }}</th><td>{{ $money($invoice->total_amount) }}</td></tr>
-            <tr><th>{{ __('customer_notes.cash_received') }}</th><td>{{ $money($invoice->received_amount) }} <span class="small">({{ $receipts->total() }} receipt{{ $receipts->total() === 1 ? '' : 's' }})</span></td></tr>
+            <tr><th>{{ __('customer_notes.cash_received') }}</th><td>{{ $money($invoice->received_amount) }} <span class="small">({{ trans_choice(':count receipt|:count receipts', $receipts->total(), ['count' => $receipts->total()]) }})</span></td></tr>
             <tr><th>{{ __('customer_notes.credit_applied_to_invoice') }}</th><td>{{ $money($creditAllocated) }} <span class="small">{{ __('customer_notes.credit_applied_help') }}</span></td></tr>
             <tr><th>{{ __('Outstanding') }}</th><td><strong>{{ $money($invoice->balance_amount) }}</strong></td></tr>
             <tr><th>{{ __('Due Date') }}</th><td>{{ $invoice->due_date?->toDateString() ?? '-' }}</td></tr>
@@ -276,7 +276,7 @@
 
     {{-- 8b. Adjustments: credit / debit notes --}}
     <x-admin.data-table :title="__('customer_notes.adjustments')" :subtitle="__('customer_notes.adjustments_help')" id="adjustments">
-        <thead><tr><th>{{ __('Note') }}</th><th>{{ __('Type') }}</th><th>{{ __('Date') }}</th><th>{{ __('Reason') }}</th><th>{{ __('Taxable') }}</th><th>{{ __('VAT') }}</th><th>{{ __('Total') }}</th><th>{{ __('Status') }}</th><th>{{ __('ZATCA') }}</th><th>{{ __('Actions') }}</th></tr></thead>
+        <thead><tr><th>{{ __('Note') }}</th><th>{{ __('Type') }}</th><th>{{ __('Date') }}</th><th>{{ __('Reason') }}</th><th>{{ __('Taxable') }}</th><th>{{ __('VAT') }}</th><th>{{ __('Total') }}</th><th>{{ __('Status') }}</th><th>{{ __('zatca.label') }}</th><th>{{ __('Actions') }}</th></tr></thead>
         <tbody>
             @forelse ($adjustmentNotes as $note)
                 <tr>

@@ -8,6 +8,9 @@ return [
     'settings_title' => 'ZATCA Settings & Onboarding',
     'record_title' => 'ZATCA Compliance Record',
     'section' => 'ZATCA E-Invoice',
+    // Short column label. Views must not call __('ZATCA'): on a case-insensitive
+    // filesystem that key resolves to this whole group and renders an array.
+    'label' => 'ZATCA',
     'env_sandbox' => 'Developer Portal sandbox (test)',
     'env_simulation' => 'FATOORA simulation (test)',
     'env_production' => 'Production (FATOORA core)',

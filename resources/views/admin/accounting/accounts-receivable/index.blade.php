@@ -45,7 +45,7 @@
             <tr>
                 <th>{{ __('Invoice') }}</th><th>{{ __('Customer') }}</th><th>{{ __('Invoice Date') }}</th><th>{{ __('Due Date') }}</th>
                 <th>{{ __('Taxable') }}</th><th>{{ __('VAT') }}</th><th>{{ __('Total') }}</th><th>{{ __('Received') }}</th><th>{{ __('Balance') }}</th>
-                <th>{{ __('ZATCA') }}</th><th>{{ __('Payment') }}</th><th>{{ __('Actions') }}</th>
+                <th>{{ __('zatca.label') }}</th><th>{{ __('Payment') }}</th><th>{{ __('Actions') }}</th>
             </tr>
         </thead>
         <tbody>
