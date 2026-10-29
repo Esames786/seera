@@ -68,11 +68,13 @@ class InvoiceReopenLocalizationTest extends TestCase
 
         $this->actingAs($admin)->post(route('admin.accounting.accounts-receivable.reopen', $invoice))
             ->assertSessionHasErrors('reason');
+        $this->assertSame(__('invoice_reopen.reason_required', locale: 'ar'), session('errors')->first('reason'));
         $this->assertSame('unpaid', $invoice->fresh()->payment_status);
 
         $this->actingAs($admin)->post(route('admin.accounting.accounts-receivable.reopen', $invoice), [
             'reason' => 'Authorized reconciliation adjustment',
         ])->assertSessionHasNoErrors();
+        $this->assertStringContainsString('أُعيدت الفاتورة إلى مسودة', (string) session('status'));
         $this->assertSame('draft', $invoice->fresh()->payment_status);
         $this->assertStringContainsString('Authorized reconciliation adjustment', (string) $invoice->fresh()->notes);
     }
@@ -126,4 +128,19 @@ class InvoiceReopenLocalizationTest extends TestCase
             ->assertSee('فشل التحقق');
         $this->assertSame('failed', $record->fresh()->validation_status);
     }
+    public function test_reopen_server_messages_have_exact_english_arabic_pairs(): void
+    {
+        foreach ([
+            'only_super_admin',
+            'reason_required',
+            'unpaid_without_receipts',
+            'success_with_reversal',
+            'success_without_reversal',
+        ] as $key) {
+            $this->assertIsString(__("invoice_reopen.{$key}", locale: 'en'));
+            $this->assertIsString(__("invoice_reopen.{$key}", locale: 'ar'));
+            $this->assertNotSame(__("invoice_reopen.{$key}", locale: 'en'), __("invoice_reopen.{$key}", locale: 'ar'));
+        }
+    }
+
 }
