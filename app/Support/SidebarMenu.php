@@ -131,7 +131,7 @@ class SidebarMenu
                         ? static::link('admin.inventory.reports.index', 'admin.inventory.reports.*', '📦', 'Inventory Reports')
                         : static::soon('inventory-reports', '📦', 'Inventory Reports'),
                     static::soon('hr-reports', '🧾', 'HR Reports'),
-                    static::soon('project-reports', '🏗️', 'Project Reports'),
+                    static::link('admin.reports.projects.index', 'admin.reports.projects.*', '🏗️', 'Project Reports'),
                 ])),
             ],
             [
