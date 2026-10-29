@@ -23,6 +23,7 @@ class EnsureUserHasPermission
         'master.branches' => 'Branches',
         'master.departments' => 'Departments',
         'master.designations' => 'Designations',
+        'reports.projects' => 'Projects',
         'master.projects' => 'Projects',
         'master.project-classifications' => 'Projects',
         'master.sites' => 'Sites',
