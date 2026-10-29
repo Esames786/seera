@@ -215,16 +215,16 @@ class AccountsReceivableController extends Controller
      */
     public function reopen(Request $request, CustomerInvoice $accounts_receivable): RedirectResponse
     {
-        abort_unless($request->user()->isSuperAdmin(), 403, 'Only a Super Admin can reopen a posted invoice.');
+        abort_unless($request->user()->isSuperAdmin(), 403, __('invoice_reopen.only_super_admin'));
 
-        $data = $request->validate(['reason' => ['required', 'string', 'max:500']], ['reason.required' => 'Give the reason for reopening; it is kept on the invoice.']);
+        $data = $request->validate(['reason' => ['required', 'string', 'max:500']], ['reason.required' => __('invoice_reopen.reason_required')]);
 
         $reversal = DB::transaction(function () use ($accounts_receivable, $data, $request) {
             $invoice = CustomerInvoice::whereKey($accounts_receivable->id)->lockForUpdate()->firstOrFail();
             $invoice->load('zatcaRecord');
 
             if ($invoice->payment_status !== 'unpaid' || $invoice->receipts()->exists()) {
-                throw ValidationException::withMessages(['invoice' => 'Only an approved invoice with no receipts can be reopened.']);
+                throw ValidationException::withMessages(['invoice' => __('invoice_reopen.unpaid_without_receipts')]);
             }
 
             if ($invoice->isZatcaLocked() || ($invoice->zatcaRecord && $invoice->zatcaRecord->isLocked())) {
@@ -258,7 +258,9 @@ class AccountsReceivableController extends Controller
         ActivityLog::record($request, 'Accounting', 'Reopened customer invoice', $accounts_receivable->invoice_number.': '.$data['reason']);
 
         return redirect()->route('admin.accounting.accounts-receivable.show', $accounts_receivable)
-            ->with('status', 'Invoice reopened as a draft'.($reversal ? '; reversing entry '.$reversal->journal_number.' posted' : '').'. Correct it and approve again.');
+            ->with('status', $reversal
+                ? __('invoice_reopen.success_with_reversal', ['journal' => $reversal->journal_number])
+                : __('invoice_reopen.success_without_reversal'));
     }
 
     /**
