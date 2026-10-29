@@ -854,5 +854,7 @@
     "No projects match your access scope and selected filters.": "لا توجد مشاريع تطابق صلاحياتك وعوامل التصفية.",
     "Financial cost, revenue and margin are calculated from posted journals in the existing Project Cost Report, not from this operational listing.": "تُحسب التكلفة والإيرادات والهامش المالي من القيود المرحلة في تقرير تكاليف المشروع الحالي، وليس من هذه القائمة التشغيلية.",
     "Open Project Cost Report": "فتح تقرير تكاليف المشروع",
-    "Financial figures are hidden because you do not have Financial Reports permission.": "الأرقام المالية مخفية لعدم توفر صلاحية عرض التقارير المالية."
+    "Financial figures are hidden because you do not have Financial Reports permission.": "الأرقام المالية مخفية لعدم توفر صلاحية عرض التقارير المالية.",
+    "Completed": "مكتمل",
+    "On hold": "متوقف مؤقتاً"
 }
