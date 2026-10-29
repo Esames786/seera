@@ -68,14 +68,14 @@
             <tr><th>{{ __('Insurance expiry') }}</th><td><span class="badge {{ $expiryClass($ins) }}">{{ $asset->insurance_expiry_date?->toDateString() ?? __('unknown') }}</span></td></tr>
             <tr><th>{{ __('Ownership / acquisition') }}</th><td>{{ __(\App\Models\EquipmentAsset::OWNERSHIP[$asset->ownership_type] ?? $asset->ownership_type) }} · {{ $asset->acquisition_date?->toDateString() ?? '-' }}{{ $canFinance && $asset->acquisition_cost !== null ? ' · '.$money($asset->acquisition_cost) : '' }}</td></tr>
             <tr><th>{{ __('Status') }}</th><td><x-admin.status-badge :status="$asset->status"/>{{ $openMaintenance ? ' · '.$openMaintenance.' open maintenance record(s)' : '' }}</td></tr>
-            <tr><th>{{ __('Meter') }}</th><td>{{ $asset->meterLabel() }} ({{ __(\App\Models\EquipmentAsset::METER_TYPES[$asset->meter_type] ?? $asset->meter_type) }}). Readings from assignments, fuel and maintenance only move it forward; a lower reading needs a logged correction.</td></tr>
+            <tr><th>{{ __('Meter') }}</th><td>{{ $asset->meterLabel() }} ({{ __(\App\Models\EquipmentAsset::METER_TYPES[$asset->meter_type] ?? $asset->meter_type) }}). {{ __('Readings from assignments, fuel and maintenance only move it forward; a lower reading needs a logged correction.') }}</td></tr>
             <tr><th>{{ __('Notes') }}</th><td>{{ $asset->notes ?? '-' }}</td></tr>
             <tr><th>{{ __('Created') }}</th><td>{{ $asset->created_at?->format('Y-m-d H:i') }} · {{ $asset->creator?->name ?? '-' }}</td></tr>
         </tbody>
     </x-admin.data-table>
 
     {{-- Current Assignment --}}
-    <x-admin.data-table :title="__('Current Assignment')" subtitle="One active assignment per asset. Reassigning closes the current one and keeps it in the history." class="detail-table" id="assignment">
+    <x-admin.data-table :title="__('Current Assignment')" :subtitle="__('One active assignment per asset. Reassigning closes the current one and keeps it in the history.')" class="detail-table" id="assignment">
         <tbody>
             @if ($active)
                 <tr><th>{{ __('Project') }}</th><td>{{ $active->project?->code }} · {{ $active->project?->name }}</td></tr>
@@ -116,7 +116,7 @@
     </x-admin.data-table>
 
     {{-- Assignment History --}}
-    <x-admin.data-table :title="__('Assignment History')" subtitle="Every assignment ever recorded; closed rows are never deleted" id="history">
+    <x-admin.data-table :title="__('Assignment History')" :subtitle="__('Every assignment ever recorded; closed rows are never deleted')" id="history">
         <thead><tr><th>{{ __('Project') }}</th><th>{{ __('Site') }}</th><th>{{ __('Operator') }}</th><th>{{ __('From') }}</th><th>{{ __('Until') }}</th><th>{{ __('Meter start → end') }}</th><th>{{ __('Assigned by') }}</th><th>{{ __('Notes') }}</th><th>{{ __('State') }}</th></tr></thead>
         <tbody>
             @forelse ($assignmentHistory as $row)
@@ -135,7 +135,7 @@
     </x-admin.data-table>
 
     {{-- Fuel --}}
-    <x-admin.data-table :title="__('Fuel')" subtitle="Total = quantity × rate (server-calculated). A fuel entry becomes project cost only when Finance posts it (Cash / Bank journal) or the supplier bill it creates is posted." id="fuel">
+    <x-admin.data-table :title="__('Fuel')" :subtitle="__('Total = quantity × rate (server-calculated). A fuel entry becomes project cost only when Finance posts it (Cash / Bank journal) or the supplier bill it creates is posted.')" id="fuel">
         <thead><tr><th>{{ __('Number') }}</th><th>{{ __('Date') }}</th><th>{{ __('Project / Site') }}</th><th>{{ __('Meter') }}</th><th>{{ __('Quantity') }}</th><th>{{ __('Rate') }}</th><th>{{ __('Total') }}</th><th>{{ __('Payment') }}</th><th>{{ __('Category') }}</th><th>{{ __('Accounting') }}</th><th>{{ __('Receipt') }}</th><th></th></tr></thead>
         <tbody>
             @forelse ($fuelLogs as $log)
@@ -183,12 +183,12 @@
                 <div style="grid-column:span 2"><label for="fuel_notes">{{ __('Notes') }}</label><input id="fuel_notes" name="notes" class="input" maxlength="1000" value="{{ old('notes') }}"/></div>
                 <div><button type="submit" class="btn sm primary">{{ __('Record Fuel') }}</button></div>
             </form>
-            <p class="small">Project and site come from the active assignment at the time of the entry. The expense category's account decides the posting; Cash / Bank needs the account paid from, Supplier Credit needs the supplier and creates a draft supplier bill when Finance posts.</p>
+            <p class="small">{{ __('Project and site come from the active assignment at the time of the entry. The expense category\'s account decides the posting; Cash / Bank needs the account paid from, Supplier Credit needs the supplier and creates a draft supplier bill when Finance posts.') }}</p>
         </div>
     @endif
 
     {{-- Maintenance --}}
-    <x-admin.data-table :title="__('Maintenance')" subtitle="Open → Completed (or Cancelled). Completed records stay in the history; cost is posted by Finance after completion." id="maintenance">
+    <x-admin.data-table :title="__('Maintenance')" :subtitle="__('Open → Completed (or Cancelled). Completed records stay in the history; cost is posted by Finance after completion.')" id="maintenance">
         <thead><tr><th>{{ __('Number') }}</th><th>{{ __('Date') }}</th><th>{{ __('Type') }}</th><th>{{ __('Description') }}</th><th>{{ __('Workshop / supplier') }}</th><th>{{ __('Meter') }}</th><th>{{ __('Cost') }}</th><th>{{ __('Next service') }}</th><th>{{ __('Status') }}</th><th>{{ __('Accounting') }}</th><th>{{ __('Invoice') }}</th><th></th></tr></thead>
         <tbody>
             @forelse ($maintenance as $row)
@@ -264,7 +264,7 @@
     @endif
 
     {{-- Costs --}}
-    <x-admin.data-table :title="__('Costs')" subtitle="Equipment cost reaches the Project Cost Report and the project budget only through posted accounting (Cash / Bank journal or the posted supplier bill), never from the operational totals below." class="detail-table" id="costs">
+    <x-admin.data-table :title="__('Costs')" :subtitle="__('Equipment cost reaches the Project Cost Report and the project budget only through posted accounting (Cash / Bank journal or the posted supplier bill), never from the operational totals below.')" class="detail-table" id="costs">
         <tbody>
             @if ($canFinance && $costs)
                 <tr><th>{{ __('Fuel — posted') }}</th><td>{{ $money($costs['fuel']->posted) }}</td></tr>
@@ -272,15 +272,15 @@
                 <tr><th>{{ __('Maintenance — posted') }}</th><td>{{ $money($costs['maintenance']->posted) }}</td></tr>
                 <tr><th>{{ __('Maintenance — recorded, not yet posted') }}</th><td>{{ $money($costs['maintenance']->unposted) }} ({{ $costs['maintenance']->entries }} records, cancelled excluded)</td></tr>
                 <tr><th>{{ __('Posted equipment cost (this asset)') }}</th><td><strong>{{ $money($costs['fuel']->posted + $costs['maintenance']->posted) }}</strong></td></tr>
-                <tr><th>{{ __('Where it counts') }}</th><td class="small">Each posted journal carries the project / site of the assignment at the time of the entry, so the Project Cost Report and Budget vs Actual (Equipment category, mapped accounts) count it once. Supplier-credit records count through their supplier bill, never twice.</td></tr>
+                <tr><th>{{ __('Where it counts') }}</th><td class="small">{{ __('Each posted journal carries the project / site of the assignment at the time of the entry, so the Project Cost Report and Budget vs Actual (Equipment category, mapped accounts) count it once. Supplier-credit records count through their supplier bill, never twice.') }}</td></tr>
             @else
-                <tr><td colspan="2" class="table-empty">Cost figures are shown to users with Financial Reports view.</td></tr>
+                <tr><td colspan="2" class="table-empty">{{ __('Cost figures are shown to users with Financial Reports view.') }}</td></tr>
             @endif
         </tbody>
     </x-admin.data-table>
 
     {{-- Documents --}}
-    <x-admin.data-table :title="__('Documents')" subtitle="Private files (registration, insurance, inspection, permits, invoices, receipts). Served only to authorized users; no public links." id="documents">
+    <x-admin.data-table :title="__('Documents')" :subtitle="__('Private files (registration, insurance, inspection, permits, invoices, receipts). Served only to authorized users; no public links.')" id="documents">
         <thead><tr><th>{{ __('Type') }}</th><th>{{ __('Number') }}</th><th>{{ __('Issued') }}</th><th>{{ __('Expiry') }}</th><th>{{ __('File') }}</th><th>{{ __('Uploaded') }}</th><th>{{ __('Notes') }}</th></tr></thead>
         <tbody>
             @forelse ($documents as $doc)
@@ -314,15 +314,15 @@
     {{-- Tracking / GPS --}}
     <x-admin.data-table :title="__('Tracking / GPS')" class="detail-table" id="tracking">
         <tbody>
-            <tr><th>{{ __('Live tracking') }}</th><td><span class="badge gray">{{ __('Not connected') }}</span> Live GPS tracking is not connected to a telematics provider. No position, route, speed, idle time or geofence event is recorded or shown for this asset.</td></tr>
+            <tr><th>{{ __('Live tracking') }}</th><td><span class="badge gray">{{ __('Not connected') }}</span> {{ __('Live GPS tracking is not connected to a telematics provider. No position, route, speed, idle time or geofence event is recorded or shown for this asset.') }}</td></tr>
             <tr><th>{{ __('Tracker readiness') }}</th><td>{{ $asset->tracker_device_id ? ($asset->tracker_provider ?: 'Provider not set').' · device '.$asset->tracker_device_id.' (stored for the future integration; not polled)' : 'No tracker device recorded.' }}</td></tr>
-            <tr><th>{{ __('What exists today') }}</th><td class="small">Project / site assignment, operator, meter readings from assignments, fuel and maintenance, and the site geofence settings used by mobile attendance. The provider integration contract is documented for the next phase.</td></tr>
+            <tr><th>{{ __('What exists today') }}</th><td class="small">{{ __('Project / site assignment, operator, meter readings from assignments, fuel and maintenance, and the site geofence settings used by mobile attendance. The provider integration contract is documented for the next phase.') }}</td></tr>
         </tbody>
     </x-admin.data-table>
 
     {{-- Activity --}}
     @if ($activity !== null)
-        <x-admin.data-table :title="__('Activity')" subtitle="Latest entries for this asset, limited to the users your role may see" id="activity">
+        <x-admin.data-table :title="__('Activity')" :subtitle="__('Latest entries for this asset, limited to the users your role may see')" id="activity">
             <thead><tr><th>{{ __('When') }}</th><th>{{ __('User') }}</th><th>{{ __('Action') }}</th><th>{{ __('Details') }}</th></tr></thead>
             <tbody>
                 @forelse ($activity as $log)
@@ -335,6 +335,6 @@
     @endif
 
     <div class="note">
-        Equipment Phase 1: asset master, assignment history, fuel, maintenance, private documents and accounting through Expense Categories and the Finance payment catalogue. Live GPS / routes / speed / idle time, utilization analytics and depreciation are NOT YET OPERATIONAL.
+        {{ __('Equipment Phase 1: asset master, assignment history, fuel, maintenance, private documents and accounting through Expense Categories and the Finance payment catalogue. Live GPS / routes / speed / idle time, utilization analytics and depreciation are NOT YET OPERATIONAL.') }}
     </div>
 @endsection
