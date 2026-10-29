@@ -25,9 +25,24 @@ const AR = /[\u0600-\u06ff]/;
 const INDEX = '/admin/accounting/accounts-receivable';
 const show = n => `${INDEX}/${n}`;
 const T = {
-    en: {button: 'Reopen for Correction', title: 'Confirm invoice reopening', help: 'A reason is required and will be preserved in the invoice audit history.', label: 'Reason for reopening this invoice (kept on the record):', required: 'Enter a reopening reason before continuing.', cancel: 'Cancel', locked: 'This invoice has a stamped or submitted e-invoice and cannot be reopened. Issue a credit note instead.', passed: 'Passed', failed: 'Failed'},
-    ar: {button: 'إعادة فتح للتصحيح', title: 'تأكيد إعادة فتح الفاتورة', help: 'يجب إدخال سبب وسيُحفظ في سجل تدقيق الفاتورة.', label: 'سبب إعادة فتح هذه الفاتورة (يُحفظ في السجل):', required: 'أدخل سبب إعادة الفتح قبل المتابعة.', cancel: 'إلغاء', locked: 'لهذه الفاتورة فاتورة إلكترونية مختومة أو مرسلة ولا يمكن إعادة فتحها. أصدر إشعاراً دائناً بدلاً من ذلك.', passed: 'اجتاز التحقق', failed: 'فشل التحقق'},
+    en: {button: 'Reopen for Correction', title: 'Confirm invoice reopening', help: 'A reason is required and will be preserved in the invoice audit history.', label: 'Reason for reopening this invoice (kept on the record):', required: 'Enter a reopening reason before continuing.', cancel: 'Cancel', locked: 'This invoice has a stamped or submitted e-invoice and cannot be reopened. Issue a credit note instead.', passed: 'Passed', failed: 'Failed',
+        // Server messages: English must stay byte-identical to the former hardcoded text; both locales are read from lang/*/invoice_reopen.php below.
+        success: /^Invoice reopened as a draft; reversing entry (JV-\d{4}-\d{4}) posted\. Correct it and approve again\.$/, reasonRequired: 'Give the reason for reopening; it is kept on the invoice.', onlySuperAdmin: 'Only a Super Admin can reopen a posted invoice.', unpaidOnly: 'Only an approved invoice with no receipts can be reopened.'},
+    ar: {button: 'إعادة فتح للتصحيح', title: 'تأكيد إعادة فتح الفاتورة', help: 'يجب إدخال سبب وسيُحفظ في سجل تدقيق الفاتورة.', label: 'سبب إعادة فتح هذه الفاتورة (يُحفظ في السجل):', required: 'أدخل سبب إعادة الفتح قبل المتابعة.', cancel: 'إلغاء', locked: 'لهذه الفاتورة فاتورة إلكترونية مختومة أو مرسلة ولا يمكن إعادة فتحها. أصدر إشعاراً دائناً بدلاً من ذلك.', passed: 'اجتاز التحقق', failed: 'فشل التحقق',
+        success: null, reasonRequired: null, onlySuperAdmin: null, unpaidOnly: null},
 };
+// The server-message catalogue is the source of truth for both locales (the English copy above must equal it).
+const catalogue = locale => {
+    const php = fs.readFileSync(path.resolve('lang', locale, 'invoice_reopen.php'), 'utf8');
+    const get = key => { const m = php.match(new RegExp("'" + key + "'\\s*=>\\s*'((?:[^'\\\\]|\\\\.)*)'")); assert.ok(m, 'lang ' + locale + ' key ' + key); return m[1].replace(/\\'/g, "'"); };
+    const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return {success: new RegExp('^' + esc(get('success_with_reversal')).replace(':journal', '(JV-\\d{4}-\\d{4})') + '$'), reasonRequired: get('reason_required'), onlySuperAdmin: get('only_super_admin'), unpaidOnly: get('unpaid_without_receipts')};
+};
+for (const locale of ['en', 'ar']) {
+    const c = catalogue(locale);
+    if (locale === 'en') { for (const k of ['reasonRequired', 'onlySuperAdmin', 'unpaidOnly']) assert.equal(c[k], T.en[k], 'English server message changed: ' + k); assert.equal(c.success.source, T.en.success.source, 'English success message changed'); }
+    Object.assign(T[locale], c);
+}
 
 (async () => {
     const browser = await chromium.launch({headless: true, executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'});
@@ -70,8 +85,17 @@ const T = {
     const csrf = page => page.locator('input[name=_token]').first().inputValue();
     const forgedPost = (page, url, token, reason) => page.evaluate(async ({url, token, reason}) => {
         const r = await fetch(url, {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'text/html'}, body: new URLSearchParams({_token: token, reason}), redirect: 'manual'});
-        return {status: r.status, type: r.type};
+        const body = r.type === 'opaqueredirect' ? '' : await r.text();
+        return {status: r.status, type: r.type, body: body.replace(/<(style|script)[\s\S]*?<\/\1>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()};
     }, {url, token, reason});
+    const flashError = page => page.locator('.alert.flash').first().innerText().then(t => t.trim()).catch(() => '');
+    // Invoices reopened by an earlier run are drafts again: approve them through the UI so the flows have eligible invoices.
+    const ensurePosted = async (page, invoice) => {
+        await page.goto(base + show(invoice));
+        const approve = page.locator('.page-actions form[action$="/approve"]');
+        if (await approve.count()) await Promise.all([page.waitForNavigation(), approve.locator('button').click()]);
+        assert.equal(await reopenForm(page).count(), 1, 'invoice ' + invoice + ' must be posted, unpaid and reopenable');
+    };
 
     // The full dialog flow on one eligible invoice: open, Escape, Cancel, empty reason, keyboard confirm.
     const dialogFlow = async (page, locale, invoice, width) => {
@@ -144,8 +168,11 @@ const T = {
             assert.match(text, /Browser QA reopen \(/, 'reason kept in notes');
             assert.match(text, /\(reversal JV-\d{4}-\d{4}\)/, 'reversal journal referenced in notes');
             assert.match(text, /Reopened customer invoice/, 'activity entry');
-            const flash = await page.locator('.alert.success.flash').innerText();
-            return {flash: flash.trim().slice(0, 160)};
+            const flash = (await page.locator('.alert.success.flash').innerText()).trim();
+            const m = flash.match(t.success);
+            assert.ok(m, 'localized success flash with journal number: ' + flash);
+            assert.ok(text.includes('(reversal ' + m[1] + ')'), 'flash journal ' + m[1] + ' matches the reversal kept in the notes');
+            return {flash, journal: m[1]};
         });
         await page.setViewportSize({width: 1440, height: 1000});
     };
@@ -169,8 +196,37 @@ const T = {
         }
 
         // ---------- Dialog flows ----------
+        await setLocale(admin, 'en');
+        await check('prepare-posted-invoices-9-and-8', async () => { await ensurePosted(admin, 9); await ensurePosted(admin, 8); });
         await dialogFlow(admin, 'ar', 9, 1440);
         await dialogFlow(admin, 'en', 8, 390);
+
+        // ---------- Server messages: required reason (forged POST without a reason, Super Admin) ----------
+        for (const locale of ['ar', 'en']) {
+            await setLocale(admin, locale);
+            await check(`server-message-${locale}-reason-required`, async () => {
+                await admin.goto(base + show(7));
+                const r = await forgedPost(admin, base + show(7) + '/reopen', await csrf(admin), '');
+                assert.ok(r.type === 'opaqueredirect' || r.status === 302, 'expected a redirect with errors, got ' + JSON.stringify(r));
+                await admin.goto(base + show(7));
+                const flash = await flashError(admin);
+                assert.equal(flash, T[locale].reasonRequired, 'reason-required message');
+                assert.equal(await reopenForm(admin).count(), 1, 'invoice 7 still unpaid / reopenable');
+                return flash;
+            });
+            // Draft invoice 9 (reopened above): the unpaid-without-receipts rule message.
+            await check(`server-message-${locale}-unpaid-without-receipts`, async () => {
+                await admin.goto(base + show(9));
+                assert.equal(await reopenForm(admin).count(), 0, 'draft has no reopen action');
+                const r = await forgedPost(admin, base + show(9) + '/reopen', await csrf(admin), 'Forged on a draft');
+                assert.ok(r.type === 'opaqueredirect' || r.status === 302, 'expected a redirect with errors, got ' + JSON.stringify(r));
+                await admin.goto(base + show(9));
+                const flash = await flashError(admin);
+                assert.equal(flash, T[locale].unpaidOnly, 'unpaid-only message');
+                assert.doesNotMatch(await pageText(admin), /Forged on a draft/, 'nothing written');
+                return flash;
+            });
+        }
 
         // ---------- Dialog open at every width, both locales (invoice 7, never submitted) ----------
         for (const locale of ['ar', 'en']) {
@@ -204,6 +260,12 @@ const T = {
                 assert.equal(await dialog(zubair).count(), 0, 'no dialog markup');
                 const r = await forgedPost(zubair, base + show(7) + '/reopen', await csrf(zubair), 'Forged by Accounts Manager');
                 assert.equal(r.status, 403, 'forged reopen must be 403, got ' + JSON.stringify(r));
+                return {messageShown: r.body.includes(T[locale].onlySuperAdmin), body: r.body.slice(0, 200)};
+            });
+            await check(`non-super-admin-${locale}-403-message-localized`, async () => {
+                const r = await forgedPost(zubair, base + show(7) + '/reopen', await csrf(zubair), 'Forged by Accounts Manager');
+                assert.equal(r.status, 403);
+                assert.ok(r.body.includes(T[locale].onlySuperAdmin), '403 body carries the localized message: ' + r.body.slice(0, 300));
             });
         }
         await setLocale(admin, 'en');

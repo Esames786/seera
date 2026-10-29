@@ -53,6 +53,15 @@ See [invoice reopen verification](SEERA-INVOICE-REOPEN-QA-2026-10-29.md) (branch
 | GAP-02 (reopen dialog, ZATCA validation) | The browser `prompt()` is replaced by a bilingual in-page dialog (Cancel / Escape / empty reason / keyboard verified at 320–1440); local ZATCA validation states translate without changing stored values; Super Admin-only visibility, server refusals (403, ZATCA lock) and the accounting reversal / audit trail verified unchanged |
 | GAP-02 (remaining) | Reopen server messages (flash, 403, validation rule texts), activity log and reversal journal descriptions stored in English; the wider client language review |
 
+### Invoice reopening server messages — 29 October 2026
+
+See [reopen messages verification](SEERA-INVOICE-REOPEN-MESSAGES-QA-2026-10-29.md) (branch `feature/seera-invoice-reopen-messages-2026-10-29`, verified HEAD `692ca45`, no source fix needed).
+
+| ID | Status |
+| --- | --- |
+| GAP-02 (reopen server messages) | 403, required-reason, unpaid-without-receipts and success messages bilingual through `lang/*/invoice_reopen.php`; English copy unchanged; journal number interpolated; verified in the browser in both locales with the reversal / VAT / audit behaviour unchanged |
+| GAP-02 (remaining) | Activity log, reversal journal description and the stored notes line in English (audit text); the wider client language review |
+
 ## Original findings
 
 Baseline `aca78ee`. This register distinguishes missing requirements, policy decisions and reproduced UI defects from accounting failures. No new production code fix or data repair was made in this review.

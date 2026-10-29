@@ -1,5 +1,5 @@
 {
-  "run_at": "2026-10-29T13:19:08.280Z",
+  "run_at": "2026-10-29T16:24:01.430Z",
   "branch": "feature/seera-invoice-localization-final-2026-10-29",
   "fixture": "private synthetic UAT fixture (not client data)",
   "widths": [
@@ -8,11 +8,21 @@
     768,
     1440
   ],
-  "checks": 27,
-  "passed": 27,
+  "checks": 34,
+  "passed": 34,
   "failed": [],
   "page_errors": [],
   "failed_resources": [
+    {
+      "user": "zubair@example.com",
+      "url": "http://127.0.0.1:18769/admin/accounting/accounts-receivable/7/reopen",
+      "status": 403
+    },
+    {
+      "user": "zubair@example.com",
+      "url": "http://127.0.0.1:18769/admin/accounting/accounts-receivable/7/reopen",
+      "status": 403
+    },
     {
       "user": "zubair@example.com",
       "url": "http://127.0.0.1:18769/admin/accounting/accounts-receivable/7/reopen",
@@ -40,6 +50,11 @@
         "row1": "Local validation\tPassed (2026-10-29 09:00)",
         "row2": "Local validation\tFailed (2026-10-29 09:00)"
       }
+    },
+    {
+      "id": "prepare-posted-invoices-9-and-8",
+      "status": "PASS",
+      "detail": null
     },
     {
       "id": "dialog-ar-9-closed-by-default-and-button-translated",
@@ -75,7 +90,8 @@
       "id": "dialog-ar-9-keyboard-tab-order-and-enter-confirms",
       "status": "PASS",
       "detail": {
-        "flash": "Invoice reopened as a draft; reversing entry JV-2026-0031 posted. Correct it and approve again."
+        "flash": "أُعيدت الفاتورة إلى مسودة؛ تم ترحيل القيد العكسي JV-2026-0039. صححها ثم اعتمدها من جديد.",
+        "journal": "JV-2026-0039"
       }
     },
     {
@@ -112,8 +128,29 @@
       "id": "dialog-en-8-keyboard-tab-order-and-enter-confirms",
       "status": "PASS",
       "detail": {
-        "flash": "Invoice reopened as a draft; reversing entry JV-2026-0032 posted. Correct it and approve again."
+        "flash": "Invoice reopened as a draft; reversing entry JV-2026-0040 posted. Correct it and approve again.",
+        "journal": "JV-2026-0040"
       }
+    },
+    {
+      "id": "server-message-ar-reason-required",
+      "status": "PASS",
+      "detail": "أدخل سبب إعادة فتح الفاتورة؛ سيُحفظ في سجل الفاتورة."
+    },
+    {
+      "id": "server-message-ar-unpaid-without-receipts",
+      "status": "PASS",
+      "detail": "لا يمكن إعادة فتح إلا فاتورة معتمدة لم تُسجَّل عليها أي مقبوضات."
+    },
+    {
+      "id": "server-message-en-reason-required",
+      "status": "PASS",
+      "detail": "Give the reason for reopening; it is kept on the invoice."
+    },
+    {
+      "id": "server-message-en-unpaid-without-receipts",
+      "status": "PASS",
+      "detail": "Only an approved invoice with no receipts can be reopened."
     },
     {
       "id": "dialog-open-ar-320",
@@ -198,10 +235,26 @@
     {
       "id": "non-super-admin-ar-no-action-and-forged-post-403",
       "status": "PASS",
+      "detail": {
+        "messageShown": true,
+        "body": "Forbidden 403 لا يمكن إعادة فتح فاتورة مرحلة إلا بواسطة المسؤول الأعلى."
+      }
+    },
+    {
+      "id": "non-super-admin-ar-403-message-localized",
+      "status": "PASS",
       "detail": null
     },
     {
       "id": "non-super-admin-en-no-action-and-forged-post-403",
+      "status": "PASS",
+      "detail": {
+        "messageShown": true,
+        "body": "Forbidden 403 Only a Super Admin can reopen a posted invoice."
+      }
+    },
+    {
+      "id": "non-super-admin-en-403-message-localized",
       "status": "PASS",
       "detail": null
     },
