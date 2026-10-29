@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Accounts Receivable')
-@section('breadcrumb', 'Accounting / Accounts Receivable')
+@section('title', __('Accounts Receivable'))
+@section('breadcrumb', __('Accounting / Accounts Receivable'))
 
 @section('content')
     <x-admin.page-header title="Accounts Receivable" description="Customer invoices, output VAT, ZATCA status and receipts">
-        <a class="btn primary" href="{{ route('admin.accounting.accounts-receivable.create') }}">+ Add Customer Invoice</a>
+        <a class="btn primary" href="{{ route('admin.accounting.accounts-receivable.create') }}">{{ __('+ Add Customer Invoice') }}</a>
     </x-admin.page-header>
 
     <div class="card-grid">
@@ -16,36 +16,36 @@
     </div>
 
     <x-admin.filter-bar>
-        <input class="input" style="width:220px" type="search" name="search" value="{{ request('search') }}" placeholder="Invoice number or customer..."/>
+        <input class="input" style="width:220px" type="search" name="search" value="{{ request('search') }}" placeholder="{{ __('Invoice number or customer...') }}"/>
         <select class="select" style="width:180px" name="customer">
-            <option value="">All Customers</option>
+            <option value="">{{ __('All Customers') }}</option>
             @foreach ($customers as $customer)
                 <option value="{{ $customer->id }}" @selected(request('customer') == $customer->id)>{{ $customer->name }}</option>
             @endforeach
         </select>
         <select class="select" style="width:160px" name="status">
-            <option value="">All Payment Status</option>
+            <option value="">{{ __('All Payment Status') }}</option>
             @foreach ($statuses as $status)
-                <option value="{{ $status }}" @selected(request('status') === $status)>{{ ucfirst(str_replace('_', ' ', $status)) }}</option>
+                <option value="{{ $status }}" @selected(request('status') === $status)>{{ __(ucfirst(str_replace('_', ' ', $status))) }}</option>
             @endforeach
         </select>
         <select class="select" style="width:170px" name="zatca">
-            <option value="">All ZATCA Status</option>
+            <option value="">{{ __('All ZATCA Status') }}</option>
             @foreach ($zatcaStatuses as $status)
-                <option value="{{ $status }}" @selected(request('zatca') === $status)>{{ ucfirst(str_replace('_', ' ', $status)) }}</option>
+                <option value="{{ $status }}" @selected(request('zatca') === $status)>{{ __(ucfirst(str_replace('_', ' ', $status))) }}</option>
             @endforeach
         </select>
         <x-slot:actions>
-            <a class="btn outline" href="{{ route('admin.accounting.accounts-receivable.index') }}">Reset</a>
+            <a class="btn outline" href="{{ route('admin.accounting.accounts-receivable.index') }}">{{ __('Reset') }}</a>
         </x-slot:actions>
     </x-admin.filter-bar>
 
     <x-admin.data-table title="Customer Invoices">
         <thead>
             <tr>
-                <th>Invoice</th><th>Customer</th><th>Invoice Date</th><th>Due Date</th>
-                <th>Taxable</th><th>VAT</th><th>Total</th><th>Received</th><th>Balance</th>
-                <th>ZATCA</th><th>Payment</th><th>Actions</th>
+                <th>{{ __('Invoice') }}</th><th>{{ __('Customer') }}</th><th>{{ __('Invoice Date') }}</th><th>{{ __('Due Date') }}</th>
+                <th>{{ __('Taxable') }}</th><th>{{ __('VAT') }}</th><th>{{ __('Total') }}</th><th>{{ __('Received') }}</th><th>{{ __('Balance') }}</th>
+                <th>{{ __('ZATCA') }}</th><th>{{ __('Payment') }}</th><th>{{ __('Actions') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -57,7 +57,7 @@
                     <td>
                         {{ $invoice->due_date?->toDateString() ?? '-' }}
                         @if ($invoice->due_date && $invoice->due_date->isPast() && in_array($invoice->payment_status, ['unpaid', 'partially_paid']))
-                            <span class="badge red">Overdue</span>
+                            <span class="badge red">{{ __('Overdue') }}</span>
                         @endif
                     </td>
                     <td>{{ number_format($invoice->taxable_amount, 2) }}</td>
@@ -76,27 +76,27 @@
                             @if ($invoice->payment_status === 'draft')
                                 <form method="POST" action="{{ route('admin.accounting.accounts-receivable.approve', $invoice) }}">
                                     @csrf
-                                    <button type="submit" class="btn sm warning">Approve</button>
+                                    <button type="submit" class="btn sm warning">{{ __('Approve') }}</button>
                                 </form>
                             @elseif (in_array($invoice->payment_status, ['unpaid', 'partially_paid']))
-                                <a class="btn sm warning" href="{{ route('admin.accounting.accounts-receivable.receipt', $invoice) }}">Receipt</a>
+                                <a class="btn sm warning" href="{{ route('admin.accounting.accounts-receivable.receipt', $invoice) }}">{{ __('Receipt') }}</a>
                             @endif
                         </x-admin.action-buttons>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="12" class="table-empty">No invoices match the selected filters.</td></tr>
+                <tr><td colspan="12" class="table-empty">{{ __('No invoices match the selected filters.') }}</td></tr>
             @endforelse
         </tbody>
         <x-slot:footer>
-            <span class="small">Showing {{ $invoices->firstItem() ?? 0 }}-{{ $invoices->lastItem() ?? 0 }} of {{ $invoices->total() }}</span>
+            <span class="small">{{ __('Showing :from-:to of :total', ['from' => $invoices->firstItem() ?? 0, 'to' => $invoices->lastItem() ?? 0, 'total' => $invoices->total()]) }}</span>
             {{ $invoices->links() }}
         </x-slot:footer>
     </x-admin.data-table>
 
     <x-admin.data-table title="Recent Customer Receipts">
         <thead>
-            <tr><th>Date</th><th>Customer</th><th>Invoice</th><th>Amount</th><th>Reference</th></tr>
+            <tr><th>{{ __('Date') }}</th><th>{{ __('Customer') }}</th><th>{{ __('Invoice') }}</th><th>{{ __('Amount') }}</th><th>{{ __('Reference') }}</th></tr>
         </thead>
         <tbody>
             @forelse ($recentReceipts as $receipt)
@@ -108,12 +108,12 @@
                     <td>{{ $receipt->reference_number ?? '-' }}</td>
                 </tr>
             @empty
-                <tr><td colspan="5" class="table-empty">No receipts recorded yet.</td></tr>
+                <tr><td colspan="5" class="table-empty">{{ __('No receipts recorded yet.') }}</td></tr>
             @endforelse
         </tbody>
     </x-admin.data-table>
 
     <div class="note">
-        Approving an invoice posts: debit accounts receivable, credit revenue and output VAT, and creates the ZATCA invoice record. Recording a receipt posts: debit cash/bank, credit accounts receivable.
+        {{ __('Approving an invoice posts: debit accounts receivable, credit revenue and output VAT, and creates the ZATCA invoice record. Recording a receipt posts: debit cash/bank, credit accounts receivable.') }}
     </div>
 @endsection
