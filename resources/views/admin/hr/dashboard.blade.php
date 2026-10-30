@@ -5,7 +5,7 @@
 
 @section('content')
     <x-admin.page-header title="HR Dashboard" description="Employees, attendance, leaves, overtime, documents and payroll at a glance">
-        @if(auth()->user()->hasPermission('Attendance', 'create'))<a class="btn outline" href="{{ route('admin.hr.attendance.create') }}">{{ __(' + Manual Attendance') }}</a>@endif
+        @if(auth()->user()->hasPermission('Attendance', 'create'))<a class="btn outline" href="{{ route('admin.hr.attendance.create') }}">{{ __('+ Manual Attendance') }}</a>@endif
         @if(auth()->user()->hasPermission('HR', 'create'))<a class="btn primary" href="{{ route('admin.hr.employees.create') }}">+ Add Employee</a>@endif
     </x-admin.page-header>
 
