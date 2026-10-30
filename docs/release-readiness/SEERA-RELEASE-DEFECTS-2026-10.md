@@ -62,6 +62,16 @@ See [reopen messages verification](SEERA-INVOICE-REOPEN-MESSAGES-QA-2026-10-29.m
 | GAP-02 (reopen server messages) | 403, required-reason, unpaid-without-receipts and success messages bilingual through `lang/*/invoice_reopen.php`; English copy unchanged; journal number interpolated; verified in the browser in both locales with the reversal / VAT / audit behaviour unchanged |
 | GAP-02 (remaining) | Activity log, reversal journal description and the stored notes line in English (audit text); the wider client language review |
 
+### Project Reports overview (MVP) — 30 October 2026
+
+See [Project Reports verification](SEERA-PROJECT-REPORTS-QA-2026-10-30.md) (branch `feature/seera-project-reports-mvp-2026-10-29`, verified HEAD `ee3c606`, test / dictionary fix on the branch).
+
+| ID | Status |
+| --- | --- |
+| PR-01 | Found and fixed: the new test assumed the seeded Project Manager lacks Financial Reports (it holds view / export) and matched the echoed search term instead of a row; the application behaviour was correct. Test made deterministic with company-level, site-level and status-filter scenarios |
+| PR-02 | Found and fixed: "Completed" / "On hold" status options untranslated in the Arabic filter |
+| Project Reports | Scoped read-only portfolio verified for Super Admin, Project Manager, Site In-Charge, Marketing Manager and HR Manager (403); Financial Reports link only with that permission; no migration, no accounting change |
+
 ## Original findings
 
 Baseline `aca78ee`. This register distinguishes missing requirements, policy decisions and reproduced UI defects from accounting failures. No new production code fix or data repair was made in this review.

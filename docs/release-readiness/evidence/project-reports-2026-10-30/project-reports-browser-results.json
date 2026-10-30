@@ -1,0 +1,324 @@
+{
+  "run_at": "2026-10-29T19:18:18.359Z",
+  "branch": "feature/seera-project-reports-mvp-2026-10-29",
+  "fixture": "private synthetic UAT fixture (not client data)",
+  "widths": [
+    320,
+    390,
+    768,
+    1440
+  ],
+  "checks": 31,
+  "passed": 31,
+  "failed": [],
+  "page_errors": [],
+  "failed_resources": [
+    {
+      "user": "zafar@example.com",
+      "url": "http://127.0.0.1:18769/admin/master/projects/1",
+      "status": 404
+    },
+    {
+      "user": "waleed@example.com",
+      "url": "http://127.0.0.1:18769/admin/reports/projects",
+      "status": 403
+    },
+    {
+      "user": "waleed@example.com",
+      "url": "http://127.0.0.1:18769/admin/reports/projects",
+      "status": 403
+    }
+  ],
+  "untranslated_text_in_arabic_ui": {
+    "project-reports-admin-ar-320": [
+      "a: S Seera"
+    ],
+    "project-reports-admin-ar-390": [
+      "a: S Seera"
+    ],
+    "project-reports-admin-ar-768": [
+      "a: S Seera"
+    ],
+    "project-reports-admin-ar-1440": [
+      "a: S Seera"
+    ],
+    "project-reports-zafar-ar-320": [
+      "a: S Seera"
+    ],
+    "project-reports-zafar-ar-390": [
+      "a: S Seera"
+    ],
+    "project-reports-zafar-ar-768": [
+      "a: S Seera"
+    ],
+    "project-reports-zafar-ar-1440": [
+      "a: S Seera"
+    ]
+  },
+  "results": [
+    {
+      "id": "scope-admin-listing-metrics-links",
+      "status": "PASS",
+      "detail": {
+        "projects": [
+          "PRJ-001",
+          "PRJ-002",
+          "PRJ-003"
+        ],
+        "metrics": [
+          3,
+          2
+        ],
+        "financeLink": true,
+        "headers": 9
+      }
+    },
+    {
+      "id": "scope-admin-search-out-of-scope-reveals-nothing",
+      "status": "PASS",
+      "detail": []
+    },
+    {
+      "id": "scope-nabeel-listing-metrics-links",
+      "status": "PASS",
+      "detail": {
+        "projects": [
+          "PRJ-001",
+          "PRJ-002",
+          "PRJ-003"
+        ],
+        "metrics": [
+          3,
+          2
+        ],
+        "financeLink": true,
+        "headers": 9
+      }
+    },
+    {
+      "id": "scope-nabeel-search-out-of-scope-reveals-nothing",
+      "status": "PASS",
+      "detail": []
+    },
+    {
+      "id": "scope-zafar-listing-metrics-links",
+      "status": "PASS",
+      "detail": {
+        "projects": [
+          "PRJ-003"
+        ],
+        "metrics": [
+          1,
+          1
+        ],
+        "financeLink": false,
+        "headers": 9
+      }
+    },
+    {
+      "id": "scope-zafar-search-out-of-scope-reveals-nothing",
+      "status": "PASS",
+      "detail": [
+        "PRJ-001",
+        "PRJ-002"
+      ]
+    },
+    {
+      "id": "scope-abdullah-listing-metrics-links",
+      "status": "PASS",
+      "detail": {
+        "projects": [
+          "PRJ-001",
+          "PRJ-002",
+          "PRJ-003"
+        ],
+        "metrics": [
+          3,
+          2
+        ],
+        "financeLink": false,
+        "headers": 8
+      }
+    },
+    {
+      "id": "scope-abdullah-search-out-of-scope-reveals-nothing",
+      "status": "PASS",
+      "detail": []
+    },
+    {
+      "id": "filters-search-status-and-forged-status",
+      "status": "PASS",
+      "detail": "ok"
+    },
+    {
+      "id": "english-baseline-exact",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "project-cost-report-link-opens-existing-report",
+      "status": "PASS",
+      "detail": {
+        "figures": 21
+      }
+    },
+    {
+      "id": "arabic-labels-exact-and-values-unchanged",
+      "status": "PASS",
+      "detail": [
+        "جميع الحالات",
+        "نشط",
+        "قيد التخطيط",
+        "متوقف مؤقتاً",
+        "مكتمل",
+        "غير نشط"
+      ]
+    },
+    {
+      "id": "arabic-hidden-figures-note-for-site-user",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "id": "project-reports-admin-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "project-reports-admin-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "project-reports-admin-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "project-reports-admin-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "project-reports-zafar-ar-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "project-reports-zafar-ar-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "project-reports-zafar-ar-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "project-reports-zafar-ar-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "project-reports-admin-en-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "project-reports-admin-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "project-reports-admin-en-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "project-reports-admin-en-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "project-reports-zafar-en-320",
+      "status": "PASS",
+      "detail": {
+        "viewport": 320,
+        "document": 320
+      }
+    },
+    {
+      "id": "project-reports-zafar-en-390",
+      "status": "PASS",
+      "detail": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "id": "project-reports-zafar-en-768",
+      "status": "PASS",
+      "detail": {
+        "viewport": 768,
+        "document": 768
+      }
+    },
+    {
+      "id": "project-reports-zafar-en-1440",
+      "status": "PASS",
+      "detail": {
+        "viewport": 1440,
+        "document": 1440
+      }
+    },
+    {
+      "id": "site-user-forged-project-record-refused",
+      "status": "PASS",
+      "detail": {
+        "own": "/admin/master/projects/3",
+        "forged": 404
+      }
+    },
+    {
+      "id": "hr-manager-without-projects-view-gets-403-and-no-sidebar-entry",
+      "status": "PASS",
+      "detail": null
+    }
+  ]
+}
