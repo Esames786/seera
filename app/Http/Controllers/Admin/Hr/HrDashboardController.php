@@ -16,6 +16,8 @@ class HrDashboardController extends Controller
 {
     public function index(): View
     {
+        $canViewAttendance = request()->user()->hasPermission('Attendance', 'view');
+        $canViewPayroll = request()->user()->hasPermission('Payroll', 'view');
         $today = now()->toDateString();
         $expiryWindow = now()->addDays(60)->toDateString();
 
@@ -24,20 +26,22 @@ class HrDashboardController extends Controller
             ->whereDate('end_date', '>=', $today)
             ->count();
 
-        $currentPayroll = PayrollRun::where('payroll_month', now()->month)
+        $currentPayroll = $canViewPayroll ? PayrollRun::where('payroll_month', now()->month)
             ->where('payroll_year', now()->year)
             ->latest('id')
-            ->first();
+            ->first() : null;
 
         return view('admin.hr.dashboard', [
+            'canViewAttendance' => $canViewAttendance,
+            'canViewPayroll' => $canViewPayroll,
             'totalEmployees' => Employee::count(),
             'activeEmployees' => Employee::where('status', 'active')->count(),
-            'presentToday' => AttendanceRecord::whereDate('attendance_date', $today)->where('status', 'present')->count(),
-            'lateToday' => AttendanceRecord::whereDate('attendance_date', $today)->where('status', 'late')->count(),
-            'absentToday' => AttendanceRecord::whereDate('attendance_date', $today)->where('status', 'absent')->count(),
+            'presentToday' => $canViewAttendance ? AttendanceRecord::whereDate('attendance_date', $today)->where('status', 'present')->count() : null,
+            'lateToday' => $canViewAttendance ? AttendanceRecord::whereDate('attendance_date', $today)->where('status', 'late')->count() : null,
+            'absentToday' => $canViewAttendance ? AttendanceRecord::whereDate('attendance_date', $today)->where('status', 'absent')->count() : null,
             'onLeaveToday' => $onLeaveToday,
             'pendingLeaves' => LeaveRequest::where('status', 'pending')->count(),
-            'pendingOvertime' => OvertimeRecord::where('status', 'pending')->count(),
+            'pendingOvertime' => $canViewPayroll ? OvertimeRecord::where('status', 'pending')->count(),
             'currentPayroll' => $currentPayroll,
             'expiringIqamas' => Employee::whereNotNull('iqama_expiry_date')
                 ->whereDate('iqama_expiry_date', '<=', $expiryWindow)
@@ -45,8 +49,8 @@ class HrDashboardController extends Controller
             'expiringDocuments' => EmployeeDocument::whereNotNull('expiry_date')
                 ->whereDate('expiry_date', '<=', $expiryWindow)
                 ->count(),
-            'pendingEosb' => EndOfServiceRecord::where('status', 'draft')->count(),
-            'pendingPayrollApprovals' => PayrollRun::whereIn('status', ['draft', 'processed'])->count(),
+            'pendingEosb' => $canViewPayroll ? EndOfServiceRecord::where('status', 'draft')->count() : null,
+            'pendingPayrollApprovals' => $canViewPayroll ? PayrollRun::whereIn('status', ['draft', 'processed'])->count() : null,
             'expiringEmployees' => Employee::with(['department', 'designation'])
                 ->whereNotNull('iqama_expiry_date')
                 ->whereDate('iqama_expiry_date', '<=', $expiryWindow)
