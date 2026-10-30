@@ -32,6 +32,31 @@ try {
     if (Test-Path -LiteralPath 'bootstrap/cache/config.php') {
         throw 'A cached Laravel config exists. In your DEV checkout run php artisan config:clear so phpunit.xml SQLite :memory: test settings apply.'
     }
+    if (Get-ChildItem -LiteralPath 'bootstrap/cache' -Filter 'routes-*.php' -ErrorAction SilentlyContinue) {
+        throw 'A cached Laravel route file exists. In your DEV checkout run php artisan route:clear so route changes on this branch are tested.'
+    }
+
+    # Resolve the PHP executable. Laragon machines often have no php on PATH, so fall back to
+    # the SEERA_PHP environment variable, then to the newest PHP 8.3 under a Laragon install.
+    if ($Php -eq 'php' -and -not (Get-Command php -ErrorAction SilentlyContinue)) {
+        if ($env:SEERA_PHP -and (Test-Path -LiteralPath $env:SEERA_PHP)) {
+            $Php = $env:SEERA_PHP
+        }
+        else {
+            $candidates = @()
+            foreach ($laragon in @($env:LARAGON_ROOT, 'C:\laragon', 'D:\laragon', 'D:\laragon2')) {
+                if ($laragon -and (Test-Path -LiteralPath (Join-Path $laragon 'bin\php'))) {
+                    $candidates += Get-ChildItem -Path (Join-Path $laragon 'bin\php') -Directory -Filter 'php-8.3*' -ErrorAction SilentlyContinue |
+                        ForEach-Object { Join-Path $_.FullName 'php.exe' } |
+                        Where-Object { Test-Path -LiteralPath $_ }
+                }
+            }
+            if ($candidates.Count -eq 0) {
+                throw 'php is not on PATH. Pass -Php <full path to php.exe> or set SEERA_PHP.'
+            }
+            $Php = ($candidates | Sort-Object -Descending | Select-Object -First 1)
+        }
+    }
 
     $argsForArtisan = @('artisan', 'test')
     switch ($Mode) {
