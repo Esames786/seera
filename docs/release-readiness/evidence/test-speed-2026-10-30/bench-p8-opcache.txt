@@ -1,0 +1,12 @@
+﻿=== p8-opcache started 2026-10-30 16:22:38 ===
+PHPRC=<isolated-opcache-ini-dir>
+php=8.3.16; ini=<isolated-opcache-ini-dir>/php.ini; opcache_loaded=1; opcache.enable_cli=1; opcache.jit=; TEST_TOKEN=(none)
+args: -Mode parallel -Processes 8
+SEERA test mode: parallel; workers: 8
+Command: php artisan test --parallel --processes=8
+Use the configured phpunit.xml SQLite in-memory database; never run this against production.
+ParaTest v7.20.0 upon PHPUnit 12.5.30 by Sebastian Bergmann and contributors.
+{"tool":"paratest","result":"passed","tests":802,"passed":802,"assertions":9686,"duration_ms":581302}
+SEERA_TEST_DURATION_SECONDS=583.3
+SEERA_TEST_EXIT_CODE=0
+=== p8-opcache finished 2026-10-30 16:32:22 exit=0 ===

@@ -81,3 +81,45 @@ Many existing Feature tests call `$this->seed(DatabaseSeeder::class)` in `setUp(
 ## Delivery conditions
 
 A speed change becomes ready for integration only after Composer lock verification, isolated repeatable 4/8-worker test runs, identical expected assertion counts and no races. Keep original client feature branches and production untouched throughout.
+
+## Results — 30 October 2026 (development workstation, 12 logical cores / 32 GB, PHP 8.3.16, Laravel 13.18, PHPUnit 12.5.30, ParaTest 7.20.0)
+
+All runs executed on this branch from the same sources, one after another, never overlapping, through `scripts/test-speed.ps1`, with the SQLite `:memory:` configuration from `phpunit.xml`. The workstation stayed awake; VS Code, Chrome and Slack were open throughout, so the background load was the same for every run. Raw outputs and the 15-second resource samples are in `evidence/test-speed-2026-10-30/`.
+
+| Run | Tests | Passed | Assertions | Failed / skipped | Wall-clock (script) | ParaTest-reported | Peak PHP RSS | Speed-up vs serial |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Serial, 1 process (fresh baseline, machine awake) | 802 | 802 | 9,686 | 0 / 0 | 2,368.1 s | 2,322.2 s (PHPUnit) | 825 MB | 1.0x |
+| Serial reference from 29 Oct (`70b31e0`, 795 tests, for context only) | 795 | 795 | 9,640 | 0 / 0 | 3,111 s | n/a | n/a | n/a |
+| 4 workers | 802 | 802 | 9,686 | 0 / 0 | 1,118.6 s | 1,116.4 s | 1,065 MB | 2.1x |
+| 8 workers | 802 | 802 | 9,686 | 0 / 0 | 846.0 s | 774.4 s | 1,415 MB | 2.8x |
+| 8 workers + CLI OPcache | 802 | 802 | 9,686 | 0 / 0 | 583.3 s | 581.3 s | 1,636 MB | 4.1x |
+| 4 workers + CLI OPcache | 802 | 802 | 9,686 | 0 / 0 | 902.7 s | 900.5 s | 1,431 MB | 2.6x |
+| 8 workers + CLI OPcache, repeat through `-OpCache` (php not on PATH) | 802 | 802 | 9,686 | 0 / 0 | 758.6 s | 698.0 s | n/a (sampler stopped) | 3.1x |
+
+Every parallel run reports the identical inventory (802 tests, 802 passed, 9,686 assertions, exit code 0) that the serial suite reports, with no skipped or incomplete test. The 8-worker ParaTest figure is lower than the script's wall-clock because ParaTest stops its timer before the final result collation; the wall-clock column is the honest number.
+
+CPU during the 4-worker run: each worker used about three quarters of a core (12-core machine, other applications took 10–15 %). With 8 workers the machine was close to saturated, which is why 8 workers gain only 1.3x over 4 and why 12 or 16 workers were not tried on this workstation.
+
+### CLI OPcache experiment
+
+OPcache was enabled only through an isolated copy of the loaded `php.ini` with `zend_extension=opcache`, `opcache.enable_cli=1` and `opcache.jit=off`, pointed to by `PHPRC` for the test command alone. The child PHP workers inherited it (verified with a probe printing `extension_loaded('Zend OPcache')` and `opcache.enable_cli` inside the worker environment). The machine's own `php.ini` was not edited, and nothing about the application's OPcache policy changes. Gain: 1.45x on 8 workers (846 s → 583 s) and 1.24x on 4 workers (1,119 s → 903 s), with identical test results. The repeat 8-worker OPcache run through the runner switch took 758.6 s, so the honest range for the recommended command on this workstation is 583-759 s (3.1x-4.1x against the 2,368 s serial run); the difference between the two runs is background load, not test behaviour, since both report the same inventory and exit code. The runner now offers this as `-OpCache`.
+
+### Worker isolation gate — what was verified
+
+- Database: `DB_DATABASE=:memory:` means each worker process owns a private SQLite database; Laravel's parallel-testing support skips test-database creation for in-memory SQLite (`TestDatabases::whenNotUsingInMemoryDatabase`). No `.sqlite` file appeared under `database/` after the runs, and no MySQL connection is configured for tests.
+- Fake disks: every test that touches `Storage` calls `Storage::fake(...)` (14 classes, including all ZATCA XML and attachment tests), and `Storage::fake` suffixes its root with the ParaTest token (`storage/framework/testing/disks/<disk>_test_<token>`), so workers never share fake-disk files.
+- Other files: seeders write no files; the only temp file in application code (`ZatcaCrypto`, CSR config) uses `tempnam`, unique per call; cache, session and queue drivers are `array` / `sync` in `phpunit.xml`; compiled Blade views were already present, so no concurrent compilation happened.
+- Test code: no `@depends`, `setUpBeforeClass` or `runInSeparateProcess`; the only `static` test state is a per-class counter used for unique fixture names.
+- Production safety: the runner refuses a cached config or cached routes, needs a local `vendor/`, and runs only the `phpunit.xml` configuration.
+
+### Recommended command
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-speed.ps1 -Mode parallel -Processes 8 -OpCache
+```
+
+Equivalent plain command once CLI OPcache is enabled in the development php.ini: `php artisan test --parallel --processes=8`. Use 4 workers on machines with fewer than 8 logical cores or less than 8 GB free memory (peak PHP memory was about 1.6 GB with 8 workers). Keep the serial `php artisan test` as the reference run for release integration branches until the parallel suite has been green on several further branches.
+
+### Not done, by design
+
+Shared-seeder optimisation (Step 5) was not started: parallel mode alone exceeds the 2–3x target, and the risk to authorization and financial fixtures is not justified by the measured need.
