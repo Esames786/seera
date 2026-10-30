@@ -856,5 +856,8 @@
     "Open Project Cost Report": "فتح تقرير تكاليف المشروع",
     "Financial figures are hidden because you do not have Financial Reports permission.": "الأرقام المالية مخفية لعدم توفر صلاحية عرض التقارير المالية.",
     "Completed": "مكتمل",
-    "On hold": "متوقف مؤقتاً"
+    "On hold": "متوقف مؤقتاً",
+    "Recorded attendance and approved leave counts for today; not a historical trend or payroll calculation.": "أعداد الحضور والإجازات المعتمدة لليوم فقط، وليست اتجاهاً تاريخياً أو حساباً للرواتب.",
+    "Attendance figures are hidden without Attendance view permission.": "بيانات الحضور مخفية دون صلاحية العرض.",
+    "+ Manual Attendance": "+ تسجيل حضور يدوي"
 }
