@@ -16,7 +16,11 @@ param(
 
     [string] $Php = 'php',
 
-    [switch] $Profile
+    [switch] $Profile,
+
+    # Run the tests with CLI OPcache enabled through an isolated php.ini copy (PHPRC), so the
+    # machine's own php.ini is never edited and the setting reaches the worker processes too.
+    [switch] $OpCache
 )
 
 $ErrorActionPreference = 'Stop'
@@ -85,6 +89,37 @@ try {
 
     if ($Profile) {
         $argsForArtisan += '--profile'
+    }
+
+    if ($OpCache) {
+        $loadedIni = (& $Php -r 'echo php_ini_loaded_file();').Trim()
+        if (-not $loadedIni -or -not (Test-Path -LiteralPath $loadedIni)) {
+            throw 'Cannot locate the php.ini that this PHP loads; -OpCache needs one to copy.'
+        }
+        $iniDir = Join-Path ([System.IO.Path]::GetTempPath()) 'seera-test-opcache'
+        New-Item -ItemType Directory -Force -Path $iniDir | Out-Null
+        $iniCopy = Join-Path $iniDir 'php.ini'
+        $opcacheLines = @(
+            '',
+            '; --- appended by scripts/test-speed.ps1 -OpCache (development test runs only) ---',
+            'zend_extension=opcache',
+            'opcache.enable=1',
+            'opcache.enable_cli=1',
+            'opcache.memory_consumption=256',
+            'opcache.interned_strings_buffer=16',
+            'opcache.max_accelerated_files=20000',
+            'opcache.validate_timestamps=1',
+            'opcache.revalidate_freq=0',
+            'opcache.jit=off'
+        )
+        Set-Content -LiteralPath $iniCopy -Value ((Get-Content -LiteralPath $loadedIni) + $opcacheLines) -Encoding ascii
+        $env:PHPRC = $iniDir
+        # No double quotes inside this PHP snippet: Windows PowerShell strips them when calling a native exe.
+        $effective = (& $Php -r 'echo (int) extension_loaded(''Zend OPcache''), '':'', ini_get(''opcache.enable_cli'');').Trim()
+        if ($effective -ne '1:1') {
+            throw ('OPcache did not take effect through PHPRC (got "' + $effective + '"). Check that php_opcache.dll exists in the extension_dir of ' + $loadedIni)
+        }
+        Write-Host ('CLI OPcache enabled through isolated ini copy: ' + $iniCopy)
     }
 
     Write-Host ('SEERA test mode: ' + $Mode + '; workers: ' + $(if ($Mode -eq 'parallel') { $Processes } else { 1 }))
