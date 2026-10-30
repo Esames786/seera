@@ -856,5 +856,20 @@
     "Open Project Cost Report": "فتح تقرير تكاليف المشروع",
     "Financial figures are hidden because you do not have Financial Reports permission.": "الأرقام المالية مخفية لعدم توفر صلاحية عرض التقارير المالية.",
     "Completed": "مكتمل",
-    "On hold": "متوقف مؤقتاً"
+    "On hold": "متوقف مؤقتاً",
+    "Reports / HR Reports": "التقارير / تقارير الموارد البشرية",
+    "Read-only workforce and monthly attendance/leave summary from permitted HR records. No salary, bank or payroll data is shown.": "ملخص شهري للموظفين والحضور والإجازات للقراءة فقط ضمن صلاحيات الموارد البشرية. لا تظهر رواتب أو حسابات بنكية أو بيانات مسيرات الرواتب.",
+    "Report month": "شهر التقرير",
+    "Reporting period: :from to :to": "فترة التقرير: من :from إلى :to",
+    "Employees in scope": "الموظفون ضمن الصلاحية",
+    "Active employees in scope": "الموظفون النشطون ضمن الصلاحية",
+    "Leave requests by start month": "طلبات الإجازة حسب شهر البدء",
+    "Requests": "الطلبات",
+    "Leave counts use the request start date, not days consumed or leave balances.": "تُحتسب طلبات الإجازة وفق تاريخ بدايتها، وليس الأيام المستهلكة أو رصيد الإجازات.",
+    "Attendance records by status": "سجلات الحضور حسب الحالة",
+    "Records": "السجلات",
+    "Attendance figures count recorded entries, not unique employees, worked days or payroll entitlement.": "تُحتسب سجلات الحضور المسجلة، لا عدد الموظفين الفريدين أو أيام العمل أو استحقاقات الرواتب.",
+    "Open Attendance": "فتح سجل الحضور",
+    "Attendance figures are hidden because you do not have Attendance view permission.": "أرقام الحضور مخفية لعدم توفر صلاحية عرض الحضور.",
+    "Official GOSI, WPS/Mudad and payroll financial reports are not provided by this operational overview.": "هذا الملخص التشغيلي لا يقدم تقارير التأمينات الاجتماعية الرسمية أو حماية الأجور أو التقارير المالية للرواتب."
 }
