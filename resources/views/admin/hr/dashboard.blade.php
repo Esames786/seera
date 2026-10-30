@@ -5,33 +5,34 @@
 
 @section('content')
     <x-admin.page-header title="HR Dashboard" description="Employees, attendance, leaves, overtime, documents and payroll at a glance">
-        <a class="btn outline" href="{{ route('admin.hr.attendance.create') }}">+ Manual Attendance</a>
-        <a class="btn primary" href="{{ route('admin.hr.employees.create') }}">+ Add Employee</a>
+        @if(auth()->user()->hasPermission('Attendance', 'create'))<a class="btn outline" href="{{ route('admin.hr.attendance.create') }}">{{ __(' + Manual Attendance') }}</a>@endif
+        @if(auth()->user()->hasPermission('HR', 'create'))<a class="btn primary" href="{{ route('admin.hr.employees.create') }}">+ Add Employee</a>@endif
     </x-admin.page-header>
 
     <div class="card-grid">
         <x-admin.metric-card color="blue" :value="$totalEmployees" label="Total Employees"/>
         <x-admin.metric-card color="green" :value="$activeEmployees" label="Active Employees"/>
-        <x-admin.metric-card color="green" :value="$presentToday" label="Present Today"/>
-        <x-admin.metric-card color="yellow" :value="$lateToday" label="Late Today"/>
+        @if($canViewAttendance)<x-admin.metric-card color="green" :value="$presentToday" label="Present Today"/>@endif
+        @if($canViewAttendance)<x-admin.metric-card color="yellow" :value="$lateToday" label="Late Today"/>@endif
     </div>
 
     <div class="card-grid">
         <x-admin.metric-card color="cyan" :value="$onLeaveToday" label="On Leave Today"/>
         <x-admin.metric-card color="yellow" :value="$pendingLeaves" label="Pending Leaves"/>
-        <x-admin.metric-card color="yellow" :value="$pendingOvertime" label="Pending Overtime"/>
-        <x-admin.metric-card color="blue" :value="'SAR '.number_format($currentPayroll?->net_amount ?? 0)" label="Current Month Payroll"/>
+        @if($canViewPayroll)<x-admin.metric-card color="yellow" :value="$pendingOvertime" label="Pending Overtime"/>@endif
+        @if($canViewPayroll)<x-admin.metric-card color="blue" :value="'SAR '.number_format($currentPayroll?->net_amount ?? 0)" label="Current Month Payroll"/>@endif
     </div>
 
     <div class="card-grid">
         <x-admin.metric-card color="red" :value="$expiringIqamas" label="Expiring IQAMAs (60 days)"/>
         <x-admin.metric-card color="red" :value="$expiringDocuments" label="Expiring Documents (60 days)"/>
-        <x-admin.metric-card color="yellow" :value="$pendingEosb" label="Pending EOSB"/>
-        <x-admin.metric-card color="red" :value="$absentToday" label="Absent Today"/>
+        @if($canViewPayroll)<x-admin.metric-card color="yellow" :value="$pendingEosb" label="Pending EOSB"/>@endif
+        @if($canViewAttendance)<x-admin.metric-card color="red" :value="$absentToday" label="Absent Today"/>@endif
     </div>
 
     <div class="split even">
         <div>
+            @if($canViewAttendance)
             <x-admin.data-table title="Today's Attendance Summary">
                 <x-slot:headerActions>
                     <a class="btn sm primary" href="{{ route('admin.hr.attendance.index') }}">Open Attendance</a>
@@ -47,7 +48,10 @@
                 </tbody>
             </x-admin.data-table>
 
-            <div class="chart-placeholder">Chart Placeholder: Present / Late / Absent / Leave trend</div>
+            <div class="help-box">{{ __('Recorded attendance and approved leave counts for today; not a historical trend or payroll calculation.') }}</div>
+            @else
+            <div class="help-box">{{ __('Attendance figures are hidden without Attendance view permission.') }}</div>
+            @endif
         </div>
 
         <div>
@@ -57,10 +61,12 @@
                 </thead>
                 <tbody>
                     <tr><td>Leave Requests</td><td>{{ $pendingLeaves }}</td><td><a class="btn sm" href="{{ route('admin.hr.leaves.index', ['status' => 'pending']) }}">Open</a></td></tr>
-                    <tr><td>Overtime Claims</td><td>{{ $pendingOvertime }}</td><td><a class="btn sm" href="{{ route('admin.hr.overtime.index', ['status' => 'pending']) }}">Open</a></td></tr>
+                    @if($canViewPayroll)<tr><td>Overtime Claims</td><td>{{ $pendingOvertime }}</td><td><a class="btn sm" href="{{ route('admin.hr.overtime.index', ['status' => 'pending']) }}">Open</a></td></tr>@endif
                     <tr><td>Document Expiry</td><td>{{ $expiringDocuments }}</td><td><a class="btn sm" href="{{ route('admin.hr.documents.index', ['validity' => 'expiring']) }}">Open</a></td></tr>
+                    @if($canViewPayroll)
                     <tr><td>Payroll Approval</td><td>{{ $pendingPayrollApprovals }}</td><td><a class="btn sm" href="{{ route('admin.hr.payroll.index') }}">Open</a></td></tr>
                     <tr><td>End of Service</td><td>{{ $pendingEosb }}</td><td><a class="btn sm" href="{{ route('admin.hr.eosb.index', ['status' => 'draft']) }}">Open</a></td></tr>
+                    @endif
                 </tbody>
             </x-admin.data-table>
 
