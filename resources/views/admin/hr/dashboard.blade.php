@@ -6,7 +6,7 @@
 @section('content')
     <x-admin.page-header title="HR Dashboard" description="Employees, attendance, leaves, overtime, documents and payroll at a glance">
         @if(auth()->user()->hasPermission('Attendance', 'create'))<a class="btn outline" href="{{ route('admin.hr.attendance.create') }}">{{ __('+ Manual Attendance') }}</a>@endif
-        @if(auth()->user()->hasPermission('HR', 'create'))<a class="btn primary" href="{{ route('admin.hr.employees.create') }}">+ Add Employee</a>@endif
+        @if(auth()->user()->hasPermission('HR', 'create'))<a class="btn primary" href="{{ route('admin.hr.employees.create') }}">{{ __('+ Add Employee') }}</a>@endif
     </x-admin.page-header>
 
     <div class="card-grid">
@@ -35,7 +35,7 @@
             @if($canViewAttendance)
             <x-admin.data-table title="Today's Attendance Summary">
                 <x-slot:headerActions>
-                    <a class="btn sm primary" href="{{ route('admin.hr.attendance.index') }}">Open Attendance</a>
+                    <a class="btn sm primary" href="{{ route('admin.hr.attendance.index') }}">{{ __('Open Attendance') }}</a>
                 </x-slot:headerActions>
                 <thead>
                     <tr><th>Status</th><th>Employees</th></tr>
@@ -60,12 +60,12 @@
                     <tr><th>Queue</th><th>Count</th><th></th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Leave Requests</td><td>{{ $pendingLeaves }}</td><td><a class="btn sm" href="{{ route('admin.hr.leaves.index', ['status' => 'pending']) }}">Open</a></td></tr>
-                    @if($canViewPayroll)<tr><td>Overtime Claims</td><td>{{ $pendingOvertime }}</td><td><a class="btn sm" href="{{ route('admin.hr.overtime.index', ['status' => 'pending']) }}">Open</a></td></tr>@endif
-                    <tr><td>Document Expiry</td><td>{{ $expiringDocuments }}</td><td><a class="btn sm" href="{{ route('admin.hr.documents.index', ['validity' => 'expiring']) }}">Open</a></td></tr>
+                    <tr><td>Leave Requests</td><td>{{ $pendingLeaves }}</td><td><a class="btn sm" href="{{ route('admin.hr.leaves.index', ['status' => 'pending']) }}">{{ __('Open') }}</a></td></tr>
+                    @if($canViewPayroll)<tr><td>Overtime Claims</td><td>{{ $pendingOvertime }}</td><td><a class="btn sm" href="{{ route('admin.hr.overtime.index', ['status' => 'pending']) }}">{{ __('Open') }}</a></td></tr>@endif
+                    <tr><td>Document Expiry</td><td>{{ $expiringDocuments }}</td><td><a class="btn sm" href="{{ route('admin.hr.documents.index', ['validity' => 'expiring']) }}">{{ __('Open') }}</a></td></tr>
                     @if($canViewPayroll)
-                    <tr><td>Payroll Approval</td><td>{{ $pendingPayrollApprovals }}</td><td><a class="btn sm" href="{{ route('admin.hr.payroll.index') }}">Open</a></td></tr>
-                    <tr><td>End of Service</td><td>{{ $pendingEosb }}</td><td><a class="btn sm" href="{{ route('admin.hr.eosb.index', ['status' => 'draft']) }}">Open</a></td></tr>
+                    <tr><td>Payroll Approval</td><td>{{ $pendingPayrollApprovals }}</td><td><a class="btn sm" href="{{ route('admin.hr.payroll.index') }}">{{ __('Open') }}</a></td></tr>
+                    <tr><td>End of Service</td><td>{{ $pendingEosb }}</td><td><a class="btn sm" href="{{ route('admin.hr.eosb.index', ['status' => 'draft']) }}">{{ __('Open') }}</a></td></tr>
                     @endif
                 </tbody>
             </x-admin.data-table>
@@ -92,7 +92,7 @@
 
     <x-admin.data-table title="Latest Leave Requests">
         <x-slot:headerActions>
-            <a class="btn sm primary" href="{{ route('admin.hr.leaves.index') }}">View All</a>
+            <a class="btn sm primary" href="{{ route('admin.hr.leaves.index') }}">{{ __('View All') }}</a>
         </x-slot:headerActions>
         <thead>
             <tr><th>Employee</th><th>Leave Type</th><th>Start</th><th>End</th><th>Days</th><th>Status</th></tr>

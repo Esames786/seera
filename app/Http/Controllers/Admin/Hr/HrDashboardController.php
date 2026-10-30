@@ -41,7 +41,7 @@ class HrDashboardController extends Controller
             'absentToday' => $canViewAttendance ? AttendanceRecord::whereDate('attendance_date', $today)->where('status', 'absent')->count() : null,
             'onLeaveToday' => $onLeaveToday,
             'pendingLeaves' => LeaveRequest::where('status', 'pending')->count(),
-            'pendingOvertime' => $canViewPayroll ? OvertimeRecord::where('status', 'pending')->count(),
+            'pendingOvertime' => $canViewPayroll ? OvertimeRecord::where('status', 'pending')->count() : null,
             'currentPayroll' => $currentPayroll,
             'expiringIqamas' => Employee::whereNotNull('iqama_expiry_date')
                 ->whereDate('iqama_expiry_date', '<=', $expiryWindow)

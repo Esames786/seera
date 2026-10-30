@@ -859,5 +859,7 @@
     "On hold": "متوقف مؤقتاً",
     "Recorded attendance and approved leave counts for today; not a historical trend or payroll calculation.": "أعداد الحضور والإجازات المعتمدة لليوم فقط، وليست اتجاهاً تاريخياً أو حساباً للرواتب.",
     "Attendance figures are hidden without Attendance view permission.": "بيانات الحضور مخفية دون صلاحية العرض.",
-    "+ Manual Attendance": "+ تسجيل حضور يدوي"
+    "+ Manual Attendance": "+ تسجيل حضور يدوي",
+    "+ Add Employee": "+ إضافة موظف",
+    "Open Attendance": "فتح الحضور"
 }
