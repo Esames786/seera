@@ -34,6 +34,7 @@ class EnsureUserHasPermission
         // Any signed-in user may reach the shared dropdown endpoint; the controller checks the list's own module.
         'master.lookup-values' => 'Dashboard',
         'master.customers' => 'Customers',
+        'reports.hr' => 'HR',
         'hr.dashboard' => 'HR',
         'hr.employees' => 'HR',
         'hr.documents' => 'HR',
