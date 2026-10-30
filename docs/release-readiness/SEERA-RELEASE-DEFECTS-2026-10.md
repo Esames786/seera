@@ -72,6 +72,17 @@ See [Project Reports verification](SEERA-PROJECT-REPORTS-QA-2026-10-30.md) (bran
 | PR-02 | Found and fixed: "Completed" / "On hold" status options untranslated in the Arabic filter |
 | Project Reports | Scoped read-only portfolio verified for Super Admin, Project Manager, Site In-Charge, Marketing Manager and HR Manager (403); Financial Reports link only with that permission; no migration, no accounting change |
 
+### HR dashboard truthful UI — 31 October 2026
+
+See [HR dashboard verification](SEERA-HR-DASHBOARD-QA-2026-10-31.md) (branch `feature/seera-hr-dashboard-truthful-ui-2026-10-30`, verified HEAD `5c138ee`, fix on the branch).
+
+| ID | Status |
+| --- | --- |
+| HR-01 | Found and fixed: PHP parse error in `HrDashboardController` (`pendingOvertime` ternary without its `null` branch) made the dashboard and every test that boots it fail on the delivered HEAD |
+| HR-02 | Found and fixed: dashboard action buttons ("+ Add Employee", "Open Attendance", "Open", "View All") stayed English in Arabic |
+| HR-03 | Open: metric labels, table titles, column headers, approval-queue names, breadcrumb and description of the HR dashboard have no Arabic entries (pre-existing) |
+| HR dashboard | Attendance counts only with Attendance view, payroll figures only with Payroll view, chart placeholder replaced by a truthful note, counts follow project / site scope, sidebar and direct URLs consistent with the permission map; verified in the browser for five roles in both locales |
+
 ## Original findings
 
 Baseline `aca78ee`. This register distinguishes missing requirements, policy decisions and reproduced UI defects from accounting failures. No new production code fix or data repair was made in this review.
