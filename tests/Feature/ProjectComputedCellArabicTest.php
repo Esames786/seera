@@ -23,7 +23,8 @@ class ProjectComputedCellArabicTest extends TestCase
     {
         app()->setLocale('ar');
         $this->assertSame('مدفوع جزئياً', ProjectPanelTable::displayCell('invoices', 8, 'partially_paid'));
-        $this->assertSame('تم الاستلام ولم تتم الفوترة', ProjectPanelTable::displayCell('orders', 5, 'Received but not invoiced'));
+        $this->assertSame(__('Received but not invoiced'), ProjectPanelTable::displayCell('orders', 5, 'Received but not invoiced'));
+        $this->assertSame('مستلم ولم تتم فوترته', ProjectPanelTable::displayCell('orders', 5, 'Received but not invoiced'));
         $this->assertSame('مقيّد', ProjectPanelTable::displayCell('suppliers', 6, 'Restricted'));
         $this->assertSame('Approved', ProjectPanelTable::displayCell('invoices', 2, 'Approved'));
         $this->assertSame('1,250.00', ProjectPanelTable::displayCell('invoices', 5, '1,250.00'));
@@ -54,5 +55,18 @@ class ProjectComputedCellArabicTest extends TestCase
         $project = Project::firstOrFail();
         $this->actingAs($admin)->get(route('admin.master.projects.workspace.panel', [$project, 'invoices']))
             ->assertOk()->assertSee('dir="rtl"', false)->assertSee('الإجراءات');
+    }
+    public function test_restricted_and_posted_cells_translate_in_every_money_column(): void
+    {
+        app()->setLocale('ar');
+        foreach ([['site-expenses', 7], ['equipment', 6], ['equipment', 7], ['warehouses', 6], ['warehouses', 8], ['suppliers', 6], ['orders', 5]] as [$panel, $index]) {
+            $this->assertSame(__('Restricted'), ProjectPanelTable::displayCell($panel, $index, 'Restricted'), "$panel[$index]");
+            $this->assertNotSame('Restricted', ProjectPanelTable::displayCell($panel, $index, 'Restricted'), "$panel[$index]");
+        }
+        $this->assertSame('مرحّل', ProjectPanelTable::displayCell('materials', 8, 'posted'));
+        $this->assertSame('ملغى', ProjectPanelTable::displayCell('orders', 4, 'cancelled'));
+        $this->assertSame('قيد التخطيط', ProjectPanelTable::displayCell('sites', 4, 'planning'));
+        $this->assertSame('SITE-A', ProjectPanelTable::displayCell('sites', 0, 'SITE-A'));
+        $this->assertSame('Restricted', ProjectPanelTable::displayCell('sites', 1, 'Restricted'), 'a site literally named Restricted is user data');
     }
 }

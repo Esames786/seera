@@ -1077,5 +1077,8 @@
     "weighted_average": "المتوسط المرجح",
     "fifo": "الوارد أولاً يصرف أولاً",
     "FIFO": "الوارد أولاً يصرف أولاً",
-    "Weighted Average": "المتوسط المرجح"
+    "Weighted Average": "المتوسط المرجح",
+    "planning": "قيد التخطيط",
+    "cancelled": "ملغى",
+    "posted": "مرحّل"
 }

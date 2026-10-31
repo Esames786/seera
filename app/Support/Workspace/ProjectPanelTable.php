@@ -41,11 +41,11 @@ class ProjectPanelTable
         }
 
         $indices = match ($panel) {
-            'site-expenses' => [6, 8, 9],
+            'site-expenses' => [6, 7, 8, 9],
             'sites' => [4],
             'staff' => [6, 7],
-            'equipment' => [4],
-            'warehouses' => [4, 5, 7, 8, 9],
+            'equipment' => [4, 6, 7],
+            'warehouses' => [4, 5, 6, 7, 8],
             'suppliers' => [4, 5, 6],
             'requests' => [3, 4],
             'orders' => [4, 5],
