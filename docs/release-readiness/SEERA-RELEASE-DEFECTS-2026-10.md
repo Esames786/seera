@@ -112,7 +112,7 @@ See [connected panel Arabic verification](SEERA-CLOSURE-PROJECT-PANEL-ARABIC-QA-
 | --- | --- |
 | CU-03 | Closed: the connected panel tabs, column headings, action buttons, empty states, notes and the financial summary labels render in Arabic with figures identical to English; `ProjectWorkspacePanels` / `ProjectPanelTable` unchanged |
 | CU-04 | Found and fixed: the paged panel breadcrumb lost its separating space in both languages (`__('Master Setup / Projects /').__($title)`), an English regression against the base; space restored, breadcrumb assertions and an amount-preservation test added |
-| CU-05 | Open: the amount notes of the customer, stock and materials panels and the two finance calculation caveats stay English in Arabic; five partial dictionary entries for the note prefixes are unused because the notes are printed without `__()` |
+| CU-05 | Closed by `56ca708` / `ea04f9e` (architect): the amount notes of the customer, stock and materials panels and the two finance calculation caveats are translated with the amounts kept outside the translated strings; verified on `ea04f9e` with figures identical to `9a6316d` and to English (137 / 137 browser checks, 6 / 6 closure tests) |
 | CU-06 | Open (outside CU-03 scope): computed cell words ("Yes / No", "Posted / Not posted", "Restricted", receiving states, "No positive stock") and stored status words stay English in Arabic; cells are printed raw, so the existing entries for the receiving states are unused |
 | Connected panels | Routes, authorization, project / site scope and read-only / edit boundaries unchanged; verified for six roles in both locales, 133 / 133 browser checks |
 

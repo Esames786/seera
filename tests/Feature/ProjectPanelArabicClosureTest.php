@@ -86,4 +86,25 @@ class ProjectPanelArabicClosureTest extends TestCase
         $this->assertNotEmpty($amounts($english));
         $this->assertSame($amounts($english), $amounts($arabic));
     }
+
+    public function test_arabic_amount_notes_keep_every_figure_of_the_english_fragments(): void
+    {
+        $admin = User::where('email', 'admin@example.com')->firstOrFail();
+        $project = Project::firstOrFail();
+        $figures = fn (string $html) => preg_match_all('/<p class="note">(.*?)<\/p>/su', $html, $m) ? array_map(fn ($n) => preg_match_all('/\d[\d,.]*\d/', $n, $d) ? $d[0] : [], $m[1]) : [];
+        $notes = fn (string $html) => preg_match_all('/<p class="note">(.*?)<\/p>/su', $html, $m) ? $m[1] : [];
+
+        foreach (['materials' => 'Material used:', 'stock' => 'Current positive stock value:', 'customer' => 'Project approved invoices:'] as $panel => $prefix) {
+            $admin->update(['language' => 'English']);
+            $english = $this->actingAs($admin->fresh())->getJson(route('admin.master.projects.workspace.panel', [$project, $panel]))->assertOk()->json('html');
+            $admin->update(['language' => 'Arabic']);
+            $arabic = $this->actingAs($admin->fresh())->getJson(route('admin.master.projects.workspace.panel', [$project, $panel]))->assertOk()->json('html');
+
+            $this->assertNotEmpty($notes($english), $panel);
+            $this->assertStringContainsString($prefix.' SAR ', implode(' ', $notes($english)), $panel);
+            $this->assertStringContainsString(__($prefix, [], 'ar').' SAR ', implode(' ', $notes($arabic)), $panel);
+            $this->assertStringNotContainsString($prefix, implode(' ', $notes($arabic)), $panel);
+            $this->assertSame($figures($english), $figures($arabic), $panel);
+        }
+    }
 }

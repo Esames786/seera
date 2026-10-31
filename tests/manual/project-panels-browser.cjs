@@ -68,6 +68,16 @@ const FINANCE_LABELS = ['Master budget', 'Posted cost', 'Budget used (%)', 'Post
 const DETAILED_LABELS = ['Detailed current budget', 'Committed (open purchase orders)', 'Actual (posted cost, same as above)', 'Remaining detailed budget'];
 const FINANCE_BUTTONS = ['Open Project Cost Report', 'Open Budget / BOQ'];
 const BILL_COLUMNS = ['Bill / Supplier', 'Approval', 'Payment status', 'Accounting'];
+const FINANCE_NOTES = [
+    'All dates; same scoped calculations as Project Cost Report. Posted cost is net debit minus credit on expense-account journal lines carrying this Project. Revenue is net credit minus debit on revenue-account lines. Reversals net off. Billed/invoiced follow the report\x27s non-draft document semantics (including cancelled documents); they are not cash or approved-only AR totals. Cost centres alone do not assign a Project.',
+    'Posted Site Expenses and payroll contribute through journal lines only. Supplier Credit contributes through its linked posted Supplier Bill, never twice. Equipment cost remains outside this phase. Master budget is the scalar amount on the project profile; the detailed budget (BOQ lines, versions, Budget vs Actual) lives on the Budget / BOQ page.',
+];
+// [prefix, trailing sentence] pairs of the amount notes; the SAR amount between them must stay identical.
+const AMOUNT_NOTES = {
+    materials: [['Material used:', 'Posted issue-ledger values only; receipts are not consumption. Quantities stay per item and unit, not one mixed-unit total.'], ['Total issued quantity (one shared unit):', null]],
+    stock: [['Current positive stock value:', 'Stored inventory values; quantities are shown per item and unit.']],
+    customer: [['Project approved invoices:', null], ['Amount still to receive:', null]],
+};
 const NO_DETAILED = 'No detailed budget has been set as current for this project yet. Open Budget / BOQ to create one.';
 
 const results = [];
@@ -240,7 +250,7 @@ async function jsonStatus(page, url) { return page.evaluate(async (u) => (await 
                 check('AR finance: summary labels exact and every amount identical to English', same(data.financeRows.map((r) => r[0]), FINANCE_LABELS.map(ar)) && same(data.financeRows.map((r) => r[1]), e.financeRows.map((r) => r[1])), { ar: data.financeRows, en: e.financeRows });
                 check('AR finance: detailed budget block or its empty note, and action buttons exact', (e.detailedRows ? same(data.detailedRows.map((r) => r[0]), DETAILED_LABELS.map(ar)) && same(data.detailedRows.map((r) => r[1].replace(ar(' — Over budget'), ' — Over budget')), e.detailedRows.map((r) => r[1])) : data.notes.includes(ar(NO_DETAILED))) && same(data.bottomButtons, FINANCE_BUTTONS.map(ar)), { notes: data.notes, detailed: data.detailedRows, buttons: data.bottomButtons });
                 check('AR finance: supplier bill context heading, columns and rows / empty state exact', same(data.h3, [ar('Supplier Bill approval context (latest 10)')]) && same(data.billColumns, BILL_COLUMNS.map(ar)) && (e.billCells.length === 1 && e.billCells[0][0] === 'No visible supplier bills.' ? same(data.billCells, [[ar('No visible supplier bills.')]]) : data.billCells.length === e.billCells.length), { h3: data.h3, columns: data.billColumns, cells: data.billCells });
-                record('AR finance: calculation caveat notes still English (remaining gap)', data.notes.filter(latin));
+                check('AR finance: both calculation caveat notes exact', same(data.notes.filter((n) => n !== ar(NO_DETAILED)), FINANCE_NOTES.map(ar)), data.notes);
                 continue;
             }
             check(`AR panel ${key}: column headings exact`, same(data.columns, [...COLUMNS[key].map(ar), ar('Actions')]), data.columns);
@@ -253,8 +263,10 @@ async function jsonStatus(page, url) { return page.evaluate(async (u) => (await 
             }
             if (NOTES[key]) { check(`AR panel ${key}: note exact`, data.notes.includes(ar(NOTES[key])), data.notes); }
             if (data.pager.length) { check(`AR panel ${key}: pager buttons exact`, data.pager.every((p) => [ar('Previous'), ar('Next')].includes(p)), data.pager); }
-            const otherNotes = data.notes.filter((n) => !NOTES[key] || n !== ar(NOTES[key]));
-            if (otherNotes.length) { record(`AR panel ${key}: other notes (amount notes, remaining gap when Latin)`, otherNotes); }
+            if (AMOUNT_NOTES[key]) {
+                const expected = e.notes.map((n) => AMOUNT_NOTES[key].reduce((acc, [prefix, rest]) => acc.replace(prefix, ar(prefix)).replace(rest || '\u0000', rest ? ar(rest) : ''), n));
+                check(`AR panel ${key}: amount notes exact with amounts identical to English`, same(data.notes, expected) && same(data.notes.join(' ').match(/[0-9][0-9,.]*/g), e.notes.join(' ').match(/[0-9][0-9,.]*/g)), { ar: data.notes, en: e.notes });
+            }
         }
         record('AR populated panels: Latin first-row data cells (stored codes, names, dates and status words; outside CU-03 scope)', latinCells);
         // Arabic "View all (paged)" pages: breadcrumb (CU-04), title, back link
