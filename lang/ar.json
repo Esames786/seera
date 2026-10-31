@@ -923,5 +923,11 @@
     "Budget / BOQ": "الميزانية / جداول الكميات",
     "Not set": "غير محدد",
     "Location": "الموقع",
-    "Project identity": "بيانات المشروع الأساسية"
+    "Project identity": "بيانات المشروع الأساسية",
+    "New Client": "عميل جديد",
+    "Create Client": "إنشاء عميل",
+    "Project Classification": "تصنيف المشروع",
+    "Save Classification": "حفظ التصنيف",
+    "New Project Manager Account": "حساب مدير مشروع جديد",
+    "Create Account": "إنشاء حساب"
 }
