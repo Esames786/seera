@@ -17,17 +17,17 @@
         </div>
     </div>
     <dl>
-        <dt>VAT number</dt><dd>{{ $supplier->vat_number ?? '-' }}</dd>
-        <dt>CR number</dt><dd>{{ $supplier->cr_number ?? '-' }}</dd>
-        <dt>Contact</dt><dd>{{ $supplier->contact_person ?? '-' }}@if($supplier->phone) · {{ $supplier->phone }}@endif</dd>
-        <dt>Payment terms</dt><dd>{{ $supplier->paymentTerm?->label() ?? $supplier->payment_terms ?? '-' }} · {{ $supplier->allowed_payment_types ?? 'Both' }}</dd>
+        <dt>{{ __('VAT number') }}</dt><dd>{{ $supplier->vat_number ?? '-' }}</dd>
+        <dt>{{ __('CR number') }}</dt><dd>{{ $supplier->cr_number ?? '-' }}</dd>
+        <dt>{{ __('Contact') }}</dt><dd>{{ $supplier->contact_person ?? '-' }}@if($supplier->phone) · {{ $supplier->phone }}@endif</dd>
+        <dt>{{ __('Payment terms') }}</dt><dd>{{ $supplier->paymentTerm?->label() ?? $supplier->payment_terms ?? '-' }} · {{ __($supplier->allowed_payment_types ?? 'Both') }}</dd>
     </dl>
     <dl>
-        <dt>Payable account</dt><dd>{{ $supplier->linkedAccount?->label() ?? $supplier->linked_account ?? '-' }}</dd>
-        <dt>Projects</dt><dd>{{ $supplier->projects()->count() }}</dd>
+        <dt>{{ __('Payable account') }}</dt><dd>{{ $supplier->linkedAccount?->label() ?? $supplier->linked_account ?? '-' }}</dd>
+        <dt>{{ __('Projects') }}</dt><dd>{{ $supplier->projects()->count() }}</dd>
         @if ($summary)
-            <dt>Outstanding payable</dt><dd>SAR {{ number_format($summary['outstanding'], 2) }} <span class="small">({{ $summary['open_bills'] }} open bill{{ $summary['open_bills'] === 1 ? '' : 's' }})</span></dd>
-            <dt>Paid to date</dt><dd>SAR {{ number_format($summary['paid'], 2) }}</dd>
+            <dt>{{ __('Outstanding payable') }}</dt><dd>SAR {{ number_format($summary['outstanding'], 2) }} <span class="small">({{ __(':count open bill(s)', ['count' => $summary['open_bills']]) }})</span></dd>
+            <dt>{{ __('Paid to date') }}</dt><dd>SAR {{ number_format($summary['paid'], 2) }}</dd>
         @endif
     </dl>
 </div>
