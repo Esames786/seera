@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'HR Dashboard')
-@section('breadcrumb', 'HR & Payroll / HR Dashboard')
+@section('title', __('HR Dashboard'))
+@section('breadcrumb', __('HR & Payroll / HR Dashboard'))
 
 @section('content')
     <x-admin.page-header title="HR Dashboard" description="Employees, attendance, leaves, overtime, documents and payroll at a glance">
@@ -38,7 +38,7 @@
                     <a class="btn sm primary" href="{{ route('admin.hr.attendance.index') }}">{{ __('Open Attendance') }}</a>
                 </x-slot:headerActions>
                 <thead>
-                    <tr><th>Status</th><th>Employees</th></tr>
+                    <tr><th>{{ __('Status') }}</th><th>{{ __('Employees') }}</th></tr>
                 </thead>
                 <tbody>
                     <tr><td><x-admin.status-badge status="present"/></td><td>{{ $presentToday }}</td></tr>
@@ -57,22 +57,22 @@
         <div>
             <x-admin.data-table title="Pending HR Approvals">
                 <thead>
-                    <tr><th>Queue</th><th>Count</th><th></th></tr>
+                    <tr><th>{{ __('Queue') }}</th><th>{{ __('Count') }}</th><th></th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Leave Requests</td><td>{{ $pendingLeaves }}</td><td><a class="btn sm" href="{{ route('admin.hr.leaves.index', ['status' => 'pending']) }}">{{ __('Open') }}</a></td></tr>
-                    @if($canViewPayroll)<tr><td>Overtime Claims</td><td>{{ $pendingOvertime }}</td><td><a class="btn sm" href="{{ route('admin.hr.overtime.index', ['status' => 'pending']) }}">{{ __('Open') }}</a></td></tr>@endif
-                    <tr><td>Document Expiry</td><td>{{ $expiringDocuments }}</td><td><a class="btn sm" href="{{ route('admin.hr.documents.index', ['validity' => 'expiring']) }}">{{ __('Open') }}</a></td></tr>
+                    <tr><td>{{ __('Leave Requests') }}</td><td>{{ $pendingLeaves }}</td><td><a class="btn sm" href="{{ route('admin.hr.leaves.index', ['status' => 'pending']) }}">{{ __('Open') }}</a></td></tr>
+                    @if($canViewPayroll)<tr><td>{{ __('Overtime Claims') }}</td><td>{{ $pendingOvertime }}</td><td><a class="btn sm" href="{{ route('admin.hr.overtime.index', ['status' => 'pending']) }}">{{ __('Open') }}</a></td></tr>@endif
+                    <tr><td>{{ __('Document Expiry') }}</td><td>{{ $expiringDocuments }}</td><td><a class="btn sm" href="{{ route('admin.hr.documents.index', ['validity' => 'expiring']) }}">{{ __('Open') }}</a></td></tr>
                     @if($canViewPayroll)
-                    <tr><td>Payroll Approval</td><td>{{ $pendingPayrollApprovals }}</td><td><a class="btn sm" href="{{ route('admin.hr.payroll.index') }}">{{ __('Open') }}</a></td></tr>
-                    <tr><td>End of Service</td><td>{{ $pendingEosb }}</td><td><a class="btn sm" href="{{ route('admin.hr.eosb.index', ['status' => 'draft']) }}">{{ __('Open') }}</a></td></tr>
+                    <tr><td>{{ __('Payroll Approval') }}</td><td>{{ $pendingPayrollApprovals }}</td><td><a class="btn sm" href="{{ route('admin.hr.payroll.index') }}">{{ __('Open') }}</a></td></tr>
+                    <tr><td>{{ __('End of Service') }}</td><td>{{ $pendingEosb }}</td><td><a class="btn sm" href="{{ route('admin.hr.eosb.index', ['status' => 'draft']) }}">{{ __('Open') }}</a></td></tr>
                     @endif
                 </tbody>
             </x-admin.data-table>
 
             <x-admin.data-table title="IQAMA Expiring Soon">
                 <thead>
-                    <tr><th>Employee</th><th>Department</th><th>Expiry</th><th>Status</th></tr>
+                    <tr><th>{{ __('Employee') }}</th><th>{{ __('Department') }}</th><th>{{ __('Expiry') }}</th><th>{{ __('Status') }}</th></tr>
                 </thead>
                 <tbody>
                     @forelse ($expiringEmployees as $employee)
@@ -83,7 +83,7 @@
                             <td><x-admin.status-badge :status="$employee->iqamaStatus()"/></td>
                         </tr>
                     @empty
-                        <tr><td colspan="4" class="table-empty">No IQAMA expiring in the next 60 days.</td></tr>
+                        <tr><td colspan="4" class="table-empty">{{ __('No IQAMA expiring in the next 60 days.') }}</td></tr>
                     @endforelse
                 </tbody>
             </x-admin.data-table>
@@ -95,7 +95,7 @@
             <a class="btn sm primary" href="{{ route('admin.hr.leaves.index') }}">{{ __('View All') }}</a>
         </x-slot:headerActions>
         <thead>
-            <tr><th>Employee</th><th>Leave Type</th><th>Start</th><th>End</th><th>Days</th><th>Status</th></tr>
+            <tr><th>{{ __('Employee') }}</th><th>{{ __('Leave Type') }}</th><th>{{ __('Start') }}</th><th>{{ __('End') }}</th><th>{{ __('Days') }}</th><th>{{ __('Status') }}</th></tr>
         </thead>
         <tbody>
             @forelse ($recentLeaves as $leave)
@@ -108,7 +108,7 @@
                     <td><x-admin.status-badge :status="$leave->status"/></td>
                 </tr>
             @empty
-                <tr><td colspan="6" class="table-empty">No leave requests yet.</td></tr>
+                <tr><td colspan="6" class="table-empty">{{ __('No leave requests yet.') }}</td></tr>
             @endforelse
         </tbody>
     </x-admin.data-table>
