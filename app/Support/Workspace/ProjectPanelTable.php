@@ -27,6 +27,61 @@ class ProjectPanelTable
         };
     }
 
+    /**
+     * Localize only system-generated cell labels, never arbitrary database text.
+     *
+     * Column indices are intentionally explicit: project/customer names, notes,
+     * amounts, references, dates and identifiers must render exactly as stored.
+     * Unknown status values are left unchanged rather than guessed.
+     */
+    public static function displayCell(string $panel, int $index, mixed $cell): mixed
+    {
+        if (! is_string($cell)) {
+            return $cell;
+        }
+
+        $indices = match ($panel) {
+            'site-expenses' => [6, 8, 9],
+            'sites' => [4],
+            'staff' => [6, 7],
+            'equipment' => [4],
+            'warehouses' => [4, 5, 7, 8, 9],
+            'suppliers' => [4, 5, 6],
+            'requests' => [3, 4],
+            'orders' => [4, 5],
+            'receipts' => [5, 6, 7],
+            'materials' => [8],
+            'invoices' => [8, 9],
+            'payments' => [3],
+            'activity' => [4],
+            default => [],
+        };
+
+        if (! in_array($index, $indices, true)) {
+            return $cell;
+        }
+
+        $systemLabels = [
+            'Restricted', 'Yes', 'No', 'Posted', 'Not posted',
+            'No positive stock', 'Nothing to invoice yet', 'Fully invoiced',
+            'Partly invoiced', 'Received but not invoiced', 'Whole project',
+            'Cash', 'Cash / Bank', 'Bank', 'Bank Transfer', 'Supplier Credit',
+            'FIFO', 'Weighted Average', 'weighted_average', 'fifo',
+            'active', 'inactive', 'planning', 'on hold', 'completed',
+            'draft', 'submitted', 'pending', 'approved', 'rejected',
+            'unpaid', 'partially_paid', 'paid', 'cancelled', 'posted',
+            'received', 'partially_received', 'fully_received',
+            'open', 'closed', 'in_progress', 'under_maintenance',
+            'available', 'retired', 'not_started',
+            'Draft', 'Submitted', 'Pending', 'Approved', 'Rejected',
+            'Unpaid', 'Partially paid', 'Paid', 'Cancelled',
+            'Available', 'Assigned', 'Under Maintenance', 'Out of Service',
+            'Retired',
+        ];
+
+        return in_array($cell, $systemLabels, true) ? __($cell) : $cell;
+    }
+
     private static function invoiceState(float $accepted, float $invoiced): string
     {
         return $accepted <= 0 ? 'Nothing to invoice yet' : ($invoiced + 0.0005 >= $accepted ? 'Fully invoiced' : ($invoiced > 0 ? 'Partly invoiced' : 'Received but not invoiced'));
@@ -37,7 +92,7 @@ class ProjectPanelTable
         ['panel' => $panel, 'project' => $project, 'user' => $user, 'returnTo' => $returnTo] = $data;
         $money = fn ($v) => number_format((float) $v, 2);
         $date = fn ($v) => $v?->format('Y-m-d') ?? '-';
-        $yes = fn ($v) => $v ? 'Yes' : 'No';
+        $yes = fn ($v) => $v ? __('Yes') : __('No');
         $purchase = $data['supplierPurchases'][$row->id] ?? null;
         $receipt = $data['orderReceipts'][$row->id] ?? null;
         $stock = $user->hasPermission('Warehouse Stock', 'view');
@@ -48,7 +103,7 @@ class ProjectPanelTable
             'customer' => [$row->code, $row->name, ($row->vat_number ?? '-').' / '.($row->cr_number ?? '-'), implode(' / ', array_filter([$row->contact_person, $row->phone, $row->email]))],
             'sites' => [$row->code, $row->name, $row->supervisor?->name, $row->address, $row->status, $yes($row->geofence_enabled).' / '.$row->geofence_radius.' m', $yes($row->attendance_inside_only).' / '.$yes($row->offline_attendance_allowed)],
             'staff' => [$row->employee_code, $row->name, $row->department?->name, $row->designation?->name, $row->site?->name, $row->manager?->name, $row->status, $yes($row->mobile_access)],
-            'equipment' => [$row->asset_code.' · '.$row->name, $row->typeLabel().($row->category ? ' · '.$row->category : ''), $row->site?->name ?? 'Whole project', $row->operator?->name, $row->statusLabel(), $row->meterLabel(),
+            'equipment' => [$row->asset_code.' · '.$row->name, __($row->typeLabel()).($row->category ? ' · '.$row->category : ''), $row->site?->name ?? __('Whole project'), $row->operator?->name, __($row->statusLabel()), $row->meterLabel(),
                 $user->hasPermission('Financial Reports', 'view') ? $money($data['equipmentFuel'][$row->id] ?? 0) : 'Restricted', $user->hasPermission('Financial Reports', 'view') ? $money($data['equipmentMaintenance'][$row->id] ?? 0) : 'Restricted'],
             'warehouses' => [$row->code, $row->name, $row->site?->name, $row->incharge?->name, $row->valuation_method, $row->status, $stock ? $row->stocked_items : 'Restricted', $stock ? ($data['warehouseQuantities'][$row->id] ?? 'No positive stock') : 'Restricted', $stock ? $money($row->stocks_sum_total_value) : 'Restricted'],
             'stock' => [$row->warehouse?->name, $row->item?->name, $row->item?->unit?->name, $row->quantity, $row->average_cost, $money($row->total_value)],
