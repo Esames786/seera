@@ -104,6 +104,18 @@ See [closure UX verification](SEERA-CLOSURE-UX-PROJECTS-QA-2026-10-31.md) (branc
 | CU-03 | Open: the shared `ProjectWorkspacePanels` titles and summary labels (21 strings incl. financial terms) have no Arabic entries, so related-record tabs and the summary line stay English in Arabic (pre-existing, shared with other workspaces) |
 | Project workspace | Read-only view without a form, functional Edit / Manage with a verified no-op save, direct links to the pre-filtered Project Reports portfolio and to Budget / BOQ, permissions and project / site scope unchanged, master budget figures identical in both locales; verified for six roles |
 
+### Project workspace connected panels in Arabic (CU-03 closure) — 31 October 2026
+
+See [connected panel Arabic verification](SEERA-CLOSURE-PROJECT-PANEL-ARABIC-QA-2026-10-31.md) (branch `feature/seera-closure-project-panel-arabic-2026-10-31`, verified HEAD `8f40c70`, fix on the branch).
+
+| ID | Status |
+| --- | --- |
+| CU-03 | Closed: the connected panel tabs, column headings, action buttons, empty states, notes and the financial summary labels render in Arabic with figures identical to English; `ProjectWorkspacePanels` / `ProjectPanelTable` unchanged |
+| CU-04 | Found and fixed: the paged panel breadcrumb lost its separating space in both languages (`__('Master Setup / Projects /').__($title)`), an English regression against the base; space restored, breadcrumb assertions and an amount-preservation test added |
+| CU-05 | Open: the amount notes of the customer, stock and materials panels and the two finance calculation caveats stay English in Arabic; five partial dictionary entries for the note prefixes are unused because the notes are printed without `__()` |
+| CU-06 | Open (outside CU-03 scope): computed cell words ("Yes / No", "Posted / Not posted", "Restricted", receiving states, "No positive stock") and stored status words stay English in Arabic; cells are printed raw, so the existing entries for the receiving states are unused |
+| Connected panels | Routes, authorization, project / site scope and read-only / edit boundaries unchanged; verified for six roles in both locales, 133 / 133 browser checks |
+
 ## Original findings
 
 Baseline `aca78ee`. This register distinguishes missing requirements, policy decisions and reproduced UI defects from accounting failures. No new production code fix or data repair was made in this review.

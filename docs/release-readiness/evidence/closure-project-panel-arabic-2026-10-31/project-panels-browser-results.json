@@ -1,0 +1,2048 @@
+{
+  "base": "http://127.0.0.1:18769",
+  "generatedAt": "2026-10-31T14:56:14.127Z",
+  "summary": {
+    "total": 133,
+    "passed": 133,
+    "failed": 0,
+    "pageErrors": 0
+  },
+  "checks": [
+    {
+      "name": "super admin: every connected panel is a tab in English",
+      "ok": true,
+      "detail": [
+        "Site Expenses",
+        "Customer",
+        "Sites / Locations",
+        "Project Team / Staff",
+        "Equipment",
+        "Warehouses",
+        "Stock On Hand",
+        "Suppliers",
+        "Purchase Requests",
+        "Project Purchases",
+        "Goods Receipts",
+        "Material Used",
+        "Customer Invoices",
+        "Customer Receipts",
+        "Financial / Cost Summary",
+        "Activity"
+      ]
+    },
+    {
+      "name": "EN panel site-expenses: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Site Expenses — PRJ-001",
+        "rows": 0,
+        "empty": "No visible Site Expenses for this project. Add an expense and submit its receipt for approval.",
+        "columns": [
+          "Expense",
+          "Date",
+          "Site",
+          "Category",
+          "Submitted by",
+          "Supplier",
+          "Payment type",
+          "Total (SAR)",
+          "Approval status",
+          "Accounting",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "EN panel customer: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Customer — PRJ-001",
+        "rows": 1,
+        "empty": null,
+        "columns": [
+          "Code",
+          "Customer",
+          "VAT / CR",
+          "Contact",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "EN panel sites: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Sites / Locations — PRJ-001",
+        "rows": 2,
+        "empty": null,
+        "columns": [
+          "Code",
+          "Site",
+          "Supervisor",
+          "Address",
+          "Status",
+          "Geofence / radius",
+          "Inside only / offline allowed",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "EN panel staff: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Project Team / Staff — PRJ-001",
+        "rows": 6,
+        "empty": null,
+        "columns": [
+          "Code",
+          "Employee",
+          "Department",
+          "Designation",
+          "Site",
+          "Manager",
+          "Status",
+          "Mobile access",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "EN panel equipment: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Equipment — PRJ-001",
+        "rows": 0,
+        "empty": "No equipment is currently assigned to this project. Open Equipment & Vehicles → View → Current Assignment to assign an asset.",
+        "columns": [
+          "Asset",
+          "Type",
+          "Site",
+          "Operator",
+          "Status",
+          "Meter",
+          "Posted fuel (SAR)",
+          "Posted maintenance (SAR)",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "EN panel warehouses: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Warehouses — PRJ-001",
+        "rows": 1,
+        "empty": null,
+        "columns": [
+          "Code",
+          "Warehouse",
+          "Site",
+          "Incharge",
+          "Valuation",
+          "Status",
+          "Stocked items",
+          "On hand (by unit)",
+          "Stock value (SAR)",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "EN panel stock: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Stock On Hand — PRJ-001",
+        "rows": 10,
+        "empty": null,
+        "columns": [
+          "Warehouse",
+          "Item",
+          "Unit",
+          "On hand",
+          "Average cost",
+          "Current value (SAR)",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "EN panel suppliers: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Suppliers — PRJ-001",
+        "rows": 1,
+        "empty": null,
+        "columns": [
+          "Code",
+          "Supplier",
+          "Category",
+          "Contact",
+          "Status",
+          "Project POs (not cancelled)",
+          "Purchase value (SAR)",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "EN panel requests: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Purchase Requests — PRJ-001",
+        "rows": 3,
+        "empty": null,
+        "columns": [
+          "Request",
+          "Date",
+          "Required date",
+          "Status",
+          "Linked project orders",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "EN panel orders: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Project Purchases — PRJ-001",
+        "rows": 2,
+        "empty": null,
+        "columns": [
+          "Order",
+          "Supplier",
+          "Date",
+          "Total (SAR)",
+          "Status / receiving",
+          "Billing state (visible receipts)",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "EN panel receipts: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Goods Receipts — PRJ-001",
+        "rows": 2,
+        "empty": null,
+        "columns": [
+          "Receipt",
+          "PO",
+          "Supplier",
+          "Warehouse",
+          "Date",
+          "Status",
+          "Stock updated",
+          "Invoicing state",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "EN panel materials: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Material Used — PRJ-001",
+        "rows": 10,
+        "empty": null,
+        "columns": [
+          "Issue",
+          "Date",
+          "Site",
+          "Warehouse",
+          "Item",
+          "Unit",
+          "Issued quantity",
+          "Material cost (SAR)",
+          "Status",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "EN panel invoices: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Customer Invoices — PRJ-001",
+        "rows": 2,
+        "empty": null,
+        "columns": [
+          "Invoice",
+          "Date",
+          "Customer",
+          "Taxable",
+          "VAT",
+          "Total",
+          "Received",
+          "Outstanding",
+          "Status",
+          "Local ZATCA",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "EN panel payments: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Customer Receipts — PRJ-001",
+        "rows": 1,
+        "empty": null,
+        "columns": [
+          "Invoice",
+          "Date",
+          "Amount (SAR)",
+          "Method",
+          "Reference",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "EN panel finance: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Financial / Cost Summary — PRJ-001",
+        "rows": null,
+        "empty": null,
+        "columns": null,
+        "finance": [
+          [
+            "Master budget",
+            "SAR 2,500,000.00"
+          ],
+          [
+            "Posted cost",
+            "SAR 130,847.97"
+          ],
+          [
+            "Budget used (%)",
+            "5.2"
+          ],
+          [
+            "Posted revenue",
+            "SAR 320,000.00"
+          ],
+          [
+            "Supplier billed",
+            "SAR 138,000.00"
+          ],
+          [
+            "Customer invoiced",
+            "SAR 368,000.00"
+          ],
+          [
+            "Margin (posted revenue minus posted cost)",
+            "SAR 189,152.03"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "EN panel activity: title, columns / finance labels, empty state",
+      "ok": true,
+      "detail": {
+        "title": "Activity — PRJ-001",
+        "rows": 3,
+        "empty": null,
+        "columns": [
+          "Date",
+          "User",
+          "Action",
+          "Reference",
+          "Status",
+          "Actions"
+        ],
+        "finance": null
+      }
+    },
+    {
+      "name": "fixture coverage: populated vs empty panels for PRJ-001 (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "populated": [
+          "customer",
+          "sites",
+          "staff",
+          "warehouses",
+          "stock",
+          "suppliers",
+          "requests",
+          "orders",
+          "receipts",
+          "materials",
+          "invoices",
+          "payments",
+          "activity"
+        ],
+        "empties": [
+          "site-expenses",
+          "equipment"
+        ]
+      }
+    },
+    {
+      "name": "EN paged page: title, breadcrumb \"Master Setup / Projects / Sites / Locations\", Back to Project",
+      "ok": true,
+      "detail": {
+        "docTitle": "Sites / Locations - Seera",
+        "breadcrumb": "Home / Master Setup / Projects / Sites / Locations",
+        "title": "PRJ-001 / Riyadh Tower",
+        "buttons": [
+          "Back to Project"
+        ],
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "Arabic view: every connected tab is the exact dictionary title, same order",
+      "ok": true,
+      "detail": [
+        "مصروفات المواقع",
+        "العميل",
+        "المواقع / مواقع العمل",
+        "فريق المشروع / الموظفون",
+        "معدة",
+        "المستودعات",
+        "المخزون المتاح",
+        "الموردون",
+        "طلبات الشراء",
+        "مشتريات المشروع",
+        "استلامات البضائع",
+        "المواد المستخدمة",
+        "فواتير العملاء",
+        "مقبوضات العملاء",
+        "الملخص المالي / ملخص التكاليف",
+        "النشاط"
+      ]
+    },
+    {
+      "name": "AR panel site-expenses: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "مصروفات المواقع — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": [
+          "إضافة مصروف موقع"
+        ]
+      }
+    },
+    {
+      "name": "AR panel site-expenses: column headings exact",
+      "ok": true,
+      "detail": [
+        "المصروف",
+        "التاريخ",
+        "الموقع",
+        "الفئة",
+        "قدم بواسطة",
+        "المورد",
+        "طريقة الدفع",
+        "الإجمالي (ريال)",
+        "حالة الاعتماد",
+        "المحاسبة",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel site-expenses: empty state exact",
+      "ok": true,
+      "detail": "لا توجد مصروفات مواقع ظاهرة لهذا المشروع. أضف مصروفاً وأرسل إيصالَه للاعتماد."
+    },
+    {
+      "name": "AR panel customer: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "العميل — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": []
+      }
+    },
+    {
+      "name": "AR panel customer: column headings exact",
+      "ok": true,
+      "detail": [
+        "الرمز",
+        "العميل",
+        "الرقم الضريبي / السجل التجاري",
+        "جهة الاتصال",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel customer: same rows as English, every row action translated",
+      "ok": true,
+      "detail": {
+        "rows": 1,
+        "actions": [
+          "عرض",
+          "تعديل / إدارة"
+        ],
+        "en": [
+          "View",
+          "Edit / Manage"
+        ]
+      }
+    },
+    {
+      "name": "AR panel customer: footer count exact",
+      "ok": true,
+      "detail": {
+        "ar": "عرض 1–1 من أصل 1",
+        "en": "Showing 1–1 of 1"
+      }
+    },
+    {
+      "name": "AR panel customer: other notes (amount notes, remaining gap when Latin) (recorded, not failed)",
+      "ok": true,
+      "detail": [
+        "Project approved invoices: SAR 368,000.00. Amount still to receive: SAR 0.00."
+      ]
+    },
+    {
+      "name": "AR panel sites: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "المواقع / مواقع العمل — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)",
+          "+ إضافة موقع"
+        ],
+        "topButtons": []
+      }
+    },
+    {
+      "name": "AR panel sites: column headings exact",
+      "ok": true,
+      "detail": [
+        "الرمز",
+        "الموقع",
+        "المشرف",
+        "العنوان",
+        "الحالة",
+        "السياج الجغرافي / النطاق",
+        "داخل النطاق فقط / السماح دون اتصال",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel sites: same rows as English, every row action translated",
+      "ok": true,
+      "detail": {
+        "rows": 2,
+        "actions": [
+          "عرض الموقع",
+          "تعديل الموقع"
+        ],
+        "en": [
+          "View Site",
+          "Edit Site"
+        ]
+      }
+    },
+    {
+      "name": "AR panel sites: footer count exact",
+      "ok": true,
+      "detail": {
+        "ar": "عرض 1–2 من أصل 2",
+        "en": "Showing 1–2 of 2"
+      }
+    },
+    {
+      "name": "AR panel staff: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "فريق المشروع / الموظفون — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": []
+      }
+    },
+    {
+      "name": "AR panel staff: column headings exact",
+      "ok": true,
+      "detail": [
+        "الرمز",
+        "الموظف",
+        "القسم",
+        "المسمى الوظيفي",
+        "الموقع",
+        "المدير",
+        "الحالة",
+        "الوصول عبر الجوال",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel staff: same rows as English, every row action translated",
+      "ok": true,
+      "detail": {
+        "rows": 6,
+        "actions": [
+          "عرض",
+          "تعديل / إدارة"
+        ],
+        "en": [
+          "View",
+          "Edit / Manage"
+        ]
+      }
+    },
+    {
+      "name": "AR panel staff: footer count exact",
+      "ok": true,
+      "detail": {
+        "ar": "عرض 1–6 من أصل 6",
+        "en": "Showing 1–6 of 6"
+      }
+    },
+    {
+      "name": "AR panel equipment: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "معدة — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": [
+          "تخصيص معدة (فتح السجل)"
+        ]
+      }
+    },
+    {
+      "name": "AR panel equipment: column headings exact",
+      "ok": true,
+      "detail": [
+        "الأصل",
+        "النوع",
+        "الموقع",
+        "المشغل",
+        "الحالة",
+        "العداد",
+        "تكلفة الوقود المرحلة (ريال)",
+        "تكلفة الصيانة المرحلة (ريال)",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel equipment: empty state exact",
+      "ok": true,
+      "detail": "لا توجد معدات مخصصة لهذا المشروع حالياً. افتح المعدات والمركبات ثم العرض ثم التخصيص الحالي لتخصيص أصل."
+    },
+    {
+      "name": "AR panel equipment: note exact",
+      "ok": true,
+      "detail": [
+        "أصول يرتبط تخصيصها النشط بهذا المشروع. تمثل أرقام الوقود والصيانة القيم المرحلة مالياً للمعلومات فقط، ويظل تقرير تكاليف المشروع والميزانية مقابل الفعلي المرجع المحاسبي. التتبع المباشر غير متصل."
+      ]
+    },
+    {
+      "name": "AR panel warehouses: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "المستودعات — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": []
+      }
+    },
+    {
+      "name": "AR panel warehouses: column headings exact",
+      "ok": true,
+      "detail": [
+        "الرمز",
+        "المستودع",
+        "الموقع",
+        "المسؤول",
+        "التقييم",
+        "الحالة",
+        "الأصناف المخزنة",
+        "المتوفر (حسب الوحدة)",
+        "قيمة المخزون (ريال)",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel warehouses: same rows as English, every row action translated",
+      "ok": true,
+      "detail": {
+        "rows": 1,
+        "actions": [
+          "عرض",
+          "المخزون المتاح",
+          "سجل المخزون"
+        ],
+        "en": [
+          "View",
+          "Stock On Hand",
+          "Stock Ledger"
+        ]
+      }
+    },
+    {
+      "name": "AR panel warehouses: footer count exact",
+      "ok": true,
+      "detail": {
+        "ar": "عرض 1–1 من أصل 1",
+        "en": "Showing 1–1 of 1"
+      }
+    },
+    {
+      "name": "AR panel stock: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "المخزون المتاح — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": []
+      }
+    },
+    {
+      "name": "AR panel stock: column headings exact",
+      "ok": true,
+      "detail": [
+        "المستودع",
+        "الصنف",
+        "الوحدة",
+        "المتوفر",
+        "متوسط التكلفة",
+        "القيمة الحالية (ريال)",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel stock: same rows as English, every row action translated",
+      "ok": true,
+      "detail": {
+        "rows": 10,
+        "actions": [],
+        "en": []
+      }
+    },
+    {
+      "name": "AR panel stock: footer count exact",
+      "ok": true,
+      "detail": {
+        "ar": "عرض 1–10 من أصل 15",
+        "en": "Showing 1–10 of 15"
+      }
+    },
+    {
+      "name": "AR panel stock: pager buttons exact",
+      "ok": true,
+      "detail": [
+        "التالي"
+      ]
+    },
+    {
+      "name": "AR panel stock: other notes (amount notes, remaining gap when Latin) (recorded, not failed)",
+      "ok": true,
+      "detail": [
+        "Current positive stock value: SAR 481,405.75. Stored inventory values; quantities are shown per item and unit."
+      ]
+    },
+    {
+      "name": "AR panel suppliers: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "الموردون — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": []
+      }
+    },
+    {
+      "name": "AR panel suppliers: column headings exact",
+      "ok": true,
+      "detail": [
+        "الرمز",
+        "المورد",
+        "الفئة",
+        "جهة الاتصال",
+        "الحالة",
+        "أوامر شراء المشروع (غير الملغاة)",
+        "قيمة المشتريات (ريال)",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel suppliers: same rows as English, every row action translated",
+      "ok": true,
+      "detail": {
+        "rows": 1,
+        "actions": [
+          "عرض",
+          "تعديل / إدارة"
+        ],
+        "en": [
+          "View",
+          "Edit / Manage"
+        ]
+      }
+    },
+    {
+      "name": "AR panel suppliers: footer count exact",
+      "ok": true,
+      "detail": {
+        "ar": "عرض 1–1 من أصل 1",
+        "en": "Showing 1–1 of 1"
+      }
+    },
+    {
+      "name": "AR panel requests: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "طلبات الشراء — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": []
+      }
+    },
+    {
+      "name": "AR panel requests: column headings exact",
+      "ok": true,
+      "detail": [
+        "الطلب",
+        "التاريخ",
+        "التاريخ المطلوب",
+        "الحالة",
+        "أوامر الشراء المرتبطة بالمشروع",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel requests: same rows as English, every row action translated",
+      "ok": true,
+      "detail": {
+        "rows": 3,
+        "actions": [
+          "عرض"
+        ],
+        "en": [
+          "View"
+        ]
+      }
+    },
+    {
+      "name": "AR panel requests: footer count exact",
+      "ok": true,
+      "detail": {
+        "ar": "عرض 1–3 من أصل 3",
+        "en": "Showing 1–3 of 3"
+      }
+    },
+    {
+      "name": "AR panel orders: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "مشتريات المشروع — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": []
+      }
+    },
+    {
+      "name": "AR panel orders: column headings exact",
+      "ok": true,
+      "detail": [
+        "أمر الشراء",
+        "المورد",
+        "التاريخ",
+        "الإجمالي (ريال)",
+        "الحالة / الاستلام",
+        "حالة الفوترة (الاستلامات المتاحة)",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel orders: same rows as English, every row action translated",
+      "ok": true,
+      "detail": {
+        "rows": 2,
+        "actions": [
+          "عرض"
+        ],
+        "en": [
+          "View"
+        ]
+      }
+    },
+    {
+      "name": "AR panel orders: footer count exact",
+      "ok": true,
+      "detail": {
+        "ar": "عرض 1–2 من أصل 2",
+        "en": "Showing 1–2 of 2"
+      }
+    },
+    {
+      "name": "AR panel receipts: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "استلامات البضائع — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": []
+      }
+    },
+    {
+      "name": "AR panel receipts: column headings exact",
+      "ok": true,
+      "detail": [
+        "الإيصال",
+        "أمر الشراء",
+        "المورد",
+        "المستودع",
+        "التاريخ",
+        "الحالة",
+        "تحديث المخزون",
+        "حالة الفوترة",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel receipts: same rows as English, every row action translated",
+      "ok": true,
+      "detail": {
+        "rows": 2,
+        "actions": [
+          "عرض"
+        ],
+        "en": [
+          "View"
+        ]
+      }
+    },
+    {
+      "name": "AR panel receipts: footer count exact",
+      "ok": true,
+      "detail": {
+        "ar": "عرض 1–2 من أصل 2",
+        "en": "Showing 1–2 of 2"
+      }
+    },
+    {
+      "name": "AR panel materials: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "المواد المستخدمة — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": []
+      }
+    },
+    {
+      "name": "AR panel materials: column headings exact",
+      "ok": true,
+      "detail": [
+        "الإصدار",
+        "التاريخ",
+        "الموقع",
+        "المستودع",
+        "الصنف",
+        "الوحدة",
+        "الكمية المصروفة",
+        "تكلفة المواد (ريال)",
+        "الحالة",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel materials: same rows as English, every row action translated",
+      "ok": true,
+      "detail": {
+        "rows": 10,
+        "actions": [
+          "عرض إذن الصرف"
+        ],
+        "en": [
+          "View Issue"
+        ]
+      }
+    },
+    {
+      "name": "AR panel materials: footer count exact",
+      "ok": true,
+      "detail": {
+        "ar": "عرض 1–10 من أصل 12",
+        "en": "Showing 1–10 of 12"
+      }
+    },
+    {
+      "name": "AR panel materials: pager buttons exact",
+      "ok": true,
+      "detail": [
+        "التالي"
+      ]
+    },
+    {
+      "name": "AR panel materials: other notes (amount notes, remaining gap when Latin) (recorded, not failed)",
+      "ok": true,
+      "detail": [
+        "Material used: SAR 10,741.41. Posted issue-ledger values only; receipts are not consumption. Quantities stay per item and unit, not one mixed-unit total."
+      ]
+    },
+    {
+      "name": "AR panel invoices: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "فواتير العملاء — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": []
+      }
+    },
+    {
+      "name": "AR panel invoices: column headings exact",
+      "ok": true,
+      "detail": [
+        "الفاتورة",
+        "التاريخ",
+        "العميل",
+        "الخاضع للضريبة",
+        "ضريبة القيمة المضافة",
+        "الإجمالي",
+        "المحصّل",
+        "المستحق",
+        "الحالة",
+        "حالة الفوترة الإلكترونية المحلية",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel invoices: same rows as English, every row action translated",
+      "ok": true,
+      "detail": {
+        "rows": 2,
+        "actions": [
+          "عرض"
+        ],
+        "en": [
+          "View"
+        ]
+      }
+    },
+    {
+      "name": "AR panel invoices: footer count exact",
+      "ok": true,
+      "detail": {
+        "ar": "عرض 1–2 من أصل 2",
+        "en": "Showing 1–2 of 2"
+      }
+    },
+    {
+      "name": "AR panel invoices: note exact",
+      "ok": true,
+      "detail": [
+        "حالة زاتكا هنا معلومات محلية أساسية وليست تأكيداً للحصول على تخليص إلكتروني مباشر."
+      ]
+    },
+    {
+      "name": "AR panel payments: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "مقبوضات العملاء — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": []
+      }
+    },
+    {
+      "name": "AR panel payments: column headings exact",
+      "ok": true,
+      "detail": [
+        "الفاتورة",
+        "التاريخ",
+        "المبلغ (ريال)",
+        "الطريقة",
+        "المرجع",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel payments: same rows as English, every row action translated",
+      "ok": true,
+      "detail": {
+        "rows": 1,
+        "actions": [
+          "عرض الفاتورة"
+        ],
+        "en": [
+          "View Invoice"
+        ]
+      }
+    },
+    {
+      "name": "AR panel payments: footer count exact",
+      "ok": true,
+      "detail": {
+        "ar": "عرض 1–1 من أصل 1",
+        "en": "Showing 1–1 of 1"
+      }
+    },
+    {
+      "name": "AR panel finance: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "الملخص المالي / ملخص التكاليف — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": []
+      }
+    },
+    {
+      "name": "AR finance: summary labels exact and every amount identical to English",
+      "ok": true,
+      "detail": {
+        "ar": [
+          [
+            "الميزانية الرئيسية",
+            "SAR 2,500,000.00"
+          ],
+          [
+            "التكاليف المرحلة",
+            "SAR 130,847.97"
+          ],
+          [
+            "نسبة استهلاك الميزانية (%)",
+            "5.2"
+          ],
+          [
+            "الإيرادات المرحلة",
+            "SAR 320,000.00"
+          ],
+          [
+            "فواتير الموردين",
+            "SAR 138,000.00"
+          ],
+          [
+            "فواتير العملاء",
+            "SAR 368,000.00"
+          ],
+          [
+            "الهامش (الإيرادات المرحلة ناقص التكاليف المرحلة)",
+            "SAR 189,152.03"
+          ]
+        ],
+        "en": [
+          [
+            "Master budget",
+            "SAR 2,500,000.00"
+          ],
+          [
+            "Posted cost",
+            "SAR 130,847.97"
+          ],
+          [
+            "Budget used (%)",
+            "5.2"
+          ],
+          [
+            "Posted revenue",
+            "SAR 320,000.00"
+          ],
+          [
+            "Supplier billed",
+            "SAR 138,000.00"
+          ],
+          [
+            "Customer invoiced",
+            "SAR 368,000.00"
+          ],
+          [
+            "Margin (posted revenue minus posted cost)",
+            "SAR 189,152.03"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "AR finance: detailed budget block or its empty note, and action buttons exact",
+      "ok": true,
+      "detail": {
+        "notes": [
+          "All dates; same scoped calculations as Project Cost Report. Posted cost is net debit minus credit on expense-account journal lines carrying this Project. Revenue is net credit minus debit on revenue-account lines. Reversals net off. Billed/invoiced follow the report's non-draft document semantics (including cancelled documents); they are not cash or approved-only AR totals. Cost centres alone do not assign a Project.",
+          "Posted Site Expenses and payroll contribute through journal lines only. Supplier Credit contributes through its linked posted Supplier Bill, never twice. Equipment cost remains outside this phase. Master budget is the scalar amount on the project profile; the detailed budget (BOQ lines, versions, Budget vs Actual) lives on the Budget / BOQ page.",
+          "لم تُعتمد ميزانية تفصيلية حالية لهذا المشروع. افتح الميزانية / جدول الكميات لإنشائها."
+        ],
+        "detailed": null,
+        "buttons": [
+          "فتح تقرير تكاليف المشروع",
+          "فتح الميزانية / جدول الكميات"
+        ]
+      }
+    },
+    {
+      "name": "AR finance: supplier bill context heading, columns and rows / empty state exact",
+      "ok": true,
+      "detail": {
+        "h3": [
+          "حالة اعتماد فواتير الموردين (أحدث 10)"
+        ],
+        "columns": [
+          "الفاتورة / المورد",
+          "الاعتماد",
+          "حالة الدفع",
+          "المحاسبة"
+        ],
+        "cells": [
+          [
+            "BILL-2026-004 / Saudi Cement Supplier",
+            "Legacy — no runtime history",
+            "مسودة",
+            "غير مرحّل"
+          ],
+          [
+            "BILL-2026-001 / Saudi Cement Supplier",
+            "Legacy — no runtime history",
+            "مدفوع",
+            "مرحّل"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "AR finance: calculation caveat notes still English (remaining gap) (recorded, not failed)",
+      "ok": true,
+      "detail": [
+        "All dates; same scoped calculations as Project Cost Report. Posted cost is net debit minus credit on expense-account journal lines carrying this Project. Revenue is net credit minus debit on revenue-account lines. Reversals net off. Billed/invoiced follow the report's non-draft document semantics (including cancelled documents); they are not cash or approved-only AR totals. Cost centres alone do not assign a Project.",
+        "Posted Site Expenses and payroll contribute through journal lines only. Supplier Credit contributes through its linked posted Supplier Bill, never twice. Equipment cost remains outside this phase. Master budget is the scalar amount on the project profile; the detailed budget (BOQ lines, versions, Budget vs Actual) lives on the Budget / BOQ page."
+      ]
+    },
+    {
+      "name": "AR panel activity: title and header buttons exact",
+      "ok": true,
+      "detail": {
+        "title": "النشاط — PRJ-001",
+        "titleButtons": [
+          "عرض الكل (صفحات)"
+        ],
+        "topButtons": []
+      }
+    },
+    {
+      "name": "AR panel activity: column headings exact",
+      "ok": true,
+      "detail": [
+        "التاريخ",
+        "المستخدم",
+        "الإجراء",
+        "المرجع",
+        "الحالة",
+        "الإجراءات"
+      ]
+    },
+    {
+      "name": "AR panel activity: same rows as English, every row action translated",
+      "ok": true,
+      "detail": {
+        "rows": 3,
+        "actions": [],
+        "en": []
+      }
+    },
+    {
+      "name": "AR panel activity: footer count exact",
+      "ok": true,
+      "detail": {
+        "ar": "عرض 1–3 من أصل 3",
+        "en": "Showing 1–3 of 3"
+      }
+    },
+    {
+      "name": "AR panel activity: note exact",
+      "ok": true,
+      "detail": [
+        "يُعرض فقط النشاط المرتبط بمعرف المشروع والمسموح لدورك برؤيته. تُستبعد السجلات القديمة النصية لتجنب التطابقات الخاطئة."
+      ]
+    },
+    {
+      "name": "AR populated panels: Latin first-row data cells (stored codes, names, dates and status words; outside CU-03 scope) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "customer": [
+          "CUS-001",
+          "ABC Holdings",
+          "Mr. Khalid / +966 50 111 2222 / khalid@abcholdings.sa"
+        ],
+        "sites": [
+          "SITE-B",
+          "Block B",
+          "Shaban",
+          "Al Olaya District, Riyadh",
+          "active",
+          "Yes / 250 m",
+          "Yes / Yes"
+        ],
+        "staff": [
+          "EMP-015",
+          "Jose Ramirez",
+          "Site Operations",
+          "Block B",
+          "Nabeel Mukhtar",
+          "active",
+          "Yes"
+        ],
+        "warehouses": [
+          "WH-SITE-A",
+          "Riyadh Tower Site Store",
+          "Block A",
+          "Nabeel Mukhtar",
+          "Average",
+          "active",
+          "600.000 Bag / 150.000 Ton / 90.000 Cubic Meter / 1,795.801 Piece / 806.128 Meter / 420.000 Litre / 60.000 Roll"
+        ],
+        "stock": [
+          "Riyadh Tower Site Store",
+          "Rebar 16mm",
+          "Ton"
+        ],
+        "suppliers": [
+          "SUP-001",
+          "Saudi Cement Supplier",
+          "Materials",
+          "Ahmed / +966 50 700 1111 / sales@saudicement.sa",
+          "active"
+        ],
+        "requests": [
+          "pending"
+        ],
+        "orders": [
+          "Saudi Cement Supplier",
+          "received",
+          "Received but not invoiced"
+        ],
+        "receipts": [
+          "GRN-2026-0004",
+          "Saudi Cement Supplier",
+          "Riyadh Main Store",
+          "posted",
+          "Yes",
+          "Received but not invoiced"
+        ],
+        "materials": [
+          "ISS-2026-0008",
+          "Block A",
+          "Riyadh Tower Site Store",
+          "Hollow Block 200mm",
+          "Piece",
+          "posted"
+        ],
+        "invoices": [
+          "INV-2026-0004",
+          "ABC Holdings",
+          "draft",
+          "draft"
+        ],
+        "payments": [
+          "INV-2026-0001",
+          "RCPT-0700"
+        ],
+        "activity": [
+          "Omar Mukhtar",
+          "Updated project",
+          "[Project #1] PRJ-001 / Riyadh Tower",
+          "success"
+        ]
+      }
+    },
+    {
+      "name": "AR paged page sites: rtl, document title, breadcrumb and Back to Project exact",
+      "ok": true,
+      "detail": {
+        "docTitle": "المواقع / مواقع العمل - Seera",
+        "breadcrumb": "الرئيسية / الإعدادات الأساسية / المشاريع / المواقع / مواقع العمل",
+        "title": "PRJ-001 / Riyadh Tower",
+        "buttons": [
+          "العودة إلى المشروع"
+        ],
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "AR paged page finance: rtl, document title, breadcrumb and Back to Project exact",
+      "ok": true,
+      "detail": {
+        "docTitle": "الملخص المالي / ملخص التكاليف - Seera",
+        "breadcrumb": "الرئيسية / الإعدادات الأساسية / المشاريع / الملخص المالي / ملخص التكاليف",
+        "title": "PRJ-001 / Riyadh Tower",
+        "buttons": [
+          "العودة إلى المشروع"
+        ],
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "AR paged page invoices: rtl, document title, breadcrumb and Back to Project exact",
+      "ok": true,
+      "detail": {
+        "docTitle": "فواتير العملاء - Seera",
+        "breadcrumb": "الرئيسية / الإعدادات الأساسية / المشاريع / فواتير العملاء",
+        "title": "PRJ-001 / Riyadh Tower",
+        "buttons": [
+          "العودة إلى المشروع"
+        ],
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "super-admin-sites ar 320px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 320,
+        "innerWidth": 320
+      }
+    },
+    {
+      "name": "super-admin-sites ar 320px no untranslated buttons, headings, column titles or empty states",
+      "ok": true,
+      "detail": {
+        "buttons": [],
+        "labels": []
+      }
+    },
+    {
+      "name": "super-admin-sites ar 320px remaining Latin notes and data cells (outside CU-03 scope) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "notes": [],
+        "cells": [
+          "SITE-B",
+          "Block B",
+          "Shaban",
+          "Al Olaya District, Riyadh",
+          "active",
+          "Yes / 250 m",
+          "Yes / Yes",
+          "SITE-A",
+          "Block A",
+          "Nabeel Mukhtar",
+          "Yes / 300 m"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-sites ar 390px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "name": "super-admin-sites ar 390px no untranslated buttons, headings, column titles or empty states",
+      "ok": true,
+      "detail": {
+        "buttons": [],
+        "labels": []
+      }
+    },
+    {
+      "name": "super-admin-sites ar 390px remaining Latin notes and data cells (outside CU-03 scope) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "notes": [],
+        "cells": [
+          "SITE-B",
+          "Block B",
+          "Shaban",
+          "Al Olaya District, Riyadh",
+          "active",
+          "Yes / 250 m",
+          "Yes / Yes",
+          "SITE-A",
+          "Block A",
+          "Nabeel Mukhtar",
+          "Yes / 300 m"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-sites ar 768px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    {
+      "name": "super-admin-sites ar 768px no untranslated buttons, headings, column titles or empty states",
+      "ok": true,
+      "detail": {
+        "buttons": [],
+        "labels": []
+      }
+    },
+    {
+      "name": "super-admin-sites ar 768px remaining Latin notes and data cells (outside CU-03 scope) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "notes": [],
+        "cells": [
+          "SITE-B",
+          "Block B",
+          "Shaban",
+          "Al Olaya District, Riyadh",
+          "active",
+          "Yes / 250 m",
+          "Yes / Yes",
+          "SITE-A",
+          "Block A",
+          "Nabeel Mukhtar",
+          "Yes / 300 m"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-sites ar 1440px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "name": "super-admin-sites ar 1440px no untranslated buttons, headings, column titles or empty states",
+      "ok": true,
+      "detail": {
+        "buttons": [],
+        "labels": []
+      }
+    },
+    {
+      "name": "super-admin-sites ar 1440px remaining Latin notes and data cells (outside CU-03 scope) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "notes": [],
+        "cells": [
+          "SITE-B",
+          "Block B",
+          "Shaban",
+          "Al Olaya District, Riyadh",
+          "active",
+          "Yes / 250 m",
+          "Yes / Yes",
+          "SITE-A",
+          "Block A",
+          "Nabeel Mukhtar",
+          "Yes / 300 m"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-finance ar 320px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 320,
+        "innerWidth": 320
+      }
+    },
+    {
+      "name": "super-admin-finance ar 320px no untranslated buttons, headings, column titles or empty states",
+      "ok": true,
+      "detail": {
+        "buttons": [],
+        "labels": []
+      }
+    },
+    {
+      "name": "super-admin-finance ar 320px remaining Latin notes and data cells (outside CU-03 scope) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "notes": [
+          "All dates; same scoped calculations as Project Cost Report. Posted cost is net debit minus credit on expense-account journal lines carrying this Project. Revenue is net credit minus debit on revenue-account lines. Reversals net off. Billed/invoiced follow the report's non-draft document semantics (including cancelled documents); they are not cash or approved-only AR totals. Cost centres alone do not assign a Project.",
+          "Posted Site Expenses and payroll contribute through journal lines only. Supplier Credit contributes through its linked posted Supplier Bill, never twice. Equipment cost remains outside this phase. Master budget is the scalar amount on the project profile; the detailed budget (BOQ lines, versions, Budget vs Actual) lives on the Budget / BOQ page."
+        ],
+        "cells": [
+          "SAR 2,500,000.00",
+          "SAR 130,847.97",
+          "SAR 320,000.00",
+          "SAR 138,000.00",
+          "SAR 368,000.00",
+          "SAR 189,152.03",
+          "BILL-2026-004 / Saudi Cement Supplier",
+          "Legacy — no runtime history",
+          "BILL-2026-001 / Saudi Cement Supplier"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-finance ar 390px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "name": "super-admin-finance ar 390px no untranslated buttons, headings, column titles or empty states",
+      "ok": true,
+      "detail": {
+        "buttons": [],
+        "labels": []
+      }
+    },
+    {
+      "name": "super-admin-finance ar 390px remaining Latin notes and data cells (outside CU-03 scope) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "notes": [
+          "All dates; same scoped calculations as Project Cost Report. Posted cost is net debit minus credit on expense-account journal lines carrying this Project. Revenue is net credit minus debit on revenue-account lines. Reversals net off. Billed/invoiced follow the report's non-draft document semantics (including cancelled documents); they are not cash or approved-only AR totals. Cost centres alone do not assign a Project.",
+          "Posted Site Expenses and payroll contribute through journal lines only. Supplier Credit contributes through its linked posted Supplier Bill, never twice. Equipment cost remains outside this phase. Master budget is the scalar amount on the project profile; the detailed budget (BOQ lines, versions, Budget vs Actual) lives on the Budget / BOQ page."
+        ],
+        "cells": [
+          "SAR 2,500,000.00",
+          "SAR 130,847.97",
+          "SAR 320,000.00",
+          "SAR 138,000.00",
+          "SAR 368,000.00",
+          "SAR 189,152.03",
+          "BILL-2026-004 / Saudi Cement Supplier",
+          "Legacy — no runtime history",
+          "BILL-2026-001 / Saudi Cement Supplier"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-finance ar 768px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    {
+      "name": "super-admin-finance ar 768px no untranslated buttons, headings, column titles or empty states",
+      "ok": true,
+      "detail": {
+        "buttons": [],
+        "labels": []
+      }
+    },
+    {
+      "name": "super-admin-finance ar 768px remaining Latin notes and data cells (outside CU-03 scope) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "notes": [
+          "All dates; same scoped calculations as Project Cost Report. Posted cost is net debit minus credit on expense-account journal lines carrying this Project. Revenue is net credit minus debit on revenue-account lines. Reversals net off. Billed/invoiced follow the report's non-draft document semantics (including cancelled documents); they are not cash or approved-only AR totals. Cost centres alone do not assign a Project.",
+          "Posted Site Expenses and payroll contribute through journal lines only. Supplier Credit contributes through its linked posted Supplier Bill, never twice. Equipment cost remains outside this phase. Master budget is the scalar amount on the project profile; the detailed budget (BOQ lines, versions, Budget vs Actual) lives on the Budget / BOQ page."
+        ],
+        "cells": [
+          "SAR 2,500,000.00",
+          "SAR 130,847.97",
+          "SAR 320,000.00",
+          "SAR 138,000.00",
+          "SAR 368,000.00",
+          "SAR 189,152.03",
+          "BILL-2026-004 / Saudi Cement Supplier",
+          "Legacy — no runtime history",
+          "BILL-2026-001 / Saudi Cement Supplier"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-finance ar 1440px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "name": "super-admin-finance ar 1440px no untranslated buttons, headings, column titles or empty states",
+      "ok": true,
+      "detail": {
+        "buttons": [],
+        "labels": []
+      }
+    },
+    {
+      "name": "super-admin-finance ar 1440px remaining Latin notes and data cells (outside CU-03 scope) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "notes": [
+          "All dates; same scoped calculations as Project Cost Report. Posted cost is net debit minus credit on expense-account journal lines carrying this Project. Revenue is net credit minus debit on revenue-account lines. Reversals net off. Billed/invoiced follow the report's non-draft document semantics (including cancelled documents); they are not cash or approved-only AR totals. Cost centres alone do not assign a Project.",
+          "Posted Site Expenses and payroll contribute through journal lines only. Supplier Credit contributes through its linked posted Supplier Bill, never twice. Equipment cost remains outside this phase. Master budget is the scalar amount on the project profile; the detailed budget (BOQ lines, versions, Budget vs Actual) lives on the Budget / BOQ page."
+        ],
+        "cells": [
+          "SAR 2,500,000.00",
+          "SAR 130,847.97",
+          "SAR 320,000.00",
+          "SAR 138,000.00",
+          "SAR 368,000.00",
+          "SAR 189,152.03",
+          "BILL-2026-004 / Saudi Cement Supplier",
+          "Legacy — no runtime history",
+          "BILL-2026-001 / Saudi Cement Supplier"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-orders ar 320px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 320,
+        "innerWidth": 320
+      }
+    },
+    {
+      "name": "super-admin-orders ar 320px no untranslated buttons, headings, column titles or empty states",
+      "ok": true,
+      "detail": {
+        "buttons": [],
+        "labels": []
+      }
+    },
+    {
+      "name": "super-admin-orders ar 320px remaining Latin notes and data cells (outside CU-03 scope) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "notes": [],
+        "cells": [
+          "Saudi Cement Supplier",
+          "received",
+          "Received but not invoiced"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-orders ar 390px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "name": "super-admin-orders ar 390px no untranslated buttons, headings, column titles or empty states",
+      "ok": true,
+      "detail": {
+        "buttons": [],
+        "labels": []
+      }
+    },
+    {
+      "name": "super-admin-orders ar 390px remaining Latin notes and data cells (outside CU-03 scope) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "notes": [],
+        "cells": [
+          "Saudi Cement Supplier",
+          "received",
+          "Received but not invoiced"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-orders ar 768px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    {
+      "name": "super-admin-orders ar 768px no untranslated buttons, headings, column titles or empty states",
+      "ok": true,
+      "detail": {
+        "buttons": [],
+        "labels": []
+      }
+    },
+    {
+      "name": "super-admin-orders ar 768px remaining Latin notes and data cells (outside CU-03 scope) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "notes": [],
+        "cells": [
+          "Saudi Cement Supplier",
+          "received",
+          "Received but not invoiced"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-orders ar 1440px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "name": "super-admin-orders ar 1440px no untranslated buttons, headings, column titles or empty states",
+      "ok": true,
+      "detail": {
+        "buttons": [],
+        "labels": []
+      }
+    },
+    {
+      "name": "super-admin-orders ar 1440px remaining Latin notes and data cells (outside CU-03 scope) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "notes": [],
+        "cells": [
+          "Saudi Cement Supplier",
+          "received",
+          "Received but not invoiced"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-sites en 320px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 320,
+        "innerWidth": 320
+      }
+    },
+    {
+      "name": "super-admin-sites en 390px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "name": "super-admin-sites en 768px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    {
+      "name": "super-admin-sites en 1440px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "name": "super-admin-finance en 320px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 320,
+        "innerWidth": 320
+      }
+    },
+    {
+      "name": "super-admin-finance en 390px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "name": "super-admin-finance en 768px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    {
+      "name": "super-admin-finance en 1440px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "name": "super-admin-orders en 320px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 320,
+        "innerWidth": 320
+      }
+    },
+    {
+      "name": "super-admin-orders en 390px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "name": "super-admin-orders en 768px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    {
+      "name": "super-admin-orders en 1440px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "name": "project manager: every visible tab is Arabic and its panel loads with the Arabic title",
+      "ok": true,
+      "detail": [
+        {
+          "key": "site-expenses",
+          "status": 200,
+          "title": "مصروفات المواقع — PRJ-001"
+        },
+        {
+          "key": "sites",
+          "status": 200,
+          "title": "المواقع / مواقع العمل — PRJ-001"
+        },
+        {
+          "key": "stock",
+          "status": 200,
+          "title": "المخزون المتاح — PRJ-001"
+        },
+        {
+          "key": "requests",
+          "status": 200,
+          "title": "طلبات الشراء — PRJ-001"
+        },
+        {
+          "key": "finance",
+          "status": 200,
+          "title": "الملخص المالي / ملخص التكاليف — PRJ-001"
+        }
+      ]
+    },
+    {
+      "name": "project manager: managed other project panel opens scoped to that project (NR-34)",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "title": "المواقع / مواقع العمل — PRJ-003",
+        "rows": 1
+      }
+    },
+    {
+      "name": "project manager: visible panel keys (recorded, not failed)",
+      "ok": true,
+      "detail": [
+        "site-expenses",
+        "sites",
+        "stock",
+        "requests",
+        "finance"
+      ]
+    },
+    {
+      "name": "view-only role: panels without the module permission are refused (403) even by direct URL",
+      "ok": true,
+      "detail": {
+        "hidden": [
+          "site-expenses",
+          "sites",
+          "staff",
+          "equipment",
+          "warehouses",
+          "stock",
+          "suppliers",
+          "requests",
+          "orders",
+          "receipts",
+          "materials",
+          "invoices",
+          "payments",
+          "finance",
+          "activity"
+        ],
+        "unexpected": []
+      }
+    },
+    {
+      "name": "view-only role: visible tabs load in Arabic",
+      "ok": true,
+      "detail": {
+        "tabs": [
+          "customer"
+        ],
+        "loaded": [
+          {
+            "key": "customer",
+            "status": 200,
+            "title": "العميل — PRJ-001"
+          }
+        ]
+      }
+    },
+    {
+      "name": "site in-charge: sites panel lists only the assigned site, Arabic headings",
+      "ok": true,
+      "detail": {
+        "rows": 1,
+        "first": [
+          "SITE-D1",
+          "Section 1 - Drainage"
+        ],
+        "columns": [
+          "الرمز",
+          "الموقع",
+          "المشرف",
+          "العنوان",
+          "الحالة",
+          "السياج الجغرافي / النطاق",
+          "داخل النطاق فقط / السماح دون اتصال",
+          "الإجراءات"
+        ]
+      }
+    },
+    {
+      "name": "site in-charge: forged panel of another project refused (404)",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "HR manager: panel page and fragment refused (403)",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "finance manager: panel page and fragment refused (403)",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "pageErrors": []
+}
