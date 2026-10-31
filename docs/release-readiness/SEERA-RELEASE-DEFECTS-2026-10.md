@@ -104,6 +104,17 @@ See [closure UX verification](SEERA-CLOSURE-UX-PROJECTS-QA-2026-10-31.md) (branc
 | CU-03 | Open: the shared `ProjectWorkspacePanels` titles and summary labels (21 strings incl. financial terms) have no Arabic entries, so related-record tabs and the summary line stay English in Arabic (pre-existing, shared with other workspaces) |
 | Project workspace | Read-only view without a form, functional Edit / Manage with a verified no-op save, direct links to the pre-filtered Project Reports portfolio and to Budget / BOQ, permissions and project / site scope unchanged, master budget figures identical in both locales; verified for six roles |
 
+### Project workspace computed cells in Arabic (CU-06 closure) — 31 October 2026
+
+See [computed cell Arabic verification](SEERA-PROJECT-COMPUTED-CELL-ARABIC-QA-2026-10-31.md) (branch `feature/seera-project-computed-cell-arabic-2026-10-31`, verified HEAD `b47941b`, fixes on the branch).
+
+| ID | Status |
+| --- | --- |
+| CU-06 | Closed: `ProjectPanelTable::displayCell()` translates whitelisted system labels only at mapped column indices; names, codes, dates, amounts and stored text stay byte-identical (271 cells compared in the browser) |
+| CC-01 | Found and fixed: three money columns (site-expense total, equipment fuel / maintenance, warehouse stocked items) were missing from the index map, so a restricted reader saw a mixed Arabic / English row; indices added, non-existent warehouse index dropped |
+| CC-02 | Found and fixed: "posted", "cancelled" and "planning" were whitelisted without an Arabic entry (Material Used status always English); entries added |
+| CC-03 | Found and fixed: the delivered test expected a different Arabic phrase for "Received but not invoiced" than the dictionary entry and failed on `b47941b`; test aligned with the dictionary |
+
 ### Project workspace connected panels in Arabic (CU-03 closure) — 31 October 2026
 
 See [connected panel Arabic verification](SEERA-CLOSURE-PROJECT-PANEL-ARABIC-QA-2026-10-31.md) (branch `feature/seera-closure-project-panel-arabic-2026-10-31`, verified HEAD `8f40c70`, fix on the branch).

@@ -1,9 +1,9 @@
 {
   "base": "http://127.0.0.1:18769",
-  "generatedAt": "2026-10-31T15:54:11.097Z",
+  "generatedAt": "2026-10-31T18:05:13.408Z",
   "summary": {
-    "total": 137,
-    "passed": 137,
+    "total": 168,
+    "passed": 168,
     "failed": 0,
     "pageErrors": 0
   },
@@ -513,6 +513,21 @@
       }
     },
     {
+      "name": "AR panel customer: system status cells translated, every other cell identical to English",
+      "ok": true,
+      "detail": {
+        "rows": 1,
+        "translatedCells": 0,
+        "identicalCells": 4,
+        "problems": []
+      }
+    },
+    {
+      "name": "AR panel customer: no whitelisted system label left in English",
+      "ok": true,
+      "detail": []
+    },
+    {
       "name": "AR panel customer: amount notes exact with amounts identical to English",
       "ok": true,
       "detail": {
@@ -574,6 +589,21 @@
       }
     },
     {
+      "name": "AR panel sites: system status cells translated, every other cell identical to English",
+      "ok": true,
+      "detail": {
+        "rows": 2,
+        "translatedCells": 2,
+        "identicalCells": 8,
+        "problems": []
+      }
+    },
+    {
+      "name": "AR panel sites: no whitelisted system label left in English",
+      "ok": true,
+      "detail": []
+    },
+    {
       "name": "AR panel staff: title and header buttons exact",
       "ok": true,
       "detail": {
@@ -621,6 +651,21 @@
         "ar": "عرض 1–6 من أصل 6",
         "en": "Showing 1–6 of 6"
       }
+    },
+    {
+      "name": "AR panel staff: system status cells translated, every other cell identical to English",
+      "ok": true,
+      "detail": {
+        "rows": 6,
+        "translatedCells": 12,
+        "identicalCells": 36,
+        "problems": []
+      }
+    },
+    {
+      "name": "AR panel staff: no whitelisted system label left in English",
+      "ok": true,
+      "detail": []
     },
     {
       "name": "AR panel equipment: title and header buttons exact",
@@ -715,6 +760,21 @@
       }
     },
     {
+      "name": "AR panel warehouses: system status cells translated, every other cell identical to English",
+      "ok": true,
+      "detail": {
+        "rows": 1,
+        "translatedCells": 1,
+        "identicalCells": 8,
+        "problems": []
+      }
+    },
+    {
+      "name": "AR panel warehouses: no whitelisted system label left in English",
+      "ok": true,
+      "detail": []
+    },
+    {
       "name": "AR panel stock: title and header buttons exact",
       "ok": true,
       "detail": {
@@ -754,6 +814,21 @@
         "ar": "عرض 1–10 من أصل 15",
         "en": "Showing 1–10 of 15"
       }
+    },
+    {
+      "name": "AR panel stock: system status cells translated, every other cell identical to English",
+      "ok": true,
+      "detail": {
+        "rows": 10,
+        "translatedCells": 0,
+        "identicalCells": 60,
+        "problems": []
+      }
+    },
+    {
+      "name": "AR panel stock: no whitelisted system label left in English",
+      "ok": true,
+      "detail": []
     },
     {
       "name": "AR panel stock: pager buttons exact",
@@ -823,6 +898,21 @@
       }
     },
     {
+      "name": "AR panel suppliers: system status cells translated, every other cell identical to English",
+      "ok": true,
+      "detail": {
+        "rows": 1,
+        "translatedCells": 1,
+        "identicalCells": 6,
+        "problems": []
+      }
+    },
+    {
+      "name": "AR panel suppliers: no whitelisted system label left in English",
+      "ok": true,
+      "detail": []
+    },
+    {
       "name": "AR panel requests: title and header buttons exact",
       "ok": true,
       "detail": {
@@ -865,6 +955,21 @@
         "ar": "عرض 1–3 من أصل 3",
         "en": "Showing 1–3 of 3"
       }
+    },
+    {
+      "name": "AR panel requests: system status cells translated, every other cell identical to English",
+      "ok": true,
+      "detail": {
+        "rows": 3,
+        "translatedCells": 1,
+        "identicalCells": 14,
+        "problems": []
+      }
+    },
+    {
+      "name": "AR panel requests: no whitelisted system label left in English",
+      "ok": true,
+      "detail": []
     },
     {
       "name": "AR panel orders: title and header buttons exact",
@@ -910,6 +1015,21 @@
         "ar": "عرض 1–2 من أصل 2",
         "en": "Showing 1–2 of 2"
       }
+    },
+    {
+      "name": "AR panel orders: system status cells translated, every other cell identical to English",
+      "ok": true,
+      "detail": {
+        "rows": 2,
+        "translatedCells": 4,
+        "identicalCells": 8,
+        "problems": []
+      }
+    },
+    {
+      "name": "AR panel orders: no whitelisted system label left in English",
+      "ok": true,
+      "detail": []
     },
     {
       "name": "AR panel receipts: title and header buttons exact",
@@ -959,6 +1079,21 @@
       }
     },
     {
+      "name": "AR panel receipts: system status cells translated, every other cell identical to English",
+      "ok": true,
+      "detail": {
+        "rows": 2,
+        "translatedCells": 6,
+        "identicalCells": 10,
+        "problems": []
+      }
+    },
+    {
+      "name": "AR panel receipts: no whitelisted system label left in English",
+      "ok": true,
+      "detail": []
+    },
+    {
       "name": "AR panel materials: title and header buttons exact",
       "ok": true,
       "detail": {
@@ -1005,6 +1140,21 @@
         "ar": "عرض 1–10 من أصل 12",
         "en": "Showing 1–10 of 12"
       }
+    },
+    {
+      "name": "AR panel materials: system status cells translated, every other cell identical to English",
+      "ok": true,
+      "detail": {
+        "rows": 10,
+        "translatedCells": 10,
+        "identicalCells": 80,
+        "problems": []
+      }
+    },
+    {
+      "name": "AR panel materials: no whitelisted system label left in English",
+      "ok": true,
+      "detail": []
     },
     {
       "name": "AR panel materials: pager buttons exact",
@@ -1075,6 +1225,21 @@
       }
     },
     {
+      "name": "AR panel invoices: system status cells translated, every other cell identical to English",
+      "ok": true,
+      "detail": {
+        "rows": 2,
+        "translatedCells": 3,
+        "identicalCells": 17,
+        "problems": []
+      }
+    },
+    {
+      "name": "AR panel invoices: no whitelisted system label left in English",
+      "ok": true,
+      "detail": []
+    },
+    {
       "name": "AR panel invoices: note exact",
       "ok": true,
       "detail": [
@@ -1124,6 +1289,21 @@
         "ar": "عرض 1–1 من أصل 1",
         "en": "Showing 1–1 of 1"
       }
+    },
+    {
+      "name": "AR panel payments: system status cells translated, every other cell identical to English",
+      "ok": true,
+      "detail": {
+        "rows": 1,
+        "translatedCells": 0,
+        "identicalCells": 5,
+        "problems": []
+      }
+    },
+    {
+      "name": "AR panel payments: no whitelisted system label left in English",
+      "ok": true,
+      "detail": []
     },
     {
       "name": "AR panel finance: title and header buttons exact",
@@ -1234,13 +1414,13 @@
         "cells": [
           [
             "BILL-2026-004 / Saudi Cement Supplier",
-            "Legacy — no runtime history",
+            "سجل قديم — لا يوجد تاريخ اعتماد تشغيلي",
             "مسودة",
             "غير مرحّل"
           ],
           [
             "BILL-2026-001 / Saudi Cement Supplier",
-            "Legacy — no runtime history",
+            "سجل قديم — لا يوجد تاريخ اعتماد تشغيلي",
             "مدفوع",
             "مرحّل"
           ]
@@ -1297,6 +1477,21 @@
       }
     },
     {
+      "name": "AR panel activity: system status cells translated, every other cell identical to English",
+      "ok": true,
+      "detail": {
+        "rows": 3,
+        "translatedCells": 0,
+        "identicalCells": 15,
+        "problems": []
+      }
+    },
+    {
+      "name": "AR panel activity: no whitelisted system label left in English",
+      "ok": true,
+      "detail": []
+    },
+    {
       "name": "AR panel activity: note exact",
       "ok": true,
       "detail": [
@@ -1316,19 +1511,14 @@
           "SITE-B",
           "Block B",
           "Shaban",
-          "Al Olaya District, Riyadh",
-          "active",
-          "Yes / 250 m",
-          "Yes / Yes"
+          "Al Olaya District, Riyadh"
         ],
         "staff": [
           "EMP-015",
           "Jose Ramirez",
           "Site Operations",
           "Block B",
-          "Nabeel Mukhtar",
-          "active",
-          "Yes"
+          "Nabeel Mukhtar"
         ],
         "warehouses": [
           "WH-SITE-A",
@@ -1336,7 +1526,6 @@
           "Block A",
           "Nabeel Mukhtar",
           "Average",
-          "active",
           "600.000 Bag / 150.000 Ton / 90.000 Cubic Meter / 1,795.801 Piece / 806.128 Meter / 420.000 Litre / 60.000 Roll"
         ],
         "stock": [
@@ -1348,38 +1537,27 @@
           "SUP-001",
           "Saudi Cement Supplier",
           "Materials",
-          "Ahmed / +966 50 700 1111 / sales@saudicement.sa",
-          "active"
+          "Ahmed / +966 50 700 1111 / sales@saudicement.sa"
         ],
-        "requests": [
-          "pending"
-        ],
+        "requests": [],
         "orders": [
-          "Saudi Cement Supplier",
-          "received",
-          "Received but not invoiced"
+          "Saudi Cement Supplier"
         ],
         "receipts": [
           "GRN-2026-0004",
           "Saudi Cement Supplier",
-          "Riyadh Main Store",
-          "posted",
-          "Yes",
-          "Received but not invoiced"
+          "Riyadh Main Store"
         ],
         "materials": [
           "ISS-2026-0008",
           "Block A",
           "Riyadh Tower Site Store",
           "Hollow Block 200mm",
-          "Piece",
-          "posted"
+          "Piece"
         ],
         "invoices": [
           "INV-2026-0004",
-          "ABC Holdings",
-          "draft",
-          "draft"
+          "ABC Holdings"
         ],
         "payments": [
           "INV-2026-0001",
@@ -1458,13 +1636,9 @@
           "Block B",
           "Shaban",
           "Al Olaya District, Riyadh",
-          "active",
-          "Yes / 250 m",
-          "Yes / Yes",
           "SITE-A",
           "Block A",
-          "Nabeel Mukhtar",
-          "Yes / 300 m"
+          "Nabeel Mukhtar"
         ]
       }
     },
@@ -1494,13 +1668,9 @@
           "Block B",
           "Shaban",
           "Al Olaya District, Riyadh",
-          "active",
-          "Yes / 250 m",
-          "Yes / Yes",
           "SITE-A",
           "Block A",
-          "Nabeel Mukhtar",
-          "Yes / 300 m"
+          "Nabeel Mukhtar"
         ]
       }
     },
@@ -1530,13 +1700,9 @@
           "Block B",
           "Shaban",
           "Al Olaya District, Riyadh",
-          "active",
-          "Yes / 250 m",
-          "Yes / Yes",
           "SITE-A",
           "Block A",
-          "Nabeel Mukhtar",
-          "Yes / 300 m"
+          "Nabeel Mukhtar"
         ]
       }
     },
@@ -1566,13 +1732,9 @@
           "Block B",
           "Shaban",
           "Al Olaya District, Riyadh",
-          "active",
-          "Yes / 250 m",
-          "Yes / Yes",
           "SITE-A",
           "Block A",
-          "Nabeel Mukhtar",
-          "Yes / 300 m"
+          "Nabeel Mukhtar"
         ]
       }
     },
@@ -1605,7 +1767,6 @@
           "SAR 368,000.00",
           "SAR 189,152.03",
           "BILL-2026-004 / Saudi Cement Supplier",
-          "Legacy — no runtime history",
           "BILL-2026-001 / Saudi Cement Supplier"
         ]
       }
@@ -1639,7 +1800,6 @@
           "SAR 368,000.00",
           "SAR 189,152.03",
           "BILL-2026-004 / Saudi Cement Supplier",
-          "Legacy — no runtime history",
           "BILL-2026-001 / Saudi Cement Supplier"
         ]
       }
@@ -1673,7 +1833,6 @@
           "SAR 368,000.00",
           "SAR 189,152.03",
           "BILL-2026-004 / Saudi Cement Supplier",
-          "Legacy — no runtime history",
           "BILL-2026-001 / Saudi Cement Supplier"
         ]
       }
@@ -1707,7 +1866,6 @@
           "SAR 368,000.00",
           "SAR 189,152.03",
           "BILL-2026-004 / Saudi Cement Supplier",
-          "Legacy — no runtime history",
           "BILL-2026-001 / Saudi Cement Supplier"
         ]
       }
@@ -1734,9 +1892,7 @@
       "detail": {
         "notes": [],
         "cells": [
-          "Saudi Cement Supplier",
-          "received",
-          "Received but not invoiced"
+          "Saudi Cement Supplier"
         ]
       }
     },
@@ -1762,9 +1918,7 @@
       "detail": {
         "notes": [],
         "cells": [
-          "Saudi Cement Supplier",
-          "received",
-          "Received but not invoiced"
+          "Saudi Cement Supplier"
         ]
       }
     },
@@ -1790,9 +1944,7 @@
       "detail": {
         "notes": [],
         "cells": [
-          "Saudi Cement Supplier",
-          "received",
-          "Received but not invoiced"
+          "Saudi Cement Supplier"
         ]
       }
     },
@@ -1818,9 +1970,7 @@
       "detail": {
         "notes": [],
         "cells": [
-          "Saudi Cement Supplier",
-          "received",
-          "Received but not invoiced"
+          "Saudi Cement Supplier"
         ]
       }
     },
@@ -2031,6 +2181,41 @@
           "الإجراءات"
         ]
       }
+    },
+    {
+      "name": "site in-charge AR panel site-expenses: no English system label in cells",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "site in-charge AR panel sites: no English system label in cells",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "site in-charge AR panel equipment: no English system label in cells",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "site in-charge AR panel equipment: restricted cells shown as مقيّد (recorded, not failed)",
+      "ok": true,
+      "detail": [
+        [
+          6,
+          7
+        ]
+      ]
+    },
+    {
+      "name": "site in-charge AR panel stock: no English system label in cells",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "site in-charge AR panel requests: no English system label in cells",
+      "ok": true,
+      "detail": []
     },
     {
       "name": "site in-charge: forged panel of another project refused (404)",

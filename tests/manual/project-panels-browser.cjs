@@ -78,6 +78,11 @@ const AMOUNT_NOTES = {
     stock: [['Current positive stock value:', 'Stored inventory values; quantities are shown per item and unit.']],
     customer: [['Project approved invoices:', null], ['Amount still to receive:', null]],
 };
+// Mirrors ProjectPanelTable::displayCell: only these column indices may carry one of these system labels; everything else must be byte-identical in both locales.
+const CELL_INDICES = { "site-expenses": [6, 7, 8, 9], sites: [4], staff: [6, 7], equipment: [4, 6, 7], warehouses: [4, 5, 6, 7, 8], suppliers: [4, 5, 6], requests: [3, 4], orders: [4, 5], receipts: [5, 6, 7], materials: [8], invoices: [8, 9], payments: [3], activity: [4] };
+const SYSTEM_LABELS = ["Restricted","Yes","No","Posted","Not posted","No positive stock","Nothing to invoice yet","Fully invoiced","Partly invoiced","Received but not invoiced","Whole project","Cash","Cash \/ Bank","Bank","Bank Transfer","Supplier Credit","FIFO","Weighted Average","weighted_average","fifo","active","inactive","planning","on hold","completed","draft","submitted","pending","approved","rejected","unpaid","partially_paid","paid","cancelled","posted","received","partially_received","fully_received","open","closed","in_progress","under_maintenance","available","retired","not_started","Draft","Submitted","Pending","Approved","Rejected","Unpaid","Partially paid","Paid","Cancelled","Available","Assigned","Under Maintenance","Out of Service","Retired"];
+// Cells built in row() with their own translation (Yes / No parts, equipment type / status / "Whole project"): digits must match, Latin whitelist words must be gone.
+const MIXED_CELLS = { sites: [5, 6], equipment: [1, 2, 4] };
 const NO_DETAILED = 'No detailed budget has been set as current for this project yet. Open Budget / BOQ to create one.';
 
 const results = [];
@@ -130,6 +135,7 @@ function extract(root) {
         rowCount: listTable ? [...listTable.querySelectorAll('tbody tr')].filter((r) => !r.querySelector('.table-empty')).length : null,
         firstRowCells: listTable ? [...(listTable.querySelector('tbody tr') ? listTable.querySelector('tbody tr').querySelectorAll('td') : [])].map(text) : null,
         rowActions: listTable ? [...listTable.querySelectorAll('tbody td .actions a')].map(text) : null,
+        rows: listTable ? [...listTable.querySelectorAll('tbody tr')].filter((r) => !r.querySelector('.table-empty')).map((r) => [...r.querySelectorAll('td')].slice(0, -1).map(text)) : null,
         empty: text(card.querySelector('.table-empty')) || null,
         footer: text(card.querySelector('.table-footer > span')) || null,
         pager: [...card.querySelectorAll('.table-footer button[data-panel-load]')].map(text),
@@ -260,6 +266,19 @@ async function jsonStatus(page, url) { return page.evaluate(async (u) => (await 
                 check(`AR panel ${key}: same rows as English, every row action translated`, data.rowCount === e.rowCount && data.rowActions.length === e.rowActions.length && data.rowActions.every((a) => !latin(a)) && e.rowActions.every((a, i) => data.rowActions[i] === ar(a)), { rows: data.rowCount, actions: [...new Set(data.rowActions)], en: [...new Set(e.rowActions)] });
                 check(`AR panel ${key}: footer count exact`, footerPattern(ar('Showing :from–:to of :total')).test(data.footer) && same(data.footer.match(/\d+/g), e.footer.match(/\d+/g)), { ar: data.footer, en: e.footer });
                 latinCells[key] = data.firstRowCells.filter(latin);
+                const cellProblems = [];
+                let translated = 0, identical = 0;
+                e.rows.forEach((row, i) => row.forEach((enCell, j) => {
+                    const arCell = (data.rows[i] || [])[j];
+                    const isIndex = (CELL_INDICES[key] || []).includes(j);
+                    const mixed = (MIXED_CELLS[key] || []).includes(j);
+                    if (isIndex && SYSTEM_LABELS.includes(enCell)) { translated++; if (arCell !== ar(enCell)) cellProblems.push({ row: i, col: j, en: enCell, ar: arCell, expected: ar(enCell) }); }
+                    else if (mixed) { if (!same(enCell.match(/\d[\d,.]*/g), (arCell || '').match(/\d[\d,.]*/g)) || /\b(Yes|No|Whole project|Equipment|Vehicle|Available|Assigned|Retired)\b/.test(arCell || '')) cellProblems.push({ row: i, col: j, en: enCell, ar: arCell }); }
+                    else { identical++; if (arCell !== enCell) cellProblems.push({ row: i, col: j, en: enCell, ar: arCell, expected: 'identical' }); }
+                }));
+                check(`AR panel ${key}: system status cells translated, every other cell identical to English`, data.rows.length === e.rows.length && cellProblems.length === 0, { rows: e.rows.length, translatedCells: translated, identicalCells: identical, problems: cellProblems.slice(0, 8) });
+                const stillLatin = data.rows.flat().filter((c, idx) => latin(c) && SYSTEM_LABELS.includes(c));
+                check(`AR panel ${key}: no whitelisted system label left in English`, stillLatin.length === 0, [...new Set(stillLatin)]);
             }
             if (NOTES[key]) { check(`AR panel ${key}: note exact`, data.notes.includes(ar(NOTES[key])), data.notes); }
             if (data.pager.length) { check(`AR panel ${key}: pager buttons exact`, data.pager.every((p) => [ar('Previous'), ar('Next')].includes(p)), data.pager); }
@@ -323,6 +342,7 @@ async function jsonStatus(page, url) { return page.evaluate(async (u) => (await 
         } else {
             check('site in-charge: sites panel visible', false, siteTabs.map((t) => t.key));
         }
+        for (const t of siteTabs) { const r = await panelJson(site, t.url); if (!r.data || !r.data.rows) continue; const en = r.data.rows.flat().filter((c) => SYSTEM_LABELS.includes(c) && latin(c)); check(`site in-charge AR panel ${t.key}: no English system label in cells`, en.length === 0, [...new Set(en)]); if (r.data.rows.flat().includes(ar('Restricted'))) record(`site in-charge AR panel ${t.key}: restricted cells shown as ${ar('Restricted')}`, r.data.rows.map((row) => row.map((c, j) => c === ar('Restricted') ? j : null).filter((j) => j !== null))); }
         check('site in-charge: forged panel of another project refused (404)', await jsonStatus(site, panelUrl(P1, 'sites')) === 404 && await status(site, panelUrl(P1, 'sites')) === 404);
         await siteCtx.close();
 
