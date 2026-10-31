@@ -1031,5 +1031,20 @@
     "Fully invoiced": "تمت الفوترة بالكامل",
     "Partly invoiced": "تمت الفوترة جزئياً",
     "Received but not invoiced": "مستلم ولم تتم فوترته",
-    "No positive stock": "لا يوجد مخزون موجب"
+    "No positive stock": "لا يوجد مخزون موجب",
+    "No visible Site Expenses for this project. Add an expense and submit its receipt for approval.": "لا توجد مصروفات مواقع ظاهرة لهذا المشروع. أضف مصروفاً وأرسل إيصالَه للاعتماد.",
+    "No customer is linked. Choose the customer on the Project profile.": "لا يوجد عميل مرتبط. اختر العميل من بيانات المشروع.",
+    "No visible locations belong to this project yet. Add a location when authorized.": "لا توجد مواقع متاحة للعرض ضمن المشروع حتى الآن. أضف موقعاً عند توفر الصلاحية.",
+    "No visible employees are assigned. Set the current Project on the employee form; each employee has one current project.": "لا يوجد موظفون معينون للمشروع. حدد المشروع الحالي في بيانات الموظف، ولكل موظف مشروع حالي واحد.",
+    "No equipment is currently assigned to this project. Open Equipment & Vehicles → View → Current Assignment to assign an asset.": "لا توجد معدات مخصصة لهذا المشروع حالياً. افتح المعدات والمركبات ثم العرض ثم التخصيص الحالي لتخصيص أصل.",
+    "No visible warehouses or positive stock balances for this project. Assign a warehouse to the project; receive stock through Inventory documents.": "لا توجد مستودعات أو أرصدة مخزون موجبة متاحة لهذا المشروع. اربط مستودعاً بالمشروع واستلم المخزون عبر مستندات المخزون.",
+    "No visible suppliers are linked. Link this project from Supplier Manage or create an authorized project purchase document.": "لا يوجد موردون مرتبطون ظاهرون. اربط المشروع بإدارة المورد أو أنشئ مستند شراء مخولاً.",
+    "No visible project documents yet. Use the existing Inventory purchase workflow and choose this project; a GRN follows its PO.": "لا توجد مستندات مشروع متاحة بعد. استخدم دورة المشتريات واختر المشروع؛ ويتبع إذن الاستلام أمر الشراء.",
+    "No materials have been issued to this project yet. Create a Stock Issue from Inventory when materials are consumed.": "لم تُصرف مواد لهذا المشروع حتى الآن. أنشئ إذن صرف مخزون عند استهلاك المواد.",
+    "No visible project invoices or receipts yet. Create an invoice in Accounts Receivable and select this project; receipt entry remains a separate action.": "لا توجد فواتير أو مقبوضات ظاهرة لهذا المشروع. أنشئ فاتورة من الحسابات المدينة واختر المشروع؛ ويظل تسجيل المقبوض إجراءً منفصلاً.",
+    "No securely linked activity yet. New project and location saves appear here. Older name-only logs cannot be reliably assigned and are omitted.": "لا يوجد نشاط مرتبط بأمان حتى الآن. ستظهر هنا عمليات حفظ المشروع والمواقع الجديدة؛ واستُبعدت السجلات القديمة المرتبطة بالاسم فقط لعدم دقة نسبتها.",
+    "Assets whose active assignment is this project. Posted fuel / maintenance are the Finance-posted amounts (information only); the Project Cost Report and Budget vs Actual remain the cost truth. Live GPS tracking is not connected.": "أصول يرتبط تخصيصها النشط بهذا المشروع. تمثل أرقام الوقود والصيانة القيم المرحلة مالياً للمعلومات فقط، ويظل تقرير تكاليف المشروع والميزانية مقابل الفعلي المرجع المحاسبي. التتبع المباشر غير متصل.",
+    "No detailed budget has been set as current for this project yet. Open Budget / BOQ to create one.": "لم تُعتمد ميزانية تفصيلية حالية لهذا المشروع. افتح الميزانية / جدول الكميات لإنشائها.",
+    "ZATCA state is local foundation information, not a claim of live clearance.": "حالة زاتكا هنا معلومات محلية أساسية وليست تأكيداً للحصول على تخليص إلكتروني مباشر.",
+    "Only exact Project entity-token activity visible to your role is included. Legacy free-text/name-only history is omitted to avoid false matches.": "يُعرض فقط النشاط المرتبط بمعرف المشروع والمسموح لدورك برؤيته. تُستبعد السجلات القديمة النصية لتجنب التطابقات الخاطئة."
 }
