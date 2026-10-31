@@ -168,7 +168,7 @@
                         <td>{{ $record->site?->name ?? '-' }}</td>
                         <td>@if($record->isGpsRecord())<span class="badge green">{{ $record->sourceLabel() }}</span>@else<x-admin.status-badge :status="$record->source"/>@endif</td>
                         <td>{{ \App\Models\AttendanceRecord::geofenceLabel($record->geofence_status) }}@if($record->isGpsRecord() && $record->check_in_distance_meters !== null) <span class="small">· {{ number_format($record->check_in_distance_meters) }} m</span>@endif</td>
-                        <td>@if($canEditAttendance)<a class="btn sm outline" href="{{ route('admin.hr.attendance.edit', ['attendance_record' => $record, 'return_to' => $links['origin_attendance']]) }}">Edit</a>@endif</td>
+                        <td>@if($canEditAttendance)<a class="btn sm outline" href="{{ route('admin.hr.attendance.edit', ['attendance_record' => $record, 'return_to' => $links['origin_attendance']]) }}">{{ __('Edit') }}</a>@endif</td>
                     </tr>
                 @empty
                     <tr><td colspan="12" class="table-empty">{{ __('workspace.hr_no_attendance') }}</td></tr>
@@ -210,7 +210,7 @@
                     <td class="small">{{ $leave->approver?->name ?? '-' }}</td>
                     <td>
                         <a class="btn sm outline" href="{{ route('admin.hr.leaves.show', ['leave_request' => $leave, 'return_to' => $links['origin_leaves']]) }}">{{ __('workspace.view') }}</a>
-                        @if($canEditLeave && $leave->status === 'pending')<a class="btn sm outline" href="{{ route('admin.hr.leaves.edit', ['leave_request' => $leave, 'return_to' => $links['origin_leaves']]) }}">Edit</a>@endif
+                        @if($canEditLeave && $leave->status === 'pending')<a class="btn sm outline" href="{{ route('admin.hr.leaves.edit', ['leave_request' => $leave, 'return_to' => $links['origin_leaves']]) }}">{{ __('Edit') }}</a>@endif
                     </td>
                 </tr>
             @empty
@@ -243,7 +243,7 @@
                         <td>{{ $record->attendanceRecord?->attendance_date?->toDateString() ?? '-' }}</td>
                         <td><x-admin.status-badge :status="$record->status"/></td>
                         <td class="small">{{ $record->reason ?? '-' }}</td>
-                        <td>@if($canEditOvertime && $record->status === 'pending')<a class="btn sm outline" href="{{ route('admin.hr.overtime.edit', ['overtime_record' => $record, 'return_to' => $links['origin_overtime']]) }}">Edit</a>@endif</td>
+                        <td>@if($canEditOvertime && $record->status === 'pending')<a class="btn sm outline" href="{{ route('admin.hr.overtime.edit', ['overtime_record' => $record, 'return_to' => $links['origin_overtime']]) }}">{{ __('Edit') }}</a>@endif</td>
                     </tr>
                 @empty
                     <tr><td colspan="8" class="table-empty">{{ __('workspace.hr_no_overtime') }}</td></tr>
@@ -269,7 +269,7 @@
 
         <x-admin.data-table :title="__('workspace.hr_salary')" :subtitle="__('workspace.hr_salary_help')" id="salary">
             <x-slot:headerActions>
-                @if($links['salary_create'])<a class="btn sm primary" href="{{ $links['salary_create'] }}">+ New Structure From Profile</a>@endif
+                @if($links['salary_create'])<a class="btn sm primary" href="{{ $links['salary_create'] }}">{{ __('+ New Structure From Profile') }}</a>@endif
                 <a class="btn sm outline" href="{{ $links['salary_all'] }}">{{ __('workspace.hr_view_register') }}</a>
             </x-slot:headerActions>
             <thead>
@@ -287,7 +287,7 @@
                         <td><x-admin.status-badge :status="$structure->status"/></td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="table-empty">No salary structure yet. "+ New Structure From Profile" opens the form already filled with the pay above.</td></tr>
+                    <tr><td colspan="7" class="table-empty">{{ __('No salary structure yet. "+ New Structure From Profile" opens the form already filled with the pay above.') }}</td></tr>
                 @endforelse
             </tbody>
         </x-admin.data-table>

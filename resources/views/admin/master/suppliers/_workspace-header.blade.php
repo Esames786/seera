@@ -26,7 +26,7 @@
         <dt>{{ __('Payable account') }}</dt><dd>{{ $supplier->linkedAccount?->label() ?? $supplier->linked_account ?? '-' }}</dd>
         <dt>{{ __('Projects') }}</dt><dd>{{ $supplier->projects()->count() }}</dd>
         @if ($summary)
-            <dt>{{ __('Outstanding payable') }}</dt><dd>SAR {{ number_format($summary['outstanding'], 2) }} <span class="small">({{ __(':count open bill(s)', ['count' => $summary['open_bills']]) }})</span></dd>
+            <dt>{{ __('Outstanding payable') }}</dt><dd>SAR {{ number_format($summary['outstanding'], 2) }} <span class="small">({{ trans_choice(':count open bill|:count open bills', $summary['open_bills'], ['count' => $summary['open_bills']]) }})</span></dd>
             <dt>{{ __('Paid to date') }}</dt><dd>SAR {{ number_format($summary['paid'], 2) }}</dd>
         @endif
     </dl>

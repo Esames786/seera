@@ -137,8 +137,8 @@
                             <td>@if ($invoice->zatcaRecord)<span class="badge {{ $invoice->zatcaRecord->statusColor() }}">{{ $invoice->zatcaRecord->statusLabel() }}</span>@else <span class="small">-</span>@endif</td>
                             <td>
                                 <a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.show', ['accounts_receivable' => $invoice, 'return_to' => $invoiceOrigin]) }}">{{ __('View') }}</a>
-                                @if ($canEditInvoice && $invoice->isEditable())<a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.edit', ['accounts_receivable' => $invoice, 'return_to' => $invoiceOrigin]) }}">Edit draft</a>@endif
-                                @if ($canReceive && in_array($invoice->payment_status, \App\Support\Workspace\CustomerWorkspacePanels::OPEN_INVOICE_STATUSES, true))<a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.receipt', ['accounts_receivable' => $invoice, 'return_to' => $invoiceOrigin]) }}">Record receipt</a>@endif
+                                @if ($canEditInvoice && $invoice->isEditable())<a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.edit', ['accounts_receivable' => $invoice, 'return_to' => $invoiceOrigin]) }}">{{ __('Edit draft') }}</a>@endif
+                                @if ($canReceive && in_array($invoice->payment_status, \App\Support\Workspace\CustomerWorkspacePanels::OPEN_INVOICE_STATUSES, true))<a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.receipt', ['accounts_receivable' => $invoice, 'return_to' => $invoiceOrigin]) }}">{{ __('Record receipt') }}</a>@endif
                             </td>
                         </tr>
                     @empty

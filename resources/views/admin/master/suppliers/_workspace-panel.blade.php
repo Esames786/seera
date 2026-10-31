@@ -35,7 +35,7 @@
                 </form>
             @endif
             <div class="table-wrap"><table>
-                <thead><tr><th>Code</th><th>Project</th><th>Client</th><th>Status</th><th>{{ __('Actions') }}</th></tr></thead>
+                <thead><tr><th>{{ __('Code') }}</th><th>{{ __('Project') }}</th><th>{{ __('Client') }}</th><th>{{ __('Status') }}</th><th>{{ __('Actions') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $project)
                         <tr>
@@ -44,7 +44,7 @@
                             <td>{{ $project->customer?->name ?? '-' }}</td>
                             <td><x-admin.status-badge :status="$project->status"/></td>
                             <td>
-                                @if ($canViewProjects)<a class="btn sm outline" href="{{ route('admin.master.projects.show', $project) }}">View project</a>@endif
+                                @if ($canViewProjects)<a class="btn sm outline" href="{{ route('admin.master.projects.show', $project) }}">{{ __('View project') }}</a>@endif
                                 @if ($canEdit)<button type="button" class="btn sm outline" data-related-action="{{ route('admin.master.suppliers.workspace.action', [$supplier, 'projects', $project->id, 'remove']) }}" data-action="remove">{{ __('Unlink') }}</button>@endif
                             </td>
                         </tr>
@@ -57,7 +57,7 @@
 
         @case('purchase-orders')
             <div class="table-wrap"><table>
-                <thead><tr><th>PO</th><th>Date</th><th>Project / Site</th><th>Amount</th><th>Received</th><th>Status</th><th>{{ __('Actions') }}</th></tr></thead>
+                <thead><tr><th>{{ __('PO') }}</th><th>{{ __('Date') }}</th><th>{{ __('Project / Site') }}</th><th>{{ __('Amount') }}</th><th>{{ __('Received') }}</th><th>{{ __('Status') }}</th><th>{{ __('Actions') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $order)
                         @php $ordered = (float) $order->lines->sum('quantity'); $received = (float) $order->lines->sum('received_quantity'); @endphp
@@ -66,9 +66,9 @@
                             <td>{{ $order->po_date?->toDateString() }}</td>
                             <td>{{ $dims($order->project, $order->site) }}</td>
                             <td>{{ $money($order->total_amount) }}</td>
-                            <td>{{ $qty($received) }} / {{ $qty($ordered) }}@if($ordered - $received > 0.0005) <span class="small">({{ $qty($ordered - $received) }} outstanding)</span>@endif</td>
+                            <td>{{ $qty($received) }} / {{ $qty($ordered) }}@if($ordered - $received > 0.0005) <span class="small">({{ __(':count outstanding', ['count' => $qty($ordered - $received)]) }})</span>@endif</td>
                             <td><x-admin.status-badge :status="$order->status"/></td>
-                            <td>@if ($canViewOrders)<a class="btn sm outline" href="{{ route('admin.inventory.purchase-orders.show', $order) }}">View PO</a>@endif</td>
+                            <td>@if ($canViewOrders)<a class="btn sm outline" href="{{ route('admin.inventory.purchase-orders.show', $order) }}">{{ __('View PO') }}</a>@endif</td>
                         </tr>
                     @empty
                         <tr><td colspan="7" class="table-empty">{{ __('No purchase orders for this supplier in your scope.') }}</td></tr>
@@ -79,7 +79,7 @@
 
         @case('goods-receipts')
             <div class="table-wrap"><table>
-                <thead><tr><th>GRN</th><th>PO</th><th>Project / Site</th><th>Date</th><th>Value</th><th>Status</th><th>Invoiced</th><th>{{ __('Actions') }}</th></tr></thead>
+                <thead><tr><th>{{ __('GRN') }}</th><th>{{ __('PO') }}</th><th>{{ __('Project / Site') }}</th><th>{{ __('Date') }}</th><th>{{ __('Value') }}</th><th>{{ __('Status') }}</th><th>{{ __('Invoiced') }}</th><th>{{ __('Actions') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $grn)
                         @php
@@ -96,15 +96,15 @@
                             <td><x-admin.status-badge :status="$grn->status"/></td>
                             <td>
                                 @if ($grn->status !== 'posted') <span class="small">-</span>
-                                @elseif ($uninvoiced <= 0.0005) <span class="badge green">Invoiced</span>
-                                @elseif ($invoiced > 0) <span class="badge yellow">{{ $qty($uninvoiced) }} uninvoiced</span>
-                                @else <span class="badge yellow">Uninvoiced</span>
+                                @elseif ($uninvoiced <= 0.0005) <span class="badge green">{{ __('Invoiced') }}</span>
+                                @elseif ($invoiced > 0) <span class="badge yellow">{{ __(':count uninvoiced', ['count' => $qty($uninvoiced)]) }}</span>
+                                @else <span class="badge yellow">{{ __('Uninvoiced') }}</span>
                                 @endif
                             </td>
                             <td>
-                                <a class="btn sm outline" href="{{ route('admin.inventory.goods-receipts.show', $grn) }}">View GRN</a>
+                                <a class="btn sm outline" href="{{ route('admin.inventory.goods-receipts.show', $grn) }}">{{ __('View GRN') }}</a>
                                 @if ($canCreateBill && $grn->status === 'posted' && $uninvoiced > 0.0005)
-                                    <a class="btn sm primary" href="{{ route('admin.accounting.accounts-payable.create', ['goods_receipt' => $grn->id, 'return_to' => route('admin.master.suppliers.edit', $supplier, false).'#goods-receipts']) }}">Create Supplier Bill</a>
+                                    <a class="btn sm primary" href="{{ route('admin.accounting.accounts-payable.create', ['goods_receipt' => $grn->id, 'return_to' => route('admin.master.suppliers.edit', $supplier, false).'#goods-receipts']) }}">{{ __('Create Supplier Bill') }}</a>
                                 @endif
                             </td>
                         </tr>
@@ -117,7 +117,7 @@
 
         @case('bills')
             <div class="table-wrap"><table>
-                <thead><tr><th>Bill</th><th>Date</th><th>Project / Site</th><th>Total</th><th>Paid</th><th>Balance</th><th>Status</th><th>Matched</th><th>{{ __('Actions') }}</th></tr></thead>
+                <thead><tr><th>{{ __('Bill') }}</th><th>{{ __('Date') }}</th><th>{{ __('Project / Site') }}</th><th>{{ __('Total') }}</th><th>{{ __('Paid') }}</th><th>{{ __('Balance') }}</th><th>{{ __('Status') }}</th><th>{{ __('Matched') }}</th><th>{{ __('Actions') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $bill)
                         <tr>
@@ -127,12 +127,12 @@
                             <td>{{ $money($bill->total_amount) }}</td>
                             <td>{{ $money($bill->paid_amount) }}</td>
                             <td>{{ $money($bill->balance_amount) }}</td>
-                            <td><x-admin.status-badge :status="$bill->status"/><div class="small">{{ $bill->approvalLabel() }}</div></td>
-                            <td>{{ $bill->grn_matches_count > 0 ? $bill->grn_matches_count.' GRN line'.($bill->grn_matches_count === 1 ? '' : 's') : 'Direct' }}</td>
+                            <td><x-admin.status-badge :status="$bill->status"/><div class="small">{{ __($bill->approvalLabel()) }}</div></td>
+                            <td>{{ $bill->grn_matches_count > 0 ? trans_choice(':count GRN line|:count GRN lines', $bill->grn_matches_count, ['count' => $bill->grn_matches_count]) : __('Direct') }}</td>
                             <td>
-                                <a class="btn sm outline" href="{{ route('admin.accounting.accounts-payable.show', $bill) }}">View</a>
-                                @if ($canEditBill && ! $bill->site_expense_id && $bill->isEditable())<a class="btn sm outline" href="{{ route('admin.accounting.accounts-payable.edit', $bill) }}">Edit draft</a>@endif
-                                @if ($canPay && $bill->isPayable())<a class="btn sm outline" href="{{ route('admin.accounting.accounts-payable.payment', $bill) }}">Record payment</a>@endif
+                                <a class="btn sm outline" href="{{ route('admin.accounting.accounts-payable.show', $bill) }}">{{ __('View') }}</a>
+                                @if ($canEditBill && ! $bill->site_expense_id && $bill->isEditable())<a class="btn sm outline" href="{{ route('admin.accounting.accounts-payable.edit', $bill) }}">{{ __('Edit draft') }}</a>@endif
+                                @if ($canPay && $bill->isPayable())<a class="btn sm outline" href="{{ route('admin.accounting.accounts-payable.payment', $bill) }}">{{ __('Record payment') }}</a>@endif
                             </td>
                         </tr>
                     @empty
@@ -146,14 +146,14 @@
         @case('payments')
             @if ($summary)
                 <div class="card-grid">
-                    <x-admin.metric-card color="blue" :value="$money($summary['approved'])" label="Approved bills"/>
-                    <x-admin.metric-card color="green" :value="$money($summary['paid'])" label="Paid"/>
-                    <x-admin.metric-card color="yellow" :value="$money($summary['outstanding'])" label="Outstanding"/>
-                    <x-admin.metric-card color="cyan" :value="$summary['last_payment'] ? $summary['last_payment']->payment_date->toDateString() : '-'" label="Last payment"/>
+                    <x-admin.metric-card color="blue" :value="$money($summary['approved'])" :label="__('Approved bills')"/>
+                    <x-admin.metric-card color="green" :value="$money($summary['paid'])" :label="__('Paid')"/>
+                    <x-admin.metric-card color="yellow" :value="$money($summary['outstanding'])" :label="__('Outstanding')"/>
+                    <x-admin.metric-card color="cyan" :value="$summary['last_payment'] ? $summary['last_payment']->payment_date->toDateString() : '-'" :label="__('Last payment')"/>
                 </div>
             @endif
             <div class="table-wrap"><table>
-                <thead><tr><th>Date</th><th>Bill</th><th>Account</th><th>Method</th><th>Amount</th><th>Reference</th><th>Journal</th></tr></thead>
+                <thead><tr><th>{{ __('Date') }}</th><th>{{ __('Bill') }}</th><th>{{ __('Account') }}</th><th>{{ __('Method') }}</th><th>{{ __('Amount') }}</th><th>{{ __('Reference') }}</th><th>{{ __('Journal') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $payment)
                         <tr>
@@ -176,7 +176,7 @@
         @case('accounting')
             <p><strong>{{ __('Linked payable account') }}:</strong> {{ $linkedAccount?->label() ?? $supplier->linked_account ?? __('Accounts Payable control account') }}</p>
             <div class="table-wrap"><table>
-                <thead><tr><th>Journal</th><th>Date</th><th>Source</th><th>Description</th><th>Amount</th><th>Status</th></tr></thead>
+                <thead><tr><th>{{ __('Journal') }}</th><th>{{ __('Date') }}</th><th>{{ __('Source') }}</th><th>{{ __('Description') }}</th><th>{{ __('Amount') }}</th><th>{{ __('Status') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $entry)
                         <tr>
@@ -196,7 +196,7 @@
 
         @case('activity')
             <div class="table-wrap"><table>
-                <thead><tr><th>When</th><th>User</th><th>Module</th><th>Action</th><th>Details</th></tr></thead>
+                <thead><tr><th>{{ __('When') }}</th><th>{{ __('User') }}</th><th>{{ __('Module') }}</th><th>{{ __('Action') }}</th><th>{{ __('Details') }}</th></tr></thead>
                 <tbody>
                     @forelse ($rows as $log)
                         <tr>

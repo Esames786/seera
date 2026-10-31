@@ -72,4 +72,27 @@ class MasterWorkspaceUxClosureTest extends TestCase
             ->assertSee('Back to Suppliers')
             ->assertDontSee('name="_save_action"', false);
     }
+    public function test_supplier_panel_actions_tabs_and_bill_count_are_translated_without_changing_amounts(): void
+    {
+        $admin = User::where('email', 'admin@example.com')->firstOrFail();
+        $supplier = Supplier::firstOrFail();
+        $amounts = fn (string $html) => preg_match_all('/SAR [0-9,]+\.[0-9]{2}/u', $html, $m) ? $m[0] : [];
+
+        $english = $this->actingAs($admin)->get(route('admin.master.suppliers.show', $supplier))->assertOk()
+            ->assertSee('Supplier Bills')->assertSee('Payments & Balance')->assertDontSee('bill(s)')
+            ->assertSeeInOrder(['Outstanding payable', 'open bill']);
+        $admin->update(['language' => 'Arabic']);
+        $arabic = $this->actingAs($admin->fresh())->get(route('admin.master.suppliers.show', $supplier))->assertOk()
+            ->assertSee('فواتير الموردين')->assertSee('المدفوعات والرصيد')->assertSee('عدد الفواتير المفتوحة:')
+            ->assertDontSee('open bill')->assertDontSee('>View project<', false)->assertDontSee('>View PO<', false)->assertDontSee('>Record payment<', false)->assertDontSee('>Edit draft<', false);
+        $this->assertNotEmpty($amounts($english->getContent()));
+        $this->assertSame($amounts($english->getContent()), $amounts($arabic->getContent()));
+
+        $this->actingAs($admin->fresh())->getJson(route('admin.master.suppliers.workspace.panel', [$supplier, 'bills']))->assertOk()
+            ->assertDontSee('>View<', false)->assertDontSee('>Edit draft<', false)->assertDontSee('<th>Bill</th>', false);
+
+        $employee = Employee::firstOrFail();
+        $this->actingAs($admin->fresh())->get(route('admin.hr.employees.show', $employee))->assertOk()
+            ->assertDontSee('>Edit</a>', false)->assertDontSee('New Structure From Profile');
+    }
 }
