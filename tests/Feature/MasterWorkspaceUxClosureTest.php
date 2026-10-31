@@ -72,6 +72,7 @@ class MasterWorkspaceUxClosureTest extends TestCase
             ->assertSee('Back to Suppliers')
             ->assertDontSee('name="_save_action"', false);
     }
+
     public function test_supplier_panel_actions_tabs_and_bill_count_are_translated_without_changing_amounts(): void
     {
         $admin = User::where('email', 'admin@example.com')->firstOrFail();

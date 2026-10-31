@@ -74,6 +74,9 @@ try {
             if (-not (Test-Path -LiteralPath 'vendor/brianium/paratest')) {
                 throw 'Parallel testing is not installed. In this DEV checkout run: composer require --dev brianium/paratest (commit BOTH composer.json and composer.lock after verification).'
             }
+            # Per-worker compiled Blade caches (storage/framework/views/test_<n>) can survive a source edit when a worker
+            # compiled the view within the same second the source changed; drop them so every worker recompiles.
+            Get-ChildItem -LiteralPath 'storage/framework/views' -Directory -Filter 'test_*' -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force
             $argsForArtisan += '--parallel'
             $argsForArtisan += ('--processes=' + $Processes)
             if (-not [string]::IsNullOrWhiteSpace($Filter)) {
