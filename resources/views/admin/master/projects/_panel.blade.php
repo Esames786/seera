@@ -26,18 +26,18 @@
     <div data-panel-status role="status" aria-live="polite"></div>
     @if($panel === 'site-expenses' && $user->hasPermission('Site Expenses', 'create'))<a class="btn primary sm" href="{{ route('admin.site-expenses.create', ['project_id' => $project->id]) }}">{{ __('Add Site Expense') }}</a>@endif
     @if($panel === 'equipment')<p class="note">{{ __('Assets whose active assignment is this project. Posted fuel / maintenance are the Finance-posted amounts (information only); the Project Cost Report and Budget vs Actual remain the cost truth. Live GPS tracking is not connected.') }}</p>@if($user->hasPermission('Equipment', 'process'))<a class="btn primary sm" href="{{ route('admin.equipment.index', ['status' => 'available']) }}">{{ __('Assign Equipment (open register)') }}</a>@endif @endif
-    @isset($materialTotal)<p class="note">Material used: SAR {{ number_format($materialTotal, 2) }}. Posted issue-ledger values only; receipts are not consumption. Quantities stay per item and unit, not one mixed-unit total.</p>@endisset
-    @isset($materialQuantity)<p class="note">Total issued quantity (one shared unit): {{ number_format($materialQuantity, 3) }} {{ $materialUnit }}.</p>@endisset
-    @isset($stockTotal)<p class="note">Current positive stock value: SAR {{ number_format($stockTotal, 2) }}. Stored inventory values; quantities are shown per item and unit.</p>@endisset
-    @isset($arTotal)<p class="note">Project approved invoices: SAR {{ number_format($arTotal, 2) }}. Amount still to receive: SAR {{ number_format($arOutstanding, 2) }}.</p>@endisset
+    @isset($materialTotal)<p class="note">{{ __('Material used:') }} SAR {{ number_format($materialTotal, 2) }}. {{ __('Posted issue-ledger values only; receipts are not consumption. Quantities stay per item and unit, not one mixed-unit total.') }}</p>@endisset
+    @isset($materialQuantity)<p class="note">{{ __('Total issued quantity (one shared unit):') }} {{ number_format($materialQuantity, 3) }} {{ $materialUnit }}.</p>@endisset
+    @isset($stockTotal)<p class="note">{{ __('Current positive stock value:') }} SAR {{ number_format($stockTotal, 2) }}. {{ __('Stored inventory values; quantities are shown per item and unit.') }}</p>@endisset
+    @isset($arTotal)<p class="note">{{ __('Project approved invoices:') }} SAR {{ number_format($arTotal, 2) }}. {{ __('Amount still to receive:') }} SAR {{ number_format($arOutstanding, 2) }}.</p>@endisset
     @if($panel === 'finance')
         <table><tbody>
             @foreach(['budget' => 'Master budget', 'cost' => 'Posted cost', 'budget_used' => 'Budget used (%)', 'revenue' => 'Posted revenue', 'billed' => 'Supplier billed', 'invoiced' => 'Customer invoiced', 'margin' => 'Margin (posted revenue minus posted cost)'] as $key => $label)
                 <tr><th>{{ __($label) }}</th><td>{{ $key === 'budget_used' ? '' : 'SAR ' }}{{ number_format($finance[$key], $key === 'budget_used' ? 1 : 2) }}</td></tr>
             @endforeach
         </tbody></table>
-        <p class="note">All dates; same scoped calculations as Project Cost Report. Posted cost is net debit minus credit on expense-account journal lines carrying this Project. Revenue is net credit minus debit on revenue-account lines. Reversals net off. Billed/invoiced follow the report's non-draft document semantics (including cancelled documents); they are not cash or approved-only AR totals. Cost centres alone do not assign a Project.</p>
-        <p class="note">Posted Site Expenses and payroll contribute through journal lines only. Supplier Credit contributes through its linked posted Supplier Bill, never twice. Equipment cost remains outside this phase. Master budget is the scalar amount on the project profile; the detailed budget (BOQ lines, versions, Budget vs Actual) lives on the Budget / BOQ page.</p>
+        <p class="note">{{ __('All dates; same scoped calculations as Project Cost Report. Posted cost is net debit minus credit on expense-account journal lines carrying this Project. Revenue is net credit minus debit on revenue-account lines. Reversals net off. Billed/invoiced follow the report\'s non-draft document semantics (including cancelled documents); they are not cash or approved-only AR totals. Cost centres alone do not assign a Project.') }}</p>
+        <p class="note">{{ __('Posted Site Expenses and payroll contribute through journal lines only. Supplier Credit contributes through its linked posted Supplier Bill, never twice. Equipment cost remains outside this phase. Master budget is the scalar amount on the project profile; the detailed budget (BOQ lines, versions, Budget vs Actual) lives on the Budget / BOQ page.') }}</p>
         @if($detailedBudget ?? null)
             <table><tbody>
                 <tr><th>{{ __('Detailed current budget') }}</th><td>SAR {{ number_format($detailedBudget['budget'], 2) }} ({{ $detailedBudget['reference'] }} · {{ $detailedBudget['title'] }})</td></tr>
