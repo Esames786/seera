@@ -919,5 +919,9 @@
     "Detailed current budget": "الميزانية التفصيلية الحالية",
     "none yet": "لا يوجد حتى الآن",
     "Open Project Reports": "فتح تقارير المشاريع",
-    "Back to Projects": "العودة إلى المشاريع"
+    "Back to Projects": "العودة إلى المشاريع",
+    "Budget / BOQ": "الميزانية / جداول الكميات",
+    "Not set": "غير محدد",
+    "Location": "الموقع",
+    "Project identity": "بيانات المشروع الأساسية"
 }

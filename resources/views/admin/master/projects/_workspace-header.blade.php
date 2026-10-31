@@ -1,4 +1,4 @@
-<section class="table-card" aria-label="Project identity" data-project-identity="{{ $project->id }}">
+<section class="table-card" aria-label="{{ __('Project identity') }}" data-project-identity="{{ $project->id }}">
     <div class="table-title"><strong>{{ $project->code }} / {{ $project->name }}</strong><x-admin.status-badge :status="$project->status"/></div>
     <div style="padding:16px;display:flex;flex-wrap:wrap;gap:16px">
         <span>{{ __('Customer') }}: {{ $project->customer?->name ?? __('Not assigned') }}</span>
