@@ -25,7 +25,7 @@
     </div>
     <div data-panel-status role="status" aria-live="polite"></div>
     @if($panel === 'site-expenses' && $user->hasPermission('Site Expenses', 'create'))<a class="btn primary sm" href="{{ route('admin.site-expenses.create', ['project_id' => $project->id]) }}">{{ __('Add Site Expense') }}</a>@endif
-    @if($panel === 'equipment')<p class="note">Assets whose active assignment is this project. Posted fuel / maintenance are the Finance-posted amounts (information only); the Project Cost Report and Budget vs Actual remain the cost truth. Live GPS tracking is not connected.</p>@if($user->hasPermission('Equipment', 'process'))<a class="btn primary sm" href="{{ route('admin.equipment.index', ['status' => 'available']) }}">{{ __('Assign Equipment (open register)') }}</a>@endif @endif
+    @if($panel === 'equipment')<p class="note">{{ __('Assets whose active assignment is this project. Posted fuel / maintenance are the Finance-posted amounts (information only); the Project Cost Report and Budget vs Actual remain the cost truth. Live GPS tracking is not connected.') }}</p>@if($user->hasPermission('Equipment', 'process'))<a class="btn primary sm" href="{{ route('admin.equipment.index', ['status' => 'available']) }}">{{ __('Assign Equipment (open register)') }}</a>@endif @endif
     @isset($materialTotal)<p class="note">Material used: SAR {{ number_format($materialTotal, 2) }}. Posted issue-ledger values only; receipts are not consumption. Quantities stay per item and unit, not one mixed-unit total.</p>@endisset
     @isset($materialQuantity)<p class="note">Total issued quantity (one shared unit): {{ number_format($materialQuantity, 3) }} {{ $materialUnit }}.</p>@endisset
     @isset($stockTotal)<p class="note">Current positive stock value: SAR {{ number_format($stockTotal, 2) }}. Stored inventory values; quantities are shown per item and unit.</p>@endisset
@@ -46,7 +46,7 @@
                 <tr><th>{{ __('Remaining detailed budget') }}</th><td>SAR {{ number_format($detailedBudget['remaining'], 2) }}{{ $detailedBudget['over_budget'] ? __(' — Over budget') : '' }}</td></tr>
             </tbody></table>
         @else
-            <p class="note">No detailed budget has been set as current for this project yet. Open Budget / BOQ to create one.</p>
+            <p class="note">{{ __('No detailed budget has been set as current for this project yet. Open Budget / BOQ to create one.') }}</p>
         @endif
         <a class="btn outline" href="{{ route('admin.accounting.reports.project-cost-report', ['project' => $project->id]) }}">{{ __('Open Project Cost Report') }}</a>
         <a class="btn outline" href="{{ route('admin.master.projects.budget.show', $project) }}">{{ __('Open Budget / BOQ') }}</a>
@@ -78,7 +78,7 @@
             @else {{ $rows->links() }} @endif
         </div>
         @if($panel === 'materials' && $user->hasPermission('Inventory Reports', 'view'))<a class="btn outline" href="{{ route('admin.inventory.reports.project-consumption', ['project' => $project->id]) }}">{{ __('Open Project Consumption Report') }}</a>@endif
-        @if($panel === 'invoices')<p class="note">ZATCA state is local foundation information, not a claim of live clearance.</p>@endif
-        @if($panel === 'activity')<p class="note">Only exact Project entity-token activity visible to your role is included. Legacy free-text/name-only history is omitted to avoid false matches.</p>@endif
+        @if($panel === 'invoices')<p class="note">{{ __('ZATCA state is local foundation information, not a claim of live clearance.') }}</p>@endif
+        @if($panel === 'activity')<p class="note">{{ __('Only exact Project entity-token activity visible to your role is included. Legacy free-text/name-only history is omitted to avoid false matches.') }}</p>@endif
     @endif
 </div>
