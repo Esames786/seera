@@ -80,7 +80,7 @@ See [HR dashboard verification](SEERA-HR-DASHBOARD-QA-2026-10-31.md) (branch `fe
 | --- | --- |
 | HR-01 | Found and fixed: PHP parse error in `HrDashboardController` (`pendingOvertime` ternary without its `null` branch) made the dashboard and every test that boots it fail on the delivered HEAD |
 | HR-02 | Found and fixed: dashboard action buttons ("+ Add Employee", "Open Attendance", "Open", "View All") stayed English in Arabic |
-| HR-03 | Open: metric labels, table titles, column headers, approval-queue names, breadcrumb and description of the HR dashboard have no Arabic entries (pre-existing) |
+| HR-03 | Closed on branch `feature/seera-hr-dashboard-arabic-2026-10-31` (see [HR dashboard Arabic](SEERA-HR-DASHBOARD-ARABIC-QA-2026-10-31.md)): page title, breadcrumb, description, metric labels, table titles, column headers, approval-queue names and empty states translated through the existing `__()` pattern with 25 dictionary entries; no logic, route, permission or data change; Arabic wording awaits the Arabic-speaking reviewer |
 | HR dashboard | Attendance counts only with Attendance view, payroll figures only with Payroll view, chart placeholder replaced by a truthful note, counts follow project / site scope, sidebar and direct URLs consistent with the permission map; verified in the browser for five roles in both locales |
 
 ## Original findings

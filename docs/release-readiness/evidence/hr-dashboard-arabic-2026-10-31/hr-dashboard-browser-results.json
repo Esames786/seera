@@ -1,0 +1,954 @@
+{
+  "base": "http://127.0.0.1:18769",
+  "generatedAt": "2026-10-31T07:35:43.939Z",
+  "checks": [
+    {
+      "phase": "phase1",
+      "name": "super admin opens HR dashboard",
+      "ok": true,
+      "detail": 200
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin page title",
+      "ok": true,
+      "detail": "HR Dashboard"
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin metrics exact",
+      "ok": true,
+      "detail": {
+        "Total Employees": "20",
+        "Active Employees": "19",
+        "Present Today": "3",
+        "Late Today": "1",
+        "On Leave Today": "1",
+        "Pending Leaves": "3",
+        "Pending Overtime": "3",
+        "Current Month Payroll": "SAR 262,588",
+        "Expiring IQAMAs (60 days)": "2",
+        "Expiring Documents (60 days)": "5",
+        "Pending EOSB": "2",
+        "Absent Today": "1"
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin attendance summary table is real data",
+      "ok": true,
+      "detail": {
+        "title": "Today's Attendance Summary",
+        "actions": [
+          "Open Attendance"
+        ],
+        "rows": [
+          [
+            "Present",
+            "3"
+          ],
+          [
+            "Late",
+            "1"
+          ],
+          [
+            "Absent",
+            "1"
+          ],
+          [
+            "On leave",
+            "1"
+          ]
+        ]
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin fake chart placeholder gone",
+      "ok": true,
+      "detail": false
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin truthful note shown",
+      "ok": true,
+      "detail": [
+        "Recorded attendance and approved leave counts for today; not a historical trend or payroll calculation."
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin pending approvals rows",
+      "ok": true,
+      "detail": [
+        [
+          "Leave Requests",
+          "3",
+          "Open"
+        ],
+        [
+          "Overtime Claims",
+          "3",
+          "Open"
+        ],
+        [
+          "Document Expiry",
+          "5",
+          "Open"
+        ],
+        [
+          "Payroll Approval",
+          "1",
+          "Open"
+        ],
+        [
+          "End of Service",
+          "2",
+          "Open"
+        ]
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin header actions",
+      "ok": true,
+      "detail": [
+        {
+          "text": "+ Manual Attendance",
+          "href": "http://127.0.0.1:18769/admin/hr/attendance/create"
+        },
+        {
+          "text": "+ Add Employee",
+          "href": "http://127.0.0.1:18769/admin/hr/employees/create"
+        }
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin sidebar has attendance and payroll entries",
+      "ok": true,
+      "detail": [
+        "/admin/hr/dashboard",
+        "/admin/hr/employees",
+        "/admin/hr/documents",
+        "/admin/hr/shifts",
+        "/admin/hr/attendance",
+        "/admin/hr/leaves",
+        "/admin/hr/overtime",
+        "/admin/hr/salary-structures",
+        "/admin/hr/payroll",
+        "/admin/hr/eosb"
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin every /admin/ link on the dashboard answers 200 or 302",
+      "ok": true,
+      "detail": {
+        "total": 69,
+        "broken": []
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin Arabic locale applied",
+      "ok": true,
+      "detail": {
+        "status": "0:opaqueredirect",
+        "dir": "rtl"
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin Arabic title",
+      "ok": true,
+      "detail": "لوحة الموارد البشرية"
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin Arabic header actions",
+      "ok": true,
+      "detail": [
+        {
+          "text": "+ تسجيل حضور يدوي",
+          "href": "http://127.0.0.1:18769/admin/hr/attendance/create"
+        },
+        {
+          "text": "+ إضافة موظف",
+          "href": "http://127.0.0.1:18769/admin/hr/employees/create"
+        }
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin Arabic attendance action and pending Open links",
+      "ok": true,
+      "detail": [
+        [
+          "فتح الحضور"
+        ],
+        [],
+        [],
+        [
+          "عرض الكل"
+        ]
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin Arabic truthful note",
+      "ok": true,
+      "detail": [
+        "أعداد الحضور والإجازات المعتمدة لليوم فقط، وليست اتجاهاً تاريخياً أو حساباً للرواتب."
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin Arabic metric values identical to English",
+      "ok": true,
+      "detail": [
+        "20",
+        "19",
+        "3",
+        "1",
+        "1",
+        "3",
+        "3",
+        "SAR 262,588",
+        "2",
+        "5",
+        "2",
+        "1"
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin Arabic View All",
+      "ok": true,
+      "detail": [
+        "✅ موافقاتي",
+        "دليل المستخدم",
+        "+ تسجيل حضور يدوي",
+        "+ إضافة موظف",
+        "فتح الحضور",
+        "فتح",
+        "فتح",
+        "فتح",
+        "فتح",
+        "فتح",
+        "عرض الكل"
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin Arabic metric labels exact from dictionary",
+      "ok": true,
+      "detail": [
+        "إجمالي الموظفين",
+        "الموظفون النشطون",
+        "الحاضرون اليوم",
+        "المتأخرون اليوم",
+        "في إجازة اليوم",
+        "إجازات قيد الاعتماد",
+        "عمل إضافي قيد الاعتماد",
+        "رواتب الشهر الحالي",
+        "إقامات تنتهي خلال 60 يوماً",
+        "مستندات تنتهي خلال 60 يوماً",
+        "مكافآت نهاية خدمة قيد الاعتماد",
+        "الغائبون اليوم"
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin Arabic table titles exact from dictionary",
+      "ok": true,
+      "detail": [
+        "ملخص حضور اليوم",
+        "موافقات الموارد البشرية المعلقة",
+        "إقامات تنتهي قريباً",
+        "أحدث طلبات الإجازة"
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin Arabic queue names exact from dictionary",
+      "ok": true,
+      "detail": [
+        "طلبات الإجازة",
+        "مطالبات العمل الإضافي",
+        "انتهاء المستندات",
+        "اعتماد الرواتب",
+        "نهاية الخدمة"
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin Arabic column headers exact from dictionary",
+      "ok": true,
+      "detail": [
+        "الحالة",
+        "الموظفون",
+        "القائمة",
+        "العدد",
+        "",
+        "الموظف",
+        "القسم",
+        "الانتهاء",
+        "الحالة",
+        "الموظف",
+        "نوع الإجازة",
+        "البداية",
+        "النهاية",
+        "الأيام",
+        "الحالة"
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "super admin Arabic title, breadcrumb and description",
+      "ok": true,
+      "detail": {
+        "title": "لوحة الموارد البشرية - Seera",
+        "breadcrumb": "الرئيسية / الموارد البشرية والرواتب / لوحة الموارد البشرية",
+        "desc": "الموظفون والحضور والإجازات والعمل الإضافي والمستندات والرواتب في لمحة"
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin ar 320px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 320,
+        "innerWidth": 320
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin ar 320px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin ar 320px no untranslated labels, titles, headers, queues, notes or empty states",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin ar 390px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin ar 390px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin ar 390px no untranslated labels, titles, headers, queues, notes or empty states",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin ar 768px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin ar 768px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin ar 768px no untranslated labels, titles, headers, queues, notes or empty states",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin ar 1440px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin ar 1440px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin ar 1440px no untranslated labels, titles, headers, queues, notes or empty states",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin en 320px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 320,
+        "innerWidth": 320
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin en 390px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin en 768px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "super-admin en 1440px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "HR manager (full) opens HR dashboard",
+      "ok": true,
+      "detail": 200
+    },
+    {
+      "phase": "phase1",
+      "name": "HR manager (full) metrics exact",
+      "ok": true,
+      "detail": {
+        "Total Employees": "20",
+        "Active Employees": "19",
+        "Present Today": "3",
+        "Late Today": "1",
+        "On Leave Today": "1",
+        "Pending Leaves": "3",
+        "Pending Overtime": "3",
+        "Current Month Payroll": "SAR 262,588",
+        "Expiring IQAMAs (60 days)": "2",
+        "Expiring Documents (60 days)": "5",
+        "Pending EOSB": "2",
+        "Absent Today": "1"
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "HR manager (full) sees Open Attendance and payroll rows",
+      "ok": true,
+      "detail": [
+        "User Guide",
+        "+ Add Employee",
+        "Open Attendance",
+        "Open",
+        "Open",
+        "Open",
+        "Open",
+        "Open",
+        "View All"
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "HR manager (full) header actions: Add Employee only (no Attendance create)",
+      "ok": true,
+      "detail": [
+        {
+          "text": "+ Add Employee",
+          "href": "http://127.0.0.1:18769/admin/hr/employees/create"
+        }
+      ]
+    },
+    {
+      "phase": "phase1",
+      "name": "HR manager (full) every /admin/ link on the dashboard answers 200 or 302",
+      "ok": true,
+      "detail": {
+        "total": 20,
+        "broken": []
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "project manager (Attendance view, no HR view) gets 403 on HR dashboard",
+      "ok": true,
+      "detail": {
+        "url": "/admin/hr/dashboard",
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "finance manager (Payroll view, no HR view) gets 403 on HR dashboard",
+      "ok": true,
+      "detail": {
+        "url": "/admin/hr/dashboard",
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "phase": "phase1",
+      "name": "site in-charge before HR view grant gets 403 on HR dashboard",
+      "ok": true,
+      "detail": {
+        "url": "/admin/hr/dashboard",
+        "status": 403,
+        "expected": 403
+      }
+    },
+    {
+      "phase": "phase2",
+      "name": "site in-charge (HR view granted) opens HR dashboard",
+      "ok": true,
+      "detail": 200
+    },
+    {
+      "phase": "phase2",
+      "name": "site in-charge metrics scoped to project 3 / site 4",
+      "ok": true,
+      "detail": {
+        "Total Employees": "3",
+        "Active Employees": "3",
+        "Present Today": "1",
+        "Late Today": "0",
+        "On Leave Today": "0",
+        "Pending Leaves": "0",
+        "Expiring IQAMAs (60 days)": "0",
+        "Expiring Documents (60 days)": "0",
+        "Absent Today": "1"
+      }
+    },
+    {
+      "phase": "phase2",
+      "name": "site in-charge attendance cards visible (Attendance view)",
+      "ok": true,
+      "detail": [
+        "Total Employees",
+        "Active Employees",
+        "Present Today",
+        "Late Today",
+        "On Leave Today",
+        "Pending Leaves",
+        "Expiring IQAMAs (60 days)",
+        "Expiring Documents (60 days)",
+        "Absent Today"
+      ]
+    },
+    {
+      "phase": "phase2",
+      "name": "site in-charge payroll cards hidden (no Payroll view)",
+      "ok": true,
+      "detail": [
+        "Total Employees",
+        "Active Employees",
+        "Present Today",
+        "Late Today",
+        "On Leave Today",
+        "Pending Leaves",
+        "Expiring IQAMAs (60 days)",
+        "Expiring Documents (60 days)",
+        "Absent Today"
+      ]
+    },
+    {
+      "phase": "phase2",
+      "name": "site in-charge payroll rows hidden",
+      "ok": true,
+      "detail": [
+        [
+          "Leave Requests",
+          "0",
+          "Open"
+        ],
+        [
+          "Document Expiry",
+          "0",
+          "Open"
+        ]
+      ]
+    },
+    {
+      "phase": "phase2",
+      "name": "site in-charge attendance summary scoped",
+      "ok": true,
+      "detail": [
+        [
+          "Present",
+          "1"
+        ],
+        [
+          "Late",
+          "0"
+        ],
+        [
+          "Absent",
+          "1"
+        ],
+        [
+          "On leave",
+          "0"
+        ]
+      ]
+    },
+    {
+      "phase": "phase2",
+      "name": "site in-charge header: Manual Attendance yes, Add Employee no",
+      "ok": true,
+      "detail": [
+        {
+          "text": "+ Manual Attendance",
+          "href": "http://127.0.0.1:18769/admin/hr/attendance/create"
+        }
+      ]
+    },
+    {
+      "phase": "phase2",
+      "name": "site in-charge sidebar has no payroll entries",
+      "ok": true,
+      "detail": [
+        "/admin/hr/dashboard",
+        "/admin/hr/employees",
+        "/admin/hr/documents",
+        "/admin/hr/shifts",
+        "/admin/hr/attendance",
+        "/admin/hr/leaves"
+      ]
+    },
+    {
+      "phase": "phase2",
+      "name": "site in-charge opens own-site employee record",
+      "ok": true,
+      "detail": 200
+    },
+    {
+      "phase": "phase2",
+      "name": "site in-charge forged other-project employee record refused",
+      "ok": true,
+      "detail": 404
+    },
+    {
+      "phase": "phase2",
+      "name": "site in-charge attendance register shows no project-1 rows",
+      "ok": true,
+      "detail": 200
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) opens HR dashboard",
+      "ok": true,
+      "detail": 200
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) no attendance counts",
+      "ok": true,
+      "detail": [
+        "Total Employees",
+        "Active Employees",
+        "On Leave Today",
+        "Pending Leaves",
+        "Expiring IQAMAs (60 days)",
+        "Expiring Documents (60 days)"
+      ]
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) no payroll figures",
+      "ok": true,
+      "detail": [
+        "Total Employees",
+        "Active Employees",
+        "On Leave Today",
+        "Pending Leaves",
+        "Expiring IQAMAs (60 days)",
+        "Expiring Documents (60 days)"
+      ]
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) non-sensitive cards still shown",
+      "ok": true,
+      "detail": {
+        "Total Employees": "20",
+        "Active Employees": "19",
+        "On Leave Today": "1",
+        "Pending Leaves": "3",
+        "Expiring IQAMAs (60 days)": "2",
+        "Expiring Documents (60 days)": "5"
+      }
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) hidden-figures note shown, truthful note absent",
+      "ok": true,
+      "detail": [
+        "Attendance figures are hidden without Attendance view permission."
+      ]
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) pending rows",
+      "ok": true,
+      "detail": [
+        [
+          "Leave Requests",
+          "3",
+          "Open"
+        ],
+        [
+          "Document Expiry",
+          "5",
+          "Open"
+        ]
+      ]
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) sidebar without attendance / payroll entries",
+      "ok": true,
+      "detail": [
+        "/admin/hr/dashboard",
+        "/admin/hr/employees",
+        "/admin/hr/documents",
+        "/admin/hr/shifts",
+        "/admin/hr/leaves"
+      ]
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) no chart placeholder",
+      "ok": true,
+      "detail": false
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) direct attendance register URL refused",
+      "ok": true,
+      "detail": {
+        "url": "/admin/hr/attendance",
+        "status": 403
+      }
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) direct payroll runs URL refused",
+      "ok": true,
+      "detail": {
+        "url": "/admin/hr/payroll",
+        "status": 403
+      }
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) direct overtime URL refused",
+      "ok": true,
+      "detail": {
+        "url": "/admin/hr/overtime",
+        "status": 403
+      }
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) direct end of service URL refused",
+      "ok": true,
+      "detail": {
+        "url": "/admin/hr/eosb",
+        "status": 403
+      }
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) every /admin/ link on the dashboard answers 200 or 302",
+      "ok": true,
+      "detail": {
+        "total": 13,
+        "broken": []
+      }
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) Arabic locale applied",
+      "ok": true,
+      "detail": {
+        "status": "0:opaqueredirect",
+        "dir": "rtl"
+      }
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) Arabic hidden-figures note",
+      "ok": true,
+      "detail": [
+        "بيانات الحضور مخفية دون صلاحية العرض."
+      ]
+    },
+    {
+      "phase": "phase3",
+      "name": "HR manager (restricted) Arabic still no SAR figure or attendance counts",
+      "ok": true,
+      "detail": [
+        "إجمالي الموظفين",
+        "الموظفون النشطون",
+        "في إجازة اليوم",
+        "إجازات قيد الاعتماد",
+        "إقامات تنتهي خلال 60 يوماً",
+        "مستندات تنتهي خلال 60 يوماً"
+      ]
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted ar 320px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 320,
+        "innerWidth": 320
+      }
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted ar 320px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted ar 320px no untranslated labels, titles, headers, queues, notes or empty states",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted ar 390px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted ar 390px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted ar 390px no untranslated labels, titles, headers, queues, notes or empty states",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted ar 768px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted ar 768px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted ar 768px no untranslated labels, titles, headers, queues, notes or empty states",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted ar 1440px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted ar 1440px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted ar 1440px no untranslated labels, titles, headers, queues, notes or empty states",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted en 320px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 320,
+        "innerWidth": 320
+      }
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted en 390px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted en 768px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    {
+      "phase": "phase3",
+      "name": "hr-restricted en 1440px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    }
+  ],
+  "pageErrors": [],
+  "summary": {
+    "total": 89,
+    "passed": 89,
+    "failed": 0,
+    "pageErrors": 0
+  }
+}

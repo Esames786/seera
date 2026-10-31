@@ -12,14 +12,16 @@ const { chromium } = require('D:/laragon2/www/property_handle/node_modules/playw
 const BASE = process.env.SEERA_BASE || 'http://127.0.0.1:18769';
 const EDGE = process.env.SEERA_EDGE || 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
 const PHASE = process.argv[2] || 'phase1';
-const OUT = path.resolve(__dirname, '../../docs/release-readiness/evidence/hr-dashboard-2026-10-31/hr-dashboard-browser-results.json');
+const OUT = process.env.SEERA_OUT || path.resolve(__dirname, '../../docs/release-readiness/evidence/hr-dashboard-arabic-2026-10-31/hr-dashboard-browser-results.json');
 const SHOTS = process.env.SEERA_SHOTS || path.join(os.tmpdir(), 'seera-hr-dashboard-shots');
 const AR = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../lang/ar.json'), 'utf8'));
 const WIDTHS = [320, 390, 768, 1440];
 const DASH = '/admin/hr/dashboard';
 const PASSWORD = 'password';
 
-const EXPECT_COMPANY = { 'Total Employees': '20', 'Active Employees': '19', 'Present Today': '3', 'Late Today': '1', 'Absent Today': '1', 'On Leave Today': '0', 'Pending Leaves': '3', 'Pending Overtime': '3', 'Current Month Payroll': 'SAR 262,588', 'Expiring IQAMAs (60 days)': '2', 'Expiring Documents (60 days)': '5', 'Pending EOSB': '2' };
+// Approved leaves in the fixture are date-dependent; the driver passes today's count (UTC, the app timezone) in SEERA_ON_LEAVE_TODAY.
+const ON_LEAVE_TODAY = process.env.SEERA_ON_LEAVE_TODAY || '0';
+const EXPECT_COMPANY = { 'Total Employees': '20', 'Active Employees': '19', 'Present Today': '3', 'Late Today': '1', 'Absent Today': '1', 'On Leave Today': ON_LEAVE_TODAY, 'Pending Leaves': '3', 'Pending Overtime': '3', 'Current Month Payroll': 'SAR 262,588', 'Expiring IQAMAs (60 days)': '2', 'Expiring Documents (60 days)': '5', 'Pending EOSB': '2' };
 const EXPECT_SITE = { 'Total Employees': '3', 'Active Employees': '3', 'Present Today': '1', 'Late Today': '0', 'Absent Today': '1' };
 const ATTENDANCE_LABELS = ['Present Today', 'Late Today', 'Absent Today'];
 const PAYROLL_LABELS = ['Pending Overtime', 'Current Month Payroll', 'Pending EOSB'];
@@ -79,14 +81,18 @@ async function sweep(page, who, locale) {
         await page.goto(BASE + DASH);
         const info = await page.evaluate(() => {
             const latinButtons = [...document.querySelectorAll('a.btn, button')].map((b) => b.textContent.replace(/\s+/g, ' ').trim()).filter((t) => t && /[A-Za-z]{3,}/.test(t) && !/[\u0600-\u06FF]/.test(t));
-            const latinOther = [...document.querySelectorAll('.card.metric .label, .table-title > span, th, .help-box')].map((b) => b.textContent.replace(/\s+/g, ' ').trim()).filter((t) => t && /[A-Za-z]{3,}/.test(t) && !/[\u0600-\u06FF]/.test(t));
+            // Labels, titles, headers, queue names, notes, empty states, breadcrumb and description: none may stay English in Arabic.
+            // Data cells (names, dates, codes) are excluded on purpose; the first cell of the approvals table is a label.
+            const latinOther = [...document.querySelectorAll('.card.metric .label, .table-title > span, th, .help-box, .table-empty, .page-desc, .breadcrumb, title')]
+                .concat([...document.querySelectorAll('.table-card tbody tr')].filter((r) => r.querySelectorAll('td').length === 3).map((r) => r.querySelector('td')))
+                .map((b) => b.textContent.replace(/\s+/g, ' ').trim()).filter((t) => t && /[A-Za-z]{3,}/.test(t) && !/[\u0600-\u06FF]/.test(t));
             return { scrollWidth: document.documentElement.scrollWidth, innerWidth: window.innerWidth, latinButtons: [...new Set(latinButtons)], latinOther: [...new Set(latinOther)] };
         });
         await page.screenshot({ path: path.join(SHOTS, `${PHASE}-${who}-${locale}-${width}.png`), fullPage: true });
         check(`${who} ${locale} ${width}px no horizontal overflow`, info.scrollWidth <= info.innerWidth + 1, { scrollWidth: info.scrollWidth, innerWidth: info.innerWidth });
         if (locale === 'ar') {
             check(`${who} ar ${width}px no untranslated action buttons`, info.latinButtons.length === 0, info.latinButtons);
-            results.push({ phase: PHASE, name: `${who} ar ${width}px remaining Latin labels (recorded, not failed)`, ok: true, detail: info.latinOther });
+            check(`${who} ar ${width}px no untranslated labels, titles, headers, queues, notes or empty states`, info.latinOther.length === 0, info.latinOther);
         }
     }
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -118,7 +124,7 @@ async function phase1(browser) {
     let snap = await snapshot(admin);
     check('super admin page title', snap.title === 'HR Dashboard', snap.title);
     check('super admin metrics exact', Object.entries(EXPECT_COMPANY).every(([k, v]) => metricMap(snap)[k] === v), metricMap(snap));
-    check('super admin attendance summary table is real data', (() => { const t = snap.tables.find((x) => x.title === "Today's Attendance Summary"); return t && JSON.stringify(t.rows.map((r) => r[1])) === JSON.stringify(['3', '1', '1', '0']); })(), snap.tables[0]);
+    check('super admin attendance summary table is real data', (() => { const t = snap.tables.find((x) => x.title === "Today's Attendance Summary"); return t && JSON.stringify(t.rows.map((r) => r[1])) === JSON.stringify(['3', '1', '1', ON_LEAVE_TODAY]); })(), snap.tables[0]);
     check('super admin fake chart placeholder gone', !snap.hasChartPlaceholder && !snap.body.includes('Chart Placeholder'), snap.hasChartPlaceholder);
     check('super admin truthful note shown', snap.helpBoxes.includes(NOTE_REAL), snap.helpBoxes);
     check('super admin pending approvals rows', (() => { const t = snap.tables.find((x) => x.title === 'Pending HR Approvals'); return t && JSON.stringify(t.rows.map((r) => r[0] + '=' + r[1])) === JSON.stringify(['Leave Requests=3', 'Overtime Claims=3', 'Document Expiry=5', 'Payroll Approval=1', 'End of Service=2']); })(), snap.tables.find((x) => x.title === 'Pending HR Approvals')?.rows);
@@ -137,6 +143,15 @@ async function phase1(browser) {
     check('super admin Arabic truthful note', snap.helpBoxes.includes(ar(NOTE_REAL)), snap.helpBoxes);
     check('super admin Arabic metric values identical to English', JSON.stringify(snap.metrics.map((m) => m.value)) === JSON.stringify(enMetrics), snap.metrics.map((m) => m.value));
     check('super admin Arabic View All', snap.allButtons.some((b) => b.text === ar('View All')), snap.allButtons.map((b) => b.text));
+    // HR-03: every label, title, header and queue name must be the exact dictionary string.
+    const enMetricLabels = Object.keys(EXPECT_COMPANY);
+    check('super admin Arabic metric labels exact from dictionary', JSON.stringify(snap.metrics.map((m) => m.label)) === JSON.stringify(['Total Employees', 'Active Employees', 'Present Today', 'Late Today', 'On Leave Today', 'Pending Leaves', 'Pending Overtime', 'Current Month Payroll', 'Expiring IQAMAs (60 days)', 'Expiring Documents (60 days)', 'Pending EOSB', 'Absent Today'].map(ar)) && enMetricLabels.every((l) => l in AR), snap.metrics.map((m) => m.label));
+    check('super admin Arabic table titles exact from dictionary', JSON.stringify(snap.tables.map((t) => t.title)) === JSON.stringify(["Today's Attendance Summary", 'Pending HR Approvals', 'IQAMA Expiring Soon', 'Latest Leave Requests'].map(ar)), snap.tables.map((t) => t.title));
+    check('super admin Arabic queue names exact from dictionary', JSON.stringify(snap.tables[1].rows.map((r) => r[0])) === JSON.stringify(['Leave Requests', 'Overtime Claims', 'Document Expiry', 'Payroll Approval', 'End of Service'].map(ar)), snap.tables[1].rows.map((r) => r[0]));
+    const arHeaders = await admin.evaluate(() => [...document.querySelectorAll('.table-card th')].map((h) => h.textContent.trim()));
+    check('super admin Arabic column headers exact from dictionary', JSON.stringify(arHeaders) === JSON.stringify(['Status', 'Employees', 'Queue', 'Count', '', 'Employee', 'Department', 'Expiry', 'Status', 'Employee', 'Leave Type', 'Start', 'End', 'Days', 'Status'].map((h) => (h ? ar(h) : ''))), arHeaders);
+    const arChrome = await admin.evaluate(() => ({ title: document.title, breadcrumb: document.querySelector('.breadcrumb')?.textContent.replace(/\s+/g, ' ').trim(), desc: document.querySelector('.page-desc')?.textContent.trim() }));
+    check('super admin Arabic title, breadcrumb and description', arChrome.title.startsWith(ar('HR Dashboard')) && arChrome.breadcrumb.endsWith(ar('HR & Payroll / HR Dashboard')) && arChrome.desc === ar('Employees, attendance, leaves, overtime, documents and payroll at a glance'), arChrome);
     await sweep(admin, 'super-admin', 'ar');
     await setLocale(admin, 'en');
     await sweep(admin, 'super-admin', 'en');
