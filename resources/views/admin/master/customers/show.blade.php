@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Customer Details')
-@section('breadcrumb', 'Master Setup / Customers / Customer Details')
+@section('title', __('Customer Details'))
+@section('breadcrumb', __('Master Setup / Customers / Customer Details'))
 
 @section('content')
     @php $ratingColor = match ($customer->rating) { 'Green' => 'green', 'Amber' => 'yellow', 'Red' => 'red', default => 'cyan' }; @endphp
