@@ -130,7 +130,7 @@ class SidebarMenu
                     static::routeExists('admin.inventory.reports.index')
                         ? static::link('admin.inventory.reports.index', 'admin.inventory.reports.*', '📦', 'Inventory Reports')
                         : static::soon('inventory-reports', '📦', 'Inventory Reports'),
-                    static::soon('hr-reports', '🧾', 'HR Reports'),
+                    static::link('admin.reports.hr.index', 'admin.reports.hr.*', '🧾', 'HR Reports'),
                     static::link('admin.reports.projects.index', 'admin.reports.projects.*', '🏗️', 'Project Reports'),
                 ])),
             ],
