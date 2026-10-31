@@ -93,6 +93,17 @@ See [HR release candidate QA](SEERA-HR-RELEASE-CANDIDATE-QA-2026-10-31.md) (bran
 | HR Reports MVP | Read-only workforce, leave and attendance summary gated by HR view (route and sidebar) and Attendance view (attendance table); no payroll, salary or bank data; project / site scope preserved; 14 Arabic entries; verified in the browser for five roles in both locales |
 | Candidate composition | Dashboard permission gates (`a4d0322`), HR-03 Arabic (`5cc6819`) and the test tooling (`6be5720`) are carried unchanged |
 
+### Project workspace closure UX — 31 October 2026
+
+See [closure UX verification](SEERA-CLOSURE-UX-PROJECTS-QA-2026-10-31.md) (branch `feature/seera-closure-ux-projects-2026-10-31`, verified HEAD `4d46fb5`, fix on the branch).
+
+| ID | Status |
+| --- | --- |
+| CU-01 | Found and fixed: the Budget / BOQ tab used `:title="__()"` on a plain anchor, so the tooltip was lost and the raw expression was emitted as an attribute in both languages |
+| CU-02 | Found and fixed: "Budget / BOQ", "Not set" and "Location" had no Arabic entry, the identity section aria-label was hard-coded English, and the project form quick-create dialogs ("Create Client", "Save Classification", "Create Account" and their titles) had no Arabic entries |
+| CU-03 | Open: the shared `ProjectWorkspacePanels` titles and summary labels (21 strings incl. financial terms) have no Arabic entries, so related-record tabs and the summary line stay English in Arabic (pre-existing, shared with other workspaces) |
+| Project workspace | Read-only view without a form, functional Edit / Manage with a verified no-op save, direct links to the pre-filtered Project Reports portfolio and to Budget / BOQ, permissions and project / site scope unchanged, master budget figures identical in both locales; verified for six roles |
+
 ## Original findings
 
 Baseline `aca78ee`. This register distinguishes missing requirements, policy decisions and reproduced UI defects from accounting failures. No new production code fix or data repair was made in this review.

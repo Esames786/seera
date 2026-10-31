@@ -1,0 +1,1088 @@
+{
+  "base": "http://127.0.0.1:18769",
+  "generatedAt": "2026-10-31T10:25:53.245Z",
+  "summary": {
+    "total": 75,
+    "passed": 75,
+    "failed": 0,
+    "pageErrors": 0
+  },
+  "checks": [
+    {
+      "name": "super admin opens project view",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "view: title, breadcrumb, description",
+      "ok": true,
+      "detail": {
+        "title": "Project: Riyadh Tower",
+        "docTitle": "Project View - Seera",
+        "breadcrumb": "Home / Master Setup / Projects / View",
+        "desc": "Read-only project context. Open Edit / Manage to update the profile."
+      }
+    },
+    {
+      "name": "view: header actions Edit / Manage and Back to Projects",
+      "ok": true,
+      "detail": [
+        {
+          "text": "Edit / Manage",
+          "href": "/admin/master/projects/1/edit"
+        },
+        {
+          "text": "Back to Projects",
+          "href": "/admin/master/projects"
+        }
+      ]
+    },
+    {
+      "name": "view: identity labels and master budget",
+      "ok": true,
+      "detail": [
+        "Customer: ABC Holdings",
+        "Manager: Nabeel Mukhtar",
+        "Classification: Not set",
+        "Branch: Riyadh Main Branch",
+        "Start: 2026-01-01",
+        "End: 2026-12-30",
+        "Master budget: SAR 2,500,000.00",
+        "Detailed current budget: none yet",
+        "Posted site expenses: 0",
+        "Posted site expenses (SAR): 0.00",
+        "Expenses pending approval: 0",
+        "Expenses pending approval (SAR): 0.00",
+        "Rejected site expenses: 0",
+        "Rejected site expenses (SAR): 0.00",
+        "Approved expenses awaiting posting: 0",
+        "Approved expenses awaiting posting (SAR): 0.00",
+        "Sites: 2",
+        "Assigned staff: 6",
+        "Warehouses: 1",
+        "Open purchase orders: 0",
+        "Material used (SAR): 10,741.41",
+        "Amount still to receive (SAR): 0.00",
+        "Posted cost (SAR): 130,847.97",
+        "Posted revenue (SAR): 320,000.00"
+      ]
+    },
+    {
+      "name": "view: direct links to Project Reports (searched by code) and Budget / BOQ",
+      "ok": true,
+      "detail": [
+        {
+          "text": "Open Project Reports",
+          "href": "/admin/reports/projects?search=PRJ-001"
+        },
+        {
+          "text": "Budget / BOQ",
+          "href": "/admin/master/projects/1/budget"
+        }
+      ]
+    },
+    {
+      "name": "view: Budget / BOQ tab carries a real title attribute (CU-01)",
+      "ok": true,
+      "detail": {
+        "text": "Budget / BOQ",
+        "href": "http://127.0.0.1:18769/admin/master/projects/1/budget",
+        "title": "Detailed budget / BOQ, versions and Budget vs Actual",
+        "colonTitle": null
+      }
+    },
+    {
+      "name": "view: Overview tab and sections nav label",
+      "ok": true,
+      "detail": {
+        "tabs": [
+          "Overview",
+          "Budget / BOQ",
+          "Site Expenses",
+          "Customer",
+          "Sites / Locations",
+          "Project Team / Staff",
+          "Equipment",
+          "Warehouses",
+          "Stock On Hand",
+          "Suppliers",
+          "Purchase Requests",
+          "Project Purchases",
+          "Goods Receipts",
+          "Material Used",
+          "Customer Invoices",
+          "Customer Receipts",
+          "Financial / Cost Summary",
+          "Activity"
+        ],
+        "navAria": "Project sections"
+      }
+    },
+    {
+      "name": "view: read-only overview rows, no save control",
+      "ok": true,
+      "detail": {
+        "rows": [
+          [
+            "Location",
+            "Al Olaya District, Riyadh"
+          ],
+          [
+            "Description",
+            "22-floor commercial tower with basement parking."
+          ],
+          [
+            "Workflow",
+            "Related records save independently. Posting, receiving and payment remain explicit actions in their business screens. No project progress percentage is calculated."
+          ]
+        ],
+        "hasSaveAction": false,
+        "formAction": null
+      }
+    },
+    {
+      "name": "super admin project view every /admin/ link answers 200 or 302",
+      "ok": true,
+      "detail": {
+        "total": 64,
+        "broken": []
+      }
+    },
+    {
+      "name": "super admin: Open Project Reports from the project",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "project reports page is pre-filtered to the project",
+      "ok": true,
+      "detail": {
+        "codes": [
+          "PRJ-001"
+        ],
+        "search": "PRJ-001"
+      }
+    },
+    {
+      "name": "super admin: Budget / BOQ from the project",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "budget page belongs to the project",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "super admin opens project edit",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "edit: title, breadcrumb, description",
+      "ok": true,
+      "detail": {
+        "title": "Project Workspace: Riyadh Tower",
+        "breadcrumb": "Home / Master Setup / Projects / Edit Manage",
+        "desc": "Save the profile here. Related records remain independent; no Save All or automatic business actions."
+      }
+    },
+    {
+      "name": "edit: header actions View (read-only) and Back to Projects",
+      "ok": true,
+      "detail": [
+        {
+          "text": "View (read-only)",
+          "href": "/admin/master/projects/1"
+        },
+        {
+          "text": "Back to Projects",
+          "href": "/admin/master/projects"
+        }
+      ]
+    },
+    {
+      "name": "edit: form with save action and identity links",
+      "ok": true,
+      "detail": {
+        "formAction": "http://127.0.0.1:18769/admin/master/projects/1",
+        "fields": [
+          "name",
+          "code",
+          "customer_id",
+          "project_classification_id",
+          "branch_id",
+          "manager_id",
+          "status",
+          "start_date",
+          "end_date",
+          "budget",
+          "location",
+          "description"
+        ]
+      }
+    },
+    {
+      "name": "edit: saving the unchanged profile succeeds and keeps the data",
+      "ok": true,
+      "detail": {
+        "flash": "Project saved successfully.",
+        "url": "http://127.0.0.1:18769/admin/master/projects/1/edit"
+      }
+    },
+    {
+      "name": "edit: master budget and summary unchanged after save",
+      "ok": true,
+      "detail": [
+        "Customer: ABC Holdings",
+        "Manager: Nabeel Mukhtar",
+        "Classification: Not set",
+        "Branch: Riyadh Main Branch",
+        "Start: 2026-01-01",
+        "End: 2026-12-30",
+        "Master budget: SAR 2,500,000.00",
+        "Detailed current budget: none yet",
+        "Posted site expenses: 0",
+        "Posted site expenses (SAR): 0.00",
+        "Expenses pending approval: 0",
+        "Expenses pending approval (SAR): 0.00",
+        "Rejected site expenses: 0",
+        "Rejected site expenses (SAR): 0.00",
+        "Approved expenses awaiting posting: 0",
+        "Approved expenses awaiting posting (SAR): 0.00",
+        "Sites: 2",
+        "Assigned staff: 6",
+        "Warehouses: 1",
+        "Open purchase orders: 0",
+        "Material used (SAR): 10,741.41",
+        "Amount still to receive (SAR): 0.00",
+        "Posted cost (SAR): 130,847.97",
+        "Posted revenue (SAR): 320,000.00"
+      ]
+    },
+    {
+      "name": "Arabic view: rtl, title, breadcrumb, description",
+      "ok": true,
+      "detail": {
+        "title": "المشروع: Riyadh Tower",
+        "docTitle": "عرض المشروع - Seera",
+        "breadcrumb": "الرئيسية / الإعدادات الأساسية / المشاريع / عرض",
+        "desc": "عرض المشروع للقراءة فقط. افتح التعديل والإدارة لتحديث البيانات."
+      }
+    },
+    {
+      "name": "Arabic view: header actions",
+      "ok": true,
+      "detail": [
+        {
+          "text": "تعديل / إدارة",
+          "href": "/admin/master/projects/1/edit"
+        },
+        {
+          "text": "العودة إلى المشاريع",
+          "href": "/admin/master/projects"
+        }
+      ]
+    },
+    {
+      "name": "Arabic view: identity labels exact and values identical",
+      "ok": true,
+      "detail": {
+        "ar": [
+          "العميل: ABC Holdings",
+          "المدير: Nabeel Mukhtar",
+          "التصنيف: غير محدد",
+          "الفرع: Riyadh Main Branch",
+          "البداية: 2026-01-01",
+          "النهاية: 2026-12-30",
+          "الميزانية الرئيسية: SAR 2,500,000.00",
+          "الميزانية التفصيلية الحالية: لا يوجد حتى الآن"
+        ],
+        "en": [
+          "Customer: ABC Holdings",
+          "Manager: Nabeel Mukhtar",
+          "Classification: Not set",
+          "Branch: Riyadh Main Branch",
+          "Start: 2026-01-01",
+          "End: 2026-12-30",
+          "Master budget: SAR 2,500,000.00",
+          "Detailed current budget: none yet"
+        ]
+      }
+    },
+    {
+      "name": "Arabic view: identity aria-label, links and tabs exact",
+      "ok": true,
+      "detail": {
+        "aria": "بيانات المشروع الأساسية",
+        "links": [
+          {
+            "text": "فتح تقارير المشاريع",
+            "href": "/admin/reports/projects?search=PRJ-001"
+          },
+          {
+            "text": "الميزانية / جداول الكميات",
+            "href": "/admin/master/projects/1/budget"
+          }
+        ],
+        "tabs": [
+          {
+            "text": "نظرة عامة",
+            "href": "#profile",
+            "title": null,
+            "colonTitle": null
+          },
+          {
+            "text": "الميزانية / جداول الكميات",
+            "href": "http://127.0.0.1:18769/admin/master/projects/1/budget",
+            "title": "الميزانية التفصيلية وجداول الكميات والإصدارات والميزانية مقابل الفعلي",
+            "colonTitle": null
+          }
+        ],
+        "navAria": "أقسام المشروع"
+      }
+    },
+    {
+      "name": "Arabic view: overview table exact",
+      "ok": true,
+      "detail": [
+        "الموقع",
+        "الوصف",
+        "سير العمل"
+      ]
+    },
+    {
+      "name": "super-admin-view ar 320px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 320,
+        "innerWidth": 320
+      }
+    },
+    {
+      "name": "super-admin-view ar 320px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "super-admin-view ar 320px remaining Latin tabs and labels (shared workspace panels, CU-03) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "tabs": [
+          "Sites / Locations",
+          "Project Team / Staff",
+          "Project Purchases",
+          "Goods Receipts",
+          "Material Used",
+          "Customer Receipts",
+          "Financial / Cost Summary"
+        ],
+        "labels": [
+          "PRJ-001 / Riyadh Tower",
+          "Posted site expenses:",
+          "Posted site expenses (SAR):",
+          "Expenses pending approval:",
+          "Expenses pending approval (SAR):",
+          "Rejected site expenses:",
+          "Rejected site expenses (SAR):",
+          "Approved expenses awaiting posting:",
+          "Approved expenses awaiting posting (SAR):",
+          "Assigned staff:",
+          "Open purchase orders:",
+          "Material used (SAR):",
+          "Amount still to receive (SAR):",
+          "Posted cost (SAR):",
+          "Posted revenue (SAR):"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-view ar 390px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "name": "super-admin-view ar 390px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "super-admin-view ar 390px remaining Latin tabs and labels (shared workspace panels, CU-03) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "tabs": [
+          "Sites / Locations",
+          "Project Team / Staff",
+          "Project Purchases",
+          "Goods Receipts",
+          "Material Used",
+          "Customer Receipts",
+          "Financial / Cost Summary"
+        ],
+        "labels": [
+          "PRJ-001 / Riyadh Tower",
+          "Posted site expenses:",
+          "Posted site expenses (SAR):",
+          "Expenses pending approval:",
+          "Expenses pending approval (SAR):",
+          "Rejected site expenses:",
+          "Rejected site expenses (SAR):",
+          "Approved expenses awaiting posting:",
+          "Approved expenses awaiting posting (SAR):",
+          "Assigned staff:",
+          "Open purchase orders:",
+          "Material used (SAR):",
+          "Amount still to receive (SAR):",
+          "Posted cost (SAR):",
+          "Posted revenue (SAR):"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-view ar 768px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    {
+      "name": "super-admin-view ar 768px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "super-admin-view ar 768px remaining Latin tabs and labels (shared workspace panels, CU-03) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "tabs": [
+          "Sites / Locations",
+          "Project Team / Staff",
+          "Project Purchases",
+          "Goods Receipts",
+          "Material Used",
+          "Customer Receipts",
+          "Financial / Cost Summary"
+        ],
+        "labels": [
+          "PRJ-001 / Riyadh Tower",
+          "Posted site expenses:",
+          "Posted site expenses (SAR):",
+          "Expenses pending approval:",
+          "Expenses pending approval (SAR):",
+          "Rejected site expenses:",
+          "Rejected site expenses (SAR):",
+          "Approved expenses awaiting posting:",
+          "Approved expenses awaiting posting (SAR):",
+          "Assigned staff:",
+          "Open purchase orders:",
+          "Material used (SAR):",
+          "Amount still to receive (SAR):",
+          "Posted cost (SAR):",
+          "Posted revenue (SAR):"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-view ar 1440px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "name": "super-admin-view ar 1440px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "super-admin-view ar 1440px remaining Latin tabs and labels (shared workspace panels, CU-03) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "tabs": [
+          "Sites / Locations",
+          "Project Team / Staff",
+          "Project Purchases",
+          "Goods Receipts",
+          "Material Used",
+          "Customer Receipts",
+          "Financial / Cost Summary"
+        ],
+        "labels": [
+          "PRJ-001 / Riyadh Tower",
+          "Posted site expenses:",
+          "Posted site expenses (SAR):",
+          "Expenses pending approval:",
+          "Expenses pending approval (SAR):",
+          "Rejected site expenses:",
+          "Rejected site expenses (SAR):",
+          "Approved expenses awaiting posting:",
+          "Approved expenses awaiting posting (SAR):",
+          "Assigned staff:",
+          "Open purchase orders:",
+          "Material used (SAR):",
+          "Amount still to receive (SAR):",
+          "Posted cost (SAR):",
+          "Posted revenue (SAR):"
+        ]
+      }
+    },
+    {
+      "name": "Arabic edit: title, breadcrumb, description, actions, save control",
+      "ok": true,
+      "detail": {
+        "title": "مساحة عمل المشروع: Riyadh Tower",
+        "breadcrumb": "الرئيسية / الإعدادات الأساسية / المشاريع / تعديل وإدارة",
+        "buttons": [
+          {
+            "text": "عرض (للقراءة فقط)",
+            "href": "/admin/master/projects/1"
+          },
+          {
+            "text": "العودة إلى المشاريع",
+            "href": "/admin/master/projects"
+          }
+        ],
+        "hasSaveAction": true
+      }
+    },
+    {
+      "name": "super-admin-edit ar 320px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 320,
+        "innerWidth": 320
+      }
+    },
+    {
+      "name": "super-admin-edit ar 320px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "super-admin-edit ar 320px remaining Latin tabs and labels (shared workspace panels, CU-03) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "tabs": [
+          "Sites / Locations",
+          "Project Team / Staff",
+          "Project Purchases",
+          "Goods Receipts",
+          "Material Used",
+          "Customer Receipts",
+          "Financial / Cost Summary"
+        ],
+        "labels": [
+          "PRJ-001 / Riyadh Tower",
+          "Posted site expenses:",
+          "Posted site expenses (SAR):",
+          "Expenses pending approval:",
+          "Expenses pending approval (SAR):",
+          "Rejected site expenses:",
+          "Rejected site expenses (SAR):",
+          "Approved expenses awaiting posting:",
+          "Approved expenses awaiting posting (SAR):",
+          "Assigned staff:",
+          "Open purchase orders:",
+          "Material used (SAR):",
+          "Amount still to receive (SAR):",
+          "Posted cost (SAR):",
+          "Posted revenue (SAR):",
+          "Project Name *",
+          "Project Code *",
+          "Client Name *",
+          "Classification",
+          "Branch *",
+          "Project Manager *",
+          "Status *",
+          "Start Date *",
+          "End Date *",
+          "Budget Amount (SAR) *",
+          "Project Location",
+          "Description",
+          "Type *",
+          "Code",
+          "VAT Number",
+          "Phone",
+          "Contact Person",
+          "Email",
+          "Classification Name *",
+          "Branch Name *",
+          "City",
+          "Full Name *",
+          "Email *",
+          "Department",
+          "Role *"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-edit ar 390px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "name": "super-admin-edit ar 390px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "super-admin-edit ar 390px remaining Latin tabs and labels (shared workspace panels, CU-03) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "tabs": [
+          "Sites / Locations",
+          "Project Team / Staff",
+          "Project Purchases",
+          "Goods Receipts",
+          "Material Used",
+          "Customer Receipts",
+          "Financial / Cost Summary"
+        ],
+        "labels": [
+          "PRJ-001 / Riyadh Tower",
+          "Posted site expenses:",
+          "Posted site expenses (SAR):",
+          "Expenses pending approval:",
+          "Expenses pending approval (SAR):",
+          "Rejected site expenses:",
+          "Rejected site expenses (SAR):",
+          "Approved expenses awaiting posting:",
+          "Approved expenses awaiting posting (SAR):",
+          "Assigned staff:",
+          "Open purchase orders:",
+          "Material used (SAR):",
+          "Amount still to receive (SAR):",
+          "Posted cost (SAR):",
+          "Posted revenue (SAR):",
+          "Project Name *",
+          "Project Code *",
+          "Client Name *",
+          "Classification",
+          "Branch *",
+          "Project Manager *",
+          "Status *",
+          "Start Date *",
+          "End Date *",
+          "Budget Amount (SAR) *",
+          "Project Location",
+          "Description",
+          "Type *",
+          "Code",
+          "VAT Number",
+          "Phone",
+          "Contact Person",
+          "Email",
+          "Classification Name *",
+          "Branch Name *",
+          "City",
+          "Full Name *",
+          "Email *",
+          "Department",
+          "Role *"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-edit ar 768px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    {
+      "name": "super-admin-edit ar 768px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "super-admin-edit ar 768px remaining Latin tabs and labels (shared workspace panels, CU-03) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "tabs": [
+          "Sites / Locations",
+          "Project Team / Staff",
+          "Project Purchases",
+          "Goods Receipts",
+          "Material Used",
+          "Customer Receipts",
+          "Financial / Cost Summary"
+        ],
+        "labels": [
+          "PRJ-001 / Riyadh Tower",
+          "Posted site expenses:",
+          "Posted site expenses (SAR):",
+          "Expenses pending approval:",
+          "Expenses pending approval (SAR):",
+          "Rejected site expenses:",
+          "Rejected site expenses (SAR):",
+          "Approved expenses awaiting posting:",
+          "Approved expenses awaiting posting (SAR):",
+          "Assigned staff:",
+          "Open purchase orders:",
+          "Material used (SAR):",
+          "Amount still to receive (SAR):",
+          "Posted cost (SAR):",
+          "Posted revenue (SAR):",
+          "Project Name *",
+          "Project Code *",
+          "Client Name *",
+          "Classification",
+          "Branch *",
+          "Project Manager *",
+          "Status *",
+          "Start Date *",
+          "End Date *",
+          "Budget Amount (SAR) *",
+          "Project Location",
+          "Description",
+          "Type *",
+          "Code",
+          "VAT Number",
+          "Phone",
+          "Contact Person",
+          "Email",
+          "Classification Name *",
+          "Branch Name *",
+          "City",
+          "Full Name *",
+          "Email *",
+          "Department",
+          "Role *"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-edit ar 1440px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "name": "super-admin-edit ar 1440px no untranslated action buttons",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "super-admin-edit ar 1440px remaining Latin tabs and labels (shared workspace panels, CU-03) (recorded, not failed)",
+      "ok": true,
+      "detail": {
+        "tabs": [
+          "Sites / Locations",
+          "Project Team / Staff",
+          "Project Purchases",
+          "Goods Receipts",
+          "Material Used",
+          "Customer Receipts",
+          "Financial / Cost Summary"
+        ],
+        "labels": [
+          "PRJ-001 / Riyadh Tower",
+          "Posted site expenses:",
+          "Posted site expenses (SAR):",
+          "Expenses pending approval:",
+          "Expenses pending approval (SAR):",
+          "Rejected site expenses:",
+          "Rejected site expenses (SAR):",
+          "Approved expenses awaiting posting:",
+          "Approved expenses awaiting posting (SAR):",
+          "Assigned staff:",
+          "Open purchase orders:",
+          "Material used (SAR):",
+          "Amount still to receive (SAR):",
+          "Posted cost (SAR):",
+          "Posted revenue (SAR):",
+          "Project Name *",
+          "Project Code *",
+          "Client Name *",
+          "Classification",
+          "Branch *",
+          "Project Manager *",
+          "Status *",
+          "Start Date *",
+          "End Date *",
+          "Budget Amount (SAR) *",
+          "Project Location",
+          "Description",
+          "Type *",
+          "Code",
+          "VAT Number",
+          "Phone",
+          "Contact Person",
+          "Email",
+          "Classification Name *",
+          "Branch Name *",
+          "City",
+          "Full Name *",
+          "Email *",
+          "Department",
+          "Role *"
+        ]
+      }
+    },
+    {
+      "name": "super-admin-view en 320px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 320,
+        "innerWidth": 320
+      }
+    },
+    {
+      "name": "super-admin-view en 390px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "name": "super-admin-view en 768px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    {
+      "name": "super-admin-view en 1440px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "name": "super-admin-edit en 320px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 320,
+        "innerWidth": 320
+      }
+    },
+    {
+      "name": "super-admin-edit en 390px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "name": "super-admin-edit en 768px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    {
+      "name": "super-admin-edit en 1440px no horizontal overflow",
+      "ok": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "name": "project manager opens project view",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "project manager sees Edit / Manage and the connected links",
+      "ok": true,
+      "detail": {
+        "buttons": [
+          {
+            "text": "Edit / Manage",
+            "href": "/admin/master/projects/1/edit"
+          },
+          {
+            "text": "Back to Projects",
+            "href": "/admin/master/projects"
+          }
+        ],
+        "links": [
+          {
+            "text": "Open Project Reports",
+            "href": "/admin/reports/projects?search=PRJ-001"
+          },
+          {
+            "text": "Budget / BOQ",
+            "href": "/admin/master/projects/1/budget"
+          }
+        ]
+      }
+    },
+    {
+      "name": "project manager opens edit",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "project manager: Project Reports pre-filtered",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "project manager: Budget / BOQ opens",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "view-only role opens project view",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "view-only role: no Edit / Manage, links present, no save control",
+      "ok": true,
+      "detail": {
+        "buttons": [
+          {
+            "text": "Back to Projects",
+            "href": "/admin/master/projects"
+          }
+        ],
+        "links": [
+          {
+            "text": "Open Project Reports",
+            "href": "/admin/reports/projects?search=PRJ-001"
+          },
+          {
+            "text": "Budget / BOQ",
+            "href": "/admin/master/projects/1/budget"
+          }
+        ]
+      }
+    },
+    {
+      "name": "view-only role: edit URL refused",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "view-only role: Project Reports and Budget / BOQ open",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "site in-charge opens own project view",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "site in-charge: own project identity, links and master budget",
+      "ok": true,
+      "detail": {
+        "spans": [
+          "Customer: Najd Development",
+          "Manager: Nabeel Mukhtar",
+          "Classification: Not set",
+          "Branch: Dammam Branch",
+          "Start: 2026-03-01",
+          "End: 2027-03-01",
+          "Master budget: SAR 3,800,000.00",
+          "Detailed current budget: none yet"
+        ],
+        "links": [
+          {
+            "text": "Open Project Reports",
+            "href": "/admin/reports/projects?search=PRJ-003"
+          },
+          {
+            "text": "Budget / BOQ",
+            "href": "/admin/master/projects/3/budget"
+          }
+        ]
+      }
+    },
+    {
+      "name": "site in-charge: Project Reports pre-filtered to own project only",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "site in-charge: forged search for another project returns no row",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "site in-charge: own Budget / BOQ opens",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "site in-charge: forged other project view refused",
+      "ok": true,
+      "detail": "/admin/master/projects/1"
+    },
+    {
+      "name": "site in-charge: forged other project edit refused",
+      "ok": true,
+      "detail": "/admin/master/projects/1/edit"
+    },
+    {
+      "name": "site in-charge: forged other project budget refused",
+      "ok": true,
+      "detail": "/admin/master/projects/1/budget"
+    },
+    {
+      "name": "site in-charge: own project edit refused without Projects edit",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "HR manager (Financial Reports view, no Projects view): project view refused",
+      "ok": true,
+      "detail": "/admin/master/projects/1"
+    },
+    {
+      "name": "HR manager (Financial Reports view, no Projects view): project edit refused",
+      "ok": true,
+      "detail": "/admin/master/projects/1/edit"
+    },
+    {
+      "name": "HR manager (Financial Reports view, no Projects view): budget refused",
+      "ok": true,
+      "detail": "/admin/master/projects/1/budget"
+    },
+    {
+      "name": "HR manager (Financial Reports view, no Projects view): project reports refused",
+      "ok": true,
+      "detail": "/admin/reports/projects?search=PRJ-001"
+    },
+    {
+      "name": "finance manager (no Projects view): project view refused",
+      "ok": true,
+      "detail": "/admin/master/projects/1"
+    },
+    {
+      "name": "finance manager (no Projects view): project edit refused",
+      "ok": true,
+      "detail": "/admin/master/projects/1/edit"
+    },
+    {
+      "name": "finance manager (no Projects view): budget refused",
+      "ok": true,
+      "detail": "/admin/master/projects/1/budget"
+    },
+    {
+      "name": "finance manager (no Projects view): project reports refused",
+      "ok": true,
+      "detail": "/admin/reports/projects?search=PRJ-001"
+    }
+  ],
+  "pageErrors": []
+}
