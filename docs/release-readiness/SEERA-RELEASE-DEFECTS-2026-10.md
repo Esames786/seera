@@ -83,6 +83,16 @@ See [HR dashboard verification](SEERA-HR-DASHBOARD-QA-2026-10-31.md) (branch `fe
 | HR-03 | Closed on branch `feature/seera-hr-dashboard-arabic-2026-10-31` (see [HR dashboard Arabic](SEERA-HR-DASHBOARD-ARABIC-QA-2026-10-31.md)): page title, breadcrumb, description, metric labels, table titles, column headers, approval-queue names and empty states translated through the existing `__()` pattern with 25 dictionary entries; no logic, route, permission or data change; Arabic wording awaits the Arabic-speaking reviewer |
 | HR dashboard | Attendance counts only with Attendance view, payroll figures only with Payroll view, chart placeholder replaced by a truthful note, counts follow project / site scope, sidebar and direct URLs consistent with the permission map; verified in the browser for five roles in both locales |
 
+### Combined HR release candidate — 31 October 2026
+
+See [HR release candidate QA](SEERA-HR-RELEASE-CANDIDATE-QA-2026-10-31.md) (branch `feature/seera-hr-release-candidate-2026-10-31`, verified HEAD `91820dd`, fix on the branch).
+
+| ID | Status |
+| --- | --- |
+| RC-01 | Found and fixed: HR Reports filtered leave start dates and attendance dates with a plain string `whereBetween`, which dropped last-day-of-month records on engines that keep the time part of the date cast (SQLite tests and fixture); now compared by calendar date, with a regression test |
+| HR Reports MVP | Read-only workforce, leave and attendance summary gated by HR view (route and sidebar) and Attendance view (attendance table); no payroll, salary or bank data; project / site scope preserved; 14 Arabic entries; verified in the browser for five roles in both locales |
+| Candidate composition | Dashboard permission gates (`a4d0322`), HR-03 Arabic (`5cc6819`) and the test tooling (`6be5720`) are carried unchanged |
+
 ## Original findings
 
 Baseline `aca78ee`. This register distinguishes missing requirements, policy decisions and reproduced UI defects from accounting failures. No new production code fix or data repair was made in this review.

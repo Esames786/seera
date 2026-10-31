@@ -75,10 +75,10 @@ async function snapshot(page) {
 
 const metricMap = (snap) => Object.fromEntries(snap.metrics.map((m) => [m.label, m.value]));
 
-async function sweep(page, who, locale) {
+async function sweep(page, who, locale, url = DASH, tag = '') {
     for (const width of WIDTHS) {
         await page.setViewportSize({ width, height: 900 });
-        await page.goto(BASE + DASH);
+        await page.goto(BASE + url);
         const info = await page.evaluate(() => {
             const latinButtons = [...document.querySelectorAll('a.btn, button')].map((b) => b.textContent.replace(/\s+/g, ' ').trim()).filter((t) => t && /[A-Za-z]{3,}/.test(t) && !/[\u0600-\u06FF]/.test(t));
             // Labels, titles, headers, queue names, notes, empty states, breadcrumb and description: none may stay English in Arabic.
@@ -88,11 +88,11 @@ async function sweep(page, who, locale) {
                 .map((b) => b.textContent.replace(/\s+/g, ' ').trim()).filter((t) => t && /[A-Za-z]{3,}/.test(t) && !/[\u0600-\u06FF]/.test(t));
             return { scrollWidth: document.documentElement.scrollWidth, innerWidth: window.innerWidth, latinButtons: [...new Set(latinButtons)], latinOther: [...new Set(latinOther)] };
         });
-        await page.screenshot({ path: path.join(SHOTS, `${PHASE}-${who}-${locale}-${width}.png`), fullPage: true });
-        check(`${who} ${locale} ${width}px no horizontal overflow`, info.scrollWidth <= info.innerWidth + 1, { scrollWidth: info.scrollWidth, innerWidth: info.innerWidth });
+        await page.screenshot({ path: path.join(SHOTS, `${PHASE}-${who}${tag}-${locale}-${width}.png`), fullPage: true });
+        check(`${who}${tag} ${locale} ${width}px no horizontal overflow`, info.scrollWidth <= info.innerWidth + 1, { scrollWidth: info.scrollWidth, innerWidth: info.innerWidth });
         if (locale === 'ar') {
-            check(`${who} ar ${width}px no untranslated action buttons`, info.latinButtons.length === 0, info.latinButtons);
-            check(`${who} ar ${width}px no untranslated labels, titles, headers, queues, notes or empty states`, info.latinOther.length === 0, info.latinOther);
+            check(`${who}${tag} ar ${width}px no untranslated action buttons`, info.latinButtons.length === 0, info.latinButtons);
+            check(`${who}${tag} ar ${width}px no untranslated labels, titles, headers, queues, notes or empty states`, info.latinOther.length === 0, info.latinOther);
         }
     }
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -132,6 +132,13 @@ async function phase1(browser) {
     check('super admin sidebar has attendance and payroll entries', ['/admin/hr/attendance', '/admin/hr/payroll', '/admin/hr/overtime', '/admin/hr/eosb'].every((p) => snap.sidebar.includes(p)), snap.sidebar.filter((s) => s.startsWith('/admin/hr')));
     await checkLinks(adminCtx, snap, 'super admin');
     const enMetrics = snap.metrics.map((m) => m.value);
+    check('super admin sidebar has HR Reports', snap.sidebar.includes(HRR), snap.sidebar.filter((s) => s.startsWith('/admin/reports')));
+
+    // HR Reports, English
+    const hrrAdminEn = await hrReportFigures(admin, 'super admin', 'company', true);
+    await hrReportFilters(admin, 'super admin');
+    const hrrLinks = await admin.evaluate(() => [...document.querySelectorAll('a[href]')].map((a) => new URL(a.getAttribute('href'), location.origin)).filter((u) => u.origin === location.origin && u.pathname.startsWith('/admin/')).map((u) => u.pathname + u.search));
+    await checkLinks(adminCtx, { contentLinks: [...new Set(hrrLinks)].filter((l) => !l.startsWith('/admin/reports/hr?')) }, 'super admin HR Reports page');
 
     // Super Admin, Arabic
     const loc = await setLocale(admin, 'ar');
@@ -153,8 +160,11 @@ async function phase1(browser) {
     const arChrome = await admin.evaluate(() => ({ title: document.title, breadcrumb: document.querySelector('.breadcrumb')?.textContent.replace(/\s+/g, ' ').trim(), desc: document.querySelector('.page-desc')?.textContent.trim() }));
     check('super admin Arabic title, breadcrumb and description', arChrome.title.startsWith(ar('HR Dashboard')) && arChrome.breadcrumb.endsWith(ar('HR & Payroll / HR Dashboard')) && arChrome.desc === ar('Employees, attendance, leaves, overtime, documents and payroll at a glance'), arChrome);
     await sweep(admin, 'super-admin', 'ar');
+    await hrReportArabic(admin, 'super admin', hrrAdminEn, true);
+    await sweep(admin, 'super-admin', 'ar', HRR + '?month=' + (HRR_EXPECT ? HRR_EXPECT.month : ''), '-hr-reports');
     await setLocale(admin, 'en');
     await sweep(admin, 'super-admin', 'en');
+    await sweep(admin, 'super-admin', 'en', HRR + '?month=' + (HRR_EXPECT ? HRR_EXPECT.month : ''), '-hr-reports');
     await adminCtx.close();
 
     // HR Manager with full HR / Attendance / Payroll permissions
@@ -173,7 +183,14 @@ async function phase1(browser) {
     // Users without HR view are refused regardless of Attendance / Payroll permissions
     for (const [email, who] of [['nabeel@example.com', 'project manager (Attendance view, no HR view)'], ['zubair@example.com', 'finance manager (Payroll view, no HR view)'], ['zafar@example.com', 'site in-charge before HR view grant']]) {
         const ctx = await browser.newContext();
-        await expectStatus(ctx, email, DASH, 403, `${who} gets 403 on HR dashboard`);
+        const p = await login(ctx, email);
+        for (const [url, label] of [[DASH, 'HR dashboard'], [HRR, 'HR Reports']]) {
+            const r = await p.goto(BASE + url);
+            check(`${who} gets 403 on ${label}`, r.status() === 403, { url, status: r.status(), expected: 403 });
+        }
+        await p.goto(BASE + '/admin/dashboard');
+        const side = await p.evaluate(() => [...document.querySelectorAll('aside a[href], nav a[href], .sidebar a[href]')].map((a) => new URL(a.getAttribute('href'), location.origin).pathname));
+        check(`${who} sidebar has no HR Reports entry`, !side.includes(HRR), side.filter((s) => s.startsWith('/admin/reports')));
         await ctx.close();
     }
 }
@@ -200,6 +217,9 @@ async function phase2(browser) {
     const forgedAtt = await page.goto(BASE + '/admin/hr/attendance?employee_id=7');
     const attBody = await page.evaluate(() => document.body.innerText);
     check('site in-charge attendance register shows no project-1 rows', forgedAtt.status() === 200 && !/Nabeel|PRJ-001/.test(attBody) , forgedAtt.status());
+    // HR Reports under project / site scope: only project-3 employees, leaves and attendance; attendance visible (Attendance view).
+    const hrrSite = await hrReportFigures(page, 'site in-charge', 'site', true);
+    check('site in-charge sidebar has HR Reports (HR view granted)', hrrSite.sidebar.includes(HRR), hrrSite.sidebar.filter((s) => s.startsWith('/admin/reports')));
     await ctx.close();
 }
 
@@ -223,15 +243,119 @@ async function phase3(browser) {
         check(`HR manager (restricted) direct ${label} URL refused`, r.status() === 403, { url, status: r.status() });
     }
     await checkLinks(ctx, snap, 'HR manager (restricted)');
+    // HR Reports for the restricted HR Manager: workforce and leaves only, attendance hidden, company scope.
+    const hrrRestrictedEn = await hrReportFigures(page, 'HR manager (restricted)', 'company', false);
+    check('HR manager (restricted) sidebar keeps HR Reports (HR view) but no attendance / payroll entries', hrrRestrictedEn.sidebar.includes(HRR) && ['/admin/hr/attendance', '/admin/hr/payroll'].every((p) => !hrrRestrictedEn.sidebar.includes(p)), hrrRestrictedEn.sidebar.filter((s) => s.startsWith('/admin/reports') || s.startsWith('/admin/hr')));
     const loc = await setLocale(page, 'ar');
     check('HR manager (restricted) Arabic locale applied', loc.dir === 'rtl', loc);
     snap = await snapshot(page);
     check('HR manager (restricted) Arabic hidden-figures note', snap.helpBoxes.includes(ar(NOTE_HIDDEN)), snap.helpBoxes);
     check('HR manager (restricted) Arabic still no SAR figure or attendance counts', !snap.body.includes('SAR ') && ATTENDANCE_LABELS.every((l) => !(l in metricMap(snap))), Object.keys(metricMap(snap)));
+    await hrReportArabic(page, 'HR manager (restricted)', hrrRestrictedEn, false);
     await sweep(page, 'hr-restricted', 'ar');
+    await sweep(page, 'hr-restricted', 'ar', HRR, '-hr-reports');
     await setLocale(page, 'en');
     await sweep(page, 'hr-restricted', 'en');
+    await sweep(page, 'hr-restricted', 'en', HRR, '-hr-reports');
     await ctx.close();
+}
+
+// ---------------------------------------------------------------------------------------------
+// HR Reports (admin/reports/hr): read-only monthly summary gated by HR view, attendance by Attendance view.
+// Expected figures come from the fixture through SEERA_HRR_EXPECT (JSON from fixture-hr-report-expect.php).
+const HRR = '/admin/reports/hr';
+const HRR_EXPECT = process.env.SEERA_HRR_EXPECT ? JSON.parse(process.env.SEERA_HRR_EXPECT) : null;
+const LEAVE_STATUSES = ['Pending', 'Approved', 'Rejected'];
+const ATT_STATUSES = ['Present', 'Late', 'Absent', 'Leave', 'Half day'];
+const HRR_NOTE_HIDDEN = 'Attendance figures are hidden because you do not have Attendance view permission.';
+const HRR_NOTE_GOSI = 'Official GOSI, WPS/Mudad and payroll financial reports are not provided by this operational overview.';
+
+async function hrReportSnapshot(page) {
+    return page.evaluate(() => {
+        const text = (el) => (el ? el.textContent.replace(/\s+/g, ' ').trim() : '');
+        return {
+            title: text(document.querySelector('h1.page-title')),
+            desc: text(document.querySelector('.page-desc')),
+            breadcrumb: text(document.querySelector('.breadcrumb')),
+            metrics: [...document.querySelectorAll('.card.metric')].map((c) => ({ label: text(c.querySelector('.label')), value: text(c.querySelector('.value')) })),
+            tables: [...document.querySelectorAll('.table-card')].map((t) => ({ title: text(t.querySelector('.table-title > span')), headers: [...t.querySelectorAll('th')].map(text), rows: [...t.querySelectorAll('tbody tr')].map((r) => [...r.querySelectorAll('td')].map(text)) })),
+            helpBoxes: [...document.querySelectorAll('.help-box')].map(text),
+            smalls: [...document.querySelectorAll('p.small')].map(text),
+            monthValue: document.querySelector('input[name="month"]')?.value,
+            monthLabel: text(document.querySelector('label[for="hr-report-month"]')),
+            buttons: [...document.querySelectorAll('a.btn, button.btn, button[type="submit"]')].map((b) => ({ text: text(b), href: b.getAttribute('href') })),
+            flash: text(document.querySelector('.alert.flash')),
+            body: document.body.innerText,
+            sidebar: [...new Set([...document.querySelectorAll('aside a[href], nav a[href], .sidebar a[href]')].map((a) => new URL(a.getAttribute('href'), location.origin).pathname))],
+        };
+    });
+}
+
+const expectedRows = (obj, keys) => keys.map((k) => [k, String(obj[k.toLowerCase()])]);
+
+async function hrReportFigures(page, who, scopeKey, attendanceVisible) {
+    const month = HRR_EXPECT ? HRR_EXPECT.month : new Date().toISOString().slice(0, 7);
+    const resp = await page.goto(BASE + HRR + '?month=' + month);
+    check(`${who} opens HR Reports for ${month}`, resp.status() === 200, resp.status());
+    const s = await hrReportSnapshot(page);
+    check(`${who} HR Reports title, breadcrumb and month input`, s.title === 'HR Reports' && s.breadcrumb.endsWith('Reports / HR Reports') && s.monthValue === month, { title: s.title, breadcrumb: s.breadcrumb, monthValue: s.monthValue });
+    if (HRR_EXPECT) {
+        const e = HRR_EXPECT[scopeKey];
+        check(`${who} HR Reports workforce metrics match the fixture (${scopeKey} scope)`, JSON.stringify(s.metrics) === JSON.stringify([{ label: 'Employees in scope', value: String(e.employees) }, { label: 'Active employees in scope', value: String(e.active) }]), s.metrics);
+        const leaves = s.tables.find((t) => t.title === 'Leave requests by start month');
+        check(`${who} HR Reports leave counts match the fixture (${scopeKey} scope)`, !!leaves && JSON.stringify(leaves.rows) === JSON.stringify(expectedRows(e.leaves, LEAVE_STATUSES)), leaves?.rows);
+        const att = s.tables.find((t) => t.title === 'Attendance records by status');
+        if (attendanceVisible) {
+            check(`${who} HR Reports attendance counts match the fixture (${scopeKey} scope)`, !!att && JSON.stringify(att.rows) === JSON.stringify(expectedRows(e.attendance, ATT_STATUSES)), att?.rows);
+            const open = s.buttons.find((b) => b.text === 'Open Attendance');
+            check(`${who} HR Reports Open Attendance link carries the period`, !!open && open.href.includes('from=' + HRR_EXPECT.from) && open.href.includes('to=' + HRR_EXPECT.to), open);
+        } else {
+            check(`${who} HR Reports hides attendance without Attendance view`, !att && s.helpBoxes.includes(HRR_NOTE_HIDDEN) && !s.buttons.some((b) => b.text === 'Open Attendance'), { tables: s.tables.map((t) => t.title), helpBoxes: s.helpBoxes });
+        }
+        check(`${who} HR Reports period note`, s.helpBoxes.includes(`Reporting period: ${HRR_EXPECT.from} to ${HRR_EXPECT.to}`), s.helpBoxes);
+    } else {
+        results.push({ phase: PHASE, name: `${who} HR Reports figures not compared (SEERA_HRR_EXPECT missing; recorded, not failed)`, ok: true, detail: null });
+    }
+    check(`${who} HR Reports shows no payroll or banking data`, !/\bSAR\b|IBAN|Basic Salary|Payroll Amount/.test(s.body) && s.helpBoxes.includes(HRR_NOTE_GOSI), s.helpBoxes);
+    return s;
+}
+
+async function hrReportFilters(page, who) {
+    const resp = await page.goto(BASE + HRR + '?month=2026-09');
+    let s = await hrReportSnapshot(page);
+    check(`${who} HR Reports month filter changes the period`, resp.status() === 200 && s.monthValue === '2026-09' && s.helpBoxes.includes('Reporting period: 2026-09-01 to 2026-09-30'), { monthValue: s.monthValue, helpBoxes: s.helpBoxes });
+    const sept = s.tables.find((t) => t.title === 'Attendance records by status');
+    check(`${who} HR Reports September attendance rows are zero in this fixture`, !!sept && sept.rows.every((r) => r[1] === '0'), sept?.rows);
+    const reset = s.buttons.find((b) => b.text === 'Reset');
+    check(`${who} HR Reports Reset link`, !!reset && new URL(reset.href, BASE).pathname === HRR, reset);
+    await page.goto(BASE + HRR + '?month=2026-13');
+    s = await hrReportSnapshot(page);
+    check(`${who} HR Reports rejects a forged month with a validation message, no server error`, !!s.flash && /month/i.test(s.flash) && !/Server Error|Whoops/.test(s.body), s.flash);
+    await page.goto(BASE + HRR + '?month=13-2026');
+    s = await hrReportSnapshot(page);
+    check(`${who} HR Reports rejects a malformed month`, !!s.flash && !/Server Error|Whoops/.test(s.body), s.flash);
+}
+
+async function hrReportArabic(page, who, enSnapshot, attendanceVisible) {
+    const month = HRR_EXPECT ? HRR_EXPECT.month : new Date().toISOString().slice(0, 7);
+    await page.goto(BASE + HRR + '?month=' + month);
+    const s = await hrReportSnapshot(page);
+    check(`${who} Arabic HR Reports title, breadcrumb, description and month label`, s.title === ar('HR Reports') && s.breadcrumb.endsWith(ar('Reports / HR Reports')) && s.desc === ar('Read-only workforce and monthly attendance/leave summary from permitted HR records. No salary, bank or payroll data is shown.') && s.monthLabel === ar('Report month'), { title: s.title, breadcrumb: s.breadcrumb, desc: s.desc, monthLabel: s.monthLabel });
+    check(`${who} Arabic HR Reports metric labels exact, values identical to English`, JSON.stringify(s.metrics) === JSON.stringify(enSnapshot.metrics.map((m, i) => ({ label: ar(['Employees in scope', 'Active employees in scope'][i]), value: m.value }))), s.metrics);
+    const leaves = s.tables.find((t) => t.title === ar('Leave requests by start month'));
+    const enLeaves = enSnapshot.tables.find((t) => t.title === 'Leave requests by start month');
+    check(`${who} Arabic HR Reports leave table exact, same counts`, !!leaves && JSON.stringify(leaves.headers) === JSON.stringify([ar('Status'), ar('Requests')]) && JSON.stringify(leaves.rows) === JSON.stringify(enLeaves.rows.map((r) => [ar(r[0]), r[1]])), leaves);
+    if (attendanceVisible) {
+        const att = s.tables.find((t) => t.title === ar('Attendance records by status'));
+        const enAtt = enSnapshot.tables.find((t) => t.title === 'Attendance records by status');
+        check(`${who} Arabic HR Reports attendance table exact, same counts`, !!att && JSON.stringify(att.headers) === JSON.stringify([ar('Status'), ar('Records')]) && JSON.stringify(att.rows) === JSON.stringify(enAtt.rows.map((r) => [ar(r[0]), r[1]])), att);
+        check(`${who} Arabic HR Reports Open Attendance uses the dashboard translation`, s.buttons.some((b) => b.text === ar('Open Attendance')), s.buttons.map((b) => b.text));
+        check(`${who} Arabic HR Reports notes exact`, s.smalls.includes(ar('Leave counts use the request start date, not days consumed or leave balances.')) && s.smalls.includes(ar('Attendance figures count recorded entries, not unique employees, worked days or payroll entitlement.')) && s.helpBoxes.includes(ar(HRR_NOTE_GOSI)), { smalls: s.smalls, helpBoxes: s.helpBoxes });
+    } else {
+        check(`${who} Arabic HR Reports hidden-attendance note exact`, s.helpBoxes.includes(ar(HRR_NOTE_HIDDEN)) && !s.tables.some((t) => t.title === ar('Attendance records by status')), s.helpBoxes);
+    }
+    check(`${who} Arabic HR Reports Reset`, s.buttons.some((b) => b.text === ar('Reset')), s.buttons.map((b) => b.text));
+    return s;
 }
 
 (async () => {
