@@ -64,7 +64,7 @@
             <tbody>
                 @forelse($rows as $row)
                     @php $display = \App\Support\Workspace\ProjectPanelTable::row($row, $data); @endphp
-                    <tr>@foreach($display['cells'] as $cell)<td>{{ $cell ?? '-' }}</td>@endforeach
+                    <tr>@foreach($display['cells'] as $index => $cell)<td>{{ \App\Support\Workspace\ProjectPanelTable::displayCell($panel, $index, $cell) ?? '-' }}</td>@endforeach
                         <td><div class="actions">@foreach($display['actions'] as $action)<a class="btn sm outline" href="{{ $action['url'] }}">{{ __($action['label']) }}</a>@endforeach</div></td>
                     </tr>
                 @empty <tr><td colspan="{{ count($columns) + 1 }}" class="table-empty">{{ __($empty) }}</td></tr>@endforelse
