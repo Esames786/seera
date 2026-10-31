@@ -34,7 +34,9 @@ class HrReportController extends Controller
 
         // Leave requests are counted by their START date in the selected month.
         // A request crossing months is counted only in its starting month.
-        $leaves = LeaveRequest::whereBetween('start_date', [$from, $to]);
+        // Compare by calendar date: the date casts persist "Y-m-d 00:00:00", so a plain string
+        // whereBetween would drop the last day of the month on engines that keep the time part.
+        $leaves = LeaveRequest::whereDate('start_date', '>=', $from)->whereDate('start_date', '<=', $to);
         $leaveCounts = [
             'pending' => (clone $leaves)->where('status', 'pending')->count(),
             'approved' => (clone $leaves)->where('status', 'approved')->count(),
@@ -44,7 +46,7 @@ class HrReportController extends Controller
         $attendanceCounts = null;
         if ($canViewAttendance) {
             // Count attendance RECORDS, not unique people or payroll days.
-            $attendance = AttendanceRecord::whereBetween('attendance_date', [$from, $to]);
+            $attendance = AttendanceRecord::whereDate('attendance_date', '>=', $from)->whereDate('attendance_date', '<=', $to);
             $attendanceCounts = [
                 'present' => (clone $attendance)->where('status', 'present')->count(),
                 'late' => (clone $attendance)->where('status', 'late')->count(),

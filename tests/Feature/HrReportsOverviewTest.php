@@ -76,6 +76,31 @@ class HrReportsOverviewTest extends TestCase
             ->assertSessionHasErrors('month');
     }
 
+    public function test_records_on_the_last_day_of_the_month_are_counted(): void
+    {
+        $admin = User::where('email', 'admin@example.com')->firstOrFail();
+        $month = '2026-02';
+        $lastDay = '2026-02-28';
+        $employee = Employee::where('status', 'active')->firstOrFail();
+
+        // Date casts persist "Y-m-d 00:00:00"; the report must compare by calendar date on every engine.
+        AttendanceRecord::query()->whereDate('attendance_date', $lastDay)->delete();
+        AttendanceRecord::create([
+            'employee_id' => $employee->id, 'project_id' => $employee->project_id, 'site_id' => $employee->site_id,
+            'attendance_date' => $lastDay, 'status' => 'present', 'source' => 'manual', 'geofence_status' => 'inside',
+            'late_minutes' => 0, 'overtime_minutes' => 0, 'check_in' => '08:00', 'check_out' => '17:00',
+        ]);
+        LeaveRequest::query()->whereDate('start_date', '>=', '2026-02-01')->whereDate('start_date', '<=', $lastDay)->delete();
+        LeaveRequest::create([
+            'employee_id' => $employee->id, 'leave_type_id' => \App\Models\LeaveType::firstOrFail()->id,
+            'start_date' => $lastDay, 'end_date' => '2026-03-02', 'total_days' => 3, 'status' => 'approved', 'reason' => 'boundary',
+        ]);
+
+        $this->actingAs($admin)->get(route('admin.reports.hr.index', ['month' => $month]))->assertOk()
+            ->assertSee('<td>Present</td><td>1</td>', false)
+            ->assertSee('<td>Approved</td><td>1</td>', false);
+    }
+
     public function test_report_does_not_emit_payroll_values_or_sensitive_identifiers(): void
     {
         $admin = User::where('email', 'admin@example.com')->firstOrFail();
