@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Employee Details')
-@section('breadcrumb', 'HR & Payroll / Employees / Employee Details')
+@section('title', __('Employee Details'))
+@section('breadcrumb', __('HR & Payroll / Employees / Employee Details'))
 
 @section('content')
     @php
@@ -139,7 +139,7 @@
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="6" class="table-empty">No documents recorded.</td></tr>
+                <tr><td colspan="6" class="table-empty">{{ __('No documents recorded.') }}</td></tr>
             @endforelse
         </tbody>
     </x-admin.data-table>
