@@ -104,7 +104,7 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 @media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }
 CSS;
 
-$nav = '<a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a>';
+$nav = '<a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a><a href="VISUAL-EXAMPLES.html">Visual Examples</a>';
 
 $page = function (string $title, string $tocHtml, string $body) use ($css, $nav): string {
     return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>'.htmlspecialchars($title).' · Seera ERP</title><style>'.$css.'</style></head><body>'
@@ -132,6 +132,7 @@ $index = <<<'HTML'
 <table><thead><tr><th>Document</th><th>What it is for</th></tr></thead><tbody>
 <tr><td><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a></td><td>21 chapters: sign-in, screen addresses, fields and buttons, Connected Workspace Standard, 19 end-to-end workflows, troubleshooting, glossary, limitations and quick start by role.</td></tr>
 <tr><td><a href="SCREEN-INDEX.html">Screen Index</a></td><td>Permanent Screen IDs, web addresses, navigation, permissions and status, including My Approvals and the embedded PR approval panel.</td></tr>
+<tr><td><a href="VISUAL-EXAMPLES.html">Visual Examples</a></td><td>Real SEERA interface screenshots with fictional unsaved example fields, generated locally after privacy review.</td></tr>
 <tr><td><a href="WORKFLOW-INDEX.html">Workflow Index</a></td><td>The 19 documented workflows (WF-001 … WF-019), including Purchase Request, Site Expense and Supplier Bill runtime approval.</td></tr>
 </tbody></table>
 <p>Status labels used throughout: <strong>AVAILABLE</strong>, <strong>PARTIAL</strong>, <strong>FOUNDATION ONLY</strong>, <strong>NOT YET OPERATIONAL</strong>. Nothing planned is described as available.</p>
