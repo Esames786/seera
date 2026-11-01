@@ -16,6 +16,7 @@ class UserGuideController extends Controller
         'SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE',
         'SCREEN-INDEX',
         'WORKFLOW-INDEX',
+        'VISUAL-EXAMPLES',
     ];
 
     public function show(string $page): Response
