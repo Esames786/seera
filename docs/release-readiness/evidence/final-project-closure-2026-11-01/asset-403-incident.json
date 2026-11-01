@@ -1,0 +1,21 @@
+{
+    "issue":  "Unstyled login; public build assets forbidden",
+    "status":  "BLOCKED",
+    "observed_http":  {
+                          "/login":  200,
+                          "/build/assets/erp-BUNRXPfo.css":  403,
+                          "/build/assets/app-CorUbhvA.js":  403,
+                          "/build/manifest.json":  403,
+                          "/build/assets/instrument-sans-400-normal-DRC__1Mx.woff2":  403,
+                          "/sw.js":  200,
+                          "/manifest.webmanifest":  200,
+                          "/icons/seera-192.png":  200
+                      },
+    "asset_urls_on_login":  "Correct HTTPS release URLs",
+    "likely_cause":  "Runbook retained umask 077 during checkout/extraction",
+    "server_file_modes":  "NOT RUN - not independently inspected",
+    "runbook_correction":  "Reset umask 022 before checkout; public/build directories 755 and files 644",
+    "server_remediation":  "PENDING - owner command supplied",
+    "production_changes_by_agent":  "none",
+    "application_changes":  "none"
+}

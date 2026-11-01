@@ -4,6 +4,8 @@
 
 The first execution reported `/dev/fd/62: No such file or directory` in the tracked-change guard. This hosting shell cannot use that process-substitution path; the failed redirection bypassed that one guard while later steps continued. The corrected guard below captures Git output first and uses a here-document, so a Git failure stops the block and `/dev/fd` is not required. Do not repeat the deployment to fix this documentation issue.
 
+**Post-deployment asset incident:** live CSS, JS, manifest and a font returned 403 while login, service worker and icon returned 200. The original block retained backup-only `umask 077` for checkout/extraction; restrictive build permissions are the likely cause (server modes still require operator confirmation). The corrected block restores `umask 022` before checkout and explicitly sets public build directory/file modes after extraction. Use the scoped repair in section 4 on an already deployed server.
+
 - Original server baseline: `aca78eea1388c249012239ffe207c6b2454db951`, branch `feature/seera-connected-workspaces-2026-09-23`. Owner-reported deployed revision is now `b88eec7` on the release branch.
 - Reviewed release branch: `release/seera-core-integration-review-2026-11-01`.
 - Pinned candidate: **`b88eec7ac79cd12b09197f4bc55f02dc61e0282d`**. Its application matches tested `c19943f`.
@@ -84,6 +86,8 @@ if [ -d public/build ]; then cp -a public/build "$BACKUP_DIR/build"; fi
 tar -czf "$BACKUP_DIR/private-files.tgz" storage/app
 test -s "$BACKUP_DIR/private-files.tgz"
 cmp -s public/build.zip "$BACKUP_DIR/previous-build.zip"
+# Private backups retain their protected directory/files. Public assets must be readable.
+umask 022
 git restore --source=HEAD -- public/build.zip
 
 if git show-ref --verify --quiet "refs/heads/$RELEASE_BRANCH"; then
@@ -105,6 +109,8 @@ fi
 echo "$BUILD_SHA  public/build.zip" | sha256sum -c -
 unzip -t public/build.zip
 unzip -oq public/build.zip -d public/build
+find public/build -type d -exec chmod 755 {} +
+find public/build -type f -exec chmod 644 {} +
 test -f public/build/manifest.json
 test -f public/sw.js
 test -f public/manifest.webmanifest
@@ -122,6 +128,19 @@ printf 'Code/assets updated to %s; private file backup: %s\n' "$RELEASE_SHA" "$B
 Do not add `artisan optimize`, `config:cache` or `route:cache` during this closure rollout without a tested environment-specific cache plan. `optimize:clear` avoids the stale-cache issue previously reported. The script neither changes `.env` nor enables ZATCA. Inspect and preserve unrelated untracked files; a checkout collision must be reviewed, not deleted blindly.
 
 ## 4. Acceptance after the approved update
+
+For the reported unstyled login / build-asset 403, repair **only public build permissions**, without redeploying, changing `.env`, running migrations or clearing application data:
+
+```bash
+cd ~/seera
+ls -ld public/build public/build/assets
+ls -l public/build/assets/erp-BUNRXPfo.css
+find public/build -type d -exec chmod 755 {} +
+find public/build -type f -exec chmod 644 {} +
+curl --fail --silent --show-error --output /dev/null --write-out 'CSS HTTP %{http_code}\n' https://seera.tech-brit.co.uk/build/assets/erp-BUNRXPfo.css
+```
+
+Expect CSS HTTP 200, then hard-refresh the browser. These commands do not change private backups, application configuration or database content. Do not use recursive 777 permissions. If 403 remains, retain the directory/file listing and inspect the server's build-path access rules/ownership; permissions are a likely cause, not independently inspected server evidence.
 
 The owner's execution reached the pinned HEAD, Composer completed, the expected ZIP hash and archive integrity passed, assets were extracted, Blade views cached, every listed migration was Ran, and maintenance mode was lifted. No migration or seeder command ran. The script recorded a private file/asset backup at `/home/techbrit/seera-pre-b88eec7.kgZvaS`. The typed `BACKUP-VERIFIED` is an operator confirmation; it is not independently inspected DB-dump or restore evidence.
 
