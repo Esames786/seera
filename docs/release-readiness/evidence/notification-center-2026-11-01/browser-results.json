@@ -1,0 +1,323 @@
+{
+  "base": "http://127.0.0.1:18772",
+  "summary": {
+    "total": 35,
+    "passed": 35,
+    "failed": 0,
+    "pageErrors": 0
+  },
+  "results": [
+    {
+      "name": "First approver sees 13 unread notifications",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Foreign recipient reference is absent",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Foreign notification ID cannot be marked read",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Malformed notification ID refused",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en title and breadcrumb localized",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en inbox 320px no page overflow",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "offenders": []
+      }
+    },
+    {
+      "name": "en bell dropdown 320px stays inside viewport",
+      "ok": true,
+      "detail": {
+        "left": 12,
+        "right": 300,
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "en inbox 390px no page overflow",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "offenders": []
+      }
+    },
+    {
+      "name": "en bell dropdown 390px stays inside viewport",
+      "ok": true,
+      "detail": {
+        "left": 12,
+        "right": 352,
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "en inbox 768px no page overflow",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "offenders": []
+      }
+    },
+    {
+      "name": "en bell dropdown 768px stays inside viewport",
+      "ok": true,
+      "detail": {
+        "left": 12,
+        "right": 352,
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "en inbox 1440px no page overflow",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "offenders": []
+      }
+    },
+    {
+      "name": "en bell dropdown 1440px stays inside viewport",
+      "ok": true,
+      "detail": {
+        "left": 531.46875,
+        "right": 871.46875,
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "ar title and breadcrumb localized",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar inbox 320px no page overflow",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "offenders": []
+      }
+    },
+    {
+      "name": "ar bell dropdown 320px stays inside viewport",
+      "ok": true,
+      "detail": {
+        "left": 20,
+        "right": 308,
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "Arabic actions 320px translated",
+      "ok": true,
+      "detail": [
+        "",
+        "تحديد جميع الإشعارات المتاحة كمقروءة",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء"
+      ]
+    },
+    {
+      "name": "ar inbox 390px no page overflow",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "offenders": []
+      }
+    },
+    {
+      "name": "ar bell dropdown 390px stays inside viewport",
+      "ok": true,
+      "detail": {
+        "left": 38,
+        "right": 378,
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "Arabic actions 390px translated",
+      "ok": true,
+      "detail": [
+        "",
+        "تحديد جميع الإشعارات المتاحة كمقروءة",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء"
+      ]
+    },
+    {
+      "name": "ar inbox 768px no page overflow",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "offenders": []
+      }
+    },
+    {
+      "name": "ar bell dropdown 768px stays inside viewport",
+      "ok": true,
+      "detail": {
+        "left": 416,
+        "right": 756,
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "Arabic actions 768px translated",
+      "ok": true,
+      "detail": [
+        "",
+        "تحديد جميع الإشعارات المتاحة كمقروءة",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء"
+      ]
+    },
+    {
+      "name": "ar inbox 1440px no page overflow",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "offenders": []
+      }
+    },
+    {
+      "name": "ar bell dropdown 1440px stays inside viewport",
+      "ok": true,
+      "detail": {
+        "left": 480.015625,
+        "right": 820.015625,
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "Arabic actions 1440px translated",
+      "ok": true,
+      "detail": [
+        "",
+        "تحديد جميع الإشعارات المتاحة كمقروءة",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء",
+        "تحديد كمقروء"
+      ]
+    },
+    {
+      "name": "Individual mark as read reduces unread badge to 12",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Mark all clears unread badge and individual unread controls",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Second approver has no premature request",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "First approval succeeds",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Next approver receives exactly one request after replay",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Second approval succeeds",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Completion reaches original requester",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Role permission loss hides references and badge",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Project change hides old accessible references",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "errors": []
+}

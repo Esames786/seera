@@ -142,6 +142,8 @@ class SupplierBillApprovalRuntimeTest extends TestCase
         $this->assertSame([1, 2], $instance->steps->pluck('step_no')->all());
         $this->submit($bill);
         $this->assertDatabaseCount('approval_instances', 1);
+        $this->assertDatabaseCount('notifications', 1);
+        $this->assertSame(1, $this->first->notifications()->count());
     }
 
     public function test_missing_workflow_blocks_without_legacy_fallback(): void
@@ -192,6 +194,7 @@ class SupplierBillApprovalRuntimeTest extends TestCase
         $instance = $this->submit($bill);
         $this->decision($bill, $instance, $this->first);
         $this->assertSame('pending', $instance->fresh()->status);
+        $this->assertSame(1, $this->finance->notifications()->count());
         $this->assertDatabaseCount('journal_entries', 0);
         $this->decision($bill, $instance, $this->finance, 1);
         $this->decision($bill, $instance, $this->finance, 1);
@@ -203,6 +206,8 @@ class SupplierBillApprovalRuntimeTest extends TestCase
         $lines = $bill->fresh()->journalEntry->lines;
         $this->assertEquals(115, $lines->sum('debit'));
         $this->assertEquals(115, $lines->sum('credit'));
+        $this->assertSame('approved', $this->owner->notifications()->sole()->data['event']);
+        $this->assertDatabaseCount('notifications', 3);
         $this->postJson(route('admin.accounting.accounts-payable.runtime.reject', $bill), ['instance_id' => $instance->id, 'step_id' => $instance->steps[1]->id, 'comment' => 'Conflict'])->assertUnprocessable();
     }
 

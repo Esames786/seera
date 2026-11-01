@@ -1,0 +1,99 @@
+{
+    "branch":  "feature/seera-notification-center-mvp-2026-11-01",
+    "delivered_head":  "d916ae072f372f0fdca3c58165f743c004890723",
+    "base":  "b88eec7ac79cd12b09197f4bc55f02dc61e0282d",
+    "verified_date":  "2026-11-02",
+    "files":  [
+                  {
+                      "path":  "app/Http/Controllers/Admin/NotificationCenterController.php",
+                      "sha256":  "A7D055207C3183F8A58F1616DDD5E930F6748C2B539BCD41102B49C018F159DE",
+                      "git_blob":  "319df096578ebf31720664d47ad05825f99eea3b"
+                  },
+                  {
+                      "path":  "app/Notifications/ApprovalActionNotification.php",
+                      "sha256":  "99A00C0812A9E93BFDA541001B9E59998BB14A8256BE0B71B15BBB041AF6EACA",
+                      "git_blob":  "e929d87ece8d66306418b20586ee403463621dd7"
+                  },
+                  {
+                      "path":  "app/Services/Approvals/ApprovalRuntimeService.php",
+                      "sha256":  "7E915727420C7FA412659A7D314AEA5EB923F59E3E6984680637B469488426F1",
+                      "git_blob":  "0b767649bb3a952bccf011f3d5e10766c6915b2a"
+                  },
+                  {
+                      "path":  "app/Services/Notifications/ApprovalNotificationPublisher.php",
+                      "sha256":  "FD07CA0C2F43ABC0F20403745A8DCE244B5B34EFEEFDD6E9A84332E56154EDE9",
+                      "git_blob":  "2cd433ab62858cb422ea800e98862888de325b64"
+                  },
+                  {
+                      "path":  "app/Services/Notifications/NotificationAccess.php",
+                      "sha256":  "02846BADFF977996DC4E344CFFA15A93DA2A46FE4BC6CAFE46DF38219E1BBCFB",
+                      "git_blob":  "6acde8816b4ab258a134f1d4b53c8d5958d84118"
+                  },
+                  {
+                      "path":  "database/migrations/2026_11_01_000001_create_notifications_table.php",
+                      "sha256":  "BC4BF319C1933A85631BD06FBD43D278CDADEC8A7E2AB78E1A20999D48B0CC32",
+                      "git_blob":  "2d961309301e2635bb7098e843877201b042080c"
+                  },
+                  {
+                      "path":  "lang/ar/notifications_ui.php",
+                      "sha256":  "052AFA9FF234027112E4AAB54869BA97E3921F1AD86A2CE3A03188270F062B5F",
+                      "git_blob":  "28d7fea12e20d18c8aa97dbbbe505b261dc86480"
+                  },
+                  {
+                      "path":  "lang/en/notifications_ui.php",
+                      "sha256":  "3B531B19F8C68FA1830DE5CE0BAC0C9F2A391D84297E061D7A85569B2DCDB197",
+                      "git_blob":  "15b7b38dffde79097fbac9a23b575bce45dc0fce"
+                  },
+                  {
+                      "path":  "public/build.zip",
+                      "sha256":  "B1FF72DAC9A9BE51DAD766EF16238D2FC46AC3F9B9E4FA36A27B9B6E06B39C4E",
+                      "git_blob":  "d8a733fef7d57997adafd6117fd7a93a7b237cd3"
+                  },
+                  {
+                      "path":  "resources/views/admin/notifications/index.blade.php",
+                      "sha256":  "7D5B19C17C790485567EF21FE977A47F8EB9385C3052C2F9E74E033207C0B24A",
+                      "git_blob":  "833fdcb9ff0ce39228f13cedd8e3e3b5385673b4"
+                  },
+                  {
+                      "path":  "resources/views/components/admin/topbar.blade.php",
+                      "sha256":  "B8F6DEE32AA4B8278BCA7B44F36A80C33F732F7AD2AABA69F711F88B4CB0CECD",
+                      "git_blob":  "75c08607021c94ca0502e895cb456decf559dd26"
+                  },
+                  {
+                      "path":  "routes/web.php",
+                      "sha256":  "887B33D3AEAF5C1022C0F5AAC3CA33250C68CDA7D606616347EE277974715F1E",
+                      "git_blob":  "f2e4eb920eaf90579edc4eed0ecb9b7ed7efe49d"
+                  },
+                  {
+                      "path":  "tests/Feature/ApprovalRuntimeTest.php",
+                      "sha256":  "B8E08161836DA0DDD37C4D0C5678383CDA2F4B79330D015CCE1AE7C526F7754E",
+                      "git_blob":  "9fb04b94fe6b6e927cada2fee48ae4dbcac5f884"
+                  },
+                  {
+                      "path":  "tests/Feature/NotificationCenterTest.php",
+                      "sha256":  "28DA88936C1EEF0821657C9F7E682A78626628D14C477260B7CB8F7865501F85",
+                      "git_blob":  "5232fa77fe96882aba2d1ea1828a11fe976daea0"
+                  },
+                  {
+                      "path":  "tests/Feature/SiteExpenseTest.php",
+                      "sha256":  "53DCCC77A34F96A833738E0694CBD91C499084F3C3CBF6696870CBBF9B7E6253",
+                      "git_blob":  "7f2f07378ef8e066b8be7b42051e38ea43d28b1b"
+                  },
+                  {
+                      "path":  "tests/Feature/SupplierBillApprovalRuntimeTest.php",
+                      "sha256":  "F62961963764BC431709930584C3CB5973B87AD4385376EE8F9FCF775EA2CC72",
+                      "git_blob":  "f9fc0a2c8bd978871625abeff7fec3ce5277ccc8"
+                  },
+                  {
+                      "path":  "tests/manual/notification-center-browser.cjs",
+                      "sha256":  "CD85B4FDBEE22E68B3B4F65B2FC341C045AD603E63A4517158D066B376A0EE7C",
+                      "git_blob":  "3d5c003807120a34cfa0edd64370f29af4cf1640"
+                  },
+                  {
+                      "path":  "tests/manual/notification-center-fixture.php",
+                      "sha256":  "2565E31BDDBE68ACE3EAEAAA21BA57EAE7109DB417361E0FB1C4BF4C66EF68A5",
+                      "git_blob":  "7484eddab9aed0981820c58fb856a262c2923282"
+                  }
+              ],
+    "hash_basis":  "SHA256 of tested Windows working-tree bytes; git_blob identifies canonical staged content across line-ending settings"
+}

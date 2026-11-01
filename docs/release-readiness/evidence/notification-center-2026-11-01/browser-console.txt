@@ -1,0 +1,36 @@
+PASS First approver sees 13 unread notifications
+PASS Foreign recipient reference is absent
+PASS Foreign notification ID cannot be marked read
+PASS Malformed notification ID refused
+PASS en title and breadcrumb localized
+PASS en inbox 320px no page overflow
+PASS en bell dropdown 320px stays inside viewport
+PASS en inbox 390px no page overflow
+PASS en bell dropdown 390px stays inside viewport
+PASS en inbox 768px no page overflow
+PASS en bell dropdown 768px stays inside viewport
+PASS en inbox 1440px no page overflow
+PASS en bell dropdown 1440px stays inside viewport
+PASS ar title and breadcrumb localized
+PASS ar inbox 320px no page overflow
+PASS ar bell dropdown 320px stays inside viewport
+PASS Arabic actions 320px translated
+PASS ar inbox 390px no page overflow
+PASS ar bell dropdown 390px stays inside viewport
+PASS Arabic actions 390px translated
+PASS ar inbox 768px no page overflow
+PASS ar bell dropdown 768px stays inside viewport
+PASS Arabic actions 768px translated
+PASS ar inbox 1440px no page overflow
+PASS ar bell dropdown 1440px stays inside viewport
+PASS Arabic actions 1440px translated
+PASS Individual mark as read reduces unread badge to 12
+PASS Mark all clears unread badge and individual unread controls
+PASS Second approver has no premature request
+PASS First approval succeeds
+PASS Next approver receives exactly one request after replay
+PASS Second approval succeeds
+PASS Completion reaches original requester
+PASS Role permission loss hides references and badge
+PASS Project change hides old accessible references
+{"total":35,"passed":35,"failed":0,"pageErrors":0}

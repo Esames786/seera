@@ -404,17 +404,20 @@ class ApprovalRuntimeTest extends TestCase
     {
         $instance = $this->start();
         $url = route('admin.my-approvals.index');
-        $this->actingAs($this->first)->get($url)->assertOk()->assertSee('APR-TEST')->assertSee('Review &amp; approve', false);
-        $this->actingAs($this->second)->get($url)->assertOk()->assertDontSee('APR-TEST');
-        $this->actingAs($this->requester)->get($url)->assertOk()->assertDontSee('APR-TEST');
-        $this->actingAs($this->first)->get($url.'?project=999999')->assertOk()->assertDontSee('APR-TEST');
-        $this->get($url.'?from='.today()->addDay()->toDateString())->assertOk()->assertDontSee('APR-TEST');
-        $this->get($url.'?to='.today()->subDay()->toDateString())->assertOk()->assertDontSee('APR-TEST');
+        // A historical notification may name a document even when it is not an actionable task.
+        $references = fn ($response) => collect($response->assertOk()->viewData('tasks')->items())->pluck('reference')->all();
+        $first = $this->actingAs($this->first)->get($url)->assertOk()->assertSee('Review &amp; approve', false);
+        $this->assertContains('APR-TEST', $references($first));
+        $this->assertNotContains('APR-TEST', $references($this->actingAs($this->second)->get($url)));
+        $this->assertNotContains('APR-TEST', $references($this->actingAs($this->requester)->get($url)));
+        $this->assertNotContains('APR-TEST', $references($this->actingAs($this->first)->get($url.'?project=999999')));
+        $this->assertNotContains('APR-TEST', $references($this->get($url.'?from='.today()->addDay()->toDateString())));
+        $this->assertNotContains('APR-TEST', $references($this->get($url.'?to='.today()->subDay()->toDateString())));
         $this->decide($instance, $this->first);
-        $this->actingAs($this->first)->get($url)->assertDontSee('APR-TEST');
-        $this->actingAs($this->second)->get($url.'?module=Purchase%20Requests&status=pending&project='.$this->project->id)->assertOk()->assertSee('APR-TEST');
+        $this->assertNotContains('APR-TEST', $references($this->actingAs($this->first)->get($url)));
+        $this->assertContains('APR-TEST', $references($this->actingAs($this->second)->get($url.'?module=Purchase%20Requests&status=pending&project='.$this->project->id)));
         $this->decide($instance, $this->second, 1);
-        $this->get($url)->assertDontSee('APR-TEST');
+        $this->assertNotContains('APR-TEST', $references($this->get($url)));
     }
 
     public function test_document_history_and_actions_obey_separate_permissions(): void
@@ -535,5 +538,97 @@ class ApprovalRuntimeTest extends TestCase
         $instance = $this->start();
         $this->decide($instance, $this->first, 0, 'reject', 'Needs correction');
         $this->assertSame('rejected', $this->requester->notifications()->first()->data['event']);
+    }
+
+    public function test_duplicate_submit_and_decision_replays_do_not_duplicate_notifications(): void
+    {
+        $instance = $this->start();
+        $this->assertSame($instance->id, $this->start()->id);
+        $this->assertDatabaseCount('notifications', 1);
+        $this->decide($instance, $this->first);
+        $this->decide($instance, $this->first);
+        $this->assertDatabaseCount('notifications', 2);
+        $this->decide($instance, $this->second, 1);
+        $this->decide($instance, $this->second, 1);
+        $this->assertDatabaseCount('notifications', 3);
+        $this->assertSame(1, $this->requester->notifications()->count());
+    }
+
+    public function test_notifications_go_only_to_current_eligible_scoped_active_non_requesters(): void
+    {
+        $role = $this->first->roles()->first();
+        $role->update(['access_scope' => 'Project Level']);
+        $alternate = $this->actor('Alternate', [], role: $role);
+        $outside = $this->actor('Outside', [], role: $role);
+        $otherProject = Project::create(['code' => 'NOTICE-OUT', 'name' => 'Other', 'status' => 'active']);
+        $outside->update(['project_id' => $otherProject->id]);
+        $inactive = $this->actor('Inactive', [], role: $role);
+        $inactive->update(['status' => 'inactive']);
+        $this->requester->roles()->attach($role);
+        $this->start();
+        $this->assertSame(1, $this->first->notifications()->count());
+        $this->assertSame(1, $alternate->notifications()->count());
+        foreach ([$outside, $inactive, $this->requester, $this->second] as $actor) {
+            $this->assertSame(0, $actor->notifications()->count());
+        }
+    }
+
+    public function test_completion_notifies_original_requester_not_the_submitting_editor(): void
+    {
+        $editor = $this->actor('Submitting editor', ['view', 'edit']);
+        $instance = $this->runtime->start($this->subject, $this->pr->id, $this->workflow->id, $editor);
+        $this->decide($instance, $this->first);
+        $this->decide($instance, $this->second, 1);
+        $this->assertSame('approved', $this->requester->notifications()->sole()->data['event']);
+        $this->assertSame(0, $editor->notifications()->count());
+    }
+
+    public function test_failed_submission_rolls_back_a_notification_already_written_to_the_database(): void
+    {
+        $publisher = new class extends \App\Services\Notifications\ApprovalNotificationPublisher {
+            public function notifyStep(ApprovalInstance $instance): void
+            {
+                parent::notifyStep($instance);
+                throw new \RuntimeException('Synthetic notification failure after write');
+            }
+        };
+        $this->app->instance(\App\Services\Notifications\ApprovalNotificationPublisher::class, $publisher);
+        try {
+            $this->start();
+            $this->fail('Failure hidden');
+        } catch (\RuntimeException $e) {
+            $this->assertSame('Synthetic notification failure after write', $e->getMessage());
+        }
+        $this->assertDatabaseCount('notifications', 0);
+        $this->assertDatabaseCount('approval_instances', 0);
+        $this->assertSame('draft', $this->pr->fresh()->status);
+    }
+
+    public function test_failed_completion_rolls_back_the_requester_notice_and_retry_sends_one(): void
+    {
+        $instance = $this->start();
+        $this->decide($instance, $this->first);
+        $publisher = new class extends \App\Services\Notifications\ApprovalNotificationPublisher {
+            public function notifyRequester(ApprovalInstance $instance, string $event): void
+            {
+                parent::notifyRequester($instance, $event);
+                throw new \RuntimeException('Synthetic completion notification failure');
+            }
+        };
+        $this->app->instance(\App\Services\Notifications\ApprovalNotificationPublisher::class, $publisher);
+        try {
+            $this->decide($instance, $this->second, 1);
+            $this->fail('Failure hidden');
+        } catch (\RuntimeException $e) {
+            $this->assertSame('Synthetic completion notification failure', $e->getMessage());
+        }
+        $this->assertDatabaseCount('notifications', 2);
+        $this->assertSame(0, $this->requester->notifications()->count());
+        $this->assertSame('pending', $instance->fresh()->status);
+        $this->app->instance(\App\Services\Notifications\ApprovalNotificationPublisher::class, new \App\Services\Notifications\ApprovalNotificationPublisher);
+        $this->decide($instance, $this->second, 1);
+        $this->decide($instance, $this->second, 1);
+        $this->assertSame(1, $this->requester->notifications()->count());
+        $this->assertSame('approved', $instance->fresh()->status);
     }
 }

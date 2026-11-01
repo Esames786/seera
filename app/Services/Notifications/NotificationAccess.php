@@ -10,13 +10,17 @@ use Illuminate\Support\Collection;
 
 class NotificationAccess
 {
+    public const HISTORY_LIMIT = 300;
+
     /**
      * Never trust a persisted notification as current permission to see a record.
      * Resolve the source through the same document-scoped query used by approvals.
      */
     public function visible(DatabaseNotification $notification, User $actor): bool
     {
-        if ($notification->type !== ApprovalActionNotification::class || $actor->status !== 'active') {
+        if ($notification->type !== ApprovalActionNotification::class || $actor->status !== 'active'
+            || $notification->notifiable_type !== $actor->getMorphClass()
+            || (string) $notification->notifiable_id !== (string) $actor->id) {
             return false;
         }
 
@@ -39,7 +43,7 @@ class NotificationAccess
     {
         return $actor->notifications()
             ->where('type', ApprovalActionNotification::class)
-            ->latest()->limit(100)->get()
+            ->latest()->orderByDesc('id')->limit(self::HISTORY_LIMIT)->get()
             ->filter(fn ($n) => $this->visible($n, $actor))
             ->take($limit);
     }
@@ -48,7 +52,7 @@ class NotificationAccess
     {
         return $actor->unreadNotifications()
             ->where('type', ApprovalActionNotification::class)
-            ->latest()->limit(100)->get()
+            ->cursor()
             ->filter(fn ($n) => $this->visible($n, $actor))
             ->count();
     }

@@ -242,9 +242,11 @@ class SiteExpenseTest extends TestCase
         $this->actingAs($this->finance)->postJson(route('admin.site-expenses.approve', $expense), ['instance_id' => $instance->id, 'step_id' => $instance->steps[1]->id])->assertUnprocessable();
         $this->decide($expense, $instance, $this->first);
         $this->assertSame('pending', $expense->fresh()->status);
+        $this->assertSame(1, $this->finance->notifications()->count());
         $this->assertDatabaseCount('journal_entries', 0);
         $this->decide($expense, $instance, $this->finance, 1);
         $this->assertSame('posted', $expense->fresh()->status);
+        $this->assertSame('approved', $this->owner->notifications()->sole()->data['event']);
     }
 
     public function test_rejection_reason_resubmission_and_original_history(): void
@@ -255,6 +257,7 @@ class SiteExpenseTest extends TestCase
         $this->actingAs($this->first)->postJson(route('admin.site-expenses.reject', $expense), $payload)->assertUnprocessable();
         $this->decide($expense, $instance, $this->first, 0, 'reject', 'Receipt needs explanation');
         $this->assertSame('rejected', $expense->fresh()->status);
+        $this->assertSame('rejected', $this->owner->notifications()->sole()->data['event']);
         $this->actingAs($this->owner)->put(route('admin.site-expenses.update', $expense), $this->payload(['description' => 'Explanation']))->assertSessionHasNoErrors();
         $this->assertSame('rejected', $expense->fresh()->status);
         $new = $this->start($expense, $instance->id);
@@ -550,6 +553,7 @@ class SiteExpenseTest extends TestCase
         $again = $this->start($expense);
         $this->assertSame($first->id, $again->id);
         $this->assertDatabaseCount('approval_instances', 1);
+        $this->assertDatabaseCount('notifications', 1);
     }
 
     public function test_missing_mapping_ignores_legacy_text_and_activity_is_recorded(): void

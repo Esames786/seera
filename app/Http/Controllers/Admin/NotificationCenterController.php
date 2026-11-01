@@ -18,7 +18,7 @@ class NotificationCenterController extends Controller
         // Limited MVP history; never collect another user's notifications.
         $rows = $actor->notifications()
             ->where('type', ApprovalActionNotification::class)
-            ->latest()->limit(300)->get()
+            ->latest()->orderByDesc('id')->limit(NotificationAccess::HISTORY_LIMIT)->get()
             ->filter(fn ($notice) => $access->visible($notice, $actor))
             ->values();
         $page = max(1, $request->integer('page', 1));
