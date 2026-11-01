@@ -1,0 +1,16 @@
+{
+    "release_branch":  "release/seera-core-integration-review-2026-11-01",
+    "release_head":  "b88eec7ac79cd12b09197f4bc55f02dc61e0282d",
+    "tested_application":  "c19943f9cb8df2dfe3dae30eee6031b736f3a777",
+    "owner_reported_server_head":  "aca78eea1388c249012239ffe207c6b2454db951",
+    "server_git_status":  "BLOCKED",
+    "server_git_reason":  "Certificate-verified FTPS authenticated read refused, curl exit 67; no remote file contents obtained",
+    "https_login_status":  "VERIFIED",
+    "https_login_http_code":  200,
+    "https_login_scope":  "Public login route only; does not establish deployment revision, assets, DB or environment flags",
+    "migrations":  "NOT RUN",
+    "runtime_configuration":  "NOT RUN",
+    "live_reconciliation":  "NOT RUN",
+    "staging_rehearsal":  "NOT RUN",
+    "production_changes":  "none"
+}

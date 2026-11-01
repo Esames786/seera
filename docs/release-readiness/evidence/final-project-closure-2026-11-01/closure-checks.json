@@ -1,0 +1,11 @@
+{
+    "release_head":  "b88eec7ac79cd12b09197f4bc55f02dc61e0282d",
+    "application_source_matches_tested_c19943f":  true,
+    "approved_revision_anchors_verified":  16,
+    "build_zip_sha256":  "B1FF72DAC9A9BE51DAD766EF16238D2FC46AC3F9B9E4FA36A27B9B6E06B39C4E",
+    "bash_blocks_syntax_checked":  2,
+    "broken_relative_document_links":  0,
+    "application_tests_rerun":  "NOT RUN - unchanged candidate",
+    "production_commands_executed":  "none",
+    "production_access":  "FTPS authenticated read refused; HTTPS login status 200 only"
+}
