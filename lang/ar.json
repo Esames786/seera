@@ -1177,5 +1177,6 @@
     ":name (:days days)": ":name (:days يوماً)",
     ":count days": ":count يوماً",
     "Add Supplier": "إضافة مورد",
-    "Create a supplier for purchasing, payables, and VAT records": "إنشاء مورد للمشتريات والحسابات الدائنة وسجلات ضريبة القيمة المضافة"
+    "Create a supplier for purchasing, payables, and VAT records": "إنشاء مورد للمشتريات والحسابات الدائنة وسجلات ضريبة القيمة المضافة",
+    "Master Setup / Suppliers / Add Supplier": "الإعدادات الأساسية / الموردون / إضافة مورد"
 }
