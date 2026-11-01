@@ -1,5 +1,11 @@
 # SEERA ERP — final project closure, 1 November 2026
 
+## Owner deployment evidence update
+
+The owner subsequently supplied a complete server transcript recording deployment to **`b88eec7ac79cd12b09197f4bc55f02dc61e0282d`** on the release branch and **Application is now live**. Deployment execution is **VERIFIED from owner-supplied output**, not an independent authenticated server inspection. Composer completed, ZIP checksum/archive tests passed, assets extracted, Blade cached and all listed migrations were Ran. No migration or seeder was run. The backup location was printed and the operator confirmed a DB snapshot, but successful restore/live Finance reconciliation/client UAT remain **NOT RUN/PENDING** until their evidence is supplied.
+
+The initial `/dev/fd/62` error bypassed the runbook's tracked-change guard; it did not stop the subsequent deployment. The documentation now uses a here-document instead of process substitution. Post-deployment `git status --short` is **PENDING** to confirm only intended hosting overrides remain. Do not redeploy for this documentation correction. The sections below preserve the initial pre-deployment closure assessment; this update supersedes their previous-server/deployment-execution status only. It does not invent approval or acceptance evidence. See [operator deployment evidence](evidence/final-project-closure-2026-11-01/owner-deployment-result.json).
+
 **Decision: CONDITIONAL GO — DEVELOPMENT COMPLETE — PENDING CLIENT ACCEPTANCE.**
 
 The reviewed core implementation can be handed over for controlled staging/client UAT. No unresolved release-blocking P0/P1 software defect was identified in the bounded release audit. Production deployment remains **BLOCKED** until the owner authorizes the exact revision and the acceptance/operational prerequisites below are evidenced. Production ZATCA activation remains **BLOCKED** separately.

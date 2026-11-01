@@ -1,0 +1,23 @@
+{
+    "source":  "Owner-supplied terminal transcript",
+    "release_head":  "b88eec7ac79cd12b09197f4bc55f02dc61e0282d",
+    "release_branch":  "release/seera-core-integration-review-2026-11-01",
+    "deployment_execution":  "VERIFIED - owner output",
+    "maintenance_final":  "VERIFIED - Application is now live",
+    "composer":  "VERIFIED - install --no-dev completed",
+    "build_sha256":  "B1FF72DAC9A9BE51DAD766EF16238D2FC46AC3F9B9E4FA36A27B9B6E06B39C4E",
+    "build_checksum_and_archive":  "VERIFIED",
+    "asset_extraction_and_view_cache":  "VERIFIED",
+    "migration_status":  "VERIFIED - all listed Ran",
+    "migrations_or_seeders_executed":  "none",
+    "pre_deployment_zatca":  "VERIFIED - owner output sandbox / NO",
+    "post_deployment_zatca":  "PENDING",
+    "file_backup_path":  "/home/techbrit/seera-pre-b88eec7.kgZvaS",
+    "database_backup":  "PENDING - operator confirmation only; dump not inspected",
+    "restore":  "NOT RUN",
+    "live_finance_reconciliation":  "NOT RUN",
+    "client_uat":  "PENDING",
+    "tracked_change_guard":  "NOT RUN - process substitution redirection failed; corrected in documentation",
+    "post_deployment_git_status":  "PENDING",
+    "agent_production_changes":  "none"
+}

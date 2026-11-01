@@ -1,8 +1,10 @@
 # cPanel deployment guide — core release, 1 November 2026
 
-**Status: PENDING owner deployment authorization. Prepared, not executed.** Use this runbook after the signed preflight, backup/restore rehearsal and Finance acceptance. A request for this guide is not treated as permission to modify production.
+**Owner deployment update:** the supplied terminal transcript records successful deployment of `b88eec7`, verified ZIP, cached views and `Application is now live`. **Do not rerun section 3 on the already updated server.** Use the post-deployment checks below. This runbook was prepared by the agent; the owner executed it. Business UAT, live reconciliation and restore evidence are still separate pending items.
 
-- Owner-reported current server: `aca78eea1388c249012239ffe207c6b2454db951`, branch `feature/seera-connected-workspaces-2026-09-23`.
+The first execution reported `/dev/fd/62: No such file or directory` in the tracked-change guard. This hosting shell cannot use that process-substitution path; the failed redirection bypassed that one guard while later steps continued. The corrected guard below captures Git output first and uses a here-document, so a Git failure stops the block and `/dev/fd` is not required. Do not repeat the deployment to fix this documentation issue.
+
+- Original server baseline: `aca78eea1388c249012239ffe207c6b2454db951`, branch `feature/seera-connected-workspaces-2026-09-23`. Owner-reported deployed revision is now `b88eec7` on the release branch.
 - Reviewed release branch: `release/seera-core-integration-review-2026-11-01`.
 - Pinned candidate: **`b88eec7ac79cd12b09197f4bc55f02dc61e0282d`**. Its application matches tested `c19943f`.
 - Build ZIP SHA-256: **`B1FF72DAC9A9BE51DAD766EF16238D2FC46AC3F9B9E4FA36A27B9B6E06B39C4E`**.
@@ -48,9 +50,12 @@ BUILD_SHA=B1FF72DAC9A9BE51DAD766EF16238D2FC46AC3F9B9E4FA36A27B9B6E06B39C4E
 
 test "$(git rev-parse HEAD)" = aca78eea1388c249012239ffe207c6b2454db951
 test -z "$(git diff --cached --name-only)"
+TRACKED_CHANGES="$(git diff --name-only)"
 while IFS= read -r path; do
     case "$path" in public/.htaccess|public/build.zip|'') ;; *) echo "STOP: unreviewed tracked change: $path"; exit 1 ;; esac
-done < <(git diff --name-only)
+done <<TRACKED_PATHS
+$TRACKED_CHANGES
+TRACKED_PATHS
 
 git fetch origin "refs/heads/$RELEASE_BRANCH:refs/remotes/origin/$RELEASE_BRANCH"
 test "$(git rev-parse "origin/$RELEASE_BRANCH")" = "$RELEASE_SHA"
@@ -117,6 +122,21 @@ printf 'Code/assets updated to %s; private file backup: %s\n' "$RELEASE_SHA" "$B
 Do not add `artisan optimize`, `config:cache` or `route:cache` during this closure rollout without a tested environment-specific cache plan. `optimize:clear` avoids the stale-cache issue previously reported. The script neither changes `.env` nor enables ZATCA. Inspect and preserve unrelated untracked files; a checkout collision must be reviewed, not deleted blindly.
 
 ## 4. Acceptance after the approved update
+
+The owner's execution reached the pinned HEAD, Composer completed, the expected ZIP hash and archive integrity passed, assets were extracted, Blade views cached, every listed migration was Ran, and maintenance mode was lifted. No migration or seeder command ran. The script recorded a private file/asset backup at `/home/techbrit/seera-pre-b88eec7.kgZvaS`. The typed `BACKUP-VERIFIED` is an operator confirmation; it is not independently inspected DB-dump or restore evidence.
+
+Read-only post-deployment checks (safe to run now; no redeployment):
+
+```bash
+cd ~/seera
+PHP=/opt/cpanel/ea-php83/root/usr/bin/php
+git rev-parse HEAD
+git status --short
+sha256sum public/build.zip
+$PHP -r 'require "vendor/autoload.php"; $app = require "bootstrap/app.php"; $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap(); echo "ZATCA environment: ", config("zatca.environment"), PHP_EOL, "Production enabled: ", config("zatca.production_enabled") ? "YES - STOP" : "NO", PHP_EOL;'
+```
+
+Expect HEAD `b88eec7ac79cd12b09197f4bc55f02dc61e0282d`, the documented ZIP hash, ZATCA sandbox/NO, and only reviewed server overrides such as `public/.htaccess`. Inspect the web application and have Finance complete reconciliation next. Do not run deployment steps or migrations again merely because the initial guard emitted `/dev/fd`.
 
 Check actual web revision/assets and PHP/FPM code freshness, login/roles, EN/AR navigation, Employee/User links, Customer/Supplier/Project/Site workspaces, HR/Project Reports and printable invoices. Confirm private uploads still open. Verify migration status, ZATCA remains disabled, logs/queues are healthy and pending mobile operations were not discarded.
 
