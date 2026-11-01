@@ -1,0 +1,107 @@
+PASS EN supplier view: title, breadcrumb, description, h1 :: {"docTitle":"Supplier Details - Seera","breadcrumb":"Home / Master Setup / Suppliers / Supplier Details","desc":"Read-only supplier view. Nothing on this page changes data.","h1":"Saudi Cement Supplier"}
+PASS EN supplier view: header actions :: [{"text":"Edit / Manage","href":"/admin/master/suppliers/1/edit"},{"text":"Back to Suppliers","href":"/admin/master/suppliers"}]
+PASS EN supplier view: stays read-only (no save control, no profile form, no related-save form) :: {"hasSaveAction":false,"fields":[]}
+PASS EN supplier view: profile rows and header dl labels exact :: {"rows":["Supplier Name","Supplier Code","Category","City / Location","Rating","VAT Number","CR Number","Contact Person","Phone","Email","Payment Terms","Accepted Payment Types","Bank","IBAN","Linked Payable Account","Opening Balance (master data)","Address","Status"],"dl":["VAT number","CR number","Contact","Payment terms","Payable account","Projects","Outstanding payable","Paid to date"]}
+PASS EN supplier view: tabs Profile + 7 panels, inline read-only panels :: {"tabs":["Profile","Projects","Purchase Orders","Goods Receipts","Supplier Bills","Payments & Balance","Accounting","Activity"],"panels":["projects","purchase-orders","goods-receipts","bills","payments","accounting","activity"]}
+PASS EN supplier view: open bill count pluralised ("1 open bill" / "n open bills", never "bill(s)") :: "SAR 0.00 (0 open bills)"
+PASS EN supplier view: every /admin/ link answers 200 or 302 :: {"total":76,"broken":[]}
+PASS EN supplier edit: title, breadcrumb, description, h1 :: {"docTitle":"Supplier Workspace - Seera","breadcrumb":"Home / Master Setup / Suppliers / Supplier Workspace","h1":"Supplier Workspace: Saudi Cement Supplier"}
+PASS EN supplier edit: header actions View (read-only) + Back :: [{"text":"View (read-only)","href":"/admin/master/suppliers/1"},{"text":"Back to Suppliers","href":"/admin/master/suppliers"}]
+PASS EN supplier edit: profile form with save action and fields, nav tabs with 7 related panels :: {"fields":["name","code","category","city","rating","rating","rating","rating"],"tabs":["Projects","Purchase Orders","Goods Receipts","Supplier Bills","Payments & Balance","Accounting","Activity"]}
+PASS EN supplier edit panel projects loads with its title :: {"status":200,"h2":"Projects — SUP-001 / Saudi Cement Supplier","rows":1,"buttons":["Link project","Back / previous section","Next section"]}
+PASS EN supplier edit panel purchase-orders loads with its title :: {"status":200,"h2":"Purchase Orders — SUP-001 / Saudi Cement Supplier","rows":2,"buttons":["View PO","View PO","Back / previous section","Next section","View all"]}
+PASS EN supplier edit panel goods-receipts loads with its title :: {"status":200,"h2":"Goods Receipts — SUP-001 / Saudi Cement Supplier","rows":2,"buttons":["View GRN","Create Supplier Bill","View GRN","Create Supplier Bill","Back / previous section","Next section","View all"]}
+PASS EN supplier edit panel bills loads with its title :: {"status":200,"h2":"Supplier Bills — SUP-001 / Saudi Cement Supplier","rows":2,"buttons":["View","Edit draft","View","Back / previous section","Next section","View all"]}
+PASS EN supplier edit panel payments loads with its title :: {"status":200,"h2":"Payments & Balance — SUP-001 / Saudi Cement Supplier","rows":1,"buttons":["Back / previous section","Next section","View all"]}
+PASS EN supplier edit panel accounting loads with its title :: {"status":200,"h2":"Accounting — SUP-001 / Saudi Cement Supplier","rows":2,"buttons":["Back / previous section","Next section","View all"]}
+PASS EN supplier edit panel activity loads with its title :: {"status":200,"h2":"Activity — SUP-001 / Saudi Cement Supplier","rows":1,"buttons":["Back / previous section","View all"]}
+PASS EN supplier edit: projects panel keeps its link form (edit) while the view has none :: ["Link project","Back / previous section","Next section"]
+PASS EN customer view: title and breadcrumb, code present, read-only :: {"docTitle":"Customer Details - Seera","breadcrumb":"Home / Master Setup / Customers / Customer Details"}
+PASS EN employee view: title and breadcrumb, employee code present :: {"docTitle":"Employee Details - Seera","breadcrumb":"Home / HR & Payroll / Employees / Employee Details","empCode":"EMP-001"}
+PASS AR supplier view: rtl, title, breadcrumb, description exact :: {"docTitle":"تفاصيل المورد - Seera","breadcrumb":"الرئيسية / الإعدادات الأساسية / الموردون / تفاصيل المورد","desc":"عرض المورد للقراءة فقط. لا تغيّر هذه الصفحة أي بيانات."}
+PASS AR supplier view: header actions exact, read-only :: [{"text":"تعديل / إدارة","href":"/admin/master/suppliers/1/edit"},{"text":"العودة إلى الموردين","href":"/admin/master/suppliers"}]
+PASS AR supplier view: profile labels exact and values identical to English :: {"ar":[["اسم المورد","Saudi Cement Supplier"],["رمز المورد","SUP-001"],["الفئة","Materials"],["المدينة / الموقع","-"],["التقييم","-"],["الرقم الضريبي","300123123100003"],["رقم السجل التجاري","1010123123"],["الشخص المسؤول","Ahmed"],["الهاتف","+966 50 700 1111"],["البريد الإلكتروني","sales@saudicement.sa"],["شروط الدفع","30 Days (30 days)"],["طرق الدفع المقبولة","كلاهما"],["بنك","-"],["رقم الحساب المصرفي الدولي","-"],["حساب الدائنين المرتبط","Accounts Payable - Suppliers"],["الرصيد الافتتاحي (البيانات الأساسية)","SAR 42,000.00"],["العنوان","Industrial City 2, Riyadh"],["الحالة","نشط"]],"en":[["Supplier Name","Saudi Cement Supplier"],["Supplier Code","SUP-001"],["Category","Materials"],["City / Location","-"],["Rating","-"],["VAT Number","300123123100003"],["CR Number","1010123123"],["Contact Person","Ahmed"],["Phone","+966 50 700 1111"],["Email","sales@saudicement.sa"],["Payment Terms","30 Days (30 days)"],["Accepted Payment Types","Both"],["Bank","-"],["IBAN","-"],["Linked Payable Account","Accounts Payable - Suppliers"],["Opening Balance (master data)","SAR 42,000.00"],["Address","Industrial City 2, Riyadh"],["Status","Active"]]}
+PASS AR supplier view: header dl labels exact, amounts and counts identical :: {"ar":[["الرقم الضريبي","300123123100003"],["رقم السجل التجاري","1010123123"],["جهة الاتصال","Ahmed · +966 50 700 1111"],["شروط الدفع","30 Days (30 days) · كلاهما"],["حساب الدائنين","Accounts Payable - Suppliers"],["المشاريع","0"],["المستحق للمورد","SAR 0.00 (عدد الفواتير المفتوحة: 0)"],["المدفوع حتى الآن","SAR 138,000.00"]],"en":[["VAT number","300123123100003"],["CR number","1010123123"],["Contact","Ahmed · +966 50 700 1111"],["Payment terms","30 Days (30 days) · Both"],["Payable account","Accounts Payable - Suppliers"],["Projects","0"],["Outstanding payable","SAR 0.00 (0 open bills)"],["Paid to date","SAR 138,000.00"]]}
+PASS AR supplier view: tabs exact and nav label exact :: ["الملف الشخصي","المشاريع","أوامر الشراء","استلامات البضائع","فواتير الموردين","المدفوعات والرصيد","المحاسبة","النشاط"]
+PASS AR supplier view panel projects: title exact, no Latin heading or button, amounts identical, same row count :: {"h2":"المشاريع — SUP-001 / Saudi Cement Supplier","ths":["الرمز","المشروع","العميل","الحالة","الإجراءات"],"buttons":[],"rows":1,"metrics":[]}
+PASS AR supplier view panel purchase-orders: title exact, no Latin heading or button, amounts identical, same row count :: {"h2":"أوامر الشراء — SUP-001 / Saudi Cement Supplier","ths":["أمر الشراء","التاريخ","المشروع / الموقع","المبلغ","المحصّل","الحالة","الإجراءات"],"buttons":["عرض أمر الشراء","عرض الكل"],"rows":2,"metrics":[]}
+PASS AR supplier view panel goods-receipts: title exact, no Latin heading or button, amounts identical, same row count :: {"h2":"استلامات البضائع — SUP-001 / Saudi Cement Supplier","ths":["إذن الاستلام","أمر الشراء","المشروع / الموقع","التاريخ","القيمة","الحالة","تمت الفوترة","الإجراءات"],"buttons":["عرض إذن الاستلام","إنشاء فاتورة مورد","عرض الكل"],"rows":2,"metrics":[]}
+PASS AR supplier view panel bills: title exact, no Latin heading or button, amounts identical, same row count :: {"h2":"فواتير الموردين — SUP-001 / Saudi Cement Supplier","ths":["فاتورة المورد","التاريخ","المشروع / الموقع","الإجمالي","مدفوع","الرصيد","الحالة","المطابقة","الإجراءات"],"buttons":["عرض","تعديل المسودة","عرض الكل"],"rows":2,"metrics":[]}
+PASS AR supplier view panel payments: title exact, no Latin heading or button, amounts identical, same row count :: {"h2":"المدفوعات والرصيد — SUP-001 / Saudi Cement Supplier","ths":["التاريخ","فاتورة المورد","الحساب","الطريقة","المبلغ","المرجع","القيد"],"buttons":["عرض الكل"],"rows":1,"metrics":[["الفواتير المعتمدة","SAR 138,000.00"],["مدفوع","SAR 138,000.00"],["المستحق","SAR 0.00"],["آخر دفعة","2026-09-25"]]}
+PASS AR supplier view panel accounting: title exact, no Latin heading or button, amounts identical, same row count :: {"h2":"المحاسبة — SUP-001 / Saudi Cement Supplier","ths":["القيد","التاريخ","المصدر","الوصف","المبلغ","الحالة"],"buttons":["عرض الكل"],"rows":2,"metrics":[]}
+PASS AR supplier view panel activity: title exact, no Latin heading or button, amounts identical, same row count :: {"h2":"النشاط — SUP-001 / Saudi Cement Supplier","ths":["الوقت","المستخدم","الوحدة","الإجراء","التفاصيل"],"buttons":["عرض الكل"],"rows":1,"metrics":[]}
+PASS AR supplier view: no untranslated priority action anywhere on the page :: []
+PASS AR supplier view: every /admin/ link answers 200 or 302 :: {"total":76,"broken":[]}
+PASS AR supplier edit: title, breadcrumb, h1, description exact; form and tabs preserved :: {"h1":"مساحة عمل المورد: Saudi Cement Supplier","breadcrumb":"الرئيسية / الإعدادات الأساسية / الموردون / مساحة عمل المورد","tabs":["المشاريع","أوامر الشراء","استلامات البضائع","فواتير الموردين","المدفوعات والرصيد","المحاسبة","النشاط"],"hasSaveAction":true}
+PASS AR supplier edit: header actions exact :: [{"text":"عرض (للقراءة فقط)","href":"/admin/master/suppliers/1"},{"text":"العودة إلى الموردين","href":"/admin/master/suppliers"}]
+PASS AR supplier edit: header dl identical amounts to English edit :: [["الرقم الضريبي","300123123100003"],["رقم السجل التجاري","1010123123"],["جهة الاتصال","Ahmed · +966 50 700 1111"],["شروط الدفع","30 Days (30 days) · كلاهما"],["حساب الدائنين","Accounts Payable - Suppliers"],["المشاريع","0"],["المستحق للمورد","SAR 0.00 (عدد الفواتير المفتوحة: 0)"],["المدفوع حتى الآن","SAR 138,000.00"]]
+PASS AR supplier edit panel projects: Arabic title, no Latin button or heading, same rows and identical amounts :: {"h2":"المشاريع — SUP-001 / Saudi Cement Supplier","latinButtons":[],"latinThs":[],"buttons":["ربط المشروع","رجوع / القسم السابق","القسم التالي"],"metrics":[]}
+PASS AR supplier edit panel purchase-orders: Arabic title, no Latin button or heading, same rows and identical amounts :: {"h2":"أوامر الشراء — SUP-001 / Saudi Cement Supplier","latinButtons":[],"latinThs":[],"buttons":["عرض أمر الشراء","رجوع / القسم السابق","القسم التالي","عرض الكل"],"metrics":[]}
+PASS AR supplier edit panel goods-receipts: Arabic title, no Latin button or heading, same rows and identical amounts :: {"h2":"استلامات البضائع — SUP-001 / Saudi Cement Supplier","latinButtons":[],"latinThs":[],"buttons":["عرض إذن الاستلام","إنشاء فاتورة مورد","رجوع / القسم السابق","القسم التالي","عرض الكل"],"metrics":[]}
+PASS AR supplier edit panel bills: Arabic title, no Latin button or heading, same rows and identical amounts :: {"h2":"فواتير الموردين — SUP-001 / Saudi Cement Supplier","latinButtons":[],"latinThs":[],"buttons":["عرض","تعديل المسودة","رجوع / القسم السابق","القسم التالي","عرض الكل"],"metrics":[]}
+PASS AR supplier edit panel payments: Arabic title, no Latin button or heading, same rows and identical amounts :: {"h2":"المدفوعات والرصيد — SUP-001 / Saudi Cement Supplier","latinButtons":[],"latinThs":[],"buttons":["رجوع / القسم السابق","القسم التالي","عرض الكل"],"metrics":[["الفواتير المعتمدة","SAR 138,000.00"],["مدفوع","SAR 138,000.00"],["المستحق","SAR 0.00"],["آخر دفعة","2026-09-25"]]}
+PASS AR payments panel: metric labels exact :: [["الفواتير المعتمدة","SAR 138,000.00"],["مدفوع","SAR 138,000.00"],["المستحق","SAR 0.00"],["آخر دفعة","2026-09-25"]]
+PASS AR supplier edit panel accounting: Arabic title, no Latin button or heading, same rows and identical amounts :: {"h2":"المحاسبة — SUP-001 / Saudi Cement Supplier","latinButtons":[],"latinThs":[],"buttons":["رجوع / القسم السابق","القسم التالي","عرض الكل"],"metrics":[]}
+PASS AR supplier edit panel activity: Arabic title, no Latin button or heading, same rows and identical amounts :: {"h2":"النشاط — SUP-001 / Saudi Cement Supplier","latinButtons":[],"latinThs":[],"buttons":["رجوع / القسم السابق","عرض الكل"],"metrics":[]}
+PASS AR customer view: title and breadcrumb exact, code and name unchanged, read-only :: {"docTitle":"تفاصيل العميل - Seera","breadcrumb":"الرئيسية / الإعدادات الأساسية / العملاء / تفاصيل العميل","h1":"ABC Holdings"}
+PASS AR customer view: no untranslated priority action :: []
+PASS AR customer view: decimal financial amounts identical to English
+PASS AR employee view: title and breadcrumb exact, employee code and name unchanged :: {"docTitle":"تفاصيل الموظف - Seera","breadcrumb":"الرئيسية / الموارد البشرية والرواتب / الموظفون / تفاصيل الموظف","h1":"Omar Mukhtar"}
+PASS AR employee view: no untranslated priority action :: []
+PASS AR employee view: salary / document amounts identical to English :: {"ar":21,"en":21}
+PASS super-admin-supplier-view ar 320px no horizontal overflow :: {"scrollWidth":320,"innerWidth":320}
+PASS super-admin-supplier-view ar 320px no untranslated priority action :: []
+PASS super-admin-supplier-view ar 390px no horizontal overflow :: {"scrollWidth":390,"innerWidth":390}
+PASS super-admin-supplier-view ar 390px no untranslated priority action :: []
+PASS super-admin-supplier-view ar 768px no horizontal overflow :: {"scrollWidth":768,"innerWidth":768}
+PASS super-admin-supplier-view ar 768px no untranslated priority action :: []
+PASS super-admin-supplier-view ar 1440px no horizontal overflow :: {"scrollWidth":1440,"innerWidth":1440}
+PASS super-admin-supplier-view ar 1440px no untranslated priority action :: []
+PASS super-admin-supplier-edit ar 320px no horizontal overflow :: {"scrollWidth":320,"innerWidth":320}
+PASS super-admin-supplier-edit ar 320px no untranslated priority action :: []
+PASS super-admin-supplier-edit ar 390px no horizontal overflow :: {"scrollWidth":390,"innerWidth":390}
+PASS super-admin-supplier-edit ar 390px no untranslated priority action :: []
+PASS super-admin-supplier-edit ar 768px no horizontal overflow :: {"scrollWidth":768,"innerWidth":768}
+PASS super-admin-supplier-edit ar 768px no untranslated priority action :: []
+PASS super-admin-supplier-edit ar 1440px no horizontal overflow :: {"scrollWidth":1440,"innerWidth":1440}
+PASS super-admin-supplier-edit ar 1440px no untranslated priority action :: []
+PASS super-admin-customer-view ar 320px no horizontal overflow :: {"scrollWidth":320,"innerWidth":320}
+PASS super-admin-customer-view ar 320px no untranslated priority action :: []
+PASS super-admin-customer-view ar 390px no horizontal overflow :: {"scrollWidth":390,"innerWidth":390}
+PASS super-admin-customer-view ar 390px no untranslated priority action :: []
+PASS super-admin-customer-view ar 768px no horizontal overflow :: {"scrollWidth":768,"innerWidth":768}
+PASS super-admin-customer-view ar 768px no untranslated priority action :: []
+PASS super-admin-customer-view ar 1440px no horizontal overflow :: {"scrollWidth":1440,"innerWidth":1440}
+PASS super-admin-customer-view ar 1440px no untranslated priority action :: []
+PASS super-admin-employee-view ar 320px no horizontal overflow :: {"scrollWidth":320,"innerWidth":320}
+PASS super-admin-employee-view ar 320px no untranslated priority action :: []
+PASS super-admin-employee-view ar 390px no horizontal overflow :: {"scrollWidth":390,"innerWidth":390}
+PASS super-admin-employee-view ar 390px no untranslated priority action :: []
+PASS super-admin-employee-view ar 768px no horizontal overflow :: {"scrollWidth":768,"innerWidth":768}
+PASS super-admin-employee-view ar 768px no untranslated priority action :: []
+PASS super-admin-employee-view ar 1440px no horizontal overflow :: {"scrollWidth":1440,"innerWidth":1440}
+PASS super-admin-employee-view ar 1440px no untranslated priority action :: []
+PASS super-admin-supplier-view en 320px no horizontal overflow :: {"scrollWidth":320,"innerWidth":320}
+PASS super-admin-supplier-view en 390px no horizontal overflow :: {"scrollWidth":390,"innerWidth":390}
+PASS super-admin-supplier-view en 768px no horizontal overflow :: {"scrollWidth":768,"innerWidth":768}
+PASS super-admin-supplier-view en 1440px no horizontal overflow :: {"scrollWidth":1440,"innerWidth":1440}
+PASS super-admin-supplier-edit en 320px no horizontal overflow :: {"scrollWidth":320,"innerWidth":320}
+PASS super-admin-supplier-edit en 390px no horizontal overflow :: {"scrollWidth":390,"innerWidth":390}
+PASS super-admin-supplier-edit en 768px no horizontal overflow :: {"scrollWidth":768,"innerWidth":768}
+PASS super-admin-supplier-edit en 1440px no horizontal overflow :: {"scrollWidth":1440,"innerWidth":1440}
+PASS super-admin-customer-view en 320px no horizontal overflow :: {"scrollWidth":320,"innerWidth":320}
+PASS super-admin-customer-view en 390px no horizontal overflow :: {"scrollWidth":390,"innerWidth":390}
+PASS super-admin-customer-view en 768px no horizontal overflow :: {"scrollWidth":768,"innerWidth":768}
+PASS super-admin-customer-view en 1440px no horizontal overflow :: {"scrollWidth":1440,"innerWidth":1440}
+PASS super-admin-employee-view en 320px no horizontal overflow :: {"scrollWidth":320,"innerWidth":320}
+PASS super-admin-employee-view en 390px no horizontal overflow :: {"scrollWidth":390,"innerWidth":390}
+PASS super-admin-employee-view en 768px no horizontal overflow :: {"scrollWidth":768,"innerWidth":768}
+PASS super-admin-employee-view en 1440px no horizontal overflow :: {"scrollWidth":1440,"innerWidth":1440}
+PASS marketing manager (Customers view/edit, no Suppliers, no HR): expected responses :: {"expected":{"/admin/master/customers/1":200,"/admin/master/suppliers/1":403,"/admin/master/suppliers/1/edit":403,"/admin/hr/employees/1":403},"got":{"/admin/master/customers/1":200,"/admin/master/suppliers/1":403,"/admin/master/suppliers/1/edit":403,"/admin/hr/employees/1":403}}
+PASS marketing manager (Customers view/edit, no Suppliers, no HR): Arabic customer view without Edit for view-only? (records buttons) :: [{"text":"تعديل / إدارة","href":"/admin/master/customers/1/edit"},{"text":"العودة إلى العملاء","href":"/admin/master/customers"}]
+PASS HR manager (HR, no Suppliers, no Customers): expected responses :: {"expected":{"/admin/hr/employees/1":200,"/admin/master/suppliers/1":403,"/admin/master/customers/1":403},"got":{"/admin/hr/employees/1":200,"/admin/master/suppliers/1":403,"/admin/master/customers/1":403}}
+PASS HR manager (HR, no Suppliers, no Customers): Arabic employee view has no untranslated priority action :: []
+PASS finance manager (Accounts Payable, no Suppliers view): expected responses :: {"expected":{"/admin/master/suppliers/1":403,"/admin/master/suppliers/1/edit":403,"/admin/master/suppliers/1/workspace/bills":403,"/admin/master/customers/1":403,"/admin/hr/employees/1":403},"got":{"/admin/master/suppliers/1":403,"/admin/master/suppliers/1/edit":403,"/admin/master/suppliers/1/workspace/bills":403,"/admin/master/customers/1":403,"/admin/hr/employees/1":403}}
+PASS project manager (no Suppliers / Customers / HR): expected responses :: {"expected":{"/admin/master/suppliers/1":403,"/admin/master/customers/1":403,"/admin/hr/employees/1":404},"got":{"/admin/master/suppliers/1":403,"/admin/master/customers/1":403,"/admin/hr/employees/1":404}}
+
+105/105 passed; page errors 0

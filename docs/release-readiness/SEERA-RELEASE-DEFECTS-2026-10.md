@@ -104,6 +104,19 @@ See [closure UX verification](SEERA-CLOSURE-UX-PROJECTS-QA-2026-10-31.md) (branc
 | CU-03 | Open: the shared `ProjectWorkspacePanels` titles and summary labels (21 strings incl. financial terms) have no Arabic entries, so related-record tabs and the summary line stay English in Arabic (pre-existing, shared with other workspaces) |
 | Project workspace | Read-only view without a form, functional Edit / Manage with a verified no-op save, direct links to the pre-filtered Project Reports portfolio and to Budget / BOQ, permissions and project / site scope unchanged, master budget figures identical in both locales; verified for six roles |
 
+### Customer / Supplier / Employee connected-workspace closure — 1 November 2026
+
+See [master workspace closure verification](SEERA-MASTER-WORKSPACE-UX-CLOSURE-QA-2026-11-01.md) (branch `feature/seera-master-workspace-ux-closure-2026-11-01`, verified HEAD `eb21bae`, fixes on the branch).
+
+| ID | Status |
+| --- | --- |
+| MW-01 | Found and fixed: the supplier header replaced the English plural with "n open bill(s)"; `trans_choice` restores "1 open bill" / "n open bills", Arabic count-neutral |
+| MW-02 | Found and fixed: priority actions, column headings, badges and metric labels of the shared supplier related-record panels, the customer invoice actions, the employee attendance / leave / overtime Edit buttons and the salary-structure action were still English in Arabic; two supplier tab titles and the supplier quick-create buttons had no Arabic entry; 40 entries added (two accounting notes for the Arabic reviewer) |
+| TS-01 | Found and fixed (tooling): stale per-worker compiled Blade views under ParaTest produced a false failure; the accelerated runner now clears `storage/framework/views/test_*` before each parallel run |
+| MW-03 | Pre-existing, outside priority-action closure: Supplier Edit profile labels, Payment & Banking heading, some options/help remain English in the unchanged form. Full form Arabic completion is not claimed; see QA report |
+| Scope ordering | Recorded, not changed: an employee outside a project-level user's scope answers 404 before the HR permission check would answer 403; still a refusal |
+| Master workspaces | Supplier View read-only, Edit / Manage form and 7 related panels preserved, customer / employee titles and breadcrumbs translated, amounts identical in both locales, permissions and routes unchanged for five roles; 105 / 105 resumed browser checks (original run 104 / 104) |
+
 ### Project workspace computed cells in Arabic (CU-06 closure) — 31 October 2026
 
 See [computed cell Arabic verification](SEERA-PROJECT-COMPUTED-CELL-ARABIC-QA-2026-10-31.md) (branch `feature/seera-project-computed-cell-arabic-2026-10-31`, verified HEAD `b47941b`, fixes on the branch).

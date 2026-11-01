@@ -1,0 +1,49 @@
+{
+    "verified_source_head":  "b215d53bb25a476cd3ba3cd5fb5f3bbd9677152b",
+    "base":  "707c5eb",
+    "full_suite_provenance":  "Completed Claude handoff run on b215d53; application source unchanged during resumed verification",
+    "files":  [
+                  {
+                      "path":  "lang/ar.json",
+                      "sha256":  "97209452E6DFB9DDD3C9EEE091D8BD22637781144D163642C7DC20F03776A441"
+                  },
+                  {
+                      "path":  "resources/views/admin/hr/employees/show.blade.php",
+                      "sha256":  "6191A7BF54C1A5FD439D32038ACD81AEBB7976D379F9B87DEDEA21EAFAB108E0"
+                  },
+                  {
+                      "path":  "resources/views/admin/master/customers/_workspace-panel.blade.php",
+                      "sha256":  "E96B585BB4DC6E2D60FFD9BC43910A620757A36E3227005F1F76E31A8C0A3856"
+                  },
+                  {
+                      "path":  "resources/views/admin/master/customers/show.blade.php",
+                      "sha256":  "60068720DE51F8CB915B587BA27477AFB9AD41B319B33756F424E69157AE6654"
+                  },
+                  {
+                      "path":  "resources/views/admin/master/suppliers/_workspace-header.blade.php",
+                      "sha256":  "728D709F4589A411F724D7BAFB3A72D0CF71FCDA234FD9A07505C1939F7FDA82"
+                  },
+                  {
+                      "path":  "resources/views/admin/master/suppliers/_workspace-panel.blade.php",
+                      "sha256":  "FA246A89DEC045F87DCCB0804905BE36E32D8E0AB48BB9F5D08F483C360E7CE9"
+                  },
+                  {
+                      "path":  "resources/views/admin/master/suppliers/edit.blade.php",
+                      "sha256":  "AF5A473464F8BC139FED429DAF670763CAE1EE34B6B713A7F3AABAEC74B34BAF"
+                  },
+                  {
+                      "path":  "resources/views/admin/master/suppliers/show.blade.php",
+                      "sha256":  "A7B900601673B59B7FCFC922566D0A635EF8232B81F4B2893DF40C27E1ADCCF6"
+                  },
+                  {
+                      "path":  "scripts/test-speed.ps1",
+                      "sha256":  "0182C920C1BD8C869D4BF857682F07BC14A44AA43BC19244141B7AACE75E8565"
+                  },
+                  {
+                      "path":  "tests/Feature/MasterWorkspaceUxClosureTest.php",
+                      "sha256":  "8A22C3D952C6B1E86E74EC4063834A424FB6446C37D6CA517850F932CCDDDBF6"
+                  }
+              ],
+    "build_zip_sha256":  "B1FF72DAC9A9BE51DAD766EF16238D2FC46AC3F9B9E4FA36A27B9B6E06B39C4E",
+    "build_entries_verified":  18
+}
