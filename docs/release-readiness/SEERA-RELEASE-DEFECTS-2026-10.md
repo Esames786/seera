@@ -117,6 +117,19 @@ See [master workspace closure verification](SEERA-MASTER-WORKSPACE-UX-CLOSURE-QA
 | Scope ordering | Recorded, not changed: an employee outside a project-level user's scope answers 404 before the HR permission check would answer 403; still a refusal |
 | Master workspaces | Supplier View read-only, Edit / Manage form and 7 related panels preserved, customer / employee titles and breadcrumbs translated, amounts identical in both locales, permissions and routes unchanged for five roles; 105 / 105 resumed browser checks (original run 104 / 104) |
 
+### Supplier Create / Edit form Arabic (MW-03 closure) — 1 November 2026
+
+See [Supplier form verification](SEERA-SUPPLIER-FORM-ARABIC-QA-2026-11-01.md), branch `feature/seera-supplier-form-arabic-2026-11-01`, delivered HEAD `8efd42f`, base `2997db4`. This update supersedes the earlier open MW-03 form-label finding above.
+
+| ID | Status |
+| --- | --- |
+| MW-03 | Scoped form closure verified: Create/Edit field labels, placeholders, static options, quick-create dialogs and help translated; stored names, values, endpoints and financial data preserved. Real Save and Save & Close verified in both locales. |
+| SF-01 | Fixed: leading-space mismatch in the payable-account help translation key left its final clause English. |
+| SF-02 | Fixed: missing Account Code translation and generated payment-term day suffix, including new options returned by quick-create. |
+| Remaining Arabic | Unchanged Create wrapper browser title/breadcrumb, controller flash/custom validation messages and generated term suffixes in other views remain outside the three-file form scope. User-entered names remain original data. |
+
+Focused: **19 tests / 261 assertions**. Full accelerated Laravel: **838 / 10,221 assertions**. JavaScript: **12 passed**. Browser: **113 passed**, zero failures or page errors, EN/AR at 320/390/768/1440px. GO for scoped integration; production and ZATCA gates unchanged.
+
 ### Project workspace computed cells in Arabic (CU-06 closure) — 31 October 2026
 
 See [computed cell Arabic verification](SEERA-PROJECT-COMPUTED-CELL-ARABIC-QA-2026-10-31.md) (branch `feature/seera-project-computed-cell-arabic-2026-10-31`, verified HEAD `b47941b`, fixes on the branch).

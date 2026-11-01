@@ -1172,5 +1172,10 @@
     "Linked suppliers are listed on each project's page.": "يُعرض الموردون المرتبطون في صفحة كل مشروع.",
     "Auto: next under": "تلقائي: التالي ضمن",
     "Created as a liability sub-account under": "يُنشأ حساباً فرعياً للالتزامات تحت",
-    " , so the payables total on the dashboard still includes it.": "، ليظل إجمالي الدائنين في لوحة المعلومات شاملاً له."
+    ", so the payables total on the dashboard still includes it.": "، ليظل إجمالي الدائنين في لوحة المعلومات شاملاً له.",
+    "Account Code": "رمز الحساب",
+    ":name (:days days)": ":name (:days يوماً)",
+    ":count days": ":count يوماً",
+    "Add Supplier": "إضافة مورد",
+    "Create a supplier for purchasing, payables, and VAT records": "إنشاء مورد للمشتريات والحسابات الدائنة وسجلات ضريبة القيمة المضافة"
 }

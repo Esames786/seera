@@ -1,0 +1,24 @@
+{
+    "base":  "2997db4",
+    "delivered_head":  "8efd42ff5dac26986a5d25365a7a06277cdb19aa",
+    "files":  [
+                  {
+                      "path":  "lang/ar.json",
+                      "sha256":  "93D37AFF984E96857F2AA25B419BFC0C7C1E80828BCA67613A783EE45B7688DD"
+                  },
+                  {
+                      "path":  "resources/views/admin/master/suppliers/_form.blade.php",
+                      "sha256":  "BFDA77C269B969285B510BF6A25708440F2F1CDE20DCB0B519BD054B95C85BB4"
+                  },
+                  {
+                      "path":  "tests/Feature/SupplierFormArabicClosureTest.php",
+                      "sha256":  "E825F5EF8C6D12C6161C2FC60518DD91F6CF929B4D2A06ED935B4AEC16862DDF"
+                  },
+                  {
+                      "path":  "tests/manual/supplier-form-arabic-browser.cjs",
+                      "sha256":  "18C0D3AC15EC4F0A4CE14C8033AABC521B5319B250B5FD6BBD60DFA6C4E526F0"
+                  }
+              ],
+    "build_zip_sha256":  "B1FF72DAC9A9BE51DAD766EF16238D2FC46AC3F9B9E4FA36A27B9B6E06B39C4E",
+    "build_entries_verified":  18
+}

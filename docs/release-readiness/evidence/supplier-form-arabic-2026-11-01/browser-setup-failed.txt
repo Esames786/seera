@@ -1,0 +1,15 @@
+node.exe : page.fill: Timeout 90000ms exceeded.
+At line:2 char:43
++ ... 0.1:18771'; & 'D:/laragon2/bin/nodejs/node-v20.20.1-win-x64/node.exe' ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (page.fill: Timeout 90000ms exceeded.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+Call log:
+[2m  - waiting for locator('[name=email]')[22m
+
+    at login (D:\laragon2\www\seera\tests\manual\supplier-form-arabic-browser.cjs:23:16)
+    at async D:\laragon2\www\seera\tests\manual\supplier-form-arabic-browser.cjs:60:22 {
+  log: [ "  - waiting for locator('[name=email]')" ],
+  name: 'TimeoutError'
+}

@@ -60,7 +60,7 @@
             <select id="payment_term_id" name="payment_term_id" class="select">
                 <option value="">{{ __('Not set') }}</option>
                 @foreach ($paymentTerms as $term)
-                    <option value="{{ $term->id }}" @selected(old('payment_term_id', $supplier?->payment_term_id ?? $defaultTerm?->id) == $term->id)>{{ $term->label() }}</option>
+                    <option value="{{ $term->id }}" @selected(old('payment_term_id', $supplier?->payment_term_id ?? $defaultTerm?->id) == $term->id)>{{ $term->days > 0 ? __(':name (:days days)', ['name' => $term->name, 'days' => $term->days]) : $term->name }}</option>
                 @endforeach
             </select>
             <div class="small" style="margin-top:4px">{{ __('Bills without a due date fall due this many days after the bill date.') }}</div>
@@ -85,7 +85,7 @@
                     <input type="hidden" name="account_type" value="liability"/>
                     <input type="hidden" name="normal_balance" value="credit"/>
                     <input type="hidden" name="status" value="active"/>
-                    <div class="full help-box">{{ __('Created as a liability sub-account under') }} {{ $payableControl?->label() ?? 'Accounts Payable' }}{{ __(', so the payables total on the dashboard still includes it.') }}</div>
+                    <div class="full help-box">{{ __('Created as a liability sub-account under') }} {{ $payableControl?->label() ?? __('Accounts Payable') }}{{ __(', so the payables total on the dashboard still includes it.') }}</div>
                 </x-admin.quick-create>
             </div>
             <select id="linked_account_id" name="linked_account_id" class="select">
@@ -124,3 +124,19 @@
 
     <x-admin.form-actions :cancel="route('admin.master.suppliers.index')" :save-new="true"/>
 </form>
+
+@if (app()->getLocale() === 'ar')
+    @push('scripts')
+        <script>
+            // Quick-create returns the stored name with a generated English day suffix.
+            // Translate only that suffix; preserve the name, option ID and submitted data.
+            document.getElementById('payment_term_id').addEventListener('seera:option-added', function (event) {
+                const option = Array.from(this.options).find(item => item.value === event.detail.value);
+                if (!option) return;
+                option.textContent = option.textContent.replace(/ \((\d+) days\)$/, function (_, days) {
+                    return ' (' + @json(__(':count days')).replace(':count', days) + ')';
+                });
+            });
+        </script>
+    @endpush
+@endif
