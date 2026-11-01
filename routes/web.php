@@ -70,6 +70,7 @@ use App\Http\Controllers\Admin\Master\SupplierController;
 use App\Http\Controllers\Admin\Master\SupplierWorkspaceController;
 use App\Http\Controllers\Admin\Master\WarehouseController;
 use App\Http\Controllers\Admin\MyApprovalController;
+use App\Http\Controllers\Admin\NotificationCenterController;
 use App\Http\Controllers\Admin\PasswordChangeController;
 use App\Http\Controllers\Admin\PermissionMatrixController;
 use App\Http\Controllers\Admin\RoleController;
@@ -129,6 +130,12 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::get('user-guide', fn () => redirect()->route('user-guide.page', 'index.html'))->name('user-guide');
     Route::get('user-guide/{page}', [UserGuideController::class, 'show'])
         ->where('page', '[A-Za-z0-9-]+(\.html)?')->name('user-guide.page');
+});
+
+Route::middleware(['auth', 'active', 'password.changed'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('notifications', [NotificationCenterController::class, 'index'])->name('notifications.index');
+    Route::post('notifications/read-all', [NotificationCenterController::class, 'readAll'])->name('notifications.read-all');
+    Route::post('notifications/{notification}/read', [NotificationCenterController::class, 'read'])->whereUuid('notification')->name('notifications.read');
 });
 
 Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])->prefix('admin')->name('admin.')->group(function () {

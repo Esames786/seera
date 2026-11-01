@@ -9,6 +9,7 @@ use App\Models\ApprovalInstance;
 use App\Models\ApprovalInstanceStep;
 use App\Models\ApprovalWorkflow;
 use App\Models\User;
+use App\Services\Notifications\ApprovalNotificationPublisher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -137,6 +138,7 @@ class ApprovalRuntimeService
             $instance->steps()->createMany($rows);
             $subject->submitted($document);
             $this->log($actor, $instance, $previous ? 'Resubmitted' : 'Approval requested');
+            app(ApprovalNotificationPublisher::class)->notifyStep($instance);
 
             return $instance->load('steps');
         }, 3);
@@ -194,12 +196,16 @@ class ApprovalRuntimeService
                 $instance->update(['status' => 'rejected', 'rejected_at' => now()]);
                 $subject->rejected($document, $comment);
                 $this->log($actor, $instance, 'Rejected', $step);
+                app(ApprovalNotificationPublisher::class)->notifyRequester($instance, 'rejected');
             } else {
                 $this->log($actor, $instance, 'Step approved', $step);
                 if ($instance->steps()->where('is_required', true)->where('status', '!=', 'approved')->lockForUpdate()->get()->isEmpty()) {
                     $instance->update(['status' => 'approved', 'completed_at' => now()]);
                     $subject->completed($document, $actor);
                     $this->log($actor, $instance, 'Fully approved');
+                    app(ApprovalNotificationPublisher::class)->notifyRequester($instance, 'approved');
+                } else {
+                    app(ApprovalNotificationPublisher::class)->notifyStep($instance->fresh()->load('steps'));
                 }
             }
 

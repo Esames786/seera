@@ -519,4 +519,21 @@ class ApprovalRuntimeTest extends TestCase
     {
         return array_replace(['request_date' => today()->toDateString(), 'project_id' => $this->project->id, 'priority' => 'normal', 'status' => 'draft', 'lines' => [['item_id' => Item::first()->id, 'quantity' => 2, 'estimated_unit_cost' => 10]]], $changes);
     }
+    public function test_approval_notifications_follow_sequential_steps_and_completion(): void
+    {
+        $instance = $this->start();
+        $this->assertSame(1, $this->first->notifications()->count());
+        $this->assertSame(0, $this->second->notifications()->count());
+        $this->decide($instance, $this->first);
+        $this->assertSame(1, $this->second->notifications()->count());
+        $this->decide($instance, $this->second, 1);
+        $this->assertSame('approved', $this->requester->notifications()->first()->data['event']);
+    }
+
+    public function test_rejection_notifies_requester(): void
+    {
+        $instance = $this->start();
+        $this->decide($instance, $this->first, 0, 'reject', 'Needs correction');
+        $this->assertSame('rejected', $this->requester->notifications()->first()->data['event']);
+    }
 }
