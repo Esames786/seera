@@ -2,7 +2,7 @@
 
 Branch: `feature/seera-notification-center-mvp-2026-11-01`.
 
-Delivered HEAD **`d916ae072f372f0fdca3c58165f743c004890723`** and ancestry from **`b88eec7`** were verified after fetch. The unrelated untracked `docs/FABLE-HANDOFF-2026-10-08.md` was preserved. Verification crossed into 2 November, Asia/Karachi. No release branch merge or production operation was performed.
+Delivered HEAD **`d916ae072f372f0fdca3c58165f743c004890723`** and ancestry from **`b88eec7`** were verified after fetch. Verified fixes/source commit: **`33fd0f44ba63dc79ec115349d0c8db18165b022b`**; the subsequent report clarification changes no application/test source. The unrelated untracked `docs/FABLE-HANDOFF-2026-10-08.md` was preserved. Verification crossed into 2 November, Asia/Karachi. No release branch merge or production operation was performed.
 
 ## 1. Review of all 12 delivered files
 
@@ -93,7 +93,7 @@ The native bell opens recent history; View all opens the inbox. Read/Mark All re
 
 No Vite CSS/JS bundle source changed. The viewport handler is rendered by Blade. Existing build archive SHA-256 remains **`B1FF72DAC9A9BE51DAD766EF16238D2FC46AC3F9B9E4FA36A27B9B6E06B39C4E`**; all **18 archive entries** decompressed successfully during verification. No new bundle build was required. Public assets and the core release branch are not changed by this review.
 
-**GO for feature integration review.** No release-blocking defect remains in the verified notification scope. All required automated checks passed after the corrections above. Owner approval of integration, client acceptance and a controlled migration/rollout plan remain pending; this is **not production deployment approval**. Production ZATCA remains disabled.
+**GO for feature integration review.** No release-blocking defect remains in the verified notification scope. All required automated checks passed after the corrections above. Owner approval of integration, client acceptance and a controlled migration/rollout plan remain pending; this is **not production deployment approval**. Production ZATCA was disabled in the test fixtures. Production was not accessed or revalidated; no production ZATCA setting was changed or activated.
 
 ### Fix files and evidence integrity
 
