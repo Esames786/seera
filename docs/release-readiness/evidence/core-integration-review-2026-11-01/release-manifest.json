@@ -1,0 +1,15 @@
+{
+    "release_baseline":  "e55a9fb307c6e52244a6f99c3bd34d018e05b10b",
+    "candidate":  "c19943f9cb8df2dfe3dae30eee6031b736f3a777",
+    "candidate_tree":  "3f02c32d88d9699140f24af1438fdf9f5be1ef24",
+    "supplier_commits":  [
+                             "df5202039d790a5ca4febfa8a88679f8f02f2a50",
+                             "bf8a40cc46ec02afebb6014cf4ae326740796ada",
+                             "c19943f9cb8df2dfe3dae30eee6031b736f3a777"
+                         ],
+    "application_diff_from_candidate":  "none",
+    "build_zip_sha256":  "B1FF72DAC9A9BE51DAD766EF16238D2FC46AC3F9B9E4FA36A27B9B6E06B39C4E",
+    "build_entries_verified":  18,
+    "schema_diff_from_reported_production_aca78ee":  "none",
+    "test_environment":  "testing / disposable SQLite / sandbox / production ZATCA false"
+}

@@ -1,0 +1,107 @@
+[
+    {
+        "reference":  "origin/feature/seera-ar-register-arabic-2026-10-29",
+        "head":  "bf3e6b085cbded1d1b792e1d2c175f7f951b7742",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-arabic-gap02-2026-10-28",
+        "head":  "cd212a0e98f6d07eaeeaf91944eeac2e04a77dca",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-closure-project-panel-arabic-2026-10-31",
+        "head":  "5de645d3896f052dba3e8fc6067a92b59c34d041",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-closure-ux-projects-2026-10-31",
+        "head":  "05b183bd6b629bb90945cf5f37f67a0b44331521",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-connected-workspaces-2026-09-23",
+        "head":  "dc048ff0d8a15b61a2487fc2e4ebbbc3792d78a3",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-equipment-arabic-2026-10-28",
+        "head":  "db550177eaadc656946dbf74f4917453893a1ae2",
+        "ancestorOfRelease":  false
+    },
+    {
+        "reference":  "origin/feature/seera-hr-dashboard-arabic-2026-10-31",
+        "head":  "5cc6819f925cf83b4755872c230981f462dfc560",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-hr-dashboard-truthful-ui-2026-10-30",
+        "head":  "a4d03226f2690923b5afdb173d2b68db291f7013",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-hr-release-candidate-2026-10-31",
+        "head":  "5f852e2395e34fa9bd284490913d3196b16f028e",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-hr-reports-mvp-2026-10-30",
+        "head":  "7703f1d72825574a8ea18016836ac0ce6b9d55dd",
+        "ancestorOfRelease":  false
+    },
+    {
+        "reference":  "origin/feature/seera-invoice-localization-final-2026-10-29",
+        "head":  "f448fb05b319a194802b4cccdc378a7c6c3792f5",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-invoice-reopen-messages-2026-10-29",
+        "head":  "70b31e0e3bd2c1d2b2490625ac330d8ed6507c42",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-master-workspace-ux-closure-2026-11-01",
+        "head":  "2997db477cca91b0ef95fca9a32f3d9a565dfbb8",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-project-computed-cell-arabic-2026-10-31",
+        "head":  "707c5ebe8b70b748baae2ce5b51c869ba1a8c3fc",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-project-reports-mvp-2026-10-29",
+        "head":  "588d83b9b5760754053778fc68cda4b0b8b9c768",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-release-integration-2026-10-28",
+        "head":  "ef3114bb3e0f6041bda00a33cc2d23845041e90d",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-sales-vat-authorization-2026-10-28",
+        "head":  "1c446a6f89799405c788cc7386cde05e763775b1",
+        "ancestorOfRelease":  true
+    },
+    {
+        "reference":  "origin/feature/seera-supplier-form-arabic-2026-11-01",
+        "head":  "c19943f9cb8df2dfe3dae30eee6031b736f3a777",
+        "ancestorOfRelease":  false
+    },
+    {
+        "reference":  "origin/feature/seera-test-speed-2026-10-30",
+        "head":  "6be57207cbfe92aa647d457d30055c858c0a4a19",
+        "ancestorOfRelease":  false
+    },
+    {
+        "reference":  "origin/feature/seera-topbar-comingsoon-2026-10-28",
+        "head":  "5c0b88583bb00766ef6d40d2f689eca0ee7b32fc",
+        "ancestorOfRelease":  false
+    },
+    {
+        "reference":  "origin/fix/seera-po-vat-superadmin-2026-10-26",
+        "head":  "627287badf6099ef8d05998f70be35a7957c281d",
+        "ancestorOfRelease":  false
+    }
+]

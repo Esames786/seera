@@ -1,5 +1,15 @@
 # Open findings — 26 October 2026
 
+## Core release integration review — 1 November 2026
+
+See [core integration review](SEERA-CORE-INTEGRATION-REVIEW-2026-11-01.md). Release branch `release/seera-core-integration-review-2026-11-01` was verified at baseline `e55a9fb`, then fast-forwarded to application candidate `c19943f` only after its Supplier gate passed. All 16 checked QA-approved integration anchors are included.
+
+- Supplier gate: **20 tests / 267 assertions**, **117 browser checks**, all passed.
+- Release full regression: **839 tests / 10,227 assertions**, JavaScript **12 passed**.
+- Critical browser: **115/116** initially; the one receipt failure was the harness pairing Cash with Bank Transfer. Corrected journey **4/4**, including rejection of that mismatch, valid receipt and posted-edit refusal. Read-only invoice/GL/VAT reconciliation **11/11**. No unresolved application failure.
+- The Supplier Create document title/breadcrumb gap is now closed. Existing broader Arabic/controller-message gaps and GATE-01/GATE-02 remain.
+- **GO for integration/client UAT. Production deployment requires explicit owner approval and acceptance/operational evidence; production ZATCA remains disabled.** No production operation was performed.
+
 ## Closure update — 27 October 2026
 
 See [release defects closure](SEERA-DEFECT-CLOSURE-2026-10-27.md) for the candidate code, test evidence and artifact. The original table below is preserved as the **26 October baseline**, not the current code status.

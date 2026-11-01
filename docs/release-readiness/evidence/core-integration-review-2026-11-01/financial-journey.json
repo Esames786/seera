@@ -1,0 +1,10 @@
+{
+  "invoicePath": "/admin/accounting/accounts-receivable/11",
+  "expected": {
+    "taxable": 200,
+    "vat": 30,
+    "total": 230,
+    "received": 100,
+    "balance": 130
+  }
+}

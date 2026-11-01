@@ -1,0 +1,897 @@
+{
+  "generatedAt": "2026-11-01T16:16:33.334Z",
+  "base": "http://127.0.0.1:18771",
+  "summary": {
+    "total": 116,
+    "passed": 115,
+    "failed": 1,
+    "pageErrors": 0
+  },
+  "results": [
+    {
+      "name": "en dashboard opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en dashboard 320px fits",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "en dashboard 390px fits",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "en dashboard 768px fits",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "en dashboard 1440px fits",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "en hr opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en hr 320px fits",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "en hr 390px fits",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "en hr 768px fits",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "en hr 1440px fits",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "en hr-reports opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en hr-reports 320px fits",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "en hr-reports 390px fits",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "en hr-reports 768px fits",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "en hr-reports 1440px fits",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "en employee opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en employee 320px fits",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "en employee 390px fits",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "en employee 768px fits",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "en employee 1440px fits",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "en project opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en project 320px fits",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "en project 390px fits",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "en project 768px fits",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "en project 1440px fits",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "en project-manage opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en budget opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en project-reports opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en customer opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en customer 320px fits",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "en customer 390px fits",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "en customer 768px fits",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "en customer 1440px fits",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "en supplier opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en supplier 320px fits",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "en supplier 390px fits",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "en supplier 768px fits",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "en supplier 1440px fits",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "en supplier-manage opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en purchase-requests opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en purchase-orders opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en goods-receipts opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en supplier-bills opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en invoices opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en credits opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en approvals opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en journals opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en ledger opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en vat-report opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en trial-balance opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "ar dashboard opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar dashboard 320px fits",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "ar dashboard 390px fits",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "ar dashboard 768px fits",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "ar dashboard 1440px fits",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "ar hr opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar hr 320px fits",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "ar hr 390px fits",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "ar hr 768px fits",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "ar hr 1440px fits",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "ar hr-reports opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar hr-reports 320px fits",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "ar hr-reports 390px fits",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "ar hr-reports 768px fits",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "ar hr-reports 1440px fits",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "ar employee opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar employee 320px fits",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "ar employee 390px fits",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "ar employee 768px fits",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "ar employee 1440px fits",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "ar project opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar project 320px fits",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "ar project 390px fits",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "ar project 768px fits",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "ar project 1440px fits",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "ar project-manage opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar budget opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar project-reports opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar customer opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar customer 320px fits",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "ar customer 390px fits",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "ar customer 768px fits",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "ar customer 1440px fits",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "ar supplier opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar supplier 320px fits",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "ar supplier 390px fits",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "ar supplier 768px fits",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "ar supplier 1440px fits",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "ar supplier-manage opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar purchase-requests opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar purchase-orders opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar goods-receipts opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar supplier-bills opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar invoices opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar credits opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar approvals opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar journals opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar ledger opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar vat-report opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar trial-balance opens with expected direction",
+      "ok": true,
+      "detail": {
+        "status": 200,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "Super Admin nonstandard VAT without reason refused",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Super Admin reasoned override creates draft",
+      "ok": true,
+      "detail": {
+        "url": "/admin/accounting/accounts-receivable/10"
+      }
+    },
+    {
+      "name": "Standard invoice draft shows correct 230 total",
+      "ok": true,
+      "detail": {
+        "invoicePath": "/admin/accounting/accounts-receivable/11"
+      }
+    },
+    {
+      "name": "Invoice approval posts and removes edit/approve action",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Approved invoice bilingual printable document opens",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Partial receipt persists and leaves 130 outstanding",
+      "ok": false,
+      "detail": null
+    },
+    {
+      "name": "Ordinary Finance VAT control locked",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Ordinary Finance forged 5 percent request refused",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Ordinary Finance standard 15 percent invoice saves",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Finance denied /admin/hr/dashboard",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Finance denied /admin/master/suppliers/1/edit",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "HR permitted workforce report",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "HR denied /admin/accounting/accounts-receivable",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "HR denied /admin/accounting/journal-entries",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Site role permitted own project",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Site role denied foreign project",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "errors": []
+}

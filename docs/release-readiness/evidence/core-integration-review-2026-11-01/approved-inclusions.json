@@ -1,0 +1,82 @@
+[
+    {
+        "area":  "Finance/ZATCA deployment blockers",
+        "approvedHead":  "aca78eea1388c249012239ffe207c6b2454db951",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "Purchase VAT and Arabic mobile",
+        "approvedHead":  "dc048ff0d8a15b61a2487fc2e4ebbbc3792d78a3",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "Sales VAT",
+        "approvedHead":  "1c446a6f89799405c788cc7386cde05e763775b1",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "Procurement/Finance/Equipment integration",
+        "approvedHead":  "ef3114bb3e0f6041bda00a33cc2d23845041e90d",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "Priority Arabic",
+        "approvedHead":  "cd212a0e98f6d07eaeeaf91944eeac2e04a77dca",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "AR register",
+        "approvedHead":  "bf3e6b085cbded1d1b792e1d2c175f7f951b7742",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "Invoice messages",
+        "approvedHead":  "70b31e0e3bd2c1d2b2490625ac330d8ed6507c42",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "Project Reports",
+        "approvedHead":  "588d83b9b5760754053778fc68cda4b0b8b9c768",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "HR dashboard authorization",
+        "approvedHead":  "a4d03226f2690923b5afdb173d2b68db291f7013",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "HR dashboard Arabic",
+        "approvedHead":  "5cc6819f925cf83b4755872c230981f462dfc560",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "HR integrated reports/tooling",
+        "approvedHead":  "5f852e2395e34fa9bd284490913d3196b16f028e",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "Project workspace UX",
+        "approvedHead":  "05b183bd6b629bb90945cf5f37f67a0b44331521",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "Project panels Arabic",
+        "approvedHead":  "5de645d3896f052dba3e8fc6067a92b59c34d041",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "Project computed cells Arabic",
+        "approvedHead":  "707c5ebe8b70b748baae2ce5b51c869ba1a8c3fc",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "Customer/Supplier/Employee workspace UX",
+        "approvedHead":  "2997db477cca91b0ef95fca9a32f3d9a565dfbb8",
+        "includedInCandidate":  true
+    },
+    {
+        "area":  "Supplier form Arabic",
+        "approvedHead":  "e55a9fb307c6e52244a6f99c3bd34d018e05b10b",
+        "includedInCandidate":  true
+    }
+]

@@ -1,0 +1,5 @@
+PASS Cash account with Bank Transfer is refused server-side
+PASS Correct bank receipt saves and returns to invoice
+PASS 100 received, 130 outstanding after corrected receipt
+PASS Posted invoice edit remains forbidden
+{"total":4,"passed":4,"failed":0,"pageErrors":0}

@@ -5,7 +5,7 @@ const os = require('os');
 const { chromium } = require(process.env.SEERA_PLAYWRIGHT || 'D:/laragon2/www/property_handle/node_modules/playwright');
 const BASE = process.env.SEERA_BASE || 'http://127.0.0.1:18771';
 if (!/^http:\/\/127\.0\.0\.1:18771$/.test(BASE)) throw new Error('Only the isolated supplier QA fixture on 18771 is supported');
-const OUT = path.resolve(__dirname, '../../docs/release-readiness/evidence/supplier-form-arabic-2026-11-01');
+const OUT = process.env.SEERA_OUT || path.resolve(__dirname, '../../docs/release-readiness/evidence/supplier-form-arabic-2026-11-01');
 const SHOTS = path.join(os.tmpdir(), 'seera-supplier-form-arabic-shots');
 const AR = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../lang/ar.json'), 'utf8'));
 const results = [], errors = [];
@@ -66,6 +66,11 @@ async function inspect(page, selector) {
             for (const [screen, url] of Object.entries(routes)) {
                 const response = await page.goto(BASE + url);
                 check(`${lang} ${screen} opens`, response.status() === 200);
+                const title = screen === 'create' ? 'Add Supplier' : 'Supplier Workspace';
+                const breadcrumb = `Master Setup / Suppliers / ${title}`;
+                check(`${lang} ${screen} document title and breadcrumb translate`,
+                    (await page.title()).startsWith(lang === 'ar' ? AR[title] : title) &&
+                    (await page.locator('.breadcrumb').innerText()).trim().endsWith(lang === 'ar' ? AR[breadcrumb] : breadcrumb));
                 contracts[`${lang}-${screen}`] = await contract(page);
                 check(`${lang} ${screen} contains main form and three dialogs`, contracts[`${lang}-${screen}`].length === 4);
                 const controls = await page.locator('#profile [name=_save_action]').evaluateAll(xs => xs.map(x => x.value));

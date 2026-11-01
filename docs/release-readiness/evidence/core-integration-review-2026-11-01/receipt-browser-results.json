@@ -1,0 +1,31 @@
+{
+  "summary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "pageErrors": 0
+  },
+  "results": [
+    {
+      "name": "Cash account with Bank Transfer is refused server-side",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Correct bank receipt saves and returns to invoice",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "100 received, 130 outstanding after corrected receipt",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Posted invoice edit remains forbidden",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "errors": []
+}

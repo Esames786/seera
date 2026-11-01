@@ -1,0 +1,76 @@
+{
+    "total": 11,
+    "passed": 11,
+    "failed": 0,
+    "checks": [
+        {
+            "name": "taxable_amount",
+            "ok": true,
+            "actual": 200
+        },
+        {
+            "name": "vat_amount",
+            "ok": true,
+            "actual": 30
+        },
+        {
+            "name": "total_amount",
+            "ok": true,
+            "actual": 230
+        },
+        {
+            "name": "received_amount",
+            "ok": true,
+            "actual": 100
+        },
+        {
+            "name": "balance_amount",
+            "ok": true,
+            "actual": 130
+        },
+        {
+            "name": "partially paid status",
+            "ok": true,
+            "actual": "partially_paid"
+        },
+        {
+            "name": "one output VAT record, 200 taxable / 30 VAT",
+            "ok": true,
+            "actual": {
+                "rows": 1,
+                "taxable": 200,
+                "vat": 30
+            }
+        },
+        {
+            "name": "one receipt for 100",
+            "ok": true,
+            "actual": 100
+        },
+        {
+            "name": "invoice journal balanced",
+            "ok": true,
+            "actual": {
+                "rows": 3,
+                "debit": 230,
+                "credit": 230
+            }
+        },
+        {
+            "name": "receipt journal balanced",
+            "ok": true,
+            "actual": {
+                "rows": 2,
+                "debit": 100,
+                "credit": 100
+            }
+        },
+        {
+            "name": "AR journal net equals invoice outstanding 130",
+            "ok": true,
+            "actual": {
+                "balance": 130
+            }
+        }
+    ]
+}

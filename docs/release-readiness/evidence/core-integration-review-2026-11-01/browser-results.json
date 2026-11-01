@@ -1,0 +1,1698 @@
+{
+  "generatedAt": "2026-11-01T16:11:11.826Z",
+  "base": "http://127.0.0.1:18771",
+  "summary": {
+    "total": 117,
+    "passed": 117,
+    "failed": 0,
+    "pageErrors": 0
+  },
+  "results": [
+    {
+      "name": "en create opens",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en create document title and breadcrumb translate",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en create contains main form and three dialogs",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en create Save and Save & Close remain",
+      "ok": true,
+      "detail": [
+        "stay",
+        "new",
+        "close"
+      ]
+    },
+    {
+      "name": "en create 320px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "Supplier Information",
+          "Supplier Name *",
+          "Supplier Code",
+          "Supplier Category",
+          "+ New",
+          "City / Location",
+          "Not rated",
+          "Green",
+          "Amber",
+          "Red",
+          "VAT Number",
+          "CR Number",
+          "Opening Balance (SAR)",
+          "Contact Person",
+          "Phone",
+          "Email",
+          "Status *",
+          "Address",
+          "Payment & Banking",
+          "Payment Terms",
+          "+ New",
+          "Bills without a due date fall due this many days after the bill date.",
+          "Accepted Payment Types",
+          "Limits the cash / bank accounts offered when recording a payment to this supplier.",
+          "Linked Payable Account",
+          "+ New",
+          "Bills, payments and goods receipts for this supplier post to this account.",
+          "Bank Name",
+          "Account Holder Name",
+          "IBAN",
+          "Projects this Supplier Works For",
+          "Linked suppliers are listed on each project's page.",
+          "Save",
+          "Save & new",
+          "Save & close"
+        ],
+        "latinPlaceholders": [
+          "Auto: SUP-001",
+          "Riyadh, Jeddah, Dammam...",
+          "Supplier address...",
+          "Al Rajhi Bank"
+        ],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 12,
+        "right": 308
+      }
+    },
+    {
+      "name": "en create 320px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Supplier Category ×",
+          "Category Name *",
+          "Cancel",
+          "Add Category"
+        ],
+        "latinPlaceholders": [
+          "e.g. Scaffolding, Transport"
+        ],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 30,
+        "right": 290
+      }
+    },
+    {
+      "name": "en create 320px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payment Term ×",
+          "Name *",
+          "Days from bill date *",
+          "Description",
+          "Cancel",
+          "Add Term"
+        ],
+        "latinPlaceholders": [
+          "e.g. 45 Days",
+          "As agreed with the supplier"
+        ],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 30,
+        "right": 290
+      }
+    },
+    {
+      "name": "en create 320px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payable Sub-Account ×",
+          "Account Name *",
+          "Account Code",
+          "Opening Balance (SAR)",
+          "Created as a liability sub-account under 2100 - Accounts Payable, so the payables total on the dashboard still includes it.",
+          "Cancel",
+          "Create Account"
+        ],
+        "latinPlaceholders": [
+          "e.g. Accounts Payable - Gulf Steel",
+          "Auto: next under 2100"
+        ],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 30,
+        "right": 290
+      }
+    },
+    {
+      "name": "en create 390px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "Supplier Information",
+          "Supplier Name *",
+          "Supplier Code",
+          "Supplier Category",
+          "+ New",
+          "City / Location",
+          "Not rated",
+          "Green",
+          "Amber",
+          "Red",
+          "VAT Number",
+          "CR Number",
+          "Opening Balance (SAR)",
+          "Contact Person",
+          "Phone",
+          "Email",
+          "Status *",
+          "Address",
+          "Payment & Banking",
+          "Payment Terms",
+          "+ New",
+          "Bills without a due date fall due this many days after the bill date.",
+          "Accepted Payment Types",
+          "Limits the cash / bank accounts offered when recording a payment to this supplier.",
+          "Linked Payable Account",
+          "+ New",
+          "Bills, payments and goods receipts for this supplier post to this account.",
+          "Bank Name",
+          "Account Holder Name",
+          "IBAN",
+          "Projects this Supplier Works For",
+          "Linked suppliers are listed on each project's page.",
+          "Save",
+          "Save & new",
+          "Save & close"
+        ],
+        "latinPlaceholders": [
+          "Auto: SUP-001",
+          "Riyadh, Jeddah, Dammam...",
+          "Supplier address...",
+          "Al Rajhi Bank"
+        ],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 12,
+        "right": 378
+      }
+    },
+    {
+      "name": "en create 390px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Supplier Category ×",
+          "Category Name *",
+          "Cancel",
+          "Add Category"
+        ],
+        "latinPlaceholders": [
+          "e.g. Scaffolding, Transport"
+        ],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 30,
+        "right": 360
+      }
+    },
+    {
+      "name": "en create 390px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payment Term ×",
+          "Name *",
+          "Days from bill date *",
+          "Description",
+          "Cancel",
+          "Add Term"
+        ],
+        "latinPlaceholders": [
+          "e.g. 45 Days",
+          "As agreed with the supplier"
+        ],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 30,
+        "right": 360
+      }
+    },
+    {
+      "name": "en create 390px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payable Sub-Account ×",
+          "Account Name *",
+          "Account Code",
+          "Opening Balance (SAR)",
+          "Created as a liability sub-account under 2100 - Accounts Payable, so the payables total on the dashboard still includes it.",
+          "Cancel",
+          "Create Account"
+        ],
+        "latinPlaceholders": [
+          "e.g. Accounts Payable - Gulf Steel",
+          "Auto: next under 2100"
+        ],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 30,
+        "right": 360
+      }
+    },
+    {
+      "name": "en create 768px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "Supplier Information",
+          "Supplier Name *",
+          "Supplier Code",
+          "Supplier Category",
+          "+ New",
+          "City / Location",
+          "Not rated",
+          "Green",
+          "Amber",
+          "Red",
+          "VAT Number",
+          "CR Number",
+          "Opening Balance (SAR)",
+          "Contact Person",
+          "Phone",
+          "Email",
+          "Status *",
+          "Address",
+          "Payment & Banking",
+          "Payment Terms",
+          "+ New",
+          "Bills without a due date fall due this many days after the bill date.",
+          "Accepted Payment Types",
+          "Limits the cash / bank accounts offered when recording a payment to this supplier.",
+          "Linked Payable Account",
+          "+ New",
+          "Bills, payments and goods receipts for this supplier post to this account.",
+          "Bank Name",
+          "Account Holder Name",
+          "IBAN",
+          "Projects this Supplier Works For",
+          "Linked suppliers are listed on each project's page.",
+          "Save",
+          "Save & new",
+          "Save & close"
+        ],
+        "latinPlaceholders": [
+          "Auto: SUP-001",
+          "Riyadh, Jeddah, Dammam...",
+          "Supplier address...",
+          "Al Rajhi Bank"
+        ],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 22,
+        "right": 746
+      }
+    },
+    {
+      "name": "en create 768px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Supplier Category ×",
+          "Category Name *",
+          "Cancel",
+          "Add Category"
+        ],
+        "latinPlaceholders": [
+          "e.g. Scaffolding, Transport"
+        ],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 154,
+        "right": 614
+      }
+    },
+    {
+      "name": "en create 768px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payment Term ×",
+          "Name *",
+          "Days from bill date *",
+          "Description",
+          "Cancel",
+          "Add Term"
+        ],
+        "latinPlaceholders": [
+          "e.g. 45 Days",
+          "As agreed with the supplier"
+        ],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 154,
+        "right": 614
+      }
+    },
+    {
+      "name": "en create 768px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payable Sub-Account ×",
+          "Account Name *",
+          "Account Code",
+          "Opening Balance (SAR)",
+          "Created as a liability sub-account under 2100 - Accounts Payable, so the payables total on the dashboard still includes it.",
+          "Cancel",
+          "Create Account"
+        ],
+        "latinPlaceholders": [
+          "e.g. Accounts Payable - Gulf Steel",
+          "Auto: next under 2100"
+        ],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 154,
+        "right": 614
+      }
+    },
+    {
+      "name": "en create 1440px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "Supplier Information",
+          "Supplier Name *",
+          "Supplier Code",
+          "Supplier Category",
+          "+ New",
+          "City / Location",
+          "Not rated",
+          "Green",
+          "Amber",
+          "Red",
+          "VAT Number",
+          "CR Number",
+          "Opening Balance (SAR)",
+          "Contact Person",
+          "Phone",
+          "Email",
+          "Status *",
+          "Address",
+          "Payment & Banking",
+          "Payment Terms",
+          "+ New",
+          "Bills without a due date fall due this many days after the bill date.",
+          "Accepted Payment Types",
+          "Limits the cash / bank accounts offered when recording a payment to this supplier.",
+          "Linked Payable Account",
+          "+ New",
+          "Bills, payments and goods receipts for this supplier post to this account.",
+          "Bank Name",
+          "Account Holder Name",
+          "IBAN",
+          "Projects this Supplier Works For",
+          "Linked suppliers are listed on each project's page.",
+          "Save",
+          "Save & new",
+          "Save & close"
+        ],
+        "latinPlaceholders": [
+          "Auto: SUP-001",
+          "Riyadh, Jeddah, Dammam...",
+          "Supplier address...",
+          "Al Rajhi Bank"
+        ],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 267,
+        "right": 1418
+      }
+    },
+    {
+      "name": "en create 1440px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Supplier Category ×",
+          "Category Name *",
+          "Cancel",
+          "Add Category"
+        ],
+        "latinPlaceholders": [
+          "e.g. Scaffolding, Transport"
+        ],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 490,
+        "right": 950
+      }
+    },
+    {
+      "name": "en create 1440px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payment Term ×",
+          "Name *",
+          "Days from bill date *",
+          "Description",
+          "Cancel",
+          "Add Term"
+        ],
+        "latinPlaceholders": [
+          "e.g. 45 Days",
+          "As agreed with the supplier"
+        ],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 490,
+        "right": 950
+      }
+    },
+    {
+      "name": "en create 1440px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payable Sub-Account ×",
+          "Account Name *",
+          "Account Code",
+          "Opening Balance (SAR)",
+          "Created as a liability sub-account under 2100 - Accounts Payable, so the payables total on the dashboard still includes it.",
+          "Cancel",
+          "Create Account"
+        ],
+        "latinPlaceholders": [
+          "e.g. Accounts Payable - Gulf Steel",
+          "Auto: next under 2100"
+        ],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 490,
+        "right": 950
+      }
+    },
+    {
+      "name": "en edit opens",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en edit document title and breadcrumb translate",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en edit contains main form and three dialogs",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en edit Save and Save & Close remain",
+      "ok": true,
+      "detail": [
+        "stay",
+        "new",
+        "close"
+      ]
+    },
+    {
+      "name": "en edit keeps seven related panels",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en edit 320px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "Supplier Information",
+          "Supplier Name *",
+          "Supplier Code",
+          "Supplier Category",
+          "+ New",
+          "City / Location",
+          "Not rated",
+          "Green",
+          "Amber",
+          "Red",
+          "VAT Number",
+          "CR Number",
+          "Opening Balance (SAR)",
+          "Contact Person",
+          "Phone",
+          "Email",
+          "Status *",
+          "Address",
+          "Payment & Banking",
+          "Payment Terms",
+          "+ New",
+          "Bills without a due date fall due this many days after the bill date.",
+          "Accepted Payment Types",
+          "Limits the cash / bank accounts offered when recording a payment to this supplier.",
+          "Linked Payable Account",
+          "+ New",
+          "Bills, payments and goods receipts for this supplier post to this account.",
+          "Bank Name",
+          "Account Holder Name",
+          "IBAN",
+          "Save",
+          "Save & new",
+          "Save & close"
+        ],
+        "latinPlaceholders": [
+          "Auto: SUP-001",
+          "Riyadh, Jeddah, Dammam...",
+          "Supplier address...",
+          "Al Rajhi Bank"
+        ],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 12,
+        "right": 308
+      }
+    },
+    {
+      "name": "en edit 320px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Supplier Category ×",
+          "Category Name *",
+          "Cancel",
+          "Add Category"
+        ],
+        "latinPlaceholders": [
+          "e.g. Scaffolding, Transport"
+        ],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 30,
+        "right": 290
+      }
+    },
+    {
+      "name": "en edit 320px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payment Term ×",
+          "Name *",
+          "Days from bill date *",
+          "Description",
+          "Cancel",
+          "Add Term"
+        ],
+        "latinPlaceholders": [
+          "e.g. 45 Days",
+          "As agreed with the supplier"
+        ],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 30,
+        "right": 290
+      }
+    },
+    {
+      "name": "en edit 320px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payable Sub-Account ×",
+          "Account Name *",
+          "Account Code",
+          "Opening Balance (SAR)",
+          "Created as a liability sub-account under 2100 - Accounts Payable, so the payables total on the dashboard still includes it.",
+          "Cancel",
+          "Create Account"
+        ],
+        "latinPlaceholders": [
+          "e.g. Accounts Payable - Gulf Steel",
+          "Auto: next under 2100"
+        ],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 30,
+        "right": 290
+      }
+    },
+    {
+      "name": "en edit 390px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "Supplier Information",
+          "Supplier Name *",
+          "Supplier Code",
+          "Supplier Category",
+          "+ New",
+          "City / Location",
+          "Not rated",
+          "Green",
+          "Amber",
+          "Red",
+          "VAT Number",
+          "CR Number",
+          "Opening Balance (SAR)",
+          "Contact Person",
+          "Phone",
+          "Email",
+          "Status *",
+          "Address",
+          "Payment & Banking",
+          "Payment Terms",
+          "+ New",
+          "Bills without a due date fall due this many days after the bill date.",
+          "Accepted Payment Types",
+          "Limits the cash / bank accounts offered when recording a payment to this supplier.",
+          "Linked Payable Account",
+          "+ New",
+          "Bills, payments and goods receipts for this supplier post to this account.",
+          "Bank Name",
+          "Account Holder Name",
+          "IBAN",
+          "Save",
+          "Save & new",
+          "Save & close"
+        ],
+        "latinPlaceholders": [
+          "Auto: SUP-001",
+          "Riyadh, Jeddah, Dammam...",
+          "Supplier address...",
+          "Al Rajhi Bank"
+        ],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 12,
+        "right": 378
+      }
+    },
+    {
+      "name": "en edit 390px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Supplier Category ×",
+          "Category Name *",
+          "Cancel",
+          "Add Category"
+        ],
+        "latinPlaceholders": [
+          "e.g. Scaffolding, Transport"
+        ],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 30,
+        "right": 360
+      }
+    },
+    {
+      "name": "en edit 390px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payment Term ×",
+          "Name *",
+          "Days from bill date *",
+          "Description",
+          "Cancel",
+          "Add Term"
+        ],
+        "latinPlaceholders": [
+          "e.g. 45 Days",
+          "As agreed with the supplier"
+        ],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 30,
+        "right": 360
+      }
+    },
+    {
+      "name": "en edit 390px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payable Sub-Account ×",
+          "Account Name *",
+          "Account Code",
+          "Opening Balance (SAR)",
+          "Created as a liability sub-account under 2100 - Accounts Payable, so the payables total on the dashboard still includes it.",
+          "Cancel",
+          "Create Account"
+        ],
+        "latinPlaceholders": [
+          "e.g. Accounts Payable - Gulf Steel",
+          "Auto: next under 2100"
+        ],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 30,
+        "right": 360
+      }
+    },
+    {
+      "name": "en edit 768px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "Supplier Information",
+          "Supplier Name *",
+          "Supplier Code",
+          "Supplier Category",
+          "+ New",
+          "City / Location",
+          "Not rated",
+          "Green",
+          "Amber",
+          "Red",
+          "VAT Number",
+          "CR Number",
+          "Opening Balance (SAR)",
+          "Contact Person",
+          "Phone",
+          "Email",
+          "Status *",
+          "Address",
+          "Payment & Banking",
+          "Payment Terms",
+          "+ New",
+          "Bills without a due date fall due this many days after the bill date.",
+          "Accepted Payment Types",
+          "Limits the cash / bank accounts offered when recording a payment to this supplier.",
+          "Linked Payable Account",
+          "+ New",
+          "Bills, payments and goods receipts for this supplier post to this account.",
+          "Bank Name",
+          "Account Holder Name",
+          "IBAN",
+          "Save",
+          "Save & new",
+          "Save & close"
+        ],
+        "latinPlaceholders": [
+          "Auto: SUP-001",
+          "Riyadh, Jeddah, Dammam...",
+          "Supplier address...",
+          "Al Rajhi Bank"
+        ],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 22,
+        "right": 746
+      }
+    },
+    {
+      "name": "en edit 768px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Supplier Category ×",
+          "Category Name *",
+          "Cancel",
+          "Add Category"
+        ],
+        "latinPlaceholders": [
+          "e.g. Scaffolding, Transport"
+        ],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 154,
+        "right": 614
+      }
+    },
+    {
+      "name": "en edit 768px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payment Term ×",
+          "Name *",
+          "Days from bill date *",
+          "Description",
+          "Cancel",
+          "Add Term"
+        ],
+        "latinPlaceholders": [
+          "e.g. 45 Days",
+          "As agreed with the supplier"
+        ],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 154,
+        "right": 614
+      }
+    },
+    {
+      "name": "en edit 768px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payable Sub-Account ×",
+          "Account Name *",
+          "Account Code",
+          "Opening Balance (SAR)",
+          "Created as a liability sub-account under 2100 - Accounts Payable, so the payables total on the dashboard still includes it.",
+          "Cancel",
+          "Create Account"
+        ],
+        "latinPlaceholders": [
+          "e.g. Accounts Payable - Gulf Steel",
+          "Auto: next under 2100"
+        ],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 154,
+        "right": 614
+      }
+    },
+    {
+      "name": "en edit 1440px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "Supplier Information",
+          "Supplier Name *",
+          "Supplier Code",
+          "Supplier Category",
+          "+ New",
+          "City / Location",
+          "Not rated",
+          "Green",
+          "Amber",
+          "Red",
+          "VAT Number",
+          "CR Number",
+          "Opening Balance (SAR)",
+          "Contact Person",
+          "Phone",
+          "Email",
+          "Status *",
+          "Address",
+          "Payment & Banking",
+          "Payment Terms",
+          "+ New",
+          "Bills without a due date fall due this many days after the bill date.",
+          "Accepted Payment Types",
+          "Limits the cash / bank accounts offered when recording a payment to this supplier.",
+          "Linked Payable Account",
+          "+ New",
+          "Bills, payments and goods receipts for this supplier post to this account.",
+          "Bank Name",
+          "Account Holder Name",
+          "IBAN",
+          "Save",
+          "Save & new",
+          "Save & close"
+        ],
+        "latinPlaceholders": [
+          "Auto: SUP-001",
+          "Riyadh, Jeddah, Dammam...",
+          "Supplier address...",
+          "Al Rajhi Bank"
+        ],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 267,
+        "right": 1418
+      }
+    },
+    {
+      "name": "en edit 1440px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Supplier Category ×",
+          "Category Name *",
+          "Cancel",
+          "Add Category"
+        ],
+        "latinPlaceholders": [
+          "e.g. Scaffolding, Transport"
+        ],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 490,
+        "right": 950
+      }
+    },
+    {
+      "name": "en edit 1440px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payment Term ×",
+          "Name *",
+          "Days from bill date *",
+          "Description",
+          "Cancel",
+          "Add Term"
+        ],
+        "latinPlaceholders": [
+          "e.g. 45 Days",
+          "As agreed with the supplier"
+        ],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 490,
+        "right": 950
+      }
+    },
+    {
+      "name": "en edit 1440px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [
+          "New New Payable Sub-Account ×",
+          "Account Name *",
+          "Account Code",
+          "Opening Balance (SAR)",
+          "Created as a liability sub-account under 2100 - Accounts Payable, so the payables total on the dashboard still includes it.",
+          "Cancel",
+          "Create Account"
+        ],
+        "latinPlaceholders": [
+          "e.g. Accounts Payable - Gulf Steel",
+          "Auto: next under 2100"
+        ],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 490,
+        "right": 950
+      }
+    },
+    {
+      "name": "ar create opens",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar create document title and breadcrumb translate",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar create contains main form and three dialogs",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar create Save and Save & Close remain",
+      "ok": true,
+      "detail": [
+        "stay",
+        "new",
+        "close"
+      ]
+    },
+    {
+      "name": "ar create 320px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 12,
+        "right": 308
+      }
+    },
+    {
+      "name": "create 320px Arabic fields/placeholders/help/actions",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 12,
+        "right": 308
+      }
+    },
+    {
+      "name": "ar create 320px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 30,
+        "right": 290
+      }
+    },
+    {
+      "name": "ar create 320px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 30,
+        "right": 290
+      }
+    },
+    {
+      "name": "ar create 320px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 30,
+        "right": 290
+      }
+    },
+    {
+      "name": "ar create 390px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 12,
+        "right": 378
+      }
+    },
+    {
+      "name": "create 390px Arabic fields/placeholders/help/actions",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 12,
+        "right": 378
+      }
+    },
+    {
+      "name": "ar create 390px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 30,
+        "right": 360
+      }
+    },
+    {
+      "name": "ar create 390px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 30,
+        "right": 360
+      }
+    },
+    {
+      "name": "ar create 390px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 30,
+        "right": 360
+      }
+    },
+    {
+      "name": "ar create 768px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 22,
+        "right": 746
+      }
+    },
+    {
+      "name": "create 768px Arabic fields/placeholders/help/actions",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 22,
+        "right": 746
+      }
+    },
+    {
+      "name": "ar create 768px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 154,
+        "right": 614
+      }
+    },
+    {
+      "name": "ar create 768px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 154,
+        "right": 614
+      }
+    },
+    {
+      "name": "ar create 768px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 154,
+        "right": 614
+      }
+    },
+    {
+      "name": "ar create 1440px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 22,
+        "right": 1173
+      }
+    },
+    {
+      "name": "create 1440px Arabic fields/placeholders/help/actions",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 22,
+        "right": 1173
+      }
+    },
+    {
+      "name": "ar create 1440px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 490,
+        "right": 950
+      }
+    },
+    {
+      "name": "ar create 1440px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 490,
+        "right": 950
+      }
+    },
+    {
+      "name": "ar create 1440px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 490,
+        "right": 950
+      }
+    },
+    {
+      "name": "ar edit opens",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar edit document title and breadcrumb translate",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar edit contains main form and three dialogs",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar edit Save and Save & Close remain",
+      "ok": true,
+      "detail": [
+        "stay",
+        "new",
+        "close"
+      ]
+    },
+    {
+      "name": "ar edit keeps seven related panels",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar edit 320px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 12,
+        "right": 308
+      }
+    },
+    {
+      "name": "edit 320px Arabic fields/placeholders/help/actions",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 12,
+        "right": 308
+      }
+    },
+    {
+      "name": "ar edit 320px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 30,
+        "right": 290
+      }
+    },
+    {
+      "name": "ar edit 320px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 30,
+        "right": 290
+      }
+    },
+    {
+      "name": "ar edit 320px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 320,
+        "width": 320,
+        "left": 30,
+        "right": 290
+      }
+    },
+    {
+      "name": "ar edit 390px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 12,
+        "right": 378
+      }
+    },
+    {
+      "name": "edit 390px Arabic fields/placeholders/help/actions",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 12,
+        "right": 378
+      }
+    },
+    {
+      "name": "ar edit 390px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 30,
+        "right": 360
+      }
+    },
+    {
+      "name": "ar edit 390px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 30,
+        "right": 360
+      }
+    },
+    {
+      "name": "ar edit 390px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 390,
+        "width": 390,
+        "left": 30,
+        "right": 360
+      }
+    },
+    {
+      "name": "ar edit 768px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 22,
+        "right": 746
+      }
+    },
+    {
+      "name": "edit 768px Arabic fields/placeholders/help/actions",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 22,
+        "right": 746
+      }
+    },
+    {
+      "name": "ar edit 768px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 154,
+        "right": 614
+      }
+    },
+    {
+      "name": "ar edit 768px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 154,
+        "right": 614
+      }
+    },
+    {
+      "name": "ar edit 768px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 768,
+        "width": 768,
+        "left": 154,
+        "right": 614
+      }
+    },
+    {
+      "name": "ar edit 1440px no overflow",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 22,
+        "right": 1173
+      }
+    },
+    {
+      "name": "edit 1440px Arabic fields/placeholders/help/actions",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 22,
+        "right": 1173
+      }
+    },
+    {
+      "name": "ar edit 1440px qc-supplier-category fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 490,
+        "right": 950
+      }
+    },
+    {
+      "name": "ar edit 1440px qc-payment-term fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 490,
+        "right": 950
+      }
+    },
+    {
+      "name": "ar edit 1440px qc-payable-account fits and translates",
+      "ok": true,
+      "detail": {
+        "latinLabels": [],
+        "latinPlaceholders": [],
+        "scrollWidth": 1440,
+        "width": 1440,
+        "left": 490,
+        "right": 950
+      }
+    },
+    {
+      "name": "create: identical names, values, options and form endpoints in EN/AR",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "edit: identical names, values, options and form endpoints in EN/AR",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en qc-supplier-category actual save succeeds",
+      "ok": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "en qc-supplier-category returned value selected without losing user text",
+      "ok": true,
+      "detail": {
+        "value": "QA category en 1793549448987",
+        "text": "QA category en 1793549448987"
+      }
+    },
+    {
+      "name": "en qc-payment-term actual save succeeds",
+      "ok": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "en qc-payment-term returned value selected without losing user text",
+      "ok": true,
+      "detail": {
+        "value": "5",
+        "text": "QA term en 1793549448987 (45 days)"
+      }
+    },
+    {
+      "name": "en new term computed day suffix is localized",
+      "ok": true,
+      "detail": {
+        "value": "5",
+        "text": "QA term en 1793549448987 (45 days)"
+      }
+    },
+    {
+      "name": "en qc-payable-account actual save succeeds",
+      "ok": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "en qc-payable-account returned value selected without losing user text",
+      "ok": true,
+      "detail": {
+        "value": "27",
+        "text": "2101 - QA payable en 1793549448987"
+      }
+    },
+    {
+      "name": "en create Save opens edit with exact submitted values",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en Edit Save & Close returns to suppliers",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en edit persisted account holder and retained financial values",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar qc-supplier-category actual save succeeds",
+      "ok": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "ar qc-supplier-category returned value selected without losing user text",
+      "ok": true,
+      "detail": {
+        "value": "QA category ar 1793549448987",
+        "text": "QA category ar 1793549448987"
+      }
+    },
+    {
+      "name": "ar qc-payment-term actual save succeeds",
+      "ok": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "ar qc-payment-term returned value selected without losing user text",
+      "ok": true,
+      "detail": {
+        "value": "6",
+        "text": "QA term ar 1793549448987 (45 يوماً)"
+      }
+    },
+    {
+      "name": "ar new term computed day suffix is localized",
+      "ok": true,
+      "detail": {
+        "value": "6",
+        "text": "QA term ar 1793549448987 (45 يوماً)"
+      }
+    },
+    {
+      "name": "ar qc-payable-account actual save succeeds",
+      "ok": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "ar qc-payable-account returned value selected without losing user text",
+      "ok": true,
+      "detail": {
+        "value": "28",
+        "text": "2102 - QA payable ar 1793549448987"
+      }
+    },
+    {
+      "name": "ar create Save opens edit with exact submitted values",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar Edit Save & Close returns to suppliers",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar edit persisted account holder and retained financial values",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Supplier View has no data-writing form or save controls",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "zubair@example.com denied create",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "zubair@example.com denied edit",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "waleed@example.com denied create",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "waleed@example.com denied edit",
+      "ok": true,
+      "detail": null
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,74 @@
+
+> test:js
+> node --test tests/js/
+
+TAP version 13
+# Subtest: 44/45 queue write and read with a durable, well-formed UUID
+ok 1 - 44/45 queue write and read with a durable, well-formed UUID
+  ---
+  duration_ms: 8.7377
+  ...
+# Subtest: 46 queue preserves logical order by sequence
+ok 2 - 46 queue preserves logical order by sequence
+  ---
+  duration_ms: 3.7209
+  ...
+# Subtest: 47 retry keeps the same UUID and clears the backoff
+ok 3 - 47 retry keeps the same UUID and clears the backoff
+  ---
+  duration_ms: 1.0713
+  ...
+# Subtest: 48 items of another signed-in account are never submitted and are reported
+ok 4 - 48 items of another signed-in account are never submitted and are reported
+  ---
+  duration_ms: 2.6319
+  ...
+# Subtest: 49/50 pending counts and status transitions from server results
+ok 5 - 49/50 pending counts and status transitions from server results
+  ---
+  duration_ms: 3.4886
+  ...
+# Subtest: 51 the receipt Blob persists with the item and is released after sync
+ok 6 - 51 the receipt Blob persists with the item and is released after sync
+  ---
+  duration_ms: 3.2032
+  ...
+# Subtest: 52/53 reconnect triggers a sync and manual Sync now ignores the backoff; expenses travel as multipart
+ok 7 - 52/53 reconnect triggers a sync and manual Sync now ignores the backoff; expenses travel as multipart
+  ---
+  duration_ms: 49.1534
+  ...
+# Subtest: 54 an expired session keeps the queue and asks for sign-in; a different signed-in user blocks submission
+ok 8 - 54 an expired session keeps the queue and asks for sign-in; a different signed-in user blocks submission
+  ---
+  duration_ms: 1.8865
+  ...
+# Subtest: 55 Clear offline data is refused while unsynced records remain and clears everything once forced
+ok 9 - 55 Clear offline data is refused while unsynced records remain and clears everything once forced
+  ---
+  duration_ms: 1.897
+  ...
+# Subtest: 56 two tabs cannot run the same queue at once (Web Locks and the lease fallback)
+ok 10 - 56 two tabs cannot run the same queue at once (Web Locks and the lease fallback)
+  ---
+  duration_ms: 9.9088
+  ...
+# Subtest: server error categories map to retry behaviour: 5xx defers with backoff, 403 blocks, 422 fails, network defers
+ok 11 - server error categories map to retry behaviour: 5xx defers with backoff, 403 blocks, 422 fails, network defers
+  ---
+  duration_ms: 4.8754
+  ...
+# Subtest: indicative geofence mirrors the server formula and is advisory
+ok 12 - indicative geofence mirrors the server formula and is advisory
+  ---
+  duration_ms: 0.6798
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 329.1621

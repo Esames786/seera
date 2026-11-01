@@ -1,0 +1,118 @@
+PASS en create opens
+PASS en create document title and breadcrumb translate
+PASS en create contains main form and three dialogs
+PASS en create Save and Save & Close remain
+PASS en create 320px no overflow
+PASS en create 320px qc-supplier-category fits and translates
+PASS en create 320px qc-payment-term fits and translates
+PASS en create 320px qc-payable-account fits and translates
+PASS en create 390px no overflow
+PASS en create 390px qc-supplier-category fits and translates
+PASS en create 390px qc-payment-term fits and translates
+PASS en create 390px qc-payable-account fits and translates
+PASS en create 768px no overflow
+PASS en create 768px qc-supplier-category fits and translates
+PASS en create 768px qc-payment-term fits and translates
+PASS en create 768px qc-payable-account fits and translates
+PASS en create 1440px no overflow
+PASS en create 1440px qc-supplier-category fits and translates
+PASS en create 1440px qc-payment-term fits and translates
+PASS en create 1440px qc-payable-account fits and translates
+PASS en edit opens
+PASS en edit document title and breadcrumb translate
+PASS en edit contains main form and three dialogs
+PASS en edit Save and Save & Close remain
+PASS en edit keeps seven related panels
+PASS en edit 320px no overflow
+PASS en edit 320px qc-supplier-category fits and translates
+PASS en edit 320px qc-payment-term fits and translates
+PASS en edit 320px qc-payable-account fits and translates
+PASS en edit 390px no overflow
+PASS en edit 390px qc-supplier-category fits and translates
+PASS en edit 390px qc-payment-term fits and translates
+PASS en edit 390px qc-payable-account fits and translates
+PASS en edit 768px no overflow
+PASS en edit 768px qc-supplier-category fits and translates
+PASS en edit 768px qc-payment-term fits and translates
+PASS en edit 768px qc-payable-account fits and translates
+PASS en edit 1440px no overflow
+PASS en edit 1440px qc-supplier-category fits and translates
+PASS en edit 1440px qc-payment-term fits and translates
+PASS en edit 1440px qc-payable-account fits and translates
+PASS ar create opens
+PASS ar create document title and breadcrumb translate
+PASS ar create contains main form and three dialogs
+PASS ar create Save and Save & Close remain
+PASS ar create 320px no overflow
+PASS create 320px Arabic fields/placeholders/help/actions
+PASS ar create 320px qc-supplier-category fits and translates
+PASS ar create 320px qc-payment-term fits and translates
+PASS ar create 320px qc-payable-account fits and translates
+PASS ar create 390px no overflow
+PASS create 390px Arabic fields/placeholders/help/actions
+PASS ar create 390px qc-supplier-category fits and translates
+PASS ar create 390px qc-payment-term fits and translates
+PASS ar create 390px qc-payable-account fits and translates
+PASS ar create 768px no overflow
+PASS create 768px Arabic fields/placeholders/help/actions
+PASS ar create 768px qc-supplier-category fits and translates
+PASS ar create 768px qc-payment-term fits and translates
+PASS ar create 768px qc-payable-account fits and translates
+PASS ar create 1440px no overflow
+PASS create 1440px Arabic fields/placeholders/help/actions
+PASS ar create 1440px qc-supplier-category fits and translates
+PASS ar create 1440px qc-payment-term fits and translates
+PASS ar create 1440px qc-payable-account fits and translates
+PASS ar edit opens
+PASS ar edit document title and breadcrumb translate
+PASS ar edit contains main form and three dialogs
+PASS ar edit Save and Save & Close remain
+PASS ar edit keeps seven related panels
+PASS ar edit 320px no overflow
+PASS edit 320px Arabic fields/placeholders/help/actions
+PASS ar edit 320px qc-supplier-category fits and translates
+PASS ar edit 320px qc-payment-term fits and translates
+PASS ar edit 320px qc-payable-account fits and translates
+PASS ar edit 390px no overflow
+PASS edit 390px Arabic fields/placeholders/help/actions
+PASS ar edit 390px qc-supplier-category fits and translates
+PASS ar edit 390px qc-payment-term fits and translates
+PASS ar edit 390px qc-payable-account fits and translates
+PASS ar edit 768px no overflow
+PASS edit 768px Arabic fields/placeholders/help/actions
+PASS ar edit 768px qc-supplier-category fits and translates
+PASS ar edit 768px qc-payment-term fits and translates
+PASS ar edit 768px qc-payable-account fits and translates
+PASS ar edit 1440px no overflow
+PASS edit 1440px Arabic fields/placeholders/help/actions
+PASS ar edit 1440px qc-supplier-category fits and translates
+PASS ar edit 1440px qc-payment-term fits and translates
+PASS ar edit 1440px qc-payable-account fits and translates
+PASS create: identical names, values, options and form endpoints in EN/AR
+PASS edit: identical names, values, options and form endpoints in EN/AR
+PASS en qc-supplier-category actual save succeeds
+PASS en qc-supplier-category returned value selected without losing user text
+PASS en qc-payment-term actual save succeeds
+PASS en qc-payment-term returned value selected without losing user text
+PASS en new term computed day suffix is localized
+PASS en qc-payable-account actual save succeeds
+PASS en qc-payable-account returned value selected without losing user text
+PASS en create Save opens edit with exact submitted values
+PASS en Edit Save & Close returns to suppliers
+PASS en edit persisted account holder and retained financial values
+PASS ar qc-supplier-category actual save succeeds
+PASS ar qc-supplier-category returned value selected without losing user text
+PASS ar qc-payment-term actual save succeeds
+PASS ar qc-payment-term returned value selected without losing user text
+PASS ar new term computed day suffix is localized
+PASS ar qc-payable-account actual save succeeds
+PASS ar qc-payable-account returned value selected without losing user text
+PASS ar create Save opens edit with exact submitted values
+PASS ar Edit Save & Close returns to suppliers
+PASS ar edit persisted account holder and retained financial values
+PASS Supplier View has no data-writing form or save controls
+PASS zubair@example.com denied create
+PASS zubair@example.com denied edit
+PASS waleed@example.com denied create
+PASS waleed@example.com denied edit
+{"total":117,"passed":117,"failed":0,"pageErrors":0}

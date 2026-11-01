@@ -1,0 +1,117 @@
+PASS en dashboard opens with expected direction
+PASS en dashboard 320px fits
+PASS en dashboard 390px fits
+PASS en dashboard 768px fits
+PASS en dashboard 1440px fits
+PASS en hr opens with expected direction
+PASS en hr 320px fits
+PASS en hr 390px fits
+PASS en hr 768px fits
+PASS en hr 1440px fits
+PASS en hr-reports opens with expected direction
+PASS en hr-reports 320px fits
+PASS en hr-reports 390px fits
+PASS en hr-reports 768px fits
+PASS en hr-reports 1440px fits
+PASS en employee opens with expected direction
+PASS en employee 320px fits
+PASS en employee 390px fits
+PASS en employee 768px fits
+PASS en employee 1440px fits
+PASS en project opens with expected direction
+PASS en project 320px fits
+PASS en project 390px fits
+PASS en project 768px fits
+PASS en project 1440px fits
+PASS en project-manage opens with expected direction
+PASS en budget opens with expected direction
+PASS en project-reports opens with expected direction
+PASS en customer opens with expected direction
+PASS en customer 320px fits
+PASS en customer 390px fits
+PASS en customer 768px fits
+PASS en customer 1440px fits
+PASS en supplier opens with expected direction
+PASS en supplier 320px fits
+PASS en supplier 390px fits
+PASS en supplier 768px fits
+PASS en supplier 1440px fits
+PASS en supplier-manage opens with expected direction
+PASS en purchase-requests opens with expected direction
+PASS en purchase-orders opens with expected direction
+PASS en goods-receipts opens with expected direction
+PASS en supplier-bills opens with expected direction
+PASS en invoices opens with expected direction
+PASS en credits opens with expected direction
+PASS en approvals opens with expected direction
+PASS en journals opens with expected direction
+PASS en ledger opens with expected direction
+PASS en vat-report opens with expected direction
+PASS en trial-balance opens with expected direction
+PASS ar dashboard opens with expected direction
+PASS ar dashboard 320px fits
+PASS ar dashboard 390px fits
+PASS ar dashboard 768px fits
+PASS ar dashboard 1440px fits
+PASS ar hr opens with expected direction
+PASS ar hr 320px fits
+PASS ar hr 390px fits
+PASS ar hr 768px fits
+PASS ar hr 1440px fits
+PASS ar hr-reports opens with expected direction
+PASS ar hr-reports 320px fits
+PASS ar hr-reports 390px fits
+PASS ar hr-reports 768px fits
+PASS ar hr-reports 1440px fits
+PASS ar employee opens with expected direction
+PASS ar employee 320px fits
+PASS ar employee 390px fits
+PASS ar employee 768px fits
+PASS ar employee 1440px fits
+PASS ar project opens with expected direction
+PASS ar project 320px fits
+PASS ar project 390px fits
+PASS ar project 768px fits
+PASS ar project 1440px fits
+PASS ar project-manage opens with expected direction
+PASS ar budget opens with expected direction
+PASS ar project-reports opens with expected direction
+PASS ar customer opens with expected direction
+PASS ar customer 320px fits
+PASS ar customer 390px fits
+PASS ar customer 768px fits
+PASS ar customer 1440px fits
+PASS ar supplier opens with expected direction
+PASS ar supplier 320px fits
+PASS ar supplier 390px fits
+PASS ar supplier 768px fits
+PASS ar supplier 1440px fits
+PASS ar supplier-manage opens with expected direction
+PASS ar purchase-requests opens with expected direction
+PASS ar purchase-orders opens with expected direction
+PASS ar goods-receipts opens with expected direction
+PASS ar supplier-bills opens with expected direction
+PASS ar invoices opens with expected direction
+PASS ar credits opens with expected direction
+PASS ar approvals opens with expected direction
+PASS ar journals opens with expected direction
+PASS ar ledger opens with expected direction
+PASS ar vat-report opens with expected direction
+PASS ar trial-balance opens with expected direction
+PASS Super Admin nonstandard VAT without reason refused
+PASS Super Admin reasoned override creates draft
+PASS Standard invoice draft shows correct 230 total
+PASS Invoice approval posts and removes edit/approve action
+PASS Approved invoice bilingual printable document opens
+FAIL Partial receipt persists and leaves 130 outstanding
+PASS Ordinary Finance VAT control locked
+PASS Ordinary Finance forged 5 percent request refused
+PASS Ordinary Finance standard 15 percent invoice saves
+PASS Finance denied /admin/hr/dashboard
+PASS Finance denied /admin/master/suppliers/1/edit
+PASS HR permitted workforce report
+PASS HR denied /admin/accounting/accounts-receivable
+PASS HR denied /admin/accounting/journal-entries
+PASS Site role permitted own project
+PASS Site role denied foreign project
+{"total":116,"passed":115,"failed":1,"pageErrors":0}
