@@ -139,4 +139,18 @@ class SupplierFormArabicClosureTest extends TestCase
         $this->assertSame($journals, JournalEntry::count());
         $this->assertSame($vat, VatTransaction::count());
     }
+    public function test_arabic_supplier_create_page_has_localized_heading_and_unmodified_form_values(): void
+    {
+        $admin = User::where('email', 'admin@example.com')->firstOrFail();
+        $admin->update(['language' => 'Arabic']);
+
+        $this->actingAs($admin)->get(route('admin.master.suppliers.create'))
+            ->assertOk()
+            ->assertSee('إضافة مورد')
+            ->assertSee('الإعدادات الأساسية / الموردون / إضافة مورد')
+            ->assertSee('name="name"', false)
+            ->assertSee('name="allowed_payment_types"', false)
+            ->assertSee('value="active"', false);
+    }
+
 }
