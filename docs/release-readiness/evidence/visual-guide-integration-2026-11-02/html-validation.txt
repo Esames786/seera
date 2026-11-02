@@ -1,0 +1,1 @@
+PASS six guide pages; 551 internal links/anchors; 94 valid embedded JPEG images; stable screen/workflow IDs.

@@ -9,7 +9,8 @@ const {chromium}=require(process.env.SEERA_PLAYWRIGHT || 'playwright');
   const env=JSON.parse(fs.readFileSync(path.join(root,'process-env.private.json')));
   const base=env.APP_URL, proof=await(await fetch(base+'/__guide_fixture_attestation')).json();
   if(!proof.synthetic || proof.id!==facts.id || proof.production_zatca || proof.business_writes)throw new Error('Unsafe fixture');
-  const out=path.resolve(__dirname,'../../docs/release-readiness/evidence/visual-guide-2026-11-02');
+  const out=process.env.SEERA_GUIDE_QA_OUT ? path.resolve(process.env.SEERA_GUIDE_QA_OUT) : path.resolve(__dirname,'../../docs/release-readiness/evidence/visual-guide-2026-11-02');
+  fs.mkdirSync(out,{recursive:true});
   const results=[],errors=[],failed=[];
   const check=(name,ok,detail=null)=>{results.push({name,ok:!!ok,detail});if(!ok)throw new Error(name)};
   const browser=await chromium.launch({headless:true,executablePath:process.env.SEERA_BROWSER});
@@ -21,6 +22,11 @@ const {chromium}=require(process.env.SEERA_PLAYWRIGHT || 'playwright');
     check('Guest redirected to login',new URL(page.url()).pathname==='/login' && guest.status()===200);
     await page.fill('[name=email]',facts.user);await page.fill('[name=password]',facts.password);
     await Promise.all([page.waitForURL(u=>u.pathname.startsWith('/admin/')||u.pathname.startsWith('/user-guide/')),page.click('button[type=submit]')]);
+    if(process.env.SEERA_GUIDE_QA_EXPECT_NOTIFICATIONS==='YES'){
+      await page.goto(base+'/admin/dashboard');
+      check('Combined candidate retains notification bell',await page.locator('[data-notification-center]').count()===1);
+      check('Combined candidate retains notification inbox',(await context.request.get(base+'/admin/notifications')).status()===200);
+    }
     page.on('response',r=>{if(r.status()>=400)failed.push({path:new URL(r.url()).pathname,status:r.status()})});
     for(const [file,lang] of [['VISUAL-EXAMPLES.html','en'],['VISUAL-EXAMPLES-AR.html','ar']]){
       const response=await page.goto(base+'/user-guide/'+file);

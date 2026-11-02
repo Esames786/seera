@@ -14,7 +14,9 @@ The supplement accompanies the existing 23-chapter manual, Screen Index and 28-w
 
 ## Critical source/integration boundary
 
-This branch starts at 1833270, based on **core b88eec7**, and does **not** include the notification candidate deployed at 8dcb1d7. Captured forms use the actual core implementation and existing translations. Do not check this branch out on production or merge it as a replacement release. Integrate only reviewed guide/controller allowlist/test/capture changes into the current release candidate through a separate approved integration review. Notification screenshots remain outside this supplement.
+The original screenshot feature branch starts at 1833270, based on **core b88eec7**, and does **not** include the notification candidate deployed at 8dcb1d7. Do not deploy that standalone feature branch. Captured forms use the actual core implementation and existing translations; Notification screenshots remain outside this supplement.
+
+The separate integration/seera-visual-guide-rollout-review-2026-11-02 candidate now combines the guide with notification baseline 8dcb1d7. Its [integration verification](../release-readiness/SEERA-VISUAL-GUIDE-INTEGRATION-2026-11-02.md) records fresh combined checks. Only this reviewed combined candidate is a possible guide rollout target, after owner approval; no production deployment was performed during preparation.
 
 No financial or workspace implementation is changed. Some Arabic-mode application headings/fields remain in English (notably User, Project and finance/report areas). The Arabic training narrative is translated; screenshots preserve the real UI and do not disguise existing gaps. Native Arabic review and actual-device acceptance remain client tasks.
 

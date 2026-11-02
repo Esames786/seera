@@ -1,0 +1,5 @@
+CHECK en guide response 200
+CHECK en decoded 47 images
+CHECK ar guide response 200
+CHECK ar decoded 47 images
+PASS 33 guide browser checks; 94 decoded images; no page errors.
