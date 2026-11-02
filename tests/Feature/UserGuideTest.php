@@ -37,4 +37,31 @@ class UserGuideTest extends TestCase
         $this->actingAs($user)->get('/user-guide/../production-deployment-guide.md')->assertNotFound();
         $this->actingAs($user)->get(route('admin.dashboard'))->assertOk()->assertSee(route('user-guide'));
     }
+
+    public function test_visual_training_pages_are_authenticated_and_have_embedded_images(): void
+    {
+        $this->get('/user-guide/VISUAL-EXAMPLES.html')->assertRedirect(route('login'));
+        $this->get('/user-guide/VISUAL-EXAMPLES-AR.html')->assertRedirect(route('login'));
+        $user = User::where('email', 'admin@example.com')->firstOrFail();
+        foreach (['VISUAL-EXAMPLES' => 'en', 'VISUAL-EXAMPLES-AR' => 'ar'] as $page => $lang) {
+            $response = $this->actingAs($user)->get('/user-guide/'.$page.'.html')->assertOk();
+            $response->assertHeader('Content-Type', 'text/html; charset=UTF-8');
+            $response->assertSee('lang="'.$lang.'"', false)
+                ->assertSee('data:image/jpeg;base64,', false)
+                ->assertSee('TRAIN-INV-01')
+                ->assertSee('employee-to-user', false);
+            $this->assertStringNotContainsString('src="visual-examples/', $response->getContent());
+        }
+    }
+
+    public function test_visual_guide_does_not_expose_arbitrary_files_or_asset_directories(): void
+    {
+        $user = User::where('email', 'admin@example.com')->firstOrFail();
+        $this->actingAs($user);
+        foreach (['user-guide-screenshots.cjs', 'fixture.private.json', 'VISUAL-EXAMPLES-UNAPPROVED.html', 'visual-examples/en-dashboard.jpg'] as $path) {
+            $this->get('/user-guide/'.$path)->assertNotFound();
+        }
+        $user->update(['status' => 'inactive']);
+        $this->get('/user-guide/VISUAL-EXAMPLES-AR.html')->assertRedirect(route('login'));
+    }
 }

@@ -15,6 +15,9 @@ require __DIR__.'/../../vendor/autoload.php';
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 
 $dir = __DIR__;
+$guideMarkdown = file_get_contents($dir.'/SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md');
+preg_match('/\*\*Version\*\*\s*\|\s*([^|]+)/', $guideMarkdown, $versionMatch);
+$guideVersion = trim($versionMatch[1] ?? 'See source guide');
 $sources = [
     'SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE' => ['title' => 'Current System User Guide', 'toc' => 3],
     'SCREEN-INDEX' => ['title' => 'Screen Index', 'toc' => 2],
@@ -104,13 +107,13 @@ footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px s
 @media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }
 CSS;
 
-$nav = '<a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a>';
+$nav = '<a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a><a href="VISUAL-EXAMPLES.html">Visual Examples</a>';
 
-$page = function (string $title, string $tocHtml, string $body) use ($css, $nav): string {
+$page = function (string $title, string $tocHtml, string $body) use ($css, $nav, $guideVersion): string {
     return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>'.htmlspecialchars($title).' · Seera ERP</title><style>'.$css.'</style></head><body>'
-        .'<header class="top"><span class="brand">Seera ERP</span><span class="meta">'.htmlspecialchars($title).' · Version 1.14 · 12 October 2026 · Current implemented system only</span><nav>'.$nav.'</nav></header>'
+        .'<header class="top"><span class="brand">Seera ERP</span><span class="meta">'.htmlspecialchars($title).' · Version '.htmlspecialchars($guideVersion).' · Current implemented system only</span><nav>'.$nav.'</nav></header>'
         .'<div class="layout"><aside class="toc"><h2>Contents</h2>'.$tocHtml.'</aside><main>'.$body.'</main></div>'
-        .'<footer>Seera ERP — Current System User Guide, version 1.14, prepared 12 October 2026. Examples use fictional training data.</footer></body></html>';
+        .'<footer>Seera ERP — Current System User Guide, version '.htmlspecialchars($guideVersion).'. Examples use fictional training data.</footer></body></html>';
 };
 
 foreach ($sources as $name => $meta) {
@@ -128,11 +131,12 @@ foreach ($sources as $name => $meta) {
 
 $index = <<<'HTML'
 <h1>SEERA ERP</h1><h1>Current System User Guide — HTML edition</h1>
-<p>Version 1.14 · Prepared 12 October 2026 · Status: current implemented system only. All examples use fictional training data.</p>
+<p>Current implemented system only. Version metadata is taken from the source user guide. Visual training supplement captured 2 November 2026. All examples use fictional training data.</p>
 <table><thead><tr><th>Document</th><th>What it is for</th></tr></thead><tbody>
-<tr><td><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a></td><td>21 chapters: sign-in, screen addresses, fields and buttons, Connected Workspace Standard, 19 end-to-end workflows, troubleshooting, glossary, limitations and quick start by role.</td></tr>
+<tr><td><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a></td><td>23 chapters: sign-in, screen addresses, fields and buttons, Connected Workspace Standard, business workflows, troubleshooting, glossary, limitations, Equipment and Mobile/Offline.</td></tr>
 <tr><td><a href="SCREEN-INDEX.html">Screen Index</a></td><td>Permanent Screen IDs, web addresses, navigation, permissions and status, including My Approvals and the embedded PR approval panel.</td></tr>
-<tr><td><a href="WORKFLOW-INDEX.html">Workflow Index</a></td><td>The 19 documented workflows (WF-001 … WF-019), including Purchase Request, Site Expense and Supplier Bill runtime approval.</td></tr>
+<tr><td><a href="VISUAL-EXAMPLES.html">Visual Examples — English</a> · <a href="VISUAL-EXAMPLES-AR.html">العربية</a></td><td>43 real application screens per language, verified fictional example fields, four mobile examples per language, buttons and connected workflows. No business form submitted.</td></tr>
+<tr><td><a href="WORKFLOW-INDEX.html">Workflow Index</a></td><td>The 28 documented workflows (WF-001 … WF-028), including approval, payroll, budget, Equipment, offline sync and customer credit resolution.</td></tr>
 </tbody></table>
 <p>Status labels used throughout: <strong>AVAILABLE</strong>, <strong>PARTIAL</strong>, <strong>FOUNDATION ONLY</strong>, <strong>NOT YET OPERATIONAL</strong>. Nothing planned is described as available.</p>
 HTML;

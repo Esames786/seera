@@ -1,0 +1,100 @@
+{
+    "source_base":  "1833270b542217c9668aff90314209fb9308b4af",
+    "hash_basis":  "Tested Windows working-tree bytes; image hashes separately recorded in capture-results.json",
+    "files":  [
+                  {
+                      "path":  "app/Http/Controllers/UserGuideController.php",
+                      "sha256":  "D1321E3F13B402ED99468127E1494C77B2DA5BA641604C5713F9435CD55C4645",
+                      "git_blob":  "2902c2f942c700d5dd33bac7d82e2a286ca22211"
+                  },
+                  {
+                      "path":  "scripts/capture-user-guide.ps1",
+                      "sha256":  "DF6750982D0FA72B490694C6DE8B5231E64828B53E42FFA5B8038808DC7F16D8",
+                      "git_blob":  "fa799a29191f4f4430f27813d51fba35c30a6f10"
+                  },
+                  {
+                      "path":  "scripts/validate-user-guide.php",
+                      "sha256":  "1179181FB76AE8F341C915A8F0179CAC997958CEDC510A4BA880D86E9FEC886E",
+                      "git_blob":  "08bffc4a0b86dc2745b80eebcce1769e10fb9848"
+                  },
+                  {
+                      "path":  "tests/Feature/UserGuideTest.php",
+                      "sha256":  "765018C0839005AEFC5C7A58C6085B039D95AAF9151229EA11779BE2767F80E0",
+                      "git_blob":  "e504e6ff064646ccc41a482545eb1df9c11e8f27"
+                  },
+                  {
+                      "path":  "tests/manual/user-guide-screenshots.cjs",
+                      "sha256":  "918EE9231F80B65091D7FD4C8D2DA28B41A3CABBBF7D87D3B5A0523A9EAE4739",
+                      "git_blob":  "11f5e31506dd9edda11ac6af00b5ed2636273356"
+                  },
+                  {
+                      "path":  "tests/manual/user-guide-scenes.cjs",
+                      "sha256":  "31DF1CA326788F4956E6D88B6AC3FA92E7FFA7DB282F9A35F0375AEAE15C72C5",
+                      "git_blob":  "8c61996124ca5b2fef9b56ecf66134f0bb850782"
+                  },
+                  {
+                      "path":  "tests/manual/user-guide-fixture.php",
+                      "sha256":  "4C9D826E161CCA2548E04A44339693FADCADF470F5E90E9B821952E49391428E",
+                      "git_blob":  "c6d58493e4e6e6b3d85418cf2d72d7e9773be5f4"
+                  },
+                  {
+                      "path":  "tests/manual/user-guide-server.php",
+                      "sha256":  "DA7A959D15BDC151EF07911355D7B0E57B7AA9CFDA1337E8307A316723FBA734",
+                      "git_blob":  "23bf7f06c22bcf63b21ad36e313b688a334ee9dc"
+                  },
+                  {
+                      "path":  "tests/manual/user-guide-browser-qa.cjs",
+                      "sha256":  "885E877454E0EF3330C02D10180ECEAB6459F062B17A16BCC856425B6C9141D2",
+                      "git_blob":  "2245618c8a7dd10871483e93b9cc6da0e2823192"
+                  },
+                  {
+                      "path":  "docs/user-guide/build-html.php",
+                      "sha256":  "FC470B48A01559A6E998F40192670019DE9D3F82F59B0C9F1B0694667F7F77B4",
+                      "git_blob":  "504bce06d4c1fe22952d8cbccc21dde68e4c06ee"
+                  },
+                  {
+                      "path":  "docs/user-guide/VISUAL-TRAINING-README.md",
+                      "sha256":  "5D30BA0AC244FDA1F3AA8D432F43FD851A135E50C8AFDE4B84FB46323B231E86",
+                      "git_blob":  "55b6ec6011e86a6561e7633c2df37d82fb5c61d2"
+                  },
+                  {
+                      "path":  "docs/user-guide/index.html",
+                      "sha256":  "667F8C6315D67C7492D5F6E1A051E3ABD8253B37D143685BC447C762933EFA24",
+                      "git_blob":  "d2b3cb0cc713469f817dff08bc086da07a54e274"
+                  },
+                  {
+                      "path":  "docs/user-guide/SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html",
+                      "sha256":  "D0183A0049B14BC6D08E0B69897740599A1CE0A741EE790DD03E3786D8FB945F",
+                      "git_blob":  "3ba5934ffe4e431cab22ef3b0118910d1ff4d275"
+                  },
+                  {
+                      "path":  "docs/user-guide/SCREEN-INDEX.html",
+                      "sha256":  "23403AEF288ACBA2A03FB1BDFDEDB2953D9768ED87E2CBE98F992FCF7FAE6D97",
+                      "git_blob":  "6a86a6412f45c46447208949cd86bad560b5da6a"
+                  },
+                  {
+                      "path":  "docs/user-guide/WORKFLOW-INDEX.html",
+                      "sha256":  "0FBBDB6CAFDF630829F395C7B18C62451D0763F42B4E99A0530CE6F451528EA9",
+                      "git_blob":  "986b76ef3894f4d354ecc005199142338ea2ca56"
+                  },
+                  {
+                      "path":  "docs/user-guide/VISUAL-EXAMPLES.html",
+                      "sha256":  "83600E068E2059206579922544015E27F891E8C4BD3890C37D15F624E7174CB2",
+                      "git_blob":  "97712e258d2d02a905f9876ab7adc81afeec0887"
+                  },
+                  {
+                      "path":  "docs/user-guide/VISUAL-EXAMPLES-AR.html",
+                      "sha256":  "E54502C98AA80DCE20978BF67D254983089E8DA6155B10C803C7E6582B7C287E",
+                      "git_blob":  "0de1526237b1535ede32b8f4b5f0ae96192e543a"
+                  },
+                  {
+                      "path":  "public/build.zip",
+                      "sha256":  "B1FF72DAC9A9BE51DAD766EF16238D2FC46AC3F9B9E4FA36A27B9B6E06B39C4E",
+                      "git_blob":  "d8a733fef7d57997adafd6117fd7a93a7b237cd3"
+                  }
+              ],
+    "offline_package":  {
+                            "bytes":  8874032,
+                            "sha256":  "240D13499716834932D59B2267F293CE7E931814A99889EB707AD27417C36076"
+                        }
+}
