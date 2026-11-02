@@ -1,0 +1,190 @@
+{
+  "summary": {
+    "total": 31,
+    "passed": 31,
+    "failed": 0
+  },
+  "results": [
+    {
+      "name": "Guest redirected to login",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en guide served",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en guide language/direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en guide has 43 training scenes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en 47 embedded images decode",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en example values and coverage boundary visible",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en guide no page overflow 320",
+      "ok": true,
+      "detail": {
+        "viewport": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "en guide no page overflow 390",
+      "ok": true,
+      "detail": {
+        "viewport": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "en guide no page overflow 768",
+      "ok": true,
+      "detail": {
+        "viewport": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "en guide no page overflow 1440",
+      "ok": true,
+      "detail": {
+        "viewport": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "en language edition navigation works",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar guide served",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar guide language/direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar guide has 43 training scenes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar 47 embedded images decode",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar example values and coverage boundary visible",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar guide no page overflow 320",
+      "ok": true,
+      "detail": {
+        "viewport": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "ar guide no page overflow 390",
+      "ok": true,
+      "detail": {
+        "viewport": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "ar guide no page overflow 768",
+      "ok": true,
+      "detail": {
+        "viewport": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "ar guide no page overflow 1440",
+      "ok": true,
+      "detail": {
+        "viewport": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "ar language edition navigation works",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "index.html served",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html served",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "SCREEN-INDEX.html served",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "WORKFLOW-INDEX.html served",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en offline packaged guide images decode",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en offline language link works",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar offline packaged guide images decode",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar offline language link works",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "No guide page errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "No failed guide responses",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "failedResponses": []
+}

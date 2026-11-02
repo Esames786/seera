@@ -1,0 +1,7541 @@
+{
+  "source": "1833270b542217c9668aff90314209fb9308b4af",
+  "base": "http://127.0.0.1:18773",
+  "synthetic": true,
+  "summary": {
+    "scenes": 43,
+    "screenshots": 94,
+    "checks": 736,
+    "passed": 736,
+    "failed": 0
+  },
+  "results": [
+    {
+      "name": "Server attests synthetic isolated fixture",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Synthetic account authenticated",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "Server rejects a business-write probe",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en locale preference accepted",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en dashboard route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en dashboard document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create select allowed_payment_types",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create has option allowed_payment_types",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create input code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create value code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create input contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create value contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create input email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create value email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create input credit_limit",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create value credit_limit",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create input opening_receivable",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create value opening_receivable",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create input city",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create value city",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create input billing_address",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-create value billing_address",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-view route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-view document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-manage route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-manage document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-manage input contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-manage value contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create select payment_term_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create has option payment_term_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create select allowed_payment_types",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create has option allowed_payment_types",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create input code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create value code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create input contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create value contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create input email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create value email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create input city",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create value city",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create input opening_balance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create value opening_balance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create input address",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create value address",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create input bank_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create value bank_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create input bank_account_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-create value bank_account_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-view route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-view document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-manage route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-manage document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-manage input contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-manage value contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create select customer_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create has option customer_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create select branch_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create has option branch_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create input code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create value code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create input budget",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create value budget",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create input location",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create value location",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create input description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-create value description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-view route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-view document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-manage route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-manage document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-manage input description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-manage value description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-budget route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-budget document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-create select project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-create has option project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-create input code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-create value code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-create input address",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-create value address",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-create input geofence_radius",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-create value geofence_radius",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-view route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-view document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-create input first_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-create value first_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-create input last_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-create value last_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-create input email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-create value email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-create input basic_salary",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-create value basic_salary",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-create input housing_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-create value housing_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-create input transport_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-create value transport_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-view route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-view document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-personal route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-personal document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-personal input first_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-personal value first_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-personal input last_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-personal value last_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-employment route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-employment document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-salary route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-salary document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-salary input basic_salary",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-salary value basic_salary",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-salary input housing_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-salary value housing_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-salary input transport_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-salary value transport_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en leave-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en leave-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en leave-create select employee_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en leave-create has option employee_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en leave-create select leave_type_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en leave-create has option leave_type_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en leave-create input start_date",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en leave-create value start_date",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en leave-create input end_date",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en leave-create value end_date",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en leave-create input reason",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en leave-create value reason",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en shift-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en shift-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en shift-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en shift-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en shift-create input code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en shift-create value code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en shift-create input start_time",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en shift-create value start_time",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en shift-create input end_time",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en shift-create value end_time",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en shift-create input break_minutes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en shift-create value break_minutes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en shift-create input grace_minutes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en shift-create value grace_minutes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en payroll-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en payroll-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en payroll-create select payroll_month",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en payroll-create has option payroll_month",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en payroll-create select payroll_year",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en payroll-create has option payroll_year",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en payroll-create input period_start",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en payroll-create value period_start",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en payroll-create input period_end",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en payroll-create value period_end",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en payroll-create input notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en payroll-create value notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en user-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en user-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en user-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en user-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en user-create input email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en user-create value email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en user-create input username",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en user-create value username",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-to-user route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee-to-user document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en employee lookup copies identity",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en role-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en role-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en role-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en role-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en role-create input description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en role-create value description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en permissions route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en permissions document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create select item_category_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create has option item_category_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create select unit_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create has option unit_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create select vat_applicable",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create has option vat_applicable",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create input item_code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create value item_code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create input reorder_level",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create value reorder_level",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create input minimum_stock",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create value minimum_stock",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create input description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en item-create value description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en warehouse-manage route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en warehouse-manage document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-request route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-request document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-request select project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-request has option project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-request select lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-request has option lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-request input reason",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-request value reason",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-request input lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-request value lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-request input lines[0][estimated_unit_cost]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-request value lines[0][estimated_unit_cost]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-order route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-order document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-order select supplier_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-order has option supplier_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-order select warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-order has option warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-order select lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-order has option lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-order input lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-order value lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-order input lines[0][unit_price]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-order value lines[0][unit_price]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-order input notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en purchase-order value notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt select supplier_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt has option supplier_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt select warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt has option warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt select lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt has option lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt input delivery_note_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt value delivery_note_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt input lines[0][ordered_quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt value lines[0][ordered_quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt input lines[0][received_quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt value lines[0][received_quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt input lines[0][accepted_quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt value lines[0][accepted_quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt input lines[0][unit_cost]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en goods-receipt value lines[0][unit_cost]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-issue route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-issue document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-issue select warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-issue has option warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-issue select project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-issue has option project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-issue select lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-issue has option lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-issue input purpose",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-issue value purpose",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-issue input lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-issue value lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-transfer route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-transfer document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-transfer select from_warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-transfer has option from_warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-transfer select lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-transfer has option lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-transfer input notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-transfer value notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-transfer input lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en stock-transfer value lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill select supplier_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill has option supplier_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill select project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill has option project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill input bill_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill value bill_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill input notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill value notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill input lines[0][description]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill value lines[0][description]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill input lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill value lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill input lines[0][unit_price]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en supplier-bill value lines[0][unit_price]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice select customer_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice has option customer_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice select project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice has option project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice input invoice_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice value invoice_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice input notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice value notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice input lines[0][description]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice value lines[0][description]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice input lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice value lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice input lines[0][unit_price]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en customer-invoice value lines[0][unit_price]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en journal-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en journal-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en journal-create input description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en journal-create value description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en journal-create input lines[0][debit]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en journal-create value lines[0][debit]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en journal-create input lines[1][credit]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en journal-create value lines[1][credit]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-expense route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-expense document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-expense select project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-expense has option project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-expense select expense_category_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-expense has option expense_category_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-expense input taxable_amount",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-expense value taxable_amount",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-expense input description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-expense value description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-expense input reference_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en site-expense value reference_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create input asset_code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create value asset_code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create input make",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create value make",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create input model",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create value model",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create input year",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create value year",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create input acquisition_cost",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create value acquisition_cost",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create input notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en equipment-create value notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en marketing-lead route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en marketing-lead document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en marketing-lead input company_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en marketing-lead value company_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en marketing-lead input contact_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en marketing-lead value contact_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en marketing-lead input contact_email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en marketing-lead value contact_email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en marketing-lead input city",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en marketing-lead value city",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en marketing-lead input requirement",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en marketing-lead value requirement",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en marketing-lead input estimated_value",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en marketing-lead value estimated_value",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en hr-reports route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en hr-reports document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-reports route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en project-reports document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en trial-balance route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en trial-balance document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en vat-report route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en vat-report document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en my-approvals route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "en my-approvals document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar locale preference accepted",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar dashboard route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar dashboard document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create select allowed_payment_types",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create has option allowed_payment_types",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create input code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create value code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create input contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create value contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create input email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create value email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create input credit_limit",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create value credit_limit",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create input opening_receivable",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create value opening_receivable",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create input city",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create value city",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create input billing_address",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-create value billing_address",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-view route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-view document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-manage route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-manage document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-manage input contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-manage value contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create select payment_term_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create has option payment_term_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create select allowed_payment_types",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create has option allowed_payment_types",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create input code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create value code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create input contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create value contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create input email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create value email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create input city",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create value city",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create input opening_balance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create value opening_balance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create input address",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create value address",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create input bank_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create value bank_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create input bank_account_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-create value bank_account_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-view route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-view document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-manage route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-manage document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-manage input contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-manage value contact_person",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create select customer_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create has option customer_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create select branch_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create has option branch_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create input code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create value code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create input budget",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create value budget",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create input location",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create value location",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create input description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-create value description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-view route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-view document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-manage route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-manage document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-manage input description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-manage value description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-budget route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-budget document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-create select project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-create has option project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-create input code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-create value code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-create input address",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-create value address",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-create input geofence_radius",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-create value geofence_radius",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-view route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-view document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-create input first_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-create value first_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-create input last_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-create value last_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-create input email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-create value email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-create input basic_salary",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-create value basic_salary",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-create input housing_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-create value housing_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-create input transport_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-create value transport_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-view route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-view document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-personal route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-personal document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-personal input first_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-personal value first_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-personal input last_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-personal value last_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-employment route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-employment document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-salary route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-salary document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-salary input basic_salary",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-salary value basic_salary",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-salary input housing_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-salary value housing_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-salary input transport_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-salary value transport_allowance",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar leave-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar leave-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar leave-create select employee_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar leave-create has option employee_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar leave-create select leave_type_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar leave-create has option leave_type_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar leave-create input start_date",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar leave-create value start_date",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar leave-create input end_date",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar leave-create value end_date",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar leave-create input reason",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar leave-create value reason",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar shift-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar shift-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar shift-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar shift-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar shift-create input code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar shift-create value code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar shift-create input start_time",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar shift-create value start_time",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar shift-create input end_time",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar shift-create value end_time",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar shift-create input break_minutes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar shift-create value break_minutes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar shift-create input grace_minutes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar shift-create value grace_minutes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar payroll-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar payroll-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar payroll-create select payroll_month",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar payroll-create has option payroll_month",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar payroll-create select payroll_year",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar payroll-create has option payroll_year",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar payroll-create input period_start",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar payroll-create value period_start",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar payroll-create input period_end",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar payroll-create value period_end",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar payroll-create input notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar payroll-create value notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar user-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar user-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar user-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar user-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar user-create input email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar user-create value email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar user-create input username",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar user-create value username",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-to-user route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee-to-user document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar employee lookup copies identity",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar role-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar role-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar role-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar role-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar role-create input description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar role-create value description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar permissions route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar permissions document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create select item_category_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create has option item_category_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create select unit_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create has option unit_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create select vat_applicable",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create has option vat_applicable",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create input item_code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create value item_code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create input reorder_level",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create value reorder_level",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create input minimum_stock",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create value minimum_stock",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create input description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar item-create value description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar warehouse-manage route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar warehouse-manage document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-request route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-request document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-request select project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-request has option project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-request select lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-request has option lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-request input reason",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-request value reason",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-request input lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-request value lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-request input lines[0][estimated_unit_cost]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-request value lines[0][estimated_unit_cost]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-order route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-order document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-order select supplier_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-order has option supplier_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-order select warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-order has option warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-order select lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-order has option lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-order input lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-order value lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-order input lines[0][unit_price]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-order value lines[0][unit_price]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-order input notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar purchase-order value notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt select supplier_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt has option supplier_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt select warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt has option warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt select lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt has option lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt input delivery_note_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt value delivery_note_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt input lines[0][ordered_quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt value lines[0][ordered_quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt input lines[0][received_quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt value lines[0][received_quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt input lines[0][accepted_quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt value lines[0][accepted_quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt input lines[0][unit_cost]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar goods-receipt value lines[0][unit_cost]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-issue route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-issue document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-issue select warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-issue has option warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-issue select project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-issue has option project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-issue select lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-issue has option lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-issue input purpose",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-issue value purpose",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-issue input lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-issue value lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-transfer route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-transfer document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-transfer select from_warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-transfer has option from_warehouse_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-transfer select lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-transfer has option lines[0][item_id]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-transfer input notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-transfer value notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-transfer input lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar stock-transfer value lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill select supplier_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill has option supplier_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill select project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill has option project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill input bill_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill value bill_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill input notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill value notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill input lines[0][description]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill value lines[0][description]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill input lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill value lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill input lines[0][unit_price]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar supplier-bill value lines[0][unit_price]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice select customer_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice has option customer_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice select project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice has option project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice input invoice_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice value invoice_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice input notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice value notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice input lines[0][description]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice value lines[0][description]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice input lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice value lines[0][quantity]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice input lines[0][unit_price]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar customer-invoice value lines[0][unit_price]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar journal-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar journal-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar journal-create input description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar journal-create value description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar journal-create input lines[0][debit]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar journal-create value lines[0][debit]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar journal-create input lines[1][credit]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar journal-create value lines[1][credit]",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-expense route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-expense document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-expense select project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-expense has option project_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-expense select expense_category_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-expense has option expense_category_id",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-expense input taxable_amount",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-expense value taxable_amount",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-expense input description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-expense value description",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-expense input reference_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar site-expense value reference_number",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create input asset_code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create value asset_code",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create input name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create value name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create input make",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create value make",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create input model",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create value model",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create input year",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create value year",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create input acquisition_cost",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create value acquisition_cost",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create input notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar equipment-create value notes",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar marketing-lead route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar marketing-lead document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar marketing-lead input company_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar marketing-lead value company_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar marketing-lead input contact_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar marketing-lead value contact_name",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar marketing-lead input contact_email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar marketing-lead value contact_email",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar marketing-lead input city",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar marketing-lead value city",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar marketing-lead input requirement",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar marketing-lead value requirement",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar marketing-lead input estimated_value",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar marketing-lead value estimated_value",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar hr-reports route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar hr-reports document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-reports route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar project-reports document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar trial-balance route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar trial-balance document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar vat-report route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar vat-report document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar my-approvals route",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "ar my-approvals document direction",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "name": "All business tables and row contents unchanged",
+      "ok": true,
+      "detail": {
+        "tables": 96,
+        "changed": []
+      }
+    },
+    {
+      "name": "No browser page errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "No failed application responses",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "No attempted business writes during capture",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "External CDN requests denied by capture policy",
+      "ok": true,
+      "detail": {
+        "blockedRequests": 8
+      }
+    }
+  ],
+  "errors": [],
+  "badResponses": [],
+  "blocked": [
+    {
+      "method": "GET",
+      "path": "/ajax/libs/leaflet/1.9.4/leaflet.min.css",
+      "reason": "external origin"
+    },
+    {
+      "method": "GET",
+      "path": "/ajax/libs/leaflet/1.9.4/leaflet.min.js",
+      "reason": "external origin"
+    },
+    {
+      "method": "GET",
+      "path": "/ajax/libs/leaflet/1.9.4/leaflet.min.css",
+      "reason": "external origin"
+    },
+    {
+      "method": "GET",
+      "path": "/ajax/libs/leaflet/1.9.4/leaflet.min.js",
+      "reason": "external origin"
+    },
+    {
+      "method": "GET",
+      "path": "/ajax/libs/leaflet/1.9.4/leaflet.min.css",
+      "reason": "external origin"
+    },
+    {
+      "method": "GET",
+      "path": "/ajax/libs/leaflet/1.9.4/leaflet.min.js",
+      "reason": "external origin"
+    },
+    {
+      "method": "GET",
+      "path": "/ajax/libs/leaflet/1.9.4/leaflet.min.css",
+      "reason": "external origin"
+    },
+    {
+      "method": "GET",
+      "path": "/ajax/libs/leaflet/1.9.4/leaflet.min.js",
+      "reason": "external origin"
+    }
+  ],
+  "businessStateBefore": {
+    "approval_instance_steps": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "approval_instances": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "approval_workflow_steps": {
+      "rows": 7,
+      "sha256": "38b024ee5c34f8210b3955ab618fc8b869268f70c7c5bdcc476d1ea7fc1b05c6"
+    },
+    "approval_workflows": {
+      "rows": 3,
+      "sha256": "c3694022cd9fd0cf21ddc723ed8d448552c942af3ca9833043d6cdc3c13d1cd4"
+    },
+    "attendance_records": {
+      "rows": 114,
+      "sha256": "4d01f2f2a563f1752c7f672924124b6477b05492545389c8ad6ebb28e40ae85d"
+    },
+    "automatic_posting_rules": {
+      "rows": 9,
+      "sha256": "8c5da523286db7aef9eccdf664923aa7044b74b83d6cfc87b97451d153f375af"
+    },
+    "branches": {
+      "rows": 3,
+      "sha256": "7c30fd51d270a1a49edecf91d8288851d5f676a39282b4e6c6a94b8adf91f54a"
+    },
+    "chart_of_accounts": {
+      "rows": 26,
+      "sha256": "8843fbe6a0bcc65881f1c31f9bc0dd979412b10b7f53a4d903911afb5c059cf9"
+    },
+    "company_profiles": {
+      "rows": 1,
+      "sha256": "aeca361331b59ba6dadf05f6be8b824317ab5e5cb14068c912147bf2b22798f7"
+    },
+    "cost_centers": {
+      "rows": 20,
+      "sha256": "4b7c8d1b0d05dcd0abcb7548276bc133f3e6f42bd1e48b8342b583643f7a05ba"
+    },
+    "customer_adjustment_note_lines": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "customer_adjustment_notes": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "customer_contacts": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "customer_credit_allocations": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "customer_credit_refunds": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "customer_invoice_lines": {
+      "rows": 4,
+      "sha256": "f74ae8f2f51d5172921aae5c4a3ef704851147be0111fdf279928486297d7c66"
+    },
+    "customer_invoices": {
+      "rows": 4,
+      "sha256": "99797b3cbc46ffb924e1e9931f5d1de65b2613497abdcbd33121bae7ed022bef"
+    },
+    "customer_notes": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "customer_receipts": {
+      "rows": 2,
+      "sha256": "d9e645481eacab67752258e2eefc04ebe8f782f186b7166f878fbd65eb46b5c6"
+    },
+    "customers": {
+      "rows": 3,
+      "sha256": "5606c9ab1a358672827e224785b8bfce3ca24f8e5cb401f1a8315be0ca4a558d"
+    },
+    "departments": {
+      "rows": 7,
+      "sha256": "f9eb761dc147dee255154a3d8fcdc7c7e3c51ec3dd0fe2aeca5e2535bf6d769f"
+    },
+    "designations": {
+      "rows": 12,
+      "sha256": "860bcb4e5d8a8b3662356bf28752dd64322f3599383dfb43c17fbd0b093da583"
+    },
+    "document_sequences": {
+      "rows": 8,
+      "sha256": "b3dd819c48b8fa3d1f285d7cf0d03c052f548bad0230f6227b4eba5bba525776"
+    },
+    "employee_documents": {
+      "rows": 46,
+      "sha256": "a1505d3ded9985c322ba618942d9cf804aa4e366ac814642699954838dae46e0"
+    },
+    "employee_shift_assignments": {
+      "rows": 20,
+      "sha256": "da2be9dfc8f196284d36d1a65dc44b5d7bb281fa9b1081519ba11fd5d80d6cf1"
+    },
+    "employees": {
+      "rows": 21,
+      "sha256": "219061e29ef9f1ae989b5b51082d16e4f6e687b1efb1364bff3d53b206950296"
+    },
+    "end_of_service_records": {
+      "rows": 3,
+      "sha256": "a9bb83bdb8a0ff6e3fc2ec65d1b5fe965f22a48cbd0ee36a22d7b4111828107c"
+    },
+    "equipment_assets": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "equipment_assignments": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "equipment_documents": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "equipment_fuel_logs": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "equipment_maintenance_records": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "expense_categories": {
+      "rows": 5,
+      "sha256": "a7f9122da857e9f020d23a22668228299cd1397282479518bbec49563addb61b"
+    },
+    "failed_jobs": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "goods_receipt_lines": {
+      "rows": 15,
+      "sha256": "8a3763ce5320333db0f403385b2ac42a6a47480320c8d0ce5fd954f865cbbbeb"
+    },
+    "goods_receipts": {
+      "rows": 5,
+      "sha256": "09437cfdb92f49ff1c0a02d83de298cff25d86e2545de408f1f803fee9209fae"
+    },
+    "item_categories": {
+      "rows": 8,
+      "sha256": "a77bdb6ad736a4ce53b3df9e8ea5f0a06132b389a9cfef0538441de34ec2dc3f"
+    },
+    "items": {
+      "rows": 40,
+      "sha256": "7da5426fd21b7684fbfc0064d0ee6a767fb2c4d59bc3dc8774e00fbbb60f8440"
+    },
+    "job_batches": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "jobs": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "journal_entries": {
+      "rows": 27,
+      "sha256": "b4476450956b2ae444f89d1770f8913b62517b5ccca0dad148850e28b679fb46"
+    },
+    "journal_entry_lines": {
+      "rows": 84,
+      "sha256": "653622fbd611f31058e8ea7232db4793f1f30da1d8116e94e92150f0f9d8dd00"
+    },
+    "leave_requests": {
+      "rows": 8,
+      "sha256": "1ac1f63cd04e0840e3a23d10d86a4e816b2b9692b21398dbee696c734992a559"
+    },
+    "leave_types": {
+      "rows": 4,
+      "sha256": "8405aec1db860efbda3ed6014d43bd52347f620cd2dc89a744928341413c3cb0"
+    },
+    "lookup_values": {
+      "rows": 24,
+      "sha256": "311c204297109fe3ae2fa3dc52114413d29358e479af178f0c68aab4cfc69f4b"
+    },
+    "marketing_leads": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "marketing_visits": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "migrations": {
+      "rows": 39,
+      "sha256": "c0294ecda62d5a9a7987160809a1a49c11c48318fd226eb58cdab0d2ffbce2a1"
+    },
+    "offline_sync_receipts": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "overtime_records": {
+      "rows": 6,
+      "sha256": "04921567a12d5d8e40ceda3d01acfada67ede183499f88f8734ad854a918f768"
+    },
+    "password_reset_tokens": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "payment_terms": {
+      "rows": 4,
+      "sha256": "35c5726d0359f4783a750a7fef0e2f10932583c782eec94f6f666c5426d05237"
+    },
+    "payroll_bank_exports": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "payroll_run_items": {
+      "rows": 19,
+      "sha256": "79c364e3997f8abad53ae9ca14190d0666a38ad71756b77e0c78df36f532265f"
+    },
+    "payroll_runs": {
+      "rows": 1,
+      "sha256": "b0225231825464f488f1353ace8059e0b02bf80b8ff112c9e75085a7747e7a14"
+    },
+    "payroll_settlements": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "permissions": {
+      "rows": 750,
+      "sha256": "6fd192fa076982f500a7fa90cba3753557b9a44f6eeec9fb018b3cd69a68d9c3"
+    },
+    "project_budget_lines": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project_budgets": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project_classifications": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "projects": {
+      "rows": 3,
+      "sha256": "707a91f0cbb801ef51c511280a91d9753ab858078088b9dbc13d34e075dfe27f"
+    },
+    "purchase_order_attachments": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "purchase_order_lines": {
+      "rows": 18,
+      "sha256": "7d0a88ba036978e94493ed62e4cd25030766a51674400c3ac6462fe6c7370fd6"
+    },
+    "purchase_orders": {
+      "rows": 6,
+      "sha256": "8b649f5fb9b3c6c8c0f347400b0e6db420326d3fde6de55656e202298421b43e"
+    },
+    "purchase_request_lines": {
+      "rows": 24,
+      "sha256": "c81b0605d19c23aace1e955c4b33a3db26f6acb6fe750aac46146cf6cd36d198"
+    },
+    "purchase_requests": {
+      "rows": 8,
+      "sha256": "8fe59b84e36d1c48d19f1073f725e8ed71cd71cff281049e583b3b7d51750f62"
+    },
+    "role_permissions": {
+      "rows": 1056,
+      "sha256": "04ccd425846899f97fd7670b84bf9cc8d7c0772201744b718b6e38a8bfb4c1fc"
+    },
+    "role_reporting_parents": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "roles": {
+      "rows": 14,
+      "sha256": "aff17355d5deefcc22403a4335287d28d806c817b172c783ee2488b7b4ce95d8"
+    },
+    "salary_structure_items": {
+      "rows": 10,
+      "sha256": "e9a8f5f343af3ac2ab6c4cbc12f15c19dd8f6f8cd919e02ec8f024d6d7a9130d"
+    },
+    "salary_structures": {
+      "rows": 20,
+      "sha256": "a7dcf769dabf0a78aeacd6b68575125739cb2317e798931ccdc685688379c781"
+    },
+    "shifts": {
+      "rows": 3,
+      "sha256": "eb39cda8f425c61a077065c9bbdf959c72238b7c420dc3ed67fa677a5e292b1b"
+    },
+    "site_expense_receipts": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "site_expenses": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "sites": {
+      "rows": 4,
+      "sha256": "4193ba2b7af8351e5d8f1fc21b5c022167a72908277f5502bdb2590a78625497"
+    },
+    "stock_adjustments": {
+      "rows": 5,
+      "sha256": "d1d97031a92bc1b612c9867163c0eb0e68043cc5effd9638848b8992f91eaa27"
+    },
+    "stock_issue_lines": {
+      "rows": 20,
+      "sha256": "c95bcb859e79b152061dc342352b1568545258ee0b9c38604cd14fbf354f20d6"
+    },
+    "stock_issues": {
+      "rows": 10,
+      "sha256": "2074505e42068564efc6fca1abe57edc6a2a4fdd96351c7e243b03cde9e64e01"
+    },
+    "stock_ledger_entries": {
+      "rows": 83,
+      "sha256": "4d70f2474e3dd3218f502a5e9ae01d698715d9be9ea45456c77e57ef5a5ae36f"
+    },
+    "stock_transfer_lines": {
+      "rows": 12,
+      "sha256": "09924ab8121f581d202aafb41a5f46fe8f0da25f2f6dad9642b0f51d91e16ca6"
+    },
+    "stock_transfers": {
+      "rows": 6,
+      "sha256": "6000eea0efc8fcef2f5e0eae0e29d2d3ee198710399684d624d647216ead7c30"
+    },
+    "supplier_bill_grn_matches": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "supplier_bill_lines": {
+      "rows": 4,
+      "sha256": "f0fab5f8bdb84d33856e8df737ff12a40af9d1f407b6463c892589c78b9c7190"
+    },
+    "supplier_bills": {
+      "rows": 4,
+      "sha256": "f106e34b13fa171b2f31d9eb154c6007a7121955c52eb38355eaa212e93a30d3"
+    },
+    "supplier_payments": {
+      "rows": 2,
+      "sha256": "46cc2edb5155574e0aee894528a6fa32a70365c0a9ac062df4fb4734add0d471"
+    },
+    "supplier_projects": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "suppliers": {
+      "rows": 3,
+      "sha256": "52fe8454eaca2085ac41d7d881d570fd264f2c469c595f54b81de73ded5def83"
+    },
+    "units": {
+      "rows": 8,
+      "sha256": "f4865e64b039325282d342efefe39594690711f041a73fde95f337ee5d474d0a"
+    },
+    "user_roles": {
+      "rows": 12,
+      "sha256": "fa378dbdeb4e54f36698007020548995b8a35d287811dc05c352819788bbe57e"
+    },
+    "vat_periods": {
+      "rows": 2,
+      "sha256": "fb4d5ecc82471c48d3ecdaa29cd761f4ee3f5f35249e1c50b5f12921c949b79d"
+    },
+    "vat_transactions": {
+      "rows": 6,
+      "sha256": "79dab7e1efc3aec151fa818d5decf8af8f5729a6ae9fbb34fcf273dd036c248a"
+    },
+    "warehouse_stocks": {
+      "rows": 52,
+      "sha256": "f55f2433c07121155d3107fc60980cf92f025df9df74ac41b4cccd0ba41d7c38"
+    },
+    "warehouses": {
+      "rows": 3,
+      "sha256": "265fce1d765ed40a100f3328fb33ecb644531804c2859c2b390876f892cf921e"
+    },
+    "zatca_egs_units": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "zatca_invoice_records": {
+      "rows": 3,
+      "sha256": "e3072b78ab6b67a56cdca71806333a193dc741674e0fb806a5228e1291e99179"
+    },
+    "zatca_submissions": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "businessStateAfter": {
+    "approval_instance_steps": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "approval_instances": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "approval_workflow_steps": {
+      "rows": 7,
+      "sha256": "38b024ee5c34f8210b3955ab618fc8b869268f70c7c5bdcc476d1ea7fc1b05c6"
+    },
+    "approval_workflows": {
+      "rows": 3,
+      "sha256": "c3694022cd9fd0cf21ddc723ed8d448552c942af3ca9833043d6cdc3c13d1cd4"
+    },
+    "attendance_records": {
+      "rows": 114,
+      "sha256": "4d01f2f2a563f1752c7f672924124b6477b05492545389c8ad6ebb28e40ae85d"
+    },
+    "automatic_posting_rules": {
+      "rows": 9,
+      "sha256": "8c5da523286db7aef9eccdf664923aa7044b74b83d6cfc87b97451d153f375af"
+    },
+    "branches": {
+      "rows": 3,
+      "sha256": "7c30fd51d270a1a49edecf91d8288851d5f676a39282b4e6c6a94b8adf91f54a"
+    },
+    "chart_of_accounts": {
+      "rows": 26,
+      "sha256": "8843fbe6a0bcc65881f1c31f9bc0dd979412b10b7f53a4d903911afb5c059cf9"
+    },
+    "company_profiles": {
+      "rows": 1,
+      "sha256": "aeca361331b59ba6dadf05f6be8b824317ab5e5cb14068c912147bf2b22798f7"
+    },
+    "cost_centers": {
+      "rows": 20,
+      "sha256": "4b7c8d1b0d05dcd0abcb7548276bc133f3e6f42bd1e48b8342b583643f7a05ba"
+    },
+    "customer_adjustment_note_lines": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "customer_adjustment_notes": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "customer_contacts": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "customer_credit_allocations": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "customer_credit_refunds": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "customer_invoice_lines": {
+      "rows": 4,
+      "sha256": "f74ae8f2f51d5172921aae5c4a3ef704851147be0111fdf279928486297d7c66"
+    },
+    "customer_invoices": {
+      "rows": 4,
+      "sha256": "99797b3cbc46ffb924e1e9931f5d1de65b2613497abdcbd33121bae7ed022bef"
+    },
+    "customer_notes": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "customer_receipts": {
+      "rows": 2,
+      "sha256": "d9e645481eacab67752258e2eefc04ebe8f782f186b7166f878fbd65eb46b5c6"
+    },
+    "customers": {
+      "rows": 3,
+      "sha256": "5606c9ab1a358672827e224785b8bfce3ca24f8e5cb401f1a8315be0ca4a558d"
+    },
+    "departments": {
+      "rows": 7,
+      "sha256": "f9eb761dc147dee255154a3d8fcdc7c7e3c51ec3dd0fe2aeca5e2535bf6d769f"
+    },
+    "designations": {
+      "rows": 12,
+      "sha256": "860bcb4e5d8a8b3662356bf28752dd64322f3599383dfb43c17fbd0b093da583"
+    },
+    "document_sequences": {
+      "rows": 8,
+      "sha256": "b3dd819c48b8fa3d1f285d7cf0d03c052f548bad0230f6227b4eba5bba525776"
+    },
+    "employee_documents": {
+      "rows": 46,
+      "sha256": "a1505d3ded9985c322ba618942d9cf804aa4e366ac814642699954838dae46e0"
+    },
+    "employee_shift_assignments": {
+      "rows": 20,
+      "sha256": "da2be9dfc8f196284d36d1a65dc44b5d7bb281fa9b1081519ba11fd5d80d6cf1"
+    },
+    "employees": {
+      "rows": 21,
+      "sha256": "219061e29ef9f1ae989b5b51082d16e4f6e687b1efb1364bff3d53b206950296"
+    },
+    "end_of_service_records": {
+      "rows": 3,
+      "sha256": "a9bb83bdb8a0ff6e3fc2ec65d1b5fe965f22a48cbd0ee36a22d7b4111828107c"
+    },
+    "equipment_assets": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "equipment_assignments": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "equipment_documents": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "equipment_fuel_logs": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "equipment_maintenance_records": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "expense_categories": {
+      "rows": 5,
+      "sha256": "a7f9122da857e9f020d23a22668228299cd1397282479518bbec49563addb61b"
+    },
+    "failed_jobs": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "goods_receipt_lines": {
+      "rows": 15,
+      "sha256": "8a3763ce5320333db0f403385b2ac42a6a47480320c8d0ce5fd954f865cbbbeb"
+    },
+    "goods_receipts": {
+      "rows": 5,
+      "sha256": "09437cfdb92f49ff1c0a02d83de298cff25d86e2545de408f1f803fee9209fae"
+    },
+    "item_categories": {
+      "rows": 8,
+      "sha256": "a77bdb6ad736a4ce53b3df9e8ea5f0a06132b389a9cfef0538441de34ec2dc3f"
+    },
+    "items": {
+      "rows": 40,
+      "sha256": "7da5426fd21b7684fbfc0064d0ee6a767fb2c4d59bc3dc8774e00fbbb60f8440"
+    },
+    "job_batches": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "jobs": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "journal_entries": {
+      "rows": 27,
+      "sha256": "b4476450956b2ae444f89d1770f8913b62517b5ccca0dad148850e28b679fb46"
+    },
+    "journal_entry_lines": {
+      "rows": 84,
+      "sha256": "653622fbd611f31058e8ea7232db4793f1f30da1d8116e94e92150f0f9d8dd00"
+    },
+    "leave_requests": {
+      "rows": 8,
+      "sha256": "1ac1f63cd04e0840e3a23d10d86a4e816b2b9692b21398dbee696c734992a559"
+    },
+    "leave_types": {
+      "rows": 4,
+      "sha256": "8405aec1db860efbda3ed6014d43bd52347f620cd2dc89a744928341413c3cb0"
+    },
+    "lookup_values": {
+      "rows": 24,
+      "sha256": "311c204297109fe3ae2fa3dc52114413d29358e479af178f0c68aab4cfc69f4b"
+    },
+    "marketing_leads": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "marketing_visits": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "migrations": {
+      "rows": 39,
+      "sha256": "c0294ecda62d5a9a7987160809a1a49c11c48318fd226eb58cdab0d2ffbce2a1"
+    },
+    "offline_sync_receipts": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "overtime_records": {
+      "rows": 6,
+      "sha256": "04921567a12d5d8e40ceda3d01acfada67ede183499f88f8734ad854a918f768"
+    },
+    "password_reset_tokens": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "payment_terms": {
+      "rows": 4,
+      "sha256": "35c5726d0359f4783a750a7fef0e2f10932583c782eec94f6f666c5426d05237"
+    },
+    "payroll_bank_exports": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "payroll_run_items": {
+      "rows": 19,
+      "sha256": "79c364e3997f8abad53ae9ca14190d0666a38ad71756b77e0c78df36f532265f"
+    },
+    "payroll_runs": {
+      "rows": 1,
+      "sha256": "b0225231825464f488f1353ace8059e0b02bf80b8ff112c9e75085a7747e7a14"
+    },
+    "payroll_settlements": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "permissions": {
+      "rows": 750,
+      "sha256": "6fd192fa076982f500a7fa90cba3753557b9a44f6eeec9fb018b3cd69a68d9c3"
+    },
+    "project_budget_lines": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project_budgets": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project_classifications": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "projects": {
+      "rows": 3,
+      "sha256": "707a91f0cbb801ef51c511280a91d9753ab858078088b9dbc13d34e075dfe27f"
+    },
+    "purchase_order_attachments": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "purchase_order_lines": {
+      "rows": 18,
+      "sha256": "7d0a88ba036978e94493ed62e4cd25030766a51674400c3ac6462fe6c7370fd6"
+    },
+    "purchase_orders": {
+      "rows": 6,
+      "sha256": "8b649f5fb9b3c6c8c0f347400b0e6db420326d3fde6de55656e202298421b43e"
+    },
+    "purchase_request_lines": {
+      "rows": 24,
+      "sha256": "c81b0605d19c23aace1e955c4b33a3db26f6acb6fe750aac46146cf6cd36d198"
+    },
+    "purchase_requests": {
+      "rows": 8,
+      "sha256": "8fe59b84e36d1c48d19f1073f725e8ed71cd71cff281049e583b3b7d51750f62"
+    },
+    "role_permissions": {
+      "rows": 1056,
+      "sha256": "04ccd425846899f97fd7670b84bf9cc8d7c0772201744b718b6e38a8bfb4c1fc"
+    },
+    "role_reporting_parents": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "roles": {
+      "rows": 14,
+      "sha256": "aff17355d5deefcc22403a4335287d28d806c817b172c783ee2488b7b4ce95d8"
+    },
+    "salary_structure_items": {
+      "rows": 10,
+      "sha256": "e9a8f5f343af3ac2ab6c4cbc12f15c19dd8f6f8cd919e02ec8f024d6d7a9130d"
+    },
+    "salary_structures": {
+      "rows": 20,
+      "sha256": "a7dcf769dabf0a78aeacd6b68575125739cb2317e798931ccdc685688379c781"
+    },
+    "shifts": {
+      "rows": 3,
+      "sha256": "eb39cda8f425c61a077065c9bbdf959c72238b7c420dc3ed67fa677a5e292b1b"
+    },
+    "site_expense_receipts": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "site_expenses": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "sites": {
+      "rows": 4,
+      "sha256": "4193ba2b7af8351e5d8f1fc21b5c022167a72908277f5502bdb2590a78625497"
+    },
+    "stock_adjustments": {
+      "rows": 5,
+      "sha256": "d1d97031a92bc1b612c9867163c0eb0e68043cc5effd9638848b8992f91eaa27"
+    },
+    "stock_issue_lines": {
+      "rows": 20,
+      "sha256": "c95bcb859e79b152061dc342352b1568545258ee0b9c38604cd14fbf354f20d6"
+    },
+    "stock_issues": {
+      "rows": 10,
+      "sha256": "2074505e42068564efc6fca1abe57edc6a2a4fdd96351c7e243b03cde9e64e01"
+    },
+    "stock_ledger_entries": {
+      "rows": 83,
+      "sha256": "4d70f2474e3dd3218f502a5e9ae01d698715d9be9ea45456c77e57ef5a5ae36f"
+    },
+    "stock_transfer_lines": {
+      "rows": 12,
+      "sha256": "09924ab8121f581d202aafb41a5f46fe8f0da25f2f6dad9642b0f51d91e16ca6"
+    },
+    "stock_transfers": {
+      "rows": 6,
+      "sha256": "6000eea0efc8fcef2f5e0eae0e29d2d3ee198710399684d624d647216ead7c30"
+    },
+    "supplier_bill_grn_matches": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "supplier_bill_lines": {
+      "rows": 4,
+      "sha256": "f0fab5f8bdb84d33856e8df737ff12a40af9d1f407b6463c892589c78b9c7190"
+    },
+    "supplier_bills": {
+      "rows": 4,
+      "sha256": "f106e34b13fa171b2f31d9eb154c6007a7121955c52eb38355eaa212e93a30d3"
+    },
+    "supplier_payments": {
+      "rows": 2,
+      "sha256": "46cc2edb5155574e0aee894528a6fa32a70365c0a9ac062df4fb4734add0d471"
+    },
+    "supplier_projects": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "suppliers": {
+      "rows": 3,
+      "sha256": "52fe8454eaca2085ac41d7d881d570fd264f2c469c595f54b81de73ded5def83"
+    },
+    "units": {
+      "rows": 8,
+      "sha256": "f4865e64b039325282d342efefe39594690711f041a73fde95f337ee5d474d0a"
+    },
+    "user_roles": {
+      "rows": 12,
+      "sha256": "fa378dbdeb4e54f36698007020548995b8a35d287811dc05c352819788bbe57e"
+    },
+    "vat_periods": {
+      "rows": 2,
+      "sha256": "fb4d5ecc82471c48d3ecdaa29cd761f4ee3f5f35249e1c50b5f12921c949b79d"
+    },
+    "vat_transactions": {
+      "rows": 6,
+      "sha256": "79dab7e1efc3aec151fa818d5decf8af8f5729a6ae9fbb34fcf273dd036c248a"
+    },
+    "warehouse_stocks": {
+      "rows": 52,
+      "sha256": "f55f2433c07121155d3107fc60980cf92f025df9df74ac41b4cccd0ba41d7c38"
+    },
+    "warehouses": {
+      "rows": 3,
+      "sha256": "265fce1d765ed40a100f3328fb33ecb644531804c2859c2b390876f892cf921e"
+    },
+    "zatca_egs_units": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "zatca_invoice_records": {
+      "rows": 3,
+      "sha256": "e3072b78ab6b67a56cdca71806333a193dc741674e0fb806a5228e1291e99179"
+    },
+    "zatca_submissions": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "captures": [
+    {
+      "slug": "dashboard",
+      "lang": "en",
+      "image": "en-dashboard.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "View All",
+        "Open Activity Logs"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "74dde58a34fcd0a502a8d54e8b61646d36865d97b1f549eecf90cda6ae887f93"
+    },
+    {
+      "slug": "dashboard",
+      "lang": "en",
+      "mobile": true,
+      "image": "en-dashboard-390.jpg",
+      "sha256": "fad62ddf8632153ebb7a4c0a801a55cd1b72c158b47a24ef54b33d79f738f696"
+    },
+    {
+      "slug": "customer-create",
+      "lang": "en",
+      "image": "en-customer-create.jpg",
+      "values": [
+        {
+          "name": "allowed_payment_types",
+          "label": "Accepted payment types",
+          "value": "Both"
+        },
+        {
+          "name": "name",
+          "label": "Customer Name *",
+          "value": "Al Noor Training Development"
+        },
+        {
+          "name": "code",
+          "label": "Customer Code",
+          "value": "CUS-TRAIN-NEW"
+        },
+        {
+          "name": "contact_person",
+          "label": "Contact Person",
+          "value": "Training Customer Contact"
+        },
+        {
+          "name": "email",
+          "label": "Email",
+          "value": "customer.new@example.test"
+        },
+        {
+          "name": "credit_limit",
+          "label": "Credit Limit (SAR)",
+          "value": "25000"
+        },
+        {
+          "name": "opening_receivable",
+          "label": "Opening Receivable (SAR)",
+          "value": "0"
+        },
+        {
+          "name": "city",
+          "label": "City",
+          "value": "Riyadh"
+        },
+        {
+          "name": "billing_address",
+          "label": "Billing Address",
+          "value": "Training address only — replace with verified customer address."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "+ New",
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1870,
+      "sha256": "3d9a6472cc2fec0b50666b5af7b2a7127749699b8b73e23302c4dec656d32de2"
+    },
+    {
+      "slug": "customer-create",
+      "lang": "en",
+      "mobile": true,
+      "image": "en-customer-create-390.jpg",
+      "sha256": "1276fafb30518cd6aacb15f75442dccbdc218ca366c198a4b719566c9a3b48c4"
+    },
+    {
+      "slug": "customer-view",
+      "lang": "en",
+      "image": "en-customer-view.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "Edit / Manage",
+        "Back to Customers",
+        "View project",
+        "View",
+        "Edit draft",
+        "View all",
+        "View record"
+      ],
+      "width": 1440,
+      "height": 4336,
+      "sha256": "04d38f661a2fd581629106642863a9f65aec2d8de4d0046e3e61bc09d20dabec"
+    },
+    {
+      "slug": "customer-manage",
+      "lang": "en",
+      "image": "en-customer-manage.jpg",
+      "values": [
+        {
+          "name": "contact_person",
+          "label": "Contact Person",
+          "value": "Updated Training Contact"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "View (read-only)",
+        "Back to Customers",
+        "+ New",
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1357,
+      "sha256": "4e20f8f1761791d7e2695321064b16f7ce3a4b16a24649e9a3eed06e2b080231"
+    },
+    {
+      "slug": "supplier-create",
+      "lang": "en",
+      "image": "en-supplier-create.jpg",
+      "values": [
+        {
+          "name": "payment_term_id",
+          "label": "Payment Terms",
+          "value": "Cash"
+        },
+        {
+          "name": "allowed_payment_types",
+          "label": "Accepted Payment Types",
+          "value": "Both"
+        },
+        {
+          "name": "name",
+          "label": "Supplier Name *",
+          "value": "Gulf Training Materials"
+        },
+        {
+          "name": "code",
+          "label": "Supplier Code",
+          "value": "SUP-TRAIN-NEW"
+        },
+        {
+          "name": "contact_person",
+          "label": "Contact Person",
+          "value": "Training Supplier Contact"
+        },
+        {
+          "name": "email",
+          "label": "Email",
+          "value": "supplier.new@example.test"
+        },
+        {
+          "name": "city",
+          "label": "City / Location",
+          "value": "Riyadh"
+        },
+        {
+          "name": "opening_balance",
+          "label": "Opening Balance (SAR)",
+          "value": "0"
+        },
+        {
+          "name": "address",
+          "label": "Address",
+          "value": "Training address only"
+        },
+        {
+          "name": "bank_name",
+          "label": "Bank Name",
+          "value": "Training Bank"
+        },
+        {
+          "name": "bank_account_name",
+          "label": "Account Holder Name",
+          "value": "Training Supplier"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "+ New",
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1169,
+      "sha256": "6b7c9aad76248d91ae2c2ba6b5061167e6d9856c071fe1b0024982fd5aeda05c"
+    },
+    {
+      "slug": "supplier-create",
+      "lang": "en",
+      "mobile": true,
+      "image": "en-supplier-create-390.jpg",
+      "sha256": "e3eb89ee6380b3940414454bbda87acd4d42495b14d592518ad28fd2ae7d4621"
+    },
+    {
+      "slug": "supplier-view",
+      "lang": "en",
+      "image": "en-supplier-view.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "Edit / Manage",
+        "Back to Suppliers",
+        "View PO",
+        "View all",
+        "View GRN",
+        "Create Supplier Bill",
+        "View",
+        "Edit draft"
+      ],
+      "width": 1440,
+      "height": 3405,
+      "sha256": "98a907463480539a1d9e5a102c3a06d212253f2b3f9edfed4910787bf667df52"
+    },
+    {
+      "slug": "supplier-manage",
+      "lang": "en",
+      "image": "en-supplier-manage.jpg",
+      "values": [
+        {
+          "name": "contact_person",
+          "label": "Contact Person",
+          "value": "Updated Training Supplier"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "View (read-only)",
+        "Back to Suppliers",
+        "+ New",
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1210,
+      "sha256": "ac75df54284c5d0eb6e6501c32c7a1e37f95973ae1a04aaa8d902295fba3fc48"
+    },
+    {
+      "slug": "project-create",
+      "lang": "en",
+      "image": "en-project-create.jpg",
+      "values": [
+        {
+          "name": "customer_id",
+          "label": "Client Name *",
+          "value": "Al Noor Training Development"
+        },
+        {
+          "name": "branch_id",
+          "label": "Branch *",
+          "value": "Dammam Branch"
+        },
+        {
+          "name": "name",
+          "label": "Project Name *",
+          "value": "Training Warehouse Extension"
+        },
+        {
+          "name": "code",
+          "label": "Project Code *",
+          "value": "PRJ-TRAIN-NEW"
+        },
+        {
+          "name": "budget",
+          "label": "Budget Amount (SAR) *",
+          "value": "150000"
+        },
+        {
+          "name": "location",
+          "label": "Project Location",
+          "value": "Riyadh — training site"
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "value": "Fictional training project. Form not submitted."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "+ New",
+        "Edit",
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "767f9a0afe42d11e11b8f6c966ad46adafa2104d9c50ad387abb3397e599270f"
+    },
+    {
+      "slug": "project-view",
+      "lang": "en",
+      "image": "en-project-view.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "Edit / Manage",
+        "Back to Projects",
+        "Open Project Reports",
+        "Budget / BOQ"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "879019fbc05e5662a20d866a743de984e7d6ce9752290030b50241991e521183"
+    },
+    {
+      "slug": "project-manage",
+      "lang": "en",
+      "image": "en-project-manage.jpg",
+      "values": [
+        {
+          "name": "description",
+          "label": "Description",
+          "value": "Training project note — unsaved."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "View (read-only)",
+        "Back to Projects",
+        "Open Project Reports",
+        "Budget / BOQ",
+        "+ New",
+        "Edit",
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1340,
+      "sha256": "9f8148e17df8450a72091357ca81a1628d2f9f36f15511d9bf7d7910224b1ea3"
+    },
+    {
+      "slug": "project-budget",
+      "lang": "en",
+      "image": "en-project-budget.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "Create Detailed Budget",
+        "Back to Project"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "f841b2599dbc292669f64d22117e85b72ab6aae183f387f5ac9a8bdef343e0cb"
+    },
+    {
+      "slug": "site-create",
+      "lang": "en",
+      "image": "en-site-create.jpg",
+      "values": [
+        {
+          "name": "project_id",
+          "label": "Project *",
+          "value": "Training Warehouse Renovation"
+        },
+        {
+          "name": "name",
+          "label": "Site Name *",
+          "value": "Training North Site"
+        },
+        {
+          "name": "code",
+          "label": "Site Code *",
+          "value": "SITE-TRAIN-NEW"
+        },
+        {
+          "name": "address",
+          "label": "Address",
+          "value": "Training site address"
+        },
+        {
+          "name": "geofence_radius",
+          "label": "Geo-Fence Radius (meters) *",
+          "value": "150"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "39ae2e8c6bf8da9e87330fa1b14e334b8f4f0dbbd748d722924f0f1ad89b4434"
+    },
+    {
+      "slug": "site-view",
+      "lang": "en",
+      "image": "en-site-view.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "Back to Sites",
+        "Edit / Manage"
+      ],
+      "width": 1440,
+      "height": 1074,
+      "sha256": "8cb2ab220029d9bb7d34e5012158c9b1e8521290f9c028a39c4c673251163c9c"
+    },
+    {
+      "slug": "employee-create",
+      "lang": "en",
+      "image": "en-employee-create.jpg",
+      "values": [
+        {
+          "name": "first_name",
+          "label": "First Name *",
+          "value": "Sara"
+        },
+        {
+          "name": "last_name",
+          "label": "Last Name",
+          "value": "Training"
+        },
+        {
+          "name": "email",
+          "label": "Email",
+          "value": "new.employee@example.test"
+        },
+        {
+          "name": "basic_salary",
+          "label": "Basic Salary (SAR) *",
+          "value": "3500"
+        },
+        {
+          "name": "housing_allowance",
+          "label": "Housing Allowance",
+          "value": "1000"
+        },
+        {
+          "name": "transport_allowance",
+          "label": "Transport Allowance",
+          "value": "250"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Show all sections",
+        "+ New",
+        "×",
+        "+ Add Document",
+        "Back / previous section",
+        "Cancel",
+        "Save & stay",
+        "Save & next",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 2055,
+      "sha256": "54b786f6fd05b39d7aa9e01e78645879dd1c06b34737ce6ba9c1cb8a4685fc84"
+    },
+    {
+      "slug": "employee-view",
+      "lang": "en",
+      "image": "en-employee-view.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "+ Attach Document",
+        "Edit Employee",
+        "Back to Employees",
+        "View linked record",
+        "Edit linked record",
+        "View register",
+        "Add attendance",
+        "Edit",
+        "Create leave",
+        "View",
+        "Add overtime",
+        "+ New Structure From Profile",
+        "Open payroll run",
+        "Payslip",
+        "View all"
+      ],
+      "width": 1440,
+      "height": 3612,
+      "sha256": "f2e48c6e802356bede8939b6288d00d261d67a076951f3256821d51ae40a63f9"
+    },
+    {
+      "slug": "employee-personal",
+      "lang": "en",
+      "image": "en-employee-personal.jpg",
+      "values": [
+        {
+          "name": "first_name",
+          "label": "First Name *",
+          "value": "Ahmed"
+        },
+        {
+          "name": "last_name",
+          "label": "Last Name",
+          "value": "Training"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Back to Employees",
+        "View linked record",
+        "Edit linked record",
+        "Show all sections",
+        "+ New",
+        "Back / previous section",
+        "Cancel",
+        "Save & stay",
+        "Save & next",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "8f9ddedb47687b108c9c337cb44491ce0859629636f071ae08b01b931c669028"
+    },
+    {
+      "slug": "employee-personal",
+      "lang": "en",
+      "mobile": true,
+      "image": "en-employee-personal-390.jpg",
+      "sha256": "ca24a4fa04280b79ee72d59f0327d5895c96bfc72e66a4bb2fd9f74deced42df"
+    },
+    {
+      "slug": "employee-employment",
+      "lang": "en",
+      "image": "en-employee-employment.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "Back to Employees",
+        "View linked record",
+        "Edit linked record",
+        "Show all sections",
+        "+ New",
+        "Back / previous section",
+        "Cancel",
+        "Save & stay",
+        "Save & next",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "1d973ac19d6543e4c3e1018b3e41d94e581cbbaa256baa23eba9e24b4d027a80"
+    },
+    {
+      "slug": "employee-salary",
+      "lang": "en",
+      "image": "en-employee-salary.jpg",
+      "values": [
+        {
+          "name": "basic_salary",
+          "label": "Basic Salary (SAR) *",
+          "value": "3500"
+        },
+        {
+          "name": "housing_allowance",
+          "label": "Housing Allowance",
+          "value": "1000"
+        },
+        {
+          "name": "transport_allowance",
+          "label": "Transport Allowance",
+          "value": "250"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Back to Employees",
+        "View linked record",
+        "Edit linked record",
+        "Show all sections",
+        "Manage salary here",
+        "Back / previous section",
+        "Cancel",
+        "Save & stay",
+        "Save & next",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1016,
+      "sha256": "27e62e4d60bd841c6b2a2353418984afbd196d3316f390f47a867956c9710a1a"
+    },
+    {
+      "slug": "leave-create",
+      "lang": "en",
+      "image": "en-leave-create.jpg",
+      "values": [
+        {
+          "name": "employee_id",
+          "label": "Employee *",
+          "value": "EMP-001 - Ahmed Training"
+        },
+        {
+          "name": "leave_type_id",
+          "label": "Leave Type *",
+          "value": "Annual Leave"
+        },
+        {
+          "name": "start_date",
+          "label": "Start Date *",
+          "value": "2026-11-10"
+        },
+        {
+          "name": "end_date",
+          "label": "End Date *",
+          "value": "2026-11-12"
+        },
+        {
+          "name": "reason",
+          "label": "Reason",
+          "value": "Fictional three-day training example."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Save",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "fdae04bb74b12c66deb1a02755a8e6f5159ee5eb038be71abab2cb9217b3e789"
+    },
+    {
+      "slug": "shift-create",
+      "lang": "en",
+      "image": "en-shift-create.jpg",
+      "values": [
+        {
+          "name": "name",
+          "label": "Shift Name *",
+          "value": "Training Day Shift"
+        },
+        {
+          "name": "code",
+          "label": "Shift Code *",
+          "value": "TRAIN-DAY"
+        },
+        {
+          "name": "start_time",
+          "label": "Start Time *",
+          "value": "08:00"
+        },
+        {
+          "name": "end_time",
+          "label": "End Time *",
+          "value": "17:00"
+        },
+        {
+          "name": "break_minutes",
+          "label": "Break (minutes) *",
+          "value": "60"
+        },
+        {
+          "name": "grace_minutes",
+          "label": "Grace (minutes) *",
+          "value": "10"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Save Shift"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "087bf56f737c67e31d2a0b89892091678686a593ae9f6aca4de3ccead3059dfb"
+    },
+    {
+      "slug": "payroll-create",
+      "lang": "en",
+      "image": "en-payroll-create.jpg",
+      "values": [
+        {
+          "name": "payroll_month",
+          "label": "Payroll Month *",
+          "value": "November"
+        },
+        {
+          "name": "payroll_year",
+          "label": "Payroll Year *",
+          "value": "2026"
+        },
+        {
+          "name": "period_start",
+          "label": "Period Start",
+          "value": "2026-11-01"
+        },
+        {
+          "name": "period_end",
+          "label": "Period End",
+          "value": "2026-11-30"
+        },
+        {
+          "name": "notes",
+          "label": "Notes",
+          "value": "Training payroll — never process or pay from this capture."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Create Payroll Run"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "6fcf9986805a3a98da52e0c076caee6b909eec395ece186f786c74a8e8945b82"
+    },
+    {
+      "slug": "user-create",
+      "lang": "en",
+      "image": "en-user-create.jpg",
+      "values": [
+        {
+          "name": "name",
+          "label": "Full Name *",
+          "value": "Training Account"
+        },
+        {
+          "name": "email",
+          "label": "Email Address *",
+          "value": "account@example.test"
+        },
+        {
+          "name": "username",
+          "label": "Username",
+          "value": "training.new"
+        }
+      ],
+      "remaining": [
+        "Primary Role"
+      ],
+      "buttons": [
+        "Upload Profile Photo",
+        "+ New",
+        "Clear employee link",
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1424,
+      "sha256": "7f1d10ca485431f1927c349526879817a445d40bc658260bb0ad0f8847361634"
+    },
+    {
+      "slug": "employee-to-user",
+      "lang": "en",
+      "image": "en-employee-to-user.jpg",
+      "values": [
+        {
+          "name": "name",
+          "label": "Full Name *",
+          "value": "Sara Training"
+        },
+        {
+          "name": "employee_id",
+          "label": "Employee ID",
+          "value": "GUIDE-EMP-01"
+        },
+        {
+          "name": "email",
+          "label": "Email Address *",
+          "value": "sara.training@example.test"
+        }
+      ],
+      "remaining": [
+        "Primary Role"
+      ],
+      "buttons": [
+        "Upload Profile Photo",
+        "+ New",
+        "Clear employee link",
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1442,
+      "sha256": "c2a617b37fb5209fd387ef57561fe96ab315e12daa5a7682ca2eb31461e720e1"
+    },
+    {
+      "slug": "role-create",
+      "lang": "en",
+      "image": "en-role-create.jpg",
+      "values": [
+        {
+          "name": "name",
+          "label": "Role Name *",
+          "value": "Training Site Reviewer"
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "value": "Training role — permissions must be reviewed before saving."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "+ New",
+        "Select all visible",
+        "Clear visible",
+        "Cancel",
+        "Save Role"
+      ],
+      "width": 1440,
+      "height": 1989,
+      "sha256": "110e3b1f37818f47947b6859ec14a162212816bf8ee3120035dbb25c8ce65979"
+    },
+    {
+      "slug": "permissions",
+      "lang": "en",
+      "image": "en-permissions.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "Apply",
+        "Save Permissions",
+        "Select all visible",
+        "Clear visible",
+        "Reset"
+      ],
+      "width": 1440,
+      "height": 1213,
+      "sha256": "880593fd55cf66fd7b9083c56cd83d188786cb73e684725c81938b56d3199ca8"
+    },
+    {
+      "slug": "item-create",
+      "lang": "en",
+      "image": "en-item-create.jpg",
+      "values": [
+        {
+          "name": "item_category_id",
+          "label": "Category",
+          "value": "Blocks and Masonry"
+        },
+        {
+          "name": "unit_id",
+          "label": "Unit *",
+          "value": "BAG - Bag"
+        },
+        {
+          "name": "vat_applicable",
+          "label": "VAT Applicable",
+          "value": "Yes"
+        },
+        {
+          "name": "name",
+          "label": "Item Name *",
+          "value": "Training Reinforcement Steel"
+        },
+        {
+          "name": "item_code",
+          "label": "Item Code *",
+          "value": "ITM-TRAIN-NEW"
+        },
+        {
+          "name": "reorder_level",
+          "label": "Reorder Level *",
+          "value": "100"
+        },
+        {
+          "name": "minimum_stock",
+          "label": "Minimum Stock *",
+          "value": "50"
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "value": "Training material only."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "a782867ce98cfbff3ed1ea35805992b63f244c13ab555a02cf4eca94c406230a"
+    },
+    {
+      "slug": "warehouse-manage",
+      "lang": "en",
+      "image": "en-warehouse-manage.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "Back",
+        "View",
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1030,
+      "sha256": "734b93a9ef33050c3dc504a790a5407174eec99b48a5503fa999fd29695cb845"
+    },
+    {
+      "slug": "purchase-request",
+      "lang": "en",
+      "image": "en-purchase-request.jpg",
+      "values": [
+        {
+          "name": "project_id",
+          "label": "Project",
+          "value": "Training Warehouse Renovation"
+        },
+        {
+          "name": "lines[0][item_id]",
+          "label": "lines[0][item_id]",
+          "value": "ITM-0001 - Ordinary Portland Cement 50kg"
+        },
+        {
+          "name": "reason",
+          "label": "Reason",
+          "value": "Training site requires materials. Unsaved example."
+        },
+        {
+          "name": "lines[0][quantity]",
+          "label": "lines[0][quantity]",
+          "value": "100"
+        },
+        {
+          "name": "lines[0][estimated_unit_cost]",
+          "label": "lines[0][estimated_unit_cost]",
+          "value": "3"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Save Purchase Request"
+      ],
+      "width": 1440,
+      "height": 1072,
+      "sha256": "a32347b9886cdb303c63b550d974a2841cdd7416c2fa4d5c0038776cfcd2d6aa"
+    },
+    {
+      "slug": "purchase-order",
+      "lang": "en",
+      "image": "en-purchase-order.jpg",
+      "values": [
+        {
+          "name": "supplier_id",
+          "label": "Supplier *",
+          "value": "Gulf Training Materials"
+        },
+        {
+          "name": "warehouse_id",
+          "label": "Deliver To Warehouse *",
+          "value": "Riyadh Main Store"
+        },
+        {
+          "name": "lines[0][item_id]",
+          "label": "lines[0][item_id]",
+          "value": "ITM-0001 - Ordinary Portland Cement 50kg"
+        },
+        {
+          "name": "lines[0][quantity]",
+          "label": "lines[0][quantity]",
+          "value": "100"
+        },
+        {
+          "name": "lines[0][unit_price]",
+          "label": "lines[0][unit_price]",
+          "value": "3"
+        },
+        {
+          "name": "notes",
+          "label": "Notes",
+          "value": "Training purchase order — not submitted."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "+ New",
+        "×",
+        "+ Add Line",
+        "Cancel",
+        "Save Purchase Order"
+      ],
+      "width": 1440,
+      "height": 1336,
+      "sha256": "83c95a3650d9ac0d430526c1114ecfcf04db99bca621f749bb3fbcb6f49987a2"
+    },
+    {
+      "slug": "goods-receipt",
+      "lang": "en",
+      "image": "en-goods-receipt.jpg",
+      "values": [
+        {
+          "name": "supplier_id",
+          "label": "Supplier *",
+          "value": "Gulf Training Materials"
+        },
+        {
+          "name": "warehouse_id",
+          "label": "Receiving Warehouse *",
+          "value": "Riyadh Main Store"
+        },
+        {
+          "name": "lines[0][item_id]",
+          "label": "lines[0][item_id]",
+          "value": "ITM-0001 - Ordinary Portland Cement 50kg"
+        },
+        {
+          "name": "delivery_note_number",
+          "label": "Delivery Note Number",
+          "value": "TRAIN-DN-01"
+        },
+        {
+          "name": "lines[0][ordered_quantity]",
+          "label": "lines[0][ordered_quantity]",
+          "value": "100"
+        },
+        {
+          "name": "lines[0][received_quantity]",
+          "label": "lines[0][received_quantity]",
+          "value": "60"
+        },
+        {
+          "name": "lines[0][accepted_quantity]",
+          "label": "lines[0][accepted_quantity]",
+          "value": "60"
+        },
+        {
+          "name": "lines[0][unit_cost]",
+          "label": "lines[0][unit_cost]",
+          "value": "3"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Save",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1060,
+      "sha256": "86b74788565ebf18996c56e44598b8a24c912a529fde5f5f8a6038aba1b816fa"
+    },
+    {
+      "slug": "stock-issue",
+      "lang": "en",
+      "image": "en-stock-issue.jpg",
+      "values": [
+        {
+          "name": "warehouse_id",
+          "label": "Issue From Warehouse *",
+          "value": "Riyadh Main Store"
+        },
+        {
+          "name": "project_id",
+          "label": "Issue To Project",
+          "value": "Training Warehouse Renovation"
+        },
+        {
+          "name": "lines[0][item_id]",
+          "label": "lines[0][item_id]",
+          "value": "ITM-0001 - Ordinary Portland Cement 50kg"
+        },
+        {
+          "name": "purpose",
+          "label": "Purpose",
+          "value": "Training material issue"
+        },
+        {
+          "name": "lines[0][quantity]",
+          "label": "lines[0][quantity]",
+          "value": "10"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Save Stock Issue"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "748b2cca1fd87431f9f1fbeff5357c961f35b6ac8636b116960faf93d6575cb9"
+    },
+    {
+      "slug": "stock-transfer",
+      "lang": "en",
+      "image": "en-stock-transfer.jpg",
+      "values": [
+        {
+          "name": "from_warehouse_id",
+          "label": "From Warehouse *",
+          "value": "Riyadh Main Store"
+        },
+        {
+          "name": "lines[0][item_id]",
+          "label": "lines[0][item_id]",
+          "value": "ITM-0001 - Ordinary Portland Cement 50kg"
+        },
+        {
+          "name": "notes",
+          "label": "Notes",
+          "value": "Training transfer — choose a different destination before saving."
+        },
+        {
+          "name": "lines[0][quantity]",
+          "label": "lines[0][quantity]",
+          "value": "5"
+        }
+      ],
+      "remaining": [
+        "To Warehouse *"
+      ],
+      "buttons": [
+        "Cancel",
+        "Save Stock Transfer"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "1669507a1913c51f086a02b032c84f32ccb3a6abe46ae26fbbd93cf02663ad3a"
+    },
+    {
+      "slug": "supplier-bill",
+      "lang": "en",
+      "image": "en-supplier-bill.jpg",
+      "values": [
+        {
+          "name": "supplier_id",
+          "label": "Supplier *",
+          "value": "Gulf Training Materials"
+        },
+        {
+          "name": "project_id",
+          "label": "Project",
+          "value": "Training Warehouse Renovation"
+        },
+        {
+          "name": "bill_number",
+          "label": "Bill Number *",
+          "value": "TRAIN-SUP-INV-01"
+        },
+        {
+          "name": "notes",
+          "label": "Notes",
+          "value": "Unsaved training service example."
+        },
+        {
+          "name": "lines[0][description]",
+          "label": "lines[0][description]",
+          "value": "Training service"
+        },
+        {
+          "name": "lines[0][quantity]",
+          "label": "lines[0][quantity]",
+          "value": "2"
+        },
+        {
+          "name": "lines[0][unit_price]",
+          "label": "lines[0][unit_price]",
+          "value": "500"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1025,
+      "sha256": "22f7864f377b022b5ddae0ba41abba027a8eee425d0726018f3e7170babe40f2"
+    },
+    {
+      "slug": "customer-invoice",
+      "lang": "en",
+      "image": "en-customer-invoice.jpg",
+      "values": [
+        {
+          "name": "customer_id",
+          "label": "Customer *",
+          "value": "Al Noor Training Development"
+        },
+        {
+          "name": "project_id",
+          "label": "Project",
+          "value": "Training Warehouse Renovation"
+        },
+        {
+          "name": "invoice_number",
+          "label": "Invoice Number",
+          "value": "TRAIN-INV-01"
+        },
+        {
+          "name": "notes",
+          "label": "Notes",
+          "value": "Training only — not saved, posted or sent to ZATCA."
+        },
+        {
+          "name": "lines[0][description]",
+          "label": "lines[0][description]",
+          "value": "Training construction service"
+        },
+        {
+          "name": "lines[0][quantity]",
+          "label": "lines[0][quantity]",
+          "value": "2"
+        },
+        {
+          "name": "lines[0][unit_price]",
+          "label": "lines[0][unit_price]",
+          "value": "5000"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1101,
+      "sha256": "334b6693fbb82369488f35b60957c9b61302bb71bd5c5d4124a47976f745ad27"
+    },
+    {
+      "slug": "journal-create",
+      "lang": "en",
+      "image": "en-journal-create.jpg",
+      "values": [
+        {
+          "name": "description",
+          "label": "Description",
+          "value": "Training balanced journal — never post from screenshot capture."
+        },
+        {
+          "name": "lines[0][debit]",
+          "label": "lines[0][debit]",
+          "value": "1000"
+        },
+        {
+          "name": "lines[1][credit]",
+          "label": "lines[1][credit]",
+          "value": "1000"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1019,
+      "sha256": "fe1bcb4056fcd6421dd380ebd1f6207542f76af589aab02f83a203085f5ad341"
+    },
+    {
+      "slug": "site-expense",
+      "lang": "en",
+      "image": "en-site-expense.jpg",
+      "values": [
+        {
+          "name": "project_id",
+          "label": "Project *",
+          "value": "Training Warehouse Renovation"
+        },
+        {
+          "name": "expense_category_id",
+          "label": "Category *",
+          "value": "Equipment Maintenance"
+        },
+        {
+          "name": "taxable_amount",
+          "label": "Amount before VAT (SAR) *",
+          "value": "100"
+        },
+        {
+          "name": "description",
+          "label": "Short description *",
+          "value": "Training small-tools expense"
+        },
+        {
+          "name": "reference_number",
+          "label": "Invoice / receipt reference",
+          "value": "TRAIN-EXP-01"
+        }
+      ],
+      "remaining": [
+        "Site *"
+      ],
+      "buttons": [
+        "Back",
+        "Save draft & stay",
+        "Save & new",
+        "Save & close",
+        "Submit for approval"
+      ],
+      "width": 1440,
+      "height": 1220,
+      "sha256": "d36a37354e915e76c0feec13a06861aff1855ed1af555636a02a37d3150a25de"
+    },
+    {
+      "slug": "equipment-create",
+      "lang": "en",
+      "image": "en-equipment-create.jpg",
+      "values": [
+        {
+          "name": "asset_code",
+          "label": "Asset code *",
+          "value": "EQ-TRAIN-01"
+        },
+        {
+          "name": "name",
+          "label": "Name *",
+          "value": "Training Generator"
+        },
+        {
+          "name": "make",
+          "label": "Make",
+          "value": "Training Make"
+        },
+        {
+          "name": "model",
+          "label": "Model",
+          "value": "Demo 100"
+        },
+        {
+          "name": "year",
+          "label": "Year",
+          "value": "2026"
+        },
+        {
+          "name": "acquisition_cost",
+          "label": "Acquisition cost (SAR)",
+          "value": "25000"
+        },
+        {
+          "name": "notes",
+          "label": "Notes",
+          "value": "Fictional training asset."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Back to Equipment",
+        "Cancel",
+        "Save",
+        "Save & new",
+        "Save & close"
+      ],
+      "width": 1440,
+      "height": 1329,
+      "sha256": "cdeaf3207059be981b2eafa50eb602c0c60273fac1e8664d6ed2c9463254010e"
+    },
+    {
+      "slug": "marketing-lead",
+      "lang": "en",
+      "image": "en-marketing-lead.jpg",
+      "values": [
+        {
+          "name": "company_name",
+          "label": "Company / Client *",
+          "value": "Training Development Co."
+        },
+        {
+          "name": "contact_name",
+          "label": "Contact Person",
+          "value": "Training Contact"
+        },
+        {
+          "name": "contact_email",
+          "label": "Email",
+          "value": "lead@example.test"
+        },
+        {
+          "name": "city",
+          "label": "City",
+          "value": "Riyadh"
+        },
+        {
+          "name": "requirement",
+          "label": "Requirement",
+          "value": "Training warehouse renovation opportunity"
+        },
+        {
+          "name": "estimated_value",
+          "label": "Estimated Value (SAR)",
+          "value": "150000"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Back to Leads",
+        "Cancel",
+        "Save Lead"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "8dbaaaa419a11ef20ebe24b4943061a0335cf94bcbac56c0f3d514d3aebd367d"
+    },
+    {
+      "slug": "hr-reports",
+      "lang": "en",
+      "image": "en-hr-reports.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "Filter",
+        "Reset",
+        "Open Attendance"
+      ],
+      "width": 1440,
+      "height": 1128,
+      "sha256": "4d6cde8e9a92c787e6b5a14529b19f7d8464a92d1f0676888b9fc183b132819b"
+    },
+    {
+      "slug": "project-reports",
+      "lang": "en",
+      "image": "en-project-reports.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "Filter",
+        "Reset",
+        "View",
+        "Open Project Cost Report"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "012373f63dce72fbd4bdb8bf921c7a7c9450f22466bb03fcfd7e01d577cd1e61"
+    },
+    {
+      "slug": "trial-balance",
+      "lang": "en",
+      "image": "en-trial-balance.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "All Reports",
+        "Filter",
+        "Reset",
+        "Export Excel (CSV)",
+        "Export PDF"
+      ],
+      "width": 1440,
+      "height": 1225,
+      "sha256": "a460fc8030d8b415bfff779c578776552d2d685ef0224dfd58de0502b7ce6102"
+    },
+    {
+      "slug": "vat-report",
+      "lang": "en",
+      "image": "en-vat-report.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "VAT Management",
+        "All Reports",
+        "Filter",
+        "Reset",
+        "Export Excel (CSV)",
+        "Export PDF"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "bcb9dda1e1acb2475e5627dbbfeab290c2b6a8c499fd8a3be2928fa730b64f23"
+    },
+    {
+      "slug": "my-approvals",
+      "lang": "en",
+      "image": "en-my-approvals.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "Filter",
+        "Reset"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "7197a0eb95d345ca31920df87929a8aad6bbd361272d973aea1561a14f21d700"
+    },
+    {
+      "slug": "dashboard",
+      "lang": "ar",
+      "image": "ar-dashboard.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "عرض الكل",
+        "فتح سجلات النشاط"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "89baaa5912a84ea6e40df2a32bf2b3a9e8f8a95383cc018e09d2a86c5b1132fb"
+    },
+    {
+      "slug": "dashboard",
+      "lang": "ar",
+      "mobile": true,
+      "image": "ar-dashboard-390.jpg",
+      "sha256": "55adcda9135aa61b66e1cab11cac659b201236176be7618d14c39aefb051aa9b"
+    },
+    {
+      "slug": "customer-create",
+      "lang": "ar",
+      "image": "ar-customer-create.jpg",
+      "values": [
+        {
+          "name": "allowed_payment_types",
+          "label": "طرق الدفع المقبولة",
+          "value": "كلاهما"
+        },
+        {
+          "name": "name",
+          "label": "اسم العميل *",
+          "value": "Al Noor Training Development"
+        },
+        {
+          "name": "code",
+          "label": "رمز العميل",
+          "value": "CUS-TRAIN-NEW"
+        },
+        {
+          "name": "contact_person",
+          "label": "الشخص المسؤول",
+          "value": "Training Customer Contact"
+        },
+        {
+          "name": "email",
+          "label": "البريد الإلكتروني",
+          "value": "customer.new@example.test"
+        },
+        {
+          "name": "credit_limit",
+          "label": "الحد الائتماني (ر.س)",
+          "value": "25000"
+        },
+        {
+          "name": "opening_receivable",
+          "label": "الرصيد الافتتاحي المدين (ر.س)",
+          "value": "0"
+        },
+        {
+          "name": "city",
+          "label": "المدينة",
+          "value": "Riyadh"
+        },
+        {
+          "name": "billing_address",
+          "label": "عنوان الفوترة",
+          "value": "Training address only — replace with verified customer address."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "+ جديد",
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1870,
+      "sha256": "191910e8b7a326100e4901b9ac620e0876069b0b4a627054d4589b4a1376f022"
+    },
+    {
+      "slug": "customer-create",
+      "lang": "ar",
+      "mobile": true,
+      "image": "ar-customer-create-390.jpg",
+      "sha256": "7e348aee5475c38980544bc62d4474b7f67af344b68637866abc1e184ddfc927"
+    },
+    {
+      "slug": "customer-view",
+      "lang": "ar",
+      "image": "ar-customer-view.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "تعديل / إدارة",
+        "العودة إلى العملاء",
+        "عرض المشروع",
+        "عرض",
+        "تعديل المسودة",
+        "عرض الكل",
+        "عرض السجل"
+      ],
+      "width": 1440,
+      "height": 4335,
+      "sha256": "b8dd8fa1e34c47f81e9bf7484a2f7b0fe7a59ff1491b3cfcd658674d0ec00c63"
+    },
+    {
+      "slug": "customer-manage",
+      "lang": "ar",
+      "image": "ar-customer-manage.jpg",
+      "values": [
+        {
+          "name": "contact_person",
+          "label": "الشخص المسؤول",
+          "value": "Updated Training Contact"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "عرض (للقراءة فقط)",
+        "العودة إلى العملاء",
+        "+ جديد",
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1342,
+      "sha256": "68879ac25365030f6d127b56e2834353176f96ed898bfb4437c410affb1f99c8"
+    },
+    {
+      "slug": "supplier-create",
+      "lang": "ar",
+      "image": "ar-supplier-create.jpg",
+      "values": [
+        {
+          "name": "payment_term_id",
+          "label": "شروط الدفع",
+          "value": "Cash"
+        },
+        {
+          "name": "allowed_payment_types",
+          "label": "طرق الدفع المقبولة",
+          "value": "كلاهما"
+        },
+        {
+          "name": "name",
+          "label": "اسم المورد *",
+          "value": "Gulf Training Materials"
+        },
+        {
+          "name": "code",
+          "label": "رمز المورد",
+          "value": "SUP-TRAIN-NEW"
+        },
+        {
+          "name": "contact_person",
+          "label": "الشخص المسؤول",
+          "value": "Training Supplier Contact"
+        },
+        {
+          "name": "email",
+          "label": "البريد الإلكتروني",
+          "value": "supplier.new@example.test"
+        },
+        {
+          "name": "city",
+          "label": "المدينة / الموقع",
+          "value": "Riyadh"
+        },
+        {
+          "name": "opening_balance",
+          "label": "الرصيد الافتتاحي (ريال)",
+          "value": "0"
+        },
+        {
+          "name": "address",
+          "label": "العنوان",
+          "value": "Training address only"
+        },
+        {
+          "name": "bank_name",
+          "label": "اسم البنك",
+          "value": "Training Bank"
+        },
+        {
+          "name": "bank_account_name",
+          "label": "اسم صاحب الحساب",
+          "value": "Training Supplier"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "+ جديد",
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1155,
+      "sha256": "1dbc62c1dee816cfe1044d951db21f29d196a6b7b2a40c057f70281380389774"
+    },
+    {
+      "slug": "supplier-create",
+      "lang": "ar",
+      "mobile": true,
+      "image": "ar-supplier-create-390.jpg",
+      "sha256": "a999c223d86a1a7770812b5f463a0e6bbf8337ae77e889be90aa11e24ebb9be2"
+    },
+    {
+      "slug": "supplier-view",
+      "lang": "ar",
+      "image": "ar-supplier-view.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "تعديل / إدارة",
+        "العودة إلى الموردين",
+        "عرض أمر الشراء",
+        "عرض الكل",
+        "عرض إذن الاستلام",
+        "إنشاء فاتورة مورد",
+        "عرض",
+        "تعديل المسودة"
+      ],
+      "width": 1440,
+      "height": 3405,
+      "sha256": "d590241033d55883cc7d64daacdf3299c00400139e3d71c81081d20601045231"
+    },
+    {
+      "slug": "supplier-manage",
+      "lang": "ar",
+      "image": "ar-supplier-manage.jpg",
+      "values": [
+        {
+          "name": "contact_person",
+          "label": "الشخص المسؤول",
+          "value": "Updated Training Supplier"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "عرض (للقراءة فقط)",
+        "العودة إلى الموردين",
+        "+ جديد",
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1196,
+      "sha256": "e7dec0f074a26db8012284c9b16a57c555d661b4089e69e00703e9ce51ac3dc4"
+    },
+    {
+      "slug": "project-create",
+      "lang": "ar",
+      "image": "ar-project-create.jpg",
+      "values": [
+        {
+          "name": "customer_id",
+          "label": "Client Name *",
+          "value": "Al Noor Training Development"
+        },
+        {
+          "name": "branch_id",
+          "label": "Branch *",
+          "value": "Dammam Branch"
+        },
+        {
+          "name": "name",
+          "label": "Project Name *",
+          "value": "Training Warehouse Extension"
+        },
+        {
+          "name": "code",
+          "label": "Project Code *",
+          "value": "PRJ-TRAIN-NEW"
+        },
+        {
+          "name": "budget",
+          "label": "Budget Amount (SAR) *",
+          "value": "150000"
+        },
+        {
+          "name": "location",
+          "label": "Project Location",
+          "value": "Riyadh — training site"
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "value": "Fictional training project. Form not submitted."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "+ جديد",
+        "تعديل",
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "812c5f5adf61eb188cd9fd4e9221cfdd9073ce92702a37a367d276d2a4427b5a"
+    },
+    {
+      "slug": "project-view",
+      "lang": "ar",
+      "image": "ar-project-view.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "تعديل / إدارة",
+        "العودة إلى المشاريع",
+        "فتح تقارير المشاريع",
+        "الميزانية / جداول الكميات"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "4d7dea6bece7f31016b01ee1277fb44aa27104383de45a105825eaa0d18dde5f"
+    },
+    {
+      "slug": "project-manage",
+      "lang": "ar",
+      "image": "ar-project-manage.jpg",
+      "values": [
+        {
+          "name": "description",
+          "label": "Description",
+          "value": "Training project note — unsaved."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "عرض (للقراءة فقط)",
+        "العودة إلى المشاريع",
+        "فتح تقارير المشاريع",
+        "الميزانية / جداول الكميات",
+        "+ جديد",
+        "تعديل",
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1260,
+      "sha256": "a490059b74d5d0fb02205c6785dffc19befcadfd81c84b3f47110b90ff3a112a"
+    },
+    {
+      "slug": "project-budget",
+      "lang": "ar",
+      "image": "ar-project-budget.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "Create Detailed Budget",
+        "Back to Project"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "4f829e23f685e8b0c12d266ec307b09b21766321b7034ac7a90a5f51f4367d49"
+    },
+    {
+      "slug": "site-create",
+      "lang": "ar",
+      "image": "ar-site-create.jpg",
+      "values": [
+        {
+          "name": "project_id",
+          "label": "Project *",
+          "value": "Training Warehouse Renovation"
+        },
+        {
+          "name": "name",
+          "label": "Site Name *",
+          "value": "Training North Site"
+        },
+        {
+          "name": "code",
+          "label": "Site Code *",
+          "value": "SITE-TRAIN-NEW"
+        },
+        {
+          "name": "address",
+          "label": "Address",
+          "value": "Training site address"
+        },
+        {
+          "name": "geofence_radius",
+          "label": "Geo-Fence Radius (meters) *",
+          "value": "150"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "4f1eaa653f73cecd384e0aff8982d0f472f7a6f10f36ed5e8ae3c8b0744ece6a"
+    },
+    {
+      "slug": "site-view",
+      "lang": "ar",
+      "image": "ar-site-view.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "العودة إلى المواقع",
+        "تعديل / إدارة"
+      ],
+      "width": 1440,
+      "height": 1059,
+      "sha256": "36fdff0424f56b53c39ea93013b193e426ce644e8d49611e32d7d3e634cad737"
+    },
+    {
+      "slug": "employee-create",
+      "lang": "ar",
+      "image": "ar-employee-create.jpg",
+      "values": [
+        {
+          "name": "first_name",
+          "label": "الاسم الأول *",
+          "value": "Sara"
+        },
+        {
+          "name": "last_name",
+          "label": "اسم العائلة",
+          "value": "Training"
+        },
+        {
+          "name": "email",
+          "label": "البريد الإلكتروني",
+          "value": "new.employee@example.test"
+        },
+        {
+          "name": "basic_salary",
+          "label": "الراتب الأساسي (ر.س) *",
+          "value": "3500"
+        },
+        {
+          "name": "housing_allowance",
+          "label": "بدل السكن",
+          "value": "1000"
+        },
+        {
+          "name": "transport_allowance",
+          "label": "بدل النقل",
+          "value": "250"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "عرض جميع الأقسام",
+        "+ جديد",
+        "×",
+        "إضافة مستند",
+        "رجوع / القسم السابق",
+        "إلغاء",
+        "حفظ والبقاء",
+        "حفظ والتالي",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 2026,
+      "sha256": "0566a814c491a721f3947b91d53256f67a894286aa771071e717ef8237f971dc"
+    },
+    {
+      "slug": "employee-view",
+      "lang": "ar",
+      "image": "ar-employee-view.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "+ إرفاق مستند",
+        "تعديل الموظف",
+        "العودة إلى الموظفين",
+        "عرض السجل المرتبط",
+        "تعديل السجل المرتبط",
+        "عرض السجل",
+        "إضافة حضور",
+        "تعديل",
+        "إنشاء إجازة",
+        "عرض",
+        "إضافة عمل إضافي",
+        "+ هيكل جديد من الملف الشخصي",
+        "فتح مسير الرواتب",
+        "قسيمة الراتب",
+        "عرض الكل"
+      ],
+      "width": 1440,
+      "height": 3450,
+      "sha256": "374687e9784e83662259cf8b2ff6e780bb9c23f77d1b9d0fdb36d639759b8cb6"
+    },
+    {
+      "slug": "employee-personal",
+      "lang": "ar",
+      "image": "ar-employee-personal.jpg",
+      "values": [
+        {
+          "name": "first_name",
+          "label": "الاسم الأول *",
+          "value": "Ahmed"
+        },
+        {
+          "name": "last_name",
+          "label": "اسم العائلة",
+          "value": "Training"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "العودة إلى الموظفين",
+        "عرض السجل المرتبط",
+        "تعديل السجل المرتبط",
+        "عرض جميع الأقسام",
+        "+ جديد",
+        "رجوع / القسم السابق",
+        "إلغاء",
+        "حفظ والبقاء",
+        "حفظ والتالي",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "eb9c2a76b390bd98af7f51f3435905e278a969bb19eeb202f8f69d897449f45e"
+    },
+    {
+      "slug": "employee-personal",
+      "lang": "ar",
+      "mobile": true,
+      "image": "ar-employee-personal-390.jpg",
+      "sha256": "33f10b4e679420f3f4ad1d11ea74f7fce19822c07e20089c0aafc8b62a233e77"
+    },
+    {
+      "slug": "employee-employment",
+      "lang": "ar",
+      "image": "ar-employee-employment.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "العودة إلى الموظفين",
+        "عرض السجل المرتبط",
+        "تعديل السجل المرتبط",
+        "عرض جميع الأقسام",
+        "+ جديد",
+        "رجوع / القسم السابق",
+        "إلغاء",
+        "حفظ والبقاء",
+        "حفظ والتالي",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "f82e1597656299830eae9df19bcc2c7ae78f88507eec6254dfa6ea6707c1a30e"
+    },
+    {
+      "slug": "employee-salary",
+      "lang": "ar",
+      "image": "ar-employee-salary.jpg",
+      "values": [
+        {
+          "name": "basic_salary",
+          "label": "الراتب الأساسي (ر.س) *",
+          "value": "3500"
+        },
+        {
+          "name": "housing_allowance",
+          "label": "بدل السكن",
+          "value": "1000"
+        },
+        {
+          "name": "transport_allowance",
+          "label": "بدل النقل",
+          "value": "250"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "العودة إلى الموظفين",
+        "عرض السجل المرتبط",
+        "تعديل السجل المرتبط",
+        "عرض جميع الأقسام",
+        "إدارة الراتب هنا",
+        "رجوع / القسم السابق",
+        "إلغاء",
+        "حفظ والبقاء",
+        "حفظ والتالي",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "b82bb64a6eb821aec37ffe5573c8cdf719c4a3497d9ff63100c9bc78e4956907"
+    },
+    {
+      "slug": "leave-create",
+      "lang": "ar",
+      "image": "ar-leave-create.jpg",
+      "values": [
+        {
+          "name": "employee_id",
+          "label": "Employee *",
+          "value": "EMP-001 - Ahmed Training"
+        },
+        {
+          "name": "leave_type_id",
+          "label": "Leave Type *",
+          "value": "Annual Leave"
+        },
+        {
+          "name": "start_date",
+          "label": "Start Date *",
+          "value": "2026-11-10"
+        },
+        {
+          "name": "end_date",
+          "label": "End Date *",
+          "value": "2026-11-12"
+        },
+        {
+          "name": "reason",
+          "label": "Reason",
+          "value": "Fictional three-day training example."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "إلغاء",
+        "حفظ",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "8d3658c86a2fd2db1717f2ce3839332ebfb0c0ffe78ba557d057179e1a69342a"
+    },
+    {
+      "slug": "shift-create",
+      "lang": "ar",
+      "image": "ar-shift-create.jpg",
+      "values": [
+        {
+          "name": "name",
+          "label": "Shift Name *",
+          "value": "Training Day Shift"
+        },
+        {
+          "name": "code",
+          "label": "Shift Code *",
+          "value": "TRAIN-DAY"
+        },
+        {
+          "name": "start_time",
+          "label": "Start Time *",
+          "value": "08:00"
+        },
+        {
+          "name": "end_time",
+          "label": "End Time *",
+          "value": "17:00"
+        },
+        {
+          "name": "break_minutes",
+          "label": "Break (minutes) *",
+          "value": "60"
+        },
+        {
+          "name": "grace_minutes",
+          "label": "Grace (minutes) *",
+          "value": "10"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Save Shift"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "fdedd2a2b177a09591d2c33aea203b54d5cd7556f5bc7628d857943104ea6eef"
+    },
+    {
+      "slug": "payroll-create",
+      "lang": "ar",
+      "image": "ar-payroll-create.jpg",
+      "values": [
+        {
+          "name": "payroll_month",
+          "label": "Payroll Month *",
+          "value": "November"
+        },
+        {
+          "name": "payroll_year",
+          "label": "Payroll Year *",
+          "value": "2026"
+        },
+        {
+          "name": "period_start",
+          "label": "Period Start",
+          "value": "2026-11-01"
+        },
+        {
+          "name": "period_end",
+          "label": "Period End",
+          "value": "2026-11-30"
+        },
+        {
+          "name": "notes",
+          "label": "Notes",
+          "value": "Training payroll — never process or pay from this capture."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Create Payroll Run"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "b5d9028386dab2e371901429c4395fff1aedd3128398892b35b0e3b90302ad69"
+    },
+    {
+      "slug": "user-create",
+      "lang": "ar",
+      "image": "ar-user-create.jpg",
+      "values": [
+        {
+          "name": "name",
+          "label": "Full Name *",
+          "value": "Training Account"
+        },
+        {
+          "name": "email",
+          "label": "Email Address *",
+          "value": "account@example.test"
+        },
+        {
+          "name": "username",
+          "label": "Username",
+          "value": "training.new"
+        }
+      ],
+      "remaining": [
+        "Primary Role"
+      ],
+      "buttons": [
+        "Upload Profile Photo",
+        "+ جديد",
+        "إلغاء ربط الموظف",
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1410,
+      "sha256": "d6ce04947a4e3955ae99c25f7046db0be19a867f20b85a27f50647bad9eab9c4"
+    },
+    {
+      "slug": "employee-to-user",
+      "lang": "ar",
+      "image": "ar-employee-to-user.jpg",
+      "values": [
+        {
+          "name": "name",
+          "label": "Full Name *",
+          "value": "Sara Training"
+        },
+        {
+          "name": "employee_id",
+          "label": "Employee ID",
+          "value": "GUIDE-EMP-01"
+        },
+        {
+          "name": "email",
+          "label": "Email Address *",
+          "value": "sara.training@example.test"
+        }
+      ],
+      "remaining": [
+        "Primary Role"
+      ],
+      "buttons": [
+        "Upload Profile Photo",
+        "+ جديد",
+        "إلغاء ربط الموظف",
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1428,
+      "sha256": "63b93dca8788a457b3457e7f013ea7944b2214c02943893a18441d83f041edd6"
+    },
+    {
+      "slug": "role-create",
+      "lang": "ar",
+      "image": "ar-role-create.jpg",
+      "values": [
+        {
+          "name": "name",
+          "label": "Role Name *",
+          "value": "Training Site Reviewer"
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "value": "Training role — permissions must be reviewed before saving."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "+ جديد",
+        "Select all visible",
+        "Clear visible",
+        "Cancel",
+        "Save Role"
+      ],
+      "width": 1440,
+      "height": 1989,
+      "sha256": "2097f40466f9edb73b8013dba727f082634863f702949d3222ac6e45b0b46834"
+    },
+    {
+      "slug": "permissions",
+      "lang": "ar",
+      "image": "ar-permissions.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "Apply",
+        "Save Permissions",
+        "Select all visible",
+        "Clear visible",
+        "Reset"
+      ],
+      "width": 1440,
+      "height": 1213,
+      "sha256": "e1a24d10c0275edd12effc3d7333a543609b1b60d62d0c4e150a30e2b431551e"
+    },
+    {
+      "slug": "item-create",
+      "lang": "ar",
+      "image": "ar-item-create.jpg",
+      "values": [
+        {
+          "name": "item_category_id",
+          "label": "Category",
+          "value": "Blocks and Masonry"
+        },
+        {
+          "name": "unit_id",
+          "label": "Unit *",
+          "value": "BAG - Bag"
+        },
+        {
+          "name": "vat_applicable",
+          "label": "VAT Applicable",
+          "value": "Yes"
+        },
+        {
+          "name": "name",
+          "label": "Item Name *",
+          "value": "Training Reinforcement Steel"
+        },
+        {
+          "name": "item_code",
+          "label": "Item Code *",
+          "value": "ITM-TRAIN-NEW"
+        },
+        {
+          "name": "reorder_level",
+          "label": "Reorder Level *",
+          "value": "100"
+        },
+        {
+          "name": "minimum_stock",
+          "label": "Minimum Stock *",
+          "value": "50"
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "value": "Training material only."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "66a7fdedf8fbc1c9c1e886dd6fbe9178eda4e1cd681af74ff0cbe0240f2881a2"
+    },
+    {
+      "slug": "warehouse-manage",
+      "lang": "ar",
+      "image": "ar-warehouse-manage.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "عودة",
+        "عرض",
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "30edb2efea39f6dde3a11f9129e545717a7a75d28b36949c01336210b476ec06"
+    },
+    {
+      "slug": "purchase-request",
+      "lang": "ar",
+      "image": "ar-purchase-request.jpg",
+      "values": [
+        {
+          "name": "project_id",
+          "label": "Project",
+          "value": "Training Warehouse Renovation"
+        },
+        {
+          "name": "lines[0][item_id]",
+          "label": "lines[0][item_id]",
+          "value": "ITM-0001 - Ordinary Portland Cement 50kg"
+        },
+        {
+          "name": "reason",
+          "label": "Reason",
+          "value": "Training site requires materials. Unsaved example."
+        },
+        {
+          "name": "lines[0][quantity]",
+          "label": "lines[0][quantity]",
+          "value": "100"
+        },
+        {
+          "name": "lines[0][estimated_unit_cost]",
+          "label": "lines[0][estimated_unit_cost]",
+          "value": "3"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Save Purchase Request"
+      ],
+      "width": 1440,
+      "height": 1072,
+      "sha256": "b74e252b6d0ba528b4cae44953dd4c04908db36be8024a37895fa81bfc105dd0"
+    },
+    {
+      "slug": "purchase-order",
+      "lang": "ar",
+      "image": "ar-purchase-order.jpg",
+      "values": [
+        {
+          "name": "supplier_id",
+          "label": "Supplier *",
+          "value": "Gulf Training Materials"
+        },
+        {
+          "name": "warehouse_id",
+          "label": "Deliver To Warehouse *",
+          "value": "Riyadh Main Store"
+        },
+        {
+          "name": "lines[0][item_id]",
+          "label": "lines[0][item_id]",
+          "value": "ITM-0001 - Ordinary Portland Cement 50kg"
+        },
+        {
+          "name": "lines[0][quantity]",
+          "label": "lines[0][quantity]",
+          "value": "100"
+        },
+        {
+          "name": "lines[0][unit_price]",
+          "label": "lines[0][unit_price]",
+          "value": "3"
+        },
+        {
+          "name": "notes",
+          "label": "Notes",
+          "value": "Training purchase order — not submitted."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "+ جديد",
+        "×",
+        "+ Add Line",
+        "Cancel",
+        "Save Purchase Order"
+      ],
+      "width": 1440,
+      "height": 1336,
+      "sha256": "01d96e79a8654d96e06764009eb0787de8c7305ad2162720b224fab412cf8539"
+    },
+    {
+      "slug": "goods-receipt",
+      "lang": "ar",
+      "image": "ar-goods-receipt.jpg",
+      "values": [
+        {
+          "name": "supplier_id",
+          "label": "Supplier *",
+          "value": "Gulf Training Materials"
+        },
+        {
+          "name": "warehouse_id",
+          "label": "Receiving Warehouse *",
+          "value": "Riyadh Main Store"
+        },
+        {
+          "name": "lines[0][item_id]",
+          "label": "lines[0][item_id]",
+          "value": "ITM-0001 - Ordinary Portland Cement 50kg"
+        },
+        {
+          "name": "delivery_note_number",
+          "label": "Delivery Note Number",
+          "value": "TRAIN-DN-01"
+        },
+        {
+          "name": "lines[0][ordered_quantity]",
+          "label": "lines[0][ordered_quantity]",
+          "value": "100"
+        },
+        {
+          "name": "lines[0][received_quantity]",
+          "label": "lines[0][received_quantity]",
+          "value": "60"
+        },
+        {
+          "name": "lines[0][accepted_quantity]",
+          "label": "lines[0][accepted_quantity]",
+          "value": "60"
+        },
+        {
+          "name": "lines[0][unit_cost]",
+          "label": "lines[0][unit_cost]",
+          "value": "3"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "إلغاء",
+        "حفظ",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1060,
+      "sha256": "3521f327417e9014b7442f5087307894054bedefb2bc1f0c629f1f2549be0989"
+    },
+    {
+      "slug": "stock-issue",
+      "lang": "ar",
+      "image": "ar-stock-issue.jpg",
+      "values": [
+        {
+          "name": "warehouse_id",
+          "label": "Issue From Warehouse *",
+          "value": "Riyadh Main Store"
+        },
+        {
+          "name": "project_id",
+          "label": "Issue To Project",
+          "value": "Training Warehouse Renovation"
+        },
+        {
+          "name": "lines[0][item_id]",
+          "label": "lines[0][item_id]",
+          "value": "ITM-0001 - Ordinary Portland Cement 50kg"
+        },
+        {
+          "name": "purpose",
+          "label": "Purpose",
+          "value": "Training material issue"
+        },
+        {
+          "name": "lines[0][quantity]",
+          "label": "lines[0][quantity]",
+          "value": "10"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Cancel",
+        "Save Stock Issue"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "059e0d57a5d6c2cea1c595e7cdd64dea138d03fd0f5709434d05e4907ee3b089"
+    },
+    {
+      "slug": "stock-transfer",
+      "lang": "ar",
+      "image": "ar-stock-transfer.jpg",
+      "values": [
+        {
+          "name": "from_warehouse_id",
+          "label": "From Warehouse *",
+          "value": "Riyadh Main Store"
+        },
+        {
+          "name": "lines[0][item_id]",
+          "label": "lines[0][item_id]",
+          "value": "ITM-0001 - Ordinary Portland Cement 50kg"
+        },
+        {
+          "name": "notes",
+          "label": "Notes",
+          "value": "Training transfer — choose a different destination before saving."
+        },
+        {
+          "name": "lines[0][quantity]",
+          "label": "lines[0][quantity]",
+          "value": "5"
+        }
+      ],
+      "remaining": [
+        "To Warehouse *"
+      ],
+      "buttons": [
+        "Cancel",
+        "Save Stock Transfer"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "390bcf54aa59f3b774cbbae1b68fecdbf07e88b9c9cec38dccd4f10656501620"
+    },
+    {
+      "slug": "supplier-bill",
+      "lang": "ar",
+      "image": "ar-supplier-bill.jpg",
+      "values": [
+        {
+          "name": "supplier_id",
+          "label": "Supplier *",
+          "value": "Gulf Training Materials"
+        },
+        {
+          "name": "project_id",
+          "label": "Project",
+          "value": "Training Warehouse Renovation"
+        },
+        {
+          "name": "bill_number",
+          "label": "Bill Number *",
+          "value": "TRAIN-SUP-INV-01"
+        },
+        {
+          "name": "notes",
+          "label": "Notes",
+          "value": "Unsaved training service example."
+        },
+        {
+          "name": "lines[0][description]",
+          "label": "lines[0][description]",
+          "value": "Training service"
+        },
+        {
+          "name": "lines[0][quantity]",
+          "label": "lines[0][quantity]",
+          "value": "2"
+        },
+        {
+          "name": "lines[0][unit_price]",
+          "label": "lines[0][unit_price]",
+          "value": "500"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1025,
+      "sha256": "3fb66bce1ef9ab5eca7dbdd4bcd821450d41c70a29c3917acbf3ba70be31bd34"
+    },
+    {
+      "slug": "customer-invoice",
+      "lang": "ar",
+      "image": "ar-customer-invoice.jpg",
+      "values": [
+        {
+          "name": "customer_id",
+          "label": "العميل *",
+          "value": "Al Noor Training Development"
+        },
+        {
+          "name": "project_id",
+          "label": "المشروع",
+          "value": "Training Warehouse Renovation"
+        },
+        {
+          "name": "invoice_number",
+          "label": "رقم الفاتورة",
+          "value": "TRAIN-INV-01"
+        },
+        {
+          "name": "notes",
+          "label": "الملاحظات",
+          "value": "Training only — not saved, posted or sent to ZATCA."
+        },
+        {
+          "name": "lines[0][description]",
+          "label": "lines[0][description]",
+          "value": "Training construction service"
+        },
+        {
+          "name": "lines[0][quantity]",
+          "label": "lines[0][quantity]",
+          "value": "2"
+        },
+        {
+          "name": "lines[0][unit_price]",
+          "label": "lines[0][unit_price]",
+          "value": "5000"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1087,
+      "sha256": "9cef72a55afc309693685628ca229faec8e16042e0b091db8567f2a2605f501e"
+    },
+    {
+      "slug": "journal-create",
+      "lang": "ar",
+      "image": "ar-journal-create.jpg",
+      "values": [
+        {
+          "name": "description",
+          "label": "Description",
+          "value": "Training balanced journal — never post from screenshot capture."
+        },
+        {
+          "name": "lines[0][debit]",
+          "label": "lines[0][debit]",
+          "value": "1000"
+        },
+        {
+          "name": "lines[1][credit]",
+          "label": "lines[1][credit]",
+          "value": "1000"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1019,
+      "sha256": "b0b5fd47b16468706fc8866ba1dd2a26d3b772a02088a9b7acdb5a5b7d52da9b"
+    },
+    {
+      "slug": "site-expense",
+      "lang": "ar",
+      "image": "ar-site-expense.jpg",
+      "values": [
+        {
+          "name": "project_id",
+          "label": "Project *",
+          "value": "Training Warehouse Renovation"
+        },
+        {
+          "name": "expense_category_id",
+          "label": "Category *",
+          "value": "Equipment Maintenance"
+        },
+        {
+          "name": "taxable_amount",
+          "label": "Amount before VAT (SAR) *",
+          "value": "100"
+        },
+        {
+          "name": "description",
+          "label": "Short description *",
+          "value": "Training small-tools expense"
+        },
+        {
+          "name": "reference_number",
+          "label": "Invoice / receipt reference",
+          "value": "TRAIN-EXP-01"
+        }
+      ],
+      "remaining": [
+        "Site *"
+      ],
+      "buttons": [
+        "عودة",
+        "Save draft & stay",
+        "Save & new",
+        "Save & close",
+        "Submit for approval"
+      ],
+      "width": 1440,
+      "height": 1220,
+      "sha256": "0fd6789e4c6db5a0b50c86f5d5ec0e1ccaacdf4363d065b29f921f0c6b3eb209"
+    },
+    {
+      "slug": "equipment-create",
+      "lang": "ar",
+      "image": "ar-equipment-create.jpg",
+      "values": [
+        {
+          "name": "asset_code",
+          "label": "رمز الأصل *",
+          "value": "EQ-TRAIN-01"
+        },
+        {
+          "name": "name",
+          "label": "الاسم *",
+          "value": "Training Generator"
+        },
+        {
+          "name": "make",
+          "label": "الشركة المصنعة",
+          "value": "Training Make"
+        },
+        {
+          "name": "model",
+          "label": "الطراز",
+          "value": "Demo 100"
+        },
+        {
+          "name": "year",
+          "label": "سنة الصنع",
+          "value": "2026"
+        },
+        {
+          "name": "acquisition_cost",
+          "label": "تكلفة الاقتناء (ريال)",
+          "value": "25000"
+        },
+        {
+          "name": "notes",
+          "label": "الملاحظات",
+          "value": "Fictional training asset."
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "العودة إلى المعدات",
+        "إلغاء",
+        "حفظ",
+        "حفظ وجديد",
+        "حفظ وإغلاق"
+      ],
+      "width": 1440,
+      "height": 1329,
+      "sha256": "12ff35138a6d2340e5a1c2d4f044bfdb9afbdd04ef0dbccbc8a94db004f2d78d"
+    },
+    {
+      "slug": "marketing-lead",
+      "lang": "ar",
+      "image": "ar-marketing-lead.jpg",
+      "values": [
+        {
+          "name": "company_name",
+          "label": "Company / Client *",
+          "value": "Training Development Co."
+        },
+        {
+          "name": "contact_name",
+          "label": "Contact Person",
+          "value": "Training Contact"
+        },
+        {
+          "name": "contact_email",
+          "label": "Email",
+          "value": "lead@example.test"
+        },
+        {
+          "name": "city",
+          "label": "City",
+          "value": "Riyadh"
+        },
+        {
+          "name": "requirement",
+          "label": "Requirement",
+          "value": "Training warehouse renovation opportunity"
+        },
+        {
+          "name": "estimated_value",
+          "label": "Estimated Value (SAR)",
+          "value": "150000"
+        }
+      ],
+      "remaining": [],
+      "buttons": [
+        "Back to Leads",
+        "Cancel",
+        "Save Lead"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "458c143b77f3584264e2192ec6c9e474c04fd9beb2dd9f19ddcca676abdd0892"
+    },
+    {
+      "slug": "hr-reports",
+      "lang": "ar",
+      "image": "ar-hr-reports.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "تصفية",
+        "إعادة تعيين",
+        "فتح الحضور"
+      ],
+      "width": 1440,
+      "height": 1128,
+      "sha256": "acb20ab057365985abff9ce865ca956c64d9bd46ffe1eb5be4b2069a8d88b5af"
+    },
+    {
+      "slug": "project-reports",
+      "lang": "ar",
+      "image": "ar-project-reports.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "تصفية",
+        "إعادة تعيين",
+        "عرض",
+        "فتح تقرير تكاليف المشروع"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "26943757491d8b0f5f3867919339f59af5b7f24135519a80789ea5790c08897c"
+    },
+    {
+      "slug": "trial-balance",
+      "lang": "ar",
+      "image": "ar-trial-balance.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "All Reports",
+        "تصفية",
+        "Reset",
+        "Export Excel (CSV)",
+        "Export PDF"
+      ],
+      "width": 1440,
+      "height": 1225,
+      "sha256": "8c29dade85ca5bd639d6b22aa6709d2e7ccf4f5b81122527d7c8a38680a21f79"
+    },
+    {
+      "slug": "vat-report",
+      "lang": "ar",
+      "image": "ar-vat-report.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "VAT Management",
+        "All Reports",
+        "تصفية",
+        "Reset",
+        "Export Excel (CSV)",
+        "Export PDF"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "08b6867b91e115817702236a352166b80fb3de5dd0fe026c5aba937ed67d4735"
+    },
+    {
+      "slug": "my-approvals",
+      "lang": "ar",
+      "image": "ar-my-approvals.jpg",
+      "values": [],
+      "remaining": [],
+      "buttons": [
+        "تصفية",
+        "إعادة تعيين"
+      ],
+      "width": 1440,
+      "height": 1000,
+      "sha256": "a10fc80486b03ee65aa7bdc11b3d53312494a27204e17b31ebb91793603d7ef4"
+    }
+  ]
+}

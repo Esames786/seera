@@ -1,0 +1,386 @@
+{
+  "approval_instance_steps": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "approval_instances": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "approval_workflow_steps": {
+    "rows": 7,
+    "sha256": "38b024ee5c34f8210b3955ab618fc8b869268f70c7c5bdcc476d1ea7fc1b05c6"
+  },
+  "approval_workflows": {
+    "rows": 3,
+    "sha256": "c3694022cd9fd0cf21ddc723ed8d448552c942af3ca9833043d6cdc3c13d1cd4"
+  },
+  "attendance_records": {
+    "rows": 114,
+    "sha256": "4d01f2f2a563f1752c7f672924124b6477b05492545389c8ad6ebb28e40ae85d"
+  },
+  "automatic_posting_rules": {
+    "rows": 9,
+    "sha256": "8c5da523286db7aef9eccdf664923aa7044b74b83d6cfc87b97451d153f375af"
+  },
+  "branches": {
+    "rows": 3,
+    "sha256": "7c30fd51d270a1a49edecf91d8288851d5f676a39282b4e6c6a94b8adf91f54a"
+  },
+  "chart_of_accounts": {
+    "rows": 26,
+    "sha256": "8843fbe6a0bcc65881f1c31f9bc0dd979412b10b7f53a4d903911afb5c059cf9"
+  },
+  "company_profiles": {
+    "rows": 1,
+    "sha256": "aeca361331b59ba6dadf05f6be8b824317ab5e5cb14068c912147bf2b22798f7"
+  },
+  "cost_centers": {
+    "rows": 20,
+    "sha256": "4b7c8d1b0d05dcd0abcb7548276bc133f3e6f42bd1e48b8342b583643f7a05ba"
+  },
+  "customer_adjustment_note_lines": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "customer_adjustment_notes": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "customer_contacts": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "customer_credit_allocations": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "customer_credit_refunds": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "customer_invoice_lines": {
+    "rows": 4,
+    "sha256": "f74ae8f2f51d5172921aae5c4a3ef704851147be0111fdf279928486297d7c66"
+  },
+  "customer_invoices": {
+    "rows": 4,
+    "sha256": "99797b3cbc46ffb924e1e9931f5d1de65b2613497abdcbd33121bae7ed022bef"
+  },
+  "customer_notes": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "customer_receipts": {
+    "rows": 2,
+    "sha256": "d9e645481eacab67752258e2eefc04ebe8f782f186b7166f878fbd65eb46b5c6"
+  },
+  "customers": {
+    "rows": 3,
+    "sha256": "5606c9ab1a358672827e224785b8bfce3ca24f8e5cb401f1a8315be0ca4a558d"
+  },
+  "departments": {
+    "rows": 7,
+    "sha256": "f9eb761dc147dee255154a3d8fcdc7c7e3c51ec3dd0fe2aeca5e2535bf6d769f"
+  },
+  "designations": {
+    "rows": 12,
+    "sha256": "860bcb4e5d8a8b3662356bf28752dd64322f3599383dfb43c17fbd0b093da583"
+  },
+  "document_sequences": {
+    "rows": 8,
+    "sha256": "b3dd819c48b8fa3d1f285d7cf0d03c052f548bad0230f6227b4eba5bba525776"
+  },
+  "employee_documents": {
+    "rows": 46,
+    "sha256": "a1505d3ded9985c322ba618942d9cf804aa4e366ac814642699954838dae46e0"
+  },
+  "employee_shift_assignments": {
+    "rows": 20,
+    "sha256": "da2be9dfc8f196284d36d1a65dc44b5d7bb281fa9b1081519ba11fd5d80d6cf1"
+  },
+  "employees": {
+    "rows": 21,
+    "sha256": "219061e29ef9f1ae989b5b51082d16e4f6e687b1efb1364bff3d53b206950296"
+  },
+  "end_of_service_records": {
+    "rows": 3,
+    "sha256": "a9bb83bdb8a0ff6e3fc2ec65d1b5fe965f22a48cbd0ee36a22d7b4111828107c"
+  },
+  "equipment_assets": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "equipment_assignments": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "equipment_documents": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "equipment_fuel_logs": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "equipment_maintenance_records": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "expense_categories": {
+    "rows": 5,
+    "sha256": "a7f9122da857e9f020d23a22668228299cd1397282479518bbec49563addb61b"
+  },
+  "failed_jobs": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "goods_receipt_lines": {
+    "rows": 15,
+    "sha256": "8a3763ce5320333db0f403385b2ac42a6a47480320c8d0ce5fd954f865cbbbeb"
+  },
+  "goods_receipts": {
+    "rows": 5,
+    "sha256": "09437cfdb92f49ff1c0a02d83de298cff25d86e2545de408f1f803fee9209fae"
+  },
+  "item_categories": {
+    "rows": 8,
+    "sha256": "a77bdb6ad736a4ce53b3df9e8ea5f0a06132b389a9cfef0538441de34ec2dc3f"
+  },
+  "items": {
+    "rows": 40,
+    "sha256": "7da5426fd21b7684fbfc0064d0ee6a767fb2c4d59bc3dc8774e00fbbb60f8440"
+  },
+  "job_batches": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "jobs": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "journal_entries": {
+    "rows": 27,
+    "sha256": "b4476450956b2ae444f89d1770f8913b62517b5ccca0dad148850e28b679fb46"
+  },
+  "journal_entry_lines": {
+    "rows": 84,
+    "sha256": "653622fbd611f31058e8ea7232db4793f1f30da1d8116e94e92150f0f9d8dd00"
+  },
+  "leave_requests": {
+    "rows": 8,
+    "sha256": "1ac1f63cd04e0840e3a23d10d86a4e816b2b9692b21398dbee696c734992a559"
+  },
+  "leave_types": {
+    "rows": 4,
+    "sha256": "8405aec1db860efbda3ed6014d43bd52347f620cd2dc89a744928341413c3cb0"
+  },
+  "lookup_values": {
+    "rows": 24,
+    "sha256": "311c204297109fe3ae2fa3dc52114413d29358e479af178f0c68aab4cfc69f4b"
+  },
+  "marketing_leads": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "marketing_visits": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "migrations": {
+    "rows": 39,
+    "sha256": "c0294ecda62d5a9a7987160809a1a49c11c48318fd226eb58cdab0d2ffbce2a1"
+  },
+  "offline_sync_receipts": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "overtime_records": {
+    "rows": 6,
+    "sha256": "04921567a12d5d8e40ceda3d01acfada67ede183499f88f8734ad854a918f768"
+  },
+  "password_reset_tokens": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "payment_terms": {
+    "rows": 4,
+    "sha256": "35c5726d0359f4783a750a7fef0e2f10932583c782eec94f6f666c5426d05237"
+  },
+  "payroll_bank_exports": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "payroll_run_items": {
+    "rows": 19,
+    "sha256": "79c364e3997f8abad53ae9ca14190d0666a38ad71756b77e0c78df36f532265f"
+  },
+  "payroll_runs": {
+    "rows": 1,
+    "sha256": "b0225231825464f488f1353ace8059e0b02bf80b8ff112c9e75085a7747e7a14"
+  },
+  "payroll_settlements": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "permissions": {
+    "rows": 750,
+    "sha256": "6fd192fa076982f500a7fa90cba3753557b9a44f6eeec9fb018b3cd69a68d9c3"
+  },
+  "project_budget_lines": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "project_budgets": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "project_classifications": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "projects": {
+    "rows": 3,
+    "sha256": "707a91f0cbb801ef51c511280a91d9753ab858078088b9dbc13d34e075dfe27f"
+  },
+  "purchase_order_attachments": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "purchase_order_lines": {
+    "rows": 18,
+    "sha256": "7d0a88ba036978e94493ed62e4cd25030766a51674400c3ac6462fe6c7370fd6"
+  },
+  "purchase_orders": {
+    "rows": 6,
+    "sha256": "8b649f5fb9b3c6c8c0f347400b0e6db420326d3fde6de55656e202298421b43e"
+  },
+  "purchase_request_lines": {
+    "rows": 24,
+    "sha256": "c81b0605d19c23aace1e955c4b33a3db26f6acb6fe750aac46146cf6cd36d198"
+  },
+  "purchase_requests": {
+    "rows": 8,
+    "sha256": "8fe59b84e36d1c48d19f1073f725e8ed71cd71cff281049e583b3b7d51750f62"
+  },
+  "role_permissions": {
+    "rows": 1056,
+    "sha256": "04ccd425846899f97fd7670b84bf9cc8d7c0772201744b718b6e38a8bfb4c1fc"
+  },
+  "role_reporting_parents": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "roles": {
+    "rows": 14,
+    "sha256": "aff17355d5deefcc22403a4335287d28d806c817b172c783ee2488b7b4ce95d8"
+  },
+  "salary_structure_items": {
+    "rows": 10,
+    "sha256": "e9a8f5f343af3ac2ab6c4cbc12f15c19dd8f6f8cd919e02ec8f024d6d7a9130d"
+  },
+  "salary_structures": {
+    "rows": 20,
+    "sha256": "a7dcf769dabf0a78aeacd6b68575125739cb2317e798931ccdc685688379c781"
+  },
+  "shifts": {
+    "rows": 3,
+    "sha256": "eb39cda8f425c61a077065c9bbdf959c72238b7c420dc3ed67fa677a5e292b1b"
+  },
+  "site_expense_receipts": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "site_expenses": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "sites": {
+    "rows": 4,
+    "sha256": "4193ba2b7af8351e5d8f1fc21b5c022167a72908277f5502bdb2590a78625497"
+  },
+  "stock_adjustments": {
+    "rows": 5,
+    "sha256": "d1d97031a92bc1b612c9867163c0eb0e68043cc5effd9638848b8992f91eaa27"
+  },
+  "stock_issue_lines": {
+    "rows": 20,
+    "sha256": "c95bcb859e79b152061dc342352b1568545258ee0b9c38604cd14fbf354f20d6"
+  },
+  "stock_issues": {
+    "rows": 10,
+    "sha256": "2074505e42068564efc6fca1abe57edc6a2a4fdd96351c7e243b03cde9e64e01"
+  },
+  "stock_ledger_entries": {
+    "rows": 83,
+    "sha256": "4d70f2474e3dd3218f502a5e9ae01d698715d9be9ea45456c77e57ef5a5ae36f"
+  },
+  "stock_transfer_lines": {
+    "rows": 12,
+    "sha256": "09924ab8121f581d202aafb41a5f46fe8f0da25f2f6dad9642b0f51d91e16ca6"
+  },
+  "stock_transfers": {
+    "rows": 6,
+    "sha256": "6000eea0efc8fcef2f5e0eae0e29d2d3ee198710399684d624d647216ead7c30"
+  },
+  "supplier_bill_grn_matches": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "supplier_bill_lines": {
+    "rows": 4,
+    "sha256": "f0fab5f8bdb84d33856e8df737ff12a40af9d1f407b6463c892589c78b9c7190"
+  },
+  "supplier_bills": {
+    "rows": 4,
+    "sha256": "f106e34b13fa171b2f31d9eb154c6007a7121955c52eb38355eaa212e93a30d3"
+  },
+  "supplier_payments": {
+    "rows": 2,
+    "sha256": "46cc2edb5155574e0aee894528a6fa32a70365c0a9ac062df4fb4734add0d471"
+  },
+  "supplier_projects": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "suppliers": {
+    "rows": 3,
+    "sha256": "52fe8454eaca2085ac41d7d881d570fd264f2c469c595f54b81de73ded5def83"
+  },
+  "units": {
+    "rows": 8,
+    "sha256": "f4865e64b039325282d342efefe39594690711f041a73fde95f337ee5d474d0a"
+  },
+  "user_roles": {
+    "rows": 12,
+    "sha256": "fa378dbdeb4e54f36698007020548995b8a35d287811dc05c352819788bbe57e"
+  },
+  "vat_periods": {
+    "rows": 2,
+    "sha256": "fb4d5ecc82471c48d3ecdaa29cd761f4ee3f5f35249e1c50b5f12921c949b79d"
+  },
+  "vat_transactions": {
+    "rows": 6,
+    "sha256": "79dab7e1efc3aec151fa818d5decf8af8f5729a6ae9fbb34fcf273dd036c248a"
+  },
+  "warehouse_stocks": {
+    "rows": 52,
+    "sha256": "f55f2433c07121155d3107fc60980cf92f025df9df74ac41b4cccd0ba41d7c38"
+  },
+  "warehouses": {
+    "rows": 3,
+    "sha256": "265fce1d765ed40a100f3328fb33ecb644531804c2859c2b390876f892cf921e"
+  },
+  "zatca_egs_units": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "zatca_invoice_records": {
+    "rows": 3,
+    "sha256": "e3072b78ab6b67a56cdca71806333a193dc741674e0fb806a5228e1291e99179"
+  },
+  "zatca_submissions": {
+    "rows": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  }
+}

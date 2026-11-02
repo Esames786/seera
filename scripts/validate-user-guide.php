@@ -1,8 +1,8 @@
 <?php
 
-// Read-only validation of the four authoritative generated HTML pages.
+// Read-only validation of all generated guide pages, including embedded training images.
 $directory = dirname(__DIR__).'/docs/user-guide/';
-$files = ['index.html', 'SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html', 'SCREEN-INDEX.html', 'WORKFLOW-INDEX.html'];
+$files = ['index.html', 'SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html', 'SCREEN-INDEX.html', 'WORKFLOW-INDEX.html', 'VISUAL-EXAMPLES.html', 'VISUAL-EXAMPLES-AR.html'];
 $documents = [];
 foreach ($files as $file) {
     $dom = new DOMDocument;
@@ -11,6 +11,23 @@ foreach ($files as $file) {
         throw new RuntimeException('Invalid HTML: '.$file);
     }
     $documents[$file] = new DOMXPath($dom);
+    if (str_starts_with($file, 'VISUAL-EXAMPLES')) {
+        $expectedLang = str_contains($file, '-AR') ? 'ar' : 'en';
+        if ($dom->documentElement->getAttribute('lang') !== $expectedLang
+            || $documents[$file]->query('//img')->length !== 47) {
+            throw new RuntimeException('Expected 43 desktop and four mobile images in '.$file);
+        }
+        foreach ($documents[$file]->query('//img') as $image) {
+            $src = $image->getAttribute('src');
+            if (! str_starts_with($src, 'data:image/jpeg;base64,')) {
+                throw new RuntimeException('Image is not self-contained: '.$file);
+            }
+            $bytes = base64_decode(substr($src, strlen('data:image/jpeg;base64,')), true);
+            if ($bytes === false || getimagesizefromstring($bytes) === false) {
+                throw new RuntimeException('Invalid embedded image: '.$file);
+            }
+        }
+    }
     $seen = [];
     foreach ($documents[$file]->query('//*[@id]') as $node) {
         $id = $node->getAttribute('id');
@@ -58,4 +75,4 @@ foreach (['EXP-SE-001', 'EXP-SE-002', 'EXP-SE-003', 'EXP-SE-004', 'HR-ATT-004', 
         throw new RuntimeException($id.' must appear exactly once as a screen table row.');
     }
 }
-echo "PASS four guide pages; $checked internal links/anchors; stable Site Expense/approval IDs including WF-019, HR-ATT-004, WF-020, HR-PAY-005, WF-021, WF-022, MST-PRJ-006, WF-023, EQP-003 and WF-024.\n";
+echo "PASS six guide pages; $checked internal links/anchors; 94 valid embedded JPEG images; stable screen/workflow IDs.\n";

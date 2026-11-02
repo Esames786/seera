@@ -17,6 +17,7 @@ class UserGuideController extends Controller
         'SCREEN-INDEX',
         'WORKFLOW-INDEX',
         'VISUAL-EXAMPLES',
+        'VISUAL-EXAMPLES-AR',
     ];
 
     public function show(string $page): Response
