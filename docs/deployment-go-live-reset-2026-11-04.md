@@ -1,6 +1,6 @@
 # Go-live reset command — controlled deployment and reset guide, 4 November 2026
 
-Target: `feature/seera-go-live-reset-2026-11-04` at **`30346bc`** (base `a3316be`, the approved production commit). The candidate is **code only**: one artisan command, its test class and the reset guide. No migration, no Composer change, no new asset build, no `public/build.zip` change, no seeder, no ZATCA change. Fast-forward from `a3316be`.
+Target: `feature/seera-go-live-reset-2026-11-04`, code commit **`30346bc`** followed only by documentation commits (base `a3316be`, the approved production commit). The candidate is **code only**: one artisan command, its test class and two guides; the deploy block below verifies that content rather than a fixed branch head, so later documentation commits on the branch do not change what is deployed. No migration, no Composer change, no new asset build, no `public/build.zip` change, no seeder, no ZATCA change. Fast-forward from `a3316be`.
 
 **This guide does not authorize production changes.** The reset deletes data permanently. It runs only after the client has confirmed in writing which registers they keep (see §3), a database backup has been taken and its restore verified, and the owner approves. Rehearse on staging first if a staging copy of the live database exists.
 
@@ -28,7 +28,7 @@ set -euo pipefail
 cd ~/seera
 PHP=/opt/cpanel/ea-php83/root/usr/bin/php
 TARGET_BRANCH=feature/seera-go-live-reset-2026-11-04
-RELEASE_SHA=30346bc
+CODE_SHA=30346bc
 PREVIOUS_SHA=a3316be4209b13efdc54ce329fa21218e0a95165
 
 test "$(git rev-parse HEAD)" = "$PREVIOUS_SHA"
@@ -39,11 +39,12 @@ while IFS= read -r path; do
 done <<< "$TRACKED_CHANGES"
 git fetch origin "refs/heads/$TARGET_BRANCH:refs/remotes/origin/$TARGET_BRANCH"
 RELEASE_FULL="$(git rev-parse "origin/$TARGET_BRANCH")"
-test "$(git rev-parse --short "$RELEASE_FULL")" = "$RELEASE_SHA"
 git merge-base --is-ancestor HEAD "$RELEASE_FULL"
-# Code-only candidate: these must all be unchanged between the two commits.
+git merge-base --is-ancestor "$CODE_SHA" "$RELEASE_FULL"
+# Code-only candidate: between the production commit and the branch head only the command, its test and Markdown guides may differ.
+if git diff --name-only "$PREVIOUS_SHA" "$RELEASE_FULL" | grep -vE '^(app/Console/Commands/GoLiveReset\.php|tests/Feature/GoLiveResetCommandTest\.php|docs/[^/]+\.md)$'; then printf 'STOP: unexpected file in the candidate
+'; exit 1; fi
 git diff --quiet "$PREVIOUS_SHA" "$RELEASE_FULL" -- composer.json composer.lock public/build.zip database/migrations database/seeders
-test "$(git diff --name-only "$PREVIOUS_SHA" "$RELEASE_FULL" | wc -l)" = 3
 
 umask 077
 BACKUP_DIR="$(mktemp -d "$HOME/seera-pre-golive-reset.XXXXXX")"
