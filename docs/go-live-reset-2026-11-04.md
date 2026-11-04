@@ -45,6 +45,8 @@ Example keeping the employee register and the project list: `php artisan seera:g
 
 ## Production procedure (cPanel host)
 
+The full step-by-step with preflight, code deploy, backup checkpoint and recovery is in [deployment-go-live-reset-2026-11-04.md](deployment-go-live-reset-2026-11-04.md); the short form:
+
 ```bash
 cd ~/seera
 # 1. Backup first and verify it restores (owner gate: no reset without a verified backup).
