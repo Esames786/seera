@@ -2,6 +2,8 @@
 
 Preparation only. No production deployment, migration, seeder, cleanup, permission change or ZATCA activation was performed by the development run.
 
+**Recovery update:** the owner's deployment attempt at `77b91bb` failed because existing MyISAM parent tables cannot support the new InnoDB foreign keys. Both photo columns and a partial Customer document table already exist. Follow [the MyISAM recovery guide](deployment-feedback-recovery-2026-11-10.md), including a full engine inventory, before retrying. Do not rerun the original deployment block or drop partial tables. The corrective migrations preserve partial data and require reviewed InnoDB parents; they do not automatically convert live tables.
+
 - Branch: `feature/seera-client-feedback-fixes-2026-11-10`.
 - Reviewed application commit: `2da7886b3e93fdf59a15198f8507c45d64e6ff91`; later closure commit is documentation/evidence only.
 - Expected base from local Git and owner-reported live state: `0aed8c791e4cd214d23a916026860585983d1cca`. Recheck actual server HEAD; do not infer deployment from GitHub.

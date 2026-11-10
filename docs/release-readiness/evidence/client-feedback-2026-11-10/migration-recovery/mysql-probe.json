@@ -1,0 +1,47 @@
+{
+    "synthetic": true,
+    "production_access": false,
+    "results": [
+        {
+            "name": "Legacy migration reproduces mixed-engine FK failure",
+            "ok": true
+        },
+        {
+            "name": "Failure leaves both photo columns and a partial customer table",
+            "ok": true
+        },
+        {
+            "name": "Migration 1 refuses MyISAM without deleting partial data",
+            "ok": true
+        },
+        {
+            "name": "Migration 2 refuses MyISAM without deleting partial data",
+            "ok": true
+        },
+        {
+            "name": "Partial recovery restores all seven foreign keys",
+            "ok": true
+        },
+        {
+            "name": "Existing photo, document IDs and all parent rows survive",
+            "ok": true
+        },
+        {
+            "name": "Repeated DDL preserves the unique existing Deny exception",
+            "ok": true
+        },
+        {
+            "name": "Recovered customer foreign key restricts parent deletion",
+            "ok": true
+        },
+        {
+            "name": "Converted synthetic tables support rollback",
+            "ok": true
+        },
+        {
+            "name": "Fresh installation explicitly uses InnoDB despite a MyISAM default",
+            "ok": true
+        }
+    ],
+    "passed": 10
+}
