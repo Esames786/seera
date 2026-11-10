@@ -20,13 +20,26 @@ use Illuminate\Support\Str;
     'access_start_date', 'access_end_date', 'last_login_at', 'status',
     'must_change_password', 'password_changed_at',
 ])]
-#[Hidden(['password', 'remember_token'])]
+#[Hidden(['password', 'remember_token', 'profile_photo_path'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
     private ?Collection $cachedEffectiveRoles = null;
+
+    private ?array $cachedPermissionOverrides = null;
+
+    public function permissionOverrides()
+    {
+        return $this->hasMany(UserPermissionOverride::class);
+    }
+
+    public function forgetPermissionOverrides(): void
+    {
+        $this->cachedPermissionOverrides = null;
+        $this->unsetRelation('permissionOverrides');
+    }
 
     /**
      * Get the attributes that should be cast.
@@ -139,7 +152,20 @@ class User extends Authenticatable
 
     public function hasPermission(string $module, string $action): bool
     {
-        return $this->effectiveRoleModels()->contains(fn (Role $role) => $role->permissions
+        // An expired/inactive role assignment cannot be resurrected by a personal exception.
+        $roles = $this->effectiveRoleModels();
+        if ($roles->isEmpty()) {
+            return false;
+        }
+        $this->cachedPermissionOverrides ??= $this->permissionOverrides()->with('permission')->get()
+            ->filter(fn ($override) => $override->permission)
+            ->mapWithKeys(fn ($override) => [$override->permission->module.'|'.$override->permission->action => $override->effect])->all();
+        $effect = $this->cachedPermissionOverrides[$module.'|'.$action] ?? null;
+        if ($effect !== null) {
+            return $effect === 'allow'; // Deny (and any invalid stored value) wins over every role grant.
+        }
+
+        return $roles->contains(fn (Role $role) => $role->permissions
             ->contains(fn (Permission $permission) => $permission->module === $module && $permission->action === $action));
     }
 

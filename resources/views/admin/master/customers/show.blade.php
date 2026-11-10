@@ -41,6 +41,7 @@
         </tbody>
     </x-admin.data-table>
 
+    <x-admin.record-documents :owner="$customer" kind="customer" :readonly="true"/>
     @foreach ($panels as $key => $data)
         @include('admin.master.customers._workspace-panel', $data)
     @endforeach

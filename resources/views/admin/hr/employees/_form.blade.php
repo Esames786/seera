@@ -23,6 +23,7 @@
     <input type="hidden" name="_workspace_section" value="{{ old('_workspace_section', 'personal') }}" data-dirty-ignore/>
 
     <x-admin.form-section :title="__('A. Personal Information')" columns="3">
+        <x-admin.profile-photo :owner="$employee" kind="employee"/>
         <div><label for="first_name">{{ __('First Name') }} *</label><input id="first_name" name="first_name" class="input" value="{{ old('first_name', $employee?->first_name) }}" required/></div>
         <div><label for="last_name">{{ __('Last Name') }}</label><input id="last_name" name="last_name" class="input" value="{{ old('last_name', $employee?->last_name) }}"/></div>
         <div>

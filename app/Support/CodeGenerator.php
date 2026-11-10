@@ -14,6 +14,17 @@ use Illuminate\Support\Str;
  */
 class CodeGenerator
 {
+    /** Serialize master creation until the caller's parent transaction commits. No number is reserved by a preview. */
+    public static function lockForCreation(string $table): void
+    {
+        if (DB::transactionLevel() < 1 || ! in_array($table, ['customers', 'suppliers'], true)) {
+            throw new \LogicException('Master code allocation needs a parent transaction.');
+        }
+        $key = 'master-code-'.$table;
+        DB::table('document_sequences')->insertOrIgnore(['key' => $key, 'last_value' => 0, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('document_sequences')->where('key', $key)->lockForUpdate()->first();
+    }
+
     /**
      * Sequential code such as CUS-001, CUS-002 for a table/column/prefix.
      */

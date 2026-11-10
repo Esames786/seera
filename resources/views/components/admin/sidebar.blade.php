@@ -13,7 +13,7 @@
 
     @if ($user)
         <div class="user">
-            <div class="avatar">{{ $user->initials() }}</div>
+            <div class="avatar">@if($user->profile_photo_path)<img src="{{ route('admin.profile-photos.show', ['user', $user->id]) }}" width="36" height="36" style="border-radius:50%;object-fit:cover" alt="{{ __('feedback.profile_photo') }}"/>@else{{ $user->initials() }}@endif</div>
             <div>
                 <div style="color:#fff;font-weight:800">{{ $user->name }}</div>
                 <div class="small" style="color:#94a3b8">{{ __($user->primaryRole()?->name ?? 'User') }}</div>

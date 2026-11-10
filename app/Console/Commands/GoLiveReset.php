@@ -45,7 +45,7 @@ class GoLiveReset extends Command
 
     /** Tables that are never touched. */
     public const PROTECTED = [
-        'users', 'user_roles', 'roles', 'permissions', 'role_permissions', 'role_reporting_parents',
+        'users', 'user_roles', 'roles', 'permissions', 'role_permissions', 'role_reporting_parents', 'user_permission_overrides',
         'branches', 'departments', 'designations', 'company_profiles',
         'chart_of_accounts', 'cost_centers', 'automatic_posting_rules', 'vat_periods', 'zatca_egs_units',
         'lookup_values', 'payment_terms', 'units', 'item_categories', 'expense_categories', 'leave_types', 'shifts',
@@ -73,8 +73,8 @@ class GoLiveReset extends Command
 
     /** Entry groups removed unless kept, children before parents. */
     public const ENTRY_GROUPS = [
-        'customers' => ['customer_contacts', 'customers'],
-        'suppliers' => ['suppliers'],
+        'customers' => ['customer_documents', 'customer_contacts', 'customers'],
+        'suppliers' => ['supplier_documents', 'suppliers'],
         'employees' => ['employee_documents', 'employee_shift_assignments', 'salary_structure_items', 'salary_structures', 'employees'],
         'projects' => ['sites', 'projects'],
         'inventory' => ['items', 'warehouses'],
@@ -83,6 +83,7 @@ class GoLiveReset extends Command
 
     /** Columns whose files live on disk; their folders are listed for manual cleanup, never deleted here. */
     private const FILE_COLUMNS = [
+        'customer_documents' => 'path', 'supplier_documents' => 'path', 'employees' => 'profile_photo_path',
         'employee_documents' => 'file_path', 'site_expense_receipts' => 'path', 'purchase_order_attachments' => 'file_path',
         'equipment_documents' => 'path', 'customer_notes' => 'attachment_path',
     ];

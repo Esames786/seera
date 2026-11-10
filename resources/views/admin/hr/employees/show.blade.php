@@ -23,7 +23,11 @@
     {{-- Persistent employee identity --}}
     <div class="card workspace-header" data-workspace-header>
         <div class="identity">
-            <div class="avatar lg">{{ $employee->initials() }}</div>
+            @if ($employee->profile_photo_path)
+                <x-admin.profile-photo :owner="$employee" kind="employee" :readonly="true"/>
+            @else
+                <div class="avatar lg">{{ $employee->initials() }}</div>
+            @endif
             <h2>{{ $employee->employee_code }} — {{ $employee->name }}</h2>
             <div class="pill-row">
                 <x-admin.status-badge :status="$employee->status"/>
@@ -182,6 +186,15 @@
     @endif
 
     {{-- Leaves --}}
+    <div class="card" style="padding:12px;margin-block:12px">
+        <p>{{ __('feedback.balance_rule') }}</p>
+        <nav aria-label="{{ __('feedback.leave_year') }}" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <strong>{{ __('feedback.leave_year') }}: {{ $leaveBalance['year'] }}</strong>
+            @foreach (array_unique([max(2000, $leaveBalance['year'] - 1), (int) now()->year, min(2100, $leaveBalance['year'] + 1)]) as $year)
+                <a class="btn sm outline" href="{{ route('admin.hr.employees.show', [$employee, 'leave_year' => $year]).'#leaves' }}">{{ $year }}</a>
+            @endforeach
+        </nav>
+    </div>
     <x-admin.data-table :title="__('workspace.hr_leaves')" :subtitle="__('workspace.hr_leave_help')" id="leaves">
         <x-slot:headerActions>
             @if($links['leaves_create'])<a class="btn sm primary" href="{{ $links['leaves_create'] }}">{{ __('workspace.hr_add_leave') }}</a>@endif

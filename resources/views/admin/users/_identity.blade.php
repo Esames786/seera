@@ -1,4 +1,5 @@
 @php $actor = auth()->user(); @endphp
+    @if ($user->profile_photo_path)<x-admin.profile-photo :owner="$user" kind="user" :readonly="true"/>@endif
     <h2>{{ $user->name }}</h2><p>{{ $user->email }} · {{ $user->employee_id ?: '-' }} · {{ $user->status }}</p>
     <p>{{ __('workspace.primary') }}: {{ $user->primaryRole()?->name ?: '-' }} · {{ __('workspace.mobile') }}: {{ $user->mobile_access ? __('workspace.yes') : __('workspace.no') }}</p>
     <p>{{ __('workspace.current_roles') }}: {{ $user->roles->filter(fn($role) => $user->hasEffectiveRole($role->id))->pluck('name')->join(', ') ?: '-' }}</p>

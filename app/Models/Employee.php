@@ -7,6 +7,8 @@ use Illuminate\Support\Str;
 
 class Employee extends Model
 {
+    protected $hidden = ['profile_photo_path'];
+
     /** Company-sponsored staff versus outside freelancers (client requirement). */
     public const CLASSIFICATIONS = ['Sponsorship', 'Freelancer'];
 
@@ -124,13 +126,14 @@ class Employee extends Model
      *
      * @return array{year: int, entitlement: int, used: float, pending: float, remaining: float}
      */
-    public function leaveBalance(?int $year = null): array
+    public function leaveBalance(?int $year = null, bool $forSelf = false): array
     {
         $year ??= (int) now()->year;
         $annualTypeIds = LeaveType::where('code', 'ANNUAL')->pluck('id');
 
         $base = $this->leaveRequests()
-            ->when($annualTypeIds->isNotEmpty(), fn ($q) => $q->whereIn('leave_type_id', $annualTypeIds))
+            ->when($forSelf && auth()->id() === $this->user_id, fn ($q) => $q->withoutGlobalScope('user_access'))
+            ->whereIn('leave_type_id', $annualTypeIds)
             ->whereYear('start_date', $year);
 
         $used = (float) (clone $base)->where('status', 'approved')->sum('total_days');

@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Supplier extends Model
 {
+    public function documents()
+    {
+        return $this->hasMany(SupplierDocument::class);
+    }
+
     /** Traffic-light supplier rating (client change request NR-04). */
     public const RATINGS = ['Green', 'Amber', 'Red'];
 

@@ -70,6 +70,7 @@ class RoleController extends Controller
         if (blank($data['code'] ?? null)) {
             $data['code'] = $this->uniqueCode(CodeGenerator::roleCode($data['name']));
         }
+        \App\Support\SuperAdminProtection::role($request->user(), new Role(['code' => $data['code']]));
 
         $permissionIds = collect($request->input('permissions', []))->map(fn ($id) => (int) $id);
 
@@ -129,6 +130,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role): RedirectResponse
     {
+        \App\Support\SuperAdminProtection::role($request->user(), $role);
         $data = $this->validated($request, $role);
         unset($data['code']);
 
@@ -207,7 +209,13 @@ class RoleController extends Controller
         ]);
 
         $role = Role::findOrFail($data['role_id']);
+        \App\Support\SuperAdminProtection::role($request->user(), $role);
         $userIds = collect($data['user_ids'] ?? [])->map(fn ($id) => (int) $id);
+        if (! $request->user()->isSuperAdmin()) {
+            $protectedUsers = fn ($query) => $query->where('code', 'SUPER_ADMIN');
+            abort_if($role->users()->whereHas('roles', $protectedUsers)->exists()
+                || User::whereIn('id', $userIds)->whereHas('roles', $protectedUsers)->exists(), 403);
+        }
 
         // Keep is_primary flags for users that stay on the role.
         $existingPrimary = $role->users()

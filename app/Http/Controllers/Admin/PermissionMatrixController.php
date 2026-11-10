@@ -65,6 +65,7 @@ class PermissionMatrixController extends Controller
         ]);
 
         $role = Role::findOrFail($request->integer('role_id'));
+        \App\Support\SuperAdminProtection::role($request->user(), $role);
         $visibleIds = collect($data['visible_permission_ids'] ?? [])->map(fn ($id) => (int) $id);
         $submittedIds = collect($data['permissions'] ?? [])->map(fn ($id) => (int) $id)->intersect($visibleIds);
         $preservedIds = $role->permissions()->pluck('permissions.id')->diff($visibleIds);

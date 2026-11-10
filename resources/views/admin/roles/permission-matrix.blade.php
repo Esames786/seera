@@ -5,6 +5,12 @@
 
 @section('content')
     <x-admin.page-header title="Permission Matrix" description="Role-wise module permissions. Tick All to grant a whole row, then untick any exception."/>
+    @if(auth()->user()->isSuperAdmin() && auth()->user()->hasPermission('Users', 'view'))
+        <div class="help-box">
+            {{ __('feedback.role_vs_person') }}
+            <a class="btn sm outline" href="{{ route('admin.users.index') }}">{{ __('feedback.individual_permissions') }}</a>
+        </div>
+    @endif
 
     <div class="help-box">
         Select a role, adjust module permissions, and save. Changes apply instantly to every user assigned to the role.

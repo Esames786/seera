@@ -22,6 +22,7 @@ final class EmployeeHrContext
     /** @return array<string, mixed> */
     public static function data(Employee $employee, User $user, Request $request): array
     {
+        $request->validate(['leave_year' => ['nullable', 'integer', 'between:2000,2100']]);
         $employee->loadMissing(['department', 'designation', 'branch', 'project', 'site', 'manager', 'documents', 'salaryStructures.items']);
         $selfUrl = route('admin.hr.employees.show', $employee, false);
         $page = fn (string $key) => $request->integer('page_'.$key) ?: null;
@@ -78,7 +79,7 @@ final class EmployeeHrContext
                 : null,
             'leaves' => $employee->leaveRequests()->with(['leaveType', 'approver'])->latest('start_date')->latest('id')
                 ->paginate(self::PER_PAGE, ['*'], 'page_leaves', $page('leaves'))->fragment('leaves'),
-            'leaveBalance' => $employee->leaveBalance(),
+            'leaveBalance' => $employee->leaveBalance($request->integer('leave_year') ?: null),
             'pendingLeaves' => $employee->leaveRequests()->where('status', 'pending')->count(),
             'overtime' => $flags['canViewOvertime']
                 ? $employee->overtimeRecords()->with(['attendanceRecord', 'approver'])->latest('overtime_date')->latest('id')

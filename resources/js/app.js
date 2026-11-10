@@ -1,4 +1,5 @@
 import './unsaved-changes';
+import './record-inputs';
 import './employee-user-search';
 import './employee-workspace';
 import './workspace';

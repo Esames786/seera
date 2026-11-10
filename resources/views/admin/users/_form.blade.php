@@ -1,17 +1,16 @@
 @php /** @var \App\Models\User|null $user */ $user = $user ?? null; @endphp
 
-<form method="POST" action="{{ $user ? route('admin.users.update', $user) : route('admin.users.store') }}">
+<form method="POST" action="{{ $user ? route('admin.users.update', $user) : route('admin.users.store') }}" enctype="multipart/form-data">
     @csrf
     @if ($user) @method('PUT') @endif
 
     <div class="split">
         <div>
             <div class="card profile-card" style="margin-bottom:16px">
-                <div class="avatar lg" style="margin:auto">{{ $user?->initials() ?? '+' }}</div>
+                <x-admin.profile-photo :owner="$user" kind="user"/>
                 <h3>{{ $user?->name ?? 'New User' }}</h3>
                 <div class="small">{{ $user?->primaryRole()?->name ?? 'Role not assigned yet' }}</div>
                 <div style="height:12px"></div>
-                <button class="btn outline" type="button">Upload Profile Photo</button>
             </div>
 
             <x-admin.form-section title="Role & Quick Capabilities">

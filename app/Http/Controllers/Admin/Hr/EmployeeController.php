@@ -80,11 +80,14 @@ class EmployeeController extends Controller
     {
         $data = $this->validated($request);
         $documents = $this->validatedDocuments($request);
+        \App\Services\RecordUploads::validatePhoto($request);
+        $uploads = new \App\Services\RecordUploads;
         $storedPaths = [];
 
         try {
-            $employee = DB::transaction(function () use ($request, $data, $documents, &$storedPaths) {
+            $employee = $uploads->transaction(function () use ($uploads, $request, $data, $documents, &$storedPaths) {
                 $employee = Employee::create($data);
+                $uploads->photo($request, $employee);
                 $this->syncDocuments($request, $employee, $documents, $storedPaths);
                 $employee->syncDocumentSummary();
                 $this->syncUserClassification($employee);
@@ -136,12 +139,15 @@ class EmployeeController extends Controller
         $data = $this->validated($request, $employee);
         $documents = $this->validatedDocuments($request);
         $existing = $this->validatedExistingDocuments($request, $employee);
+        \App\Services\RecordUploads::validatePhoto($request);
+        $uploads = new \App\Services\RecordUploads;
         $storedPaths = [];
         $replacedPaths = [];
 
         try {
-            $structure = DB::transaction(function () use ($request, $employee, $data, $documents, $existing, &$storedPaths, &$replacedPaths) {
+            $structure = $uploads->transaction(function () use ($uploads, $request, $employee, $data, $documents, $existing, &$storedPaths, &$replacedPaths) {
                 $employee->update($data);
+                $uploads->photo($request, $employee);
                 $this->syncDocuments($request, $employee, $documents, $storedPaths);
                 $this->updateExistingDocuments($request, $employee, $existing, $storedPaths, $replacedPaths);
                 $employee->syncDocumentSummary();
@@ -370,7 +376,7 @@ class EmployeeController extends Controller
             'bank_name' => ['nullable', 'string', 'max:100'],
             'iban' => ['nullable', 'string', 'max:50', function (string $attribute, mixed $value, callable $fail) {
                 if (! \App\Support\Iban::isValid($value)) {
-                    $fail('Enter a valid IBAN (letters and digits, 15–34 characters, correct check digits), e.g. SA03 8000 0000 6080 1016 7519.');
+                    $fail(\App\Support\Iban::validationMessage($value));
                 }
             }],
             'mobile_access' => ['nullable', 'boolean'],

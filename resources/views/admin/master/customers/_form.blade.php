@@ -1,12 +1,12 @@
 @php /** @var \App\Models\Customer|null $customer */ $customer = $customer ?? null; @endphp
 
-<form method="POST" action="{{ $customer ? route('admin.master.customers.update', $customer) : route('admin.master.customers.store') }}">
+<form method="POST" action="{{ $customer ? route('admin.master.customers.update', $customer) : route('admin.master.customers.store') }}" enctype="multipart/form-data">
     @csrf
     @if ($customer) @method('PUT') @endif
 
     <x-admin.form-section :title="__('Customer Information')" columns="3">
         <div><label for="name">{{ __('Customer Name') }} *</label><input id="name" name="name" class="input" value="{{ old('name', $customer?->name) }}" required/></div>
-        <div><label for="code">{{ __('Customer Code') }}</label><input id="code" name="code" class="input" value="{{ old('code', $customer?->code) }}" placeholder="Auto: CUS-001"/></div>
+        <x-admin.master-code :owner="$customer" kind="customer"/>
         <div>
             <div class="label-row">
                 <label for="type">{{ __('ui.customer_type') }}</label>
@@ -62,5 +62,6 @@
         @include('admin.master.customers._related-inputs')
     @endunless
 
+    <x-admin.record-documents :owner="$customer" kind="customer"/>
     <x-admin.form-actions :cancel="route('admin.master.customers.index')" :save-new="true"/>
 </form>

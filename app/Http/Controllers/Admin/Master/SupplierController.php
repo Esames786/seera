@@ -59,8 +59,15 @@ class SupplierController extends Controller
     {
         [$data, $projectIds] = $this->validated($request);
 
-        $supplier = DB::transaction(function () use ($data, $projectIds) {
+        \App\Services\RecordUploads::validateDocuments($request);
+        $uploads = new \App\Services\RecordUploads;
+        $supplier = $uploads->transaction(function () use ($uploads, $request, $data, $projectIds) {
+            CodeGenerator::lockForCreation('suppliers');
+            if (blank($request->input('code'))) {
+                $data['code'] = CodeGenerator::sequential('suppliers', 'code', 'SUP-');
+            }
             $supplier = Supplier::create($data);
+            $uploads->documents($request, $supplier);
             if ($projectIds !== null) {
                 $supplier->projects()->sync($projectIds);
             }
@@ -115,8 +122,11 @@ class SupplierController extends Controller
     {
         [$data, $projectIds] = $this->validated($request, $supplier);
 
-        DB::transaction(function () use ($supplier, $data, $projectIds) {
+        \App\Services\RecordUploads::validateDocuments($request);
+        $uploads = new \App\Services\RecordUploads;
+        $uploads->transaction(function () use ($uploads, $request, $supplier, $data, $projectIds) {
             $supplier->update($data);
+            $uploads->documents($request, $supplier);
             // The workspace manages project links in its own panel; only a form that
             // submitted the project list changes it.
             if ($projectIds !== null) {

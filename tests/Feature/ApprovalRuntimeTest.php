@@ -28,6 +28,15 @@ use Tests\TestCase;
 
 class ApprovalRuntimeTest extends TestCase
 {
+    public function test_personal_deny_removes_current_approval_eligibility(): void
+    {
+        $instance = $this->start();
+        $this->first->permissionOverrides()->create(['permission_id' => Permission::where('module', 'Purchase Requests')->where('action', 'approve')->firstOrFail()->id, 'effect' => 'deny', 'reason' => 'Probation restriction']);
+        $this->assertFalse($this->runtime->eligible($this->subject, $this->pr, $instance, $instance->steps->first(), $this->first->fresh(), 'approve'));
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\HttpException::class);
+        $this->decide($instance, $this->first->fresh());
+    }
+
     use RefreshDatabase;
 
     private User $requester;

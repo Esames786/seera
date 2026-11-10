@@ -131,13 +131,15 @@ class UserController extends Controller
             $request->validate(['password' => ['nullable', 'string', 'min:8']]);
         }
         $data = $this->validated($request);
+        \App\Services\RecordUploads::validatePhoto($request);
+        $uploads = new \App\Services\RecordUploads;
         $roleId = $data['role_id'];
         unset($data['role_id'], $data['password']);
 
         $password = $request->filled('password') ? $request->input('password') : self::DEFAULT_PASSWORD;
         $data['must_change_password'] = ! $request->filled('password');
 
-        $user = DB::transaction(function () use ($data, $roleId, $password, $source) {
+        $user = $uploads->transaction(function () use ($uploads, $request, $data, $roleId, $password, $source) {
             if ($source) {
                 $source = Employee::whereKey($source->id)->lockForUpdate()->firstOrFail();
                 if ($source->user_id || $source->status !== 'active' || $source->employee_code !== $data['employee_id']) {
@@ -145,6 +147,7 @@ class UserController extends Controller
                 }
             }
             $user = User::create($data + ['password' => $password]);
+            $uploads->photo($request, $user);
             $user->roles()->attach($roleId, ['is_primary' => true]);
             if ($source) {
                 $source->update(['user_id' => $user->id]);
@@ -194,10 +197,15 @@ class UserController extends Controller
     public function update(Request $request, User $user): RedirectResponse
     {
         abort_unless(app(LinkedIdentityNavigation::class)->canUser($request->user(), $user, 'edit'), 403);
+        \App\Services\RecordUploads::validatePhoto($request);
+        $uploads = new \App\Services\RecordUploads;
         if ($request->boolean('_workspace_profile')) {
             $data = $request->validate(['name' => ['required', 'string', 'max:255'], 'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
                 'phone' => ['nullable', 'string', 'max:30'], 'username' => ['nullable', 'string', 'max:100', Rule::unique('users')->ignore($user->id)], 'language' => ['required', 'in:English,Arabic']]);
-            $user->update($data);
+            $uploads->transaction(function () use ($uploads, $request, $user, $data) {
+                $user->update($data);
+                $uploads->photo($request, $user);
+            });
             ActivityLog::record($request, 'Users', 'Updated profile', '[User #'.$user->id.']');
 
             return $this->saved($request, $user)->with('status', __('workspace.saved'));
@@ -210,9 +218,10 @@ class UserController extends Controller
             $data['password'] = $request->input('password');
         }
 
-        DB::transaction(function () use ($user, $data, $roleId) {
+        $uploads->transaction(function () use ($uploads, $request, $user, $data, $roleId) {
             $user = User::whereKey($user->id)->lockForUpdate()->firstOrFail();
             $user->update($data);
+            $uploads->photo($request, $user);
             app(UserRoleAssignments::class)->primary($user, (int) $roleId);
             $this->syncEmployeeClassification($user);
         });
@@ -250,6 +259,8 @@ class UserController extends Controller
 
     private function validated(Request $request, ?User $user = null): array
     {
+        $request->validate(['role_id' => ['required', 'integer', 'exists:roles,id']]);
+        \App\Support\SuperAdminProtection::role($request->user(), Role::findOrFail($request->integer('role_id')));
         UserWorkspaceController::validateScope($request->only('project_id', 'site_id', 'warehouse_id'));
 
         return $request->validate([
@@ -296,7 +307,7 @@ class UserController extends Controller
             'projects' => Project::orderBy('name')->get(),
             'sites' => Site::orderBy('name')->get(),
             'warehouses' => Warehouse::orderBy('name')->get(),
-            'roles' => Role::orderBy('level')->orderBy('name')->get(),
+            'roles' => Role::when(! auth()->user()->isSuperAdmin(), fn ($query) => $query->where('code', '!=', 'SUPER_ADMIN'))->orderBy('level')->orderBy('name')->get(),
             'roleTypes' => Role::TYPES,
             'classifications' => Employee::CLASSIFICATIONS,
         ];

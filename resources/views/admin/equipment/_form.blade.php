@@ -1,6 +1,6 @@
 @php /** @var \App\Models\EquipmentAsset|null $asset */ $asset = $asset ?? null; @endphp
 
-<form method="POST" action="{{ $asset ? route('admin.equipment.update', $asset) : route('admin.equipment.store') }}">
+<form method="POST" action="{{ $asset ? route('admin.equipment.update', $asset) : route('admin.equipment.store') }}" enctype="multipart/form-data">
     @csrf
     @if ($asset) @method('PUT') @endif
     <input type="hidden" name="{{ \App\Support\SaveAction::RETURN_FIELD }}" value="{{ old(\App\Support\SaveAction::RETURN_FIELD, \App\Support\SaveAction::returnTo()) }}"/>
@@ -43,5 +43,6 @@
         <div class="full"><label for="notes">{{ __('Notes') }}</label><textarea id="notes" name="notes" class="textarea" maxlength="2000">{{ old('notes', $asset?->notes) }}</textarea></div>
     </x-admin.form-section>
 
+    <x-admin.record-documents :owner="$asset" kind="equipment" :readonly="! auth()->user()->hasPermission('Equipment', 'create')"/>
     <x-admin.form-actions :cancel="\App\Support\SaveAction::cancelUrl(route('admin.equipment.index'))" :save-new="! $asset"/>
 </form>

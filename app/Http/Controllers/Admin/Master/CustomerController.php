@@ -58,8 +58,15 @@ class CustomerController extends Controller
     {
         $data = $this->validated($request);
         $related = $this->validatedRelated($request);
-        $customer = DB::transaction(function () use ($request, $data, $related) {
+        \App\Services\RecordUploads::validateDocuments($request);
+        $uploads = new \App\Services\RecordUploads;
+        $customer = $uploads->transaction(function () use ($uploads, $request, $data, $related) {
+            CodeGenerator::lockForCreation('customers');
+            if (blank($request->input('code'))) {
+                $data['code'] = CodeGenerator::sequential('customers', 'code', 'CUS-');
+            }
             $customer = Customer::create($data);
+            $uploads->documents($request, $customer);
             $this->saveRelated($request, $customer, $related);
 
             return $customer;
@@ -107,8 +114,11 @@ class CustomerController extends Controller
     {
         $data = $this->validated($request, $customer);
         $related = $this->validatedRelated($request, $customer);
-        DB::transaction(function () use ($request, $customer, $data, $related) {
+        \App\Services\RecordUploads::validateDocuments($request);
+        $uploads = new \App\Services\RecordUploads;
+        $uploads->transaction(function () use ($uploads, $request, $customer, $data, $related) {
             $customer->update($data);
+            $uploads->documents($request, $customer);
             $this->saveRelated($request, $customer, $related);
         });
 
@@ -119,6 +129,9 @@ class CustomerController extends Controller
 
     public function destroy(Request $request, Customer $customer): RedirectResponse
     {
+        if ($customer->documents()->exists()) {
+            return back()->withErrors(['customer' => __('feedback.customer_documents_retained')]);
+        }
         if ($customer->projects()->exists()) {
             return back()->withErrors(['customer' => 'This customer still has projects attached.']);
         }

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Support\SuperAdminProtection;
 use Illuminate\Validation\ValidationException;
 
 /** Caller holds the User row mutex. Never replace the whole pivot collection. */
@@ -11,6 +12,10 @@ class UserRoleAssignments
 {
     public function primary(User $user, int $roleId): void
     {
+        if ($actor = auth()->user()) {
+            SuperAdminProtection::role($actor, Role::findOrFail($roleId));
+            abort_unless(SuperAdminProtection::user($actor, $user), 403);
+        }
         $assigned = $user->roles()->whereKey($roleId)->first();
         if ($assigned?->pivot->is_temporary) {
             throw ValidationException::withMessages(['role_id' => __('workspace.temporary_primary_error')]);
@@ -21,6 +26,10 @@ class UserRoleAssignments
 
     public function change(User $user, Role $role, array $data): void
     {
+        if ($actor = auth()->user()) {
+            SuperAdminProtection::role($actor, $role);
+            abort_unless(SuperAdminProtection::user($actor, $user), 403);
+        }
         $assigned = $user->roles()->whereKey($role->id)->first();
         $action = $data['operation'];
         if ($action === 'primary') {

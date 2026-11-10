@@ -8,6 +8,11 @@ use Illuminate\Support\Collection;
 
 class Customer extends Model
 {
+    public function documents()
+    {
+        return $this->hasMany(CustomerDocument::class);
+    }
+
     /** Traffic-light customer rating (client change request NR-06). */
     public const RATINGS = ['Green', 'Amber', 'Red'];
 

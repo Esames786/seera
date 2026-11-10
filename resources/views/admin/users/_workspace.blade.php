@@ -11,9 +11,10 @@
     </nav>
     <div data-workspace-form>
         @if($manage)
-            <form method="POST" action="{{ route('admin.users.update',$user) }}">
+            <form method="POST" action="{{ route('admin.users.update',$user) }}" enctype="multipart/form-data">
                 @csrf @method('PUT')<input type="hidden" name="_workspace_profile" value="1">
                 <x-admin.form-section :title="__('workspace.profile')" columns="2">
+                    <x-admin.profile-photo :owner="$user" kind="user"/>
                     @foreach(['name','email','phone','username'] as $field)
                     <div><label for="{{ $field }}">{{ __('workspace.'.$field) }}</label><input class="input" id="{{ $field }}" name="{{ $field }}" value="{{ old($field,$user->$field) }}" @required(in_array($field,['name','email'])) type="{{ $field === 'email' ? 'email' : 'text' }}"></div>
                     @endforeach
@@ -21,6 +22,9 @@
                 </x-admin.form-section>
                 <x-admin.form-actions :cancel="route('admin.users.index')" :save-new="$actor->hasPermission('Users','create')"/>
             </form>
+            @if($actor->isSuperAdmin())
+                @include('admin.users._individual-permissions')
+            @endif
         @else
             <div class="table-card" style="padding:16px"><h3>{{ __('workspace.readonly') }}</h3>
                 @foreach(['name','email','phone','username','language','employee_id','joining_date','contract_type','employee_classification'] as $field)

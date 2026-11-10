@@ -27,6 +27,9 @@ class LinkedIdentityNavigation
 
     public function canUser(User $actor, User $target, string $action): bool
     {
+        if (in_array($action, ['edit', 'delete'], true) && ! SuperAdminProtection::user($actor, $target)) {
+            return false;
+        }
         return $actor->hasPermission('Users', $action) && $this->users($actor)->whereKey($target->id)->exists();
     }
 

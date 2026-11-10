@@ -17,6 +17,16 @@ use Tests\TestCase;
 
 class NotificationCenterTest extends TestCase
 {
+    public function test_personal_deny_hides_existing_notification_without_changing_shared_role(): void
+    {
+        $notice = $this->notice();
+        $this->actor->permissionOverrides()->create(['permission_id' => Permission::where('module', 'Purchase Requests')->where('action', 'view')->firstOrFail()->id, 'effect' => 'deny', 'reason' => 'Restricted assignment']);
+        $this->actingAs($this->actor->fresh())->get(route('admin.notifications.index'))->assertOk()->assertDontSee('PRIVATE-NOTICE-A');
+        $this->post(route('admin.notifications.read', $notice->id))->assertNotFound();
+        $this->assertNull($notice->fresh()->read_at);
+        $this->assertTrue($this->other->fresh()->hasPermission('Purchase Requests', 'view'));
+    }
+
     use RefreshDatabase;
 
     private User $actor;

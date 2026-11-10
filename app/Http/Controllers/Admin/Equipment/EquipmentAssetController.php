@@ -76,9 +76,18 @@ class EquipmentAssetController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validated($request);
+        // Blank form inputs become explicit nulls; a SQL default only applies to an omitted column.
+        $data['current_meter'] ??= 0;
         $data['status'] = 'available';
         $data['created_by'] = $request->user()->id;
-        $asset = EquipmentAsset::create($data);
+        \App\Services\RecordUploads::validateDocuments($request, true);
+        $uploads = new \App\Services\RecordUploads;
+        $asset = $uploads->transaction(function () use ($uploads, $request, $data) {
+            $asset = EquipmentAsset::create($data);
+            $uploads->documents($request, $asset);
+
+            return $asset;
+        });
         ActivityLog::record($request, 'Equipment', 'Created equipment', '[Equipment #'.$asset->id.'] '.$asset->asset_code.' · '.$asset->name.' ('.$asset->typeLabel().')');
 
         return $this->saved($request, $asset, 'Equipment '.$asset->asset_code.' created.');
@@ -128,7 +137,9 @@ class EquipmentAssetController extends Controller
     public function update(Request $request, EquipmentAsset $equipment): RedirectResponse
     {
         $data = $this->validated($request, $equipment);
-        $equipment = DB::transaction(function () use ($request, $equipment, $data) {
+        \App\Services\RecordUploads::validateDocuments($request, true);
+        $uploads = new \App\Services\RecordUploads;
+        $equipment = $uploads->transaction(function () use ($uploads, $request, $equipment, $data) {
             // Re-read assignment and meter state under the same mutex as operational actions.
             $equipment = EquipmentAsset::whereKey($equipment->id)->lockForUpdate()->firstOrFail();
             if (array_key_exists('status', $data)) {
@@ -142,6 +153,7 @@ class EquipmentAssetController extends Controller
             $meter = $data['current_meter'] ?? null;
             unset($data['current_meter']);
             $equipment->update($data);
+            $uploads->documents($request, $equipment);
             if ($meter !== null) {
                 $this->assignments->applyMeter($equipment, (float) $meter, $request->boolean('meter_correction'), $request->user(), 'profile edit');
             }

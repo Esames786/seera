@@ -6,13 +6,13 @@
     $selectedProjects = collect(old('project_ids', $supplier?->projects->pluck('id')->all() ?? []))->map(fn ($id) => (int) $id);
 @endphp
 
-<form method="POST" action="{{ $supplier ? route('admin.master.suppliers.update', $supplier) : route('admin.master.suppliers.store') }}" id="profile">
+<form method="POST" action="{{ $supplier ? route('admin.master.suppliers.update', $supplier) : route('admin.master.suppliers.store') }}" id="profile" enctype="multipart/form-data">
     @csrf
     @if ($supplier) @method('PUT') @endif
 
     <x-admin.form-section title="Supplier Information" columns="3">
         <div><label for="name">{{ __('Supplier Name *') }}</label><input id="name" name="name" class="input" value="{{ old('name', $supplier?->name) }}" required/></div>
-        <div><label for="code">{{ __('Supplier Code') }}</label><input id="code" name="code" class="input" value="{{ old('code', $supplier?->code) }}" placeholder="{{ __('Auto: SUP-001') }}"/></div>
+        <x-admin.master-code :owner="$supplier" kind="supplier"/>
         <div>
             <div class="label-row">
                 <label for="category">{{ __('Supplier Category') }}</label>
@@ -122,6 +122,7 @@
         </x-admin.form-section>
     @endunless
 
+    <x-admin.record-documents :owner="$supplier" kind="supplier"/>
     <x-admin.form-actions :cancel="route('admin.master.suppliers.index')" :save-new="true"/>
 </form>
 

@@ -6,6 +6,10 @@
     <h2>{{ __($title) }} — {{ $employee->employee_code }} / {{ $employee->name }}</h2>
     <p class="small">{{ __('Employee is fixed to this workspace. Each section saves independently.') }}</p>
     <div role="status" aria-live="polite" data-panel-status></div>
+    @if($panel === 'leaves')
+        @php $annualBalance = $employee->leaveBalance(); @endphp
+        <p class="help-box">{{ __('feedback.balance_rule') }} {{ $annualBalance['year'] }}: {{ __('workspace.hr_remaining') }} {{ $annualBalance['remaining'] }} / {{ $annualBalance['entitlement'] }} {{ __('days') }}.</p>
+    @endif
     @if($panel === 'salary')
         <p class="help-box">{{ __('New effective-dated structure only. Existing salary structures and past payroll are not overwritten.') }}</p>
     @elseif($panel === 'eosb')

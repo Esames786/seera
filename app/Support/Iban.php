@@ -12,7 +12,13 @@ final class Iban
     /** Upper-case, without spaces or hyphens; null when nothing was entered. */
     public static function normalize(?string $value): ?string
     {
-        $clean = strtoupper((string) preg_replace('/[\s\-]+/', '', (string) $value));
+        // Bank copy/paste commonly includes non-breaking/zero-width spacing and Arabic digits.
+        // Normalize presentation only; never repair or invent check digits.
+        $value = strtr((string) $value, array_combine(
+            preg_split('//u', '٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹', -1, PREG_SPLIT_NO_EMPTY),
+            str_split('01234567890123456789')
+        ));
+        $clean = strtoupper((string) preg_replace('/[\s\p{Z}\x{200B}\x{FEFF}\-]+/u', '', $value));
 
         return $clean === '' ? null : $clean;
     }
@@ -34,6 +40,14 @@ final class Iban
         }
 
         return $remainder === 1;
+    }
+
+    public static function validationMessage(?string $value): string
+    {
+        $iban = self::normalize($value);
+
+        return preg_match('/^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$/', $iban ?? '')
+            ? __('feedback.iban_checksum') : __('feedback.iban_format');
     }
 
     /** "SA03 8000 0000 6080 1016 7519" → "SA•• •••• 7519": country and last four only. */

@@ -133,12 +133,19 @@ Route::middleware(['auth', 'active'])->group(function () {
 });
 
 Route::middleware(['auth', 'active', 'password.changed'])->prefix('admin')->name('admin.')->group(function () {
+    Route::put('users/{user}/permission-overrides', [\App\Http\Controllers\Admin\UserPermissionOverrideController::class, 'update'])->name('users.permission-overrides.update');
+    Route::get('my-leave', [\App\Http\Controllers\Admin\MyLeaveController::class, 'index'])->name('my-leave.index');
+    Route::post('my-leave', [\App\Http\Controllers\Admin\MyLeaveController::class, 'store'])->middleware('throttle:20,1')->name('my-leave.store');
+    Route::get('my-leave/{leave}/attachment', [\App\Http\Controllers\Admin\MyLeaveController::class, 'attachment'])->whereNumber('leave')->name('my-leave.attachment');
+    Route::get('profile-photos/{kind}/{id}', [\App\Http\Controllers\Admin\RecordFileController::class, 'photo'])->whereIn('kind', ['employee', 'user'])->whereNumber('id')->name('profile-photos.show');
     Route::get('notifications', [NotificationCenterController::class, 'index'])->name('notifications.index');
     Route::post('notifications/read-all', [NotificationCenterController::class, 'readAll'])->name('notifications.read-all');
     Route::post('notifications/{notification}/read', [NotificationCenterController::class, 'read'])->whereUuid('notification')->name('notifications.read');
 });
 
 Route::middleware(['auth', 'active', 'password.changed', 'permission', 'scope'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('master/customers/{customer}/documents/{document}', [\App\Http\Controllers\Admin\RecordFileController::class, 'customer'])->whereNumber('document')->name('master.customers.documents.show');
+    Route::get('master/suppliers/{supplier}/documents/{document}', [\App\Http\Controllers\Admin\RecordFileController::class, 'supplier'])->whereNumber('document')->name('master.suppliers.documents.show');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/my-approvals', [MyApprovalController::class, 'index'])->name('my-approvals.index');
     Route::get('reports/projects', [ProjectReportController::class, 'index'])->name('reports.projects.index');

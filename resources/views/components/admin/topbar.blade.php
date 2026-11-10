@@ -4,6 +4,9 @@
     </div>
     <div class="topbar-right">
         @auth
+            @if (\App\Models\Employee::withoutGlobalScopes()->where('user_id', auth()->id())->whereIn('status', ['active', 'on leave'])->exists())
+                <a class="btn sm outline" href="{{ route('admin.my-leave.index') }}">{{ __('feedback.my_leave') }}</a>
+            @endif
             @php
                 $notificationAccess = app(\App\Services\Notifications\NotificationAccess::class);
                 $recentNotifications = $notificationAccess->recent(auth()->user());
@@ -59,7 +62,7 @@
                 </select>
                 <button type="submit" class="btn sm outline">{{ __('ui.change_language') }}</button>
             </form>
-            <div class="avatar" title="{{ auth()->user()->name }}">{{ auth()->user()->initials() }}</div>
+            <div class="avatar" title="{{ auth()->user()->name }}">@if(auth()->user()->profile_photo_path)<img src="{{ route('admin.profile-photos.show', ['user', auth()->id()]) }}" width="36" height="36" style="border-radius:50%;object-fit:cover" alt="{{ __('feedback.profile_photo') }}"/>@else{{ auth()->user()->initials() }}@endif</div>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="btn sm outline">{{ __('Logout') }}</button>
