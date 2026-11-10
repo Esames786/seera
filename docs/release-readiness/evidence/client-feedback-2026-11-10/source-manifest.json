@@ -1,0 +1,321 @@
+{
+  "application_commit": "2da7886b3e93fdf59a15198f8507c45d64e6ff91",
+  "base_commit": "0aed8c791e4cd214d23a916026860585983d1cca",
+  "files": [
+    {
+      "path": "app/Console/Commands/EntryAudit.php",
+      "git_blob_sha1": "816717baf08714c9fa6cfcf6898cfa1a25a28c7f",
+      "working_sha256": "972d5c1f9e5c31bc4fc86c3505138638b29169edc392ac317b5503136b9b3aac"
+    },
+    {
+      "path": "app/Console/Commands/GoLiveReset.php",
+      "git_blob_sha1": "6d3b72e154a60e31527342b0db33fcd965143ab7",
+      "working_sha256": "64e0e4758556d6cb3b552ff892288d04302ec825eeb0bf236e2d4ad30f65f5d9"
+    },
+    {
+      "path": "app/Http/Controllers/Admin/Equipment/EquipmentAssetController.php",
+      "git_blob_sha1": "f2b6768b12a9e2ac8ae8f689d76982c105f51e7c",
+      "working_sha256": "5dc8375f5724b14754f9814008109a8f244ce0d98f94d70a34554e05d16ccebe"
+    },
+    {
+      "path": "app/Http/Controllers/Admin/Hr/EmployeeController.php",
+      "git_blob_sha1": "96fcdfebdfaf21d9cdbe94a1e3af0a4761d03cda",
+      "working_sha256": "0aa08cf4227427c1db6fa227a401ac79e10a97d732a7fd03f30bcde38fa40755"
+    },
+    {
+      "path": "app/Http/Controllers/Admin/Master/CustomerController.php",
+      "git_blob_sha1": "804a385bb7a2297b04e75836895bcf25f176904f",
+      "working_sha256": "c2a23f8b0768b0bb5465031a103c7bf1c2f75624578b17288fc6e157979c68c7"
+    },
+    {
+      "path": "app/Http/Controllers/Admin/Master/SupplierController.php",
+      "git_blob_sha1": "a6326af6f8f93f1c7a281c00d4ce8d31e9cad664",
+      "working_sha256": "ca0ddec2847e826461447d63362c12521905e45b584688db1d16cc4c53cebe1c"
+    },
+    {
+      "path": "app/Http/Controllers/Admin/MyLeaveController.php",
+      "git_blob_sha1": "ec40546a99b89571b6db2eebcbfc59898cc831da",
+      "working_sha256": "ccd2958fd57eed45337531dae35828d1bdf8e29b3c3bd4b73ed11b89638b2c80"
+    },
+    {
+      "path": "app/Http/Controllers/Admin/PermissionMatrixController.php",
+      "git_blob_sha1": "043cf167b7910368103cabaa9a845463fa39205c",
+      "working_sha256": "205721c0e1f59cc9362d8a3de31f6c73c8ff2e0f58fb1dd6ec9d78ef920827e7"
+    },
+    {
+      "path": "app/Http/Controllers/Admin/RecordFileController.php",
+      "git_blob_sha1": "ff9706ed192cc12038805918e96970b3be09d6ad",
+      "working_sha256": "fd5a7715091249b5de3c134d786fc4371db32f12a8dc8dd3f2511cc2f273eb57"
+    },
+    {
+      "path": "app/Http/Controllers/Admin/RoleController.php",
+      "git_blob_sha1": "3839bda8347afa17587113e12083a0f8ca409976",
+      "working_sha256": "294ef3df13a6d63c1cbb7fdfbbf3ed6486841df9aae138d0e1b229010760bae0"
+    },
+    {
+      "path": "app/Http/Controllers/Admin/UserController.php",
+      "git_blob_sha1": "17a83ecd850ef24edfc6151a3a19ed8cd30b97a3",
+      "working_sha256": "bfc6f7f4e1569e1375c79899fdd549541a89c1ae9db305587b499f6dd9fc5a84"
+    },
+    {
+      "path": "app/Http/Controllers/Admin/UserPermissionOverrideController.php",
+      "git_blob_sha1": "b116643fd2ae40a24e421a5bc625116957e206ff",
+      "working_sha256": "251890a35a19c7130a7989b7f00417e70395aa994319c8ca6539bafd7a300468"
+    },
+    {
+      "path": "app/Models/Customer.php",
+      "git_blob_sha1": "52d3cfe6cde2282d7b749363e02e4718e8969f1e",
+      "working_sha256": "fed03a57e1f5c0539a49731e904c67a1f60ef7b1f31db2e6c9d4807770c4e64f"
+    },
+    {
+      "path": "app/Models/CustomerDocument.php",
+      "git_blob_sha1": "d653e053fbe8f5c4109c7c566bd3732aff779b59",
+      "working_sha256": "e5a81f668a87ae83fe401e7c7d703c9ae54d0a5a263e6e2691501c98993aa262"
+    },
+    {
+      "path": "app/Models/Employee.php",
+      "git_blob_sha1": "4607dc822fb2eb1bf2940bb69476254238fb8246",
+      "working_sha256": "57d4855a6ae1262468e73819d691039d742a54fef8a3c7871e907112f6d37eea"
+    },
+    {
+      "path": "app/Models/Supplier.php",
+      "git_blob_sha1": "04f4a56bb11aa02e40da227f08a4c08cdf074da4",
+      "working_sha256": "c98b887a0471fdc46636b2afb6c93ed8700939e6d1af2ce0d6156a81a4c88507"
+    },
+    {
+      "path": "app/Models/SupplierDocument.php",
+      "git_blob_sha1": "5319e41a9273c2e006f6105f1221c11a66dd9538",
+      "working_sha256": "e2f5774343ec4bee562f7281d50a46d90edf5fdb1fcd7fb57c20045b0cfeee9a"
+    },
+    {
+      "path": "app/Models/User.php",
+      "git_blob_sha1": "0d8fd1564e1d3002dcbc99bfd4dca1cfbd86aa26",
+      "working_sha256": "b482dbd2ca6a716b90ccdb3f0b657a7dd1e69605a50145f572bddc8d24446d47"
+    },
+    {
+      "path": "app/Models/UserPermissionOverride.php",
+      "git_blob_sha1": "006c8f0da1e230242335fc748a2a9e3683f60324",
+      "working_sha256": "b57c8cafeb486afef1193a3e93e91acfcb8c4729d47fb80b90e1d50d2fcc867a"
+    },
+    {
+      "path": "app/Services/RecordUploads.php",
+      "git_blob_sha1": "756a4cd23ce4b72181de6565cfbbbb24193a8608",
+      "working_sha256": "6608fa58016f54299a7bd9025cf94d71fcd82406bcab4f1f2a204bc443ccd632"
+    },
+    {
+      "path": "app/Services/UserRoleAssignments.php",
+      "git_blob_sha1": "aacfe46a169c045b81b15fee4fb4fed23d9e58ae",
+      "working_sha256": "bfa32d9522164e8a71a8d89231a4365f481a6d12665f2985b9a943bca2685cec"
+    },
+    {
+      "path": "app/Support/CodeGenerator.php",
+      "git_blob_sha1": "37db29f40fcf5f58dcea8f645a50f4aef79e8ca6",
+      "working_sha256": "7b702ac597f1216c161f9963c3a10b07dc2502fce331a1aae568e8d62a1e851f"
+    },
+    {
+      "path": "app/Support/Iban.php",
+      "git_blob_sha1": "e69fce530c7fc5aa92cd99a9fe7081b4d1e69722",
+      "working_sha256": "be172baf790bbb253ec2e0f708eec3906e78fd797673dbce7b30bdbb7659eb9c"
+    },
+    {
+      "path": "app/Support/LinkedIdentityNavigation.php",
+      "git_blob_sha1": "fb1277805b45cd17e3fe82748bb95fc98e5fd2f6",
+      "working_sha256": "c1f23717d7e73475a3f8483478eee5fbd49cf96031ce590fe4de23911379292d"
+    },
+    {
+      "path": "app/Support/SuperAdminProtection.php",
+      "git_blob_sha1": "8437e32202ee52589293b7703c06d08797d7c679",
+      "working_sha256": "8face64c867ee58d3a59f27443a61fe4aa736edd36273a09ae3b24ad7a46e1cc"
+    },
+    {
+      "path": "app/Support/Workspace/EmployeeHrContext.php",
+      "git_blob_sha1": "d435407d7731d7c7ecafa4274d759a2e16e6d83a",
+      "working_sha256": "0a69c7818070c39812b7af874da7e80b67da990cfa571e304d33cf1a446995f1"
+    },
+    {
+      "path": "database/migrations/2026_11_10_000001_add_profile_photos_and_party_documents.php",
+      "git_blob_sha1": "a990ce1e2962b138e35ebfb3ba6d5f2b5cb6ec9d",
+      "working_sha256": "7de860f949e0e2b9ddada3bd88324cbcd28a8d23556a649f194047ea71c2cd02"
+    },
+    {
+      "path": "database/migrations/2026_11_10_000002_create_user_permission_overrides.php",
+      "git_blob_sha1": "0c288b1ad1af8bc3faf50f38398dcf6ea775ea8f",
+      "working_sha256": "281ea333cc39e2214b8de60533513ce6595d847a58926c4f6fe2c4e345fd3e5c"
+    },
+    {
+      "path": "docs/user-guide/CLIENT-ENTRY-UPDATES-2026-11-10.md",
+      "git_blob_sha1": "11dc93d6ec840a4bf1c4a3141e27b4b5da83d534",
+      "working_sha256": "e50da51513cb63b34a58bcea3a5e887cd803f36162ba63fc94f7b3acec52cbd8"
+    },
+    {
+      "path": "lang/ar.json",
+      "git_blob_sha1": "dfa10f8a74d794558c07d4cccc2e9655d5eca72c",
+      "working_sha256": "df1103e85f01384d79c2c3dfd3e0b75c0089e45d629272058a438c385c3b73d8"
+    },
+    {
+      "path": "lang/ar/feedback.php",
+      "git_blob_sha1": "bdeb3e5d629e3b4f8d5256feaafa24963fc6f98f",
+      "working_sha256": "ef82ece519bb7716899226234a868a6a1d56c16fe91a0de6eb55c0d1faf67975"
+    },
+    {
+      "path": "lang/en/feedback.php",
+      "git_blob_sha1": "e6882ebc2584a02cb56c18810f1a441b86a85f55",
+      "working_sha256": "88befbda88663cfe129a2e602a419749c2868536e228ad595dbf0b868b1e369c"
+    },
+    {
+      "path": "public/build.zip",
+      "git_blob_sha1": "c4c7e07643df0e98a461808cc0844ac9b30a269b",
+      "working_sha256": "f6451e04aa14549ea7ec629f27de9becb5e2fcf37d063de9e63710a84b132bf7"
+    },
+    {
+      "path": "resources/js/app.js",
+      "git_blob_sha1": "6ace490b22f24bcc2dc3857497df4ee8c9cacf12",
+      "working_sha256": "da5a5df0051c8b846cd4ac9c4072bc4db687c635176f446bb66bc714abacf779"
+    },
+    {
+      "path": "resources/js/record-inputs.js",
+      "git_blob_sha1": "ba415e4d4689e0d2645252367c127efcaeb25161",
+      "working_sha256": "f99cb6b63804127c01e7a2f4e442c6b57b7c51fbc29b7faffc03e454364e9dca"
+    },
+    {
+      "path": "resources/views/admin/equipment/_form.blade.php",
+      "git_blob_sha1": "d0d7de3cc68eaa8fcba003c0d2242258097c6b59",
+      "working_sha256": "ac429182e9a4d58eebb552012661757e51369671afb7146684499b5ec9cce845"
+    },
+    {
+      "path": "resources/views/admin/equipment/create.blade.php",
+      "git_blob_sha1": "954938dc1a1df76d006f5daab3e4b5a23abdfd75",
+      "working_sha256": "5288ca402d476c89f44fec1080d1a3f6754e4f53bd2f0cbd254cbe2dc578b835"
+    },
+    {
+      "path": "resources/views/admin/equipment/edit.blade.php",
+      "git_blob_sha1": "e4666d914e5e4f5a4d4e1143603cdc9fd50018b8",
+      "working_sha256": "403ca7034e2b03e522c8f190052108004951f6ea3295ea3d8cfdbe35fcd92a34"
+    },
+    {
+      "path": "resources/views/admin/hr/employees/_form.blade.php",
+      "git_blob_sha1": "de62893c61526c2671b56cbed790a040f33cc5d8",
+      "working_sha256": "261f512d3175040b8e0a4ae0ea9c99474a3733984da559276f2c4deb30575d94"
+    },
+    {
+      "path": "resources/views/admin/hr/employees/_workspace-panel.blade.php",
+      "git_blob_sha1": "f6b3c45bc5fd4e3692899b84cf9a706636a0a75c",
+      "working_sha256": "92a1e1cf0f4ce1927bd2343195b86f2540cbc577f412705f4c95412758c94541"
+    },
+    {
+      "path": "resources/views/admin/hr/employees/show.blade.php",
+      "git_blob_sha1": "64a70db8e771f0a2b579e3d0f499b8a6ce888c18",
+      "working_sha256": "874afdadf672c68266b50b2244b8aa50d9cc8930692074fa2873380806633ec7"
+    },
+    {
+      "path": "resources/views/admin/master/customers/_form.blade.php",
+      "git_blob_sha1": "42c12e265dcfa5cbe4a9d4430084e6ed61503d82",
+      "working_sha256": "eec3a7defdb2238e0b5a44c2159d0e36193e003582b70362ae8ed84bad81b271"
+    },
+    {
+      "path": "resources/views/admin/master/customers/show.blade.php",
+      "git_blob_sha1": "70a54152528104622884bfa046fd9aeda8773a52",
+      "working_sha256": "afae1004d0218e4df6b478d3939fbb1a29a80934a18dbaf9370a47fe864e05ff"
+    },
+    {
+      "path": "resources/views/admin/master/suppliers/_form.blade.php",
+      "git_blob_sha1": "52d53e89ccc84358fc35120b1c6959f21e4469e0",
+      "working_sha256": "546550f751c8e5cfdcc958ea7b6c17d8e5bee84520ea359934cbe44fa0640000"
+    },
+    {
+      "path": "resources/views/admin/master/suppliers/show.blade.php",
+      "git_blob_sha1": "bbf04956e4ad32a42b405d5b57926fcc84fcd664",
+      "working_sha256": "cec82e75b5c9157bac3f23313c2d31b2c7191fca60fd14de3a49d15898d00da8"
+    },
+    {
+      "path": "resources/views/admin/my-leave.blade.php",
+      "git_blob_sha1": "0ada54492e5647b9dc020777fa58cf1ab050e108",
+      "working_sha256": "3131bbec569bc0ff1574b426ad2291298072a8800ea7f9db7724bcda966c180e"
+    },
+    {
+      "path": "resources/views/admin/roles/permission-matrix.blade.php",
+      "git_blob_sha1": "85812e80d21b1a9205ed94933d626b6950b58212",
+      "working_sha256": "04f0bbfb521b40c5a26699b57e2eec45d3d6faf6e7b45b6f6546e9ec15773fe2"
+    },
+    {
+      "path": "resources/views/admin/users/_form.blade.php",
+      "git_blob_sha1": "dd33e5058bfaf59bb66f9c577f2ea662734b4325",
+      "working_sha256": "e9e90089d45d02abbb45718320145cfca90fb7bd5e34ee37184d9c1eb0e5f953"
+    },
+    {
+      "path": "resources/views/admin/users/_identity.blade.php",
+      "git_blob_sha1": "70142a28b4b6575600eabe3f780b7c1d627439a8",
+      "working_sha256": "d5a4981983fcc00bbbcbbb19b14472b6d39350c876c3d97632e0540eae29ed3c"
+    },
+    {
+      "path": "resources/views/admin/users/_individual-permissions.blade.php",
+      "git_blob_sha1": "eac0f1b34d35e2cc650f53e539a14052d915966c",
+      "working_sha256": "6bbb2d64fd3146763b43aa07e14d0d380f276bb6734687fed06dab5b987b4c5b"
+    },
+    {
+      "path": "resources/views/admin/users/_workspace.blade.php",
+      "git_blob_sha1": "3ba4dc0133995200907257e2a1766abe4c562dbb",
+      "working_sha256": "c51f4bf4ec827e7cdb7fab30e1b35edd6b39512fa17947e39d5c2b1c13e36e0b"
+    },
+    {
+      "path": "resources/views/components/admin/master-code.blade.php",
+      "git_blob_sha1": "d9c0dd9e777601a5f31baeeda6f5870a24cfcd8c",
+      "working_sha256": "02ddaaae9ef0cd86c920181d5c6eda36ee5a4732fb7c334f535cc4d9542d899b"
+    },
+    {
+      "path": "resources/views/components/admin/profile-photo.blade.php",
+      "git_blob_sha1": "8617e6e84700e4532511f883c2ed120d771ca71b",
+      "working_sha256": "2e2472426f23f512ba032feb4ce820a83f049c18605de0fd3093d65b27204055"
+    },
+    {
+      "path": "resources/views/components/admin/record-documents.blade.php",
+      "git_blob_sha1": "951ea02f81f0f4f59657d70e4652d9b9830619c4",
+      "working_sha256": "7d533c18bb4e9dd1381abfffd23fc3a37b38518181eeb9c0d95554174f328f87"
+    },
+    {
+      "path": "resources/views/components/admin/sidebar.blade.php",
+      "git_blob_sha1": "495c43390c711a4e4b1eb04c4e5a044ad56e1459",
+      "working_sha256": "34b0e0f3e56bb6dd842581a88d62f831a3affb383d2a1dc7841f30533379659a"
+    },
+    {
+      "path": "resources/views/components/admin/topbar.blade.php",
+      "git_blob_sha1": "4a584b30c25bedde12d7dbc4f0adc53b45febdbf",
+      "working_sha256": "028e0dfa009e746ad8a4108123db1217a701d00454a06393549002be3cb26db2"
+    },
+    {
+      "path": "routes/web.php",
+      "git_blob_sha1": "06b906622c24c360927353977ed016ea9a3ad138",
+      "working_sha256": "5f14c1382116c2a21d63f79e47d44e9942218bf34374428f535daa6b9281b08d"
+    },
+    {
+      "path": "tests/Feature/ApprovalRuntimeTest.php",
+      "git_blob_sha1": "7352eede03d494b2886fd55cff0afcae6c0391d8",
+      "working_sha256": "40a3893f769fd08b50d6baf2adc32de746417ae8a04ba53aaba43fc0ed262c79"
+    },
+    {
+      "path": "tests/Feature/ClientFeedbackClosureTest.php",
+      "git_blob_sha1": "a660d7d9decafdf7a3e898eddc0e28160fd31a4d",
+      "working_sha256": "21032d1d6b554383ae8d3347007087ab7bf464dd20ddc8acb28f229a14dce031"
+    },
+    {
+      "path": "tests/Feature/NotificationCenterTest.php",
+      "git_blob_sha1": "a08b747367dac13ccbc545dd6dff0490c6cf55de",
+      "working_sha256": "027882785dfae607d43604bcf138474af8378b1b8450a23958c87119d4a5fa4b"
+    },
+    {
+      "path": "tests/Feature/UserPermissionOverrideTest.php",
+      "git_blob_sha1": "82bbf9c7146adb4fb482a630822749187be6ef95",
+      "working_sha256": "2518f6a6334a6a070406a292e1be62309f343977930918064053c0c8e539e796"
+    },
+    {
+      "path": "tests/manual/client-feedback-browser.cjs",
+      "git_blob_sha1": "e84df276ec308ca47723147daaf9966913805c88",
+      "working_sha256": "6a4fe6b60f1ff2afb9f52eedc0f1167091d03f811d5f891780c18e0de13d6981"
+    },
+    {
+      "path": "tests/manual/client-feedback-fixture.php",
+      "git_blob_sha1": "ba429039e7806cd2d9c0e2f8c70f2debb9af97e1",
+      "working_sha256": "b6cb20695b409e891dbecbfdc44a9c494a694b7136312722522b59c7ce2cd635"
+    }
+  ]
+}

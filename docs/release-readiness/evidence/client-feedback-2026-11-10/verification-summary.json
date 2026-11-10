@@ -1,0 +1,41 @@
+{
+  "application_commit": "2da7886b3e93fdf59a15198f8507c45d64e6ff91",
+  "laravel": {
+    "tool": "paratest",
+    "result": "passed",
+    "tests": 894,
+    "passed": 894,
+    "assertions": 10638,
+    "duration_ms": 468145
+  },
+  "javascript": {
+    "passed": 12,
+    "failed": 0
+  },
+  "browser": {
+    "passed": 363,
+    "failed": 0,
+    "locales": [
+      "en",
+      "ar"
+    ],
+    "widths": [
+      320,
+      390,
+      768,
+      1440
+    ]
+  },
+  "supplemental_upload_tests": {
+    "passed": 25,
+    "assertions": 336
+  },
+  "build_zip_sha256": "f6451e04aa14549ea7ec629f27de9becb5e2fcf37d063de9e63710a84b132bf7",
+  "production_actions": "NONE",
+  "pending": [
+    "live inventory and reviewed deactivation list",
+    "exact bank-certified IBAN comparison if issue persists",
+    "client acceptance",
+    "real MySQL concurrency probe not run"
+  ]
+}

@@ -1,0 +1,9 @@
+CLI OPcache enabled through isolated ini copy: C:\Users\Dell\AppData\Local\Temp\seera-test-opcache\php.ini
+SEERA test mode: parallel; workers: 8
+Command: D:/laragon2/bin/php/php-8.3.16-Win32-vs16-x64/php.exe artisan test --parallel --processes=8
+Use the configured phpunit.xml SQLite in-memory database; never run this against production.
+ParaTest v7.20.0 upon PHPUnit 12.5.30 by Sebastian Bergmann and contributors.
+
+{"tool":"paratest","result":"failed","tests":879,"passed":877,"assertions":10554,"duration_ms":360284,"failed":2,"failures":[{"test":"Tests\\Feature\\EmployeeViewEditDeactivateTest::test_view_is_read_only_and_writes_nothing_even_for_an_editor","file":"D:\\laragon2\\www\\seera\\tests\\Feature\\EmployeeViewEditDeactivateTest.php","line":110,"message":"the view page must carry no HR data form\nFailed asserting that 'http://seera.test/admin/hr/employees/21#leaves' [ASCII](length: 46) does not contain \"/admin/hr/\" [ASCII](length: 10)."},{"test":"Tests\\Feature\\EmployeeHrContextTest::test_view_shows_every_hr_section_for_a_full_reader_and_writes_nothing","file":"D:\\laragon2\\www\\seera\\tests\\Feature\\EmployeeHrContextTest.php","line":138,"message":"the view page must carry no HR data form\nFailed asserting that 'http://seera.test/admin/hr/employees/21#leaves' [ASCII](length: 46) does not contain \"/admin/hr/\" [ASCII](length: 10)."}]}
+SEERA_TEST_DURATION_SECONDS=362.27
+SEERA_TEST_EXIT_CODE=1
