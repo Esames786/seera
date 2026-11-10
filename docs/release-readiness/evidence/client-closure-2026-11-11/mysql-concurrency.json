@@ -1,0 +1,35 @@
+{
+    "synthetic": true,
+    "production_access": false,
+    "passed": 7,
+    "checks": [
+        {
+            "name": "Concurrent duplicate advance posts once",
+            "ok": true
+        },
+        {
+            "name": "Competing partial refunds cannot overspend available funds",
+            "ok": true
+        },
+        {
+            "name": "Reversal wins before a blocked refund without consuming money twice",
+            "ok": true
+        },
+        {
+            "name": "Concurrent overdue publishers produce one user\/invoice\/day notice",
+            "ok": true
+        },
+        {
+            "name": "Concurrent paid invoice is excluded before reminder insertion",
+            "ok": true
+        },
+        {
+            "name": "All financial journals balance; no VAT invented",
+            "ok": true
+        },
+        {
+            "name": "Real posted bill reconciles AP and advance clearing; VAT row unchanged; no extra cash; every journal line matches its header",
+            "ok": true
+        }
+    ]
+}

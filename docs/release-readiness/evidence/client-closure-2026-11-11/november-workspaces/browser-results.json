@@ -1,0 +1,1461 @@
+{
+  "base": "http://127.0.0.1:18775",
+  "synthetic": true,
+  "business_writes": false,
+  "results": [
+    {
+      "name": "en 320 customer-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 320 customer-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 320 customer-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 320 customer-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 320 customer-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 320 customer-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 320 customer-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 320 customer-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 320 customer-view direction",
+      "ok": true
+    },
+    {
+      "name": "en 320 customer-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "en 320 supplier-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 320 supplier-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 320 supplier-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 320 supplier-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 320 supplier-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 320 supplier-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 320 supplier-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 320 supplier-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 320 supplier-view direction",
+      "ok": true
+    },
+    {
+      "name": "en 320 supplier-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "en 320 employee-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 320 employee-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 320 employee-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 320 employee-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 320 employee-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 320 employee-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 320 employee-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 320 employee-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 320 employee-view direction",
+      "ok": true
+    },
+    {
+      "name": "en 320 employee-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "en 320 user-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 320 user-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 320 user-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 320 user-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 320 user-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 320 user-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 320 personal permission controls",
+      "ok": true
+    },
+    {
+      "name": "en 320 open permission matrix no overflow",
+      "ok": true
+    },
+    {
+      "name": "en 320 equipment-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 320 equipment-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 320 equipment-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 320 my-leave HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 320 my-leave no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 320 my-leave direction",
+      "ok": true
+    },
+    {
+      "name": "en 390 customer-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 390 customer-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 390 customer-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 390 customer-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 390 customer-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 390 customer-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 390 customer-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 390 customer-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 390 customer-view direction",
+      "ok": true
+    },
+    {
+      "name": "en 390 customer-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "en 390 supplier-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 390 supplier-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 390 supplier-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 390 supplier-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 390 supplier-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 390 supplier-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 390 supplier-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 390 supplier-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 390 supplier-view direction",
+      "ok": true
+    },
+    {
+      "name": "en 390 supplier-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "en 390 employee-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 390 employee-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 390 employee-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 390 employee-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 390 employee-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 390 employee-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 390 employee-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 390 employee-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 390 employee-view direction",
+      "ok": true
+    },
+    {
+      "name": "en 390 employee-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "en 390 user-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 390 user-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 390 user-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 390 user-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 390 user-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 390 user-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 390 personal permission controls",
+      "ok": true
+    },
+    {
+      "name": "en 390 open permission matrix no overflow",
+      "ok": true
+    },
+    {
+      "name": "en 390 equipment-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 390 equipment-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 390 equipment-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 390 my-leave HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 390 my-leave no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 390 my-leave direction",
+      "ok": true
+    },
+    {
+      "name": "en 768 customer-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 768 customer-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 768 customer-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 768 customer-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 768 customer-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 768 customer-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 768 customer-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 768 customer-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 768 customer-view direction",
+      "ok": true
+    },
+    {
+      "name": "en 768 customer-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "en 768 supplier-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 768 supplier-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 768 supplier-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 768 supplier-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 768 supplier-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 768 supplier-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 768 supplier-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 768 supplier-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 768 supplier-view direction",
+      "ok": true
+    },
+    {
+      "name": "en 768 supplier-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "en 768 employee-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 768 employee-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 768 employee-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 768 employee-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 768 employee-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 768 employee-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 768 employee-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 768 employee-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 768 employee-view direction",
+      "ok": true
+    },
+    {
+      "name": "en 768 employee-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "en 768 user-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 768 user-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 768 user-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 768 user-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 768 user-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 768 user-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 768 personal permission controls",
+      "ok": true
+    },
+    {
+      "name": "en 768 open permission matrix no overflow",
+      "ok": true
+    },
+    {
+      "name": "en 768 equipment-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 768 equipment-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 768 equipment-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 768 my-leave HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 768 my-leave no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 768 my-leave direction",
+      "ok": true
+    },
+    {
+      "name": "en 1440 customer-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 1440 customer-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 1440 customer-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 1440 customer-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 1440 customer-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 1440 customer-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 1440 customer-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 1440 customer-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 1440 customer-view direction",
+      "ok": true
+    },
+    {
+      "name": "en 1440 customer-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "en 1440 supplier-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 1440 supplier-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 1440 supplier-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 1440 supplier-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 1440 supplier-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 1440 supplier-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 1440 supplier-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 1440 supplier-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 1440 supplier-view direction",
+      "ok": true
+    },
+    {
+      "name": "en 1440 supplier-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "en 1440 employee-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 1440 employee-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 1440 employee-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 1440 employee-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 1440 employee-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 1440 employee-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 1440 employee-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 1440 employee-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 1440 employee-view direction",
+      "ok": true
+    },
+    {
+      "name": "en 1440 employee-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "en 1440 user-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 1440 user-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 1440 user-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 1440 user-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 1440 user-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 1440 user-manage direction",
+      "ok": true
+    },
+    {
+      "name": "en 1440 personal permission controls",
+      "ok": true
+    },
+    {
+      "name": "en 1440 open permission matrix no overflow",
+      "ok": true
+    },
+    {
+      "name": "en 1440 equipment-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 1440 equipment-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 1440 equipment-create direction",
+      "ok": true
+    },
+    {
+      "name": "en 1440 my-leave HTTP",
+      "ok": true
+    },
+    {
+      "name": "en 1440 my-leave no page overflow",
+      "ok": true
+    },
+    {
+      "name": "en 1440 my-leave direction",
+      "ok": true
+    },
+    {
+      "name": "en manual code opens",
+      "ok": true
+    },
+    {
+      "name": "en automatic code clears manual value",
+      "ok": true
+    },
+    {
+      "name": "en document rows add distinct fields",
+      "ok": true
+    },
+    {
+      "name": "en unsaved document row removable",
+      "ok": true
+    },
+    {
+      "name": "en photo chooser and preview work",
+      "ok": true
+    },
+    {
+      "name": "ar 320 customer-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 320 customer-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 320 customer-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 320 customer-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 320 customer-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 320 customer-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 320 customer-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 320 customer-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 320 customer-view direction",
+      "ok": true
+    },
+    {
+      "name": "ar 320 customer-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "ar 320 supplier-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 320 supplier-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 320 supplier-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 320 supplier-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 320 supplier-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 320 supplier-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 320 supplier-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 320 supplier-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 320 supplier-view direction",
+      "ok": true
+    },
+    {
+      "name": "ar 320 supplier-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "ar 320 employee-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 320 employee-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 320 employee-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 320 employee-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 320 employee-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 320 employee-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 320 employee-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 320 employee-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 320 employee-view direction",
+      "ok": true
+    },
+    {
+      "name": "ar 320 employee-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "ar 320 user-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 320 user-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 320 user-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 320 user-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 320 user-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 320 user-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 320 personal permission controls",
+      "ok": true
+    },
+    {
+      "name": "ar 320 open permission matrix no overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 320 equipment-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 320 equipment-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 320 equipment-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 320 my-leave HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 320 my-leave no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 320 my-leave direction",
+      "ok": true
+    },
+    {
+      "name": "ar 390 customer-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 390 customer-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 390 customer-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 390 customer-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 390 customer-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 390 customer-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 390 customer-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 390 customer-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 390 customer-view direction",
+      "ok": true
+    },
+    {
+      "name": "ar 390 customer-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "ar 390 supplier-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 390 supplier-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 390 supplier-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 390 supplier-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 390 supplier-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 390 supplier-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 390 supplier-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 390 supplier-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 390 supplier-view direction",
+      "ok": true
+    },
+    {
+      "name": "ar 390 supplier-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "ar 390 employee-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 390 employee-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 390 employee-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 390 employee-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 390 employee-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 390 employee-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 390 employee-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 390 employee-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 390 employee-view direction",
+      "ok": true
+    },
+    {
+      "name": "ar 390 employee-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "ar 390 user-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 390 user-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 390 user-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 390 user-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 390 user-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 390 user-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 390 personal permission controls",
+      "ok": true
+    },
+    {
+      "name": "ar 390 open permission matrix no overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 390 equipment-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 390 equipment-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 390 equipment-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 390 my-leave HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 390 my-leave no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 390 my-leave direction",
+      "ok": true
+    },
+    {
+      "name": "ar 768 customer-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 768 customer-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 768 customer-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 768 customer-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 768 customer-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 768 customer-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 768 customer-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 768 customer-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 768 customer-view direction",
+      "ok": true
+    },
+    {
+      "name": "ar 768 customer-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "ar 768 supplier-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 768 supplier-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 768 supplier-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 768 supplier-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 768 supplier-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 768 supplier-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 768 supplier-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 768 supplier-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 768 supplier-view direction",
+      "ok": true
+    },
+    {
+      "name": "ar 768 supplier-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "ar 768 employee-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 768 employee-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 768 employee-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 768 employee-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 768 employee-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 768 employee-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 768 employee-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 768 employee-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 768 employee-view direction",
+      "ok": true
+    },
+    {
+      "name": "ar 768 employee-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "ar 768 user-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 768 user-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 768 user-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 768 user-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 768 user-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 768 user-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 768 personal permission controls",
+      "ok": true
+    },
+    {
+      "name": "ar 768 open permission matrix no overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 768 equipment-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 768 equipment-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 768 equipment-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 768 my-leave HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 768 my-leave no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 768 my-leave direction",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 customer-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 customer-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 customer-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 customer-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 customer-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 customer-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 customer-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 customer-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 customer-view direction",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 customer-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 supplier-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 supplier-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 supplier-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 supplier-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 supplier-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 supplier-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 supplier-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 supplier-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 supplier-view direction",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 supplier-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 employee-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 employee-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 employee-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 employee-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 employee-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 employee-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 employee-view HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 employee-view no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 employee-view direction",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 employee-view stays read-only",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 user-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 user-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 user-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 user-manage HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 user-manage no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 user-manage direction",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 personal permission controls",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 open permission matrix no overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 equipment-create HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 equipment-create no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 equipment-create direction",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 my-leave HTTP",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 my-leave no page overflow",
+      "ok": true
+    },
+    {
+      "name": "ar 1440 my-leave direction",
+      "ok": true
+    },
+    {
+      "name": "ar manual code opens",
+      "ok": true
+    },
+    {
+      "name": "ar automatic code clears manual value",
+      "ok": true
+    },
+    {
+      "name": "ar document rows add distinct fields",
+      "ok": true
+    },
+    {
+      "name": "ar unsaved document row removable",
+      "ok": true
+    },
+    {
+      "name": "ar photo chooser and preview work",
+      "ok": true
+    },
+    {
+      "name": "no uncaught browser errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,32 @@
+{
+    "checks_across_runs":  28,
+    "synthetic":  true,
+    "negative_runs":  [
+                          {
+                              "refused":  true,
+                              "mode":  "orphan",
+                              "passed":  6
+                          },
+                          {
+                              "refused":  true,
+                              "mode":  "changed",
+                              "passed":  6
+                          },
+                          {
+                              "refused":  true,
+                              "mode":  "unknown",
+                              "passed":  6
+                          }
+                      ],
+    "provenance":  "Executed manual probe tool outputs in this session, including repeated dry-run and destination guards; not production restore evidence",
+    "source_kind":  "partially attempted November schema and mixed MyISAM/InnoDB, fictional existing invoice and GL journal",
+    "production_access":  false,
+    "positive":  {
+                     "passed":  10,
+                     "source_write_sql":  0,
+                     "copied_tables":  102,
+                     "verified_foreign_keys":  308,
+                     "automatic_promotion":  false,
+                     "source_rows_fields_preserved":  true
+                 }
+}

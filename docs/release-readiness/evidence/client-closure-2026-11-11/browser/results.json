@@ -1,0 +1,1262 @@
+{
+  "synthetic": true,
+  "business_posts": false,
+  "results": [
+    {
+      "name": "en/320/dashboard: response",
+      "ok": true
+    },
+    {
+      "name": "en/320/dashboard: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/320/dashboard: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/320/users: response",
+      "ok": true
+    },
+    {
+      "name": "en/320/users: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/320/users: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/320/supplier-create: response",
+      "ok": true
+    },
+    {
+      "name": "en/320/supplier-create: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/320/supplier-create: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/320/supplier-manage: response",
+      "ok": true
+    },
+    {
+      "name": "en/320/supplier-manage: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/320/supplier-manage: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/320: recoverable actions",
+      "ok": true
+    },
+    {
+      "name": "en/320: saved training balance",
+      "ok": true
+    },
+    {
+      "name": "en/320: expanded payment form no overflow",
+      "ok": true
+    },
+    {
+      "name": "en/320/supplier-view: response",
+      "ok": true
+    },
+    {
+      "name": "en/320/supplier-view: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/320/supplier-view: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/320: supplier read only",
+      "ok": true
+    },
+    {
+      "name": "en/320/notifications: response",
+      "ok": true
+    },
+    {
+      "name": "en/320/notifications: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/320/notifications: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/320: overdue invoice link",
+      "ok": true
+    },
+    {
+      "name": "en/320/employee: response",
+      "ok": true
+    },
+    {
+      "name": "en/320/employee: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/320/employee: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/320/customer: response",
+      "ok": true
+    },
+    {
+      "name": "en/320/customer: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/320/customer: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/390/dashboard: response",
+      "ok": true
+    },
+    {
+      "name": "en/390/dashboard: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/390/dashboard: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/390/users: response",
+      "ok": true
+    },
+    {
+      "name": "en/390/users: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/390/users: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/390/supplier-create: response",
+      "ok": true
+    },
+    {
+      "name": "en/390/supplier-create: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/390/supplier-create: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/390/supplier-manage: response",
+      "ok": true
+    },
+    {
+      "name": "en/390/supplier-manage: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/390/supplier-manage: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/390: recoverable actions",
+      "ok": true
+    },
+    {
+      "name": "en/390: saved training balance",
+      "ok": true
+    },
+    {
+      "name": "en/390: expanded payment form no overflow",
+      "ok": true
+    },
+    {
+      "name": "en/390/supplier-view: response",
+      "ok": true
+    },
+    {
+      "name": "en/390/supplier-view: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/390/supplier-view: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/390: supplier read only",
+      "ok": true
+    },
+    {
+      "name": "en/390/notifications: response",
+      "ok": true
+    },
+    {
+      "name": "en/390/notifications: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/390/notifications: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/390: overdue invoice link",
+      "ok": true
+    },
+    {
+      "name": "en/390/employee: response",
+      "ok": true
+    },
+    {
+      "name": "en/390/employee: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/390/employee: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/390/customer: response",
+      "ok": true
+    },
+    {
+      "name": "en/390/customer: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/390/customer: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/768/dashboard: response",
+      "ok": true
+    },
+    {
+      "name": "en/768/dashboard: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/768/dashboard: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/768/users: response",
+      "ok": true
+    },
+    {
+      "name": "en/768/users: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/768/users: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/768/supplier-create: response",
+      "ok": true
+    },
+    {
+      "name": "en/768/supplier-create: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/768/supplier-create: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/768/supplier-manage: response",
+      "ok": true
+    },
+    {
+      "name": "en/768/supplier-manage: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/768/supplier-manage: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/768: recoverable actions",
+      "ok": true
+    },
+    {
+      "name": "en/768: saved training balance",
+      "ok": true
+    },
+    {
+      "name": "en/768: expanded payment form no overflow",
+      "ok": true
+    },
+    {
+      "name": "en/768/supplier-view: response",
+      "ok": true
+    },
+    {
+      "name": "en/768/supplier-view: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/768/supplier-view: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/768: supplier read only",
+      "ok": true
+    },
+    {
+      "name": "en/768/notifications: response",
+      "ok": true
+    },
+    {
+      "name": "en/768/notifications: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/768/notifications: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/768: overdue invoice link",
+      "ok": true
+    },
+    {
+      "name": "en/768/employee: response",
+      "ok": true
+    },
+    {
+      "name": "en/768/employee: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/768/employee: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/768/customer: response",
+      "ok": true
+    },
+    {
+      "name": "en/768/customer: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/768/customer: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/1440/dashboard: response",
+      "ok": true
+    },
+    {
+      "name": "en/1440/dashboard: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/1440/dashboard: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/1440/users: response",
+      "ok": true
+    },
+    {
+      "name": "en/1440/users: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/1440/users: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/1440/supplier-create: response",
+      "ok": true
+    },
+    {
+      "name": "en/1440/supplier-create: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/1440/supplier-create: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/1440/supplier-manage: response",
+      "ok": true
+    },
+    {
+      "name": "en/1440/supplier-manage: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/1440/supplier-manage: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/1440: recoverable actions",
+      "ok": true
+    },
+    {
+      "name": "en/1440: saved training balance",
+      "ok": true
+    },
+    {
+      "name": "en/1440: expanded payment form no overflow",
+      "ok": true
+    },
+    {
+      "name": "en/1440/supplier-view: response",
+      "ok": true
+    },
+    {
+      "name": "en/1440/supplier-view: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/1440/supplier-view: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/1440: supplier read only",
+      "ok": true
+    },
+    {
+      "name": "en/1440/notifications: response",
+      "ok": true
+    },
+    {
+      "name": "en/1440/notifications: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/1440/notifications: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/1440: overdue invoice link",
+      "ok": true
+    },
+    {
+      "name": "en/1440/employee: response",
+      "ok": true
+    },
+    {
+      "name": "en/1440/employee: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/1440/employee: translation keys",
+      "ok": true
+    },
+    {
+      "name": "en/1440/customer: response",
+      "ok": true
+    },
+    {
+      "name": "en/1440/customer: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "ltr"
+      }
+    },
+    {
+      "name": "en/1440/customer: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/320/dashboard: response",
+      "ok": true
+    },
+    {
+      "name": "ar/320/dashboard: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/320/dashboard: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/320/users: response",
+      "ok": true
+    },
+    {
+      "name": "ar/320/users: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/320/users: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/320/supplier-create: response",
+      "ok": true
+    },
+    {
+      "name": "ar/320/supplier-create: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/320/supplier-create: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/320/supplier-manage: response",
+      "ok": true
+    },
+    {
+      "name": "ar/320/supplier-manage: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/320/supplier-manage: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/320: recoverable actions",
+      "ok": true
+    },
+    {
+      "name": "ar/320: saved training balance",
+      "ok": true
+    },
+    {
+      "name": "ar/320: expanded payment form no overflow",
+      "ok": true
+    },
+    {
+      "name": "ar/320/supplier-view: response",
+      "ok": true
+    },
+    {
+      "name": "ar/320/supplier-view: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/320/supplier-view: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/320: supplier read only",
+      "ok": true
+    },
+    {
+      "name": "ar/320/notifications: response",
+      "ok": true
+    },
+    {
+      "name": "ar/320/notifications: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/320/notifications: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/320: overdue invoice link",
+      "ok": true
+    },
+    {
+      "name": "ar/320/employee: response",
+      "ok": true
+    },
+    {
+      "name": "ar/320/employee: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/320/employee: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/320/customer: response",
+      "ok": true
+    },
+    {
+      "name": "ar/320/customer: viewport",
+      "ok": true,
+      "detail": {
+        "width": 320,
+        "scroll": 320,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/320/customer: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/390/dashboard: response",
+      "ok": true
+    },
+    {
+      "name": "ar/390/dashboard: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/390/dashboard: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/390/users: response",
+      "ok": true
+    },
+    {
+      "name": "ar/390/users: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/390/users: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/390/supplier-create: response",
+      "ok": true
+    },
+    {
+      "name": "ar/390/supplier-create: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/390/supplier-create: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/390/supplier-manage: response",
+      "ok": true
+    },
+    {
+      "name": "ar/390/supplier-manage: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/390/supplier-manage: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/390: recoverable actions",
+      "ok": true
+    },
+    {
+      "name": "ar/390: saved training balance",
+      "ok": true
+    },
+    {
+      "name": "ar/390: expanded payment form no overflow",
+      "ok": true
+    },
+    {
+      "name": "ar/390/supplier-view: response",
+      "ok": true
+    },
+    {
+      "name": "ar/390/supplier-view: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/390/supplier-view: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/390: supplier read only",
+      "ok": true
+    },
+    {
+      "name": "ar/390/notifications: response",
+      "ok": true
+    },
+    {
+      "name": "ar/390/notifications: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/390/notifications: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/390: overdue invoice link",
+      "ok": true
+    },
+    {
+      "name": "ar/390/employee: response",
+      "ok": true
+    },
+    {
+      "name": "ar/390/employee: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/390/employee: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/390/customer: response",
+      "ok": true
+    },
+    {
+      "name": "ar/390/customer: viewport",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scroll": 390,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/390/customer: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/768/dashboard: response",
+      "ok": true
+    },
+    {
+      "name": "ar/768/dashboard: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/768/dashboard: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/768/users: response",
+      "ok": true
+    },
+    {
+      "name": "ar/768/users: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/768/users: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/768/supplier-create: response",
+      "ok": true
+    },
+    {
+      "name": "ar/768/supplier-create: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/768/supplier-create: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/768/supplier-manage: response",
+      "ok": true
+    },
+    {
+      "name": "ar/768/supplier-manage: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/768/supplier-manage: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/768: recoverable actions",
+      "ok": true
+    },
+    {
+      "name": "ar/768: saved training balance",
+      "ok": true
+    },
+    {
+      "name": "ar/768: expanded payment form no overflow",
+      "ok": true
+    },
+    {
+      "name": "ar/768/supplier-view: response",
+      "ok": true
+    },
+    {
+      "name": "ar/768/supplier-view: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/768/supplier-view: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/768: supplier read only",
+      "ok": true
+    },
+    {
+      "name": "ar/768/notifications: response",
+      "ok": true
+    },
+    {
+      "name": "ar/768/notifications: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/768/notifications: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/768: overdue invoice link",
+      "ok": true
+    },
+    {
+      "name": "ar/768/employee: response",
+      "ok": true
+    },
+    {
+      "name": "ar/768/employee: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/768/employee: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/768/customer: response",
+      "ok": true
+    },
+    {
+      "name": "ar/768/customer: viewport",
+      "ok": true,
+      "detail": {
+        "width": 768,
+        "scroll": 768,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/768/customer: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/dashboard: response",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/dashboard: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/1440/dashboard: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/users: response",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/users: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/1440/users: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/supplier-create: response",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/supplier-create: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/1440/supplier-create: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/supplier-manage: response",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/supplier-manage: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/1440/supplier-manage: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/1440: recoverable actions",
+      "ok": true
+    },
+    {
+      "name": "ar/1440: saved training balance",
+      "ok": true
+    },
+    {
+      "name": "ar/1440: expanded payment form no overflow",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/supplier-view: response",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/supplier-view: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/1440/supplier-view: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/1440: supplier read only",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/notifications: response",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/notifications: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/1440/notifications: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/1440: overdue invoice link",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/employee: response",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/employee: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/1440/employee: translation keys",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/customer: response",
+      "ok": true
+    },
+    {
+      "name": "ar/1440/customer: viewport",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "scroll": 1440,
+        "dir": "rtl"
+      }
+    },
+    {
+      "name": "ar/1440/customer: translation keys",
+      "ok": true
+    },
+    {
+      "name": "No browser JavaScript errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "errors": [],
+  "passed": 233,
+  "failed": 0
+}

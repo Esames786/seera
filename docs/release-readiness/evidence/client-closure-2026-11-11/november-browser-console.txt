@@ -1,0 +1,364 @@
+PASS en 320 customer-create HTTP
+PASS en 320 customer-create no page overflow
+PASS en 320 customer-create direction
+PASS en 320 customer-manage HTTP
+PASS en 320 customer-manage no page overflow
+PASS en 320 customer-manage direction
+PASS en 320 customer-view HTTP
+PASS en 320 customer-view no page overflow
+PASS en 320 customer-view direction
+PASS en 320 customer-view stays read-only
+PASS en 320 supplier-create HTTP
+PASS en 320 supplier-create no page overflow
+PASS en 320 supplier-create direction
+PASS en 320 supplier-manage HTTP
+PASS en 320 supplier-manage no page overflow
+PASS en 320 supplier-manage direction
+PASS en 320 supplier-view HTTP
+PASS en 320 supplier-view no page overflow
+PASS en 320 supplier-view direction
+PASS en 320 supplier-view stays read-only
+PASS en 320 employee-create HTTP
+PASS en 320 employee-create no page overflow
+PASS en 320 employee-create direction
+PASS en 320 employee-manage HTTP
+PASS en 320 employee-manage no page overflow
+PASS en 320 employee-manage direction
+PASS en 320 employee-view HTTP
+PASS en 320 employee-view no page overflow
+PASS en 320 employee-view direction
+PASS en 320 employee-view stays read-only
+PASS en 320 user-create HTTP
+PASS en 320 user-create no page overflow
+PASS en 320 user-create direction
+PASS en 320 user-manage HTTP
+PASS en 320 user-manage no page overflow
+PASS en 320 user-manage direction
+PASS en 320 personal permission controls
+PASS en 320 open permission matrix no overflow
+PASS en 320 equipment-create HTTP
+PASS en 320 equipment-create no page overflow
+PASS en 320 equipment-create direction
+PASS en 320 my-leave HTTP
+PASS en 320 my-leave no page overflow
+PASS en 320 my-leave direction
+PASS en 390 customer-create HTTP
+PASS en 390 customer-create no page overflow
+PASS en 390 customer-create direction
+PASS en 390 customer-manage HTTP
+PASS en 390 customer-manage no page overflow
+PASS en 390 customer-manage direction
+PASS en 390 customer-view HTTP
+PASS en 390 customer-view no page overflow
+PASS en 390 customer-view direction
+PASS en 390 customer-view stays read-only
+PASS en 390 supplier-create HTTP
+PASS en 390 supplier-create no page overflow
+PASS en 390 supplier-create direction
+PASS en 390 supplier-manage HTTP
+PASS en 390 supplier-manage no page overflow
+PASS en 390 supplier-manage direction
+PASS en 390 supplier-view HTTP
+PASS en 390 supplier-view no page overflow
+PASS en 390 supplier-view direction
+PASS en 390 supplier-view stays read-only
+PASS en 390 employee-create HTTP
+PASS en 390 employee-create no page overflow
+PASS en 390 employee-create direction
+PASS en 390 employee-manage HTTP
+PASS en 390 employee-manage no page overflow
+PASS en 390 employee-manage direction
+PASS en 390 employee-view HTTP
+PASS en 390 employee-view no page overflow
+PASS en 390 employee-view direction
+PASS en 390 employee-view stays read-only
+PASS en 390 user-create HTTP
+PASS en 390 user-create no page overflow
+PASS en 390 user-create direction
+PASS en 390 user-manage HTTP
+PASS en 390 user-manage no page overflow
+PASS en 390 user-manage direction
+PASS en 390 personal permission controls
+PASS en 390 open permission matrix no overflow
+PASS en 390 equipment-create HTTP
+PASS en 390 equipment-create no page overflow
+PASS en 390 equipment-create direction
+PASS en 390 my-leave HTTP
+PASS en 390 my-leave no page overflow
+PASS en 390 my-leave direction
+PASS en 768 customer-create HTTP
+PASS en 768 customer-create no page overflow
+PASS en 768 customer-create direction
+PASS en 768 customer-manage HTTP
+PASS en 768 customer-manage no page overflow
+PASS en 768 customer-manage direction
+PASS en 768 customer-view HTTP
+PASS en 768 customer-view no page overflow
+PASS en 768 customer-view direction
+PASS en 768 customer-view stays read-only
+PASS en 768 supplier-create HTTP
+PASS en 768 supplier-create no page overflow
+PASS en 768 supplier-create direction
+PASS en 768 supplier-manage HTTP
+PASS en 768 supplier-manage no page overflow
+PASS en 768 supplier-manage direction
+PASS en 768 supplier-view HTTP
+PASS en 768 supplier-view no page overflow
+PASS en 768 supplier-view direction
+PASS en 768 supplier-view stays read-only
+PASS en 768 employee-create HTTP
+PASS en 768 employee-create no page overflow
+PASS en 768 employee-create direction
+PASS en 768 employee-manage HTTP
+PASS en 768 employee-manage no page overflow
+PASS en 768 employee-manage direction
+PASS en 768 employee-view HTTP
+PASS en 768 employee-view no page overflow
+PASS en 768 employee-view direction
+PASS en 768 employee-view stays read-only
+PASS en 768 user-create HTTP
+PASS en 768 user-create no page overflow
+PASS en 768 user-create direction
+PASS en 768 user-manage HTTP
+PASS en 768 user-manage no page overflow
+PASS en 768 user-manage direction
+PASS en 768 personal permission controls
+PASS en 768 open permission matrix no overflow
+PASS en 768 equipment-create HTTP
+PASS en 768 equipment-create no page overflow
+PASS en 768 equipment-create direction
+PASS en 768 my-leave HTTP
+PASS en 768 my-leave no page overflow
+PASS en 768 my-leave direction
+PASS en 1440 customer-create HTTP
+PASS en 1440 customer-create no page overflow
+PASS en 1440 customer-create direction
+PASS en 1440 customer-manage HTTP
+PASS en 1440 customer-manage no page overflow
+PASS en 1440 customer-manage direction
+PASS en 1440 customer-view HTTP
+PASS en 1440 customer-view no page overflow
+PASS en 1440 customer-view direction
+PASS en 1440 customer-view stays read-only
+PASS en 1440 supplier-create HTTP
+PASS en 1440 supplier-create no page overflow
+PASS en 1440 supplier-create direction
+PASS en 1440 supplier-manage HTTP
+PASS en 1440 supplier-manage no page overflow
+PASS en 1440 supplier-manage direction
+PASS en 1440 supplier-view HTTP
+PASS en 1440 supplier-view no page overflow
+PASS en 1440 supplier-view direction
+PASS en 1440 supplier-view stays read-only
+PASS en 1440 employee-create HTTP
+PASS en 1440 employee-create no page overflow
+PASS en 1440 employee-create direction
+PASS en 1440 employee-manage HTTP
+PASS en 1440 employee-manage no page overflow
+PASS en 1440 employee-manage direction
+PASS en 1440 employee-view HTTP
+PASS en 1440 employee-view no page overflow
+PASS en 1440 employee-view direction
+PASS en 1440 employee-view stays read-only
+PASS en 1440 user-create HTTP
+PASS en 1440 user-create no page overflow
+PASS en 1440 user-create direction
+PASS en 1440 user-manage HTTP
+PASS en 1440 user-manage no page overflow
+PASS en 1440 user-manage direction
+PASS en 1440 personal permission controls
+PASS en 1440 open permission matrix no overflow
+PASS en 1440 equipment-create HTTP
+PASS en 1440 equipment-create no page overflow
+PASS en 1440 equipment-create direction
+PASS en 1440 my-leave HTTP
+PASS en 1440 my-leave no page overflow
+PASS en 1440 my-leave direction
+PASS en manual code opens
+PASS en automatic code clears manual value
+PASS en document rows add distinct fields
+PASS en unsaved document row removable
+PASS en photo chooser and preview work
+PASS ar 320 customer-create HTTP
+PASS ar 320 customer-create no page overflow
+PASS ar 320 customer-create direction
+PASS ar 320 customer-manage HTTP
+PASS ar 320 customer-manage no page overflow
+PASS ar 320 customer-manage direction
+PASS ar 320 customer-view HTTP
+PASS ar 320 customer-view no page overflow
+PASS ar 320 customer-view direction
+PASS ar 320 customer-view stays read-only
+PASS ar 320 supplier-create HTTP
+PASS ar 320 supplier-create no page overflow
+PASS ar 320 supplier-create direction
+PASS ar 320 supplier-manage HTTP
+PASS ar 320 supplier-manage no page overflow
+PASS ar 320 supplier-manage direction
+PASS ar 320 supplier-view HTTP
+PASS ar 320 supplier-view no page overflow
+PASS ar 320 supplier-view direction
+PASS ar 320 supplier-view stays read-only
+PASS ar 320 employee-create HTTP
+PASS ar 320 employee-create no page overflow
+PASS ar 320 employee-create direction
+PASS ar 320 employee-manage HTTP
+PASS ar 320 employee-manage no page overflow
+PASS ar 320 employee-manage direction
+PASS ar 320 employee-view HTTP
+PASS ar 320 employee-view no page overflow
+PASS ar 320 employee-view direction
+PASS ar 320 employee-view stays read-only
+PASS ar 320 user-create HTTP
+PASS ar 320 user-create no page overflow
+PASS ar 320 user-create direction
+PASS ar 320 user-manage HTTP
+PASS ar 320 user-manage no page overflow
+PASS ar 320 user-manage direction
+PASS ar 320 personal permission controls
+PASS ar 320 open permission matrix no overflow
+PASS ar 320 equipment-create HTTP
+PASS ar 320 equipment-create no page overflow
+PASS ar 320 equipment-create direction
+PASS ar 320 my-leave HTTP
+PASS ar 320 my-leave no page overflow
+PASS ar 320 my-leave direction
+PASS ar 390 customer-create HTTP
+PASS ar 390 customer-create no page overflow
+PASS ar 390 customer-create direction
+PASS ar 390 customer-manage HTTP
+PASS ar 390 customer-manage no page overflow
+PASS ar 390 customer-manage direction
+PASS ar 390 customer-view HTTP
+PASS ar 390 customer-view no page overflow
+PASS ar 390 customer-view direction
+PASS ar 390 customer-view stays read-only
+PASS ar 390 supplier-create HTTP
+PASS ar 390 supplier-create no page overflow
+PASS ar 390 supplier-create direction
+PASS ar 390 supplier-manage HTTP
+PASS ar 390 supplier-manage no page overflow
+PASS ar 390 supplier-manage direction
+PASS ar 390 supplier-view HTTP
+PASS ar 390 supplier-view no page overflow
+PASS ar 390 supplier-view direction
+PASS ar 390 supplier-view stays read-only
+PASS ar 390 employee-create HTTP
+PASS ar 390 employee-create no page overflow
+PASS ar 390 employee-create direction
+PASS ar 390 employee-manage HTTP
+PASS ar 390 employee-manage no page overflow
+PASS ar 390 employee-manage direction
+PASS ar 390 employee-view HTTP
+PASS ar 390 employee-view no page overflow
+PASS ar 390 employee-view direction
+PASS ar 390 employee-view stays read-only
+PASS ar 390 user-create HTTP
+PASS ar 390 user-create no page overflow
+PASS ar 390 user-create direction
+PASS ar 390 user-manage HTTP
+PASS ar 390 user-manage no page overflow
+PASS ar 390 user-manage direction
+PASS ar 390 personal permission controls
+PASS ar 390 open permission matrix no overflow
+PASS ar 390 equipment-create HTTP
+PASS ar 390 equipment-create no page overflow
+PASS ar 390 equipment-create direction
+PASS ar 390 my-leave HTTP
+PASS ar 390 my-leave no page overflow
+PASS ar 390 my-leave direction
+PASS ar 768 customer-create HTTP
+PASS ar 768 customer-create no page overflow
+PASS ar 768 customer-create direction
+PASS ar 768 customer-manage HTTP
+PASS ar 768 customer-manage no page overflow
+PASS ar 768 customer-manage direction
+PASS ar 768 customer-view HTTP
+PASS ar 768 customer-view no page overflow
+PASS ar 768 customer-view direction
+PASS ar 768 customer-view stays read-only
+PASS ar 768 supplier-create HTTP
+PASS ar 768 supplier-create no page overflow
+PASS ar 768 supplier-create direction
+PASS ar 768 supplier-manage HTTP
+PASS ar 768 supplier-manage no page overflow
+PASS ar 768 supplier-manage direction
+PASS ar 768 supplier-view HTTP
+PASS ar 768 supplier-view no page overflow
+PASS ar 768 supplier-view direction
+PASS ar 768 supplier-view stays read-only
+PASS ar 768 employee-create HTTP
+PASS ar 768 employee-create no page overflow
+PASS ar 768 employee-create direction
+PASS ar 768 employee-manage HTTP
+PASS ar 768 employee-manage no page overflow
+PASS ar 768 employee-manage direction
+PASS ar 768 employee-view HTTP
+PASS ar 768 employee-view no page overflow
+PASS ar 768 employee-view direction
+PASS ar 768 employee-view stays read-only
+PASS ar 768 user-create HTTP
+PASS ar 768 user-create no page overflow
+PASS ar 768 user-create direction
+PASS ar 768 user-manage HTTP
+PASS ar 768 user-manage no page overflow
+PASS ar 768 user-manage direction
+PASS ar 768 personal permission controls
+PASS ar 768 open permission matrix no overflow
+PASS ar 768 equipment-create HTTP
+PASS ar 768 equipment-create no page overflow
+PASS ar 768 equipment-create direction
+PASS ar 768 my-leave HTTP
+PASS ar 768 my-leave no page overflow
+PASS ar 768 my-leave direction
+PASS ar 1440 customer-create HTTP
+PASS ar 1440 customer-create no page overflow
+PASS ar 1440 customer-create direction
+PASS ar 1440 customer-manage HTTP
+PASS ar 1440 customer-manage no page overflow
+PASS ar 1440 customer-manage direction
+PASS ar 1440 customer-view HTTP
+PASS ar 1440 customer-view no page overflow
+PASS ar 1440 customer-view direction
+PASS ar 1440 customer-view stays read-only
+PASS ar 1440 supplier-create HTTP
+PASS ar 1440 supplier-create no page overflow
+PASS ar 1440 supplier-create direction
+PASS ar 1440 supplier-manage HTTP
+PASS ar 1440 supplier-manage no page overflow
+PASS ar 1440 supplier-manage direction
+PASS ar 1440 supplier-view HTTP
+PASS ar 1440 supplier-view no page overflow
+PASS ar 1440 supplier-view direction
+PASS ar 1440 supplier-view stays read-only
+PASS ar 1440 employee-create HTTP
+PASS ar 1440 employee-create no page overflow
+PASS ar 1440 employee-create direction
+PASS ar 1440 employee-manage HTTP
+PASS ar 1440 employee-manage no page overflow
+PASS ar 1440 employee-manage direction
+PASS ar 1440 employee-view HTTP
+PASS ar 1440 employee-view no page overflow
+PASS ar 1440 employee-view direction
+PASS ar 1440 employee-view stays read-only
+PASS ar 1440 user-create HTTP
+PASS ar 1440 user-create no page overflow
+PASS ar 1440 user-create direction
+PASS ar 1440 user-manage HTTP
+PASS ar 1440 user-manage no page overflow
+PASS ar 1440 user-manage direction
+PASS ar 1440 personal permission controls
+PASS ar 1440 open permission matrix no overflow
+PASS ar 1440 equipment-create HTTP
+PASS ar 1440 equipment-create no page overflow
+PASS ar 1440 equipment-create direction
+PASS ar 1440 my-leave HTTP
+PASS ar 1440 my-leave no page overflow
+PASS ar 1440 my-leave direction
+PASS ar manual code opens
+PASS ar automatic code clears manual value
+PASS ar document rows add distinct fields
+PASS ar unsaved document row removable
+PASS ar photo chooser and preview work
+PASS no uncaught browser errors
+{"checks":363,"passed":363,"failed":0}
