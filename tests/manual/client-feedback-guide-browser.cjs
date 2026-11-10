@@ -12,7 +12,9 @@ const { chromium } = require(process.env.SEERA_PLAYWRIGHT || 'D:/laragon2/www/pr
     const base = env.APP_URL;
     const proof = await (await fetch(base + '/__guide_fixture_attestation')).json();
     if (!fixture.synthetic || !proof.synthetic || proof.id !== path.basename(root) || proof.production_zatca || proof.business_writes) throw new Error('Unsafe fixture');
-    const out = path.resolve(__dirname, '../../docs/release-readiness/evidence/client-feedback-2026-11-10/user-guide');
+    const out = process.env.SEERA_GUIDE_QA_OUT
+        ? path.resolve(process.env.SEERA_GUIDE_QA_OUT)
+        : path.resolve(__dirname, '../../docs/release-readiness/evidence/client-feedback-2026-11-10/user-guide');
     fs.mkdirSync(out, { recursive: true });
     const results = [], errors = [];
     const check = (name, ok, detail) => {
@@ -44,10 +46,19 @@ const { chromium } = require(process.env.SEERA_PLAYWRIGHT || 'D:/laragon2/www/pr
             const token = await page.locator('form[action$="/admin/locale"] input[name=_token]').inputValue();
             const switched = await context.request.post(base + '/admin/locale', { form: { _token: token, locale }, maxRedirects: 0 });
             check(locale + ': locale selected', [302, 303].includes(switched.status()));
+            await page.goto(base + '/admin/dashboard');
+            check(locale + ': portal has direct client feedback shortcut', await page.locator('[data-client-feedback-guide]').getAttribute('href') === base + '/user-guide/CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html');
+            check(locale + ': portal shortcut is translated', await page.locator('[data-client-feedback-guide]').innerText() === (locale === 'ar' ? 'ملاحظات العميل والإصلاحات' : 'Client Issues & Fixes'));
+            for (const width of [320, 390, 768, 1440]) {
+                await page.setViewportSize({ width, height: 1000 });
+                const bounds = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
+                check(locale + ': dashboard shortcut no page overflow at ' + width, bounds.scroll <= bounds.viewport + 1, bounds);
+            }
             for (const name of pages) {
                 const response = await page.goto(base + '/user-guide/' + name + '.html');
                 check(locale + ' ' + name + ': authenticated page', response.status() === 200);
                 check(locale + ' ' + name + ': English guide language explicit', await page.locator('html').getAttribute('lang') === 'en');
+                check(locale + ' ' + name + ': contents links to client issues', await page.locator('aside.toc a[href="CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html"]').count() === 1);
                 for (const width of [320, 390, 768, 1440]) {
                     await page.setViewportSize({ width, height: 1000 });
                     const bounds = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));

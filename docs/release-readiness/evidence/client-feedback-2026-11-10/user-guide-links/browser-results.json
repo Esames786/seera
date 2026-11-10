@@ -1,0 +1,544 @@
+{
+  "source": "0a1a01ac0bf4e064da831d7d99bb22baaf460c67",
+  "working_tree_guide_changes": true,
+  "synthetic": true,
+  "business_writes": false,
+  "production_access": false,
+  "results": [
+    {
+      "name": "CLIENT-ENTRY-UPDATES-2026-11-10: guest requires login",
+      "ok": true
+    },
+    {
+      "name": "CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: guest requires login",
+      "ok": true
+    },
+    {
+      "name": "en: dashboard served",
+      "ok": true
+    },
+    {
+      "name": "en: locale selected",
+      "ok": true
+    },
+    {
+      "name": "en: portal has direct client feedback shortcut",
+      "ok": true
+    },
+    {
+      "name": "en: portal shortcut is translated",
+      "ok": true
+    },
+    {
+      "name": "en: dashboard shortcut no page overflow at 320",
+      "ok": true,
+      "detail": {
+        "viewport": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "en: dashboard shortcut no page overflow at 390",
+      "ok": true,
+      "detail": {
+        "viewport": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "en: dashboard shortcut no page overflow at 768",
+      "ok": true,
+      "detail": {
+        "viewport": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "en: dashboard shortcut no page overflow at 1440",
+      "ok": true,
+      "detail": {
+        "viewport": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "en index: authenticated page",
+      "ok": true
+    },
+    {
+      "name": "en index: English guide language explicit",
+      "ok": true
+    },
+    {
+      "name": "en index: contents links to client issues",
+      "ok": true
+    },
+    {
+      "name": "en index: no page overflow at 320",
+      "ok": true,
+      "detail": {
+        "viewport": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "en index: no page overflow at 390",
+      "ok": true,
+      "detail": {
+        "viewport": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "en index: no page overflow at 768",
+      "ok": true,
+      "detail": {
+        "viewport": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "en index: no page overflow at 1440",
+      "ok": true,
+      "detail": {
+        "viewport": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "en: home links CLIENT-ENTRY-UPDATES-2026-11-10",
+      "ok": true
+    },
+    {
+      "name": "en: home links CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10",
+      "ok": true
+    },
+    {
+      "name": "en SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE: authenticated page",
+      "ok": true
+    },
+    {
+      "name": "en SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE: English guide language explicit",
+      "ok": true
+    },
+    {
+      "name": "en SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE: contents links to client issues",
+      "ok": true
+    },
+    {
+      "name": "en SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE: no page overflow at 320",
+      "ok": true,
+      "detail": {
+        "viewport": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "en SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE: no page overflow at 390",
+      "ok": true,
+      "detail": {
+        "viewport": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "en SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE: no page overflow at 768",
+      "ok": true,
+      "detail": {
+        "viewport": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "en SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE: no page overflow at 1440",
+      "ok": true,
+      "detail": {
+        "viewport": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "en CLIENT-ENTRY-UPDATES-2026-11-10: authenticated page",
+      "ok": true
+    },
+    {
+      "name": "en CLIENT-ENTRY-UPDATES-2026-11-10: English guide language explicit",
+      "ok": true
+    },
+    {
+      "name": "en CLIENT-ENTRY-UPDATES-2026-11-10: contents links to client issues",
+      "ok": true
+    },
+    {
+      "name": "en CLIENT-ENTRY-UPDATES-2026-11-10: no page overflow at 320",
+      "ok": true,
+      "detail": {
+        "viewport": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "en CLIENT-ENTRY-UPDATES-2026-11-10: no page overflow at 390",
+      "ok": true,
+      "detail": {
+        "viewport": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "en CLIENT-ENTRY-UPDATES-2026-11-10: no page overflow at 768",
+      "ok": true,
+      "detail": {
+        "viewport": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "en CLIENT-ENTRY-UPDATES-2026-11-10: no page overflow at 1440",
+      "ok": true,
+      "detail": {
+        "viewport": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "en CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: authenticated page",
+      "ok": true
+    },
+    {
+      "name": "en CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: English guide language explicit",
+      "ok": true
+    },
+    {
+      "name": "en CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: contents links to client issues",
+      "ok": true
+    },
+    {
+      "name": "en CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: no page overflow at 320",
+      "ok": true,
+      "detail": {
+        "viewport": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "en CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: no page overflow at 390",
+      "ok": true,
+      "detail": {
+        "viewport": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "en CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: no page overflow at 768",
+      "ok": true,
+      "detail": {
+        "viewport": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "en CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: no page overflow at 1440",
+      "ok": true,
+      "detail": {
+        "viewport": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "en: all 13 reported points visible",
+      "ok": true
+    },
+    {
+      "name": "en: 10 implemented, 1 partial, 2 pending",
+      "ok": true
+    },
+    {
+      "name": "en: live deployment boundary stated",
+      "ok": true
+    },
+    {
+      "name": "en: table scrolls locally on mobile",
+      "ok": true
+    },
+    {
+      "name": "ar: dashboard served",
+      "ok": true
+    },
+    {
+      "name": "ar: locale selected",
+      "ok": true
+    },
+    {
+      "name": "ar: portal has direct client feedback shortcut",
+      "ok": true
+    },
+    {
+      "name": "ar: portal shortcut is translated",
+      "ok": true
+    },
+    {
+      "name": "ar: dashboard shortcut no page overflow at 320",
+      "ok": true,
+      "detail": {
+        "viewport": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "ar: dashboard shortcut no page overflow at 390",
+      "ok": true,
+      "detail": {
+        "viewport": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "ar: dashboard shortcut no page overflow at 768",
+      "ok": true,
+      "detail": {
+        "viewport": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "ar: dashboard shortcut no page overflow at 1440",
+      "ok": true,
+      "detail": {
+        "viewport": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "ar index: authenticated page",
+      "ok": true
+    },
+    {
+      "name": "ar index: English guide language explicit",
+      "ok": true
+    },
+    {
+      "name": "ar index: contents links to client issues",
+      "ok": true
+    },
+    {
+      "name": "ar index: no page overflow at 320",
+      "ok": true,
+      "detail": {
+        "viewport": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "ar index: no page overflow at 390",
+      "ok": true,
+      "detail": {
+        "viewport": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "ar index: no page overflow at 768",
+      "ok": true,
+      "detail": {
+        "viewport": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "ar index: no page overflow at 1440",
+      "ok": true,
+      "detail": {
+        "viewport": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "ar: home links CLIENT-ENTRY-UPDATES-2026-11-10",
+      "ok": true
+    },
+    {
+      "name": "ar: home links CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10",
+      "ok": true
+    },
+    {
+      "name": "ar SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE: authenticated page",
+      "ok": true
+    },
+    {
+      "name": "ar SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE: English guide language explicit",
+      "ok": true
+    },
+    {
+      "name": "ar SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE: contents links to client issues",
+      "ok": true
+    },
+    {
+      "name": "ar SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE: no page overflow at 320",
+      "ok": true,
+      "detail": {
+        "viewport": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "ar SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE: no page overflow at 390",
+      "ok": true,
+      "detail": {
+        "viewport": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "ar SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE: no page overflow at 768",
+      "ok": true,
+      "detail": {
+        "viewport": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "ar SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE: no page overflow at 1440",
+      "ok": true,
+      "detail": {
+        "viewport": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "ar CLIENT-ENTRY-UPDATES-2026-11-10: authenticated page",
+      "ok": true
+    },
+    {
+      "name": "ar CLIENT-ENTRY-UPDATES-2026-11-10: English guide language explicit",
+      "ok": true
+    },
+    {
+      "name": "ar CLIENT-ENTRY-UPDATES-2026-11-10: contents links to client issues",
+      "ok": true
+    },
+    {
+      "name": "ar CLIENT-ENTRY-UPDATES-2026-11-10: no page overflow at 320",
+      "ok": true,
+      "detail": {
+        "viewport": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "ar CLIENT-ENTRY-UPDATES-2026-11-10: no page overflow at 390",
+      "ok": true,
+      "detail": {
+        "viewport": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "ar CLIENT-ENTRY-UPDATES-2026-11-10: no page overflow at 768",
+      "ok": true,
+      "detail": {
+        "viewport": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "ar CLIENT-ENTRY-UPDATES-2026-11-10: no page overflow at 1440",
+      "ok": true,
+      "detail": {
+        "viewport": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "ar CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: authenticated page",
+      "ok": true
+    },
+    {
+      "name": "ar CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: English guide language explicit",
+      "ok": true
+    },
+    {
+      "name": "ar CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: contents links to client issues",
+      "ok": true
+    },
+    {
+      "name": "ar CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: no page overflow at 320",
+      "ok": true,
+      "detail": {
+        "viewport": 320,
+        "scroll": 320
+      }
+    },
+    {
+      "name": "ar CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: no page overflow at 390",
+      "ok": true,
+      "detail": {
+        "viewport": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "name": "ar CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: no page overflow at 768",
+      "ok": true,
+      "detail": {
+        "viewport": 768,
+        "scroll": 768
+      }
+    },
+    {
+      "name": "ar CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: no page overflow at 1440",
+      "ok": true,
+      "detail": {
+        "viewport": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "name": "ar: all 13 reported points visible",
+      "ok": true
+    },
+    {
+      "name": "ar: 10 implemented, 1 partial, 2 pending",
+      "ok": true
+    },
+    {
+      "name": "ar: live deployment boundary stated",
+      "ok": true
+    },
+    {
+      "name": "ar: table scrolls locally on mobile",
+      "ok": true
+    },
+    {
+      "name": "CLIENT-ENTRY-UPDATES-2026-11-10: opens offline",
+      "ok": true
+    },
+    {
+      "name": "CLIENT-ENTRY-UPDATES-2026-11-10: print table is not clipped",
+      "ok": true,
+      "detail": {
+        "width": 1280,
+        "parent": 1280,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: opens offline",
+      "ok": true
+    },
+    {
+      "name": "CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10: print table is not clipped",
+      "ok": true,
+      "detail": {
+        "width": 1280,
+        "parent": 1280,
+        "overflow": "visible"
+      }
+    },
+    {
+      "name": "No browser JavaScript errors",
+      "ok": true
+    }
+  ],
+  "errors": []
+}

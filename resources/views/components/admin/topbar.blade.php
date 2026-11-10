@@ -53,6 +53,7 @@
                 <a class="btn sm outline" href="{{ route('admin.my-approvals.index') }}" aria-label="{{ __('My Approvals') }}" title="{{ __('ui.approvals_shortcut_help') }}">✅ {{ __('My Approvals') }}</a>
             @endif
             <a class="btn sm outline" href="{{ route('user-guide') }}" target="_blank" rel="noopener" title="{{ __('Current System User Guide') }}">{{ __('User Guide') }}</a>
+            <a class="btn sm outline" href="{{ route('user-guide.page', 'CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html') }}" target="_blank" rel="noopener" data-client-feedback-guide>{{ __('Client Issues & Fixes') }}</a>
             <form method="POST" action="{{ route('admin.locale.update') }}" class="locale-switch" data-no-dirty-guard>
                 @csrf
                 <label for="interface-locale" class="sr-only">{{ __('ui.language') }}</label>

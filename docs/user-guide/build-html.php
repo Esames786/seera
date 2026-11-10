@@ -122,7 +122,7 @@ $page = function (string $title, string $tocHtml, string $body) use ($css, $nav,
 
     return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>'.htmlspecialchars($title).' · Seera ERP</title><style>'.$css.'</style></head><body>'
         .'<header class="top"><span class="brand">Seera ERP</span><span class="meta">'.htmlspecialchars($title).' · Version '.htmlspecialchars($guideVersion).' · Current implemented system only</span><nav>'.$nav.'</nav></header>'
-        .'<div class="layout"><aside class="toc"><h2>Contents</h2>'.$tocHtml.'</aside><main>'.$body.'</main></div>'
+        .'<div class="layout"><aside class="toc"><h2>Contents</h2><a href="CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html"><strong>Client Issues &amp; Fixes</strong></a>'.$tocHtml.'</aside><main>'.$body.'</main></div>'
         .'<footer>Seera ERP — Current System User Guide, version '.htmlspecialchars($guideVersion).'. Examples use fictional training data.</footer></body></html>';
 };
 
