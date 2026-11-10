@@ -6,13 +6,13 @@ header.top .brand { font-size:22px; font-weight:800; letter-spacing:.3px; color:
 header.top .meta { color:var(--muted); font-size:13px; }
 header.top nav a { color:var(--link); margin-inline-end:16px; font-size:14px; text-decoration:none; }
 header.top nav a:hover { text-decoration:underline; }
-.layout { display:grid; grid-template-columns: 300px 1fr; gap:0; min-height:calc(100vh - 64px); }
+.layout { display:grid; grid-template-columns: 300px minmax(0, 1fr); gap:0; min-height:calc(100vh - 64px); }
 aside.toc { border-inline-end:1px solid var(--line); background:var(--panel); padding:18px 14px; position:sticky; top:0; height:100vh; overflow:auto; font-size:13px; }
 aside.toc h2 { font-size:12px; text-transform:uppercase; letter-spacing:.7px; color:var(--muted); margin:0 0 10px; }
 aside.toc a { display:block; color:var(--ink); text-decoration:none; padding:3px 6px; border-radius:4px; }
 aside.toc a:hover { background:var(--soft); color:var(--accent); }
 aside.toc a.l3 { padding-inline-start:18px; color:var(--muted); font-size:12.5px; }
-main { padding:28px 36px 60px; max-width: 1180px; }
+main { padding:28px 36px 60px; max-width: 1180px; min-width:0; overflow-wrap:anywhere; }
 main h1 { font-size:30px; margin:0 0 4px; }
 main h1 + h1 { font-size:22px; color:var(--accent); font-weight:600; margin-bottom:18px; }
 main h2 { font-size:22px; margin:40px 0 12px; padding-block-end:6px; border-block-end:2px solid var(--line); }
@@ -20,7 +20,12 @@ main h3 { font-size:17px; margin:28px 0 8px; color:var(--ink); }
 main h3::before { content:""; display:inline-block; width:6px; height:18px; background:var(--accent); margin-inline-end:8px; vertical-align:-3px; border-radius:2px; }
 main p { margin:8px 0; }
 main table { border-collapse:collapse; width:100%; margin:10px 0 16px; font-size:13.5px; background:var(--card); }
+.table-scroll { max-width:100%; overflow-x:auto; margin:10px 0 16px; }
+.table-scroll table { min-width:680px; margin:0; }
+.table-scroll:has(th:nth-child(6)) table { min-width:980px; }
+.table-scroll:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
 main th, main td { border:1px solid var(--line); padding:6px 9px; text-align:start; vertical-align:top; }
+main th:first-child, main td:first-child { min-width:78px; }
 main th { background:var(--soft); font-weight:700; }
 main tr:nth-child(even) td { background:#182029; }
 main code { background:var(--soft); color:var(--code-ink); padding:1px 5px; border-radius:4px; font-size:13px; }
@@ -34,12 +39,14 @@ main a { color:var(--link); }
 main strong { color:#ffffff; }
 footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px solid var(--line); background:var(--panel); }
 @media (max-width: 900px) { .layout { grid-template-columns:1fr; } aside.toc { position:static; height:auto; max-height:40vh; } main { padding:18px 16px; } }
-@media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Documentation home · Version 1.22 (28 October 2026, sales VAT authorization) · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a><a href="VISUAL-EXAMPLES.html">Visual Examples</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></aside><main><h1>SEERA ERP</h1><h1>Current System User Guide — HTML edition</h1>
+@media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } .table-scroll { overflow:visible; } .table-scroll table, .table-scroll:has(th:nth-child(6)) table { min-width:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main strong { color:inherit; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }</style></head><body><header class="top"><span class="brand">Seera ERP</span><span class="meta">Documentation home · Version 1.23 (10 November 2026, client entry and permissions update) · Current implemented system only</span><nav><a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a><a href="VISUAL-EXAMPLES.html">Visual Examples</a><a href="CLIENT-ENTRY-UPDATES-2026-11-10.html">November Instructions</a><a href="CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html">Issues &amp; Fixes</a></nav></header><div class="layout"><aside class="toc"><h2>Contents</h2><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a></aside><main><h1>SEERA ERP</h1><h1>Current System User Guide — HTML edition</h1>
 <p>Current implemented system only. Version metadata is taken from the source user guide. Visual training supplement captured 2 November 2026. All examples use fictional training data.</p>
-<table><thead><tr><th>Document</th><th>What it is for</th></tr></thead><tbody>
+<div class="table-scroll" role="region" aria-label="Scrollable guide table" tabindex="0"><table><thead><tr><th>Document</th><th>What it is for</th></tr></thead><tbody>
+<tr><td><a href="CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html">Client Feedback — Issues, Fixes and Screens</a></td><td>Easy-English table of all 13 November feedback points: reported issue, change, screen, check steps and status. Ten implemented, one partial, two pending. Candidate changes await deployment and client acceptance.</td></tr>
+<tr><td><a href="CLIENT-ENTRY-UPDATES-2026-11-10.html">November Entry Instructions</a></td><td>Screen-by-screen instructions for photos, documents, codes, annual leave, My Leave, IBAN and individual permissions, with Arabic explanations.</td></tr>
 <tr><td><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a></td><td>23 chapters: sign-in, screen addresses, fields and buttons, Connected Workspace Standard, business workflows, troubleshooting, glossary, limitations, Equipment and Mobile/Offline.</td></tr>
 <tr><td><a href="SCREEN-INDEX.html">Screen Index</a></td><td>Permanent Screen IDs, web addresses, navigation, permissions and status, including My Approvals and the embedded PR approval panel.</td></tr>
 <tr><td><a href="VISUAL-EXAMPLES.html">Visual Examples — English</a> · <a href="VISUAL-EXAMPLES-AR.html">العربية</a></td><td>43 real application screens per language, verified fictional example fields, four mobile examples per language, buttons and connected workflows. No business form submitted.</td></tr>
 <tr><td><a href="WORKFLOW-INDEX.html">Workflow Index</a></td><td>The 28 documented workflows (WF-001 … WF-028), including approval, payroll, budget, Equipment, offline sync and customer credit resolution.</td></tr>
-</tbody></table>
-<p>Status labels used throughout: <strong>AVAILABLE</strong>, <strong>PARTIAL</strong>, <strong>FOUNDATION ONLY</strong>, <strong>NOT YET OPERATIONAL</strong>. Nothing planned is described as available.</p></main></div><footer>Seera ERP — Current System User Guide, version 1.22 (28 October 2026, sales VAT authorization). Examples use fictional training data.</footer></body></html>
+</tbody></table></div>
+<p>Status labels used throughout: <strong>AVAILABLE</strong>, <strong>PARTIAL</strong>, <strong>FOUNDATION ONLY</strong>, <strong>NOT YET OPERATIONAL</strong>. Nothing planned is described as available.</p></main></div><footer>Seera ERP — Current System User Guide, version 1.23 (10 November 2026, client entry and permissions update). Examples use fictional training data.</footer></body></html>

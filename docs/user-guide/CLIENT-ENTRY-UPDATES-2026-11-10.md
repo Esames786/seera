@@ -2,6 +2,24 @@
 
 This supplement describes the November feedback candidate. It applies after the owner installs the approved update; it does not mean the live website has already changed.
 
+For the client review, open [Client feedback: issues, fixes and screens](CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.md). It lists all 13 reported points, their fixes, the exact screen to visit and the remaining work in easy English.
+
+## Quick screen guide
+
+| Task | Open this screen | What to do |
+| --- | --- | --- |
+| Add an Employee photo | Employees → Open/Edit → Personal | Choose a photo, check the preview and save. |
+| Add a User photo | Users → Add User or Edit / Manage → Profile | Choose the user's photo and save the form. |
+| Check annual leave | Employees → View → year links; or My Leave → year selector | Select the correct year. Only approved Annual Leave reduces its annual balance. |
+| Request your own leave | Topbar → My Leave | Select the type and dates, enter a reason and submit. HR approval is separate. |
+| Change one person's access | Users → Edit / Manage → Individual permissions | Super Admin selects Inherit, Allow or Deny, enters a reason and saves. |
+| Use an automatic party code | Customers / Suppliers → Add | Leave the manual-code option unchecked and save. |
+| Attach party papers | Customer / Supplier → Add or Edit / Manage → Documents | Add a document row, select a file and save the parent form. |
+| Attach Equipment papers | Equipment & Vehicles → Add or Edit → Documents | Select documents while entering the asset, then save. |
+| Correct an IBAN entry | Employees → Open/Edit → Salary & payment | Copy the full value from the bank document. If refused, compare the exact value privately. |
+
+Keep using the existing Previous/Back and Save actions in each workspace. A document row is stored when its parent form is saved. An individual-permission change has its own Save individual permissions action.
+
 ## Photos / الصور الشخصية
 
 **Employee:** Employees → Open/Edit → Personal. Choose a JPG, PNG or WebP photo, check the preview, then use the normal Save action. Replace it by choosing another image, or select Remove saved photo and save. Photos are private and limited to 4 MB. Initials remain when there is no photo.

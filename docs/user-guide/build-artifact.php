@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Builds a single shareable page (the three documents in one, with a sticky
+ * Builds a single shareable page (guide, indexes and client supplements, with a sticky
  * contents rail) for publishing as a hosted page. Usage:
  *
  *   php docs/user-guide/build-artifact.php <output.html>
@@ -21,12 +21,19 @@ if (! $out) {
 }
 
 $dir = __DIR__;
+preg_match('/\*\*Version\*\*\s*\|\s*([^|]+)/', file_get_contents($dir.'/SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.md'), $versionMatch);
+$guideVersion = htmlspecialchars(trim($versionMatch[1] ?? 'See source guide'), ENT_QUOTES | ENT_HTML5);
 $docs = [
     'guide' => ['file' => 'SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE', 'label' => 'User Guide', 'toc' => 2],
     'screens' => ['file' => 'SCREEN-INDEX', 'label' => 'Screen Index', 'toc' => 2],
     'workflows' => ['file' => 'WORKFLOW-INDEX', 'label' => 'Workflow Index', 'toc' => 2],
+    'november' => ['file' => 'CLIENT-ENTRY-UPDATES-2026-11-10', 'label' => 'November Entry Instructions', 'toc' => 2],
+    'feedback' => ['file' => 'CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10', 'label' => 'Client Issues and Fixes', 'toc' => 2],
 ];
-$prefixByFile = ['SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE' => 'guide', 'SCREEN-INDEX' => 'screens', 'WORKFLOW-INDEX' => 'workflows'];
+$prefixByFile = [];
+foreach ($docs as $prefix => $doc) {
+    $prefixByFile[$doc['file']] = $prefix;
+}
 
 function slug(string $text): string
 {
@@ -130,7 +137,7 @@ main hr { border: 0; border-top: 1px solid var(--line); margin: 30px 0; }
 </style>
 HTML;
 
-$band = '<div class="band"><span class="brand">Seera ERP</span><span class="meta">Current System User Guide · Version 1.14 · 12 October 2026 · Current implemented system only · Examples use fictional training data</span><nav><a href="#guide-top">User Guide</a><a href="#screens-top">Screen Index</a><a href="#workflows-top">Workflow Index</a></nav></div>';
+$band = '<div class="band"><span class="brand">Seera ERP</span><span class="meta">Current System User Guide · Version '.$guideVersion.' · Current implemented system only · Examples use fictional training data</span><nav><a href="#guide-top">User Guide</a><a href="#screens-top">Screen Index</a><a href="#workflows-top">Workflow Index</a><a href="#november-top">November Instructions</a><a href="#feedback-top">Issues &amp; Fixes</a></nav></div>';
 
 file_put_contents($out, $page.$band.'<div class="wrap"><aside class="rail">'.$rail.'</aside><main>'.$sections.'</main></div>');
 echo 'written '.number_format(filesize($out))." bytes\n";

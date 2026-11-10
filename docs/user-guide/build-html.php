@@ -6,7 +6,7 @@
  *   php docs/user-guide/build-html.php
  *
  * Output (same folder): index.html, SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html,
- * SCREEN-INDEX.html, WORKFLOW-INDEX.html. Self-contained pages (inline CSS,
+ * SCREEN-INDEX.html, WORKFLOW-INDEX.html and registered client supplements. Self-contained pages (inline CSS,
  * no external assets) so they can be emailed or opened from a shared drive.
  */
 
@@ -22,6 +22,8 @@ $sources = [
     'SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE' => ['title' => 'Current System User Guide', 'toc' => 3],
     'SCREEN-INDEX' => ['title' => 'Screen Index', 'toc' => 2],
     'WORKFLOW-INDEX' => ['title' => 'Workflow Index', 'toc' => 2],
+    'CLIENT-ENTRY-UPDATES-2026-11-10' => ['title' => 'November Entry Instructions', 'toc' => 2],
+    'CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10' => ['title' => 'Client Feedback: Issues, Fixes and Screens', 'toc' => 2],
 ];
 
 /** GitHub-style heading anchors, so the Markdown links keep working in HTML. */
@@ -60,7 +62,7 @@ function render(string $markdown, int $tocDepth, array &$toc): string
     // Site addresses become clickable links (addresses with a {placeholder} stay as plain text).
     $html = preg_replace('/<code>(https:\/\/[^<{]+)<\/code>/', '<a class="url" href="$1" target="_blank" rel="noopener"><code>$1</code></a>', $html);
 
-    // Links between the three documents.
+    // Links between the guide documents and registered supplements.
     $html = preg_replace('/href="([A-Z0-9-]+)\.md(#[^"]*)?"/', 'href="$1.html$2"', $html);
 
     return $html;
@@ -76,13 +78,13 @@ header.top .brand { font-size:22px; font-weight:800; letter-spacing:.3px; color:
 header.top .meta { color:var(--muted); font-size:13px; }
 header.top nav a { color:var(--link); margin-inline-end:16px; font-size:14px; text-decoration:none; }
 header.top nav a:hover { text-decoration:underline; }
-.layout { display:grid; grid-template-columns: 300px 1fr; gap:0; min-height:calc(100vh - 64px); }
+.layout { display:grid; grid-template-columns: 300px minmax(0, 1fr); gap:0; min-height:calc(100vh - 64px); }
 aside.toc { border-inline-end:1px solid var(--line); background:var(--panel); padding:18px 14px; position:sticky; top:0; height:100vh; overflow:auto; font-size:13px; }
 aside.toc h2 { font-size:12px; text-transform:uppercase; letter-spacing:.7px; color:var(--muted); margin:0 0 10px; }
 aside.toc a { display:block; color:var(--ink); text-decoration:none; padding:3px 6px; border-radius:4px; }
 aside.toc a:hover { background:var(--soft); color:var(--accent); }
 aside.toc a.l3 { padding-inline-start:18px; color:var(--muted); font-size:12.5px; }
-main { padding:28px 36px 60px; max-width: 1180px; }
+main { padding:28px 36px 60px; max-width: 1180px; min-width:0; overflow-wrap:anywhere; }
 main h1 { font-size:30px; margin:0 0 4px; }
 main h1 + h1 { font-size:22px; color:var(--accent); font-weight:600; margin-bottom:18px; }
 main h2 { font-size:22px; margin:40px 0 12px; padding-block-end:6px; border-block-end:2px solid var(--line); }
@@ -90,7 +92,12 @@ main h3 { font-size:17px; margin:28px 0 8px; color:var(--ink); }
 main h3::before { content:""; display:inline-block; width:6px; height:18px; background:var(--accent); margin-inline-end:8px; vertical-align:-3px; border-radius:2px; }
 main p { margin:8px 0; }
 main table { border-collapse:collapse; width:100%; margin:10px 0 16px; font-size:13.5px; background:var(--card); }
+.table-scroll { max-width:100%; overflow-x:auto; margin:10px 0 16px; }
+.table-scroll table { min-width:680px; margin:0; }
+.table-scroll:has(th:nth-child(6)) table { min-width:980px; }
+.table-scroll:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
 main th, main td { border:1px solid var(--line); padding:6px 9px; text-align:start; vertical-align:top; }
+main th:first-child, main td:first-child { min-width:78px; }
 main th { background:var(--soft); font-weight:700; }
 main tr:nth-child(even) td { background:#182029; }
 main code { background:var(--soft); color:var(--code-ink); padding:1px 5px; border-radius:4px; font-size:13px; }
@@ -104,12 +111,15 @@ main a { color:var(--link); }
 main strong { color:#ffffff; }
 footer { color:var(--muted); font-size:12px; padding:20px 36px; border-top:1px solid var(--line); background:var(--panel); }
 @media (max-width: 900px) { .layout { grid-template-columns:1fr; } aside.toc { position:static; height:auto; max-height:40vh; } main { padding:18px 16px; } }
-@media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }
+@media print { body { background:#fff; color:#111; } header.top nav, aside.toc { display:none; } .layout { display:block; } main { max-width:none; padding:0; } .table-scroll { overflow:visible; } .table-scroll table, .table-scroll:has(th:nth-child(6)) table { min-width:0; } main table, main th, main td { background:#fff; color:#111; border-color:#bbb; } main strong { color:inherit; } main h2 { page-break-before:always; } main h2:first-of-type { page-break-before:auto; } a { color:inherit; text-decoration:none; } }
 CSS;
 
-$nav = '<a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a><a href="VISUAL-EXAMPLES.html">Visual Examples</a>';
+$nav = '<a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a><a href="SCREEN-INDEX.html">Screen Index</a><a href="WORKFLOW-INDEX.html">Workflow Index</a><a href="VISUAL-EXAMPLES.html">Visual Examples</a><a href="CLIENT-ENTRY-UPDATES-2026-11-10.html">November Instructions</a><a href="CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html">Issues &amp; Fixes</a>';
 
 $page = function (string $title, string $tocHtml, string $body) use ($css, $nav, $guideVersion): string {
+    // Keep wide tables readable and keyboard-scrollable within their own region.
+    $body = preg_replace('/<table>(.*?)<\/table>/s', '<div class="table-scroll" role="region" aria-label="Scrollable guide table" tabindex="0"><table>$1</table></div>', $body);
+
     return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>'.htmlspecialchars($title).' · Seera ERP</title><style>'.$css.'</style></head><body>'
         .'<header class="top"><span class="brand">Seera ERP</span><span class="meta">'.htmlspecialchars($title).' · Version '.htmlspecialchars($guideVersion).' · Current implemented system only</span><nav>'.$nav.'</nav></header>'
         .'<div class="layout"><aside class="toc"><h2>Contents</h2>'.$tocHtml.'</aside><main>'.$body.'</main></div>'
@@ -133,6 +143,8 @@ $index = <<<'HTML'
 <h1>SEERA ERP</h1><h1>Current System User Guide — HTML edition</h1>
 <p>Current implemented system only. Version metadata is taken from the source user guide. Visual training supplement captured 2 November 2026. All examples use fictional training data.</p>
 <table><thead><tr><th>Document</th><th>What it is for</th></tr></thead><tbody>
+<tr><td><a href="CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html">Client Feedback — Issues, Fixes and Screens</a></td><td>Easy-English table of all 13 November feedback points: reported issue, change, screen, check steps and status. Ten implemented, one partial, two pending. Candidate changes await deployment and client acceptance.</td></tr>
+<tr><td><a href="CLIENT-ENTRY-UPDATES-2026-11-10.html">November Entry Instructions</a></td><td>Screen-by-screen instructions for photos, documents, codes, annual leave, My Leave, IBAN and individual permissions, with Arabic explanations.</td></tr>
 <tr><td><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a></td><td>23 chapters: sign-in, screen addresses, fields and buttons, Connected Workspace Standard, business workflows, troubleshooting, glossary, limitations, Equipment and Mobile/Offline.</td></tr>
 <tr><td><a href="SCREEN-INDEX.html">Screen Index</a></td><td>Permanent Screen IDs, web addresses, navigation, permissions and status, including My Approvals and the embedded PR approval panel.</td></tr>
 <tr><td><a href="VISUAL-EXAMPLES.html">Visual Examples — English</a> · <a href="VISUAL-EXAMPLES-AR.html">العربية</a></td><td>43 real application screens per language, verified fictional example fields, four mobile examples per language, buttons and connected workflows. No business form submitted.</td></tr>

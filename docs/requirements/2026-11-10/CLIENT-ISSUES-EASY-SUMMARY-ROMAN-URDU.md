@@ -19,6 +19,8 @@ Branch: `feature/seera-client-feedback-fixes-2026-11-10`. Iske baad wale commits
 
 ## Har point: pehle kya tha, ab kya hai?
 
+Client ko share karne ke liye [easy-English issue/fix/screen table](../../user-guide/CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.md) aur [updated user instructions](../../user-guide/CLIENT-ENTRY-UPDATES-2026-11-10.md) bhi tayyar hain. Dono HTML user guide ke Home aur navigation se milte hain; website par approved update install hone ke baad nazar aayenge.
+
 | # | Client ka issue / kehna | Hum ne kya kiya | Status |
 | --- | --- | --- | --- |
 | R10-01 | "Bank account/IBAN sahi dala hai, phir bhi invalid aa raha hai." | Bank se copy ki hui extra spaces, invisible spacing aur Arabic/Persian digits handle kiye. Error ab format aur check-digit problem alag samjhata hai. Galat number ko zabardasti accept nahi karwaya. | **PARTIAL:** exact client IBAN ko bank document se milana baqi hai. |
