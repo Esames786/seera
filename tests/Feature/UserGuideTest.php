@@ -35,7 +35,8 @@ class UserGuideTest extends TestCase
 
         $this->actingAs($user)->get('/user-guide/build-html.php')->assertNotFound();
         $this->actingAs($user)->get('/user-guide/../production-deployment-guide.md')->assertNotFound();
-        $this->actingAs($user)->get(route('admin.dashboard'))->assertOk()->assertSee(route('user-guide'));
+        $this->actingAs($user)->get(route('admin.dashboard'))->assertOk()->assertSee(route('user-guide'))
+            ->assertSee(route('user-guide.page', 'CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html'));
     }
 
     public function test_visual_training_pages_are_authenticated_and_have_embedded_images(): void
@@ -51,6 +52,32 @@ class UserGuideTest extends TestCase
                 ->assertSee('TRAIN-INV-01')
                 ->assertSee('employee-to-user', false);
             $this->assertStringNotContainsString('src="visual-examples/', $response->getContent());
+        }
+    }
+
+    public function test_client_feedback_guides_are_discoverable_and_require_an_active_login(): void
+    {
+        $pages = ['CLIENT-ENTRY-UPDATES-2026-11-10', 'CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10'];
+        foreach ($pages as $page) {
+            $this->get('/user-guide/'.$page.'.html')->assertRedirect(route('login'));
+        }
+
+        $user = User::where('email', 'zubair@example.com')->firstOrFail();
+        $this->actingAs($user);
+        foreach ($pages as $page) {
+            $this->get('/user-guide/index.html')->assertOk()->assertSee($page.'.html', false);
+            $this->get('/user-guide/'.$page.'.html')->assertOk()
+                ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
+        }
+        $response = $this->get('/user-guide/CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10');
+        $response->assertOk()->assertSee('PARTIAL')->assertSee('PENDING')->assertSee('have not been deployed');
+        for ($number = 1; $number <= 13; $number++) {
+            $response->assertSee(sprintf('R10-%02d', $number));
+        }
+        $this->get('/user-guide/CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.md')->assertNotFound();
+        $user->update(['status' => 'inactive']);
+        foreach ($pages as $page) {
+            $this->get('/user-guide/'.$page.'.html')->assertRedirect(route('login'));
         }
     }
 

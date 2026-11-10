@@ -18,6 +18,8 @@ class UserGuideController extends Controller
         'WORKFLOW-INDEX',
         'VISUAL-EXAMPLES',
         'VISUAL-EXAMPLES-AR',
+        'CLIENT-ENTRY-UPDATES-2026-11-10',
+        'CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10',
     ];
 
     public function show(string $page): Response

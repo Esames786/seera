@@ -2,7 +2,7 @@
 
 // Read-only validation of all generated guide pages, including embedded training images.
 $directory = dirname(__DIR__).'/docs/user-guide/';
-$files = ['index.html', 'SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html', 'SCREEN-INDEX.html', 'WORKFLOW-INDEX.html', 'VISUAL-EXAMPLES.html', 'VISUAL-EXAMPLES-AR.html'];
+$files = ['index.html', 'SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html', 'SCREEN-INDEX.html', 'WORKFLOW-INDEX.html', 'VISUAL-EXAMPLES.html', 'VISUAL-EXAMPLES-AR.html', 'CLIENT-ENTRY-UPDATES-2026-11-10.html', 'CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html'];
 $documents = [];
 foreach ($files as $file) {
     $dom = new DOMDocument;
@@ -75,4 +75,11 @@ foreach (['EXP-SE-001', 'EXP-SE-002', 'EXP-SE-003', 'EXP-SE-004', 'HR-ATT-004', 
         throw new RuntimeException($id.' must appear exactly once as a screen table row.');
     }
 }
-echo "PASS six guide pages; $checked internal links/anchors; 94 valid embedded JPEG images; stable screen/workflow IDs.\n";
+$feedback = $documents['CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html'];
+for ($number = 1; $number <= 13; $number++) {
+    $id = sprintf('R10-%02d', $number);
+    if ($feedback->query('//tr[td[1][normalize-space()="'.$id.'"]]')->length !== 1) {
+        throw new RuntimeException($id.' must appear exactly once as a client issue table row.');
+    }
+}
+echo 'PASS '.count($files)." guide pages; $checked internal links/anchors; 94 valid embedded JPEG images; 13 client issue rows; stable screen/workflow IDs.\n";
