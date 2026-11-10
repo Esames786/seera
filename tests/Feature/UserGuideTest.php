@@ -70,7 +70,7 @@ class UserGuideTest extends TestCase
                 ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
         }
         $response = $this->get('/user-guide/CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10');
-        $response->assertOk()->assertSee('PARTIAL')->assertSee('PENDING')->assertSee('have not been deployed');
+        $response->assertOk()->assertSee('NEEDS CONFIRMATION')->assertSee('PENDING')->assertSee('need to be checked on your portal');
         for ($number = 1; $number <= 13; $number++) {
             $response->assertSee(sprintf('R10-%02d', $number));
         }

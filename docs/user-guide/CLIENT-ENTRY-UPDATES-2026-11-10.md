@@ -1,8 +1,6 @@
 # Employee and master entry — November update
 
-This supplement describes the November feedback candidate. It applies after the owner installs the approved update; it does not mean the live website has already changed.
-
-Installing this documentation-only supplement does not install the described features. Their application deployment and database recovery remain separate.
+Use these instructions for the November entry improvements. Check that the relevant option is available on your portal before following its steps. Pending items are listed in the client feedback table.
 
 For the client review, open [Client feedback: issues, fixes and screens](CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.md). It lists all 13 reported points, their fixes, the exact screen to visit and the remaining work in easy English.
 
@@ -82,4 +80,4 @@ Copy the full IBAN from the bank. Spaces and common Arabic/Persian digit present
 
 ## Starting data cleanup
 
-The owner approved inventory first, then review of demo-account deactivation. No cleanup has occurred as part of this update. Do not run a whole-system reset to tidy a user list after real entry has started. The operator inventory/backup steps are maintained separately in the implementation report.
+Review the old account and master-entry lists with the owner. Confirm what to keep before approving any deactivation or cleanup. Cleanup is still pending; newly entered real records must be preserved.

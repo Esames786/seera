@@ -71,8 +71,9 @@ const { chromium } = require(process.env.SEERA_PLAYWRIGHT || 'D:/laragon2/www/pr
                     const rows = page.locator('main table').first().locator('tbody tr');
                     check(locale + ': all 13 reported points visible', await rows.count() === 13);
                     const statuses = await rows.evaluateAll(items => items.map(row => row.lastElementChild.textContent.trim()));
-                    check(locale + ': 10 implemented, 1 partial, 2 pending', statuses.filter(text => text.startsWith('IMPLEMENTED')).length === 10 && statuses.filter(text => text.startsWith('PARTIAL')).length === 1 && statuses.filter(text => text.startsWith('PENDING')).length === 2);
-                    check(locale + ': live deployment boundary stated', (await page.locator('main').innerText()).includes('have not been deployed'));
+                    check(locale + ': 10 ready for review, 1 needs confirmation, 2 pending', statuses.filter(text => text.startsWith('READY FOR REVIEW')).length === 10 && statuses.filter(text => text.startsWith('NEEDS CONFIRMATION')).length === 1 && statuses.filter(text => text.startsWith('PENDING')).length === 2);
+                    const clientText = await page.locator('main').innerText();
+                    check(locale + ': client review status is clear without deployment notes', clientText.includes('need to be checked on your portal') && !/documentation-only|database migration|feedback branch|development candidate|deploy the approved/i.test(clientText));
                     await page.setViewportSize({ width: 390, height: 1000 });
                     check(locale + ': table scrolls locally on mobile', await page.locator('.table-scroll').first().evaluate(el => el.scrollWidth > el.clientWidth && el.tabIndex === 0));
                     if (locale === 'en') {

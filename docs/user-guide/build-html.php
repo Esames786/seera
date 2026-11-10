@@ -119,11 +119,17 @@ $nav = '<a href="index.html">Home</a><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUID
 $page = function (string $title, string $tocHtml, string $body) use ($css, $nav, $guideVersion): string {
     // Keep wide tables readable and keyboard-scrollable within their own region.
     $body = preg_replace('/<table>(.*?)<\/table>/s', '<div class="table-scroll" role="region" aria-label="Scrollable guide table" tabindex="0"><table>$1</table></div>', $body);
+    $clientPage = in_array($title, ['Client Feedback: Issues, Fixes and Screens', 'November Entry Instructions'], true);
+    $meta = $clientPage ? 'November 2026 · Client guide' : $title.' · Version '.$guideVersion.' · Current implemented system only';
+    $pageNav = $clientPage
+        ? '<a href="index.html">User Guide Home</a><a href="CLIENT-ENTRY-UPDATES-2026-11-10.html">November Instructions</a><a href="CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html">Issues &amp; Fixes</a>'
+        : $nav;
+    $footer = $clientPage ? 'Seera ERP — November 2026 client guide.' : 'Seera ERP — Current System User Guide, version '.$guideVersion.'. Examples use fictional training data.';
 
     return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>'.htmlspecialchars($title).' · Seera ERP</title><style>'.$css.'</style></head><body>'
-        .'<header class="top"><span class="brand">Seera ERP</span><span class="meta">'.htmlspecialchars($title).' · Version '.htmlspecialchars($guideVersion).' · Current implemented system only</span><nav>'.$nav.'</nav></header>'
+        .'<header class="top"><span class="brand">Seera ERP</span><span class="meta">'.htmlspecialchars($meta).'</span><nav>'.$pageNav.'</nav></header>'
         .'<div class="layout"><aside class="toc"><h2>Contents</h2><a href="CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html"><strong>Client Issues &amp; Fixes</strong></a>'.$tocHtml.'</aside><main>'.$body.'</main></div>'
-        .'<footer>Seera ERP — Current System User Guide, version '.htmlspecialchars($guideVersion).'. Examples use fictional training data.</footer></body></html>';
+        .'<footer>'.htmlspecialchars($footer).'</footer></body></html>';
 };
 
 foreach ($sources as $name => $meta) {
@@ -141,10 +147,10 @@ foreach ($sources as $name => $meta) {
 
 $index = <<<'HTML'
 <h1>SEERA ERP</h1><h1>Current System User Guide — HTML edition</h1>
-<blockquote><strong>Documentation-only update.</strong> The November issues and instructions describe a feature candidate for review. Installing these guide pages does not install those features or complete their database migrations.</blockquote>
+<blockquote><strong>November client feedback.</strong> Open Issues &amp; Fixes to review your reported points, prepared improvements, screens and remaining confirmations.</blockquote>
 <p>Current implemented system only. Version metadata is taken from the source user guide. Visual training supplement captured 2 November 2026. All examples use fictional training data.</p>
 <table><thead><tr><th>Document</th><th>What it is for</th></tr></thead><tbody>
-<tr><td><a href="CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html">Client Feedback — Issues, Fixes and Screens</a></td><td>Easy-English table of all 13 November feedback points: reported issue, change, screen, check steps and status. Ten implemented, one partial, two pending. Candidate changes await deployment and client acceptance.</td></tr>
+<tr><td><a href="CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html">Client Feedback — Issues, Fixes and Screens</a></td><td>All 13 November feedback points: issue, prepared improvement, screen, check steps and status. Ten ready for review, one needs bank-detail confirmation and two await cleanup approval.</td></tr>
 <tr><td><a href="CLIENT-ENTRY-UPDATES-2026-11-10.html">November Entry Instructions</a></td><td>Screen-by-screen instructions for photos, documents, codes, annual leave, My Leave, IBAN and individual permissions, with Arabic explanations.</td></tr>
 <tr><td><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a></td><td>23 chapters: sign-in, screen addresses, fields and buttons, Connected Workspace Standard, business workflows, troubleshooting, glossary, limitations, Equipment and Mobile/Offline.</td></tr>
 <tr><td><a href="SCREEN-INDEX.html">Screen Index</a></td><td>Permanent Screen IDs, web addresses, navigation, permissions and status, including My Approvals and the embedded PR approval panel.</td></tr>
