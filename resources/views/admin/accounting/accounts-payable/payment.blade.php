@@ -4,6 +4,7 @@
 @section('breadcrumb', 'Accounting / Accounts Payable / Record Payment')
 
 @section('content')
+    <p>{{ __('supplier_advances.bill_payment_help') }}</p>
     <x-admin.page-header :title="'Record Payment: '.$bill->bill_number" :description="$bill->supplier->name.' · outstanding SAR '.number_format($bill->balance_amount, 2)">
         <a class="btn outline" href="{{ $returnTo }}">{{ str_starts_with($returnTo, route('admin.accounting.accounts-payable.show', $bill, false)) ? 'Back to Bill' : 'Back' }}</a>
     </x-admin.page-header>

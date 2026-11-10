@@ -13,7 +13,8 @@ class JournalEntry extends Model
 {
     public function isApprovalControlledSource(): bool
     {
-        return $this->isSiteExpenseSource() || $this->isPayrollSource() || $this->isEquipmentSource() || ($this->source_module === 'Supplier Bill'
+        return in_array($this->source_module, ['Supplier Advance', 'Supplier Advance Movement'], true)
+            || $this->isSiteExpenseSource() || $this->isPayrollSource() || $this->isEquipmentSource() || ($this->source_module === 'Supplier Bill'
             && SupplierBill::withoutGlobalScopes()->whereKey($this->source_id)->where('approval_mode', 'runtime')->exists());
     }
 
@@ -69,6 +70,7 @@ class JournalEntry extends Model
     public const SOURCE_MODULES = [
         'Manual', 'Payroll', 'Payroll Settlement', 'Site Expense', 'Equipment Fuel', 'Equipment Maintenance', 'Site Expense Reimbursement', 'Inventory',
         'Supplier Bill', 'Supplier Payment', 'Customer Invoice', 'Customer Receipt', 'Customer Credit Note', 'Customer Debit Note', 'Customer Credit Refund',
+        'Supplier Advance', 'Supplier Advance Movement',
     ];
 
     protected $fillable = [

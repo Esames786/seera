@@ -75,6 +75,22 @@ class UserAccessScopeService
 
             return;
         }
+        if ($table === 'supplier_advance_movements') {
+            $query->whereHas('advance');
+
+            return;
+        }
+        if ($table === 'supplier_advances') {
+            if ($scope === 'project') {
+                $query->whereIn('project_id', $this->projectIdsFor($user) ?: [0]);
+            } elseif ($scope === 'site') {
+                $query->where('site_id', $user->site_id ?: 0)->whereIn('project_id', $this->projectIdsFor($user) ?: [0]);
+            } else {
+                $query->whereRaw('1 = 0');
+            }
+
+            return;
+        }
         if ($table === 'customer_receipts') {
             $query->whereHas('invoice');
 

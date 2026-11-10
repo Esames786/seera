@@ -2,6 +2,7 @@
 
 namespace App\Services\Accounting;
 
+use App\Contracts\ZatcaDocument;
 use App\Models\AutomaticPostingRule;
 use App\Models\ChartOfAccount;
 use App\Models\CustomerAdjustmentNote;
@@ -19,14 +20,16 @@ use App\Models\SiteExpense;
 use App\Models\StockAdjustment;
 use App\Models\StockIssue;
 use App\Models\Supplier;
+use App\Models\SupplierAdvance;
+use App\Models\SupplierAdvanceMovement;
 use App\Models\SupplierBill;
 use App\Models\SupplierPayment;
 use App\Models\VatPeriod;
 use App\Models\VatTransaction;
 use App\Models\ZatcaInvoiceRecord;
+use App\Services\Zatca\ZatcaSubmissionService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -41,6 +44,24 @@ use Illuminate\Validation\ValidationException;
  */
 class PostingService
 {
+    /** Supplier recoverable cash out / explicit clearing / cash return. Never creates VAT rows. */
+    public function postSupplierRecoverable(SupplierAdvance $advance, ?SupplierAdvanceMovement $movement, int $debitId, int $creditId, int $actorId): JournalEntry
+    {
+        $amount = (float) ($movement?->amount ?? $advance->amount);
+        $dimensions = ['project_id' => $advance->project_id, 'site_id' => $advance->site_id];
+
+        return $this->createEntry([
+            'journal_date' => $movement?->movement_date ?? $advance->payment_date,
+            'reference_number' => $movement?->reference ?? $advance->reference,
+            'source_module' => $movement ? 'Supplier Advance Movement' : 'Supplier Advance',
+            'source_id' => $movement?->id ?? $advance->id,
+            'description' => 'Supplier recoverable #'.$advance->id.($movement ? ' / '.$movement->kind : ' / '.$advance->purpose),
+        ], [
+            ['chart_of_account_id' => $debitId, 'debit' => $amount, 'credit' => 0] + $dimensions,
+            ['chart_of_account_id' => $creditId, 'debit' => 0, 'credit' => $amount] + $dimensions,
+        ], 'Supplier Advance', 'Payment Recorded', $actorId, true);
+    }
+
     public function settleSiteExpense(SiteExpense $expense, ChartOfAccount $payment, int $actorId): JournalEntry
     {
         $payableLine = $expense->journalEntry->lines()->where('credit', '>', 0)->firstOrFail();
@@ -779,11 +800,13 @@ class PostingService
             ]);
         });
     }
+
     /** Compliance record (UUID, not generated) for an approved invoice; the Phase 2 service owns the lifecycle. */
-    public function createZatcaRecord(\App\Contracts\ZatcaDocument $invoice): ZatcaInvoiceRecord
+    public function createZatcaRecord(ZatcaDocument $invoice): ZatcaInvoiceRecord
     {
-        return app(\App\Services\Zatca\ZatcaSubmissionService::class)->ensureRecord($invoice);
+        return app(ZatcaSubmissionService::class)->ensureRecord($invoice);
     }
+
     public function recordVat(
         string $type,
         float|string $vatAmount,

@@ -35,7 +35,8 @@ class UserGuideTest extends TestCase
 
         $this->actingAs($user)->get('/user-guide/build-html.php')->assertNotFound();
         $this->actingAs($user)->get('/user-guide/../production-deployment-guide.md')->assertNotFound();
-        $this->actingAs($user)->get(route('admin.dashboard'))->assertOk()->assertSee(route('user-guide'));
+        $this->actingAs($user)->get(route('admin.dashboard'))->assertOk()->assertSee(route('user-guide'))
+            ->assertSee(route('user-guide.page', 'CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html'));
     }
 
     public function test_visual_training_pages_are_authenticated_and_have_embedded_images(): void
@@ -69,7 +70,7 @@ class UserGuideTest extends TestCase
                 ->assertHeader('Content-Type', 'text/html; charset=UTF-8');
         }
         $response = $this->get('/user-guide/CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10');
-        $response->assertOk()->assertSee('PARTIAL')->assertSee('PENDING')->assertSee('have not been deployed');
+        $response->assertOk()->assertSee('NEEDS CONFIRMATION')->assertSee('PENDING')->assertSee('need to be checked on your portal');
         for ($number = 1; $number <= 13; $number++) {
             $response->assertSee(sprintf('R10-%02d', $number));
         }

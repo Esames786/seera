@@ -1,0 +1,46 @@
+{
+  "review_date": "2026-11-11",
+  "owner_reported_live_commit": "9cc5ea0179c6e104750fcb1249ec3f684194ad38",
+  "compared_feature_commit": "eb4d2b7eca4876a674d5b388f06bdb3d437b65ec",
+  "requirement_ids": 86,
+  "round_counts": {
+    "5 and 8 September": 18,
+    "14 September": 34,
+    "21 September": 7,
+    "22 September": 7,
+    "24 September": 7,
+    "10 November": 13
+  },
+  "scope": "Stored source reviews, supplied screenshots, Git and targeted source inspection; no replay/retranscription of all original media or fresh authenticated production UAT.",
+  "new_november_application_commit_in_live": false,
+  "raw_media_published": false,
+  "production_actions": "NONE",
+  "recorded_media_rounds": 7,
+  "recorded_audio_file_entries": 99,
+  "recorded_image_file_entries": 105,
+  "new_chat_screenshots": "Visually reviewed; repeated Employee Create image counted once as a topic, not a new requirement.",
+  "git_ancestry_checks": {
+    "november_application": {
+      "commit": "2da7886",
+      "ancestor_of_reported_live": false
+    },
+    "purchase_vat": {
+      "commit": "dc048ff",
+      "ancestor_of_reported_live": true
+    },
+    "sales_vat": {
+      "commit": "1c446a6",
+      "ancestor_of_reported_live": true
+    },
+    "notifications": {
+      "commit": "35c79e2",
+      "ancestor_of_reported_live": true
+    }
+  },
+  "validation": {
+    "all_86_existing_ids_present_once": true,
+    "november_client_table_rows": 13,
+    "client_document_companion_links_exist": true,
+    "application_code_changes": 0
+  }
+}

@@ -7,7 +7,7 @@ const ROOT = process.env.SEERA_GUIDE_ROOT;
 if (!ROOT || !/^seera-guide-[a-f0-9]{32}$/.test(path.basename(ROOT))) throw new Error('Synthetic fixture required');
 const fixture = JSON.parse(fs.readFileSync(path.join(ROOT, 'fixture.private.json')));
 if (!fixture.synthetic) throw new Error('Synthetic fixture marker missing');
-const OUT = path.resolve(__dirname, '../../docs/release-readiness/evidence/client-feedback-2026-11-10');
+const OUT = process.env.SEERA_GUIDE_QA_OUT ? path.resolve(process.env.SEERA_GUIDE_QA_OUT) : path.resolve(__dirname, '../../docs/release-readiness/evidence/client-feedback-2026-11-10');
 const results = [], errors = [];
 const check = (name, ok, detail) => { results.push({ name, ok: !!ok, ...(detail ? { detail } : {}) }); console.log(`${ok ? 'PASS' : 'FAIL'} ${name}`); };
 (async () => {

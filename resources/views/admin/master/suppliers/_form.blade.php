@@ -107,7 +107,7 @@
         <x-admin.form-section title="Projects this Supplier Works For">
             <input type="hidden" name="project_ids_submitted" value="1"/>
             @if ($projects->isEmpty())
-                <div class="small">{{ __('No projects yet. Suppliers can be linked once projects exist.') }}</div>
+                <div class="small">{{ __('ui.no_available_projects') }}</div>
             @else
                 <div class="form-grid three">
                     @foreach ($projects as $project)

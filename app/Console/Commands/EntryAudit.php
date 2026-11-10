@@ -28,9 +28,11 @@ class EntryAudit extends Command
                 $counts[$table] = DB::table($table)->count();
             }
         }
-        $users = DB::table('users')->orderBy('id')->limit($limit)->get(['id', 'name', 'email', 'username', 'status', 'created_at'])->map(function ($user) {
+        $users = DB::table('users')->orderBy('id')->limit($limit)->get(['id', 'name', 'email', 'username', 'employee_id', 'status', 'created_at'])->map(function ($user) {
             $user->roles = DB::table('user_roles')->join('roles', 'roles.id', '=', 'user_roles.role_id')->where('user_roles.user_id', $user->id)->pluck('roles.code')->all();
             $user->linked_employee_ids = DB::table('employees')->where('user_id', $user->id)->pluck('id')->all();
+            $user->linked_employee_codes = DB::table('employees')->where('user_id', $user->id)->pluck('employee_code')->all();
+            $user->link_review_required = count($user->linked_employee_ids) > 1 || (count($user->linked_employee_codes) === 1 && $user->employee_id !== $user->linked_employee_codes[0]);
             $user->decision = 'OWNER REVIEW REQUIRED — do not infer demo status from a name or creation date';
 
             return $user;
@@ -44,9 +46,14 @@ class EntryAudit extends Command
         foreach (['project' => 'projects', 'site' => 'sites', 'warehouse' => 'warehouses', 'branch' => 'branches', 'department' => 'departments'] as $type => $table) {
             $danglingCenters = array_merge($danglingCenters, DB::table('cost_centers')->where('type', $type)->whereNotNull('linked_id')->whereNotIn('linked_id', DB::table($table)->select('id'))->get(['id', 'code', 'type', 'linked_id'])->all());
         }
+        $duplicateCodes = DB::table('users')->whereNotNull('employee_id')->where('employee_id', '!=', '')->select('employee_id')->groupBy('employee_id')->havingRaw('COUNT(*) > 1')->pluck('employee_id');
+        $duplicates = $duplicateCodes->map(fn ($code) => ['displayed_employee_code' => $code,
+            'user_ids' => DB::table('users')->where('employee_id', $code)->orderBy('id')->pluck('id')->all(),
+            'action' => 'Review actual employee.user_id links; never automatically relink or delete'])->all();
         $report = ['read_only' => true, 'database' => DB::connection()->getDatabaseName(), 'row_limit' => $limit,
             'warning' => 'Private inventory, not an approved delete list. Protect exact owner/admin IDs and take a verified backup before any separate cleanup operation.',
-            'counts' => $counts, 'users' => $users->all(), 'masters' => $records, 'cost_centers_with_missing_linked_record' => $danglingCenters];
+            'counts' => $counts, 'users' => $users->all(), 'duplicate_displayed_employee_codes' => $duplicates,
+            'masters' => $records, 'cost_centers_with_missing_linked_record' => $danglingCenters];
         $this->line(json_encode($report, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR));
 
         return self::SUCCESS;

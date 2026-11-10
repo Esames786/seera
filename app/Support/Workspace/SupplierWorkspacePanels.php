@@ -3,14 +3,19 @@
 namespace App\Support\Workspace;
 
 use App\Models\ActivityLog;
+use App\Models\ChartOfAccount;
 use App\Models\GoodsReceipt;
 use App\Models\JournalEntry;
 use App\Models\Project;
 use App\Models\PurchaseOrder;
+use App\Models\Site;
 use App\Models\Supplier;
+use App\Models\SupplierAdvance;
+use App\Models\SupplierAdvanceMovement;
 use App\Models\SupplierBill;
 use App\Models\SupplierPayment;
 use App\Models\User;
+use App\Services\Accounting\PostingService;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -37,6 +42,7 @@ class SupplierWorkspacePanels implements WorkspacePanels
             'goods-receipts' => new PanelDefinition('goods-receipts', 'Goods Receipts', 'Goods Receipts'),
             'bills' => new PanelDefinition('bills', 'Supplier Bills', 'Accounts Payable'),
             'payments' => new PanelDefinition('payments', 'Payments & Balance', 'Accounts Payable'),
+            'advances' => new PanelDefinition('advances', 'Supplier advances', 'Accounts Payable'),
             'accounting' => new PanelDefinition('accounting', 'Accounting', 'Journal Entries'),
             'activity' => new PanelDefinition('activity', 'Activity', 'Activity Logs'),
         ];
@@ -55,12 +61,15 @@ class SupplierWorkspacePanels implements WorkspacePanels
                 ->with(['project', 'site', 'journalEntry'])->withCount('grnMatches')->latest('bill_date')->latest('id'),
             'payments' => SupplierPayment::query()->where('supplier_id', $supplier->id)
                 ->with(['bill', 'paymentAccount', 'journalEntry'])->latest('payment_date')->latest('id'),
+            'advances' => SupplierAdvance::query()->where('supplier_id', $supplier->id)->with(['movements.bill', 'journalEntry'])->latest('payment_date')->latest('id'),
             'accounting' => JournalEntry::query()
                 ->where(fn ($q) => $q
                     ->where(fn ($bills) => $bills->where('source_module', 'Supplier Bill')
                         ->whereIn('source_id', SupplierBill::query()->where('supplier_id', $supplier->id)->select('id')))
                     ->orWhere(fn ($payments) => $payments->where('source_module', 'Supplier Payment')
-                        ->whereIn('source_id', SupplierPayment::query()->where('supplier_id', $supplier->id)->select('id'))))
+                        ->whereIn('source_id', SupplierPayment::query()->where('supplier_id', $supplier->id)->select('id')))
+                    ->orWhere(fn ($advances) => $advances->where('source_module', 'Supplier Advance')->whereIn('source_id', SupplierAdvance::where('supplier_id', $supplier->id)->select('id')))
+                    ->orWhere(fn ($movements) => $movements->where('source_module', 'Supplier Advance Movement')->whereIn('source_id', SupplierAdvanceMovement::whereHas('advance', fn ($q) => $q->where('supplier_id', $supplier->id))->select('id'))))
                 ->latest('journal_date')->latest('id'),
             'activity' => self::activityQuery($supplier, $user),
         };
@@ -124,6 +133,13 @@ class SupplierWorkspacePanels implements WorkspacePanels
                 'canPay' => $user->hasPermission('Accounts Payable', 'process'),
             ],
             'payments' => ['summary' => self::summary($supplier, $user)],
+            'advances' => [
+                'canPostAdvance' => ! $readonly && $user->hasPermission('Accounts Payable', 'approve') && $user->hasPermission('Accounts Payable', 'process'),
+                'advanceProjects' => Project::orderBy('name')->get(['id', 'name']),
+                'advanceSites' => Site::orderBy('name')->get(['id', 'name', 'project_id']),
+                'advanceBills' => SupplierBill::where('supplier_id', $supplier->id)->whereIn('status', ['unpaid', 'partially_paid'])->whereHas('journalEntry', fn ($q) => $q->where('status', 'posted'))->get(),
+                'advanceAccounts' => ChartOfAccount::whereIn('account_code', [PostingService::BANK, PostingService::CASH])->where('status', 'active')->get(),
+            ],
             'accounting' => ['linkedAccount' => $supplier->linkedAccount],
             default => [],
         };

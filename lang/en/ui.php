@@ -1,11 +1,13 @@
 <?php
 
 return [
+    'deactivate' => 'Deactivate',
     'previous_section' => 'Back / previous section',
     'primary_parent' => 'Primary reporting parent',
     'additional_parents' => 'Additional reporting parents',
     'reporting_help' => 'Choose any additional parents below. The primary parent keeps the existing access hierarchy. Additional parents do not grant permissions, expand visibility, or activate approvals.',
-    'reporting_pending' => 'All-required-parent approval processing is not active yet; reporting links alone do not enforce it.',
+    'reporting_pending' => 'Configure required approval steps in Approval Workflows for Purchase Requests, Site Expenses and Supplier Bills. Reporting parents alone do not activate approvals for other modules.',
+    'no_available_projects' => 'No projects are available for this account. Ask an authorized project administrator to check project setup and your assigned scope.',
     'reporting_duplicate' => 'The primary parent cannot also be an additional parent.',
     'reporting_cycle' => 'Reporting parents cannot include this role or create a reporting cycle.',
     'reporting_parents' => 'Reporting parents',

@@ -55,6 +55,7 @@ class GoLiveReset extends Command
 
     /** Business documents and postings: always removed, children before parents. */
     public const TRANSACTIONS = [
+        'supplier_advance_movements', 'supplier_advances',
         'notifications', 'activity_logs', 'approval_instance_steps', 'approval_instances', 'offline_sync_receipts',
         'payroll_settlements', 'payroll_bank_exports', 'payroll_run_items', 'payroll_runs',
         'end_of_service_records', 'overtime_records', 'leave_requests', 'attendance_records',

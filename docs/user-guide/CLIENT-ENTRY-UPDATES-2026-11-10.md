@@ -1,6 +1,6 @@
 # Employee and master entry — November update
 
-This supplement describes the November feedback candidate. It applies after the owner installs the approved update; it does not mean the live website has already changed.
+Use these instructions for the November entry improvements. Check that the relevant option is available on your portal before following its steps. Pending items are listed in the client feedback table.
 
 For the client review, open [Client feedback: issues, fixes and screens](CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.md). It lists all 13 reported points, their fixes, the exact screen to visit and the remaining work in easy English.
 
@@ -80,4 +80,23 @@ Copy the full IBAN from the bank. Spaces and common Arabic/Persian digit present
 
 ## Starting data cleanup
 
-The owner approved inventory first, then review of demo-account deactivation. No cleanup has occurred as part of this update. Do not run a whole-system reset to tidy a user list after real entry has started. The operator inventory/backup steps are maintained separately in the implementation report.
+Review the old account and master-entry lists with the owner. Confirm what to keep before approving any deactivation or cleanup. Cleanup is still pending; newly entered real records must be preserved.
+
+## Customer overdue reminders / تذكيرات تأخر العملاء
+
+After the owner activates the daily schedule, an authorized Finance or Super Admin user receives one in-app reminder per overdue invoice each day. Reminders begin one day after its due date. Open **Notifications → Open invoice** to review it. Settled invoices and records outside your permissions/project scope are excluded. This does not send email or SMS.
+
+**العربية:** بعد تفعيل الجدول اليومي، تصل إلى مستخدم المالية أو المدير الأعلى المخوّل رسالة داخل النظام مرة واحدة يومياً لكل فاتورة متأخرة، ابتداءً من اليوم التالي للاستحقاق. افتح الإشعارات ثم الفاتورة. تُستبعد الفواتير المسددة والسجلات خارج نطاق صلاحياتك. لا يُرسل بريد إلكتروني أو رسائل نصية.
+
+## Supplier advances / الدفعات المقدمة للمورد
+
+Open **Suppliers → Edit / Manage → Supplier advances**. Finance must first map its dedicated advance asset account. Posting requires both Accounts Payable approval and payment permissions.
+
+1. Choose **Record a recoverable payment**. Select Advance, Salary paid on behalf, or Repair paid on behalf. Enter date, amount, cash/bank account, project/site, supporting reference and reason. Confirm the agreed right to recover the money. **Post recoverable payment** records the cash outflow and an advance balance; it does not pay an unrelated bill or create VAT.
+2. Choose **Apply to bill** only when explicitly clearing an eligible posted bill for the same supplier/project/site. The bill balance reduces, but no additional cash leaves the bank.
+3. Choose **Record supplier refund** when the supplier actually returns money. Select the receiving cash/bank account and amount.
+4. For a correction, enter a reason and **Reverse** the affected application/refund. Reverse the original payment only after its active applications/refunds have been reversed. History stays visible.
+
+Example: pay 1,000 in advance, apply 400 to a bill and receive 100 back. The remaining recoverable is 500. Old cash payments remain separate. A new taxable back-charge needs its proper tax-document treatment; do not use a recoverable payment to bypass VAT.
+
+**العربية:** افتح الموردين ← تعديل / إدارة ← الدفعات المقدمة للمورد. بعد ربط حساب الأصل المستقل بواسطة المالية، سجّل الدفعة ومرجع الاتفاق وسبب الاسترداد. يمكن تطبيقها صراحةً على فاتورة مرحّلة للمورد والمشروع والموقع أنفسهم، أو تسجيل أموال أعادها المورد. مثال: دفعة ١٠٠٠، وتطبيق ٤٠٠، واسترداد ١٠٠؛ الرصيد المتاح ٥٠٠. لا تُنشأ ضريبة تلقائياً ولا تتغير المدفوعات السابقة. يتطلب العكس سبباً وتبقى السجلات محفوظة.

@@ -130,92 +130,36 @@ The corrective patch was tested on SQLite and a dedicated disposable MySQL 8 ins
 
 No production engine conversion, migration rerun, rollback, deployment, data deletion or ZATCA activation has been performed by this development run. Production recovery and earlier performance diagnosis remain pending operator evidence.
 
-## Path C (recommended): rebuild the database as InnoDB, then install the release
+## Path C: prepare a complete InnoDB copy without resetting the source
 
-The owner's engine inventory of 10 November shows the **entire** live database on MyISAM (every table except `customer_documents` and `notifications`). That means no foreign key from any earlier migration was ever created on live and no accounting write ever ran inside a real transaction. `ALTER TABLE … ENGINE=InnoDB` would fix the engine but leave all those historical foreign keys missing. Because the live database holds only setup data after the go-live reset (14 accounts, roles, permissions, chart of accounts, masters: about 1,900 rows), the clean fix is to rebuild the schema from the migrations and reload exactly those rows.
+**The previous setup-only rebuild recipe is withdrawn. Do not run `migrate:fresh` on the live database.** The owner has since shown newly entered accounts and may have real business records. A historic setup-only snapshot is not permission to discard other rows.
 
-Procedure, rehearsed on 10 November on a disposable local MySQL 8 database built from the pre-November migrations plus `ProductionBootstrapSeeder` (1,904 setup rows): data-only dump of the 26 setup tables → `migrate:fresh` on the corrective candidate → truncate the setup tables (several migrations pre-seed permissions, accounts, lookup values and payment terms, so a plain reload hits duplicate keys) → reload with foreign-key checks off → identical row counts, 105 InnoDB tables, 292 foreign keys, zero dangling references, Super Admin logs in with their permissions.
+The current storage inventory also includes financial/stock/approval tables using MyISAM. This prevents dependable transaction rollback and row locks. Missing historical constraints must be reconstructed and checked, not merely assumed to appear when an engine changes.
 
-Preconditions: server HEAD `0aed8c7` on `feature/seera-go-live-reset-2026-11-04` (the Path A state), `mysql` and `mysqldump` clients available, the `techbrit_seera` database password at hand, no real business records entered since the reset (if any were, stop and list them first: this path keeps only the setup tables). The script keeps a full dump and a `storage/app` archive in a private folder before touching anything; if a verification step fails it stops **before** `artisan up`, and the operator restores `full-before-rebuild.sql` with `mysql --defaults-extra-file=<cnf> techbrit_seera < full-before-rebuild.sql` and returns to the previous code as in Path A.
+The corrective branch adds `seera:prepare-storage-copy`. It prepares a DIFFERENT, existing empty database on the same MySQL/MariaDB server. It never changes the live database engine, drops its tables, rewrites its rows or edits `.env`.
 
-```bash
-(
-set -euo pipefail
-cd ~/seera
-umask 077
-PHP=/opt/cpanel/ea-php83/root/usr/bin/php
-BRANCH=feature/seera-client-feedback-fixes-2026-11-10
-CODE_SHA=0a1a01a
-PREVIOUS_SHA=0aed8c791e4cd214d23a916026860585983d1cca
-BUILD_SHA=F6451E04AA14549EA7EC629F27DE9BECB5E2FCF37D063DE9E63710A84B132BF7
-DBNAME=techbrit_seera
-DBUSER=techbrit_seera
-SETUP="users user_roles roles permissions role_permissions role_reporting_parents branches departments designations company_profiles chart_of_accounts cost_centers automatic_posting_rules vat_periods zatca_egs_units lookup_values payment_terms units item_categories expense_categories leave_types shifts approval_workflows approval_workflow_steps project_classifications document_sequences"
+### Preparation and read-only inspection
 
-test -x "$PHP"; command -v mysql >/dev/null; command -v mysqldump >/dev/null
-test "$(git rev-parse HEAD)" = "$PREVIOUS_SHA"
-test -z "$(git diff --cached --name-only)"
-CHANGES="$(mktemp "$HOME/seera-changes.XXXXXX")"
-git diff --name-only > "$CHANGES"
-while IFS= read -r p; do case "$p" in public/.htaccess|public/build.zip|'') ;; *) echo "STOP: review local change: $p"; exit 1 ;; esac; done < "$CHANGES"
-git fetch origin "refs/heads/$BRANCH:refs/remotes/origin/$BRANCH"
-RELEASE="$(git rev-parse "origin/$BRANCH")"
-git merge-base --is-ancestor "$CODE_SHA" "$RELEASE"
-git merge-base --is-ancestor HEAD "$RELEASE"
-git diff --quiet "$PREVIOUS_SHA" "$RELEASE" -- composer.json composer.lock
+1. Arrange a full consistent backup with all writers stopped and verify restoration separately. A single-transaction dump alone is not a consistency guarantee for MyISAM.
+2. Have the hosting operator create a separately named EMPTY database and grant the application's DB user access to it. Do not reuse another application's database or the live database.
+3. Install the reviewed corrective code in the controlled environment. The full November feature branch still requires its new schema; do not serve it prematurely against the old live DB.
+4. Run `php artisan seera:prepare-storage-copy --target=YOUR_EMPTY_DATABASE` for a read-only report. The command refuses the live database as a destination, populated destinations, table prefixes and split read/write connections.
 
-CNF="$(mktemp "$HOME/seera-my.XXXXXX")"
-read -r -s -p "MySQL password for $DBUSER: " DBPW; echo
-printf '[client]\nhost=127.0.0.1\nport=3306\nuser=%s\npassword=%s\n' "$DBUSER" "$DBPW" > "$CNF"; unset DBPW
-mysql --defaults-extra-file="$CNF" -N -e "select count(*) from information_schema.tables where table_schema='$DBNAME'" | sed 's/^/tables now: /'
+### Approved preparation (not automatic live activation)
 
-$PHP artisan down
-BACKUP_DIR="$(mktemp -d "$HOME/seera-rebuild-$(date +%Y%m%d-%H%M).XXXXXX")"
-printf 'Private backup folder: %s\n' "$BACKUP_DIR"
-git rev-parse HEAD > "$BACKUP_DIR/previous-head.txt"
-cp -p .env "$BACKUP_DIR/env.private"
-cp -p public/.htaccess "$BACKUP_DIR/public.htaccess"
-cp -p public/build.zip "$BACKUP_DIR/previous-build.zip"
-mysqldump --defaults-extra-file="$CNF" --quick --no-tablespaces --skip-lock-tables "$DBNAME" > "$BACKUP_DIR/full-before-rebuild.sql"
-test -s "$BACKUP_DIR/full-before-rebuild.sql"
-grep -c '^CREATE TABLE' "$BACKUP_DIR/full-before-rebuild.sql" | sed 's/^/tables in full backup: /'
-tar -czf "$BACKUP_DIR/storage-app.tgz" storage/app
-tar -tzf "$BACKUP_DIR/storage-app.tgz" >/dev/null
-# shellcheck disable=SC2086
-mysqldump --defaults-extra-file="$CNF" --no-create-info --skip-triggers --complete-insert --quick --no-tablespaces --skip-lock-tables "$DBNAME" $SETUP > "$BACKUP_DIR/setup-data.sql"
-test -s "$BACKUP_DIR/setup-data.sql"
-for t in $SETUP; do printf '%s %s\n' "$t" "$(mysql --defaults-extra-file="$CNF" -N -e "select count(*) from $DBNAME.$t")"; done > "$BACKUP_DIR/setup-counts-before.txt"
-cat "$BACKUP_DIR/setup-counts-before.txt"
+Execution requires `--execute`, a private full backup file and matching `--backup-sha256`, the operator's `--restore-verified` and `--writers-stopped` attestations, and typing the exact destination name. Production additionally requires maintenance mode and `--force`.
 
-git restore --source=HEAD -- public/build.zip
-if git show-ref --verify --quiet "refs/heads/$BRANCH"; then git switch "$BRANCH"; git merge --ff-only "$RELEASE"; else git switch --create "$BRANCH" --track "origin/$BRANCH"; fi
-test "$(git rev-parse HEAD)" = "$RELEASE"
-cmp -s .env "$BACKUP_DIR/env.private"
-cmp -s public/.htaccess "$BACKUP_DIR/public.htaccess"
-$PHP artisan optimize:clear
-if [ -f composer.phar ]; then $PHP composer.phar dump-autoload --optimize --no-interaction; else PATH="$(dirname "$PHP"):$PATH" composer dump-autoload --optimize --no-interaction; fi
-echo "$BUILD_SHA  public/build.zip" | sha256sum -c -
-unzip -t public/build.zip >/dev/null
-unzip -oq public/build.zip -d public/build
-test -f public/build/manifest.json
-$PHP -r 'require "vendor/autoload.php"; $a=require "bootstrap/app.php"; $a->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap(); if (config("database.connections.mysql.database") !== "techbrit_seera" || config("zatca.production_enabled")) { fwrite(STDERR, "STOP: database target or ZATCA configuration\n"); exit(1); } echo "Database target and ZATCA guard: OK\n";'
+The command migrates the empty destination with an explicit InnoDB connection, then copies **every source table and every source column**, including business transactions, user passwords, permissions, new real accounts, financial rows and document paths. It retains the destination's fresh migration ledger; the source ledger is unchanged. Migration-created seed rows are replaced only inside this new destination for tables being copied, so existing source settings/IDs remain authoritative. It does not guess new permissions or run a bootstrap/demo seeder.
 
-$PHP artisan migrate:fresh --force
-{ echo "SET FOREIGN_KEY_CHECKS=0; SET UNIQUE_CHECKS=0;"; for t in $SETUP; do echo "TRUNCATE TABLE \`$t\`;"; done; cat "$BACKUP_DIR/setup-data.sql"; echo "SET FOREIGN_KEY_CHECKS=1; SET UNIQUE_CHECKS=1;"; } | mysql --defaults-extra-file="$CNF" "$DBNAME"
-for t in $SETUP; do printf '%s %s\n' "$t" "$(mysql --defaults-extra-file="$CNF" -N -e "select count(*) from $DBNAME.$t")"; done > "$BACKUP_DIR/setup-counts-after.txt"
-diff "$BACKUP_DIR/setup-counts-before.txt" "$BACKUP_DIR/setup-counts-after.txt" && echo "setup row counts identical"
-mysql --defaults-extra-file="$CNF" -N -e "select engine, count(*) from information_schema.tables where table_schema='$DBNAME' group by engine"
-mysql --defaults-extra-file="$CNF" -N -e "select count(*) from information_schema.referential_constraints where constraint_schema='$DBNAME'" | sed 's/^/foreign keys: /'
-$PHP -r 'require "vendor/autoload.php"; $a=require "bootstrap/app.php"; $a->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap(); $p=0; foreach (DB::select("select TABLE_NAME c, COLUMN_NAME k, REFERENCED_TABLE_NAME p, REFERENCED_COLUMN_NAME pk from information_schema.KEY_COLUMN_USAGE where TABLE_SCHEMA=database() and REFERENCED_TABLE_NAME is not null") as $f) { $n = DB::table($f->c." as c")->leftJoin($f->p." as p", "c.".$f->k, "=", "p.".$f->pk)->whereNotNull("c.".$f->k)->whereNull("p.".$f->pk)->count(); if ($n) { $p++; echo "ORPHANS ", $f->c, ".", $f->k, " -> ", $f->p, ": ", $n, PHP_EOL; } } echo "dangling references: ", $p, PHP_EOL; exit($p ? 1 : 0);'
-$PHP -r 'require "vendor/autoload.php"; $a=require "bootstrap/app.php"; $a->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap(); $u=App\Models\User::whereHas("roles", fn($q)=>$q->where("code","SUPER_ADMIN"))->first(); if (!$u || !$u->hasPermission("Users","view")) { fwrite(STDERR, "STOP: Super Admin account or permissions missing\n"); exit(1); } echo "Super Admin: ", $u->email, " with Users view\n";'
-$PHP artisan migrate:status | grep -c Pending | grep -qx 0
-$PHP scripts/diagnose-feedback-storage.php > "$BACKUP_DIR/diagnose-after.json"
-$PHP artisan view:cache
-rm -f "$CNF" "$CHANGES"
-git log -1 --oneline
-$PHP artisan up
-printf 'Rebuild complete. Keep the private folder: %s\n' "$BACKUP_DIR"
-)
-```
+Target foreign-key checks are temporarily suspended only on the target connection to load self/cross references. Unique checks remain enabled. The command then verifies every generated foreign key, every copied table's row count/content hash, source unchanged before/after, restored auto-increment counters and InnoDB engines. Unknown source fields, duplicate target keys, orphan references or concurrent source changes cause refusal. A failed target is not reused or promoted automatically; the source stays available for recovery.
 
-After it prints `Rebuild complete`: log in as the Super Admin and one ordinary user (sessions were cleared), check Dashboard, Users → Edit / Manage → Individual permissions, Employees → photo upload, Customers / Suppliers → automatic code and Documents, Equipment → save with a blank meter, My Leave, and the User Guide links including `/user-guide/CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html`. Rerun the read-only smoke script only after its expected SHA is updated to the installed release. ZATCA production stays disabled.
+A private verification report records counts/hashes and the operator's backup attestations. These attestations are not claimed as an automated backup-restore test.
+
+### Before owner-approved activation
+
+- Review the report and target schema/permissions, and independently reconcile GL/AP/AR/VAT/stock/payroll.
+- Check new schema/setup needs, configured posting accounts and user/project scope; the source's existing configuration is preserved, not replaced with demo data.
+- Test the exact new release against this database in a controlled environment, including login, photos/documents, My Leave, permissions and the customer/supplier flows.
+- Obtain owner approval for the destination database, release and maintenance window. Recheck stopped writers and the source snapshot before changing the application's database configuration.
+- Preserve the source database, previous configuration/assets and private uploaded files. The command does not promote the target or delete the source.
+- Keep production ZATCA disabled. No data cleanup, account deactivation, full reset or unreviewed engine conversion is part of this storage preparation.

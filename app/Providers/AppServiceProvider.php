@@ -9,13 +9,13 @@ use App\Models\CustomerCreditRefund;
 use App\Models\CustomerInvoice;
 use App\Models\CustomerReceipt;
 use App\Models\Employee;
+use App\Models\EmployeeDocument;
+use App\Models\EndOfServiceRecord;
 use App\Models\EquipmentAsset;
 use App\Models\EquipmentAssignment;
 use App\Models\EquipmentDocument;
 use App\Models\EquipmentFuelLog;
 use App\Models\EquipmentMaintenanceRecord;
-use App\Models\EmployeeDocument;
-use App\Models\EndOfServiceRecord;
 use App\Models\GoodsReceipt;
 use App\Models\GoodsReceiptLine;
 use App\Models\JournalEntry;
@@ -37,6 +37,8 @@ use App\Models\StockIssueLine;
 use App\Models\StockLedgerEntry;
 use App\Models\StockTransfer;
 use App\Models\StockTransferLine;
+use App\Models\SupplierAdvance;
+use App\Models\SupplierAdvanceMovement;
 use App\Models\SupplierBill;
 use App\Models\SupplierPayment;
 use App\Models\Warehouse;
@@ -77,7 +79,8 @@ class AppServiceProvider extends ServiceProvider
             OvertimeRecord::class, SalaryStructure::class,
             EndOfServiceRecord::class, PayrollRunItem::class,
             JournalEntry::class, JournalEntryLine::class, SupplierBill::class,
-            SupplierPayment::class, CustomerInvoice::class, CustomerAdjustmentNote::class, CustomerCreditAllocation::class, CustomerCreditRefund::class,
+            SupplierPayment::class, SupplierAdvance::class, SupplierAdvanceMovement::class,
+            CustomerInvoice::class, CustomerAdjustmentNote::class, CustomerCreditAllocation::class, CustomerCreditRefund::class,
             CustomerReceipt::class, ZatcaInvoiceRecord::class,
             PurchaseRequest::class, PurchaseRequestLine::class,
             PurchaseOrder::class, PurchaseOrderLine::class,

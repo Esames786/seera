@@ -228,7 +228,7 @@ class AccountsPayableController extends Controller
         $reversal = DB::transaction(function () use ($accounts_payable, $data, $request) {
             $bill = SupplierBill::whereKey($accounts_payable->id)->lockForUpdate()->firstOrFail();
 
-            if ($bill->status !== 'unpaid' || $bill->payments()->exists() || $bill->journalEntry?->status !== 'posted') {
+            if ($bill->status !== 'unpaid' || $bill->payments()->exists() || $bill->advanceApplications()->whereNull('reversed_at')->exists() || $bill->journalEntry?->status !== 'posted') {
                 throw ValidationException::withMessages(['bill' => 'Only an approved bill with no payments can be reopened. Reverse the payments first.']);
             }
 
@@ -275,7 +275,7 @@ class AccountsPayableController extends Controller
             // Only the channels this supplier accepts (client change request NR-28).
             'paymentAccounts' => $this->formOptions()['paymentAccounts']->filter(fn ($account) => in_array($account->account_code, $allowedCodes, true))->values(),
             'paymentMethods' => SupplierPayment::METHODS,
-            'purposes' => SupplierPayment::PURPOSES,
+            'purposes' => SupplierPayment::SETTLEMENT_PURPOSES,
         ]);
     }
 
@@ -325,6 +325,11 @@ class AccountsPayableController extends Controller
                 }
             }
 
+            // Match historical retries before enforcing the narrower purpose list
+            // for NEW settlements; old payment descriptions are never rewritten.
+            if (! in_array($data['purpose'], SupplierPayment::SETTLEMENT_PURPOSES, true)) {
+                throw ValidationException::withMessages(['purpose' => __('supplier_advances.bill_payment_help')]);
+            }
             if (! $accounts_payable->isPayable()) {
                 throw ValidationException::withMessages(['payment' => 'This bill is not open for payment.']);
             }

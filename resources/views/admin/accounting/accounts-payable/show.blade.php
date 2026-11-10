@@ -247,6 +247,18 @@
         @endif
     </x-admin.data-table>
 
+    @if ($bill->advanceApplications()->whereNull('reversed_at')->exists())
+        <div class="card" style="padding:18px">
+            <h2>{{ __('supplier_advances.applied_title') }}</h2>
+            <p>{{ __('supplier_advances.cash_separate') }}</p>
+            <div class="table-wrap"><table><thead><tr><th>{{ __('supplier_advances.date') }}</th><th>{{ __('supplier_advances.reference') }}</th><th>{{ __('supplier_advances.amount') }}</th></tr></thead><tbody>
+            @foreach ($bill->advanceApplications()->whereNull('reversed_at')->get() as $application)
+                <tr><td>{{ $application->movement_date->format('Y-m-d') }}</td><td>{{ $application->reference }}</td><td>SAR {{ number_format((float) $application->amount, 2) }}</td></tr>
+            @endforeach
+            </tbody></table></div>
+        </div>
+    @endif
+
     <x-admin.data-table title="Balance" class="detail-table" id="balance">
         <tbody>
             <tr><th>Bill total</th><td>SAR {{ number_format($bill->total_amount, 2) }}</td></tr>

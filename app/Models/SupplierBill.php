@@ -123,6 +123,11 @@ class SupplierBill extends Model
         return $this->hasMany(SupplierPayment::class);
     }
 
+    public function advanceApplications()
+    {
+        return $this->hasMany(SupplierAdvanceMovement::class)->where('kind', 'apply');
+    }
+
     /** Goods receipt lines this bill invoices (F04). */
     public function grnMatches()
     {
@@ -138,7 +143,8 @@ class SupplierBill extends Model
             return;
         }
 
-        $paid = (float) $this->payments()->sum('amount');
+        $paid = (float) $this->payments()->sum('amount')
+            + (float) $this->advanceApplications()->whereNull('reversed_at')->sum('amount');
         $total = (float) $this->total_amount;
 
         $this->update([

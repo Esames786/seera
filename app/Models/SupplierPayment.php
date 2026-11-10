@@ -18,6 +18,9 @@ class SupplierPayment extends Model
         'Other adjustment',
     ];
 
+    /** Existing descriptions remain readable; new recoverables use their own asset sub-ledger. */
+    public const SETTLEMENT_PURPOSES = ['Bill payment', 'Advance against this bill'];
+
     protected $fillable = [
         'supplier_id', 'supplier_bill_id', 'payment_date', 'payment_account_id',
         'payment_method', 'purpose', 'amount', 'reference_number', 'journal_entry_id', 'idempotency_key', 'notes',

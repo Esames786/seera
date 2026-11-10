@@ -11,6 +11,9 @@
     <div role="status" aria-live="polite" data-panel-status></div>
 
     @switch($panel)
+        @case('advances')
+            @include('admin.master.suppliers._advances')
+            @break
         @case('projects')
             @if ($canEdit)
                 <form method="POST" action="{{ route('admin.master.suppliers.workspace.save', [$supplier, 'projects']) }}" data-related-save>

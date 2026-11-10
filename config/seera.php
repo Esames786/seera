@@ -19,6 +19,12 @@ return [
     ],
     // First month of the financial year (1 = January) used by the report quick ranges (NR-21).
     'financial_year_start_month' => (int) env('SEERA_FINANCIAL_YEAR_START_MONTH', 1),
+    // Owner approved: daily in-app alerts from one day overdue. Operator activates after rollout.
+    'overdue_reminders' => [
+        'enabled' => (bool) env('SEERA_OVERDUE_REMINDERS_ENABLED', false),
+        'minimum_days' => 1,
+        'finance_roles' => ['FINANCE_MANAGER', 'ACCOUNTS_MANAGER', 'ACCOUNT_ASSISTANT'],
+    ],
     // Offline Mobile Sync, Phase 1. Conservative defaults, documented in the user
     // guide; no approved business policy existed, so the owner may tune these by env.
     'offline_sync' => [

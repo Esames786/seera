@@ -23,7 +23,9 @@
                     <div class="small">{{ $notice->created_at?->format('Y-m-d H:i') }} · {{ $notice->read_at ? __('notifications_ui.read') : __('notifications_ui.unread') }}</div>
                 </div>
                 <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
-                    @if(\App\Http\Middleware\EnsureUserHasPermission::canViewAnyOf(auth()->user(), \App\Http\Middleware\EnsureUserHasPermission::ANY_OF['my-approvals.index']))
+                    @if($notice->type === \App\Notifications\CustomerOverdueNotification::class)
+                        <a class="btn sm outline" href="{{ route('admin.accounting.accounts-receivable.show', $data['source_id']) }}">{{ __('notifications_ui.view_invoice') }}</a>
+                    @elseif(\App\Http\Middleware\EnsureUserHasPermission::canViewAnyOf(auth()->user(), \App\Http\Middleware\EnsureUserHasPermission::ANY_OF['my-approvals.index']))
                         <a class="btn sm outline" href="{{ route('admin.my-approvals.index') }}">{{ __('notifications_ui.view_approvals') }}</a>
                     @endif
                     @if(! $notice->read_at)

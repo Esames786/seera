@@ -177,6 +177,9 @@ class EnsureUserHasPermission
     /** @return array{0: ?string, 1: string} */
     public static function permissionForRoute(string $routeName, ?string $comingSoonModule = null): array
     {
+        if (str_starts_with($routeName, 'admin.accounting.accounts-payable.advances.')) {
+            return ['Accounts Payable', 'approve']; // Service also requires process and view.
+        }
         if (in_array($routeName, ['admin.hr.payroll.reverse', 'admin.hr.payroll.settle', 'admin.hr.payroll.settlement-reverse'], true)) {
             // Finance corrections and salary settlement: the controller also requires Payroll approve
             // (reversals) and the Accounts Payable "record payment" right (settlement).
