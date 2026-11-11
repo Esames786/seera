@@ -120,6 +120,14 @@ If preparation fails, do **not** activate the partial target. It stays available
 
 Only after B succeeds and its report is reviewed. Keep both old writers stopped and the live portal down. Do not write training transactions into the final copy before this switch.
 
+### Single-script alternative (recommended after the owner-reported successful preparation)
+
+`scripts/activate-clean-start.sh` performs the following manual C steps, including private `.env` replacement, in one guarded run. Use **either this script or the manual procedure below**, not both. It expects the source code/config to remain unchanged since A, maintenance enabled, the same pinned candidate, and exactly one successful preparation report matching source/target and retained IDs. It validates new credentials before changing the serving checkout. It privately prompts for the new DB password once, preserves APP_KEY/unrelated settings, installs locked dependencies, verifies/extracts the existing ZIP, checks resolved target/users/schema/empty transactions, then runs `artisan up`. It performs no migration/seeder and does not remove the old source database.
+
+Fetch the exact reviewed tools commit supplied in the operator reply, save `git show COMMIT:scripts/activate-clean-start.sh` to a private temporary file, then execute `bash FILE /home/techbrit/seera-clean-start.ZgB77G` for the owner's confirmed run. No manual `.env` edit is needed for this option. On failure maintenance stays enabled; inspect the output before any retry or reopening. Do not invent a success report or copy a dry-run JSON into the report folder.
+
+### Manual alternative
+
 Using cPanel File Manager, edit **`~/seera/.env` privately**:
 
 ```dotenv

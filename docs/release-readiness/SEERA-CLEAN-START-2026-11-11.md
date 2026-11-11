@@ -31,6 +31,7 @@ The original database still contains the old accounts/history after preparation.
 | Updated November guide tests | **5 passed / 99 assertions** | Focused `UserGuideTest` after the documentation update |
 | Guide link/content validation | **8 pages / 615 links and anchors / 94 validated visual-example JPEGs / 13 issue rows** | `php scripts/validate-user-guide.php` |
 | Deployment syntax validation | **3 Bash blocks + 2 embedded PHP guards** passed | Syntax only; no server-side execution |
+| Single activation-script helper | **16 isolated fixture checks passed**, Bash and **4 embedded PHP blocks** linted | [Fixture evidence](evidence/clean-start-2026-11-11/activation-helper.json); password quoting/round-trip, atomic replacement, unchanged APP_KEY/settings/real development env, valid/missing/incomplete/wrong-user/ambiguous reports |
 | Existing build package | **18 ZIP entries** readable; SHA-256 `F6451E04AA14549EA7EC629F27DE9BECB5E2FCF37D063DE9E63710A84B132BF7` | Unchanged application assets; rebuild unnecessary |
 | Fresh production browser acceptance | **NOT RUN** | No authenticated production terminal/browser connector; operator actions remain necessary |
 | New browser screenshot run | **NOT RUN** | No application UI implementation changed; existing screenshot evidence is retained, not presented as a fresh live check |
@@ -46,3 +47,7 @@ During guide validation, the existing validator incorrectly treated repeated iss
 - Existing production-reported HEAD remains `9cc5ea0` until new operator evidence shows otherwise. Do not infer live activation from these pushed commits.
 - Production ZATCA stays disabled. Actual live photo/document upload, password login, code preview, Finance/HR access, preserved master files and ledger starting position still need the operator/client smoke checks.
 - No unconditional release approval is claimed for the actual uninspected target DB, cPanel privileges or final activation.
+
+## Owner execution update
+
+The owner subsequently supplied a successful read-only preflight and then a terminal screenshot reporting **Clean destination prepared for operator review**, with source DB/config/files unchanged and **website NOT switched**. This confirms command completion, not live activation or fresh browser acceptance. A nonzero master opening balance of SAR 500 was shown and is deliberately preserved. The single activation helper will validate the actual private report at execution before attempting cutover; that report has not been read through a remote developer connector.

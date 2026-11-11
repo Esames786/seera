@@ -1,0 +1,71 @@
+{
+  "synthetic": true,
+  "production_access": false,
+  "passed": 16,
+  "checks": [
+    {
+      "name": "Atomic env replacement/password round-trip 1",
+      "ok": true
+    },
+    {
+      "name": "Atomic env replacement/password round-trip 2",
+      "ok": true
+    },
+    {
+      "name": "Atomic env replacement/password round-trip 3",
+      "ok": true
+    },
+    {
+      "name": "Atomic env replacement/password round-trip 4",
+      "ok": true
+    },
+    {
+      "name": "Atomic env replacement/password round-trip 5",
+      "ok": true
+    },
+    {
+      "name": "Atomic env replacement/password round-trip 6",
+      "ok": true
+    },
+    {
+      "name": "Atomic env replacement/password round-trip 7",
+      "ok": true
+    },
+    {
+      "name": "Atomic env replacement/password round-trip 8",
+      "ok": true
+    },
+    {
+      "name": "Atomic env replacement/password round-trip 9",
+      "ok": true
+    },
+    {
+      "name": "Changed env refused without replacing it",
+      "ok": true
+    },
+    {
+      "name": "Actual development env never modified",
+      "ok": true
+    },
+    {
+      "name": "Missing preparation report refused",
+      "ok": true
+    },
+    {
+      "name": "Dry/incomplete preparation report refused",
+      "ok": true
+    },
+    {
+      "name": "Complete matching success report accepted",
+      "ok": true
+    },
+    {
+      "name": "Wrong retained user identity refused",
+      "ok": true
+    },
+    {
+      "name": "Ambiguous multiple preparation reports refused",
+      "ok": true
+    }
+  ]
+}
