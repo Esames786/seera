@@ -1,0 +1,34 @@
+{
+  "read_only_public_requests": true,
+  "authenticated_pages_checked": false,
+  "results": [
+    {
+      "path": "/login",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 1895,
+      "local_asset_matches": null
+    },
+    {
+      "path": "/build/manifest.json",
+      "status": 200,
+      "content_type": "application/json",
+      "bytes": 2705,
+      "local_asset_matches": true
+    },
+    {
+      "path": "/build/assets/app-Ad6zwa8o.js",
+      "status": 200,
+      "content_type": "text/javascript",
+      "bytes": 45276,
+      "local_asset_matches": true
+    },
+    {
+      "path": "/build/assets/erp-BUNRXPfo.css",
+      "status": 200,
+      "content_type": "text/css",
+      "bytes": 20100,
+      "local_asset_matches": true
+    }
+  ]
+}

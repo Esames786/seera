@@ -1,0 +1,742 @@
+{
+  "synthetic": true,
+  "actual_app_http_pages": false,
+  "real_release_assets": true,
+  "production_access": false,
+  "form_submissions": false,
+  "checks": [
+    {
+      "name": "403 script reproduces checked checkbox with manual field still hidden",
+      "ok": true
+    },
+    {
+      "name": "403 script leaves automatic preview read-only",
+      "ok": true
+    },
+    {
+      "name": "customer en 320: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "customer en 320: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "customer en 320: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "customer en 320: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "customer en 320: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "customer en 320: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "customer en 320: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "customer en 320: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "customer en 320: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "customer en 320: document remove works",
+      "ok": true
+    },
+    {
+      "name": "customer en 320: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "customer en 390: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "customer en 390: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "customer en 390: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "customer en 390: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "customer en 390: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "customer en 390: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "customer en 390: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "customer en 390: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "customer en 390: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "customer en 390: document remove works",
+      "ok": true
+    },
+    {
+      "name": "customer en 390: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "customer en 768: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "customer en 768: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "customer en 768: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "customer en 768: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "customer en 768: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "customer en 768: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "customer en 768: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "customer en 768: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "customer en 768: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "customer en 768: document remove works",
+      "ok": true
+    },
+    {
+      "name": "customer en 768: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "customer en 1440: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "customer en 1440: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "customer en 1440: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "customer en 1440: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "customer en 1440: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "customer en 1440: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "customer en 1440: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "customer en 1440: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "customer en 1440: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "customer en 1440: document remove works",
+      "ok": true
+    },
+    {
+      "name": "customer en 1440: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "customer ar 320: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "customer ar 320: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "customer ar 320: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "customer ar 320: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "customer ar 320: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "customer ar 320: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "customer ar 320: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "customer ar 320: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "customer ar 320: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "customer ar 320: document remove works",
+      "ok": true
+    },
+    {
+      "name": "customer ar 320: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "customer ar 390: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "customer ar 390: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "customer ar 390: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "customer ar 390: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "customer ar 390: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "customer ar 390: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "customer ar 390: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "customer ar 390: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "customer ar 390: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "customer ar 390: document remove works",
+      "ok": true
+    },
+    {
+      "name": "customer ar 390: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "customer ar 768: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "customer ar 768: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "customer ar 768: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "customer ar 768: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "customer ar 768: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "customer ar 768: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "customer ar 768: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "customer ar 768: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "customer ar 768: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "customer ar 768: document remove works",
+      "ok": true
+    },
+    {
+      "name": "customer ar 768: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "customer ar 1440: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "customer ar 1440: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "customer ar 1440: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "customer ar 1440: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "customer ar 1440: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "customer ar 1440: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "customer ar 1440: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "customer ar 1440: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "customer ar 1440: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "customer ar 1440: document remove works",
+      "ok": true
+    },
+    {
+      "name": "customer ar 1440: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "supplier en 320: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "supplier en 320: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "supplier en 320: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "supplier en 320: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "supplier en 320: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "supplier en 320: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "supplier en 320: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "supplier en 320: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "supplier en 320: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "supplier en 320: document remove works",
+      "ok": true
+    },
+    {
+      "name": "supplier en 320: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "supplier en 390: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "supplier en 390: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "supplier en 390: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "supplier en 390: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "supplier en 390: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "supplier en 390: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "supplier en 390: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "supplier en 390: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "supplier en 390: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "supplier en 390: document remove works",
+      "ok": true
+    },
+    {
+      "name": "supplier en 390: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "supplier en 768: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "supplier en 768: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "supplier en 768: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "supplier en 768: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "supplier en 768: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "supplier en 768: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "supplier en 768: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "supplier en 768: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "supplier en 768: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "supplier en 768: document remove works",
+      "ok": true
+    },
+    {
+      "name": "supplier en 768: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "supplier en 1440: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "supplier en 1440: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "supplier en 1440: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "supplier en 1440: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "supplier en 1440: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "supplier en 1440: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "supplier en 1440: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "supplier en 1440: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "supplier en 1440: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "supplier en 1440: document remove works",
+      "ok": true
+    },
+    {
+      "name": "supplier en 1440: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 320: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 320: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 320: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 320: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 320: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 320: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 320: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 320: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 320: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 320: document remove works",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 320: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 390: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 390: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 390: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 390: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 390: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 390: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 390: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 390: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 390: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 390: document remove works",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 390: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 768: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 768: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 768: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 768: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 768: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 768: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 768: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 768: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 768: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 768: document remove works",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 768: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 1440: automatic preview starts read-only",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 1440: no submitted manual value initially",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 1440: manual input becomes editable",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 1440: manual mode hides the readonly preview and automatic help",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 1440: typed manual value preserved",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 1440: submitted field is the manual code, not the preview",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 1440: automatic mode clears and hides manual value",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 1440: browser history restoration synchronizes without a change event",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 1440: document add creates a distinct file field",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 1440: document remove works",
+      "ok": true
+    },
+    {
+      "name": "supplier ar 1440: photo preview uses selected local image",
+      "ok": true
+    },
+    {
+      "name": "customer en: initially restored checked mode is editable",
+      "ok": true
+    },
+    {
+      "name": "customer ar: initially restored checked mode is editable",
+      "ok": true
+    },
+    {
+      "name": "supplier en: initially restored checked mode is editable",
+      "ok": true
+    },
+    {
+      "name": "supplier ar: initially restored checked mode is editable",
+      "ok": true
+    },
+    {
+      "name": "No JavaScript page errors when release asset loads",
+      "ok": true
+    }
+  ],
+  "errors": []
+}
