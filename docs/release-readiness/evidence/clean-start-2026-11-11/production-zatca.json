@@ -1,0 +1,23 @@
+{
+    "synthetic": true,
+    "mode": "production-zatca",
+    "checks": [
+        {
+            "name": "Unsafe production-zatca state refused without activation",
+            "ok": true
+        },
+        {
+            "name": "No writes issued to source DB",
+            "ok": true
+        },
+        {
+            "name": "Source users and invoice remain",
+            "ok": true
+        },
+        {
+            "name": "Application source connection unchanged",
+            "ok": true
+        }
+    ],
+    "passed": 4
+}

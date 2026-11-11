@@ -1,0 +1,8 @@
+CLI OPcache enabled through isolated ini copy: C:\Users\Dell\AppData\Local\Temp\seera-test-opcache\php.ini
+SEERA test mode: parallel; workers: 8
+Command: D:\laragon2\bin\php\php-8.3.16-Win32-vs16-x64\php.exe artisan test --parallel --processes=8
+Use the configured phpunit.xml SQLite in-memory database; never run this against production.
+ParaTest v7.20.0 upon PHPUnit 12.5.30 by Sebastian Bergmann and contributors.
+{"tool":"paratest","result":"passed","tests":944,"passed":944,"assertions":10892,"duration_ms":356335}
+SEERA_TEST_DURATION_SECONDS=357.94
+SEERA_TEST_EXIT_CODE=0

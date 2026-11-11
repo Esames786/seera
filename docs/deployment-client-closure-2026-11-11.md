@@ -1,5 +1,7 @@
 # November client closure — cPanel deployment guide
 
+**Owner scope updated on 11 November:** for the approved two-account clean start, use [the clean-start deployment guide](deployment-clean-start-2026-11-11.md). The historical-preservation procedure below remains for operators who need all business history retained; do not fake its backup attestations to replace the separate clean-start command.
+
 Updated: 11 November 2026 (Asia/Karachi). This runbook is for the owner/operator; the client-facing November pages contain the issue/fix/screen table instead of deployment instructions.
 
 ## Status and approved source

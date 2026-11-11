@@ -155,7 +155,7 @@ foreach ([['name' => $sourceName, 'ids' => $ids, 'admin' => $admin->id], ['name'
 }
 $targetUser = 'clean_'.$suffix;
 $targetPassword = bin2hex(random_bytes(18));
-$pdo->exec("CREATE USER ".$pdo->quote($targetUser)."@'localhost' IDENTIFIED BY ".$pdo->quote($targetPassword));
+$pdo->exec('CREATE USER '.$pdo->quote($targetUser)."@'localhost' IDENTIFIED BY ".$pdo->quote($targetPassword));
 $pdo->exec('GRANT ALL PRIVILEGES ON '.$targetName.'.* TO '.$pdo->quote($targetUser)."@'localhost'");
 $report = $service->prepare($targetName, $ids, $admin->id, ['username' => $targetUser, 'password' => $targetPassword]);
 $target = DB::connection(CleanStartPreparation::CONNECTION);

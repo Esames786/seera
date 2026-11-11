@@ -1,0 +1,76 @@
+{
+    "synthetic": true,
+    "production_access": false,
+    "mode": "positive",
+    "checks": [
+        {
+            "name": "Dry run leaves destination empty",
+            "ok": true
+        },
+        {
+            "name": "Unsafe same-source\/duplicate\/Finance-admin\/missing identity refused",
+            "ok": true
+        },
+        {
+            "name": "Unsafe same-source\/duplicate\/Finance-admin\/missing identity refused",
+            "ok": true
+        },
+        {
+            "name": "Unsafe same-source\/duplicate\/Finance-admin\/missing identity refused",
+            "ok": true
+        },
+        {
+            "name": "Unsafe same-source\/duplicate\/Finance-admin\/missing identity refused",
+            "ok": true
+        },
+        {
+            "name": "Only exact two retained users exist in destination",
+            "ok": true
+        },
+        {
+            "name": "Client password hash and Finance role unchanged",
+            "ok": true
+        },
+        {
+            "name": "Employee salary and retained client link preserved; removed manager detached",
+            "ok": true
+        },
+        {
+            "name": "Customer attachment and asset document preserved",
+            "ok": true
+        },
+        {
+            "name": "Business documents and runtime data empty",
+            "ok": true
+        },
+        {
+            "name": "Master sequence remains at 44 instead of resetting",
+            "ok": true
+        },
+        {
+            "name": "All setup roles and chart of accounts preserved",
+            "ok": true
+        },
+        {
+            "name": "Source users, invoice and storage remain untouched",
+            "ok": true
+        },
+        {
+            "name": "Destination fully InnoDB and master hash\/FK verification passes",
+            "ok": true
+        },
+        {
+            "name": "Nullable user detaches reported and source never auto-promoted",
+            "ok": true
+        },
+        {
+            "name": "Separate destination credentials work without changing source credentials or leaking password in report",
+            "ok": true
+        },
+        {
+            "name": "Nonempty destination refused",
+            "ok": true
+        }
+    ],
+    "passed": 17
+}

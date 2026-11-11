@@ -1,5 +1,7 @@
 # Client closure — operator prerequisites
 
+**11 November owner update:** the owner has now authorized a clean start retaining two identified logins and master data. Use [the clean-start guide](deployment-clean-start-2026-11-11.md) for that request. The full historical-preservation requirements below describe the earlier scope and do not override the later owner instruction. Finance mapping and scheduler prerequisites still apply.
+
 This is preparation for a separate owner-approved rollout, not an instruction to deploy immediately. Current development branch: `feature/seera-client-closure-2026-11-11`. Latest owner-reported production source: `fix/seera-client-guide-backport-2026-11-10` at `9cc5ea0`.
 
 The [complete phased cPanel deployment guide](deployment-client-closure-2026-11-11.md) starts with read-only preflight, then covers the private candidate, backup/restored rehearsal, final InnoDB copy, approved activation, assets and recovery boundaries. Run its first section before scheduling downtime.
