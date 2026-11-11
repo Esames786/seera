@@ -4,19 +4,19 @@ Updated: 11 November 2026.
 
 This page lists your November feedback, the improvements prepared, where to find them and what still needs your confirmation.
 
-**13 points: 10 ready for review, 1 needs bank-detail confirmation and 2 are pending cleanup approval.**
+**November changes are installed. Bank-detail confirmation, Finance setup, specific old-master cleanup and client acceptance remain open.**
 
 Changes marked **Ready for review** need to be checked on your portal before you accept them.
 
 ## November review status
 
-- **Prepared for review:** the November entry improvements and the earlier overdue-reminder/supplier-recovery improvements. Follow the screen checks below with the portal administrator.
-- **Still needs your confirmation:** the exact IBAN, old login list and old master-entry list. Confirm the bank value privately and approve the exact records to keep or deactivate.
-- **Portal availability:** confirm which options are enabled before the walkthrough. An updated guide alone does not activate every screen option.
+- **Installed release:** the owner reported successful activation on 11 November, retaining Admin and the client's existing login and preserving master data. New business history starts empty at activation; later real entries are kept normally.
+- **Still needs your confirmation:** the exact IBAN and any specific old master entries you want removed. The two retained logins have already been identified.
+- **Entry controls:** Customer and Supplier share the same automatic/manual code control. The checkbox opens the editable manual field; the automatic preview stays read-only in automatic mode. The follow-up fix also handles restored checkbox state and hides the automatic preview while typing a manual code.
 - **Finance setup:** supplier recovery needs Finance's dedicated advance account; daily overdue reminders need the administrator to activate their schedule.
 - **Client acceptance:** check each point using your own login and real business task, then record Accepted or Needs a change beside its ID.
 
-**بالعربية:** التحسينات البرمجية المؤكدة جاهزة للمراجعة، لكن إغلاق جميع الملاحظات يتطلب تأكيد رقم IBAN وقوائم الحسابات والبيانات القديمة. تأكد من مسؤول البوابة من تفعيل الخيارات قبل التجربة، ثم سجّل قبولك أو التعديل المطلوب لكل نقطة.
+**بالعربية:** تم تثبيت تحديثات نوفمبر مع الاحتفاظ بحساب المدير وحساب العميل والبيانات الأساسية. ما زال يلزم تأكيد رقم IBAN وإعدادات المالية وأي بيانات أساسية قديمة يراد حذفها. اختبر كل نقطة بحسابك ثم سجّل قبولك أو التعديل المطلوب.
 
 ## Reported issue versus fix
 
@@ -29,8 +29,8 @@ On a phone, swipe the table sideways to read every column. Menu names below use 
 | R10-03 | “I cannot add an employee profile picture.” | Added photo selection, preview, save, replacement and removal. | Employees → Open/Edit → Personal → photo. | Choose a photo, save, reopen and check it. To remove it, select Remove saved photo and save. | **READY FOR REVIEW** |
 | R10-04 | “The photo/plus button on Add User does nothing.” | The chooser now uploads a photo. The saved user photo appears in the profile, topbar and sidebar. | Users → Add User; or Users → Edit / Manage → Profile. | Choose a photo, save and reopen the user. Employee and User account photos are separate. | **READY FOR REVIEW** |
 | R10-05 | “Two people with the same role need different access, especially a new employee.” | Super Admin can set **Inherit, Allow or Deny** for one user, with a required reason and an audit record. Deny takes priority over role grants. | Users → that person → Edit / Manage → expand Individual permissions below Profile. | Give one user a Deny exception. Check that this action is blocked for that person while another person with the same role keeps their normal access. | **READY FOR REVIEW** |
-| R10-06 | “Keep my login and Super Admin; remove the old demo logins.” | The two logins have been identified: Admin and the client's existing account. Clean-start preparation keeps their passwords and roles and excludes the other logins from the new portal. No live cleanup has been confirmed yet. | Users - check the list after the new release is activated. | Confirm only Admin and your login remain, and both can sign in. Your Finance Manager role is retained; it is not automatically changed to Super Admin. | **PENDING INSTALLATION:** retained accounts identified. |
-| R10-07 | “Old projects, sites and other entries make new entry confusing.” | The latest owner instruction is to keep master data and setup while starting business transactions empty. Existing master entries and saved files are retained. Specific old master entries still need a separate review if they should be removed. | Projects, Sites, other master lists and business registers. | After activation, check that masters/files remain and transaction registers are empty. Identify any particular old master entry that should be removed; retained masters will still appear in selectors. | **PENDING:** clean start needs installation; specific old master cleanup remains separate. |
+| R10-06 | “Keep my login and Super Admin; remove the old demo logins.” | Activation checks confirmed exactly Admin and the client's existing login in the new database. Their passwords and roles were preserved; other logins were excluded. | Users. | Check both retained logins can sign in. Your Finance Manager role is retained; it was not automatically changed to Super Admin. | **INSTALLED:** verify both logins during acceptance. |
+| R10-07 | “Old projects, sites and other entries make new entry confusing.” | The owner's rule was applied: master data/setup/files retained; old business transactions excluded from the new portal. Existing master entries remain in selectors. | Projects, Sites, other master lists and business registers. | Identify any particular old master entry that should be removed. Old master opening amounts were preserved, including one SAR 500 opening balance for Finance to review. | **PENDING:** specific old-master/opening-balance review; clean-start activation completed. |
 | R10-08 | “Where can I request leave using my own login?” | Added **My Leave** for a user linked to one eligible HR employee. It shows their own requests, status and annual balance. New requests remain Pending. | Topbar → My Leave. If missing, HR checks the linked Employee in User Manage. | Sign in as the linked employee, choose a leave type and dates, and submit. Check that only that employee's records are shown. Approval remains a separate HR action. | **READY FOR REVIEW** |
 | R10-09 | “Customer and Supplier codes should appear automatically, like Employee codes.” | Added the next-code preview, automatic numbering and an optional manual-code choice. Save & New shows the next preview. Saved old codes are unchanged. | Customers → Add Customer → Code; Suppliers → Add Supplier → Code. | Leave Enter my own code instead unchecked. Save the record, then use Save & New for another. The final saved code may advance if another user saves first. | **READY FOR REVIEW** |
 | R10-10 | “There is no place to attach Supplier papers.” | Added private document uploads, type, reference and dates, plus View and Download for saved files. | Suppliers → Add Supplier or Edit / Manage → Documents. Supplier View shows saved files without upload controls. | Add a document row and select a file. Save the supplier, reopen and use View or Download. | **READY FOR REVIEW** |
@@ -45,7 +45,7 @@ On a phone, swipe the table sideways to read every column. Menu names below use 
 | Annual balance | Deduct only approved Annual Leave for the selected calendar year. Do not deduct Urgent/Personal Leave. No automatic carry-forward was introduced. |
 | Individual access | Inherit role access by default. Super Admin alone manages personal Allow/Deny exceptions and supplies a reason. Deny takes priority. |
 | Record access | Personal Allow does not widen project, site or warehouse scope, revive an expired role assignment, or make someone Super Admin. |
-| Old users and data | Keep the identified Admin and client login; preserve their existing roles/passwords and master data. Exclude other logins and old business history from the new portal. Installation is still pending confirmation. Specific old master deletion is separate. |
+| Old users and data | The owner-reported activation kept Admin and client logins, existing roles/passwords and master data, and excluded old business history/other logins. Specific old master deletion is separate. |
 | HR dates and later raises | Keep calendar-day counting and explicit new effective-dated salary structures. No automatic carry-forward or accrual. |
 | Overdue reminders | In-app reminder each day from one day overdue, for authorized Finance/Super Admin users. Stop showing the reminder when the invoice is settled. |
 
@@ -77,7 +77,7 @@ Supplier salary/repair recovery requires an agreed right to recover the payment.
 <!-- NOVEMBER_SCREENSHOTS_START -->
 ## Screenshots: where each change is
 
-These are real application screenshots captured on **11 November 2026** using **fictional training data**. They show the prepared improvements. They do not mean these changes are already installed on your live website. Live screen links below require your normal authorized login; select your own record where indicated. Training record IDs are not live-record links.
+These are real application screenshots captured on **11 November 2026** using **fictional training data**. They illustrate the improvements; they are not screenshots of your private production records. The owner has reported activation of the November release. Live screen links below require your normal authorized login; select your own record where indicated. Training record IDs are not live-record links.
 
 | Point | Screenshot / screen | Open screen |
 | --- | --- | --- |
@@ -258,7 +258,7 @@ These are real application screenshots captured on **11 November 2026** using **
 
 **Where:** Users → review exact account IDs and Employee links with the owner. [Open this screen](https://seera.tech-brit.co.uk/admin/users).
 
-**Status:** Actual cleanup and any identity correction are still pending the approved list. The fictional accounts pictured were not deleted or deactivated.
+**Status:** Live activation retained the two approved logins. Any further identity correction remains a separate review. The fictional screenshot is illustrative and is not the current live user list.
 
 <img src="november-screenshots/en-users-review.jpg" alt="Old-user review and readable Deactivate action — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
 

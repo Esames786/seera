@@ -100,7 +100,7 @@ class UserGuideTest extends TestCase
         $response->assertSee('Screenshots: where each change is')->assertSee('fictional training data')
             ->assertSee('data:image/jpeg;base64,', false)
             ->assertSee('https://seera.tech-brit.co.uk/admin/users/create', false)
-            ->assertSee('Actual cleanup and any identity correction are still pending')
+            ->assertSee('Live activation retained the two approved logins')
             ->assertDontSee('src="november-screenshots/', false);
         $this->get('/user-guide/november-screenshots/en-user-photo.jpg')->assertNotFound();
     }

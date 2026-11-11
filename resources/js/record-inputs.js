@@ -2,10 +2,22 @@ document.querySelectorAll('[data-master-code]').forEach(root => {
     const checkbox = root.querySelector('[data-code-manual]');
     const input = root.querySelector('[data-code-input]');
     if (!checkbox || !input) return;
-    checkbox.addEventListener('change', () => {
+    const preview = root.querySelector('[data-code-preview]');
+    const help = root.querySelector('[data-code-help]');
+    const label = root.querySelector('[data-code-label]');
+    const syncMode = () => {
         input.hidden = !checkbox.checked;
+        if (preview) preview.hidden = checkbox.checked;
+        if (help) help.hidden = checkbox.checked;
+        if (label) label.htmlFor = checkbox.checked ? input.id : preview?.id || input.id;
         if (!checkbox.checked) input.value = '';
-        else input.focus();
+    };
+    syncMode();
+    // Browser Back/reload can restore checkbox state without emitting change.
+    window.addEventListener('pageshow', syncMode);
+    checkbox.addEventListener('change', () => {
+        syncMode();
+        if (checkbox.checked) input.focus();
         input.dispatchEvent(new Event('input', { bubbles: true }));
     });
 });

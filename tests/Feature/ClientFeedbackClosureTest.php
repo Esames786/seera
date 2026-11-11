@@ -185,6 +185,29 @@ class ClientFeedbackClosureTest extends TestCase
         }
     }
 
+    public function test_party_manual_code_validation_reopen_preserves_editable_value_in_both_languages(): void
+    {
+        foreach (['en', 'ar'] as $locale) {
+            foreach (['customer', 'supplier'] as $kind) {
+                $code = 'TRAIN-'.$kind.'-101';
+                $response = $this->withSession(['locale' => $locale, '_old_input' => ['code' => $code]])
+                    ->get(route('admin.master.'.$kind.'s.create'))->assertOk();
+                $document = new \DOMDocument;
+                libxml_use_internal_errors(true);
+                $document->loadHTML($response->getContent());
+                $xpath = new \DOMXPath($document);
+                $input = $xpath->query('//*[@data-code-input]')->item(0);
+                $preview = $xpath->query('//*[@data-code-preview]')->item(0);
+                $this->assertSame($code, $input->getAttribute('value'));
+                $this->assertFalse($input->hasAttribute('hidden'));
+                $this->assertFalse($input->hasAttribute('readonly'));
+                $this->assertTrue($preview->hasAttribute('hidden'));
+                $this->assertTrue($xpath->query('//*[@data-code-manual]')->item(0)->hasAttribute('checked'));
+                $this->assertSame('code', $xpath->query('//*[@data-code-label]')->item(0)->getAttribute('for'));
+            }
+        }
+    }
+
     public function test_bank_copy_paste_normalization_preserves_checksum_validation(): void
     {
         $valid = 'SA03 8000 0000 6080 1016 7519';

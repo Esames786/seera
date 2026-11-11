@@ -255,6 +255,10 @@ fi
 printf '%s  public/build.zip\n' F6451E04AA14549EA7EC629F27DE9BECB5E2FCF37D063DE9E63710A84B132BF7 | sha256sum -c -
 unzip -t public/build.zip
 unzip -oq public/build.zip -d public/build
+test ! -L public/build
+test -z "$(find public/build -type l -print -quit)"
+find public/build -type d -exec chmod 755 {} +
+find public/build -type f -exec chmod 644 {} +
 test -f public/build/manifest.json
 
 SEERA_EXPECTED_DB="$TARGET_DB" "$PHP" <<'PHP'
