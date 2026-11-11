@@ -5,13 +5,13 @@ Updated: 11 November 2026 (Asia/Karachi). This runbook is for the owner/operator
 ## Status and approved source
 
 - Branch: `feature/seera-client-closure-2026-11-11`.
-- QA anchor: `ab68a0963d2d90b2a2f58ec76cb95ee820664f5b`; application code: `510d88a914545b839ba393323b195e4844b0b85d`.
+- QA anchor: `aa0a73b093fd3b4ba77254d21153f47313c9fe00`; application code: `510d88a914545b839ba393323b195e4844b0b85d`.
 - Evidence: 936 Laravel tests / 10,855 assertions; 12 JavaScript tests; 687 browser checks; 7 MySQL concurrency/accounting checks; 28 storage-copy checks across four runs. These are saved local results, not a fresh production check.
 - Latest **owner-reported** live HEAD: `9cc5ea0179c6e104750fcb1249ec3f684194ad38`, branch `fix/seera-client-guide-backport-2026-11-10`. Actual live HEAD must be checked again.
 - Reported live storage: mostly MyISAM with partial November DDL. The feature code requires its new tables. Serving it against the unprepared old database can cause errors.
 - No seeder, reset, historical backfill or production ZATCA activation is part of this rollout.
 
-Guide-only follow-up verification: 4 User Guide tests / 89 assertions and 91 browser checks passed. Deployment Bash blocks and embedded PHP guards were syntax-checked without execution. Application code and the verified ZIP remain unchanged from the QA anchor; the full suite was not needlessly repeated for this documentation update.
+Visual-guide follow-up verification: 5 User Guide tests / 99 assertions and 125 browser checks passed. The guide contains 21 real training screenshots with screen URLs. Deployment Bash blocks and embedded PHP guards were syntax-checked without execution. Application code and the verified ZIP remain unchanged from the QA anchor; the full suite was not needlessly repeated for this documentation update.
 
 The two branches diverge after their stable ancestor. This is a reviewed **branch switch**, not a fast-forward merge from the guide-only branch. Preserve hosting `.htaccess`, `.env`, current assets, uploads and database history.
 
@@ -25,7 +25,7 @@ set -euo pipefail
 cd ~/seera
 PHP=/opt/cpanel/ea-php83/root/usr/bin/php
 BRANCH=feature/seera-client-closure-2026-11-11
-QA_HEAD=ab68a0963d2d90b2a2f58ec76cb95ee820664f5b
+QA_HEAD=aa0a73b093fd3b4ba77254d21153f47313c9fe00
 
 git branch --show-current
 git log -1 --oneline
@@ -69,6 +69,34 @@ The remaining blocks are conditional operator steps after these prerequisites. T
 
 ## 3. Pin the release and prepare a private candidate checkout
 
+### If the private candidate was already prepared at 063c42f
+
+The owner reported `/home/techbrit/seera-november.mAuOQH/candidate`. To include the screenshot walkthrough, this block updates **that private checkout only** to its tested visual-guide commit. It does not switch `~/seera`, run migrations or activate the website. Use it only for that exact unchanged candidate; otherwise follow the fresh preparation below. Do not run both preparation paths.
+
+```bash
+(
+set -euo pipefail
+APP_DIR="$HOME/seera"
+RUN_DIR="$HOME/seera-november.mAuOQH"
+CANDIDATE_DIR="$RUN_DIR/candidate"
+BRANCH=feature/seera-client-closure-2026-11-11
+VISUAL_SHA=aa0a73b093fd3b4ba77254d21153f47313c9fe00
+test "$(git -C "$APP_DIR" rev-parse HEAD)" = 9cc5ea0179c6e104750fcb1249ec3f684194ad38
+test "$(git -C "$CANDIDATE_DIR" rev-parse HEAD)" = 063c42f695ad2bd929cce79c03725223e1273184
+git -C "$CANDIDATE_DIR" diff --quiet
+git -C "$CANDIDATE_DIR" diff --cached --quiet
+git -C "$APP_DIR" fetch origin "refs/heads/$BRANCH:refs/remotes/origin/$BRANCH"
+git -C "$APP_DIR" merge-base --is-ancestor "$VISUAL_SHA" "origin/$BRANCH"
+git -C "$CANDIDATE_DIR" merge --ff-only "$VISUAL_SHA"
+printf '%s\n' "$VISUAL_SHA" > "$RUN_DIR/release-sha.txt"
+printf 'Private candidate contains screenshots. Live HEAD: %s\n' "$(git -C "$APP_DIR" rev-parse --short HEAD)"
+)
+```
+
+For later sections, set `APP_DIR="$HOME/seera"`, `PHP=/opt/cpanel/ea-php83/root/usr/bin/php`, `RUN_DIR="$HOME/seera-november.mAuOQH"` and `CANDIDATE_DIR="$RUN_DIR/candidate"` again; the block keeps its variables local. Backup/restore, rehearsal and destination checks remain required before step 4.
+
+### Fresh private candidate
+
 Use the **same terminal** through the later steps. `RUN_DIR`, `CANDIDATE_DIR` and `RELEASE_SHA` are shell variables. Record the printed private directory; if the terminal is reopened, restore those exact values from its files before continuing.
 
 ```bash
@@ -76,7 +104,7 @@ cd ~/seera
 PHP=/opt/cpanel/ea-php83/root/usr/bin/php
 APP_DIR="$HOME/seera"
 BRANCH=feature/seera-client-closure-2026-11-11
-QA_HEAD=ab68a0963d2d90b2a2f58ec76cb95ee820664f5b
+QA_HEAD=aa0a73b093fd3b4ba77254d21153f47313c9fe00
 RUN_DIR="$(mktemp -d "$HOME/seera-november.XXXXXX")"
 CANDIDATE_DIR="$RUN_DIR/candidate"
 
