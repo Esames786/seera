@@ -76,9 +76,14 @@ foreach (['EXP-SE-001', 'EXP-SE-002', 'EXP-SE-003', 'EXP-SE-004', 'HR-ATT-004', 
     }
 }
 $feedback = $documents['CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html'];
+$issueTable = $feedback->query('//h2[@id="reported-issue-versus-fix"]/following-sibling::div[table][1]/table')->item(0);
+if (! $issueTable) {
+    throw new RuntimeException('Missing primary client issue table.');
+}
 for ($number = 1; $number <= 13; $number++) {
     $id = sprintf('R10-%02d', $number);
-    if ($feedback->query('//tr[td[1][normalize-space()="'.$id.'"]]')->length !== 1) {
+    // The screenshot index intentionally repeats the issue IDs in a second table.
+    if ($feedback->query('.//tr[td[1][normalize-space()="'.$id.'"]]', $issueTable)->length !== 1) {
         throw new RuntimeException($id.' must appear exactly once as a client issue table row.');
     }
 }

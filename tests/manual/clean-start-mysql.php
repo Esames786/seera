@@ -153,7 +153,11 @@ foreach ([['name' => $sourceName, 'ids' => $ids, 'admin' => $admin->id], ['name'
         $check('Unsafe same-source/duplicate/Finance-admin/missing identity refused', true);
     }
 }
-$report = $service->prepare($targetName, $ids, $admin->id);
+$targetUser = 'clean_'.$suffix;
+$targetPassword = bin2hex(random_bytes(18));
+$pdo->exec("CREATE USER ".$pdo->quote($targetUser)."@'localhost' IDENTIFIED BY ".$pdo->quote($targetPassword));
+$pdo->exec('GRANT ALL PRIVILEGES ON '.$targetName.'.* TO '.$pdo->quote($targetUser)."@'localhost'");
+$report = $service->prepare($targetName, $ids, $admin->id, ['username' => $targetUser, 'password' => $targetPassword]);
 $target = DB::connection(CleanStartPreparation::CONNECTION);
 $check('Only exact two retained users exist in destination', $target->table('users')->orderBy('id')->pluck('id')->map(fn ($id) => (int) $id)->all() === $ids);
 $check('Client password hash and Finance role unchanged', $target->table('users')->where('id', $client->id)->value('password') === DB::table('users')->where('id', $client->id)->value('password')
@@ -169,6 +173,9 @@ $check('Source users, invoice and storage remain untouched', $writes === [] && D
     && $pdo->query("SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA='$sourceName' AND TABLE_NAME='users'")->fetchColumn() === 'MyISAM');
 $check('Destination fully InnoDB and master hash/FK verification passes', $report['all_destination_tables_innodb'] && $report['verified_foreign_keys'] > 250 && count($report['verified_master_hashes']) > 35);
 $check('Nullable user detaches reported and source never auto-promoted', $report['nullable_removed_login_references_detached']['employees.manager_id'] === 1 && ! $report['automatic_promotion']);
+$check('Separate destination credentials work without changing source credentials or leaking password in report',
+    $target->getConfig('username') === $targetUser && DB::connection()->getConfig('username') === 'root'
+    && ! str_contains(json_encode($report), $targetPassword));
 try {
     $service->inspect($targetName, $ids, $admin->id);
     $check('Nonempty target refused', false);
