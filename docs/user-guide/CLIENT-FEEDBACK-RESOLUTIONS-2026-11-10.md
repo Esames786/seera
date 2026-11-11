@@ -8,6 +8,16 @@ This page lists your November feedback, the improvements prepared, where to find
 
 Changes marked **Ready for review** need to be checked on your portal before you accept them.
 
+## November review status
+
+- **Prepared for review:** the November entry improvements and the earlier overdue-reminder/supplier-recovery improvements. Follow the screen checks below with the portal administrator.
+- **Still needs your confirmation:** the exact IBAN, old login list and old master-entry list. Confirm the bank value privately and approve the exact records to keep or deactivate.
+- **Portal availability:** confirm which options are enabled before the walkthrough. An updated guide alone does not activate every screen option.
+- **Finance setup:** supplier recovery needs Finance's dedicated advance account; daily overdue reminders need the administrator to activate their schedule.
+- **Client acceptance:** check each point using your own login and real business task, then record Accepted or Needs a change beside its ID.
+
+**بالعربية:** التحسينات البرمجية المؤكدة جاهزة للمراجعة، لكن إغلاق جميع الملاحظات يتطلب تأكيد رقم IBAN وقوائم الحسابات والبيانات القديمة. تأكد من مسؤول البوابة من تفعيل الخيارات قبل التجربة، ثم سجّل قبولك أو التعديل المطلوب لكل نقطة.
+
 ## Reported issue versus fix
 
 On a phone, swipe the table sideways to read every column. Menu names below use the English interface. Choose Arabic from the application language selector for the corresponding Arabic screens.

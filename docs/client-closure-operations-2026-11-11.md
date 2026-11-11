@@ -2,6 +2,8 @@
 
 This is preparation for a separate owner-approved rollout, not an instruction to deploy immediately. Current development branch: `feature/seera-client-closure-2026-11-11`. Latest owner-reported production source: `fix/seera-client-guide-backport-2026-11-10` at `9cc5ea0`.
 
+The [complete phased cPanel deployment guide](deployment-client-closure-2026-11-11.md) starts with read-only preflight, then covers the private candidate, backup/restored rehearsal, final InnoDB copy, approved activation, assets and recovery boundaries. Run its first section before scheduling downtime.
+
 ## Blocking storage condition
 
 The reported live database is mainly MyISAM, with partially attempted November DDL. Do not run a generic `git pull; migrate; up` sequence. Transactional financial workflows require InnoDB and actual constraints. See [the corrected recovery guide](deployment-feedback-recovery-2026-11-10.md#path-c-prepare-a-complete-innodb-copy-without-discarding-current-data).

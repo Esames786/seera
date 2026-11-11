@@ -1,5 +1,7 @@
 # Employee and master entry — November update
 
+Last reviewed: **11 November 2026**.
+
 Use these instructions for the November entry improvements. Check that the relevant option is available on your portal before following its steps. Pending items are listed in the client feedback table.
 
 For the client review, open [Client feedback: issues, fixes and screens](CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.md). It lists all 13 reported points, their fixes, the exact screen to visit and the remaining work in easy English.
@@ -8,6 +10,7 @@ For the client review, open [Client feedback: issues, fixes and screens](CLIENT-
 
 | Task | Open this screen | What to do |
 | --- | --- | --- |
+| Review what is ready and what is still pending | User Guide → Issues & Fixes → November review status | Check the status first, then follow the point's screen instructions. |
 | Add an Employee photo | Employees → Open/Edit → Personal | Choose a photo, check the preview and save. |
 | Add a User photo | Users → Add User or Edit / Manage → Profile | Choose the user's photo and save the form. |
 | Check annual leave | Employees → View → year links; or My Leave → year selector | Select the correct year. Only approved Annual Leave reduces its annual balance. |
@@ -81,6 +84,8 @@ Copy the full IBAN from the bank. Spaces and common Arabic/Persian digit present
 ## Starting data cleanup
 
 Review the old account and master-entry lists with the owner. Confirm what to keep before approving any deactivation or cleanup. Cleanup is still pending; newly entered real records must be preserved.
+
+For the meeting, review in this order: Employee photo and annual leave; My Leave; User photo and personal access; Customer/Supplier codes and documents; Equipment documents and meter; overdue reminders; Supplier recovery. Use an approved training environment for saving examples or posting money. Confirm the exact old-account/master lists separately. A completed demonstration does not authorize deleting records.
 
 ## Customer overdue reminders / تذكيرات تأخر العملاء
 
