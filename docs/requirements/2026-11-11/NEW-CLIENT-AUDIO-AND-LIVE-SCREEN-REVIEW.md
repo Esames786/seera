@@ -2,6 +2,21 @@
 
 Status: source review and release-gap diagnosis. No production write, deployment, migration, deletion, deactivation or reset was performed. This review is on the separate `docs/seera-client-audio-followup-2026-11-11` branch; the QA/deployment candidate branch is unchanged.
 
+## Latest owner instruction: clean start and activate the fixes
+
+After this audio review, the owner explicitly clarified the requested execution scope:
+
+- Retain **two** login accounts: one Admin and the client's own login. This owner clarification governs the account-retention plan, regardless of the earlier interpretation of the spoken admin sentence.
+- Preserve master data and setup. Do not treat the instruction to remove other users as permission to remove their linked Employee master records, uploaded master documents, roles, chart of accounts or company setup.
+- Remove other logins and disposable business/test data, then activate the complete November fixes. This supersedes the earlier inventory-only/deactivate-only preference for the approved cleanup, but the two retained login identities must first be verified by exact User IDs and their references handled correctly.
+- The owner does **not** require preservation/backup of the discarded old business data. Do not keep presenting a full historical-data backup as an unwaivable condition for this revised clean-start request. Preserving the retained accounts and masters, preparing the correct schema, and verifying their references remain necessary.
+
+No production execution is recorded. Exact retained User IDs are still missing. The supplied Employee `/3/edit` URL does not establish the linked User ID. Read the actual user/role/link inventory before issuing destructive commands.
+
+The existing `seera:prepare-storage-copy` is a full data-preservation workflow and explicitly requires a verified backup; do not fake those attestations to turn it into a clean-start command. The existing `seera:go-live-reset` always keeps all users, removes some relationships even with entry-group keep flags, and relies on transactions that do not protect MyISAM tables. Neither command alone implements the owner's latest request. The earlier full-preservation runbook must not be handed out unchanged as this clean-start deployment procedure.
+
+The next operator step is read-only account/master inventory; it needs no backup, maintenance mode, migration or password sharing. Identify the retained accounts, verify active Admin access and classify the retained master relationships before preparing the exact clean-start execution plan. Do not delete all users and recreate two guessed accounts, run an unqualified `migrate:fresh`, or reset master sequences while keeping existing master records.
+
 ## Direct answer about the supplied screenshots
 
 The client is right that the controls are absent in the screens they are using. The Employee's **Personal** section is already selected, but no profile-photo uploader is shown. The Customer Create page shows the old editable field with the `Auto: CUS-001` placeholder, rather than the new next-code preview/manual-choice controls. Asking the client to find another tab or refresh repeatedly does not supply missing server-rendered controls.
