@@ -91,4 +91,17 @@ class UserGuideTest extends TestCase
         $user->update(['status' => 'inactive']);
         $this->get('/user-guide/VISUAL-EXAMPLES-AR.html')->assertRedirect(route('login'));
     }
+
+    public function test_november_screenshots_are_embedded_with_screen_links_and_honest_pending_status(): void
+    {
+        $this->get('/user-guide/CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html')->assertRedirect(route('login'));
+        $this->actingAs(User::where('email', 'admin@example.com')->firstOrFail());
+        $response = $this->get('/user-guide/CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html')->assertOk();
+        $response->assertSee('Screenshots: where each change is')->assertSee('fictional training data')
+            ->assertSee('data:image/jpeg;base64,', false)
+            ->assertSee('https://seera.tech-brit.co.uk/admin/users/create', false)
+            ->assertSee('Actual cleanup and any identity correction are still pending')
+            ->assertDontSee('src="november-screenshots/', false);
+        $this->get('/user-guide/november-screenshots/en-user-photo.jpg')->assertNotFound();
+    }
 }

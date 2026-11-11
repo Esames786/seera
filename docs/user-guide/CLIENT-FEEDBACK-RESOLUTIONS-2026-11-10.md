@@ -74,6 +74,242 @@ The supplied leave example was **9 days of Urgent / Personal Leave in August 202
 
 Supplier salary/repair recovery requires an agreed right to recover the payment. A newly taxable charge is not automatically treated as a tax-free deduction. Existing bill VAT and previous payments stay unchanged.
 
+<!-- NOVEMBER_SCREENSHOTS_START -->
+## Screenshots: where each change is
+
+These are real application screenshots captured on **11 November 2026** using **fictional training data**. They show the prepared improvements. They do not mean these changes are already installed on your live website. Live screen links below require your normal authorized login; select your own record where indicated. Training record IDs are not live-record links.
+
+| Point | Screenshot / screen | Open screen |
+| --- | --- | --- |
+| R10-03 | [Employee profile photo](#screenshot-employee-photo) | [Open](https://seera.tech-brit.co.uk/admin/hr/employees) |
+| R10-04 | [User account photo](#screenshot-user-photo) | [Open](https://seera.tech-brit.co.uk/admin/users/create) |
+| R10-02 | [Annual leave balance and year](#screenshot-annual-leave) | [Open](https://seera.tech-brit.co.uk/admin/hr/employees) |
+| R10-01 | [Employee bank details](#screenshot-iban) | [Open](https://seera.tech-brit.co.uk/admin/hr/employees) |
+| R10-05 | [Individual access for one user](#screenshot-personal-permissions) | [Open](https://seera.tech-brit.co.uk/admin/users) |
+| R10-08 | [Request your own leave](#screenshot-my-leave) | [Open](https://seera.tech-brit.co.uk/admin/my-leave) |
+| R10-09 | [Automatic Supplier code](#screenshot-supplier-code) | [Open](https://seera.tech-brit.co.uk/admin/master/suppliers/create) |
+| R10-09 | [Automatic Customer code](#screenshot-customer-code) | [Open](https://seera.tech-brit.co.uk/admin/master/customers/create) |
+| R10-10 | [Supplier papers on the entry screen](#screenshot-supplier-documents) | [Open](https://seera.tech-brit.co.uk/admin/master/suppliers/create) |
+| R10-11 | [Customer papers on the entry screen](#screenshot-customer-documents) | [Open](https://seera.tech-brit.co.uk/admin/master/customers/create) |
+| R10-12 | [Equipment documents during initial entry](#screenshot-equipment-documents) | [Open](https://seera.tech-brit.co.uk/admin/equipment/create) |
+| R10-13 | [Equipment initial meter](#screenshot-equipment-meter) | [Open](https://seera.tech-brit.co.uk/admin/equipment/create) |
+| R10-06 / latest screenshot | [Old-user review and readable Deactivate action](#screenshot-users-review) | [Open](https://seera.tech-brit.co.uk/admin/users) |
+| R10-07 | [Master records to review before cleanup](#screenshot-master-review) | [Open](https://seera.tech-brit.co.uk/admin/accounting/cost-centers) |
+| NR-06 | [Customer overdue reminder](#screenshot-overdue-reminder) | [Open](https://seera.tech-brit.co.uk/admin/notifications) |
+| NR-29 | [Supplier recoverable payment and settlement](#screenshot-supplier-recovery) | [Open](https://seera.tech-brit.co.uk/admin/master/suppliers) |
+
+<a id="screenshot-employee-photo"></a>
+### R10-03 — Employee profile photo
+
+**What changed:** Choose, preview, save, replace or remove an Employee photo.
+
+**Where:** Open the employee → Personal. [Open this screen](https://seera.tech-brit.co.uk/admin/hr/employees).
+
+**Status:** Prepared and tested; check portal availability with the administrator, then record your acceptance.
+
+<img src="november-screenshots/en-employee-photo.jpg" alt="Employee profile photo — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<details>
+<summary>Arabic screenshot / الصورة العربية</summary>
+
+<img src="november-screenshots/ar-employee-photo.jpg" alt="Employee profile photo — Arabic training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+</details>
+
+<a id="screenshot-user-photo"></a>
+### R10-04 — User account photo
+
+**What changed:** The photo chooser now works and shows a preview. Save the user to keep the selected photo.
+
+**Where:** Profile photo on Add User; also available on Edit / Manage. [Open this screen](https://seera.tech-brit.co.uk/admin/users/create).
+
+**Status:** Prepared and tested; check portal availability with the administrator, then record your acceptance.
+
+<img src="november-screenshots/en-user-photo.jpg" alt="User account photo — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<a id="screenshot-annual-leave"></a>
+### R10-02 — Annual leave balance and year
+
+**What changed:** The selected year and Annual Leave balance are explicit. Only approved Annual Leave in that year reduces the annual balance.
+
+**Where:** Open the employee → View → leave balance/year. [Open this screen](https://seera.tech-brit.co.uk/admin/hr/employees).
+
+**Status:** Prepared and tested; check portal availability with the administrator, then record your acceptance.
+
+<img src="november-screenshots/en-annual-leave.jpg" alt="Annual leave balance and year — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<a id="screenshot-iban"></a>
+### R10-01 — Employee bank details
+
+**What changed:** Copied spaces and Arabic/Persian digits are normalized; format/check-digit errors are explained.
+
+**Where:** Open the employee → Salary & payment → IBAN. [Open this screen](https://seera.tech-brit.co.uk/admin/hr/employees).
+
+**Status:** Needs private confirmation of the exact disputed bank value. This screenshot shows the form, not bank ownership verification.
+
+<img src="november-screenshots/en-iban.jpg" alt="Employee bank details — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<a id="screenshot-personal-permissions"></a>
+### R10-05 — Individual access for one user
+
+**What changed:** Super Admin can set Inherit / Allow / Deny for one person with a reason. A personal Deny takes priority over role grants.
+
+**Where:** Choose the user → Edit / Manage → Individual permissions. [Open this screen](https://seera.tech-brit.co.uk/admin/users).
+
+**Status:** Prepared and tested; check portal availability with the administrator, then record your acceptance.
+
+<img src="november-screenshots/en-personal-permissions.jpg" alt="Individual access for one user — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<details>
+<summary>Arabic screenshot / الصورة العربية</summary>
+
+<img src="november-screenshots/ar-personal-permissions.jpg" alt="Individual access for one user — Arabic training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+</details>
+
+<a id="screenshot-my-leave"></a>
+### R10-08 — Request your own leave
+
+**What changed:** The linked employee sees their own requests and balance. New requests remain Pending for HR approval.
+
+**Where:** Topbar → My Leave. A unique eligible Employee link is required. [Open this screen](https://seera.tech-brit.co.uk/admin/my-leave).
+
+**Status:** Prepared and tested; check portal availability with the administrator, then record your acceptance.
+
+<img src="november-screenshots/en-my-leave.jpg" alt="Request your own leave — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<a id="screenshot-supplier-code"></a>
+### R10-09 — Automatic Supplier code
+
+**What changed:** The next expected code is visible. The server allocates the final code on save; Save & New refreshes the preview.
+
+**Where:** Add Supplier → Code. Leave the manual-code checkbox unchecked. [Open this screen](https://seera.tech-brit.co.uk/admin/master/suppliers/create).
+
+**Status:** Prepared and tested; check portal availability with the administrator, then record your acceptance.
+
+<img src="november-screenshots/en-supplier-code.jpg" alt="Automatic Supplier code — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<a id="screenshot-customer-code"></a>
+### R10-09 — Automatic Customer code
+
+**What changed:** The same preview/manual-code choice is available for Customers. Existing saved codes are preserved.
+
+**Where:** Add Customer → Code. [Open this screen](https://seera.tech-brit.co.uk/admin/master/customers/create).
+
+**Status:** Prepared and tested; check portal availability with the administrator, then record your acceptance.
+
+<img src="november-screenshots/en-customer-code.jpg" alt="Automatic Customer code — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<a id="screenshot-supplier-documents"></a>
+### R10-10 — Supplier papers on the entry screen
+
+**What changed:** Choose document type, reference, dates and file together with the supplier. Save the parent form to store it.
+
+**Where:** Add Supplier or Edit / Manage → Documents. [Open this screen](https://seera.tech-brit.co.uk/admin/master/suppliers/create).
+
+**Status:** Prepared and tested; check portal availability with the administrator, then record your acceptance.
+
+<img src="november-screenshots/en-supplier-documents.jpg" alt="Supplier papers on the entry screen — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<details>
+<summary>Arabic screenshot / الصورة العربية</summary>
+
+<img src="november-screenshots/ar-supplier-documents.jpg" alt="Supplier papers on the entry screen — Arabic training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+</details>
+
+<a id="screenshot-customer-documents"></a>
+### R10-11 — Customer papers on the entry screen
+
+**What changed:** Customer documents stay with their Customer. Saved files have View/Download; Customer View stays read-only.
+
+**Where:** Add Customer or Edit / Manage → Documents. [Open this screen](https://seera.tech-brit.co.uk/admin/master/customers/create).
+
+**Status:** Prepared and tested; check portal availability with the administrator, then record your acceptance.
+
+<img src="november-screenshots/en-customer-documents.jpg" alt="Customer papers on the entry screen — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<a id="screenshot-equipment-documents"></a>
+### R10-12 — Equipment documents during initial entry
+
+**What changed:** Files can be selected before the first save, without moving to a separate View screen.
+
+**Where:** Add Equipment → Documents. [Open this screen](https://seera.tech-brit.co.uk/admin/equipment/create).
+
+**Status:** Prepared and tested; check portal availability with the administrator, then record your acceptance.
+
+<img src="november-screenshots/en-equipment-documents.jpg" alt="Equipment documents during initial entry — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<a id="screenshot-equipment-meter"></a>
+### R10-13 — Equipment initial meter
+
+**What changed:** The server saves a blank initial meter as zero; entered readings are kept and negative readings are refused. This image identifies the affected field; the save behavior is covered by regression tests.
+
+**Where:** Add Equipment → Initial meter reading. [Open this screen](https://seera.tech-brit.co.uk/admin/equipment/create).
+
+**Status:** Prepared and tested; check portal availability with the administrator, then record your acceptance.
+
+<img src="november-screenshots/en-equipment-meter.jpg" alt="Equipment initial meter — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<a id="screenshot-users-review"></a>
+### R10-06 / latest screenshot — Old-user review and readable Deactivate action
+
+**What changed:** The raw ui.deactivate text is replaced by a readable action. The owner inventory distinguishes displayed codes from actual Employee links.
+
+**Where:** Users → review exact account IDs and Employee links with the owner. [Open this screen](https://seera.tech-brit.co.uk/admin/users).
+
+**Status:** Actual cleanup and any identity correction are still pending the approved list. The fictional accounts pictured were not deleted or deactivated.
+
+<img src="november-screenshots/en-users-review.jpg" alt="Old-user review and readable Deactivate action — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<a id="screenshot-master-review"></a>
+### R10-07 — Master records to review before cleanup
+
+**What changed:** The private inventory identifies retained masters and missing linked references. Newly entered real records are protected from automatic cleanup.
+
+**Where:** Review Cost Centers, Projects and Sites with the owner. [Open this screen](https://seera.tech-brit.co.uk/admin/accounting/cost-centers).
+
+**Status:** Pending item-by-item Keep / Review decisions. This screenshot is a training list, not proof of completed cleanup.
+
+<img src="november-screenshots/en-master-review.jpg" alt="Master records to review before cleanup — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<a id="screenshot-overdue-reminder"></a>
+### NR-06 — Customer overdue reminder
+
+**What changed:** After schedule activation, eligible Finance/Super Admin users receive one in-app reminder per overdue invoice/day from one day overdue. Settled or inaccessible invoices are excluded.
+
+**Where:** Notifications → Open invoice. [Open this screen](https://seera.tech-brit.co.uk/admin/notifications).
+
+**Status:** Prepared and tested; check portal availability with the administrator, then record your acceptance.
+
+<img src="november-screenshots/en-overdue-reminder.jpg" alt="Customer overdue reminder — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<details>
+<summary>Arabic screenshot / الصورة العربية</summary>
+
+<img src="november-screenshots/ar-overdue-reminder.jpg" alt="Customer overdue reminder — Arabic training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+</details>
+
+<a id="screenshot-supplier-recovery"></a>
+### NR-29 — Supplier recoverable payment and settlement
+
+**What changed:** Record an agreed recoverable payment, explicitly apply it to an eligible bill, record money returned, or reverse a correction. Finance must configure its dedicated advance asset first.
+
+**Where:** Choose supplier → Edit / Manage → Supplier advances. [Open this screen](https://seera.tech-brit.co.uk/admin/master/suppliers).
+
+**Status:** Prepared and tested; check portal availability with the administrator, then record your acceptance.
+
+<img src="november-screenshots/en-supplier-recovery.jpg" alt="Supplier recoverable payment and settlement — fictional training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+<details>
+<summary>Arabic screenshot / الصورة العربية</summary>
+
+<img src="november-screenshots/ar-supplier-recovery.jpg" alt="Supplier recoverable payment and settlement — Arabic training example" loading="lazy" style="display:block;max-width:100%;height:auto;border:1px solid #667085;border-radius:8px"/>
+
+</details>
+
+<!-- NOVEMBER_SCREENSHOTS_END -->
 ## Client confirmation checklist
 
 1. Compare the disputed IBAN privately with the bank document.

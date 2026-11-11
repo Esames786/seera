@@ -41,6 +41,22 @@ function render(string $markdown, int $tocDepth, array &$toc): string
     $converter = new GithubFlavoredMarkdownConverter(['html_input' => 'allow', 'allow_unsafe_links' => false]);
     $html = (string) $converter->convert($markdown);
 
+    // Keep the November walkthrough self-contained behind the existing guide
+    // login. Only reviewed local JPEG/PNG captures may be embedded; no new file route.
+    $html = preg_replace_callback('/\bsrc="(november-screenshots\/[a-z0-9-]+\.(?:jpg|png))"/i', function ($match) {
+        $root = realpath(__DIR__.'/november-screenshots');
+        $file = realpath(__DIR__.'/'.$match[1]);
+        if (! $root || ! $file || ! str_starts_with($file, $root.DIRECTORY_SEPARATOR)) {
+            throw new RuntimeException('Missing or out-of-folder November screenshot: '.$match[1]);
+        }
+        $mime = (new finfo(FILEINFO_MIME_TYPE))->file($file);
+        if (! in_array($mime, ['image/jpeg', 'image/png'], true)) {
+            throw new RuntimeException('Unsupported November screenshot type.');
+        }
+
+        return 'src="data:'.$mime.';base64,'.base64_encode(file_get_contents($file)).'"';
+    }, $html);
+
     // Anchor ids on headings + table of contents.
     $used = [];
     $html = preg_replace_callback('/<h([1-6])>(.*?)<\/h\1>/s', function ($m) use (&$toc, &$used, $tocDepth) {
@@ -150,7 +166,7 @@ $index = <<<'HTML'
 <blockquote><strong>November client feedback.</strong> Open Issues &amp; Fixes to review your reported points, prepared improvements, screens and remaining confirmations.</blockquote>
 <p>Current implemented system only. Version metadata is taken from the source user guide. Visual training supplement captured 2 November 2026. All examples use fictional training data.</p>
 <table><thead><tr><th>Document</th><th>What it is for</th></tr></thead><tbody>
-<tr><td><a href="CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html">Client Feedback — Issues, Fixes and Screens</a></td><td>All 13 November feedback points: issue, prepared improvement, screen, check steps and status. Ten ready for review, one needs bank-detail confirmation and two await cleanup approval.</td></tr>
+<tr><td><a href="CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.html">Client Feedback — Issues, Fixes and Screens</a></td><td>All 13 November feedback points, 21 application screenshots and clickable screen links. Ten points ready for review, one needs bank-detail confirmation and two await cleanup approval.</td></tr>
 <tr><td><a href="CLIENT-ENTRY-UPDATES-2026-11-10.html">November Entry Instructions</a></td><td>Screen-by-screen instructions for photos, documents, codes, annual leave, My Leave, IBAN and individual permissions, with Arabic explanations.</td></tr>
 <tr><td><a href="SEERA-ERP-CURRENT-SYSTEM-USER-GUIDE.html">User Guide</a></td><td>23 chapters: sign-in, screen addresses, fields and buttons, Connected Workspace Standard, business workflows, troubleshooting, glossary, limitations, Equipment and Mobile/Offline.</td></tr>
 <tr><td><a href="SCREEN-INDEX.html">Screen Index</a></td><td>Permanent Screen IDs, web addresses, navigation, permissions and status, including My Approvals and the embedded PR approval panel.</td></tr>

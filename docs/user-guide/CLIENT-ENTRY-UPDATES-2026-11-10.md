@@ -6,6 +6,8 @@ Use these instructions for the November entry improvements. Check that the relev
 
 For the client review, open [Client feedback: issues, fixes and screens](CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.md). It lists all 13 reported points, their fixes, the exact screen to visit and the remaining work in easy English.
 
+[Open the November screenshots and clickable screen links](CLIENT-FEEDBACK-RESOLUTIONS-2026-11-10.md#screenshots-where-each-change-is). The 21 real application captures use fictional training data; they illustrate the prepared changes and do not confirm live deployment.
+
 ## Quick screen guide
 
 | Task | Open this screen | What to do |
